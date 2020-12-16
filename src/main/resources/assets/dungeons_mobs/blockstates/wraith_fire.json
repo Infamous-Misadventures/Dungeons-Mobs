@@ -1,0 +1,90 @@
+{
+  "multipart": [
+    {
+      "apply": [
+        {
+          "model": "dungeons_mobs:block/wraith_fire_floor0"
+        },
+        {
+          "model": "dungeons_mobs:block/wraith_fire_floor1"
+        }
+      ]
+    },
+    {
+      "apply": [
+        {
+          "model": "dungeons_mobs:block/wraith_fire_side0"
+        },
+        {
+          "model": "dungeons_mobs:block/wraith_fire_side1"
+        },
+        {
+          "model": "dungeons_mobs:block/wraith_fire_side_alt0"
+        },
+        {
+          "model": "dungeons_mobs:block/wraith_fire_side_alt1"
+        }
+      ]
+    },
+    {
+      "apply": [
+        {
+          "model": "dungeons_mobs:block/wraith_fire_side0",
+          "y": 90
+        },
+        {
+          "model": "dungeons_mobs:block/wraith_fire_side1",
+          "y": 90
+        },
+        {
+          "model": "dungeons_mobs:block/wraith_fire_side_alt0",
+          "y": 90
+        },
+        {
+          "model": "dungeons_mobs:block/wraith_fire_side_alt1",
+          "y": 90
+        }
+      ]
+    },
+    {
+      "apply": [
+        {
+          "model": "dungeons_mobs:block/wraith_fire_side0",
+          "y": 180
+        },
+        {
+          "model": "dungeons_mobs:block/wraith_fire_side1",
+          "y": 180
+        },
+        {
+          "model": "dungeons_mobs:block/wraith_fire_side_alt0",
+          "y": 180
+        },
+        {
+          "model": "dungeons_mobs:block/wraith_fire_side_alt1",
+          "y": 180
+        }
+      ]
+    },
+    {
+      "apply": [
+        {
+          "model": "dungeons_mobs:block/wraith_fire_side0",
+          "y": 270
+        },
+        {
+          "model": "dungeons_mobs:block/wraith_fire_side1",
+          "y": 270
+        },
+        {
+          "model": "dungeons_mobs:block/wraith_fire_side_alt0",
+          "y": 270
+        },
+        {
+          "model": "dungeons_mobs:block/wraith_fire_side_alt1",
+          "y": 270
+        }
+      ]
+    }
+  ]
+}

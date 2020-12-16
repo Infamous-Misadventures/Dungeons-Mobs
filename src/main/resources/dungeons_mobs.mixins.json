@@ -1,0 +1,22 @@
+{
+  "required": true,
+  "package": "com.infamous.dungeons_mobs.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "minVersion": "0.8",
+  "refmap": "dungeons_mobs.refmap.json",
+  "mixins": [
+    "AbstractHorseEntityMixin",
+    "CropsBlockMixin",
+    "IllusionerEntityMixin",
+    "SpiderEntityMixin",
+    "RaidMixin",
+    "MansionTemplateMixin",
+    "PatrolSpawnerMixin"
+  ],
+  "client": [
+    "SpiderModelMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

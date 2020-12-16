@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "dungeons_mobs:geomancer",
+    "dungeons_mobs:armored_pillager",
+    "dungeons_mobs:redstone_golem",
+    "dungeons_mobs:armored_vindicator",
+    "dungeons_mobs:mountaineer",
+    "dungeons_mobs:armored_mountaineer",
+    "dungeons_mobs:royal_guard",
+    "dungeons_mobs:vindicator_chef",
+    "dungeons_mobs:iceologer",
+    "dungeons_mobs:windcaller",
+    "dungeons_mobs:illusioner_clone",
+    "dungeons_mobs:squall_golem"
+  ]
+}

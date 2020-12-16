@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/template_fire_floor",
+  "textures": {
+    "fire": "dungeons_mobs:block/wraith_fire_1"
+  }
+}
