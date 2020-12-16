@@ -1,0 +1,14 @@
+{
+"parent": "item/shield",
+"textures": {
+"particle": "block/iron_block"
+},
+"overrides": [
+{
+"predicate": {
+"blocking": 1
+},
+"model": "dungeons_mobs:item/royal_guard_shield_blocking"
+}
+]
+}

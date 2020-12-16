@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "dungeons_mobs:slimeball",
+    "dungeons_mobs:wraith_fireball",
+    "dungeons_mobs:cobweb_projectile"
+  ]
+}
