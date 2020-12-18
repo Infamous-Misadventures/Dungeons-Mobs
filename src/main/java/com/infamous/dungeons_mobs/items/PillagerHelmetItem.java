@@ -8,6 +8,8 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
@@ -24,12 +26,14 @@ public class PillagerHelmetItem extends ArmorItem {
     @SuppressWarnings({"rawtypes", "unchecked"})
     @Nullable
     @Override
+    @OnlyIn(Dist.CLIENT)
     public <A extends BipedModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
         return (A) new PillagerHelmetModel<>(1.0F, slot, entityLiving);
     }
 
     @Nullable
     @Override
+    @OnlyIn(Dist.CLIENT)
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
         if (this.isDiamond) {
             return MODID + ":textures/models/armor/diamond_pillager_helmet.png";
