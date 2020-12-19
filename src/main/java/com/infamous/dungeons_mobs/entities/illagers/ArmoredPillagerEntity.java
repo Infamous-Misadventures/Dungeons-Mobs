@@ -135,12 +135,15 @@ public class ArmoredPillagerEntity extends PillagerEntity {
             }
 
             weaponEnchantmentMap.put(Enchantments.MULTISHOT, 1);
-            weaponEnchantmentMap.put(Enchantments.PIERCING, 1);
             EnchantmentHelper.setEnchantments(weaponEnchantmentMap, crossbow);
             EnchantmentHelper.setEnchantments(armorEnchantmentMap, helmet);
-            this.setItemStackToSlot(EquipmentSlotType.MAINHAND, crossbow);
-            this.setItemStackToSlot(EquipmentSlotType.HEAD, helmet);
         }
+        Map<Enchantment, Integer> guaranteedEnchantMap = Maps.newHashMap();
+        guaranteedEnchantMap.put(Enchantments.PIERCING, 1);
+        EnchantmentHelper.setEnchantments(guaranteedEnchantMap, crossbow);
+        this.setItemStackToSlot(EquipmentSlotType.MAINHAND, crossbow);
+
+        this.setItemStackToSlot(EquipmentSlotType.HEAD, helmet);
     }
 
     @Override
