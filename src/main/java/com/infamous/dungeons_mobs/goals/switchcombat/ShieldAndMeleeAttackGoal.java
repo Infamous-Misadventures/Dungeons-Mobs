@@ -1,22 +1,28 @@
 package com.infamous.dungeons_mobs.goals.switchcombat;
 
 import com.infamous.dungeons_mobs.interfaces.IShieldUser;
+import com.infamous.dungeons_mobs.tags.CustomTags;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.util.Hand;
 
 public class ShieldAndMeleeAttackGoal<T extends CreatureEntity & IShieldUser> extends MeleeAttackGoal {
-    private T hostCreature;
-    private boolean inAttackMode;
+    private final T hostCreature;
+    private final int maxCloseQuartersShieldUseTime;
+    private final int attackWindowTime;
     private int seeTime;
+    private int closeQuartersShieldUseCounter;
+    private final double closeQuartersRangeSq;
 
-    public ShieldAndMeleeAttackGoal(T creatureEntity, double speedTowardsTarget, boolean useLongMemory) {
+    public ShieldAndMeleeAttackGoal(T creatureEntity, double speedTowardsTarget, boolean useLongMemory, double closeQuartersRange, int maxCloseQuartersShieldUseTime, int attackWindowTime) {
         super(creatureEntity, speedTowardsTarget, useLongMemory);
-            this.hostCreature = creatureEntity;
-            this.inAttackMode = false;
+        this.hostCreature = creatureEntity;
+        this.closeQuartersRangeSq = closeQuartersRange * closeQuartersRange;
+        this.maxCloseQuartersShieldUseTime = maxCloseQuartersShieldUseTime;
+        this.attackWindowTime = attackWindowTime;
+        this.closeQuartersShieldUseCounter = 0;
     }
 
     private boolean hasShieldInOffhand(){
@@ -30,7 +36,7 @@ public class ShieldAndMeleeAttackGoal<T extends CreatureEntity & IShieldUser> ex
     }
 
     private void stopUsingShield(){
-        if(this.hostCreature.getActiveHand() == Hand.OFF_HAND && this.hasShieldInOffhand()){
+        if(this.hostCreature.isActiveItemStackBlocking()){
             this.hostCreature.stopActiveHand();
         }
     }
@@ -38,7 +44,7 @@ public class ShieldAndMeleeAttackGoal<T extends CreatureEntity & IShieldUser> ex
     @Override
     public boolean shouldExecute() {
 
-        if(this.hasShieldInOffhand() && !this.hostCreature.isShieldDisabled() && !this.inAttackMode){
+        if(this.hasShieldInOffhand() && !this.hostCreature.isShieldDisabled()){
             LivingEntity attackTarget = this.hostCreature.getAttackTarget();
             return attackTarget != null && attackTarget.isAlive();
         }
@@ -54,7 +60,7 @@ public class ShieldAndMeleeAttackGoal<T extends CreatureEntity & IShieldUser> ex
 
     @Override
     public boolean shouldContinueExecuting() {
-        if(this.hasShieldInOffhand() && !this.hostCreature.isShieldDisabled() && !this.inAttackMode){
+        if(this.hasShieldInOffhand() && !this.hostCreature.isShieldDisabled()){
             return this.shouldExecute();
         }
         else{
@@ -66,21 +72,22 @@ public class ShieldAndMeleeAttackGoal<T extends CreatureEntity & IShieldUser> ex
     public void resetTask() {
         if(this.hasShieldInOffhand() && this.hostCreature.isActiveItemStackBlocking()){
             this.seeTime = 0;
+            this.closeQuartersShieldUseCounter = 0;
             this.stopUsingShield();
         }
-        this.inAttackMode = false;
         super.resetTask();
     }
 
     @Override
     public void tick() {
         LivingEntity attackTarget = this.hostCreature.getAttackTarget();
-        boolean villagerFlag = attackTarget instanceof AbstractVillagerEntity;
-        if(this.hasShieldInOffhand() // check if we have a shield - if not, we must default to melee attack AI
-                && !this.hostCreature.isShieldDisabled() // check if our shield is disabled - if so, we must default to melee attack AI
-                && !this.inAttackMode // check if we are set in attack mode - if so, default to melee attack AI
+        boolean dontShieldAgainst = attackTarget != null && attackTarget.getType().isContained(CustomTags.DONT_SHIELD_AGAINST);
+        boolean shieldDisabled = this.hostCreature.isShieldDisabled();
+        boolean hasShield = this.hasShieldInOffhand();
+        if(hasShield // check if we have a shield - if not, we must default to melee attack AI
+                && !shieldDisabled // check if our shield is disabled - if so, we must default to melee attack AI
                 && attackTarget != null // check if our target exists - otherwise we will get a NPE below
-                && !villagerFlag){ // check if the target is a villager - if so, default to melee attack AI since it cannot fight back
+                && !dontShieldAgainst){ // check if the target is a villager - if so, default to melee attack AI since it cannot fight back
             double hostDistanceSq = this.hostCreature.getDistanceSq(attackTarget.getPosX(), attackTarget.getPosY(), attackTarget.getPosZ());
             double detectRange = this.hostCreature.getAttributeValue(Attributes.FOLLOW_RANGE);
             double detectRangeSq = detectRange * detectRange;
@@ -95,6 +102,19 @@ public class ShieldAndMeleeAttackGoal<T extends CreatureEntity & IShieldUser> ex
                 this.hostCreature.getNavigator().clearPath();
             }
 
+            boolean closeQuarters = hostDistanceSq <= this.closeQuartersRangeSq;
+
+            if(closeQuarters && this.hostCreature.isActiveItemStackBlocking()){
+                this.closeQuartersShieldUseCounter++;
+            }
+
+            if(this.closeQuartersShieldUseCounter >= this.maxCloseQuartersShieldUseTime){
+                this.closeQuartersShieldUseCounter = 0;
+                this.stopUsingShield();
+                this.hostCreature.setShieldCooldownTime(this.attackWindowTime);
+                return;
+            }
+
             this.hostCreature.getLookController().setLookPositionWithEntity(attackTarget, 30.0F, 30.0F);
             if (!canSee) {
                 this.stopUsingShield();
@@ -104,8 +124,8 @@ public class ShieldAndMeleeAttackGoal<T extends CreatureEntity & IShieldUser> ex
             if(!this.hostCreature.isActiveItemStackBlocking()){
                 this.useShield();
             }
-        } else{
-            this.inAttackMode = true;
+        } else if(attackTarget != null){
+            this.closeQuartersShieldUseCounter = 0;
             super.tick();
         }
     }

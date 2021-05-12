@@ -15,7 +15,6 @@ import java.util.EnumSet;
 public class ThrowAndMeleeAttackGoal<T extends CreatureEntity & IRangedAttackMob> extends MeleeAttackGoal
 {
 	private final T hostCreature;
-	private LivingEntity attackTarget;
 	private int rangedAttackTime;
 	private final double entityMoveSpeed;
 	private int seeTime;
@@ -44,12 +43,7 @@ public class ThrowAndMeleeAttackGoal<T extends CreatureEntity & IRangedAttackMob
 	{
 		if(hasThrowableItemInMainhand()){
 			LivingEntity attackTarget = this.hostCreature.getAttackTarget();
-			if (attackTarget != null && attackTarget.isAlive()) {
-				this.attackTarget = attackTarget;
-				return true;
-			} else {
-				return false;
-			}
+			return attackTarget != null && attackTarget.isAlive();
 		}
 		else{
 			return super.shouldExecute();
@@ -80,7 +74,6 @@ public class ThrowAndMeleeAttackGoal<T extends CreatureEntity & IRangedAttackMob
 	public void resetTask()
 	{
 		if(hasThrowableItemInMainhand()){
-			this.attackTarget = null;
 			this.seeTime = 0;
 			this.rangedAttackTime = -1;
 		}
@@ -94,10 +87,10 @@ public class ThrowAndMeleeAttackGoal<T extends CreatureEntity & IRangedAttackMob
 	 */
 	public void tick()
 	{
-
-		if (hasThrowableItemInMainhand()) {
-			double hostDistanceSq = this.hostCreature.getDistanceSq(this.attackTarget.getPosX(), this.attackTarget.getPosY(), this.attackTarget.getPosZ());
-			boolean canSee = this.hostCreature.getEntitySenses().canSee(this.attackTarget);
+		LivingEntity attackTarget = this.hostCreature.getAttackTarget();
+		if (hasThrowableItemInMainhand() && attackTarget != null) {
+			double hostDistanceSq = this.hostCreature.getDistanceSq(attackTarget.getPosX(), attackTarget.getPosY(), attackTarget.getPosZ());
+			boolean canSee = this.hostCreature.getEntitySenses().canSee(attackTarget);
 			if (canSee) {
 				++this.seeTime;
 			} else {
@@ -107,10 +100,10 @@ public class ThrowAndMeleeAttackGoal<T extends CreatureEntity & IRangedAttackMob
 			if (hostDistanceSq <= (double)this.maxAttackDistance && this.seeTime >= 5) {
 				this.hostCreature.getNavigator().clearPath();
 			} else {
-				this.hostCreature.getNavigator().tryMoveToEntityLiving(this.attackTarget, this.entityMoveSpeed);
+				this.hostCreature.getNavigator().tryMoveToEntityLiving(attackTarget, this.entityMoveSpeed);
 			}
 
-			this.hostCreature.getLookController().setLookPositionWithEntity(this.attackTarget, 30.0F, 30.0F);
+			this.hostCreature.getLookController().setLookPositionWithEntity(attackTarget, 30.0F, 30.0F);
 			float distanceOverAttackRadius;
 			if (--this.rangedAttackTime == 0) {
 				if (!canSee) {
@@ -123,14 +116,14 @@ public class ThrowAndMeleeAttackGoal<T extends CreatureEntity & IRangedAttackMob
 				// Used to animate snowball or egg throwing
 				if(this.hasThrowableItemInMainhand()) this.hostCreature.swingArm(Hand.MAIN_HAND);
 
-				this.hostCreature.attackEntityWithRangedAttack(this.attackTarget, clampedDistanceOverAttackRadius);
+				this.hostCreature.attackEntityWithRangedAttack(attackTarget, clampedDistanceOverAttackRadius);
 				this.rangedAttackTime = MathHelper.floor(distanceOverAttackRadius * (float)(this.maxRangedAttackTime - this.attackIntervalMin) + (float)this.attackIntervalMin);
 			} else if (this.rangedAttackTime < 0) {
 				distanceOverAttackRadius = MathHelper.sqrt(hostDistanceSq) / this.attackRadius;
 				this.rangedAttackTime = MathHelper.floor(distanceOverAttackRadius * (float)(this.maxRangedAttackTime - this.attackIntervalMin) + (float)this.attackIntervalMin);
 			}
 		}
-		else
+		else if(attackTarget != null)
 		{
 			super.tick();
 		}

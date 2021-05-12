@@ -33,7 +33,6 @@ import java.util.Map;
 
 public class RoyalGuardEntity extends ArmoredVindicatorEntity implements IShieldUser {
     private int shieldCooldownTime;
-    private boolean isShieldDisabled;
 
     public RoyalGuardEntity(World world){
         super(ModEntityTypes.ROYAL_GUARD.get(), world);
@@ -133,10 +132,8 @@ public class RoyalGuardEntity extends ArmoredVindicatorEntity implements IShield
         if(this.shieldCooldownTime > 0){
             this.shieldCooldownTime--;
         }
-        else{
-            if(this.isShieldDisabled){
-                this.isShieldDisabled = false;
-            }
+        else if(this.shieldCooldownTime < 0){
+            this.shieldCooldownTime = 0;
         }
     }
 
@@ -159,7 +156,6 @@ public class RoyalGuardEntity extends ArmoredVindicatorEntity implements IShield
         if (this.rand.nextFloat() < f) {
             this.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.8F, 0.8F + this.world.rand.nextFloat() * 0.4F);
             this.shieldCooldownTime = 100;
-            this.isShieldDisabled = true;
             this.resetActiveHand();
             this.world.setEntityState(this, (byte)30);
         }
@@ -167,7 +163,7 @@ public class RoyalGuardEntity extends ArmoredVindicatorEntity implements IShield
 
     @Override
     public boolean isShieldDisabled() {
-        return this.isShieldDisabled;
+        return this.shieldCooldownTime > 0;
     }
 
     @Override
@@ -225,7 +221,7 @@ public class RoyalGuardEntity extends ArmoredVindicatorEntity implements IShield
 
     static class GuardAndAttackGoal extends ShieldAndMeleeAttackGoal {
         GuardAndAttackGoal(RoyalGuardEntity royalGuardEntity, double speedTowardsTarget, boolean useLongMemory) {
-            super(royalGuardEntity, speedTowardsTarget, useLongMemory);
+            super(royalGuardEntity, speedTowardsTarget, useLongMemory, 3.0D, 40, 5);
         }
 
         protected double getAttackReachSqr(LivingEntity livingEntity) {

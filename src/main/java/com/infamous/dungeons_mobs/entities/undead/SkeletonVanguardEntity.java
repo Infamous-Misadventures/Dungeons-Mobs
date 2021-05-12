@@ -24,7 +24,6 @@ import javax.annotation.Nullable;
 
 public class SkeletonVanguardEntity extends ArmoredSkeletonEntity implements IShieldUser {
     private int shieldCooldownTime;
-    private boolean isShieldDisabled;
 
     public SkeletonVanguardEntity(World worldIn) {
         super(ModEntityTypes.SKELETON_VANGUARD.get(), worldIn);
@@ -91,10 +90,8 @@ public class SkeletonVanguardEntity extends ArmoredSkeletonEntity implements ISh
         if(this.shieldCooldownTime > 0){
             this.shieldCooldownTime--;
         }
-        else{
-            if(this.isShieldDisabled){
-                this.isShieldDisabled = false;
-            }
+        else if(this.shieldCooldownTime < 0){
+            this.shieldCooldownTime = 0;
         }
     }
 
@@ -159,7 +156,6 @@ public class SkeletonVanguardEntity extends ArmoredSkeletonEntity implements ISh
         if (this.rand.nextFloat() < f) {
             this.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.8F, 0.8F + this.world.rand.nextFloat() * 0.4F);
             this.shieldCooldownTime = 100;
-            this.isShieldDisabled = true;
             this.resetActiveHand();
             this.world.setEntityState(this, (byte)30);
         }
@@ -167,12 +163,12 @@ public class SkeletonVanguardEntity extends ArmoredSkeletonEntity implements ISh
 
     @Override
     public boolean isShieldDisabled() {
-        return this.isShieldDisabled;
+        return this.shieldCooldownTime > 0;
     }
 
     static class GuardAndAttackGoal extends ShieldAndMeleeAttackGoal {
         GuardAndAttackGoal(SkeletonVanguardEntity skeletonVanguardEntity, double speedTowardsTarget, boolean useLongMemory) {
-            super(skeletonVanguardEntity, speedTowardsTarget, useLongMemory);
+            super(skeletonVanguardEntity, speedTowardsTarget, useLongMemory,3.0D, 40, 5);
         }
 
         protected double getAttackReachSqr(LivingEntity attackTarget) {
