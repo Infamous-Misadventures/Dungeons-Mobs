@@ -1,10 +1,13 @@
 package com.infamous.dungeons_mobs.blocks;
 
 import com.infamous.dungeons_mobs.mod.ModBlocks;
+import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import net.minecraft.block.*;
+import net.minecraft.entity.Entity;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameRules;
@@ -17,8 +20,11 @@ import java.util.Random;
 
 public class WraithFireBlock extends AbstractFireBlock {
     public static final IntegerProperty AGE = BlockStateProperties.AGE_0_15;
+    private final float fireDamage;
+
     public WraithFireBlock(Properties properties) {
         super(properties, 2.0F);
+        this.fireDamage = 2.0F;
         this.setDefaultState(this.stateContainer.getBaseState().with(AGE, Integer.valueOf(0)));
     }
 
@@ -92,6 +98,17 @@ public class WraithFireBlock extends AbstractFireBlock {
     private BlockState getFireWithAge(IWorld world, BlockPos pos, int age) {
         BlockState blockstate = ModBlocks.WRAITH_FIRE_BLOCK.get().getDefaultState();
         return blockstate.isIn(ModBlocks.WRAITH_FIRE_BLOCK.get()) ? blockstate.with(AGE, age) : blockstate;
+    }
+
+    public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
+        if (!entityIn.isImmuneToFire() || entityIn.getType() == ModEntityTypes.WRAITH.get()) {
+            entityIn.forceFireTicks(entityIn.getFireTimer() + 1);
+            if (entityIn.getFireTimer() == 0) {
+                entityIn.setFire(8);
+            }
+
+            entityIn.attackEntityFrom(DamageSource.IN_FIRE, this.fireDamage);
+        }
     }
 
     protected boolean canBurn(BlockState state) {

@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.worldgen;
 
 import com.infamous.dungeons_mobs.entities.creepers.IcyCreeperEntity;
+import com.infamous.dungeons_mobs.entities.jungle.VineEntity;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.entities.undead.FrozenZombieEntity;
 import com.infamous.dungeons_mobs.entities.undead.JungleZombieEntity;
@@ -115,7 +116,7 @@ public class EntitySpawnPlacements {
         EntitySpawnPlacementRegistry.register(ModEntityTypes.WHISPERER.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                MobEntity::canSpawnOn);
+                MonsterEntity::canMonsterSpawnInLight);
         EntitySpawnPlacementRegistry.register(ModEntityTypes.LEAPLEAF.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
@@ -123,11 +124,11 @@ public class EntitySpawnPlacements {
         EntitySpawnPlacementRegistry.register(ModEntityTypes.QUICK_GROWING_VINE.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                MobEntity::canSpawnOn);
+                VineEntity::canVineSpawnInLight);
         EntitySpawnPlacementRegistry.register(ModEntityTypes.POISON_QUILL_VINE.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                MobEntity::canSpawnOn);
+                VineEntity::canVineSpawnInLight);
 
     }
 
