@@ -101,7 +101,7 @@ public class WraithFireBlock extends AbstractFireBlock {
     }
 
     public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
-        if (!entityIn.isImmuneToFire() || entityIn.getType() == ModEntityTypes.WRAITH.get()) {
+        if (!entityIn.isImmuneToFire() || entityIn.getType() != ModEntityTypes.WRAITH.get()) {
             entityIn.forceFireTicks(entityIn.getFireTimer() + 1);
             if (entityIn.getFireTimer() == 0) {
                 entityIn.setFire(8);

@@ -1,5 +1,6 @@
 package com.infamous.dungeons_mobs.mixin;
 
+import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.goals.RangedWebAttackGoal;
 import com.infamous.dungeons_mobs.interfaces.IWebShooter;
 import net.minecraft.entity.Entity;
@@ -30,7 +31,9 @@ public abstract class SpiderEntityMixin extends MonsterEntity implements IWebSho
 
     @Inject(at = @At("RETURN"), method = "registerGoals")
     private void registerGoals(CallbackInfo callbackInfo){
-        this.goalSelector.addGoal(2, new RangedWebAttackGoal<>(this, 1.0D, 60, 20.0F));
+        if(DungeonsMobsConfig.COMMON.ENABLE_RANGED_SPIDERS.get()){
+            this.goalSelector.addGoal(2, new RangedWebAttackGoal<>(this, 1.0D, 60, 20.0F));
+        }
     }
 
     @Inject(at = @At("RETURN"), method = "registerData")

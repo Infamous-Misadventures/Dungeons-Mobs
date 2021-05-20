@@ -13,6 +13,8 @@ import com.infamous.dungeons_mobs.entities.undead.FrozenZombieEntity;
 import com.infamous.dungeons_mobs.goals.AvoidBaseEntityGoal;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.AvoidEntityGoal;
+import net.minecraft.entity.ai.goal.GoalSelector;
+import net.minecraft.entity.ai.goal.PrioritizedGoal;
 import net.minecraft.entity.monster.IllusionerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.SnowballEntity;
@@ -86,6 +88,11 @@ public class MobEvents {
                     }
                 }
             }
+        }
+        if(event.getEntity() instanceof IllusionerEntity){
+            IllusionerEntity illusionerEntity = (IllusionerEntity)event.getEntity();
+            GoalSelector goalSelector = illusionerEntity.goalSelector;
+
         }
     }
 

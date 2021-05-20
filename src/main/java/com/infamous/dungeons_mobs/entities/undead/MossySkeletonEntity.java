@@ -32,8 +32,6 @@ public class MossySkeletonEntity extends AbstractSkeletonEntity {
         super(entityType, world);
     }
 
-
-
     public static boolean canMossySkeletonSpawn(EntityType<MossySkeletonEntity> entityType, IServerWorld iWorld, SpawnReason spawnReason, BlockPos blockPos, Random rand) {
         return canMonsterSpawnInLight(entityType, iWorld, spawnReason, blockPos, rand) && (spawnReason == SpawnReason.SPAWNER || iWorld.canSeeSky(blockPos));
     }

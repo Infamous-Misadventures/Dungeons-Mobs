@@ -1,5 +1,6 @@
 package com.infamous.dungeons_mobs.worldgen;
 
+import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.entities.creepers.IcyCreeperEntity;
 import com.infamous.dungeons_mobs.entities.golem.SquallGolemEntity;
 import com.infamous.dungeons_mobs.entities.illagers.*;
@@ -62,10 +63,12 @@ public class EntityTypeAttributes {
         GlobalEntityTypeAttributes.put(ModEntityTypes.SQUALL_GOLEM.get(), SquallGolemEntity.setCustomAttributes().create());
 
         // Tougher Husks
-        GlobalEntityTypeAttributes.put(EntityType.HUSK, HuskEntity.func_234342_eQ_()
-                .createMutableAttribute(Attributes.ARMOR, 10.0D)
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.17D)
-                .createMutableAttribute(Attributes.KNOCKBACK_RESISTANCE, 0.6D)
-                .create());
+        if(DungeonsMobsConfig.COMMON.ENABLE_STRONGER_HUSKS.get()){
+            GlobalEntityTypeAttributes.put(EntityType.HUSK, HuskEntity.func_234342_eQ_()
+                    .createMutableAttribute(Attributes.ARMOR, 10.0D)
+                    .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.17D)
+                    .createMutableAttribute(Attributes.KNOCKBACK_RESISTANCE, 0.6D)
+                    .create());
+        }
     }
 }

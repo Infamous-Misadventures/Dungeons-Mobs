@@ -53,7 +53,7 @@ public class WraithFireballEntity extends AbstractFireballEntity {
       super.onEntityHit(p_213868_1_);
       if (!this.world.isRemote) {
          Entity entity = p_213868_1_.getEntity();
-         if (!entity.isImmuneToFire() || entity.getType() == ModEntityTypes.WRAITH.get()) {
+         if (!entity.isImmuneToFire() || entity.getType() != ModEntityTypes.WRAITH.get()) {
             Entity entity1 = this.func_234616_v_();
             int i = entity.getFireTimer();
             entity.setFire(5);

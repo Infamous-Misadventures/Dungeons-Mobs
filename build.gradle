@@ -22,9 +22,9 @@ mixin {
     add sourceSets.main, "dungeons_mobs.refmap.json"
 }
 
-version = '1.0.4'
+version = '1.0.6'
 group = 'com.infamous.dungeons_mobs' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'dungeons_mobs-1.16.4'
+archivesBaseName = 'dungeons_mobs-1.16.5'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 

@@ -113,6 +113,10 @@ public class DungeonsMobsConfig {
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_SQUALL_GOLEMS_IN_RAIDS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_REDSTONE_GOLEMS_IN_RAIDS;
 
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_STRONGER_HUSKS;
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_RANGED_SPIDERS;
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_CLONING_ILLUSIONERS;
+
         public Common(ForgeConfigSpec.Builder builder){
             // MOB CONFIGURATION
             builder.comment("Mob Configuration").push("mob_configuration");
@@ -570,6 +574,19 @@ public class DungeonsMobsConfig {
             ENABLE_REDSTONE_GOLEMS_IN_RAIDS = builder
                     .comment("Enable the addition of Redstone Golems to raids. [true / false]")
                     .define("enableRedstoneGolemsInRaids", true);
+            builder.pop();
+
+            builder.comment("Vanilla Mob Configuration").push("vanilla_mob_configuration");
+            ENABLE_STRONGER_HUSKS = builder
+                    .comment("Enable the addition of additional attributes to Husks to make them as powerful as they are in Minecraft Dungeons. [true / false]")
+                    .define("enableStrongerHusks", true);
+            ENABLE_RANGED_SPIDERS = builder
+                    .comment("Enables Spiders and Cave Spiders shooting webs as a ranged attack like they do in Minecraft Dungeons. [true / false]")
+                    .define("enableRangedSpiders", true);
+            ENABLE_CLONING_ILLUSIONERS = builder
+                    .comment("Enables Illusioners to have the same cloning behavior as they do in Minecraft Dungeons. [true / false]")
+                    .define("enableCloningIllusioners", true);
+            builder.pop();
         }
     }
 
