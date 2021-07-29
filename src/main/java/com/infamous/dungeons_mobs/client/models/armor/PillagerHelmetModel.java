@@ -33,11 +33,11 @@ public class PillagerHelmetModel<T extends LivingEntity> extends BipedModel<T> {
 		super(modelSize, 0.0F, 64, 64);
 		this.slot = slot;
 		this.entity = entity;
-		textureWidth = 64;
-		textureHeight = 64;
+		texWidth = 64;
+		texHeight = 64;
 
 		everything = new ModelRenderer(this);
-		everything.setRotationPoint(0.0F, 12.0F, 0.0F);
+		everything.setPos(0.0F, 12.0F, 0.0F);
 
 		boolean testificate =
 				this.entity instanceof AbstractIllagerEntity ||
@@ -49,34 +49,34 @@ public class PillagerHelmetModel<T extends LivingEntity> extends BipedModel<T> {
 		int testificateHelmetShiftUp = testificate ? 2 : 0;
 
 		head = new ModelRenderer(this);
-		head.setRotationPoint(0.0F, -24.0F, 0.0F);
+		head.setPos(0.0F, -24.0F, 0.0F);
 		everything.addChild(head);
-		head.setTextureOffset(32, 0).addBox(-4.0F, -10.0F, -4.0F, 8.0F, 6.0F, 8.0F, 1.0F, false);
+		head.texOffs(32, 0).addBox(-4.0F, -10.0F, -4.0F, 8.0F, 6.0F, 8.0F, 1.0F, false);
 
 		flap1 = new ModelRenderer(this);
-		flap1.setRotationPoint(-1.0F, 0.0F, -4.0F);
+		flap1.setPos(-1.0F, 0.0F, -4.0F);
 		head.addChild(flap1);
 		setRotationAngle(flap1, 0.0F, 0.0F, 0.4363F);
-		flap1.setTextureOffset(46, 27).addBox(-5.0F, -3.0F, 0.0F, 1.0F, 3.0F, 8.0F, 1.0F, false);
+		flap1.texOffs(46, 27).addBox(-5.0F, -3.0F, 0.0F, 1.0F, 3.0F, 8.0F, 1.0F, false);
 
 		flap2 = new ModelRenderer(this);
-		flap2.setRotationPoint(1.0F, 0.0F, -4.0F);
+		flap2.setPos(1.0F, 0.0F, -4.0F);
 		head.addChild(flap2);
 		setRotationAngle(flap2, 0.0F, 0.0F, -0.4363F);
-		flap2.setTextureOffset(46, 27).addBox(4.0F, -3.0F, 0.0F, 1.0F, 3.0F, 8.0F, 1.0F, true);
+		flap2.texOffs(46, 27).addBox(4.0F, -3.0F, 0.0F, 1.0F, 3.0F, 8.0F, 1.0F, true);
 
 		flap3 = new ModelRenderer(this);
-		flap3.setRotationPoint(4.0F, -3.0F, 7.0F);
+		flap3.setPos(4.0F, -3.0F, 7.0F);
 		head.addChild(flap3);
 		setRotationAngle(flap3, 0.4363F, 0.0F, 0.0F);
-		flap3.setTextureOffset(45, 30).addBox(-8.0F, -3.0F, 0.0F, 8.0F, 3.0F, 1.0F, 1.0F, false);
+		flap3.texOffs(45, 30).addBox(-8.0F, -3.0F, 0.0F, 8.0F, 3.0F, 1.0F, 1.0F, false);
 	}
 
 	@Override
-	public void setRotationAngles(T  entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
+	public void setupAnim(T  entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
 		//previously the render function, render code was moved to a method below
 	}@Override
-	public void render(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha){
+	public void renderToBuffer(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha){
 		boolean testificate =
 				this.entity instanceof AbstractIllagerEntity ||
 						this.entity.getType() == ForgeRegistries.ENTITIES.getValue(new ResourceLocation("savageandravage:skeleton_villager")) ||
@@ -114,21 +114,21 @@ public class PillagerHelmetModel<T extends LivingEntity> extends BipedModel<T> {
 			} else {
 
 		 */
-			matrixStackIn.push();
-			this.head.copyModelAngles(this.bipedHead);
-			if (this.entity.isChild()) {
+			matrixStackIn.pushPose();
+			this.head.copyFrom(this.head);
+			if (this.entity.isBaby()) {
 				matrixStackIn.scale(0.8F, 0.8F, 0.8F);
-				this.head.setRotationPoint(0.0F, 15.0F, 0.0F);
+				this.head.setPos(0.0F, 15.0F, 0.0F);
 			}
 			this.head.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-			matrixStackIn.pop();
+			matrixStackIn.popPose();
 			//}
 		}
 	}
 
 	public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
-		modelRenderer.rotateAngleX = x;
-		modelRenderer.rotateAngleY = y;
-		modelRenderer.rotateAngleZ = z;
+		modelRenderer.xRot = x;
+		modelRenderer.yRot = y;
+		modelRenderer.zRot = z;
 	}
 }

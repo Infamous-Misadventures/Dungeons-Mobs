@@ -9,6 +9,8 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
+import net.minecraft.item.Item.Properties;
+
 public class WindcallerStaffItem extends AbstractStaffItem{
     public WindcallerStaffItem(Properties properties) {
         super(properties);
@@ -16,12 +18,12 @@ public class WindcallerStaffItem extends AbstractStaffItem{
 
     @Override
     protected void activateStaff(PlayerEntity playerIn, LivingEntity target, ItemStack itemStack, Hand hand) {
-        World world = playerIn.getEntityWorld();
+        World world = playerIn.getCommandSenderWorld();
         TornadoEntity tornadoEntity = new TornadoEntity(world, playerIn, target);
         tornadoEntity.addEffect(new EffectInstance(Effects.LEVITATION, 100,1));
         tornadoEntity.setDuration(100);
-        world.addEntity(tornadoEntity);
-        playerIn.getCooldownTracker().setCooldown(itemStack.getItem(), 400);
-        itemStack.damageItem(1, playerIn, playerEntity -> playerEntity.sendBreakAnimation(hand));
+        world.addFreshEntity(tornadoEntity);
+        playerIn.getCooldowns().addCooldown(itemStack.getItem(), 400);
+        itemStack.hurtAndBreak(1, playerIn, playerEntity -> playerEntity.broadcastBreakEvent(hand));
     }
 }

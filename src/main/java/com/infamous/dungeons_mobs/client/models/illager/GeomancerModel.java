@@ -25,85 +25,85 @@ public class GeomancerModel<T extends GeomancerEntity> extends BipedModel<T> {
 
 	public GeomancerModel(float modelSize, float yOffset, int textureWidthIn, int textureHeightIn) {
 		super(modelSize);
-		textureWidth = textureWidthIn;
-		textureHeight = textureHeightIn;
+		texWidth = textureWidthIn;
+		texHeight = textureHeightIn;
 
-		this.bipedHead = new ModelRenderer(this);
-		this.bipedHead.setRotationPoint(0.0F, 0.0F + yOffset, 0.0F);
-		this.bipedHead.setTextureOffset(0, 0).addBox(-4.0F, -10.0F, -4.0F, 8.0F, 10.0F, 8.0F, modelSize);
-		this.bipedHead.setTextureOffset(24, 0).addBox(-1.0F, -3.0F, -6.0F, 2.0F, 4.0F, 2.0F, modelSize);
-		this.bipedHead.setTextureOffset(32, 0).addBox(-4.0F, -10.0F, -4.0F, 8.0F, 10.0F, 8.0F, modelSize);
-		this.bipedHead.setTextureOffset(47, 30).addBox(-3.0F, -2.9F, -4.5F, 6.0F, 5.0F, 1.0F, modelSize);
-		this.bipedHead.setTextureOffset(49, 33).addBox(-2.0F, 2.1F, -4.5F, 4.0F, 1.0F, 1.0F, modelSize);
+		this.head = new ModelRenderer(this);
+		this.head.setPos(0.0F, 0.0F + yOffset, 0.0F);
+		this.head.texOffs(0, 0).addBox(-4.0F, -10.0F, -4.0F, 8.0F, 10.0F, 8.0F, modelSize);
+		this.head.texOffs(24, 0).addBox(-1.0F, -3.0F, -6.0F, 2.0F, 4.0F, 2.0F, modelSize);
+		this.head.texOffs(32, 0).addBox(-4.0F, -10.0F, -4.0F, 8.0F, 10.0F, 8.0F, modelSize);
+		this.head.texOffs(47, 30).addBox(-3.0F, -2.9F, -4.5F, 6.0F, 5.0F, 1.0F, modelSize);
+		this.head.texOffs(49, 33).addBox(-2.0F, 2.1F, -4.5F, 4.0F, 1.0F, 1.0F, modelSize);
 
-		this.bipedHeadwear.showModel = false; // no mapped headwear texture
+		this.hat.visible = false; // no mapped headwear texture
 
-		this.bipedBody = new ModelRenderer(this);
-		this.bipedBody.setRotationPoint(0.0F, 0.0F + yOffset, 0.0F);
-		this.bipedBody.setTextureOffset(16, 20).addBox(-4.0F, 0.0F, -3.0F, 8.0F, 12.0F, 6.0F, modelSize);
+		this.body = new ModelRenderer(this);
+		this.body.setPos(0.0F, 0.0F + yOffset, 0.0F);
+		this.body.texOffs(16, 20).addBox(-4.0F, 0.0F, -3.0F, 8.0F, 12.0F, 6.0F, modelSize);
 
 		this.collar = new ModelRenderer(this);
-		this.collar.setRotationPoint(0.0F, 0.0F + yOffset, 0.0F);
-		this.collar.setTextureOffset(0, 0).addBox(-6.0F, -2.0F, -1.0F, 2.0F, 2.0F, 2.0F, modelSize);
-		this.collar.setTextureOffset(0, 0).addBox(-6.0F, -1.0F, -4.0F, 2.0F, 2.0F, 2.0F, modelSize);
-		this.collar.setTextureOffset(0, 0).addBox(-4.0F, 1.0F, -5.0F, 2.0F, 2.0F, 2.0F, modelSize);
-		this.collar.setTextureOffset(0, 0).addBox(-6.0F, -1.0F, 2.0F, 2.0F, 2.0F, 2.0F, modelSize);
-		this.collar.setTextureOffset(56, 0).addBox(-4.0F, 1.0F, 3.0F, 2.0F, 2.0F, 2.0F, modelSize);
-		this.collar.setTextureOffset(52, 4).addBox(-2.0F, 2.0F, 3.0F, 4.0F, 2.0F, 2.0F, modelSize);
-		this.collar.setTextureOffset(56, 0).addBox(2.0F, 1.0F, 3.0F, 2.0F, 2.0F, 2.0F, modelSize);
-		this.collar.setTextureOffset(56, 40).addBox(4.0F, -1.0F, 2.0F, 2.0F, 2.0F, 2.0F, modelSize);
-		this.collar.setTextureOffset(56, 40).addBox(4.0F, -2.0F, -1.0F, 2.0F, 2.0F, 2.0F, modelSize);
-		this.collar.setTextureOffset(56, 40).addBox(4.0F, -1.0F, -4.0F, 2.0F, 2.0F, 2.0F, modelSize);
-		this.collar.setTextureOffset(56, 40).addBox(2.0F, 1.0F, -5.0F, 2.0F, 2.0F, 2.0F, modelSize);
-		this.collar.setTextureOffset(56, 20).addBox(-1.0F, 3.0F, -5.0F, 2.0F, 2.0F, 2.0F, modelSize);
+		this.collar.setPos(0.0F, 0.0F + yOffset, 0.0F);
+		this.collar.texOffs(0, 0).addBox(-6.0F, -2.0F, -1.0F, 2.0F, 2.0F, 2.0F, modelSize);
+		this.collar.texOffs(0, 0).addBox(-6.0F, -1.0F, -4.0F, 2.0F, 2.0F, 2.0F, modelSize);
+		this.collar.texOffs(0, 0).addBox(-4.0F, 1.0F, -5.0F, 2.0F, 2.0F, 2.0F, modelSize);
+		this.collar.texOffs(0, 0).addBox(-6.0F, -1.0F, 2.0F, 2.0F, 2.0F, 2.0F, modelSize);
+		this.collar.texOffs(56, 0).addBox(-4.0F, 1.0F, 3.0F, 2.0F, 2.0F, 2.0F, modelSize);
+		this.collar.texOffs(52, 4).addBox(-2.0F, 2.0F, 3.0F, 4.0F, 2.0F, 2.0F, modelSize);
+		this.collar.texOffs(56, 0).addBox(2.0F, 1.0F, 3.0F, 2.0F, 2.0F, 2.0F, modelSize);
+		this.collar.texOffs(56, 40).addBox(4.0F, -1.0F, 2.0F, 2.0F, 2.0F, 2.0F, modelSize);
+		this.collar.texOffs(56, 40).addBox(4.0F, -2.0F, -1.0F, 2.0F, 2.0F, 2.0F, modelSize);
+		this.collar.texOffs(56, 40).addBox(4.0F, -1.0F, -4.0F, 2.0F, 2.0F, 2.0F, modelSize);
+		this.collar.texOffs(56, 40).addBox(2.0F, 1.0F, -5.0F, 2.0F, 2.0F, 2.0F, modelSize);
+		this.collar.texOffs(56, 20).addBox(-1.0F, 3.0F, -5.0F, 2.0F, 2.0F, 2.0F, modelSize);
 
 		this.tunic = new ModelRenderer(this);
-		this.tunic.setRotationPoint(0.0F, 0.0F + yOffset, 0.0F);
-		this.tunic.setTextureOffset(0, 38).addBox(-4.0F, -24.0F + 24.0F, -3.0F, 8.0F, 18.0F, 6.0F, 0.5F + modelSize);
+		this.tunic.setPos(0.0F, 0.0F + yOffset, 0.0F);
+		this.tunic.texOffs(0, 38).addBox(-4.0F, -24.0F + 24.0F, -3.0F, 8.0F, 18.0F, 6.0F, 0.5F + modelSize);
 
-		this.bipedRightLeg = new ModelRenderer(this);
-		this.bipedRightLeg.setRotationPoint(2.0F, 12.0F + yOffset, 0.0F);
-		this.bipedRightLeg.setTextureOffset(0, 22).addBox(-6.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, modelSize);
+		this.rightLeg = new ModelRenderer(this);
+		this.rightLeg.setPos(2.0F, 12.0F + yOffset, 0.0F);
+		this.rightLeg.texOffs(0, 22).addBox(-6.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, modelSize);
 
-		this.bipedLeftLeg = new ModelRenderer(this);
-		this.bipedLeftLeg.setRotationPoint(-2.0F, 12.0F + yOffset, 0.0F);
-		this.bipedLeftLeg.setTextureOffset(0, 22).addBox(2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, modelSize, true);
+		this.leftLeg = new ModelRenderer(this);
+		this.leftLeg.setPos(-2.0F, 12.0F + yOffset, 0.0F);
+		this.leftLeg.texOffs(0, 22).addBox(2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, modelSize, true);
 
-		this.bipedRightArm = new ModelRenderer(this);
-		this.bipedRightArm.setRotationPoint(5.0F, 2.0F + yOffset, 0.0F);
-		this.bipedRightArm.setTextureOffset(40, 46).addBox(-13.0F + 10.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, modelSize);
+		this.rightArm = new ModelRenderer(this);
+		this.rightArm.setPos(5.0F, 2.0F + yOffset, 0.0F);
+		this.rightArm.texOffs(40, 46).addBox(-13.0F + 10.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, modelSize);
 
-		this.bipedLeftArm = new ModelRenderer(this);
-		this.bipedLeftArm.setRotationPoint(-5.0F, 2.0F + yOffset, 0.0F);
-		this.bipedLeftArm.setTextureOffset(40, 46).addBox(9.0F - 10.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, 0.0F, true);
+		this.leftArm = new ModelRenderer(this);
+		this.leftArm.setPos(-5.0F, 2.0F + yOffset, 0.0F);
+		this.leftArm.texOffs(40, 46).addBox(9.0F - 10.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, 0.0F, true);
 	}
 
 	@Override
-	protected Iterable<ModelRenderer> getBodyParts() {
-		return Iterables.concat(super.getBodyParts(), ImmutableList.of(this.tunic, this.collar));
+	protected Iterable<ModelRenderer> bodyParts() {
+		return Iterables.concat(super.bodyParts(), ImmutableList.of(this.tunic, this.collar));
 	}
 
 	@Override
-	public void setLivingAnimations(T entityIn, float limbSwing, float limbSwingAmount, float partialTick) {
+	public void prepareMobModel(T entityIn, float limbSwing, float limbSwingAmount, float partialTick) {
 		this.rightArmPose = BipedModel.ArmPose.EMPTY;
 		this.leftArmPose = BipedModel.ArmPose.EMPTY;
-		if (entityIn.getPrimaryHand() == HandSide.RIGHT) {
+		if (entityIn.getMainArm() == HandSide.RIGHT) {
 			this.giveModelRightArmPoses(Hand.MAIN_HAND, entityIn);
 			this.giveModelLeftArmPoses(Hand.OFF_HAND, entityIn);
 		} else {
 			this.giveModelRightArmPoses(Hand.OFF_HAND, entityIn);
 			this.giveModelLeftArmPoses(Hand.MAIN_HAND, entityIn);
 		}
-		super.setLivingAnimations(entityIn, limbSwing, limbSwingAmount, partialTick);
+		super.prepareMobModel(entityIn, limbSwing, limbSwingAmount, partialTick);
 	}
 
 	private void giveModelRightArmPoses(Hand hand, T entityIn) {
-		ItemStack itemstack = entityIn.getHeldItem(hand);
-		UseAction useaction = itemstack.getUseAction();
+		ItemStack itemstack = entityIn.getItemInHand(hand);
+		UseAction useaction = itemstack.getUseAnimation();
 		if (entityIn.getArmPose() != AbstractIllagerEntity.ArmPose.CROSSED) {
 			switch (useaction) {
 				case BLOCK:
-					if(entityIn.isActiveItemStackBlocking()){
+					if(entityIn.isBlocking()){
 						this.rightArmPose = BipedModel.ArmPose.BLOCK;
 					}
 					else{
@@ -112,7 +112,7 @@ public class GeomancerModel<T extends GeomancerEntity> extends BipedModel<T> {
 					break;
 				case CROSSBOW:
 					this.rightArmPose = BipedModel.ArmPose.CROSSBOW_HOLD;
-					if (entityIn.isHandActive()) {
+					if (entityIn.isUsingItem()) {
 						this.rightArmPose = BipedModel.ArmPose.CROSSBOW_CHARGE;
 					}
 					break;
@@ -133,12 +133,12 @@ public class GeomancerModel<T extends GeomancerEntity> extends BipedModel<T> {
 	}
 
 	private void giveModelLeftArmPoses(Hand hand, T entityIn) {
-		ItemStack itemstack = entityIn.getHeldItem(hand);
-		UseAction useaction = itemstack.getUseAction();
+		ItemStack itemstack = entityIn.getItemInHand(hand);
+		UseAction useaction = itemstack.getUseAnimation();
 		if (entityIn.getArmPose() != AbstractIllagerEntity.ArmPose.CROSSED) {
 			switch (useaction) {
 				case BLOCK:
-					if(entityIn.isActiveItemStackBlocking()){
+					if(entityIn.isBlocking()){
 						this.leftArmPose = BipedModel.ArmPose.BLOCK;
 					}
 					else{
@@ -147,7 +147,7 @@ public class GeomancerModel<T extends GeomancerEntity> extends BipedModel<T> {
 					break;
 				case CROSSBOW:
 					this.leftArmPose = BipedModel.ArmPose.CROSSBOW_HOLD;
-					if (entityIn.isHandActive()) {
+					if (entityIn.isUsingItem()) {
 						this.leftArmPose = BipedModel.ArmPose.CROSSBOW_CHARGE;
 					}
 					break;
@@ -168,34 +168,34 @@ public class GeomancerModel<T extends GeomancerEntity> extends BipedModel<T> {
 	}
 
 	@Override
-	public void setRotationAngles(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		super.setRotationAngles(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+	public void setupAnim(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+		super.setupAnim(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
 		AbstractIllagerEntity.ArmPose armpose = entityIn.getArmPose();
 		//this.arms.rotationPointY = 3.0F;
 		//this.arms.rotationPointZ = -1.0F;
 		//this.arms.rotateAngleX = -0.75F;
-		this.tunic.copyModelAngles(bipedBody);
-		boolean isWearingChestplateOrLeggings = entityIn.getItemStackFromSlot(EquipmentSlotType.CHEST).getItem() instanceof ArmorItem || entityIn.getItemStackFromSlot(EquipmentSlotType.LEGS).getItem() instanceof ArmorItem;
-		this.tunic.showModel = !isWearingChestplateOrLeggings;
+		this.tunic.copyFrom(body);
+		boolean isWearingChestplateOrLeggings = entityIn.getItemBySlot(EquipmentSlotType.CHEST).getItem() instanceof ArmorItem || entityIn.getItemBySlot(EquipmentSlotType.LEGS).getItem() instanceof ArmorItem;
+		this.tunic.visible = !isWearingChestplateOrLeggings;
 		boolean flag = armpose == AbstractIllagerEntity.ArmPose.CROSSED;
 		//this.arms.showModel = flag;
-		this.bipedLeftArm.showModel = !flag;
-		this.bipedRightArm.showModel = !flag;
+		this.leftArm.visible = !flag;
+		this.rightArm.visible = !flag;
 		if (flag) {
-			this.bipedLeftArm.rotationPointY = 3.0F;
-			this.bipedLeftArm.rotationPointZ = -1.0F;
-			this.bipedLeftArm.rotateAngleX = -0.75F;
-			this.bipedRightArm.rotationPointY = 3.0F;
-			this.bipedRightArm.rotationPointZ = -1.0F;
-			this.bipedRightArm.rotateAngleX = -0.75F;
+			this.leftArm.y = 3.0F;
+			this.leftArm.z = -1.0F;
+			this.leftArm.xRot = -0.75F;
+			this.rightArm.y = 3.0F;
+			this.rightArm.z = -1.0F;
+			this.rightArm.xRot = -0.75F;
 		}
 		switch (armpose) {
 			case ATTACKING:
-				if (!entityIn.getHeldItemMainhand().isEmpty()
-						&& !(entityIn.getHeldItemMainhand().getItem() instanceof ShootableItem)
-						&& !(entityIn.isActiveItemStackBlocking())){
+				if (!entityIn.getMainHandItem().isEmpty()
+						&& !(entityIn.getMainHandItem().getItem() instanceof ShootableItem)
+						&& !(entityIn.isBlocking())){
 					// raises arm with weapon, moves left arm back and forth while attacking
-					ModelHelper.func_239103_a_(this.bipedRightArm, this.bipedLeftArm, entityIn, this.swingProgress, ageInTicks);
+					ModelHelper.swingWeaponDown(this.rightArm, this.leftArm, entityIn, this.attackTime, ageInTicks);
 				}
                 /*
                 else if(!entityIn.getHeldItemMainhand().isEmpty()
@@ -206,28 +206,28 @@ public class GeomancerModel<T extends GeomancerEntity> extends BipedModel<T> {
                  */
 				break;
 			case CELEBRATING:
-				this.bipedRightArm.rotationPointZ = 0.0F;
-				this.bipedRightArm.rotationPointX = -5.0F;
-				this.bipedRightArm.rotateAngleX = MathHelper.cos(ageInTicks * 0.6662F) * 0.05F;
-				this.bipedRightArm.rotateAngleZ = 2.670354F;
-				this.bipedRightArm.rotateAngleY = 0.0F;
-				this.bipedLeftArm.rotationPointZ = 0.0F;
-				this.bipedLeftArm.rotationPointX = 5.0F;
-				this.bipedLeftArm.rotateAngleX = MathHelper.cos(ageInTicks * 0.6662F) * 0.05F;
-				this.bipedLeftArm.rotateAngleZ = -2.3561945F;
-				this.bipedLeftArm.rotateAngleY = 0.0F;
+				this.rightArm.z = 0.0F;
+				this.rightArm.x = -5.0F;
+				this.rightArm.xRot = MathHelper.cos(ageInTicks * 0.6662F) * 0.05F;
+				this.rightArm.zRot = 2.670354F;
+				this.rightArm.yRot = 0.0F;
+				this.leftArm.z = 0.0F;
+				this.leftArm.x = 5.0F;
+				this.leftArm.xRot = MathHelper.cos(ageInTicks * 0.6662F) * 0.05F;
+				this.leftArm.zRot = -2.3561945F;
+				this.leftArm.yRot = 0.0F;
 				break;
 			case SPELLCASTING:
-				this.bipedRightArm.rotationPointZ = 0.0F;
-				this.bipedRightArm.rotationPointX = -5.0F;
-				this.bipedLeftArm.rotationPointZ = 0.0F;
-				this.bipedLeftArm.rotationPointX = 5.0F;
-				this.bipedRightArm.rotateAngleX = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
-				this.bipedLeftArm.rotateAngleX = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
-				this.bipedRightArm.rotateAngleZ = 2.3561945F;
-				this.bipedLeftArm.rotateAngleZ = -2.3561945F;
-				this.bipedRightArm.rotateAngleY = 0.0F;
-				this.bipedLeftArm.rotateAngleY = 0.0F;
+				this.rightArm.z = 0.0F;
+				this.rightArm.x = -5.0F;
+				this.leftArm.z = 0.0F;
+				this.leftArm.x = 5.0F;
+				this.rightArm.xRot = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
+				this.leftArm.xRot = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
+				this.rightArm.zRot = 2.3561945F;
+				this.leftArm.zRot = -2.3561945F;
+				this.rightArm.yRot = 0.0F;
+				this.leftArm.yRot = 0.0F;
 				break;
 			default:
 				break;
@@ -235,8 +235,8 @@ public class GeomancerModel<T extends GeomancerEntity> extends BipedModel<T> {
 	}
 
 	public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
-		modelRenderer.rotateAngleX = x;
-		modelRenderer.rotateAngleY = y;
-		modelRenderer.rotateAngleZ = z;
+		modelRenderer.xRot = x;
+		modelRenderer.yRot = y;
+		modelRenderer.zRot = z;
 	}
 }

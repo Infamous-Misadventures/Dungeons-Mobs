@@ -24,7 +24,7 @@ public class GeomancerWallRenderer extends GeomancerConstructRenderer<GeomancerW
     }
 
     @Override
-    public ResourceLocation getEntityTexture(GeomancerWallEntity entity) {
+    public ResourceLocation getTextureLocation(GeomancerWallEntity entity) {
         return BLOCKING_PILLAR_TEXTURE;
     }
 }

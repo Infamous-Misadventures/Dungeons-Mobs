@@ -30,7 +30,7 @@ import net.minecraftforge.fml.network.NetworkHooks;
    _interface = IRendersAsItem.class
 )
 public class SlimeballEntity extends DamagingProjectileEntity implements IRendersAsItem {
-   private static final DataParameter<ItemStack> STACK = EntityDataManager.createKey(SlimeballEntity.class, DataSerializers.ITEMSTACK);
+   private static final DataParameter<ItemStack> STACK = EntityDataManager.defineId(SlimeballEntity.class, DataSerializers.ITEM_STACK);
 
    public SlimeballEntity(World worldIn){
       super(ModEntityTypes.SLIMEBALL.get(), worldIn);
@@ -51,14 +51,14 @@ public class SlimeballEntity extends DamagingProjectileEntity implements IRender
 
    public void setStack(ItemStack stack) {
       if (stack.getItem() != Items.SLIME_BALL || stack.hasTag()) {
-         this.getDataManager().set(STACK, Util.make(stack.copy(), (itemStack) -> {
+         this.getEntityData().set(STACK, Util.make(stack.copy(), (itemStack) -> {
             itemStack.setCount(1);
          }));
       }
    }
 
    protected ItemStack getStack() {
-      return this.getDataManager().get(STACK);
+      return this.getEntityData().get(STACK);
    }
 
    @OnlyIn(Dist.CLIENT)
@@ -67,15 +67,15 @@ public class SlimeballEntity extends DamagingProjectileEntity implements IRender
       return itemstack.isEmpty() ? new ItemStack(Items.SLIME_BALL) : itemstack;
    }
 
-   protected void registerData() {
-      this.getDataManager().register(STACK, ItemStack.EMPTY);
+   protected void defineSynchedData() {
+      this.getEntityData().define(STACK, ItemStack.EMPTY);
    }
 
-   public void writeAdditional(CompoundNBT compound) {
-      super.writeAdditional(compound);
+   public void addAdditionalSaveData(CompoundNBT compound) {
+      super.addAdditionalSaveData(compound);
       ItemStack itemstack = this.getStack();
       if (!itemstack.isEmpty()) {
-         compound.put("Item", itemstack.write(new CompoundNBT()));
+         compound.put("Item", itemstack.save(new CompoundNBT()));
       }
 
    }
@@ -83,39 +83,39 @@ public class SlimeballEntity extends DamagingProjectileEntity implements IRender
    /**
     * (abstract) Protected helper method to read subclass entity data from NBT.
     */
-   public void readAdditional(CompoundNBT compound) {
-      super.readAdditional(compound);
-      ItemStack itemstack = ItemStack.read(compound.getCompound("Item"));
+   public void readAdditionalSaveData(CompoundNBT compound) {
+      super.readAdditionalSaveData(compound);
+      ItemStack itemstack = ItemStack.of(compound.getCompound("Item"));
       this.setStack(itemstack);
    }
 
-   protected boolean isFireballFiery() {
+   protected boolean shouldBurn() {
       return false;
    }
 
-   protected IParticleData getParticle() {
+   protected IParticleData getTrailParticle() {
       return ParticleTypes.ITEM_SLIME;
    }
 
     @Override
-    protected void onEntityHit(EntityRayTraceResult rayTraceResult) {
-        super.onEntityHit(rayTraceResult);
+    protected void onHitEntity(EntityRayTraceResult rayTraceResult) {
+        super.onHitEntity(rayTraceResult);
         Entity entity = rayTraceResult.getEntity();
         int attackDamage = 3;
         if(!(entity instanceof SlimeEntity)){
-           entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.func_234616_v_()), (float)attackDamage);
+           entity.hurt(DamageSource.thrown(this, this.getOwner()), (float)attackDamage);
         }
     }
 
     /**
     * Called when this EntityFireball hits a block or entity.
     */
-   protected void onImpact(RayTraceResult result) {
-      super.onImpact(result);
+   protected void onHit(RayTraceResult result) {
+      super.onHit(result);
       if(result instanceof EntityRayTraceResult){
          EntityRayTraceResult entityRayTraceResult = (EntityRayTraceResult)result;
          if(!(entityRayTraceResult.getEntity() instanceof SlimeEntity)){
-            if (!this.world.isRemote) {
+            if (!this.level.isClientSide) {
             this.remove();
             }
          }
@@ -126,7 +126,7 @@ public class SlimeballEntity extends DamagingProjectileEntity implements IRender
    }
 
    private void removeIfWorldNotRemote() {
-      if (!this.world.isRemote) {
+      if (!this.level.isClientSide) {
          this.remove();
       }
    }
@@ -134,19 +134,19 @@ public class SlimeballEntity extends DamagingProjectileEntity implements IRender
    /**
     * Returns true if other Entities should be prevented from moving through this Entity.
     */
-   public boolean canBeCollidedWith() {
+   public boolean isPickable() {
       return false;
    }
 
    /**
     * Called when the entity is attacked.
     */
-   public boolean attackEntityFrom(DamageSource source, float amount) {
+   public boolean hurt(DamageSource source, float amount) {
       return false;
    }
 
    @Override
-   public IPacket<?> createSpawnPacket() {
+   public IPacket<?> getAddEntityPacket() {
       return NetworkHooks.getEntitySpawningPacket(this);
    }
 }

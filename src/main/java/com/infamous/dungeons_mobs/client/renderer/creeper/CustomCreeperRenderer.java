@@ -19,10 +19,10 @@ public class CustomCreeperRenderer extends CreeperRenderer {
     }
 
     @Override
-    public ResourceLocation getEntityTexture(CreeperEntity creeperEntity) {
+    public ResourceLocation getTextureLocation(CreeperEntity creeperEntity) {
         if(creeperEntity instanceof IcyCreeperEntity){
             return ICY_CREEPER_TEXTURE;
         }
-        return super.getEntityTexture(creeperEntity);
+        return super.getTextureLocation(creeperEntity);
     }
 }

@@ -8,6 +8,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Util;
 
+import net.minecraft.item.Item.Properties;
+
 public class GeomancerStaffItem extends AbstractStaffItem{
     public GeomancerStaffItem(Properties properties) {
         super(properties);
@@ -15,14 +17,14 @@ public class GeomancerStaffItem extends AbstractStaffItem{
 
     @Override
     protected void activateStaff(PlayerEntity playerIn, LivingEntity target, ItemStack itemStack, Hand hand) {
-        if(playerIn.getRNG().nextFloat() < 0.25F){
+        if(playerIn.getRandom().nextFloat() < 0.25F){
             GeomancyHelper.summonOffensiveConstruct(playerIn, target, ModEntityTypes.GEOMANCER_BOMB.get());
         }
         else{
-            int[] rowToRemove = Util.getRandomObject(GeomancyHelper.ROWS, playerIn.getRNG());
+            int[] rowToRemove = Util.getRandom(GeomancyHelper.ROWS, playerIn.getRandom());
             GeomancyHelper.summonAreaDenialTrap(playerIn, target, ModEntityTypes.GEOMANCER_WALL.get(), rowToRemove);
         }
-        playerIn.getCooldownTracker().setCooldown(itemStack.getItem(), 400);
-        itemStack.damageItem(1, playerIn, playerEntity -> playerEntity.sendBreakAnimation(hand));
+        playerIn.getCooldowns().addCooldown(itemStack.getItem(), 400);
+        itemStack.hurtAndBreak(1, playerIn, playerEntity -> playerEntity.broadcastBreakEvent(hand));
     }
 }

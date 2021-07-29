@@ -30,18 +30,18 @@ public class IllusionerCloneRenderer extends MobRenderer<IllusionerCloneEntity, 
                 }
             }
         });
-        this.entityModel.bipedHeadwear.showModel = true; // apparently this cost tallestred hours of his life
+        this.model.hat.visible = true; // apparently this cost tallestred hours of his life
     }
 
     @Override
-    protected void preRenderCallback(IllusionerCloneEntity illusionerCloneEntity, MatrixStack matrixStack, float v) {
+    protected void scale(IllusionerCloneEntity illusionerCloneEntity, MatrixStack matrixStack, float v) {
         float scaleFactor = 0.9375F;
         matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
-        super.preRenderCallback(illusionerCloneEntity, matrixStack, v);
+        super.scale(illusionerCloneEntity, matrixStack, v);
     }
 
     @Override
-    public ResourceLocation getEntityTexture(IllusionerCloneEntity entity) {
+    public ResourceLocation getTextureLocation(IllusionerCloneEntity entity) {
         return ILLUSIONER_CLONE_TEXTURE;
     }
 }

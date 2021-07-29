@@ -28,7 +28,7 @@ public class WindcallerRenderer extends MobRenderer<WindcallerEntity, Windcaller
         this.addLayer(new HeldItemLayer<WindcallerEntity, WindcallerModel<WindcallerEntity>>(this) {
             @Override
             public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, WindcallerEntity windcallerEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-                if (windcallerEntity.isSpellcasting() || windcallerEntity.isAggressive() || windcallerEntity.getArmPose() == AbstractIllagerEntity.ArmPose.NEUTRAL) {
+                if (windcallerEntity.isCastingSpell() || windcallerEntity.isAggressive() || windcallerEntity.getArmPose() == AbstractIllagerEntity.ArmPose.NEUTRAL) {
                     super.render(matrixStackIn, bufferIn, packedLightIn, windcallerEntity, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
                 }
             }
@@ -37,14 +37,14 @@ public class WindcallerRenderer extends MobRenderer<WindcallerEntity, Windcaller
     }
 
     @Override
-    protected void preRenderCallback(WindcallerEntity windcallerEntity, MatrixStack matrixStack, float v) {
+    protected void scale(WindcallerEntity windcallerEntity, MatrixStack matrixStack, float v) {
         float scaleFactor = 0.9375F;
         matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
-        super.preRenderCallback(windcallerEntity, matrixStack, v);
+        super.scale(windcallerEntity, matrixStack, v);
     }
 
     @Override
-    public ResourceLocation getEntityTexture(WindcallerEntity windcallerEntity) {
+    public ResourceLocation getTextureLocation(WindcallerEntity windcallerEntity) {
         return WINDCALLER_TEXTURE;
     }
 }

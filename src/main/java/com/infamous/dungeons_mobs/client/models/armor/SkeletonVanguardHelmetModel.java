@@ -29,8 +29,8 @@ public class SkeletonVanguardHelmetModel<T extends LivingEntity> extends BipedMo
 		super(modelSize, 0.0F, 64, 64);
 		this.slot = slot;
 		this.entity = entity;
-		textureWidth = 64;
-		textureHeight = 64;
+		texWidth = 64;
+		texHeight = 64;
 
 		boolean testificate =
 				this.entity instanceof AbstractIllagerEntity ||
@@ -42,13 +42,13 @@ public class SkeletonVanguardHelmetModel<T extends LivingEntity> extends BipedMo
 		int testificateHelmetShiftUp = testificate ? 2 : 0;
 
 		Head = new ModelRenderer(this);
-		Head.setRotationPoint(0.0F, 24.0F, 0.0F);
-		Head.setTextureOffset(0, 0).addBox(-5.0F, -33.0F + 24.0F - testificateHelmetShiftUp, -5.0F, 10.0F, 8.0F, 10.0F, 0.0F, false);
-		Head.setTextureOffset(0, 0).addBox(-1.0F, -34.0F + 24.0F - testificateHelmetShiftUp, -5.99F, 2.0F, 7.0F, 1.0F, 0.0F, false);
+		Head.setPos(0.0F, 24.0F, 0.0F);
+		Head.texOffs(0, 0).addBox(-5.0F, -33.0F + 24.0F - testificateHelmetShiftUp, -5.0F, 10.0F, 8.0F, 10.0F, 0.0F, false);
+		Head.texOffs(0, 0).addBox(-1.0F, -34.0F + 24.0F - testificateHelmetShiftUp, -5.99F, 2.0F, 7.0F, 1.0F, 0.0F, false);
 	}
 
 	@Override
-	public void render(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
+	public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
 		boolean testificate =
 				this.entity instanceof AbstractIllagerEntity ||
 						this.entity.getType() == ForgeRegistries.ENTITIES.getValue(new ResourceLocation("savageandravage:skeleton_villager")) ||
@@ -86,21 +86,21 @@ public class SkeletonVanguardHelmetModel<T extends LivingEntity> extends BipedMo
 			} else {
 
 		 */
-			matrixStack.push();
-			this.Head.copyModelAngles(this.bipedHead);
-			if (this.entity.isChild()) {
+			matrixStack.pushPose();
+			this.Head.copyFrom(this.head);
+			if (this.entity.isBaby()) {
 				matrixStack.scale(0.8F, 0.8F, 0.8F);
-				this.Head.setRotationPoint(0.0F, 15.0F, 0.0F);
+				this.Head.setPos(0.0F, 15.0F, 0.0F);
 			}
 			this.Head.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
-			matrixStack.pop();
+			matrixStack.popPose();
 			//}
 		}
 	}
 
 	public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
-		modelRenderer.rotateAngleX = x;
-		modelRenderer.rotateAngleY = y;
-		modelRenderer.rotateAngleZ = z;
+		modelRenderer.xRot = x;
+		modelRenderer.yRot = y;
+		modelRenderer.zRot = z;
 	}
 }

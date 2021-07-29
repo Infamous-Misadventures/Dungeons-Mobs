@@ -38,14 +38,14 @@ public abstract class MansionTemplateMixin extends TemplateStructurePiece {
             ResourceLocation entityResourceLocation = new ResourceLocation(function);
             EntityType entityType = ForgeRegistries.ENTITIES.getValue(entityResourceLocation);
             if (entityType != null) {
-                Entity entity = entityType.create(worldIn.getWorld());
+                Entity entity = entityType.create(worldIn.getLevel());
                 if(entity instanceof MobEntity){
                     MobEntity mansionSpawn = (MobEntity) entity;
-                    mansionSpawn.enablePersistence();
-                    mansionSpawn.moveToBlockPosAndAngles(pos, 0.0F, 0.0F);
-                    mansionSpawn.onInitialSpawn(worldIn, worldIn.getDifficultyForLocation(mansionSpawn.getPosition()), SpawnReason.STRUCTURE, (ILivingEntityData)null, (CompoundNBT)null);
-                    worldIn.addEntity(mansionSpawn);
-                    worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
+                    mansionSpawn.setPersistenceRequired();
+                    mansionSpawn.moveTo(pos, 0.0F, 0.0F);
+                    mansionSpawn.finalizeSpawn(worldIn, worldIn.getCurrentDifficultyAt(mansionSpawn.blockPosition()), SpawnReason.STRUCTURE, (ILivingEntityData)null, (CompoundNBT)null);
+                    worldIn.addFreshEntity(mansionSpawn);
+                    worldIn.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);
                     callbackInfo.cancel();
                 }
             }

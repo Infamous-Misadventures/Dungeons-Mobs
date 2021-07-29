@@ -19,20 +19,20 @@ public class CustomSkeletonRenderer extends SkeletonRenderer {
 
 
     @Override
-    protected void preRenderCallback(AbstractSkeletonEntity abstractSkeletonEntity, MatrixStack matrixStack, float v) {
+    protected void scale(AbstractSkeletonEntity abstractSkeletonEntity, MatrixStack matrixStack, float v) {
         if(abstractSkeletonEntity instanceof ArmoredSkeletonEntity){
             float scaleFactor = 1.1F;
             matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
         }
-        super.preRenderCallback(abstractSkeletonEntity, matrixStack, v);
+        super.scale(abstractSkeletonEntity, matrixStack, v);
     }
 
-    public ResourceLocation getEntityTexture(AbstractSkeletonEntity abstractSkeletonEntity) {
+    public ResourceLocation getTextureLocation(AbstractSkeletonEntity abstractSkeletonEntity) {
         if(abstractSkeletonEntity instanceof MossySkeletonEntity){
             return MOSSY_SKELETON_TEXTURE;
         }
         else{
-            return super.getEntityTexture(abstractSkeletonEntity);
+            return super.getTextureLocation(abstractSkeletonEntity);
         }
     }
 }

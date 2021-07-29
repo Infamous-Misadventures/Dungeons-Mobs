@@ -16,13 +16,13 @@ import java.util.Random;
 @Mixin(PatrolSpawner.class)
 public class PatrolSpawnerMixin {
 
-    @ModifyVariable(at = @At(value = "STORE", ordinal = 0), method = "spawnPatroller")
+    @ModifyVariable(at = @At(value = "STORE", ordinal = 0), method = "spawnPatrolMember")
     private PatrollerEntity spawnPatroller(PatrollerEntity patrollerEntity, ServerWorld serverWorld, BlockPos blockPos, Random random, boolean makeLeader){
         Boolean armoredPillagersCanReplacePillagers = DungeonsMobsConfig.COMMON.ENABLE_ARMORED_PILLAGER_REPLACES_PILLAGER.get();
         if(!makeLeader && armoredPillagersCanReplacePillagers){
             int difficultyAsInt = serverWorld.getDifficulty().getId();
             double armoredPillagerChance = difficultyAsInt * 0.25D;
-            if(serverWorld.rand.nextDouble() < armoredPillagerChance){
+            if(serverWorld.random.nextDouble() < armoredPillagerChance){
                 patrollerEntity = ModEntityTypes.ARMORED_PILLAGER.get().create(serverWorld);
             }
         }

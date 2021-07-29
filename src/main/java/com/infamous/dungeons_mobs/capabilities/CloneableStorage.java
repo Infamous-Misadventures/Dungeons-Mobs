@@ -15,7 +15,7 @@ public class CloneableStorage implements Capability.IStorage<ICloneable> {
         for(int i = 0; i < instance.getClones().length; i++){
             UUID clone = instance.getClones()[i];
             if(clone != null){
-                tag.putUniqueId("clone" + i, clone);
+                tag.putUUID("clone" + i, clone);
             }
         }
         return tag;
@@ -26,8 +26,8 @@ public class CloneableStorage implements Capability.IStorage<ICloneable> {
         CompoundNBT tag = (CompoundNBT) nbt;
         for(int i = 0; i < instance.getClones().length; i++){
             String currentClone = "clone" + i;
-            if(tag.hasUniqueId(currentClone)){
-                instance.addClone(tag.getUniqueId(currentClone));
+            if(tag.hasUUID(currentClone)){
+                instance.addClone(tag.getUUID(currentClone));
             }
         }
     }

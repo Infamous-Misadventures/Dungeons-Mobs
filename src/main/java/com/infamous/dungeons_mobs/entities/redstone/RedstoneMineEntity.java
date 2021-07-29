@@ -38,19 +38,19 @@ public class RedstoneMineEntity extends Entity {
     public RedstoneMineEntity(World worldIn, double x, double y, double z, LivingEntity casterIn){
         this(ModEntityTypes.REDSTONE_MINE.get(), worldIn);
         this.setCaster(casterIn);
-        this.setPosition(x, y, z);
+        this.setPos(x, y, z);
         this.lifeTicks = LIFE_TICKS;
     }
 
     public void setCaster(@Nullable LivingEntity livingEntity) {
         this.caster = livingEntity;
-        this.casterUuid = livingEntity == null ? null : livingEntity.getUniqueID();
+        this.casterUuid = livingEntity == null ? null : livingEntity.getUUID();
     }
 
     @Nullable
     public LivingEntity getCaster() {
-        if (this.caster == null && this.casterUuid != null && this.world instanceof ServerWorld) {
-            Entity entity = ((ServerWorld)this.world).getEntityByUuid(this.casterUuid);
+        if (this.caster == null && this.casterUuid != null && this.level instanceof ServerWorld) {
+            Entity entity = ((ServerWorld)this.level).getEntity(this.casterUuid);
             if (entity instanceof LivingEntity) {
                 this.caster = (LivingEntity)entity;
             }
@@ -62,12 +62,12 @@ public class RedstoneMineEntity extends Entity {
     /**
      * Returns true if it's possible to attack this entity with an item.
      */
-    public boolean canBeAttackedWithItem() {
+    public boolean isAttackable() {
         return false;
     }
 
     @Override
-    protected boolean canTriggerWalking() {
+    protected boolean isMovementNoisy() {
         return false;
     }
 
@@ -81,7 +81,7 @@ public class RedstoneMineEntity extends Entity {
     }
 
     @Override
-    public boolean canBeCollidedWith() {
+    public boolean isPickable() {
         return true;
     }
 
@@ -95,12 +95,12 @@ public class RedstoneMineEntity extends Entity {
      */
 
     private void explode() {
-        this.world.createExplosion(this, this.getPosX(), this.getPosYHeight(0.0625D), this.getPosZ(), this.explosionRadius, Explosion.Mode.NONE);
+        this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), this.explosionRadius, Explosion.Mode.NONE);
         this.remove();
     }
 
     public void handleExistence(){
-        this.func_233566_aG_(); // handles being in water
+        this.updateInWaterStateAndDoFluidPushing(); // handles being in water
     }
 
     public void handleExpiration(){
@@ -114,7 +114,7 @@ public class RedstoneMineEntity extends Entity {
     @Override
     public void tick() {
         //super.tick();
-        if(!this.world.isRemote){
+        if(!this.level.isClientSide){
             this.lifeTicks--;
             //this.checkCollisions();
             if(this.lifeTicks <= 0){
@@ -127,14 +127,14 @@ public class RedstoneMineEntity extends Entity {
     }
 
     @Override
-    public void onCollideWithPlayer(PlayerEntity entityIn) {
+    public void playerTouch(PlayerEntity entityIn) {
         if(entityIn != this.getCaster()){
             this.explode();
         }
     }
 
     private void checkCollisions() {
-        List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getBoundingBox().grow(0.2D, 0.2D, 0.2D));
+        List<Entity> list = this.level.getEntities(this, this.getBoundingBox().inflate(0.2D, 0.2D, 0.2D));
         for (Entity entity : list) {
             if (!entity.removed && !this.removed && entity != this.getCaster()) {
                 this.explode();
@@ -143,24 +143,24 @@ public class RedstoneMineEntity extends Entity {
     }
 
     @Override
-    protected void registerData() {
+    protected void defineSynchedData() {
 
     }
 
     @Override
-    protected void readAdditional(CompoundNBT compound) {
+    protected void readAdditionalSaveData(CompoundNBT compound) {
         this.setLifeTicks(compound.getInt("LifeTicks"));
-        if (compound.hasUniqueId("Owner")) {
-            this.casterUuid = compound.getUniqueId("Owner");
+        if (compound.hasUUID("Owner")) {
+            this.casterUuid = compound.getUUID("Owner");
         }
 
     }
 
     @Override
-    protected void writeAdditional(CompoundNBT compound) {
+    protected void addAdditionalSaveData(CompoundNBT compound) {
         compound.putInt("LifeTicks", this.getLifeTicks());
         if (this.casterUuid != null) {
-            compound.putUniqueId("Owner", this.casterUuid);
+            compound.putUUID("Owner", this.casterUuid);
         }
     }
 
@@ -173,7 +173,7 @@ public class RedstoneMineEntity extends Entity {
     }
 
     @Override
-    public IPacket<?> createSpawnPacket() {
+    public IPacket<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 }

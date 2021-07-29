@@ -23,7 +23,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(SpiderEntity.class)
 public abstract class SpiderEntityMixin extends MonsterEntity implements IWebShooter {
 
-    private static final DataParameter<Boolean> WEBSHOOTING = EntityDataManager.createKey(SpiderEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> WEBSHOOTING = EntityDataManager.defineId(SpiderEntity.class, DataSerializers.BOOLEAN);
 
     protected SpiderEntityMixin(EntityType<? extends MonsterEntity> type, World worldIn) {
         super(type, worldIn);
@@ -36,19 +36,21 @@ public abstract class SpiderEntityMixin extends MonsterEntity implements IWebSho
         }
     }
 
-    @Inject(at = @At("RETURN"), method = "registerData")
+    @Inject(at = @At("RETURN"), method = "defineSynchedData")
     private void registerData(CallbackInfo callbackInfo){
-        this.dataManager.register(WEBSHOOTING, false);
+        if(DungeonsMobsConfig.COMMON.ENABLE_RANGED_SPIDERS.get()){
+            this.entityData.define(WEBSHOOTING, false);
+        }
     }
 
     @Override
     public boolean shouldShootWeb() {
-        return this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) > 9.0D;
+        return this.getTarget() != null && this.distanceToSqr(this.getTarget()) > 9.0D;
     }
 
     @Override
     public boolean isTargetSlowedDown() {
-        LivingEntity attackTarget = this.getAttackTarget();
+        LivingEntity attackTarget = this.getTarget();
         if(attackTarget != null){
             Vector3d motionMultiplier = ObfuscationReflectionHelper.getPrivateValue(Entity.class, attackTarget, "field_213328_B");
             if (motionMultiplier != null) {
@@ -61,16 +63,16 @@ public abstract class SpiderEntityMixin extends MonsterEntity implements IWebSho
 
     @Override
     public void setWebShooting(boolean webShooting) {
-        this.dataManager.set(WEBSHOOTING, webShooting);
+        this.entityData.set(WEBSHOOTING, webShooting);
     }
 
     @Override
     public boolean isWebShooting() {
-        return this.dataManager.get(WEBSHOOTING);
+        return this.entityData.get(WEBSHOOTING);
     }
 
     @Override
-    public void attackEntityWithRangedAttack(LivingEntity target, float distanceFactor) {
+    public void performRangedAttack(LivingEntity target, float distanceFactor) {
         this.shootWeb(this, target);
     }
 }

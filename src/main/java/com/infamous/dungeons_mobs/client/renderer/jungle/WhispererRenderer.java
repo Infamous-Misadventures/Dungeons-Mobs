@@ -24,16 +24,16 @@ public class WhispererRenderer extends BipedRenderer<WhispererEntity, WhispererM
     }
 
     @Override
-    protected void preRenderCallback(WhispererEntity whispererEntity, MatrixStack matrixStack, float v) {
+    protected void scale(WhispererEntity whispererEntity, MatrixStack matrixStack, float v) {
         float scaleFactor = 1.2F;
         matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
-        super.preRenderCallback(whispererEntity, matrixStack, v);
+        super.scale(whispererEntity, matrixStack, v);
     }
 
     /**
      * Returns the location of an entity's texture.
      */
-    public ResourceLocation getEntityTexture(WhispererEntity whispererEntity) {
+    public ResourceLocation getTextureLocation(WhispererEntity whispererEntity) {
         return NECROMANCER_TEXTURE;
     }
 }

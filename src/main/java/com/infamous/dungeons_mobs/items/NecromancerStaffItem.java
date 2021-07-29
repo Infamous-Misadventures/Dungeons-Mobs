@@ -7,6 +7,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 
+import net.minecraft.item.Item.Properties;
+
 public class NecromancerStaffItem extends AbstractStaffItem{
     public NecromancerStaffItem(Properties properties) {
         super(properties);
@@ -14,17 +16,17 @@ public class NecromancerStaffItem extends AbstractStaffItem{
 
     @Override
     protected void activateStaff(PlayerEntity playerIn, LivingEntity target, ItemStack itemStack, Hand hand) {
-        double squareDistanceToTarget = playerIn.getDistanceSq(target);
-        double xDifference = target.getPosX() - playerIn.getPosX();
-        double yDifference = target.getPosYHeight(0.5D) - playerIn.getPosYHeight(0.5D);
-        double zDifference = target.getPosZ() - playerIn.getPosZ();
+        double squareDistanceToTarget = playerIn.distanceToSqr(target);
+        double xDifference = target.getX() - playerIn.getX();
+        double yDifference = target.getY(0.5D) - playerIn.getY(0.5D);
+        double zDifference = target.getZ() - playerIn.getZ();
         float f = MathHelper.sqrt(MathHelper.sqrt(squareDistanceToTarget)) * 0.5F;
 
-        WraithFireballEntity wraithFireballEntity = new WraithFireballEntity(playerIn.world, playerIn, xDifference, yDifference, zDifference);
-        wraithFireballEntity.setPosition(wraithFireballEntity.getPosX(), playerIn.getPosYHeight(0.5D) + 0.5D, wraithFireballEntity.getPosZ());
-        playerIn.world.addEntity(wraithFireballEntity);
+        WraithFireballEntity wraithFireballEntity = new WraithFireballEntity(playerIn.level, playerIn, xDifference, yDifference, zDifference);
+        wraithFireballEntity.setPos(wraithFireballEntity.getX(), playerIn.getY(0.5D) + 0.5D, wraithFireballEntity.getZ());
+        playerIn.level.addFreshEntity(wraithFireballEntity);
 
-        playerIn.getCooldownTracker().setCooldown(itemStack.getItem(), 20);
-        itemStack.damageItem(1, playerIn, playerEntity -> playerEntity.sendBreakAnimation(hand));
+        playerIn.getCooldowns().addCooldown(itemStack.getItem(), 20);
+        itemStack.hurtAndBreak(1, playerIn, playerEntity -> playerEntity.broadcastBreakEvent(hand));
     }
 }

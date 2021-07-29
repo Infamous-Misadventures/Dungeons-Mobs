@@ -34,11 +34,11 @@ public class MountaineerRenderer extends MobRenderer<VindicatorEntity, IllagerBi
                 }
             }
         });
-        this.entityModel.bipedHeadwear.showModel = true; // apparently this cost tallestred hours of his life
+        this.model.hat.visible = true; // apparently this cost tallestred hours of his life
     }
 
     @Override
-    protected void preRenderCallback(VindicatorEntity vindicatorEntity, MatrixStack matrixStack, float v) {
+    protected void scale(VindicatorEntity vindicatorEntity, MatrixStack matrixStack, float v) {
         if(vindicatorEntity instanceof ArmoredMountaineerEntity){
             float scaleFactor = 1.1F;
             matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
@@ -47,11 +47,11 @@ public class MountaineerRenderer extends MobRenderer<VindicatorEntity, IllagerBi
             float scaleFactor = 0.9375F;
             matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
         }
-        super.preRenderCallback(vindicatorEntity, matrixStack, v);
+        super.scale(vindicatorEntity, matrixStack, v);
     }
 
     @Override
-    public ResourceLocation getEntityTexture(VindicatorEntity entity) {
+    public ResourceLocation getTextureLocation(VindicatorEntity entity) {
         if(entity.getClass() == ArmoredMountaineerEntity.class){
             ArmoredMountaineerEntity armoredMountaineerEntity = (ArmoredMountaineerEntity)entity;
             if(armoredMountaineerEntity.isDiamond()){

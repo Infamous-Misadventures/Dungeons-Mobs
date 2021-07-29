@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
 @Mixin(CropsBlock.class)
 public abstract class CropsBlockMixin{
 
-    @Inject(at = @At("HEAD"), method = "onEntityCollision", cancellable = true)
+    @Inject(at = @At("HEAD"), method = "entityInside", cancellable = true)
     private void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn, CallbackInfo callbackInfo){
         if (entityIn instanceof RedstoneGolemEntity && net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(worldIn, entityIn)) {
             worldIn.destroyBlock(pos, true, entityIn);

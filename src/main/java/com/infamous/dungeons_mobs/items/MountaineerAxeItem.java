@@ -8,6 +8,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.PickaxeItem;
 
+import net.minecraft.item.Item.Properties;
+
 public class MountaineerAxeItem extends PickaxeItem {
     public MountaineerAxeItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, Properties builder) {
         super(tier, attackDamageIn, attackSpeedIn, builder);
@@ -15,9 +17,9 @@ public class MountaineerAxeItem extends PickaxeItem {
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        return (enchantment.type.canEnchantItem(Items.IRON_SWORD)
-                || enchantment.type.canEnchantItem(Items.IRON_AXE))
-                && enchantment != Enchantments.SWEEPING;
+        return (enchantment.category.canEnchant(Items.IRON_SWORD)
+                || enchantment.category.canEnchant(Items.IRON_AXE))
+                && enchantment != Enchantments.SWEEPING_EDGE;
     }
 
     @Override

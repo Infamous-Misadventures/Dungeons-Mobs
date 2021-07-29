@@ -32,10 +32,10 @@ import java.util.UUID;
 
 public class TornadoEntity extends Entity {
     private static final Logger PRIVATE_LOGGER = LogManager.getLogger();
-    private static final DataParameter<Float> RADIUS = EntityDataManager.createKey(TornadoEntity.class, DataSerializers.FLOAT);
-    private static final DataParameter<Integer> COLOR = EntityDataManager.createKey(TornadoEntity.class, DataSerializers.VARINT);
-    private static final DataParameter<Boolean> IGNORE_RADIUS = EntityDataManager.createKey(TornadoEntity.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<IParticleData> PARTICLE = EntityDataManager.createKey(TornadoEntity.class, DataSerializers.PARTICLE_DATA);
+    private static final DataParameter<Float> RADIUS = EntityDataManager.defineId(TornadoEntity.class, DataSerializers.FLOAT);
+    private static final DataParameter<Integer> COLOR = EntityDataManager.defineId(TornadoEntity.class, DataSerializers.INT);
+    private static final DataParameter<Boolean> IGNORE_RADIUS = EntityDataManager.defineId(TornadoEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<IParticleData> PARTICLE = EntityDataManager.defineId(TornadoEntity.class, DataSerializers.PARTICLE);
     private Potion potion = Potions.EMPTY;
     private final List<EffectInstance> effects = Lists.newArrayList();
     private final Map<Entity, Integer> reapplicationDelayMap = Maps.newHashMap();
@@ -57,45 +57,45 @@ public class TornadoEntity extends Entity {
 
     public TornadoEntity(EntityType<? extends TornadoEntity> cloud, World world) {
         super(cloud, world);
-        this.noClip = true;
+        this.noPhysics = true;
         this.setRadius(3.0F);
     }
 
     public TornadoEntity(World worldIn, LivingEntity caster, double x, double y, double z) {
         this(ModEntityTypes.TORNADO.get(), worldIn);
         this.setOwner(caster);
-        this.setPosition(x, y, z);
+        this.setPos(x, y, z);
     }
 
     public TornadoEntity(World world, LivingEntity caster, LivingEntity livingEntity) {
-        this(world, caster, livingEntity.getPosX(), livingEntity.getPosY(), livingEntity.getPosZ());
+        this(world, caster, livingEntity.getX(), livingEntity.getY(), livingEntity.getZ());
         this.setTarget(livingEntity);
     }
 
-    protected void registerData() {
-        this.getDataManager().register(COLOR, 0);
-        this.getDataManager().register(RADIUS, 0.5F);
-        this.getDataManager().register(IGNORE_RADIUS, false);
-        this.getDataManager().register(PARTICLE, ParticleTypes.CAMPFIRE_SIGNAL_SMOKE);
+    protected void defineSynchedData() {
+        this.getEntityData().define(COLOR, 0);
+        this.getEntityData().define(RADIUS, 0.5F);
+        this.getEntityData().define(IGNORE_RADIUS, false);
+        this.getEntityData().define(PARTICLE, ParticleTypes.CAMPFIRE_SIGNAL_SMOKE);
     }
 
     public void setRadius(float radiusIn) {
-        if (!this.world.isRemote) {
-            this.getDataManager().set(RADIUS, radiusIn);
+        if (!this.level.isClientSide) {
+            this.getEntityData().set(RADIUS, radiusIn);
         }
 
     }
 
-    public void recalculateSize() {
-        double d0 = this.getPosX();
-        double d1 = this.getPosY();
-        double d2 = this.getPosZ();
-        super.recalculateSize();
-        this.setPosition(d0, d1, d2);
+    public void refreshDimensions() {
+        double d0 = this.getX();
+        double d1 = this.getY();
+        double d2 = this.getZ();
+        super.refreshDimensions();
+        this.setPos(d0, d1, d2);
     }
 
     public float getRadius() {
-        return this.getDataManager().get(RADIUS);
+        return this.getEntityData().get(RADIUS);
     }
 
     public void setPotion(Potion potionIn) {
@@ -108,9 +108,9 @@ public class TornadoEntity extends Entity {
 
     private void updateFixedColor() {
         if (this.potion == Potions.EMPTY && this.effects.isEmpty()) {
-            this.getDataManager().set(COLOR, 0);
+            this.getEntityData().set(COLOR, 0);
         } else {
-            this.getDataManager().set(COLOR, PotionUtils.getPotionColorFromEffectList(PotionUtils.mergeEffects(this.potion, this.effects)));
+            this.getEntityData().set(COLOR, PotionUtils.getColor(PotionUtils.getAllEffects(this.potion, this.effects)));
         }
 
     }
@@ -124,34 +124,34 @@ public class TornadoEntity extends Entity {
     }
 
     public int getColor() {
-        return this.getDataManager().get(COLOR);
+        return this.getEntityData().get(COLOR);
     }
 
     public void setColor(int colorIn) {
         this.colorSet = true;
-        this.getDataManager().set(COLOR, colorIn);
+        this.getEntityData().set(COLOR, colorIn);
     }
 
     public IParticleData getParticleData() {
-        return this.getDataManager().get(PARTICLE);
+        return this.getEntityData().get(PARTICLE);
     }
 
     public void setParticleData(IParticleData particleData) {
-        this.getDataManager().set(PARTICLE, particleData);
+        this.getEntityData().set(PARTICLE, particleData);
     }
 
     /**
      * Sets if the radius should be ignored, and the effect should be shown in a single point instead of an area
      */
     protected void setIgnoreRadius(boolean ignoreRadius) {
-        this.getDataManager().set(IGNORE_RADIUS, ignoreRadius);
+        this.getEntityData().set(IGNORE_RADIUS, ignoreRadius);
     }
 
     /**
      * Returns true if the radius should be ignored, and the effect should be shown in a single point instead of an area
      */
     public boolean shouldIgnoreRadius() {
-        return this.getDataManager().get(IGNORE_RADIUS);
+        return this.getEntityData().get(IGNORE_RADIUS);
     }
 
     public int getDuration() {
@@ -169,19 +169,19 @@ public class TornadoEntity extends Entity {
         super.tick();
         boolean shouldIgnoreRadius = this.shouldIgnoreRadius();
         float radius = this.getRadius();
-        if (this.world.isRemote) {
+        if (this.level.isClientSide) {
             IParticleData iparticledata = this.getParticleData();
             if (shouldIgnoreRadius) {
-                if (this.rand.nextBoolean()) {
+                if (this.random.nextBoolean()) {
                     for(int i = 0; i < 2; ++i) {
-                        float randWithin2Pi = this.rand.nextFloat() * ((float)Math.PI * 2F);
-                        float adjustedSqrtFloat = MathHelper.sqrt(this.rand.nextFloat()) * 0.2F;
+                        float randWithin2Pi = this.random.nextFloat() * ((float)Math.PI * 2F);
+                        float adjustedSqrtFloat = MathHelper.sqrt(this.random.nextFloat()) * 0.2F;
                         float adjustedCosine = MathHelper.cos(randWithin2Pi) * adjustedSqrtFloat;
                         float adjustedSine = MathHelper.sin(randWithin2Pi) * adjustedSqrtFloat;
-                        this.world.addOptionalParticle(iparticledata, true,
-                                this.getPosX() + (double)adjustedCosine,
-                                this.getPosY(),
-                                this.getPosZ() + (double)adjustedSine,
+                        this.level.addAlwaysVisibleParticle(iparticledata, true,
+                                this.getX() + (double)adjustedCosine,
+                                this.getY(),
+                                this.getZ() + (double)adjustedSine,
                                 0.0D,
                                 0.07D,
                                 0.0D);
@@ -192,14 +192,14 @@ public class TornadoEntity extends Entity {
                 float areaOfEffect = (float)Math.PI * radius * radius;
 
                 for(int k1 = 0; (float)k1 < areaOfEffect; ++k1) {
-                    float randWithin2Pi = this.rand.nextFloat() * ((float)Math.PI * 2F);
-                    float adjustedSqrtFloat = MathHelper.sqrt(this.rand.nextFloat()) * radius;
+                    float randWithin2Pi = this.random.nextFloat() * ((float)Math.PI * 2F);
+                    float adjustedSqrtFloat = MathHelper.sqrt(this.random.nextFloat()) * radius;
                     float adjustedCosine = MathHelper.cos(randWithin2Pi) * adjustedSqrtFloat;
                     float adjustedSine = MathHelper.sin(randWithin2Pi) * adjustedSqrtFloat;
-                    this.world.addOptionalParticle(iparticledata,
-                            this.getPosX() + (double)adjustedCosine,
-                            this.getPosY(),
-                            this.getPosZ() + (double)adjustedSine,
+                    this.level.addAlwaysVisibleParticle(iparticledata,
+                            this.getX() + (double)adjustedCosine,
+                            this.getY(),
+                            this.getZ() + (double)adjustedSine,
                             0.0D,
                             0.07D,
                             0.0D);
@@ -208,14 +208,14 @@ public class TornadoEntity extends Entity {
             }
         } else {
             if(this.target != null){
-                this.setPosition(target.getPosX(), this.getPosY(), target.getPosZ());
+                this.setPos(target.getX(), this.getY(), target.getZ());
             }
-            if (this.ticksExisted >= this.waitTime + this.duration) {
+            if (this.tickCount >= this.waitTime + this.duration) {
                 this.remove();
                 return;
             }
 
-            boolean flag1 = this.ticksExisted < this.waitTime;
+            boolean flag1 = this.tickCount < this.waitTime;
             if (shouldIgnoreRadius != flag1) {
                 this.setIgnoreRadius(flag1);
             }
@@ -234,35 +234,35 @@ public class TornadoEntity extends Entity {
                 this.setRadius(radius);
             }
 
-            if (this.ticksExisted % 5 == 0) {
+            if (this.tickCount % 5 == 0) {
 
-                this.reapplicationDelayMap.entrySet().removeIf(entry -> this.ticksExisted >= entry.getValue());
+                this.reapplicationDelayMap.entrySet().removeIf(entry -> this.tickCount >= entry.getValue());
 
                 List<EffectInstance> list = Lists.newArrayList();
 
                 for(EffectInstance effectinstance1 : this.potion.getEffects()) {
-                    list.add(new EffectInstance(effectinstance1.getPotion(), effectinstance1.getDuration() / 4, effectinstance1.getAmplifier(), effectinstance1.isAmbient(), effectinstance1.doesShowParticles()));
+                    list.add(new EffectInstance(effectinstance1.getEffect(), effectinstance1.getDuration() / 4, effectinstance1.getAmplifier(), effectinstance1.isAmbient(), effectinstance1.isVisible()));
                 }
 
                 list.addAll(this.effects);
                 if (list.isEmpty()) {
                     this.reapplicationDelayMap.clear();
                 } else {
-                    List<LivingEntity> list1 = this.world.getEntitiesWithinAABB(LivingEntity.class, this.getBoundingBox());
+                    List<LivingEntity> list1 = this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox());
                     if (!list1.isEmpty()) {
                         for(LivingEntity livingentity : list1) {
-                            if (!this.reapplicationDelayMap.containsKey(livingentity) && livingentity.canBeHitWithPotion()) {
-                                double xDifference = livingentity.getPosX() - this.getPosX();
-                                double zDifference = livingentity.getPosZ() - this.getPosZ();
+                            if (!this.reapplicationDelayMap.containsKey(livingentity) && livingentity.isAffectedByPotions()) {
+                                double xDifference = livingentity.getX() - this.getX();
+                                double zDifference = livingentity.getZ() - this.getZ();
                                 double horizontalDistanceSquared = xDifference * xDifference + zDifference * zDifference;
                                 if (horizontalDistanceSquared <= (double)(radius * radius)) {
-                                    this.reapplicationDelayMap.put(livingentity, this.ticksExisted + this.reapplicationDelay);
+                                    this.reapplicationDelayMap.put(livingentity, this.tickCount + this.reapplicationDelay);
 
                                     for(EffectInstance effectinstance : list) {
-                                        if (effectinstance.getPotion().isInstant()) {
-                                            effectinstance.getPotion().affectEntity(this, this.getOwner(), livingentity, effectinstance.getAmplifier(), 0.5D);
+                                        if (effectinstance.getEffect().isInstantenous()) {
+                                            effectinstance.getEffect().applyInstantenousEffect(this, this.getOwner(), livingentity, effectinstance.getAmplifier(), 0.5D);
                                         } else {
-                                            livingentity.addPotionEffect(new EffectInstance(effectinstance));
+                                            livingentity.addEffect(new EffectInstance(effectinstance));
                                         }
                                     }
 
@@ -307,17 +307,17 @@ public class TornadoEntity extends Entity {
 
     public void setOwner(@Nullable LivingEntity ownerIn) {
         this.owner = ownerIn;
-        this.ownerUniqueId = ownerIn == null ? null : ownerIn.getUniqueID();
+        this.ownerUniqueId = ownerIn == null ? null : ownerIn.getUUID();
     }
 
     public void setTarget(@Nullable LivingEntity targetIn) {
         this.target = targetIn;
-        this.targetUniqueId = targetIn == null ? null : targetIn.getUniqueID();
+        this.targetUniqueId = targetIn == null ? null : targetIn.getUUID();
     }
     @Nullable
     public LivingEntity getOwner() {
-        if (this.owner == null && this.ownerUniqueId != null && this.world instanceof ServerWorld) {
-            Entity entity = ((ServerWorld)this.world).getEntityByUuid(this.ownerUniqueId);
+        if (this.owner == null && this.ownerUniqueId != null && this.level instanceof ServerWorld) {
+            Entity entity = ((ServerWorld)this.level).getEntity(this.ownerUniqueId);
             if (entity instanceof LivingEntity) {
                 this.owner = (LivingEntity)entity;
             }
@@ -327,8 +327,8 @@ public class TornadoEntity extends Entity {
     }
     @Nullable
     public LivingEntity getTarget() {
-        if (this.target == null && this.targetUniqueId != null && this.world instanceof ServerWorld) {
-            Entity entity = ((ServerWorld)this.world).getEntityByUuid(this.targetUniqueId);
+        if (this.target == null && this.targetUniqueId != null && this.level instanceof ServerWorld) {
+            Entity entity = ((ServerWorld)this.level).getEntity(this.targetUniqueId);
             if (entity instanceof LivingEntity) {
                 this.target = (LivingEntity)entity;
             }
@@ -340,8 +340,8 @@ public class TornadoEntity extends Entity {
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    protected void readAdditional(CompoundNBT compound) {
-        this.ticksExisted = compound.getInt("Age");
+    protected void readAdditionalSaveData(CompoundNBT compound) {
+        this.tickCount = compound.getInt("Age");
         this.duration = compound.getInt("Duration");
         this.waitTime = compound.getInt("WaitTime");
         this.reapplicationDelay = compound.getInt("ReapplicationDelay");
@@ -349,16 +349,16 @@ public class TornadoEntity extends Entity {
         this.radiusOnUse = compound.getFloat("RadiusOnUse");
         this.radiusPerTick = compound.getFloat("RadiusPerTick");
         this.setRadius(compound.getFloat("Radius"));
-        if (compound.hasUniqueId("Owner")) {
-            this.ownerUniqueId = compound.getUniqueId("Owner");
+        if (compound.hasUUID("Owner")) {
+            this.ownerUniqueId = compound.getUUID("Owner");
         }
-        if (compound.hasUniqueId("Target")) {
-            this.targetUniqueId = compound.getUniqueId("Target");
+        if (compound.hasUUID("Target")) {
+            this.targetUniqueId = compound.getUUID("Target");
         }
 
         if (compound.contains("Particle", 8)) {
             try {
-                this.setParticleData(ParticleArgument.parseParticle(new StringReader(compound.getString("Particle"))));
+                this.setParticleData(ParticleArgument.readParticle(new StringReader(compound.getString("Particle"))));
             } catch (CommandSyntaxException commandsyntaxexception) {
                 PRIVATE_LOGGER.warn("Couldn't load custom particle {}", compound.getString("Particle"), commandsyntaxexception);
             }
@@ -369,7 +369,7 @@ public class TornadoEntity extends Entity {
         }
 
         if (compound.contains("Potion", 8)) {
-            this.setPotion(PotionUtils.getPotionTypeFromNBT(compound));
+            this.setPotion(PotionUtils.getPotion(compound));
         }
 
         if (compound.contains("Effects", 9)) {
@@ -377,7 +377,7 @@ public class TornadoEntity extends Entity {
             this.effects.clear();
 
             for(int i = 0; i < listnbt.size(); ++i) {
-                EffectInstance effectinstance = EffectInstance.read(listnbt.getCompound(i));
+                EffectInstance effectinstance = EffectInstance.load(listnbt.getCompound(i));
                 if (effectinstance != null) {
                     this.addEffect(effectinstance);
                 }
@@ -386,8 +386,8 @@ public class TornadoEntity extends Entity {
 
     }
 
-    protected void writeAdditional(CompoundNBT compound) {
-        compound.putInt("Age", this.ticksExisted);
+    protected void addAdditionalSaveData(CompoundNBT compound) {
+        compound.putInt("Age", this.tickCount);
         compound.putInt("Duration", this.duration);
         compound.putInt("WaitTime", this.waitTime);
         compound.putInt("ReapplicationDelay", this.reapplicationDelay);
@@ -395,12 +395,12 @@ public class TornadoEntity extends Entity {
         compound.putFloat("RadiusOnUse", this.radiusOnUse);
         compound.putFloat("RadiusPerTick", this.radiusPerTick);
         compound.putFloat("Radius", this.getRadius());
-        compound.putString("Particle", this.getParticleData().getParameters());
+        compound.putString("Particle", this.getParticleData().writeToString());
         if (this.ownerUniqueId != null) {
-            compound.putUniqueId("Owner", this.ownerUniqueId);
+            compound.putUUID("Owner", this.ownerUniqueId);
         }
         if (this.targetUniqueId != null) {
-            compound.putUniqueId("Target", this.targetUniqueId);
+            compound.putUUID("Target", this.targetUniqueId);
         }
 
         if (this.colorSet) {
@@ -415,7 +415,7 @@ public class TornadoEntity extends Entity {
             ListNBT listnbt = new ListNBT();
 
             for(EffectInstance effectinstance : this.effects) {
-                listnbt.add(effectinstance.write(new CompoundNBT()));
+                listnbt.add(effectinstance.save(new CompoundNBT()));
             }
 
             compound.put("Effects", listnbt);
@@ -423,23 +423,23 @@ public class TornadoEntity extends Entity {
 
     }
 
-    public void notifyDataManagerChange(DataParameter<?> key) {
+    public void onSyncedDataUpdated(DataParameter<?> key) {
         if (RADIUS.equals(key)) {
-            this.recalculateSize();
+            this.refreshDimensions();
         }
 
-        super.notifyDataManagerChange(key);
+        super.onSyncedDataUpdated(key);
     }
 
-    public PushReaction getPushReaction() {
+    public PushReaction getPistonPushReaction() {
         return PushReaction.IGNORE;
     }
 
-    public IPacket<?> createSpawnPacket() {
+    public IPacket<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
-    public EntitySize getSize(Pose poseIn) {
-        return EntitySize.flexible(this.getRadius() * 2.0F, 0.5F);
+    public EntitySize getDimensions(Pose poseIn) {
+        return EntitySize.scalable(this.getRadius() * 2.0F, 0.5F);
     }
 }

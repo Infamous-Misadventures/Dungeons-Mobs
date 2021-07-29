@@ -20,20 +20,20 @@ public class PoisonQuillVineRenderer extends MobRenderer<PoisonQuillVineEntity, 
    }
 
    @Override
-   protected void preRenderCallback(PoisonQuillVineEntity entitylivingbaseIn, MatrixStack matrixStackIn, float partialTickTime) {
+   protected void scale(PoisonQuillVineEntity entitylivingbaseIn, MatrixStack matrixStackIn, float partialTickTime) {
       float scaleFactor = 1.00F;
       matrixStackIn.scale(scaleFactor, scaleFactor, scaleFactor);
-      super.preRenderCallback(entitylivingbaseIn, matrixStackIn, partialTickTime);
+      super.scale(entitylivingbaseIn, matrixStackIn, partialTickTime);
    }
 
    /**
     * Returns the location of an entity's texture.
     */
-   public ResourceLocation getEntityTexture(PoisonQuillVineEntity entity) {
+   public ResourceLocation getTextureLocation(PoisonQuillVineEntity entity) {
       return POISON_QUILL_VINE_TEXTURE;
    }
 
-   protected void applyRotations(PoisonQuillVineEntity entityLiving, MatrixStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks) {
-      super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
+   protected void setupRotations(PoisonQuillVineEntity entityLiving, MatrixStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks) {
+      super.setupRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
    }
 }

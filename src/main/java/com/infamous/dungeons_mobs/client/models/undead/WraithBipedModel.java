@@ -19,20 +19,20 @@ public class WraithBipedModel<T extends WraithEntity> extends BipedModel<T> {
    public WraithBipedModel(float modelSize, boolean p_i46303_2_) {
       super(modelSize);
       if (!p_i46303_2_) {
-         this.bipedRightArm = new ModelRenderer(this, 40, 16);
-         this.bipedRightArm.addBox(-1.0F, -2.0F, -1.0F, 2.0F, 12.0F, 2.0F, modelSize);
-         this.bipedRightArm.setRotationPoint(-5.0F, 2.0F, 0.0F);
-         this.bipedLeftArm = new ModelRenderer(this, 40, 16);
-         this.bipedLeftArm.mirror = true;
-         this.bipedLeftArm.addBox(-1.0F, -2.0F, -1.0F, 2.0F, 12.0F, 2.0F, modelSize);
-         this.bipedLeftArm.setRotationPoint(5.0F, 2.0F, 0.0F);
-         this.bipedRightLeg = new ModelRenderer(this, 0, 16);
-         this.bipedRightLeg.addBox(-1.0F, 0.0F, -1.0F, 2.0F, 12.0F, 2.0F, modelSize);
-         this.bipedRightLeg.setRotationPoint(-2.0F, 12.0F, 0.0F);
-         this.bipedLeftLeg = new ModelRenderer(this, 0, 16);
-         this.bipedLeftLeg.mirror = true;
-         this.bipedLeftLeg.addBox(-1.0F, 0.0F, -1.0F, 2.0F, 12.0F, 2.0F, modelSize);
-         this.bipedLeftLeg.setRotationPoint(2.0F, 12.0F, 0.0F);
+         this.rightArm = new ModelRenderer(this, 40, 16);
+         this.rightArm.addBox(-1.0F, -2.0F, -1.0F, 2.0F, 12.0F, 2.0F, modelSize);
+         this.rightArm.setPos(-5.0F, 2.0F, 0.0F);
+         this.leftArm = new ModelRenderer(this, 40, 16);
+         this.leftArm.mirror = true;
+         this.leftArm.addBox(-1.0F, -2.0F, -1.0F, 2.0F, 12.0F, 2.0F, modelSize);
+         this.leftArm.setPos(5.0F, 2.0F, 0.0F);
+         this.rightLeg = new ModelRenderer(this, 0, 16);
+         this.rightLeg.addBox(-1.0F, 0.0F, -1.0F, 2.0F, 12.0F, 2.0F, modelSize);
+         this.rightLeg.setPos(-2.0F, 12.0F, 0.0F);
+         this.leftLeg = new ModelRenderer(this, 0, 16);
+         this.leftLeg.mirror = true;
+         this.leftLeg.addBox(-1.0F, 0.0F, -1.0F, 2.0F, 12.0F, 2.0F, modelSize);
+         this.leftLeg.setPos(2.0F, 12.0F, 0.0F);
       }
 
    }
@@ -40,41 +40,41 @@ public class WraithBipedModel<T extends WraithEntity> extends BipedModel<T> {
    /**
     * Sets this entity's model rotation angles
     */
-   public void setRotationAngles(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-      super.setRotationAngles(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+   public void setupAnim(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+      super.setupAnim(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
       if (!entityIn.isUsingMagic()) {
-         float f = MathHelper.sin(this.swingProgress * (float)Math.PI);
-         float f1 = MathHelper.sin((1.0F - (1.0F - this.swingProgress) * (1.0F - this.swingProgress)) * (float)Math.PI);
-         this.bipedRightArm.rotateAngleZ = 0.0F;
-         this.bipedLeftArm.rotateAngleZ = 0.0F;
-         this.bipedRightArm.rotateAngleY = -(0.1F - f * 0.6F);
-         this.bipedLeftArm.rotateAngleY = 0.1F - f * 0.6F;
-         this.bipedRightArm.rotateAngleX = (-(float)Math.PI / 2F);
-         this.bipedLeftArm.rotateAngleX = (-(float)Math.PI / 2F);
-         this.bipedRightArm.rotateAngleX -= f * 1.2F - f1 * 0.4F;
-         this.bipedLeftArm.rotateAngleX -= f * 1.2F - f1 * 0.4F;
-         ModelHelper.func_239101_a_(this.bipedRightArm, this.bipedLeftArm, ageInTicks);
+         float f = MathHelper.sin(this.attackTime * (float)Math.PI);
+         float f1 = MathHelper.sin((1.0F - (1.0F - this.attackTime) * (1.0F - this.attackTime)) * (float)Math.PI);
+         this.rightArm.zRot = 0.0F;
+         this.leftArm.zRot = 0.0F;
+         this.rightArm.yRot = -(0.1F - f * 0.6F);
+         this.leftArm.yRot = 0.1F - f * 0.6F;
+         this.rightArm.xRot = (-(float)Math.PI / 2F);
+         this.leftArm.xRot = (-(float)Math.PI / 2F);
+         this.rightArm.xRot -= f * 1.2F - f1 * 0.4F;
+         this.leftArm.xRot -= f * 1.2F - f1 * 0.4F;
+         ModelHelper.bobArms(this.rightArm, this.leftArm, ageInTicks);
       }
       else{
-         this.bipedRightArm.rotationPointZ = 0.0F;
-         this.bipedRightArm.rotationPointX = -5.0F;
-         this.bipedLeftArm.rotationPointZ = 0.0F;
-         this.bipedLeftArm.rotationPointX = 5.0F;
-         this.bipedRightArm.rotateAngleX = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
-         this.bipedLeftArm.rotateAngleX = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
-         this.bipedRightArm.rotateAngleZ = 2.3561945F;
-         this.bipedLeftArm.rotateAngleZ = -2.3561945F;
-         this.bipedRightArm.rotateAngleY = 0.0F;
-         this.bipedLeftArm.rotateAngleY = 0.0F;
+         this.rightArm.z = 0.0F;
+         this.rightArm.x = -5.0F;
+         this.leftArm.z = 0.0F;
+         this.leftArm.x = 5.0F;
+         this.rightArm.xRot = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
+         this.leftArm.xRot = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
+         this.rightArm.zRot = 2.3561945F;
+         this.leftArm.zRot = -2.3561945F;
+         this.rightArm.yRot = 0.0F;
+         this.leftArm.yRot = 0.0F;
       }
 
    }
 
-   public void translateHand(HandSide sideIn, MatrixStack matrixStackIn) {
+   public void translateToHand(HandSide sideIn, MatrixStack matrixStackIn) {
       float f = sideIn == HandSide.RIGHT ? 1.0F : -1.0F;
-      ModelRenderer modelrenderer = this.getArmForSide(sideIn);
-      modelrenderer.rotationPointX += f;
-      modelrenderer.translateRotate(matrixStackIn);
-      modelrenderer.rotationPointX -= f;
+      ModelRenderer modelrenderer = this.getArm(sideIn);
+      modelrenderer.x += f;
+      modelrenderer.translateAndRotate(matrixStackIn);
+      modelrenderer.x -= f;
    }
 }

@@ -9,14 +9,14 @@ import net.minecraft.client.renderer.entity.layers.AbstractEyesLayer;
 import net.minecraft.util.ResourceLocation;
 
 public class NecromancerEyesLayer<T extends NecromancerEntity> extends AbstractEyesLayer<T, NecromancerModel<T>> {
-  private static final RenderType EYE_LAYER = RenderType.getEyes(new ResourceLocation(DungeonsMobs.MODID, "textures/entity/skeleton/necromancer_eyes.png"));
+  private static final RenderType EYE_LAYER = RenderType.eyes(new ResourceLocation(DungeonsMobs.MODID, "textures/entity/skeleton/necromancer_eyes.png"));
 
   public NecromancerEyesLayer(IEntityRenderer<T, NecromancerModel<T>> entityRenderer) {
     super(entityRenderer);
   }
 
   @Override
-  public RenderType getRenderType() {
+  public RenderType renderType() {
     return EYE_LAYER;
   }
 }

@@ -3,6 +3,7 @@ package com.infamous.dungeons_mobs;
 import com.infamous.dungeons_mobs.capabilities.CloneableHelper;
 import com.infamous.dungeons_mobs.capabilities.CloneableProvider;
 import com.infamous.dungeons_mobs.capabilities.ICloneable;
+import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.entities.creepers.IcyCreeperEntity;
 import com.infamous.dungeons_mobs.entities.illagers.GeomancerEntity;
 import com.infamous.dungeons_mobs.entities.illagers.IllusionerCloneEntity;
@@ -79,35 +80,37 @@ public class MobEvents {
         }
         if(event.getEntity() instanceof IllusionerCloneEntity){
             IllusionerCloneEntity illusionerCloneEntity = (IllusionerCloneEntity)event.getEntity();
-            if(illusionerCloneEntity.getCaster() != null && !illusionerCloneEntity.world.isRemote){
+            if(illusionerCloneEntity.getCaster() != null && !illusionerCloneEntity.level.isClientSide){
                 LivingEntity caster = illusionerCloneEntity.getCaster();
                 if(caster instanceof IllusionerEntity){
                     ICloneable cloneable = CloneableHelper.getCloneableCapability(caster);
                     if(cloneable != null){
-                        cloneable.addClone(illusionerCloneEntity.getUniqueID());
+                        cloneable.addClone(illusionerCloneEntity.getUUID());
                     }
                 }
             }
         }
+        /*
         if(event.getEntity() instanceof IllusionerEntity){
             IllusionerEntity illusionerEntity = (IllusionerEntity)event.getEntity();
             GoalSelector goalSelector = illusionerEntity.goalSelector;
 
         }
+         */
     }
 
     @SubscribeEvent
     public static void onIllusionerAttacked(LivingAttackEvent event){
-        if(event.getEntityLiving() instanceof IllusionerEntity && !(event.getSource().getTrueSource() instanceof IllusionerCloneEntity)){
+        if(event.getEntityLiving() instanceof IllusionerEntity && !(event.getSource().getEntity() instanceof IllusionerCloneEntity)){
             IllusionerEntity illusionerEntity = (IllusionerEntity) event.getEntityLiving();
             ICloneable cloneable = CloneableHelper.getCloneableCapability(illusionerEntity);
-            if(cloneable != null && illusionerEntity.world instanceof ServerWorld){
+            if(cloneable != null && illusionerEntity.level instanceof ServerWorld){
                 UUID[] clones = cloneable.getClones();
                 for(int i = 0; i < clones.length; i++){
                     UUID currentClone = clones[i];
                     if(currentClone != null){
-                        ServerWorld serverWorld = (ServerWorld) illusionerEntity.world;
-                        Entity entity = serverWorld.getEntityByUuid(currentClone);
+                        ServerWorld serverWorld = (ServerWorld) illusionerEntity.level;
+                        Entity entity = serverWorld.getEntity(currentClone);
                         if(entity != null){
                             entity.remove();
                         }
@@ -120,27 +123,29 @@ public class MobEvents {
 
     @SubscribeEvent
     public static void onIllusionerBecomesInvisible(PotionEvent.PotionAddedEvent event){
-        if(event.getEntityLiving() instanceof IllusionerEntity){
-            IllusionerEntity illusionerEntity = (IllusionerEntity) event.getEntityLiving();
-            if(!illusionerEntity.isPotionActive(Effects.INVISIBILITY)
-                    && event.getPotionEffect().getPotion() == Effects.INVISIBILITY
-                    && !illusionerEntity.world.isRemote
-                    && illusionerEntity.isSpellcasting()){
-                summonIllusionerClones(illusionerEntity);
+        if(DungeonsMobsConfig.COMMON.ENABLE_CLONING_ILLUSIONERS.get()){
+            if(event.getEntityLiving() instanceof IllusionerEntity){
+                IllusionerEntity illusionerEntity = (IllusionerEntity) event.getEntityLiving();
+                if(!illusionerEntity.hasEffect(Effects.INVISIBILITY)
+                        && event.getPotionEffect().getEffect() == Effects.INVISIBILITY
+                        && !illusionerEntity.level.isClientSide
+                        && illusionerEntity.isCastingSpell()){
+                    summonIllusionerClones(illusionerEntity);
+                }
             }
         }
     }
 
     private static void summonIllusionerClones(IllusionerEntity illusionerEntity){
-        int difficultyAsInt = illusionerEntity.world.getDifficulty().getId();
+        int difficultyAsInt = illusionerEntity.level.getDifficulty().getId();
         int mobsToSummon = difficultyAsInt * 2 + 1; // 3 on easy, 5 on normal, 7 on hard
         for(int i = 0; i < mobsToSummon; ++i) {
-            BlockPos blockpos = illusionerEntity.getPosition().add(-2 + illusionerEntity.getRNG().nextInt(5), 1, -2 + illusionerEntity.getRNG().nextInt(5));
-            IllusionerCloneEntity illusionerCloneEntity = new IllusionerCloneEntity(illusionerEntity.world, illusionerEntity, 30 * 20);
-            DifficultyInstance difficultyForLocation = illusionerEntity.world.getDifficultyForLocation(blockpos);
-            illusionerCloneEntity.moveToBlockPosAndAngles(blockpos, 0.0F, 0.0F);
-            illusionerCloneEntity.onInitialSpawn((IServerWorld) illusionerCloneEntity.world, difficultyForLocation, SpawnReason.MOB_SUMMONED, (ILivingEntityData)null, (CompoundNBT)null);
-            illusionerEntity.world.addEntity(illusionerCloneEntity);
+            BlockPos blockpos = illusionerEntity.blockPosition().offset(-2 + illusionerEntity.getRandom().nextInt(5), 1, -2 + illusionerEntity.getRandom().nextInt(5));
+            IllusionerCloneEntity illusionerCloneEntity = new IllusionerCloneEntity(illusionerEntity.level, illusionerEntity, 30 * 20);
+            DifficultyInstance difficultyForLocation = illusionerEntity.level.getCurrentDifficultyAt(blockpos);
+            illusionerCloneEntity.moveTo(blockpos, 0.0F, 0.0F);
+            illusionerCloneEntity.finalizeSpawn((IServerWorld) illusionerCloneEntity.level, difficultyForLocation, SpawnReason.MOB_SUMMONED, (ILivingEntityData)null, (CompoundNBT)null);
+            illusionerEntity.level.addFreshEntity(illusionerCloneEntity);
         }
     }
 
@@ -148,14 +153,14 @@ public class MobEvents {
     public static void onSnowballHitPlayer(ProjectileImpactEvent event){
         if(event.getEntity() instanceof SnowballEntity){
             SnowballEntity snowballEntity = (SnowballEntity)event.getEntity();
-            Entity shooter = snowballEntity.func_234616_v_();
+            Entity shooter = snowballEntity.getOwner();
             if(shooter instanceof FrozenZombieEntity){
                 RayTraceResult rayTraceResult = event.getRayTraceResult();
                 if(rayTraceResult instanceof EntityRayTraceResult){
                     EntityRayTraceResult entityRayTraceResult = (EntityRayTraceResult)rayTraceResult;
                     if(entityRayTraceResult.getEntity() instanceof PlayerEntity){
                         PlayerEntity playerEntity = (PlayerEntity) entityRayTraceResult.getEntity();
-                        playerEntity.attackEntityFrom(DamageSource.causeThrownDamage(snowballEntity, shooter), 1.0F);
+                        playerEntity.hurt(DamageSource.thrown(snowballEntity, shooter), 1.0F);
                     }
                 }
             }
@@ -165,8 +170,8 @@ public class MobEvents {
 
     @SubscribeEvent
     public static void onSnowballDamageMob(LivingHurtEvent event){
-        if(event.getSource().getImmediateSource() instanceof SnowballEntity){
-            if(event.getSource().getTrueSource() instanceof FrozenZombieEntity){
+        if(event.getSource().getDirectEntity() instanceof SnowballEntity){
+            if(event.getSource().getEntity() instanceof FrozenZombieEntity){
                 if(!(event.getEntityLiving() instanceof PlayerEntity)){
                     event.setAmount(event.getAmount() + 1.0F);
                 }
@@ -178,7 +183,7 @@ public class MobEvents {
     public static void onIceCreeperExplosion(EntityMobGriefingEvent event){
         if(event.getEntity() instanceof IcyCreeperEntity){
             IcyCreeperEntity iceCreeperEntity = (IcyCreeperEntity)event.getEntity();
-            iceCreeperEntity.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 600));
+            iceCreeperEntity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 600));
         }
     }
 
@@ -191,7 +196,7 @@ public class MobEvents {
             for(Entity entity : entityList){
                 if(entity instanceof LivingEntity){
                     LivingEntity livingEntity = (LivingEntity)entity;
-                    livingEntity.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 600));
+                    livingEntity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 600));
                 }
             }
         }
@@ -241,13 +246,13 @@ public class MobEvents {
 
     private static boolean entityProtectedByPillar(Entity entity, List<ConstructEntity> pillarEntities, BlockPos detonationOrigin){
         if(pillarEntities.isEmpty()) return false;
-        BlockPos entityPos = entity.getPosition();
+        BlockPos entityPos = entity.blockPosition();
         for(ConstructEntity pillarEntity : pillarEntities){
-            BlockPos pillarPos = pillarEntity.getPosition();
-            double widthAllowance = pillarEntity.getWidth();
-            double distanceEntityToPillar = Math.sqrt(entityPos.distanceSq(pillarPos));
-            double distanceExplosionToPillar = Math.sqrt(detonationOrigin.distanceSq(pillarPos));
-            double distanceExplosionToEntity = Math.sqrt(detonationOrigin.distanceSq(entityPos));
+            BlockPos pillarPos = pillarEntity.blockPosition();
+            double widthAllowance = pillarEntity.getBbWidth();
+            double distanceEntityToPillar = Math.sqrt(entityPos.distSqr(pillarPos));
+            double distanceExplosionToPillar = Math.sqrt(detonationOrigin.distSqr(pillarPos));
+            double distanceExplosionToEntity = Math.sqrt(detonationOrigin.distSqr(entityPos));
             boolean canProtect = distanceEntityToPillar + distanceExplosionToPillar <= distanceExplosionToEntity + widthAllowance;
             if(canProtect) return true;
         }

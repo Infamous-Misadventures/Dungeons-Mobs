@@ -23,31 +23,31 @@ public class SwitchCombatItemGoal extends Goal
 
         private boolean hasRangedItemInMainhand()
         {
-            return this.hostMob.getHeldItemMainhand().getItem() instanceof ShootableItem
-                    || this.hostMob.getHeldItemMainhand().getItem() instanceof SnowballItem
-                    || this.hostMob.getHeldItemMainhand().getItem() instanceof EggItem;
+            return this.hostMob.getMainHandItem().getItem() instanceof ShootableItem
+                    || this.hostMob.getMainHandItem().getItem() instanceof SnowballItem
+                    || this.hostMob.getMainHandItem().getItem() instanceof EggItem;
         }
 
         private boolean hasRangedItemInOffhand()
         {
-            return this.hostMob.getHeldItemOffhand().getItem() instanceof ShootableItem
-                    || this.hostMob.getHeldItemOffhand().getItem() instanceof SnowballItem
-                    || this.hostMob.getHeldItemMainhand().getItem() instanceof EggItem;
+            return this.hostMob.getOffhandItem().getItem() instanceof ShootableItem
+                    || this.hostMob.getOffhandItem().getItem() instanceof SnowballItem
+                    || this.hostMob.getMainHandItem().getItem() instanceof EggItem;
         }
 
         private void swapWeapons(){
-            ItemStack mainhand = this.hostMob.getHeldItemMainhand();
-            ItemStack offhand = this.hostMob.getHeldItemOffhand();
-            this.hostMob.setItemStackToSlot(EquipmentSlotType.OFFHAND, mainhand);
-            this.hostMob.setItemStackToSlot(EquipmentSlotType.MAINHAND, offhand);
+            ItemStack mainhand = this.hostMob.getMainHandItem();
+            ItemStack offhand = this.hostMob.getOffhandItem();
+            this.hostMob.setItemSlot(EquipmentSlotType.OFFHAND, mainhand);
+            this.hostMob.setItemSlot(EquipmentSlotType.MAINHAND, offhand);
         }
 
         /**
          * Returns whether the EntityAIBase should begin execution.
          */
-        public boolean shouldExecute()
+        public boolean canUse()
         {
-            this.target = this.hostMob.getAttackTarget();
+            this.target = this.hostMob.getTarget();
 
             if (target == null)
             {
@@ -62,9 +62,9 @@ public class SwitchCombatItemGoal extends Goal
                 // check if we are close to the target and have a ranged item in mainhand and do not have one in offhand,
                 // or if we are far from the target and we do not have a ranged item in our mainhand but do have one in our offhand
                 if((
-                        (this.hostMob.getDistance(this.target) < minDistance && hasRangedItemInMainhand() && !hasRangedItemInOffhand())
-                            || (this.hostMob.getDistance(this.target) > maxDistance && !hasRangedItemInMainhand()) && hasRangedItemInOffhand())
-                        && this.hostMob.canEntityBeSeen(this.target))
+                        (this.hostMob.distanceTo(this.target) < minDistance && hasRangedItemInMainhand() && !hasRangedItemInOffhand())
+                            || (this.hostMob.distanceTo(this.target) > maxDistance && !hasRangedItemInMainhand()) && hasRangedItemInOffhand())
+                        && this.hostMob.canSee(this.target))
                 {
                     return true;
                 }
@@ -76,7 +76,7 @@ public class SwitchCombatItemGoal extends Goal
         /**
          * Resets the task
          */
-        public void resetTask()
+        public void stop()
         {
             target = null;
         }
@@ -86,11 +86,11 @@ public class SwitchCombatItemGoal extends Goal
          */
         public void tick()
         {
-            if(this.hostMob.getDistance(this.target) < minDistance && hasRangedItemInMainhand() && !hasRangedItemInOffhand())
+            if(this.hostMob.distanceTo(this.target) < minDistance && hasRangedItemInMainhand() && !hasRangedItemInOffhand())
             {
                 swapWeapons();
             }
-            else if(this.hostMob.getDistance(this.target) > maxDistance && !hasRangedItemInMainhand() && hasRangedItemInOffhand())
+            else if(this.hostMob.distanceTo(this.target) > maxDistance && !hasRangedItemInMainhand() && hasRangedItemInOffhand())
             {
                 swapWeapons();
             }

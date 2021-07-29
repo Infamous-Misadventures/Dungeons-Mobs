@@ -38,25 +38,25 @@ public abstract class IllusionerEntityMixin extends SpellcastingIllagerEntity im
     }
 
     @OnlyIn(Dist.CLIENT)
-    @Inject(at = @At("HEAD"), method = "getRenderLocations", cancellable = true)
+    @Inject(at = @At("HEAD"), method = "getIllusionOffsets", cancellable = true)
     private void getRenderLocations(float partialTicks, CallbackInfoReturnable<Vector3d[]> callbackInfoReturnable){
         if(DungeonsMobsConfig.COMMON.ENABLE_CLONING_ILLUSIONERS.get()){
             callbackInfoReturnable.setReturnValue(emptyRenderLocation);
         }
     }
 
-    @Inject(at = @At("HEAD"), method = "attackEntityWithRangedAttack", cancellable = true)
+    @Inject(at = @At("HEAD"), method = "performRangedAttack", cancellable = true)
     private void attackEntityWithRangedAttack(LivingEntity target, float distanceFactor, CallbackInfo callbackInfo){
         if(DungeonsMobsConfig.COMMON.ENABLE_CLONING_ILLUSIONERS.get()){
             ItemStack fireworkRocket = createPinkRocket();
-            FireworkRocketEntity fireworkrocketentity = new FireworkRocketEntity(this.world, fireworkRocket, this, this.getPosX(), this.getPosYEye() - (double)0.15F, this.getPosZ(), true);
-            double xDifference = target.getPosX() - this.getPosX();
-            double yDifference = target.getPosYHeight(0.3333333333333333D) - fireworkrocketentity.getPosY();
-            double zDifference = target.getPosZ() - this.getPosZ();
+            FireworkRocketEntity fireworkrocketentity = new FireworkRocketEntity(this.level, fireworkRocket, this, this.getX(), this.getEyeY() - (double)0.15F, this.getZ(), true);
+            double xDifference = target.getX() - this.getX();
+            double yDifference = target.getY(0.3333333333333333D) - fireworkrocketentity.getY();
+            double zDifference = target.getZ() - this.getZ();
             double horizontalDifference = (double) MathHelper.sqrt(xDifference * xDifference + zDifference * zDifference);
-            fireworkrocketentity.shoot(xDifference, yDifference + horizontalDifference * (double)0.2F, zDifference, 1.6F, (float)(14 - this.world.getDifficulty().getId() * 4));
-            this.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-            this.world.addEntity(fireworkrocketentity);
+            fireworkrocketentity.shoot(xDifference, yDifference + horizontalDifference * (double)0.2F, zDifference, 1.6F, (float)(14 - this.level.getDifficulty().getId() * 4));
+            this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+            this.level.addFreshEntity(fireworkrocketentity);
             callbackInfo.cancel();
         }
     }
@@ -64,11 +64,11 @@ public abstract class IllusionerEntityMixin extends SpellcastingIllagerEntity im
     private static ItemStack createPinkRocket() {
         ItemStack rocket = new ItemStack(Items.FIREWORK_ROCKET);
         ItemStack star = new ItemStack(Items.FIREWORK_STAR);
-        CompoundNBT starExplosionNBT = star.getOrCreateChildTag("Explosion");
-        starExplosionNBT.putInt("Type", FireworkRocketItem.Shape.BURST.getIndex());
-        CompoundNBT rocketFireworksNBT = rocket.getOrCreateChildTag("Fireworks");
+        CompoundNBT starExplosionNBT = star.getOrCreateTagElement("Explosion");
+        starExplosionNBT.putInt("Type", FireworkRocketItem.Shape.BURST.getId());
+        CompoundNBT rocketFireworksNBT = rocket.getOrCreateTagElement("Fireworks");
         ListNBT rocketExplosionsNBT = new ListNBT();
-        CompoundNBT actualStarExplosionNBT = star.getChildTag("Explosion");
+        CompoundNBT actualStarExplosionNBT = star.getTagElement("Explosion");
         if (actualStarExplosionNBT != null) {
             // making firework pink
             List<Integer> colorList = Lists.newArrayList();

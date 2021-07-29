@@ -42,41 +42,41 @@ public class WraithFireballEntity extends AbstractFireballEntity {
 
    @OnlyIn(Dist.CLIENT)
    public ItemStack getItem() {
-      ItemStack itemstack = this.getStack();
+      ItemStack itemstack = this.getItemRaw();
       return itemstack.isEmpty() ? new ItemStack(ModItems.WRAITH_FIRE_CHARGE.get()) : itemstack;
    }
 
    /**
     * Called when the arrow hits an entity
     */
-   protected void onEntityHit(EntityRayTraceResult p_213868_1_) {
-      super.onEntityHit(p_213868_1_);
-      if (!this.world.isRemote) {
+   protected void onHitEntity(EntityRayTraceResult p_213868_1_) {
+      super.onHitEntity(p_213868_1_);
+      if (!this.level.isClientSide) {
          Entity entity = p_213868_1_.getEntity();
-         if (!entity.isImmuneToFire() || entity.getType() != ModEntityTypes.WRAITH.get()) {
-            Entity entity1 = this.func_234616_v_();
-            int i = entity.getFireTimer();
-            entity.setFire(5);
-            boolean flag = entity.attackEntityFrom(DamageSource.func_233547_a_(this, entity1), 10.0F); // twice as much damage as normal fire
+         if (!entity.fireImmune() || entity.getType() != ModEntityTypes.WRAITH.get()) {
+            Entity entity1 = this.getOwner();
+            int i = entity.getRemainingFireTicks();
+            entity.setSecondsOnFire(5);
+            boolean flag = entity.hurt(DamageSource.fireball(this, entity1), 10.0F); // twice as much damage as normal fire
             if (!flag) {
-               entity.forceFireTicks(i);
+               entity.setRemainingFireTicks(i);
             } else if (entity1 instanceof LivingEntity) {
-               this.applyEnchantments((LivingEntity)entity1, entity);
+               this.doEnchantDamageEffects((LivingEntity)entity1, entity);
             }
          }
 
       }
    }
 
-   protected void func_230299_a_(BlockRayTraceResult p_230299_1_) {
-      super.func_230299_a_(p_230299_1_);
-      if (!this.world.isRemote) {
-         Entity entity = this.func_234616_v_();
-         if (entity == null || !(entity instanceof MobEntity) || this.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING) || net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this.getEntity())) {
-            BlockPos blockpos = p_230299_1_.getPos().offset(p_230299_1_.getFace());
-            if (this.world.isAirBlock(blockpos)) {
-               BlockState soulFireBlockState = ModBlocks.WRAITH_FIRE_BLOCK.get().getDefaultState();
-               this.world.setBlockState(blockpos, soulFireBlockState);
+   protected void onHitBlock(BlockRayTraceResult p_230299_1_) {
+      super.onHitBlock(p_230299_1_);
+      if (!this.level.isClientSide) {
+         Entity entity = this.getOwner();
+         if (entity == null || !(entity instanceof MobEntity) || this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) || net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this.getEntity())) {
+            BlockPos blockpos = p_230299_1_.getBlockPos().relative(p_230299_1_.getDirection());
+            if (this.level.isEmptyBlock(blockpos)) {
+               BlockState soulFireBlockState = ModBlocks.WRAITH_FIRE_BLOCK.get().defaultBlockState();
+               this.level.setBlockAndUpdate(blockpos, soulFireBlockState);
             }
          }
 
@@ -86,9 +86,9 @@ public class WraithFireballEntity extends AbstractFireballEntity {
    /**
     * Called when this EntityFireball hits a block or entity.
     */
-   protected void onImpact(RayTraceResult result) {
-      super.onImpact(result);
-      if (!this.world.isRemote) {
+   protected void onHit(RayTraceResult result) {
+      super.onHit(result);
+      if (!this.level.isClientSide) {
          this.remove();
       }
 
@@ -97,19 +97,19 @@ public class WraithFireballEntity extends AbstractFireballEntity {
    /**
     * Returns true if other Entities should be prevented from moving through this Entity.
     */
-   public boolean canBeCollidedWith() {
+   public boolean isPickable() {
       return false;
    }
 
    /**
     * Called when the entity is attacked.
     */
-   public boolean attackEntityFrom(DamageSource source, float amount) {
+   public boolean hurt(DamageSource source, float amount) {
       return false;
    }
 
    @Override
-   public IPacket<?> createSpawnPacket() {
+   public IPacket<?> getAddEntityPacket() {
       return NetworkHooks.getEntitySpawningPacket(this);
    }
 }

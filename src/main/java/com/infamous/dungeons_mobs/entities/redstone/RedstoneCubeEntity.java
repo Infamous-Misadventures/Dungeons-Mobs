@@ -33,10 +33,12 @@ import net.minecraftforge.common.Tags;
 
 import java.util.EnumSet;
 
+import net.minecraft.entity.ai.controller.MovementController.Action;
+
 public class RedstoneCubeEntity extends MonsterEntity {
     protected int rollingDuration;
 
-    private static final DataParameter<Boolean> IS_ROLLING = EntityDataManager.createKey(RedstoneCubeEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> IS_ROLLING = EntityDataManager.defineId(RedstoneCubeEntity.class, DataSerializers.BOOLEAN);
 
     public RedstoneCubeEntity(World worldIn) {
         super(ModEntityTypes.REDSTONE_CUBE.get(), worldIn);
@@ -44,36 +46,36 @@ public class RedstoneCubeEntity extends MonsterEntity {
 
     public RedstoneCubeEntity(EntityType<? extends RedstoneCubeEntity> type, World worldIn) {
         super(type, worldIn);
-        this.moveController = new RedstoneCubeEntity.MoveHelperController(this);
-        this.stepHeight = 1.0F;
+        this.moveControl = new RedstoneCubeEntity.MoveHelperController(this);
+        this.maxUpStep = 1.0F;
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return MonsterEntity.func_234295_eP_()
-                .createMutableAttribute(Attributes.MAX_HEALTH, 4.0D * 4.0D)
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, (double)(0.2F + 0.1F * (float)2.0D * 0.5D))
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 4.0D);
+        return MonsterEntity.createMonsterAttributes()
+                .add(Attributes.MAX_HEALTH, 4.0D * 4.0D)
+                .add(Attributes.MOVEMENT_SPEED, (double)(0.2F + 0.1F * (float)2.0D * 0.5D))
+                .add(Attributes.ATTACK_DAMAGE, 4.0D);
     }
 
     @Override
-    protected void registerData() {
-        super.registerData();
-        this.dataManager.register(IS_ROLLING, false);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(IS_ROLLING, false);
     }
 
     protected void registerGoals() {
         this.goalSelector.addGoal(2, new RedstoneCubeEntity.AttackGoal(this));
         this.goalSelector.addGoal(3, new RedstoneCubeEntity.FaceRandomGoal(this));
         this.goalSelector.addGoal(4, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
-        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, 10, true, false, (entity) -> Math.abs(entity.getPosY() - this.getPosY()) <= 4.0D));
+        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, 10, true, false, (entity) -> Math.abs(entity.getY() - this.getY()) <= 4.0D));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
     }
 
     /**
      * Applies a velocity to the entities, to push them away from eachother.
      */
-    public void applyEntityCollision(Entity entityIn) {
-        super.applyEntityCollision(entityIn);
+    public void push(Entity entityIn) {
+        super.push(entityIn);
         if (entityIn instanceof IronGolemEntity && this.canDamagePlayer()) {
             this.dealDamage((IronGolemEntity)entityIn);
         }
@@ -82,7 +84,7 @@ public class RedstoneCubeEntity extends MonsterEntity {
     /**
      * Called by a player entity when they collide with an entity
      */
-    public void onCollideWithPlayer(PlayerEntity entityIn) {
+    public void playerTouch(PlayerEntity entityIn) {
         if (this.canDamagePlayer()) {
             this.dealDamage(entityIn);
         }
@@ -92,9 +94,9 @@ public class RedstoneCubeEntity extends MonsterEntity {
     protected void dealDamage(LivingEntity entityIn) {
         if (this.isAlive()) {
             int i = 2; // Using biggest slime size
-            if (this.getDistanceSq(entityIn) < 0.6D * (double)i * 0.6D * (double)i && this.canEntityBeSeen(entityIn) && entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), this.getAttackDamageAmount())) {
-                this.playSound(SoundEvents.BLOCK_STONE_HIT, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
-                this.applyEnchantments(this, entityIn);
+            if (this.distanceToSqr(entityIn) < 0.6D * (double)i * 0.6D * (double)i && this.canSee(entityIn) && entityIn.hurt(DamageSource.mobAttack(this), this.getAttackDamageAmount())) {
+                this.playSound(SoundEvents.STONE_HIT, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
+                this.doEnchantDamageEffects(this, entityIn);
             }
         }
 
@@ -112,22 +114,22 @@ public class RedstoneCubeEntity extends MonsterEntity {
      * Indicates weather the slime is able to damage the player (based upon the slime's size)
      */
     protected boolean canDamagePlayer() {
-        return this.isServerWorld();
+        return this.isEffectiveAi();
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return SoundEvents.BLOCK_STONE_HIT;
+        return SoundEvents.STONE_HIT;
     }
 
     protected SoundEvent getDeathSound() {
-        return SoundEvents.BLOCK_STONE_BREAK;
+        return SoundEvents.STONE_BREAK;
     }
 
     /**
      * The speed it takes to move the entityliving's rotationPitch through the faceEntity method. This is only currently
      * use in wolves.
      */
-    public int getVerticalFaceSpeed() {
+    public int getMaxHeadXRot() {
         return 0;
     }
 
@@ -138,42 +140,42 @@ public class RedstoneCubeEntity extends MonsterEntity {
 
         AttackGoal(RedstoneCubeEntity cubeIn) {
             this.redstoneCubeEntity = cubeIn;
-            this.setMutexFlags(EnumSet.of(Goal.Flag.LOOK));
+            this.setFlags(EnumSet.of(Goal.Flag.LOOK));
         }
 
         /**
          * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
          * method as well.
          */
-        public boolean shouldExecute() {
-            LivingEntity livingentity = this.redstoneCubeEntity.getAttackTarget();
+        public boolean canUse() {
+            LivingEntity livingentity = this.redstoneCubeEntity.getTarget();
             if (livingentity == null) {
                 return false;
             } else if (!livingentity.isAlive()) {
                 return false;
             } else {
-                return (!(livingentity instanceof PlayerEntity) || !((PlayerEntity) livingentity).abilities.disableDamage);
+                return (!(livingentity instanceof PlayerEntity) || !((PlayerEntity) livingentity).abilities.invulnerable);
             }
         }
 
         /**
          * Execute a one shot task or start executing a continuous task
          */
-        public void startExecuting() {
+        public void start() {
             this.growTieredTimer = 300;
-            super.startExecuting();
+            super.start();
         }
 
         /**
          * Returns whether an in-progress EntityAIBase should continue executing
          */
-        public boolean shouldContinueExecuting() {
-            LivingEntity livingentity = this.redstoneCubeEntity.getAttackTarget();
+        public boolean canContinueToUse() {
+            LivingEntity livingentity = this.redstoneCubeEntity.getTarget();
             if (livingentity == null) {
                 return false;
             } else if (!livingentity.isAlive()) {
                 return false;
-            } else if (livingentity instanceof PlayerEntity && ((PlayerEntity)livingentity).abilities.disableDamage) {
+            } else if (livingentity instanceof PlayerEntity && ((PlayerEntity)livingentity).abilities.invulnerable) {
                 return false;
             } else {
                 return --this.growTieredTimer > 0;
@@ -184,8 +186,8 @@ public class RedstoneCubeEntity extends MonsterEntity {
          * Keep ticking a continuous task that has already been started
          */
         public void tick() {
-            this.redstoneCubeEntity.faceEntity(this.redstoneCubeEntity.getAttackTarget(), 10.0F, 10.0F);
-            ((RedstoneCubeEntity.MoveHelperController)this.redstoneCubeEntity.getMoveHelper()).setDirection(this.redstoneCubeEntity.rotationYaw, this.redstoneCubeEntity.canDamagePlayer());
+            this.redstoneCubeEntity.lookAt(this.redstoneCubeEntity.getTarget(), 10.0F, 10.0F);
+            ((RedstoneCubeEntity.MoveHelperController)this.redstoneCubeEntity.getMoveControl()).setDirection(this.redstoneCubeEntity.yRot, this.redstoneCubeEntity.canDamagePlayer());
 
         }
     }
@@ -197,15 +199,15 @@ public class RedstoneCubeEntity extends MonsterEntity {
 
         public FaceRandomGoal(RedstoneCubeEntity cubeIn) {
             this.redstoneCubeEntity = cubeIn;
-            this.setMutexFlags(EnumSet.of(Goal.Flag.LOOK));
+            this.setFlags(EnumSet.of(Goal.Flag.LOOK));
         }
 
         /**
          * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
          * method as well.
          */
-        public boolean shouldExecute() {
-            return this.redstoneCubeEntity.getAttackTarget() == null && (this.redstoneCubeEntity.isOnGround() || this.redstoneCubeEntity.isInWater() || this.redstoneCubeEntity.isInLava() || this.redstoneCubeEntity.isPotionActive(Effects.LEVITATION));
+        public boolean canUse() {
+            return this.redstoneCubeEntity.getTarget() == null && (this.redstoneCubeEntity.isOnGround() || this.redstoneCubeEntity.isInWater() || this.redstoneCubeEntity.isInLava() || this.redstoneCubeEntity.hasEffect(Effects.LEVITATION));
         }
 
         /**
@@ -213,11 +215,11 @@ public class RedstoneCubeEntity extends MonsterEntity {
          */
         public void tick() {
             if (--this.nextRandomizeTime <= 0) {
-                this.nextRandomizeTime = 40 + this.redstoneCubeEntity.getRNG().nextInt(60);
-                this.chosenDegrees = (float)this.redstoneCubeEntity.getRNG().nextInt(360);
+                this.nextRandomizeTime = 40 + this.redstoneCubeEntity.getRandom().nextInt(60);
+                this.chosenDegrees = (float)this.redstoneCubeEntity.getRandom().nextInt(360);
             }
 
-            ((RedstoneCubeEntity.MoveHelperController)this.redstoneCubeEntity.getMoveHelper())
+            ((RedstoneCubeEntity.MoveHelperController)this.redstoneCubeEntity.getMoveControl())
                     .setDirection(this.chosenDegrees, false);
         }
     }
@@ -230,7 +232,7 @@ public class RedstoneCubeEntity extends MonsterEntity {
         public MoveHelperController(RedstoneCubeEntity cubeIn) {
             super(cubeIn);
             this.redstoneCubeEntity = cubeIn;
-            this.yRot = 180.0F * cubeIn.rotationYaw / (float)Math.PI;
+            this.yRot = 180.0F * cubeIn.yRot / (float)Math.PI;
         }
 
         public void setDirection(float yRotIn, boolean aggressive) {
@@ -239,20 +241,20 @@ public class RedstoneCubeEntity extends MonsterEntity {
         }
 
         public void setSpeed(double speedIn) {
-            this.speed = speedIn;
-            this.action = MovementController.Action.MOVE_TO;
+            this.speedModifier = speedIn;
+            this.operation = MovementController.Action.MOVE_TO;
         }
 
         public void tick() {
-            this.mob.rotationYaw = this.limitAngle(this.mob.rotationYaw, this.yRot, 90.0F);
-            this.mob.rotationYawHead = this.mob.rotationYaw;
-            this.mob.renderYawOffset = this.mob.rotationYaw;
-            if (this.action == Action.WAIT) {
-                this.mob.setMoveForward(0.0F);
-            } else if(this.action == Action.MOVE_TO) {
-                this.action = MovementController.Action.WAIT;
+            this.mob.yRot = this.rotlerp(this.mob.yRot, this.yRot, 90.0F);
+            this.mob.yHeadRot = this.mob.yRot;
+            this.mob.yBodyRot = this.mob.yRot;
+            if (this.operation == Action.WAIT) {
+                this.mob.setZza(0.0F);
+            } else if(this.operation == Action.MOVE_TO) {
+                this.operation = MovementController.Action.WAIT;
                 if (this.mob.isOnGround() || this.mob.isInWater()) {
-                    this.mob.setAIMoveSpeed((float) (this.speed * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED)));
+                    this.mob.setSpeed((float) (this.speedModifier * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED)));
                     if(!this.redstoneCubeEntity.isRolling() && this.redstoneCubeEntity.shouldRoll()){
                         this.redstoneCubeEntity.startRolling(20);
                     }
@@ -262,17 +264,17 @@ public class RedstoneCubeEntity extends MonsterEntity {
     }
 
     @Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
         if(this.isRolling()){
-            if(this.world.isRemote){
-                this.world.addParticle(RedstoneParticleData.REDSTONE_DUST,
-                        this.getPosXRandom(0.5D) + 1.0D,
-                        this.getPosYRandom() - 0.25D + 1.0D,
-                        this.getPosZRandom(0.5D) + 1.0D,
-                        (this.rand.nextDouble() - 0.5D) * 2.0D,
-                        -this.rand.nextDouble(),
-                        (this.rand.nextDouble() - 0.5D) * 2.0D);
+            if(this.level.isClientSide){
+                this.level.addParticle(RedstoneParticleData.REDSTONE,
+                        this.getRandomX(0.5D) + 1.0D,
+                        this.getRandomY() - 0.25D + 1.0D,
+                        this.getRandomZ(0.5D) + 1.0D,
+                        (this.random.nextDouble() - 0.5D) * 2.0D,
+                        -this.random.nextDouble(),
+                        (this.random.nextDouble() - 0.5D) * 2.0D);
             }
         }
         if (this.rollingDuration > 0) {
@@ -286,14 +288,14 @@ public class RedstoneCubeEntity extends MonsterEntity {
 
     public void startRolling(int timeIn) {
         this.rollingDuration = timeIn;
-        if (!this.world.isRemote) {
+        if (!this.level.isClientSide) {
             this.setIsRolling(true);
         }
     }
 
     public void stopRolling() {
         this.rollingDuration = 0;
-        if (!this.world.isRemote) {
+        if (!this.level.isClientSide) {
             this.setIsRolling(false);
         }
     }
@@ -307,17 +309,17 @@ public class RedstoneCubeEntity extends MonsterEntity {
             this.rollingDuration = 0;
         }
 
-        if (!this.world.isRemote && this.rollingDuration <= 0) {
+        if (!this.level.isClientSide && this.rollingDuration <= 0) {
             this.setIsRolling(false);
         }
     }
 
     public void setIsRolling(boolean isRolling){
-        this.dataManager.set(IS_ROLLING, isRolling);
+        this.entityData.set(IS_ROLLING, isRolling);
     }
 
     public boolean isRolling() {
-        return this.dataManager.get(IS_ROLLING);
+        return this.entityData.get(IS_ROLLING);
     }
 
 }

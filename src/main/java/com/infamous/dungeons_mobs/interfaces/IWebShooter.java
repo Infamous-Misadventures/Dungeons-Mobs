@@ -19,20 +19,20 @@ public interface IWebShooter extends IRangedAttackMob {
     void setWebShooting(boolean webShooting);
 
     default void shootWeb(MobEntity webShooter, LivingEntity target){
-        double squareDistanceToTarget = webShooter.getDistanceSq(target);
-        double xDifference = target.getPosX() - webShooter.getPosX();
-        double yDifference = target.getPosYHeight(0.5D) - webShooter.getPosYHeight(0.5D);
-        double zDifference = target.getPosZ() - webShooter.getPosZ();
+        double squareDistanceToTarget = webShooter.distanceToSqr(target);
+        double xDifference = target.getX() - webShooter.getX();
+        double yDifference = target.getY(0.5D) - webShooter.getY(0.5D);
+        double zDifference = target.getZ() - webShooter.getZ();
         float f = MathHelper.sqrt(MathHelper.sqrt(squareDistanceToTarget)) * 0.5F;
 
-        CobwebProjectileEntity cobwebProjectileEntity = new CobwebProjectileEntity(webShooter.world,
+        CobwebProjectileEntity cobwebProjectileEntity = new CobwebProjectileEntity(webShooter.level,
                 webShooter,
                 xDifference * (double)f,
                 yDifference,
                 zDifference * (double)f);
-        cobwebProjectileEntity.setPosition(cobwebProjectileEntity.getPosX(),
-                webShooter.getPosYHeight(0.25D),
-                cobwebProjectileEntity.getPosZ());
-        webShooter.world.addEntity(cobwebProjectileEntity);
+        cobwebProjectileEntity.setPos(cobwebProjectileEntity.getX(),
+                webShooter.getY(0.25D),
+                cobwebProjectileEntity.getZ());
+        webShooter.level.addFreshEntity(cobwebProjectileEntity);
     }
 }

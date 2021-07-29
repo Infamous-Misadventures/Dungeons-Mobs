@@ -25,16 +25,16 @@ public class NecromancerRenderer extends BipedRenderer<NecromancerEntity, Necrom
     }
 
     @Override
-    protected void preRenderCallback(NecromancerEntity necromancerEntity, MatrixStack matrixStack, float v) {
+    protected void scale(NecromancerEntity necromancerEntity, MatrixStack matrixStack, float v) {
         float scaleFactor = 1.2F;
         matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
-        super.preRenderCallback(necromancerEntity, matrixStack, v);
+        super.scale(necromancerEntity, matrixStack, v);
     }
 
     /**
      * Returns the location of an entity's texture.
      */
-    public ResourceLocation getEntityTexture(NecromancerEntity entity) {
+    public ResourceLocation getTextureLocation(NecromancerEntity entity) {
         return NECROMANCER_TEXTURE;
     }
 }

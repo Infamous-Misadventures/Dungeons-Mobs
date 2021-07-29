@@ -48,20 +48,20 @@ public class PoisonQuillVineEntity extends VineEntity implements IRangedAttackMo
     }
 
     @Override
-    public void attackEntityWithRangedAttack(LivingEntity target, float distanceFactor) {
+    public void performRangedAttack(LivingEntity target, float distanceFactor) {
         ItemStack itemstack = new ItemStack(Items.TIPPED_ARROW);
-        PotionUtils.addPotionToItemStack(itemstack, Potions.POISON);
-        AbstractArrowEntity abstractarrowentity = ProjectileHelper.fireArrow(this, itemstack, distanceFactor);
-        double xDifference = target.getPosX() - this.getPosX();
-        double yDifference = target.getPosYHeight(0.3333333333333333D) - abstractarrowentity.getPosY();
-        double zDifference = target.getPosZ() - this.getPosZ();
+        PotionUtils.setPotion(itemstack, Potions.POISON);
+        AbstractArrowEntity abstractarrowentity = ProjectileHelper.getMobArrow(this, itemstack, distanceFactor);
+        double xDifference = target.getX() - this.getX();
+        double yDifference = target.getY(0.3333333333333333D) - abstractarrowentity.getY();
+        double zDifference = target.getZ() - this.getZ();
         float adjustedHorizontalDistanceSq = MathHelper.sqrt(xDifference * xDifference + zDifference * zDifference) * 0.2F;
         abstractarrowentity.shoot(xDifference, yDifference + (double)adjustedHorizontalDistanceSq, zDifference, 1.5F, 10.0F - 10.0F);
         if (!this.isSilent()) {
-            this.world.playSound((PlayerEntity)null, this.getPosX(), this.getPosY(), this.getPosZ(), SoundEvents.ENTITY_LLAMA_SPIT, this.getSoundCategory(), 1.0F, 1.0F + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F);
+            this.level.playSound((PlayerEntity)null, this.getX(), this.getY(), this.getZ(), SoundEvents.LLAMA_SPIT, this.getSoundSource(), 1.0F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
         }
 
-        this.world.addEntity(abstractarrowentity);
+        this.level.addFreshEntity(abstractarrowentity);
     }
 
 }

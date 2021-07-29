@@ -26,15 +26,15 @@ public class EntitySpawnPlacements {
         EntitySpawnPlacementRegistry.register(ModEntityTypes.ARMORED_ZOMBIE.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                MonsterEntity::canMonsterSpawnInLight);
+                MonsterEntity::checkMonsterSpawnRules);
         EntitySpawnPlacementRegistry.register(ModEntityTypes.ARMORED_SKELETON.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                MonsterEntity::canMonsterSpawnInLight);
+                MonsterEntity::checkMonsterSpawnRules);
         EntitySpawnPlacementRegistry.register(ModEntityTypes.WRAITH.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                MonsterEntity::canMonsterSpawnInLight);
+                MonsterEntity::checkMonsterSpawnRules);
         EntitySpawnPlacementRegistry.register(ModEntityTypes.FROZEN_ZOMBIE.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
@@ -60,15 +60,15 @@ public class EntitySpawnPlacements {
         EntitySpawnPlacementRegistry.register(ModEntityTypes.ARMORED_PILLAGER.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                PatrollerEntity::func_223330_b);
+                PatrollerEntity::checkPatrollingMonsterSpawnRules);
         EntitySpawnPlacementRegistry.register(ModEntityTypes.SKELETON_VANGUARD.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                MonsterEntity::canMonsterSpawnInLight);
+                MonsterEntity::checkMonsterSpawnRules);
         EntitySpawnPlacementRegistry.register(ModEntityTypes.NECROMANCER.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                MonsterEntity::canMonsterSpawnInLight);
+                MonsterEntity::checkMonsterSpawnRules);
         EntitySpawnPlacementRegistry.register(ModEntityTypes.ROYAL_GUARD.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
@@ -110,15 +110,15 @@ public class EntitySpawnPlacements {
         EntitySpawnPlacementRegistry.register(ModEntityTypes.REDSTONE_GOLEM.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                MonsterEntity::canMonsterSpawnInLight);
+                MonsterEntity::checkMonsterSpawnRules);
         EntitySpawnPlacementRegistry.register(ModEntityTypes.REDSTONE_CUBE.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                MonsterEntity::canMonsterSpawnInLight);
+                MonsterEntity::checkMonsterSpawnRules);
         EntitySpawnPlacementRegistry.register(ModEntityTypes.CONJURED_SLIME.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                MobEntity::canSpawnOn);
+                MobEntity::checkMobSpawnRules);
 
 
         EntitySpawnPlacementRegistry.register(ModEntityTypes.WHISPERER.get(),
@@ -141,17 +141,17 @@ public class EntitySpawnPlacements {
     }
 
     public static boolean canJungleMobSpawn(EntityType<? extends MonsterEntity> entityType, IServerWorld world, SpawnReason spawnReason, BlockPos blockPos, Random rand) {
-        return MonsterEntity.canMonsterSpawnInLight(entityType, world, spawnReason, blockPos, rand)
+        return MonsterEntity.checkMonsterSpawnRules(entityType, world, spawnReason, blockPos, rand)
                 && (spawnReason == SpawnReason.SPAWNER || world.canSeeSky(blockPos));
     }
 
     public static boolean canIllagerSpawn(EntityType<? extends AbstractIllagerEntity> entityType, IServerWorld world, SpawnReason spawnReason, BlockPos blockPos, Random rand) {
-        return MonsterEntity.canMonsterSpawnInLight(entityType, world, spawnReason, blockPos, rand)
+        return MonsterEntity.checkMonsterSpawnRules(entityType, world, spawnReason, blockPos, rand)
                 && (spawnReason == SpawnReason.SPAWNER || world.canSeeSky(blockPos));
     }
 
     public static boolean canRaiderSpawn(EntityType<? extends AbstractRaiderEntity> entityType, IServerWorld world, SpawnReason spawnReason, BlockPos blockPos, Random rand) {
-        return MonsterEntity.canMonsterSpawnInLight(entityType, world, spawnReason, blockPos, rand)
+        return MonsterEntity.checkMonsterSpawnRules(entityType, world, spawnReason, blockPos, rand)
                 && (spawnReason == SpawnReason.SPAWNER || world.canSeeSky(blockPos));
     }
 

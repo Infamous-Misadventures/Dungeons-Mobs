@@ -20,20 +20,20 @@ public class QuickGrowingVineRenderer extends MobRenderer<QuickGrowingVineEntity
    }
 
    @Override
-   protected void preRenderCallback(QuickGrowingVineEntity entitylivingbaseIn, MatrixStack matrixStackIn, float partialTickTime) {
+   protected void scale(QuickGrowingVineEntity entitylivingbaseIn, MatrixStack matrixStackIn, float partialTickTime) {
       float scaleFactor = 1.00F;
       matrixStackIn.scale(scaleFactor, scaleFactor, scaleFactor);
-      super.preRenderCallback(entitylivingbaseIn, matrixStackIn, partialTickTime);
+      super.scale(entitylivingbaseIn, matrixStackIn, partialTickTime);
    }
 
    /**
     * Returns the location of an entity's texture.
     */
-   public ResourceLocation getEntityTexture(QuickGrowingVineEntity entity) {
+   public ResourceLocation getTextureLocation(QuickGrowingVineEntity entity) {
       return QUICK_GROWING_VINE_TEXTURE;
    }
 
-   protected void applyRotations(QuickGrowingVineEntity entityLiving, MatrixStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks) {
-      super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
+   protected void setupRotations(QuickGrowingVineEntity entityLiving, MatrixStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks) {
+      super.setupRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
    }
 }

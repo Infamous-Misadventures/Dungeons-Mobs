@@ -13,24 +13,24 @@ public class RangedWebAttackGoal<T extends MobEntity & IWebShooter> extends Rang
     }
 
     @Override
-    public boolean shouldExecute() {
-        return super.shouldExecute() && this.webShooter.shouldShootWeb() && !this.webShooter.isTargetSlowedDown();
+    public boolean canUse() {
+        return super.canUse() && this.webShooter.shouldShootWeb() && !this.webShooter.isTargetSlowedDown();
     }
 
     @Override
-    public boolean shouldContinueExecuting() {
-        return super.shouldContinueExecuting() && !this.webShooter.isTargetSlowedDown();
+    public boolean canContinueToUse() {
+        return super.canContinueToUse() && !this.webShooter.isTargetSlowedDown();
     }
 
     @Override
-    public void startExecuting() {
-        super.startExecuting();
+    public void start() {
+        super.start();
         this.webShooter.setWebShooting(true);
     }
 
     @Override
-    public void resetTask() {
-        super.resetTask();
+    public void stop() {
+        super.stop();
         this.webShooter.setWebShooting(false);
     }
 }

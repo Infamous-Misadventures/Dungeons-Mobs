@@ -26,8 +26,10 @@ import net.minecraft.world.raid.Raid;
 import javax.annotation.Nullable;
 import java.util.Map;
 
+import net.minecraft.entity.monster.AbstractIllagerEntity.ArmPose;
+
 public class ArmoredPillagerEntity extends PillagerEntity {
-    private static final DataParameter<Boolean> IS_DIAMOND = EntityDataManager.createKey(ArmoredPillagerEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> IS_DIAMOND = EntityDataManager.defineId(ArmoredPillagerEntity.class, DataSerializers.BOOLEAN);
 
     public ArmoredPillagerEntity(World world){
         super(ModEntityTypes.ARMORED_PILLAGER.get(), world);
@@ -37,40 +39,40 @@ public class ArmoredPillagerEntity extends PillagerEntity {
         super(p_i50189_1_, p_i50189_2_);
     }
 
-    protected void registerData() {
-        super.registerData();
-        this.dataManager.register(IS_DIAMOND, false);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(IS_DIAMOND, false);
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
-        return PillagerEntity.func_234296_eI_()
-                .createMutableAttribute(Attributes.MAX_HEALTH, 36.0D)
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 7.0D)
-                .createMutableAttribute(Attributes.KNOCKBACK_RESISTANCE);
+        return PillagerEntity.createAttributes()
+                .add(Attributes.MAX_HEALTH, 36.0D)
+                .add(Attributes.ATTACK_DAMAGE, 7.0D)
+                .add(Attributes.KNOCKBACK_RESISTANCE);
     }
 
     @Override
-    public void writeAdditional(CompoundNBT compound) {
-        super.writeAdditional(compound);
+    public void addAdditionalSaveData(CompoundNBT compound) {
+        super.addAdditionalSaveData(compound);
         if (this.isDiamond()){
             compound.putBoolean("Diamond", true);
         }
     }
 
     @Override
-    public void readAdditional(CompoundNBT compound) {
-        super.readAdditional(compound);
+    public void readAdditionalSaveData(CompoundNBT compound) {
+        super.readAdditionalSaveData(compound);
         if (compound.contains("Diamond", 99)) {
             this.setDiamond(compound.getBoolean("Diamond"));
         }
     }
 
     public boolean isDiamond(){
-        return this.dataManager.get(IS_DIAMOND);
+        return this.entityData.get(IS_DIAMOND);
     }
 
     public void setDiamond(boolean isDiamond){
-        this.dataManager.set(IS_DIAMOND, isDiamond);
+        this.entityData.set(IS_DIAMOND, isDiamond);
     }
 
     @Override
@@ -80,55 +82,55 @@ public class ArmoredPillagerEntity extends PillagerEntity {
 
     @Nullable
     @Override
-    public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+    public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
 
-        float diamondChance = rand.nextFloat();
+        float diamondChance = random.nextFloat();
         if(diamondChance < 0.25F){
             this.setDiamond(true);
             this.applyDiamondArmorBoosts();
         }
 
-        return super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+        return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 
     private void applyDiamondArmorBoosts() {
-        this.getAttribute(Attributes.ARMOR).applyPersistentModifier(new AttributeModifier("Diamond armor boost", 10.0D, AttributeModifier.Operation.ADDITION));
-        this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).applyPersistentModifier(new AttributeModifier("Diamond knockback resistance boost", 0.6D, AttributeModifier.Operation.ADDITION));
-        this.getAttribute(Attributes.ATTACK_DAMAGE).applyPersistentModifier(new AttributeModifier("Diamond attack boost", 1.0D, AttributeModifier.Operation.ADDITION));
+        this.getAttribute(Attributes.ARMOR).addPermanentModifier(new AttributeModifier("Diamond armor boost", 10.0D, AttributeModifier.Operation.ADDITION));
+        this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).addPermanentModifier(new AttributeModifier("Diamond knockback resistance boost", 0.6D, AttributeModifier.Operation.ADDITION));
+        this.getAttribute(Attributes.ATTACK_DAMAGE).addPermanentModifier(new AttributeModifier("Diamond attack boost", 1.0D, AttributeModifier.Operation.ADDITION));
     }
 
-    protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficultyInstance) {
-        if(this.getRaid() == null){
+    protected void populateDefaultEquipmentSlots(DifficultyInstance difficultyInstance) {
+        if(this.getCurrentRaid() == null){
             if(this.isDiamond()){
-                this.setItemStackToSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.DIAMOND_PILLAGER_HELMET.get()));
+                this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.DIAMOND_PILLAGER_HELMET.get()));
             }
             else{
-                this.setItemStackToSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.GOLD_PILLAGER_HELMET.get()));
+                this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.GOLD_PILLAGER_HELMET.get()));
             }
             ItemStack mainhandWeapon = new ItemStack(Items.CROSSBOW);
             Map<Enchantment, Integer> enchantmentIntegerMap = Maps.newHashMap();
             enchantmentIntegerMap.put(Enchantments.PIERCING, 1);
             EnchantmentHelper.setEnchantments(enchantmentIntegerMap, mainhandWeapon);
 
-            this.setItemStackToSlot(EquipmentSlotType.MAINHAND, mainhandWeapon);
+            this.setItemSlot(EquipmentSlotType.MAINHAND, mainhandWeapon);
         }
     }
 
     @Override
-    public void applyWaveBonus(int waveAmount, boolean p_213660_2_) {
+    public void applyRaidBuffs(int waveAmount, boolean p_213660_2_) {
         ItemStack crossbow = new ItemStack(Items.CROSSBOW);
         ItemStack helmet = this.isDiamond() ? new ItemStack(ModItems.DIAMOND_PILLAGER_HELMET.get()) : new ItemStack(ModItems.GOLD_PILLAGER_HELMET.get());
-        Raid raid = this.getRaid();
-        boolean applyEnchant = this.rand.nextFloat() <= raid.getEnchantOdds();
+        Raid raid = this.getCurrentRaid();
+        boolean applyEnchant = this.random.nextFloat() <= raid.getEnchantOdds();
         if (applyEnchant) {
             Map<Enchantment, Integer> weaponEnchantmentMap = Maps.newHashMap();
             Map<Enchantment, Integer> armorEnchantmentMap = Maps.newHashMap();
-            if (waveAmount > raid.getWaves(Difficulty.NORMAL)) {
+            if (waveAmount > raid.getNumGroups(Difficulty.NORMAL)) {
                 weaponEnchantmentMap.put(Enchantments.QUICK_CHARGE, 2);
-                armorEnchantmentMap.put(Enchantments.PROTECTION, 2);
-            } else if (waveAmount > raid.getWaves(Difficulty.EASY)) {
+                armorEnchantmentMap.put(Enchantments.ALL_DAMAGE_PROTECTION, 2);
+            } else if (waveAmount > raid.getNumGroups(Difficulty.EASY)) {
                 weaponEnchantmentMap.put(Enchantments.QUICK_CHARGE, 1);
-                armorEnchantmentMap.put(Enchantments.PROTECTION, 1);
+                armorEnchantmentMap.put(Enchantments.ALL_DAMAGE_PROTECTION, 1);
             }
 
             weaponEnchantmentMap.put(Enchantments.MULTISHOT, 1);
@@ -138,9 +140,9 @@ public class ArmoredPillagerEntity extends PillagerEntity {
         Map<Enchantment, Integer> guaranteedEnchantMap = Maps.newHashMap();
         guaranteedEnchantMap.put(Enchantments.PIERCING, 1);
         EnchantmentHelper.setEnchantments(guaranteedEnchantMap, crossbow);
-        this.setItemStackToSlot(EquipmentSlotType.MAINHAND, crossbow);
+        this.setItemSlot(EquipmentSlotType.MAINHAND, crossbow);
 
-        this.setItemStackToSlot(EquipmentSlotType.HEAD, helmet);
+        this.setItemSlot(EquipmentSlotType.HEAD, helmet);
     }
 
     @Override

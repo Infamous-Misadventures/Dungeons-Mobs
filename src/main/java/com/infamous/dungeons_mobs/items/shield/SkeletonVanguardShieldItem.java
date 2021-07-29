@@ -10,16 +10,18 @@ import net.minecraft.item.ShieldItem;
 import javax.annotation.Nullable;
 import java.util.concurrent.Callable;
 
+import net.minecraft.item.Item.Properties;
+
 public class SkeletonVanguardShieldItem extends ShieldItem {
     public SkeletonVanguardShieldItem(Properties builder) {
         super(builder.setISTER(SkeletonVanguardShieldItem::getISTER));
-        DispenserBlock.registerDispenseBehavior(this, ArmorItem.DISPENSER_BEHAVIOR);
+        DispenserBlock.registerBehavior(this, ArmorItem.DISPENSE_ITEM_BEHAVIOR);
     }
 
     /**
      * Return whether this item is repairable in an anvil.
      */
-    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
+    public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) {
         return false;
     }
 

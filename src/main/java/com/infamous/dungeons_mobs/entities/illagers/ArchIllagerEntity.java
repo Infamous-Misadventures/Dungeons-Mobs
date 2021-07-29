@@ -18,12 +18,12 @@ public class ArchIllagerEntity extends AbstractIllagerEntity {
     }
 
     @Override
-    public void applyWaveBonus(int p_213660_1_, boolean p_213660_2_) {
+    public void applyRaidBuffs(int p_213660_1_, boolean p_213660_2_) {
 
     }
 
     @Override
-    public SoundEvent getRaidLossSound() {
+    public SoundEvent getCelebrateSound() {
         return null;
     }
 }

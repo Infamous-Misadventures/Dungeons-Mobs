@@ -64,7 +64,6 @@ public class DungeonsMobs
 
     private void setup(final FMLCommonSetupEvent event){
         DeferredWorkQueue.runLater(() -> {
-            EntityTypeAttributes.initEntityTypeAttributes();
             EntitySpawnPlacements.initSpawnPlacements();
             RaidEntries.initWaveMemberEntries();
             SensorMapModifier.replaceSensorMaps();
@@ -81,7 +80,7 @@ public class DungeonsMobs
     }
 
     private void onLoadComplete(final FMLLoadCompleteEvent event){
-        EntityType.HUSK.size = EntitySize.flexible(0.6F * 1.2F, 1.95F * 1.2F);
+        EntityType.HUSK.dimensions = EntitySize.scalable(0.6F * 1.2F, 1.95F * 1.2F);
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event)

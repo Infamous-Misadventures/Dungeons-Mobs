@@ -20,55 +20,65 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
 import net.minecraft.entity.monster.HuskEntity;
 import net.minecraft.entity.passive.horse.SkeletonHorseEntity;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
+import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
+import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
+
+@Mod.EventBusSubscriber(modid = MODID)
 public class EntityTypeAttributes {
 
-    public static void initEntityTypeAttributes() {
-        GlobalEntityTypeAttributes.put(ModEntityTypes.ARMORED_ZOMBIE.get(), ArmoredZombieEntity.setCustomAttributes().create());
-        GlobalEntityTypeAttributes.put(ModEntityTypes.JUNGLE_ZOMBIE.get(), JungleZombieEntity.setCustomAttributes().create());
-        GlobalEntityTypeAttributes.put(ModEntityTypes.FROZEN_ZOMBIE.get(), FrozenZombieEntity.setCustomAttributes().create());
+    @SubscribeEvent
+    public static void initEntityTypeAttributes(EntityAttributeCreationEvent event) {
+        event.put(ModEntityTypes.ARMORED_ZOMBIE.get(), ArmoredZombieEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.JUNGLE_ZOMBIE.get(), JungleZombieEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.FROZEN_ZOMBIE.get(), FrozenZombieEntity.setCustomAttributes().build());
 
-        GlobalEntityTypeAttributes.put(ModEntityTypes.ARMORED_SKELETON.get(), ArmoredSkeletonEntity.setCustomAttributes().create());
-        GlobalEntityTypeAttributes.put(ModEntityTypes.MOSSY_SKELETON.get(), MossySkeletonEntity.setCustomAttributes().create());
-        GlobalEntityTypeAttributes.put(ModEntityTypes.SKELETON_VANGUARD.get(), SkeletonVanguardEntity.setCustomAttributes().create());
-        GlobalEntityTypeAttributes.put(ModEntityTypes.SKELETON_HORSEMAN.get(), SkeletonHorsemanEntity.setCustomAttributes().create());
-        GlobalEntityTypeAttributes.put(ModEntityTypes.NECROMANCER.get(), NecromancerEntity.setCustomAttributes().create());
+        event.put(ModEntityTypes.ARMORED_SKELETON.get(), ArmoredSkeletonEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.MOSSY_SKELETON.get(), MossySkeletonEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.SKELETON_VANGUARD.get(), SkeletonVanguardEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.SKELETON_HORSEMAN.get(), SkeletonHorsemanEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.NECROMANCER.get(), NecromancerEntity.setCustomAttributes().build());
 
-        GlobalEntityTypeAttributes.put(ModEntityTypes.ARMORED_VINDICATOR.get(), ArmoredVindicatorEntity.setCustomAttributes().create());
-        GlobalEntityTypeAttributes.put(ModEntityTypes.ARMORED_PILLAGER.get(), ArmoredPillagerEntity.setCustomAttributes().create());
-        GlobalEntityTypeAttributes.put(ModEntityTypes.ROYAL_GUARD.get(), RoyalGuardEntity.setCustomAttributes().create());
-        GlobalEntityTypeAttributes.put(ModEntityTypes.VINDICATOR_CHEF.get(), VindicatorChefEntity.setCustomAttributes().create());
-        GlobalEntityTypeAttributes.put(ModEntityTypes.MOUNTAINEER.get(), MountaineerEntity.setCustomAttributes().create());
-        GlobalEntityTypeAttributes.put(ModEntityTypes.ARMORED_MOUNTAINEER.get(), ArmoredMountaineerEntity.setCustomAttributes().create());
+        event.put(ModEntityTypes.ARMORED_VINDICATOR.get(), ArmoredVindicatorEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.ARMORED_PILLAGER.get(), ArmoredPillagerEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.ROYAL_GUARD.get(), RoyalGuardEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.VINDICATOR_CHEF.get(), VindicatorChefEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.MOUNTAINEER.get(), MountaineerEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.ARMORED_MOUNTAINEER.get(), ArmoredMountaineerEntity.setCustomAttributes().build());
 
-        GlobalEntityTypeAttributes.put(ModEntityTypes.ICEOLOGER.get(), IceologerEntity.setCustomAttributes().create());
-        GlobalEntityTypeAttributes.put(ModEntityTypes.GEOMANCER.get(), GeomancerEntity.setCustomAttributes().create());
-        GlobalEntityTypeAttributes.put(ModEntityTypes.ILLUSIONER_CLONE.get(), IllusionerCloneEntity.setCustomAttributes().create());
-        GlobalEntityTypeAttributes.put(ModEntityTypes.WINDCALLER.get(), WindcallerEntity.setCustomAttributes().create());
+        event.put(ModEntityTypes.ICEOLOGER.get(), IceologerEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.GEOMANCER.get(), GeomancerEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.ILLUSIONER_CLONE.get(), IllusionerCloneEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.WINDCALLER.get(), WindcallerEntity.setCustomAttributes().build());
 
-        GlobalEntityTypeAttributes.put(ModEntityTypes.ICY_CREEPER.get(), IcyCreeperEntity.setCustomAttributes().create());
+        event.put(ModEntityTypes.ICY_CREEPER.get(), IcyCreeperEntity.setCustomAttributes().build());
 
-        GlobalEntityTypeAttributes.put(ModEntityTypes.WRAITH.get(), WraithEntity.setCustomAttributes().create());
+        event.put(ModEntityTypes.WRAITH.get(), WraithEntity.setCustomAttributes().build());
 
-        GlobalEntityTypeAttributes.put(ModEntityTypes.CONJURED_SLIME.get(), ConjuredSlimeEntity.setCustomAttributes().create());
+        event.put(ModEntityTypes.CONJURED_SLIME.get(), ConjuredSlimeEntity.setCustomAttributes().build());
 
-        GlobalEntityTypeAttributes.put(ModEntityTypes.REDSTONE_CUBE.get(), RedstoneCubeEntity.setCustomAttributes().create());
-        GlobalEntityTypeAttributes.put(ModEntityTypes.REDSTONE_GOLEM.get(), RedstoneGolemEntity.setCustomAttributes().create());
+        event.put(ModEntityTypes.REDSTONE_CUBE.get(), RedstoneCubeEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.REDSTONE_GOLEM.get(), RedstoneGolemEntity.setCustomAttributes().build());
 
-        GlobalEntityTypeAttributes.put(ModEntityTypes.WHISPERER.get(), WhispererEntity.setCustomAttributes().create());
-        GlobalEntityTypeAttributes.put(ModEntityTypes.LEAPLEAF.get(), LeapleafEntity.setCustomAttributes().create());
-        GlobalEntityTypeAttributes.put(ModEntityTypes.QUICK_GROWING_VINE.get(), QuickGrowingVineEntity.setCustomAttributes().create());
-        GlobalEntityTypeAttributes.put(ModEntityTypes.POISON_QUILL_VINE.get(), PoisonQuillVineEntity.setCustomAttributes().create());
+        event.put(ModEntityTypes.WHISPERER.get(), WhispererEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.LEAPLEAF.get(), LeapleafEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.QUICK_GROWING_VINE.get(), QuickGrowingVineEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.POISON_QUILL_VINE.get(), PoisonQuillVineEntity.setCustomAttributes().build());
 
-        GlobalEntityTypeAttributes.put(ModEntityTypes.SQUALL_GOLEM.get(), SquallGolemEntity.setCustomAttributes().create());
+        event.put(ModEntityTypes.SQUALL_GOLEM.get(), SquallGolemEntity.setCustomAttributes().build());
 
+    }
+
+    @SubscribeEvent
+    public static void changeAttributes(EntityAttributeModificationEvent event){
         // Tougher Husks
         if(DungeonsMobsConfig.COMMON.ENABLE_STRONGER_HUSKS.get()){
-            GlobalEntityTypeAttributes.put(EntityType.HUSK, HuskEntity.func_234342_eQ_()
-                    .createMutableAttribute(Attributes.ARMOR, 10.0D)
-                    .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.17D)
-                    .createMutableAttribute(Attributes.KNOCKBACK_RESISTANCE, 0.6D)
-                    .create());
+            event.add(EntityType.HUSK, Attributes.ARMOR, 10.0D);
+            event.add(EntityType.HUSK, Attributes.MOVEMENT_SPEED, 0.17D);
+            event.add(EntityType.HUSK, Attributes.KNOCKBACK_RESISTANCE, 0.6D);
         }
     }
 }

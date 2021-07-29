@@ -29,20 +29,20 @@ public abstract class VineEntity extends MobEntity implements IMob {
 
     protected VineEntity(EntityType<? extends VineEntity> entityTypeIn, World worldIn, double x, double y, double z, LivingEntity casterIn, int lifeTicksIn){
         this(entityTypeIn, worldIn);
-        this.setPosition(x, y, z);
+        this.setPos(x, y, z);
         this.setCaster(casterIn);
         this.setLifeTicks(lifeTicksIn);
     }
 
     protected static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 30.0D);
+        return MobEntity.createMobAttributes().add(Attributes.MAX_HEALTH, 30.0D);
     }
 
     @Override
-    public void readAdditional(CompoundNBT compound) {
-        super.readAdditional(compound);
-        if (compound.hasUniqueId("Owner")) {
-            this.casterUuid = compound.getUniqueId("Owner");
+    public void readAdditionalSaveData(CompoundNBT compound) {
+        super.readAdditionalSaveData(compound);
+        if (compound.hasUUID("Owner")) {
+            this.casterUuid = compound.getUUID("Owner");
         }
         this.setLifeTicks(compound.getInt("LifeTicks"));
         this.setPerishable(compound.getBoolean("IsPerishable"));
@@ -50,10 +50,10 @@ public abstract class VineEntity extends MobEntity implements IMob {
 
 
     @Override
-    public void writeAdditional(CompoundNBT compound) {
-        super.writeAdditional(compound);
+    public void addAdditionalSaveData(CompoundNBT compound) {
+        super.addAdditionalSaveData(compound);
         if (this.casterUuid != null) {
-            compound.putUniqueId("Owner", this.casterUuid);
+            compound.putUUID("Owner", this.casterUuid);
         }
         compound.putInt("LifeTicks", this.getLifeTicks());
         compound.putBoolean("IsPerishable", this.isPerishable());
@@ -61,13 +61,13 @@ public abstract class VineEntity extends MobEntity implements IMob {
 
     public void setCaster(@Nullable LivingEntity caster) {
         this.caster = caster;
-        this.casterUuid = caster == null ? null : caster.getUniqueID();
+        this.casterUuid = caster == null ? null : caster.getUUID();
     }
 
     @Nullable
     public LivingEntity getCaster() {
-        if (this.caster == null && this.casterUuid != null && this.world instanceof ServerWorld) {
-            Entity entity = ((ServerWorld)this.world).getEntityByUuid(this.casterUuid);
+        if (this.caster == null && this.casterUuid != null && this.level instanceof ServerWorld) {
+            Entity entity = ((ServerWorld)this.level).getEntity(this.casterUuid);
             if (entity instanceof LivingEntity) {
                 this.caster = (LivingEntity)entity;
             }
@@ -94,29 +94,29 @@ public abstract class VineEntity extends MobEntity implements IMob {
     }
 
     // used for some kind of collision checking
-    public boolean func_241845_aY() {
+    public boolean canBeCollidedWith() {
         return this.isAlive();
     }
 
     @Override
-    protected boolean canTriggerWalking() {
+    protected boolean isMovementNoisy() {
         return false;
     }
 
     @Override
-    public void applyEntityCollision(Entity entity) {
+    public void push(Entity entity) {
         // NO-OP
     }
 
     @Override
-    public void applyKnockback(float strength, double ratioX, double ratioZ) {
+    public void knockback(float strength, double ratioX, double ratioZ) {
         // NO-OP
     }
 
     @Override
     public void tick() {
         super.tick();
-        if(this.isPerishable && !this.world.isRemote()){
+        if(this.isPerishable && !this.level.isClientSide()){
             this.lifeTicks--;
             if(this.lifeTicks <= 0){
                 this.remove();
@@ -126,8 +126,8 @@ public abstract class VineEntity extends MobEntity implements IMob {
 
     public static boolean canVineSpawnInLight(EntityType<? extends VineEntity> type, IServerWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
         return worldIn.getDifficulty() != Difficulty.PEACEFUL
-                && MonsterEntity.isValidLightLevel(worldIn, pos, randomIn)
-                && canSpawnOn(type, worldIn, reason, pos, randomIn)
+                && MonsterEntity.isDarkEnoughToSpawn(worldIn, pos, randomIn)
+                && checkMobSpawnRules(type, worldIn, reason, pos, randomIn)
                 && (reason == SpawnReason.SPAWNER || worldIn.canSeeSky(pos));
     }
 }

@@ -15,6 +15,8 @@ import javax.annotation.Nullable;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
+import net.minecraft.item.Item.Properties;
+
 public class VindicatorHelmetItem extends ArmorItem {
     private final boolean isDiamond;
 

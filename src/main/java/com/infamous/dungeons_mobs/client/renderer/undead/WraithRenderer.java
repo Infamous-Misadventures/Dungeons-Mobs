@@ -24,7 +24,7 @@ public class WraithRenderer extends BipedRenderer<WraithEntity, WraithBipedModel
     /**
      * Returns the location of an entity's texture.
      */
-    public ResourceLocation getEntityTexture(WraithEntity entity) {
+    public ResourceLocation getTextureLocation(WraithEntity entity) {
         return WRAITH_TEXTURE;
     }
 }

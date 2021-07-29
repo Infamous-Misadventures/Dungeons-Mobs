@@ -28,33 +28,33 @@ public class ShieldTileEntityRenderer extends ItemStackTileEntityRenderer {
 	private final ShieldModel modelShield = new ShieldModel();
 	private final SkeletonVanguardShieldModel modelVanguardShield = new SkeletonVanguardShieldModel();
 
-	public void func_239207_a_(ItemStack stack, ItemCameraTransforms.TransformType p_239207_2_, MatrixStack matrixStack, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay){
+	public void renderByItem(ItemStack stack, ItemCameraTransforms.TransformType p_239207_2_, MatrixStack matrixStack, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay){
 		Item item = stack.getItem();
 		if (item == ModItems.ROYAL_GUARD_SHIELD.get()) {
-		boolean flag = stack.getChildTag("BlockEntityTag") != null;
-		matrixStack.push();
+		boolean flag = stack.getTagElement("BlockEntityTag") != null;
+		matrixStack.pushPose();
 		matrixStack.scale(1.0F, -1.0F, -1.0F);
 		RenderMaterial rendermaterial = flag ? LOCATION_ROYAL_GUARD_SHIELD_BASE : LOCATION_ROYAL_GUARD_SHIELD_NO_PATTERN;
-		IVertexBuilder ivertexbuilder = rendermaterial.getSprite().wrapBuffer(ItemRenderer.getEntityGlintVertexBuilder(buffer, this.modelShield.getRenderType(rendermaterial.getAtlasLocation()), true, stack.hasEffect()));
-		this.modelShield.func_228294_b_().render(matrixStack, ivertexbuilder, combinedLight, combinedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);
+		IVertexBuilder ivertexbuilder = rendermaterial.sprite().wrap(ItemRenderer.getFoilBufferDirect(buffer, this.modelShield.renderType(rendermaterial.atlasLocation()), true, stack.hasFoil()));
+		this.modelShield.handle().render(matrixStack, ivertexbuilder, combinedLight, combinedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);
 		if (flag) {
-			List<Pair<BannerPattern, DyeColor>> list = BannerTileEntity.getPatternColorData(ShieldItem.getColor(stack), BannerTileEntity.getPatternData(stack));
-			BannerTileEntityRenderer.func_241717_a_(matrixStack, buffer, combinedLight, combinedOverlay, this.modelShield.func_228293_a_(), rendermaterial, false, list, stack.hasEffect());
+			List<Pair<BannerPattern, DyeColor>> list = BannerTileEntity.createPatterns(ShieldItem.getColor(stack), BannerTileEntity.getItemPatterns(stack));
+			BannerTileEntityRenderer.renderPatterns(matrixStack, buffer, combinedLight, combinedOverlay, this.modelShield.plate(), rendermaterial, false, list, stack.hasFoil());
 		} else {
-			this.modelShield.func_228293_a_().render(matrixStack, ivertexbuilder, combinedLight, combinedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);
+			this.modelShield.plate().render(matrixStack, ivertexbuilder, combinedLight, combinedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);
 		}
 
-		matrixStack.pop();
+		matrixStack.popPose();
 		}
 		else if (item == ModItems.SKELETON_VANGUARD_SHIELD.get()) {
-			matrixStack.push();
+			matrixStack.pushPose();
 			matrixStack.scale(1.0F, -1.0F, -1.0F);
 			RenderMaterial rendermaterial = LOCATION_SKELETON_VANGUARD_SHIELD;
-			IVertexBuilder ivertexbuilder = rendermaterial.getSprite().wrapBuffer(ItemRenderer.getEntityGlintVertexBuilder(buffer, this.modelShield.getRenderType(rendermaterial.getAtlasLocation()), true, stack.hasEffect()));
+			IVertexBuilder ivertexbuilder = rendermaterial.sprite().wrap(ItemRenderer.getFoilBufferDirect(buffer, this.modelShield.renderType(rendermaterial.atlasLocation()), true, stack.hasFoil()));
 			//this.modelVanguardShield.getHandle().render(matrixStack, ivertexbuilder, combinedLight, combinedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);
 			this.modelVanguardShield.getPlate().render(matrixStack, ivertexbuilder, combinedLight, combinedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);
 
-			matrixStack.pop();
+			matrixStack.popPose();
 		}
 	}
 

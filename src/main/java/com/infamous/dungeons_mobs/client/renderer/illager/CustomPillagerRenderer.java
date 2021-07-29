@@ -28,7 +28,7 @@ public class CustomPillagerRenderer extends MobRenderer<PillagerEntity, IllagerB
     }
 
     @Override
-    protected void preRenderCallback(PillagerEntity pillagerEntity, MatrixStack matrixStack, float v) {
+    protected void scale(PillagerEntity pillagerEntity, MatrixStack matrixStack, float v) {
         if(pillagerEntity instanceof ArmoredPillagerEntity){
             float scaleFactor = 1.1F;
             matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
@@ -37,11 +37,11 @@ public class CustomPillagerRenderer extends MobRenderer<PillagerEntity, IllagerB
             float scaleFactor = 0.9375F;
             matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
         }
-        super.preRenderCallback(pillagerEntity, matrixStack, v);
+        super.scale(pillagerEntity, matrixStack, v);
     }
 
     @Override
-    public ResourceLocation getEntityTexture(PillagerEntity entity) {
+    public ResourceLocation getTextureLocation(PillagerEntity entity) {
         if(entity instanceof ArmoredPillagerEntity){
             ArmoredPillagerEntity armoredPillagerEntity = (ArmoredPillagerEntity)entity;
             if(armoredPillagerEntity.isDiamond()){

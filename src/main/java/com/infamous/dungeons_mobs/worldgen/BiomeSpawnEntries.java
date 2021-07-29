@@ -30,7 +30,7 @@ public class BiomeSpawnEntries {
     public static void onBiomeLoadingEvent(BiomeLoadingEvent event){
         ResourceLocation biomeRegistryName = event.getName();
         if (biomeRegistryName != null) {
-            RegistryKey<Biome> biomeRegistryKey = RegistryKey.getOrCreateKey(Registry.BIOME_KEY, biomeRegistryName);
+            RegistryKey<Biome> biomeRegistryKey = RegistryKey.create(Registry.BIOME_REGISTRY, biomeRegistryName);
             MobSpawnInfoBuilder mobSpawnInfoBuilder = event.getSpawns();
             addMonsterSpawnsToBiome(biomeRegistryKey, mobSpawnInfoBuilder);
         }
@@ -211,17 +211,17 @@ public class BiomeSpawnEntries {
         List<MobSpawnInfo.Spawners> monsterSpawnList = mobSpawnInfoBuilder.getSpawner(EntityClassification.MONSTER);
         for(int i = 0; i < monsterSpawnList.size(); i++) {
             MobSpawnInfo.Spawners spawnListEntry = monsterSpawnList.get(i);
-            int weight = spawnListEntry.itemWeight;
+            int weight = spawnListEntry.weight;
             int minGroupCount = spawnListEntry.minCount;
             int maxGroupCount = spawnListEntry.maxCount;
             EntityType<?> entityType = spawnListEntry.type;
             if (entityType == typeToReplace) {
                 MobSpawnInfo.SpawnCosts spawnCosts = mobSpawnInfoBuilder.getCost(typeToReplace);
                 if(spawnCosts != null){
-                    double maxSpawnCost = spawnCosts.getMaxSpawnCost();
-                    double entitySpawnCost = spawnCosts.getEntitySpawnCost();
-                    mobSpawnInfoBuilder.withSpawnCost(typeToReplace, maxSpawnCost * retainAmount, entitySpawnCost * retainAmount);
-                    mobSpawnInfoBuilder.withSpawnCost(typeReplaceBy, maxSpawnCost * replaceAmount, entitySpawnCost * replaceAmount);
+                    double maxSpawnCost = spawnCosts.getEnergyBudget();
+                    double entitySpawnCost = spawnCosts.getCharge();
+                    mobSpawnInfoBuilder.addMobCharge(typeToReplace, maxSpawnCost * retainAmount, entitySpawnCost * retainAmount);
+                    mobSpawnInfoBuilder.addMobCharge(typeReplaceBy, maxSpawnCost * replaceAmount, entitySpawnCost * replaceAmount);
                 }
                 MobSpawnInfo.Spawners typeReplaceByEntry = new MobSpawnInfo.Spawners(typeReplaceBy, (int) (weight * replaceAmount), minGroupCount, maxGroupCount);
                 MobSpawnInfo.Spawners typeToReplaceEntry = new MobSpawnInfo.Spawners(typeToReplace, (int) (weight * retainAmount), minGroupCount, maxGroupCount);

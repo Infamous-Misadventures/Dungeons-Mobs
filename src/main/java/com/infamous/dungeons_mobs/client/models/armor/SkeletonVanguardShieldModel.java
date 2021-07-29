@@ -15,23 +15,23 @@ public class SkeletonVanguardShieldModel extends Model {
 	private final ModelRenderer plate;
 
 	public SkeletonVanguardShieldModel() {
-		super(RenderType::getEntitySolid);
-		textureWidth = 32;
-		textureHeight = 32;
+		super(RenderType::entitySolid);
+		texWidth = 32;
+		texHeight = 32;
 
 		plate = new ModelRenderer(this);
 		//plate.setRotationPoint(1.0F, -3.0F, -11.0F);
 
 		// tops
-		plate.setTextureOffset(0, 26).addBox(-8.0F + 5.0F, -1.0F - 12.0F, 0.0F - 2.0F, 6.0F, 2.0F, 1.0F, 0.0F, false);
+		plate.texOffs(0, 26).addBox(-8.0F + 5.0F, -1.0F - 12.0F, 0.0F - 2.0F, 6.0F, 2.0F, 1.0F, 0.0F, false);
 
 		//sides
-		plate.setTextureOffset(24, 26).addBox(-13.0F + 5.0F, 5.0F - 12.0F, 0.0F - 2.0F, 3.0F, 5.0F, 1.0F, 0.0F, false);
-		plate.setTextureOffset(16, 26).addBox(0.0F + 5.0F, 5.0F - 12.0F, 0.0F - 2.0F, 3.0F, 5.0F, 1.0F, 0.0F, false);
+		plate.texOffs(24, 26).addBox(-13.0F + 5.0F, 5.0F - 12.0F, 0.0F - 2.0F, 3.0F, 5.0F, 1.0F, 0.0F, false);
+		plate.texOffs(16, 26).addBox(0.0F + 5.0F, 5.0F - 12.0F, 0.0F - 2.0F, 3.0F, 5.0F, 1.0F, 0.0F, false);
 
 		// base
-		plate.setTextureOffset(0, 0).addBox(-10.0F + 5.0F, 6.0F - 12.0F, 0.0F - 2.0F, 10.0F, 13.0F, 1.0F, 0.0F, false);
-		plate.setTextureOffset(0, 17).addBox(-11.0F + 5.0F, 1.0F - 12.0F, 0.0F - 2.0F, 12.0F, 5.0F, 1.0F, 0.0F, false);
+		plate.texOffs(0, 0).addBox(-10.0F + 5.0F, 6.0F - 12.0F, 0.0F - 2.0F, 10.0F, 13.0F, 1.0F, 0.0F, false);
+		plate.texOffs(0, 17).addBox(-11.0F + 5.0F, 1.0F - 12.0F, 0.0F - 2.0F, 12.0F, 5.0F, 1.0F, 0.0F, false);
 	}
 
 	public ModelRenderer getPlate() {
@@ -45,7 +45,7 @@ public class SkeletonVanguardShieldModel extends Model {
 
 	 */
 
-	public void render(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+	public void renderToBuffer(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
 		this.plate.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
 		/*
 		this.handle.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);

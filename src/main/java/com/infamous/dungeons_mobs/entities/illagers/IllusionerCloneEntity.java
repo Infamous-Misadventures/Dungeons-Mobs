@@ -35,6 +35,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
+import net.minecraft.entity.monster.AbstractIllagerEntity.ArmPose;
+
 public class IllusionerCloneEntity extends AbstractIllagerEntity implements IRangedAttackMob {
     private LivingEntity caster;
     private UUID casterUuid;
@@ -46,7 +48,7 @@ public class IllusionerCloneEntity extends AbstractIllagerEntity implements IRan
 
     public IllusionerCloneEntity(EntityType<? extends IllusionerCloneEntity> type, World worldIn) {
         super(type, worldIn);
-        this.experienceValue = 5;
+        this.xpReward = 5;
     }
 
     public IllusionerCloneEntity(World worldIn, LivingEntity caster, int lifeTicks) {
@@ -57,13 +59,13 @@ public class IllusionerCloneEntity extends AbstractIllagerEntity implements IRan
 
     public void setCaster(@Nullable LivingEntity caster) {
         this.caster = caster;
-        this.casterUuid = caster == null ? null : caster.getUniqueID();
+        this.casterUuid = caster == null ? null : caster.getUUID();
     }
 
     @Nullable
     public LivingEntity getCaster() {
-        if (this.caster == null && this.casterUuid != null && this.world instanceof ServerWorld) {
-            Entity entity = ((ServerWorld)this.world).getEntityByUuid(this.casterUuid);
+        if (this.caster == null && this.casterUuid != null && this.level instanceof ServerWorld) {
+            Entity entity = ((ServerWorld)this.level).getEntity(this.casterUuid);
             if (entity instanceof LivingEntity) {
                 this.caster = (LivingEntity)entity;
             }
@@ -81,20 +83,20 @@ public class IllusionerCloneEntity extends AbstractIllagerEntity implements IRan
     }
 
     @Override
-    public void readAdditional(CompoundNBT compound) {
-        super.readAdditional(compound);
+    public void readAdditionalSaveData(CompoundNBT compound) {
+        super.readAdditionalSaveData(compound);
         compound.putInt("LifeTicks", this.getLifeTicks());
-        if (compound.hasUniqueId("Owner")) {
-            this.casterUuid = compound.getUniqueId("Owner");
+        if (compound.hasUUID("Owner")) {
+            this.casterUuid = compound.getUUID("Owner");
         }
     }
 
     @Override
-    public void writeAdditional(CompoundNBT compound) {
-        super.writeAdditional(compound);
+    public void addAdditionalSaveData(CompoundNBT compound) {
+        super.addAdditionalSaveData(compound);
         this.setLifeTicks(compound.getInt("LifeTicks"));
         if (this.casterUuid != null) {
-            compound.putUniqueId("Owner", this.casterUuid);
+            compound.putUUID("Owner", this.casterUuid);
         }
     }
 
@@ -105,24 +107,24 @@ public class IllusionerCloneEntity extends AbstractIllagerEntity implements IRan
         this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 0.6D));
         this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
         this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
-        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, AbstractRaiderEntity.class)).setCallsForHelp());
+        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, AbstractRaiderEntity.class)).setAlertOthers());
         this.targetSelector.addGoal(2, (new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true)).setUnseenMemoryTicks(300));
         this.targetSelector.addGoal(3, (new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, false)).setUnseenMemoryTicks(300));
         this.targetSelector.addGoal(3, (new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, false)).setUnseenMemoryTicks(300));
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return IllusionerEntity.func_234293_eI_();
+        return IllusionerEntity.createAttributes();
     }
 
     @Override
-    protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
-        this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.BOW));
+    protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
+        this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.BOW));
     }
 
     @Override
     public void onAddedToWorld() {
-        if(this.world.isRemote){
+        if(this.level.isClientSide){
             this.spawnPoofCloud();
         }
         super.onAddedToWorld();
@@ -130,7 +132,7 @@ public class IllusionerCloneEntity extends AbstractIllagerEntity implements IRan
 
     @Override
     public void onRemovedFromWorld() {
-        if(this.world.isRemote){
+        if(this.level.isClientSide){
            this.spawnPoofCloud();
         }
         super.onRemovedFromWorld();
@@ -138,18 +140,18 @@ public class IllusionerCloneEntity extends AbstractIllagerEntity implements IRan
 
     private void spawnPoofCloud(){
         for(int i = 0; i < 20; ++i) {
-            double d0 = this.rand.nextGaussian() * 0.02D;
-            double d1 = this.rand.nextGaussian() * 0.02D;
-            double d2 = this.rand.nextGaussian() * 0.02D;
-            this.world.addParticle(ParticleTypes.POOF, this.getPosXRandom(1.0D), this.getPosYRandom(), this.getPosZRandom(1.0D), d0, d1, d2);
+            double d0 = this.random.nextGaussian() * 0.02D;
+            double d1 = this.random.nextGaussian() * 0.02D;
+            double d2 = this.random.nextGaussian() * 0.02D;
+            this.level.addParticle(ParticleTypes.POOF, this.getRandomX(1.0D), this.getRandomY(), this.getRandomZ(1.0D), d0, d1, d2);
         }
     }
 
     @Nullable
     @Override
-    public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
-        this.setEquipmentBasedOnDifficulty(difficultyIn);
-        return super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+    public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+        this.populateDefaultEquipmentSlots(difficultyIn);
+        return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 
     /**
@@ -157,17 +159,17 @@ public class IllusionerCloneEntity extends AbstractIllagerEntity implements IRan
      * a minecart, such as a command block).
      */
     @OnlyIn(Dist.CLIENT)
-    public AxisAlignedBB getRenderBoundingBox() {
-        return this.getBoundingBox().grow(3.0D, 0.0D, 3.0D);
+    public AxisAlignedBB getBoundingBoxForCulling() {
+        return this.getBoundingBox().inflate(3.0D, 0.0D, 3.0D);
     }
 
     /**
      * Called frequently so the entity can update its state every tick as required. For example, zombies and skeletons
      * use this to react to sunlight and start to burn.
      */
-    public void livingTick() {
-        super.livingTick();
-        if(!this.world.isRemote){
+    public void aiStep() {
+        super.aiStep();
+        if(!this.level.isClientSide){
             this.lifeTicks--;
             if(this.lifeTicks <= 0){
                 this.remove();
@@ -175,17 +177,17 @@ public class IllusionerCloneEntity extends AbstractIllagerEntity implements IRan
         }
     }
 
-    public SoundEvent getRaidLossSound() {
-        return SoundEvents.ENTITY_ILLUSIONER_AMBIENT;
+    public SoundEvent getCelebrateSound() {
+        return SoundEvents.ILLUSIONER_AMBIENT;
     }
 
     /**
      * Returns whether this Entity is on the same team as the given Entity.
      */
-    public boolean isOnSameTeam(Entity entityIn) {
-        if (super.isOnSameTeam(entityIn)) {
+    public boolean isAlliedTo(Entity entityIn) {
+        if (super.isAlliedTo(entityIn)) {
             return true;
-        } else if (entityIn instanceof LivingEntity && ((LivingEntity)entityIn).getCreatureAttribute() == CreatureAttribute.ILLAGER) {
+        } else if (entityIn instanceof LivingEntity && ((LivingEntity)entityIn).getMobType() == CreatureAttribute.ILLAGER) {
             return this.getTeam() == null && entityIn.getTeam() == null;
         } else {
             return false;
@@ -193,35 +195,35 @@ public class IllusionerCloneEntity extends AbstractIllagerEntity implements IRan
     }
 
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.ENTITY_ILLUSIONER_AMBIENT;
+        return SoundEvents.ILLUSIONER_AMBIENT;
     }
 
     protected SoundEvent getDeathSound() {
-        return SoundEvents.ENTITY_ILLUSIONER_DEATH;
+        return SoundEvents.ILLUSIONER_DEATH;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return SoundEvents.ENTITY_ILLUSIONER_HURT;
+        return SoundEvents.ILLUSIONER_HURT;
     }
 
-    public void applyWaveBonus(int p_213660_1_, boolean p_213660_2_) {
+    public void applyRaidBuffs(int p_213660_1_, boolean p_213660_2_) {
     }
 
     /**
      * Attack the specified entity using a ranged attack.
      */
-    public void attackEntityWithRangedAttack(LivingEntity target, float distanceFactor) {
-        ItemStack itemstack = this.findAmmo(this.getHeldItem(ProjectileHelper.getHandWith(this, Items.BOW)));
-        AbstractArrowEntity abstractarrowentity = ProjectileHelper.fireArrow(this, itemstack, distanceFactor);
-        if (this.getHeldItemMainhand().getItem() instanceof net.minecraft.item.BowItem)
-            abstractarrowentity = ((net.minecraft.item.BowItem)this.getHeldItemMainhand().getItem()).customArrow(abstractarrowentity);
-        double xDifference = target.getPosX() - this.getPosX();
-        double yDifference = target.getPosYHeight(0.3333333333333333D) - abstractarrowentity.getPosY();
-        double zDifference = target.getPosZ() - this.getPosZ();
+    public void performRangedAttack(LivingEntity target, float distanceFactor) {
+        ItemStack itemstack = this.getProjectile(this.getItemInHand(ProjectileHelper.getWeaponHoldingHand(this, Items.BOW)));
+        AbstractArrowEntity abstractarrowentity = ProjectileHelper.getMobArrow(this, itemstack, distanceFactor);
+        if (this.getMainHandItem().getItem() instanceof net.minecraft.item.BowItem)
+            abstractarrowentity = ((net.minecraft.item.BowItem)this.getMainHandItem().getItem()).customArrow(abstractarrowentity);
+        double xDifference = target.getX() - this.getX();
+        double yDifference = target.getY(0.3333333333333333D) - abstractarrowentity.getY();
+        double zDifference = target.getZ() - this.getZ();
         double horizontalDistance = (double) MathHelper.sqrt(xDifference * xDifference + zDifference * zDifference);
-        abstractarrowentity.shoot(xDifference, yDifference + horizontalDistance * (double)0.2F, zDifference, 1.6F, (float)(14 - this.world.getDifficulty().getId() * 4));
-        this.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-        this.world.addEntity(abstractarrowentity);
+        abstractarrowentity.shoot(xDifference, yDifference + horizontalDistance * (double)0.2F, zDifference, 1.6F, (float)(14 - this.level.getDifficulty().getId() * 4));
+        this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+        this.level.addFreshEntity(abstractarrowentity);
     }
 
     @OnlyIn(Dist.CLIENT)

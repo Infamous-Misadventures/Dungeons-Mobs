@@ -19,7 +19,7 @@ import java.util.List;
 
 public class CobwebTrapEntity extends Entity {
     private int lifeTicks;
-    private static final DataParameter<BlockPos> ORIGIN = EntityDataManager.createKey(CobwebTrapEntity.class, DataSerializers.BLOCK_POS);
+    private static final DataParameter<BlockPos> ORIGIN = EntityDataManager.defineId(CobwebTrapEntity.class, DataSerializers.BLOCK_POS);
 
     public CobwebTrapEntity(World worldIn) {
         super(ModEntityTypes.COBWEB_TRAP.get(), worldIn);
@@ -31,31 +31,31 @@ public class CobwebTrapEntity extends Entity {
     public CobwebTrapEntity(World worldIn, double x, double y, double z, int lifeTicksIn){
         this(ModEntityTypes.COBWEB_TRAP.get(), worldIn);
         this.lifeTicks = lifeTicksIn;
-        this.setPosition(x, y, z);
-        this.setOrigin(this.getPosition());
+        this.setPos(x, y, z);
+        this.setOrigin(this.blockPosition());
     }
 
     @Override
-    protected void registerData() {
-        this.dataManager.register(ORIGIN, BlockPos.ZERO);
+    protected void defineSynchedData() {
+        this.entityData.define(ORIGIN, BlockPos.ZERO);
     }
 
 
     public void setOrigin(BlockPos origin) {
-        this.dataManager.set(ORIGIN, origin);
+        this.entityData.set(ORIGIN, origin);
     }
 
     public BlockPos getOrigin() {
-        return this.dataManager.get(ORIGIN);
+        return this.entityData.get(ORIGIN);
     }
 
     @Override
-    protected void readAdditional(CompoundNBT compound) {
+    protected void readAdditionalSaveData(CompoundNBT compound) {
         this.setLifeTicks(compound.getInt("LifeTicks"));
     }
 
     @Override
-    protected void writeAdditional(CompoundNBT compound) {
+    protected void addAdditionalSaveData(CompoundNBT compound) {
         compound.putInt("LifeTicks", this.getLifeTicks());
     }
 
@@ -68,7 +68,7 @@ public class CobwebTrapEntity extends Entity {
     }
 
     public void handleExistence(){
-        this.func_233566_aG_(); // handles being in water
+        this.updateInWaterStateAndDoFluidPushing(); // handles being in water
     }
 
     public void handleExpiration(){
@@ -83,7 +83,7 @@ public class CobwebTrapEntity extends Entity {
     @Override
     public void tick() {
         //super.tick();
-        if(!this.world.isRemote()){
+        if(!this.level.isClientSide()){
             this.lifeTicks--;
             //this.checkCollisions();
             if(this.lifeTicks <= 0){
@@ -96,21 +96,21 @@ public class CobwebTrapEntity extends Entity {
     }
 
     @Override
-    public void onCollideWithPlayer(PlayerEntity entityIn) {
-        entityIn.setMotionMultiplier(Blocks.COBWEB.getDefaultState(), new Vector3d(0.25D, 0.05D, 0.25D));
+    public void playerTouch(PlayerEntity entityIn) {
+        entityIn.makeStuckInBlock(Blocks.COBWEB.defaultBlockState(), new Vector3d(0.25D, 0.05D, 0.25D));
     }
 
     private void checkCollisions() {
-        List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getBoundingBox().grow(0.2D, 0.2D, 0.2D));
+        List<Entity> list = this.level.getEntities(this, this.getBoundingBox().inflate(0.2D, 0.2D, 0.2D));
         for (Entity entity : list) {
             if (!entity.removed && !this.removed) {
-                entity.setMotionMultiplier(Blocks.COBWEB.getDefaultState(), new Vector3d(0.25D, 0.05D, 0.25D));
+                entity.makeStuckInBlock(Blocks.COBWEB.defaultBlockState(), new Vector3d(0.25D, 0.05D, 0.25D));
             }
         }
     }
 
     @Override
-    public IPacket<?> createSpawnPacket() {
+    public IPacket<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 }

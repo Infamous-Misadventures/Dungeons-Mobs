@@ -12,16 +12,18 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 import java.util.concurrent.Callable;
 
+import net.minecraft.item.Item.Properties;
+
 public class RoyalGuardShieldItem extends ShieldItem {
     public RoyalGuardShieldItem(Properties builder) {
         super(builder.setISTER(RoyalGuardShieldItem::getISTER));
-        DispenserBlock.registerDispenseBehavior(this, ArmorItem.DISPENSER_BEHAVIOR);
+        DispenserBlock.registerBehavior(this, ArmorItem.DISPENSE_ITEM_BEHAVIOR);
     }
 
     /**
      * Return whether this item is repairable in an anvil.
      */
-    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
+    public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) {
         return false;
     }
 

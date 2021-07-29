@@ -31,25 +31,25 @@ public class ArmoredZombieEntity extends ZombieEntity {
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return ZombieEntity.func_234342_eQ_()
-                .createMutableAttribute(Attributes.MAX_HEALTH, 30.0D) // normal zombies have 20
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 4.0D)
+        return ZombieEntity.createAttributes()
+                .add(Attributes.MAX_HEALTH, 30.0D) // normal zombies have 20
+                .add(Attributes.ATTACK_DAMAGE, 4.0D)
         ;
     }
 
     @Override
-    public void setChild(boolean childZombie) {
+    public void setBaby(boolean childZombie) {
         // NO-OP
     }
 
     @Override
-    public boolean isChild() {
+    public boolean isBaby() {
         // technically, NO-OP
         return false;
     }
 
     @Override
-    protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficultyInstance) {
+    protected void populateDefaultEquipmentSlots(DifficultyInstance difficultyInstance) {
         if(ModList.get().isLoaded("dungeons_gear")){
 
             Item REINFORCED_MAIL_HELMET = ForgeRegistries.ITEMS.getValue(new ResourceLocation("dungeons_gear", "reinforced_mail_helmet"));
@@ -58,38 +58,38 @@ public class ArmoredZombieEntity extends ZombieEntity {
             ItemStack reinforcedMailHelmet = new ItemStack(REINFORCED_MAIL_HELMET);
             ItemStack reinforcedMailChestplate = new ItemStack(REINFORCED_MAIL_CHESTPLATE);
 
-            this.setItemStackToSlot(EquipmentSlotType.HEAD, reinforcedMailHelmet);
-            this.setItemStackToSlot(EquipmentSlotType.CHEST, reinforcedMailChestplate);
-            this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_SWORD));
+            this.setItemSlot(EquipmentSlotType.HEAD, reinforcedMailHelmet);
+            this.setItemSlot(EquipmentSlotType.CHEST, reinforcedMailChestplate);
+            this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_SWORD));
         }
         else{
-            this.setItemStackToSlot(EquipmentSlotType.HEAD, new ItemStack(Items.IRON_HELMET));
-            this.setItemStackToSlot(EquipmentSlotType.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
-            this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_SWORD));
+            this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Items.IRON_HELMET));
+            this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
+            this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_SWORD));
         }
     }
 
     @Override
-    public ILivingEntityData onInitialSpawn(IServerWorld world, DifficultyInstance difficultyInstance, SpawnReason spawnReason, @Nullable ILivingEntityData livingEntityDataIn, @Nullable CompoundNBT compoundNBTIn) {
-        livingEntityDataIn = super.onInitialSpawn(world, difficultyInstance, spawnReason, livingEntityDataIn, compoundNBTIn);
-        float f = difficultyInstance.getClampedAdditionalDifficulty();
-        this.setCanPickUpLoot(this.rand.nextFloat() < 0.55F * f);
+    public ILivingEntityData finalizeSpawn(IServerWorld world, DifficultyInstance difficultyInstance, SpawnReason spawnReason, @Nullable ILivingEntityData livingEntityDataIn, @Nullable CompoundNBT compoundNBTIn) {
+        livingEntityDataIn = super.finalizeSpawn(world, difficultyInstance, spawnReason, livingEntityDataIn, compoundNBTIn);
+        float f = difficultyInstance.getSpecialMultiplier();
+        this.setCanPickUpLoot(this.random.nextFloat() < 0.55F * f);
         if (livingEntityDataIn == null) {
-            livingEntityDataIn = new ZombieEntity.GroupData(func_241399_a_(world.getRandom()), true);
+            livingEntityDataIn = new ZombieEntity.GroupData(getSpawnAsBabyOdds(world.getRandom()), true);
         }
 
         if (livingEntityDataIn instanceof ZombieEntity.GroupData) {
             //ZombieEntity.GroupData zombieentity$groupdata = (ZombieEntity.GroupData)livingEntityData;
             // only used for handling baby zombies and their chance to spawn riding chickens
-            this.setBreakDoorsAItask(this.canBreakDoors()
+            this.setCanBreakDoors(this.supportsBreakDoorGoal()
                     //&& this.rand.nextFloat() < f * 0.1F
                     // we want these zombies to always be able to break doors
             );
-            this.setEquipmentBasedOnDifficulty(difficultyInstance);
-            this.setEnchantmentBasedOnDifficulty(difficultyInstance);
+            this.populateDefaultEquipmentSlots(difficultyInstance);
+            this.populateDefaultEquipmentEnchantments(difficultyInstance);
         }
 
-        this.applyAttributeBonuses(f);
+        this.handleAttributes(f);
         return (ILivingEntityData)livingEntityDataIn;
     }
 }

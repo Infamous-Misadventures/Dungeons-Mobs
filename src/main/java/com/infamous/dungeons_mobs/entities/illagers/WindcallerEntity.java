@@ -27,6 +27,11 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.entity.monster.AbstractIllagerEntity.ArmPose;
+import net.minecraft.entity.monster.SpellcastingIllagerEntity.CastingASpellGoal;
+import net.minecraft.entity.monster.SpellcastingIllagerEntity.SpellType;
+import net.minecraft.entity.monster.SpellcastingIllagerEntity.UseSpellGoal;
+
 public class WindcallerEntity extends SpellcastingIllagerEntity {
 
     public double prevChasingPosX;
@@ -60,34 +65,34 @@ public class WindcallerEntity extends SpellcastingIllagerEntity {
         this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 0.6D));
         this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
         this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
-        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, AbstractRaiderEntity.class)).setCallsForHelp());
+        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, AbstractRaiderEntity.class)).setAlertOthers());
         this.targetSelector.addGoal(2, (new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true)).setUnseenMemoryTicks(300));
         this.targetSelector.addGoal(3, (new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, false)).setUnseenMemoryTicks(300));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, false));
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
-        return EvokerEntity.func_234289_eI_();
+        return EvokerEntity.createAttributes();
     }
 
     @Override
-    protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
-        this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModItems.WINDCALLER_STAFF.get()));
+    protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
+        this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModItems.WINDCALLER_STAFF.get()));
     }
 
     @Nullable
-    public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
-        this.setEquipmentBasedOnDifficulty(difficultyIn);
-        return super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+    public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+        this.populateDefaultEquipmentSlots(difficultyIn);
+        return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 
     /**
      * Returns whether this Entity is on the same team as the given Entity.
      */
-    public boolean isOnSameTeam(Entity entityIn) {
-        if (super.isOnSameTeam(entityIn)) {
+    public boolean isAlliedTo(Entity entityIn) {
+        if (super.isAlliedTo(entityIn)) {
             return true;
-        } else if (entityIn instanceof LivingEntity && ((LivingEntity)entityIn).getCreatureAttribute() == CreatureAttribute.ILLAGER) {
+        } else if (entityIn instanceof LivingEntity && ((LivingEntity)entityIn).getMobType() == CreatureAttribute.ILLAGER) {
             return this.getTeam() == null && entityIn.getTeam() == null;
         } else {
             return false;
@@ -95,33 +100,33 @@ public class WindcallerEntity extends SpellcastingIllagerEntity {
     }
 
     @Override
-    public void applyWaveBonus(int p_213660_1_, boolean p_213660_2_) {
+    public void applyRaidBuffs(int p_213660_1_, boolean p_213660_2_) {
 
     }
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.ENTITY_EVOKER_AMBIENT;
+        return SoundEvents.EVOKER_AMBIENT;
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.ENTITY_EVOKER_DEATH;
+        return SoundEvents.EVOKER_DEATH;
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return SoundEvents.ENTITY_EVOKER_HURT;
+        return SoundEvents.EVOKER_HURT;
     }
 
     @Override
-    protected SoundEvent getSpellSound() {
-        return SoundEvents.ENTITY_EVOKER_CAST_SPELL;
+    protected SoundEvent getCastingSoundEvent() {
+        return SoundEvents.EVOKER_CAST_SPELL;
     }
 
     @Override
-    public SoundEvent getRaidLossSound() {
-        return SoundEvents.ENTITY_EVOKER_CELEBRATE;
+    public SoundEvent getCelebrateSound() {
+        return SoundEvents.EVOKER_CELEBRATE;
     }
 
     class CastingSpellGoal extends CastingASpellGoal {
@@ -132,8 +137,8 @@ public class WindcallerEntity extends SpellcastingIllagerEntity {
          * Keep ticking a continuous task that has already been started
          */
         public void tick() {
-            if (WindcallerEntity.this.getAttackTarget() != null) {
-                WindcallerEntity.this.getLookController().setLookPositionWithEntity(WindcallerEntity.this.getAttackTarget(), (float) WindcallerEntity.this.getHorizontalFaceSpeed(), (float) WindcallerEntity.this.getVerticalFaceSpeed());
+            if (WindcallerEntity.this.getTarget() != null) {
+                WindcallerEntity.this.getLookControl().setLookAt(WindcallerEntity.this.getTarget(), (float) WindcallerEntity.this.getMaxHeadYRot(), (float) WindcallerEntity.this.getMaxHeadXRot());
             }
 
         }
@@ -144,23 +149,23 @@ public class WindcallerEntity extends SpellcastingIllagerEntity {
         }
 
         @Override
-        public boolean shouldExecute() {
-            LivingEntity attackTarget = WindcallerEntity.this.getAttackTarget();
+        public boolean canUse() {
+            LivingEntity attackTarget = WindcallerEntity.this.getTarget();
             if(attackTarget != null){
                 boolean targetOnGround = attackTarget.isOnGround();
-                boolean targetCanBeSeen = WindcallerEntity.this.canEntityBeSeen(attackTarget);
-                return super.shouldExecute() && targetOnGround && targetCanBeSeen;
+                boolean targetCanBeSeen = WindcallerEntity.this.canSee(attackTarget);
+                return super.canUse() && targetOnGround && targetCanBeSeen;
             }
             return false;
         }
 
         @Override
-        public boolean shouldContinueExecuting() {
-            LivingEntity attackTarget = WindcallerEntity.this.getAttackTarget();
+        public boolean canContinueToUse() {
+            LivingEntity attackTarget = WindcallerEntity.this.getTarget();
             if(attackTarget != null){
                 boolean targetOnGround = attackTarget.isOnGround();
-                boolean targetCanBeSeen = WindcallerEntity.this.canEntityBeSeen(attackTarget);
-                return super.shouldContinueExecuting() && targetOnGround && targetCanBeSeen;
+                boolean targetCanBeSeen = WindcallerEntity.this.canSee(attackTarget);
+                return super.canContinueToUse() && targetOnGround && targetCanBeSeen;
             }
             return false;
         }
@@ -173,8 +178,8 @@ public class WindcallerEntity extends SpellcastingIllagerEntity {
             return 100;
         }
 
-        protected void castSpell() {
-            LivingEntity attackTarget = WindcallerEntity.this.getAttackTarget();
+        protected void performSpellCasting() {
+            LivingEntity attackTarget = WindcallerEntity.this.getTarget();
             if (attackTarget != null) {
                 summonTornado(attackTarget);
             }
@@ -190,18 +195,18 @@ public class WindcallerEntity extends SpellcastingIllagerEntity {
             WindcallerEntity.this.world.addEntity(areaEffectCloudEntity);
              */
 
-            TornadoEntity tornadoEntity = new TornadoEntity(WindcallerEntity.this.world, WindcallerEntity.this, livingEntity);
+            TornadoEntity tornadoEntity = new TornadoEntity(WindcallerEntity.this.level, WindcallerEntity.this, livingEntity);
             tornadoEntity.addEffect(new EffectInstance(Effects.LEVITATION, 100,1));
             tornadoEntity.setDuration(100);
-            WindcallerEntity.this.world.addEntity(tornadoEntity);
+            WindcallerEntity.this.level.addFreshEntity(tornadoEntity);
         }
 
 
         protected SoundEvent getSpellPrepareSound() {
-            return SoundEvents.ENTITY_EVOKER_PREPARE_SUMMON;
+            return SoundEvents.EVOKER_PREPARE_SUMMON;
         }
 
-        protected SpellType getSpellType() {
+        protected SpellType getSpell() {
             return SpellType.SUMMON_VEX;
         }
     }
@@ -222,8 +227,8 @@ public class WindcallerEntity extends SpellcastingIllagerEntity {
     }
 
     @Override
-    public void updateRidden() {
-        super.updateRidden();
+    public void rideTick() {
+        super.rideTick();
         this.prevCameraYaw = this.cameraYaw;
         this.cameraYaw = 0.0F;
     }
@@ -232,37 +237,37 @@ public class WindcallerEntity extends SpellcastingIllagerEntity {
         this.prevChasingPosX = this.chasingPosX;
         this.prevChasingPosY = this.chasingPosY;
         this.prevChasingPosZ = this.chasingPosZ;
-        double xDifference = this.getPosX() - this.chasingPosX;
-        double yDifference = this.getPosY() - this.chasingPosY;
-        double zDifference = this.getPosZ() - this.chasingPosZ;
+        double xDifference = this.getX() - this.chasingPosX;
+        double yDifference = this.getY() - this.chasingPosY;
+        double zDifference = this.getZ() - this.chasingPosZ;
         double maxDelta = 10.0D;
         if (xDifference > maxDelta) {
-            this.chasingPosX = this.getPosX();
+            this.chasingPosX = this.getX();
             this.prevChasingPosX = this.chasingPosX;
         }
 
         if (zDifference > maxDelta) {
-            this.chasingPosZ = this.getPosZ();
+            this.chasingPosZ = this.getZ();
             this.prevChasingPosZ = this.chasingPosZ;
         }
 
         if (yDifference > maxDelta) {
-            this.chasingPosY = this.getPosY();
+            this.chasingPosY = this.getY();
             this.prevChasingPosY = this.chasingPosY;
         }
 
         if (xDifference < -maxDelta) {
-            this.chasingPosX = this.getPosX();
+            this.chasingPosX = this.getX();
             this.prevChasingPosX = this.chasingPosX;
         }
 
         if (zDifference < -maxDelta) {
-            this.chasingPosZ = this.getPosZ();
+            this.chasingPosZ = this.getZ();
             this.prevChasingPosZ = this.chasingPosZ;
         }
 
         if (yDifference < -maxDelta) {
-            this.chasingPosY = this.getPosY();
+            this.chasingPosY = this.getY();
             this.prevChasingPosY = this.chasingPosY;
         }
 

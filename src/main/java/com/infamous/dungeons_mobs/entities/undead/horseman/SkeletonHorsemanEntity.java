@@ -36,7 +36,7 @@ public class SkeletonHorsemanEntity extends ArmoredSkeletonEntity implements IMo
 
     public SkeletonHorsemanEntity(EntityType<? extends SkeletonHorsemanEntity> entityType, World world) {
         super(entityType, world);
-        this.lookController = new HorsemanLookController(this);
+        this.lookControl = new HorsemanLookController(this);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class SkeletonHorsemanEntity extends ArmoredSkeletonEntity implements IMo
     }
 
     @Override
-    protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficultyInstance) {
+    protected void populateDefaultEquipmentSlots(DifficultyInstance difficultyInstance) {
         if(ModList.get().isLoaded("dungeons_gear")){
 
             Item REINFORCED_MAIL_HELMET = ForgeRegistries.ITEMS.getValue(new ResourceLocation("dungeons_gear", "reinforced_mail_helmet"));
@@ -59,27 +59,27 @@ public class SkeletonHorsemanEntity extends ArmoredSkeletonEntity implements IMo
             ItemStack reinforcedMailHelmet = new ItemStack(REINFORCED_MAIL_HELMET);
             ItemStack longbow = new ItemStack(LONGBOW);
 
-            this.setItemStackToSlot(EquipmentSlotType.HEAD, reinforcedMailHelmet);
-            this.setItemStackToSlot(EquipmentSlotType.MAINHAND, longbow);
+            this.setItemSlot(EquipmentSlotType.HEAD, reinforcedMailHelmet);
+            this.setItemSlot(EquipmentSlotType.MAINHAND, longbow);
         }
         else{
-            this.setItemStackToSlot(EquipmentSlotType.HEAD, new ItemStack(Items.IRON_HELMET));
-            this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.BOW));
+            this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Items.IRON_HELMET));
+            this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.BOW));
         }
     }
 
     @Nullable
     @Override
-    public ILivingEntityData onInitialSpawn(IServerWorld world, DifficultyInstance difficultyInstance, SpawnReason spawnReason, @Nullable ILivingEntityData livingEntityDataIn, @Nullable CompoundNBT compoundNBT) {
-        livingEntityDataIn = super.onInitialSpawn(world, difficultyInstance, spawnReason, livingEntityDataIn, compoundNBT);
+    public ILivingEntityData finalizeSpawn(IServerWorld world, DifficultyInstance difficultyInstance, SpawnReason spawnReason, @Nullable ILivingEntityData livingEntityDataIn, @Nullable CompoundNBT compoundNBT) {
+        livingEntityDataIn = super.finalizeSpawn(world, difficultyInstance, spawnReason, livingEntityDataIn, compoundNBT);
         if(spawnReason != SpawnReason.TRIGGERED){
             this.setTrap(true);
         }
         return livingEntityDataIn;
     }
 
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
         if (this.isTrap() && this.horsemanTrapTime++ >= 18000) {
             this.remove();
         }
@@ -88,8 +88,8 @@ public class SkeletonHorsemanEntity extends ArmoredSkeletonEntity implements IMo
 
 
     @Override
-    public boolean isOnSameTeam(Entity entityIn) {
-        if (super.isOnSameTeam(entityIn)) {
+    public boolean isAlliedTo(Entity entityIn) {
+        if (super.isAlliedTo(entityIn)) {
             return true;
         } else if (entityIn instanceof SkeletonHorsemanEntity) {
             return this.getTeam() == null && entityIn.getTeam() == null;
@@ -113,8 +113,8 @@ public class SkeletonHorsemanEntity extends ArmoredSkeletonEntity implements IMo
         }
     }
 
-    public void writeAdditional(CompoundNBT compound) {
-        super.writeAdditional(compound);
+    public void addAdditionalSaveData(CompoundNBT compound) {
+        super.addAdditionalSaveData(compound);
         compound.putBoolean("HorsemanTrap", this.isTrap());
         compound.putInt("HorsemanTrapTime", this.horsemanTrapTime);
     }
@@ -122,17 +122,17 @@ public class SkeletonHorsemanEntity extends ArmoredSkeletonEntity implements IMo
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    public void readAdditional(CompoundNBT compound) {
-        super.readAdditional(compound);
+    public void readAdditionalSaveData(CompoundNBT compound) {
+        super.readAdditionalSaveData(compound);
         this.setTrap(compound.getBoolean("HorsemanTrap"));
         this.horsemanTrapTime = compound.getInt("HorsemanTrapTime");
     }
 
     @Override
-    public void attackEntityWithRangedAttack(LivingEntity target, float distanceFactor) {
-        super.attackEntityWithRangedAttack(target, distanceFactor);
-        if(this.getRidingEntity() instanceof AbstractHorseEntity){
-            AbstractHorseEntity horseEntity = (AbstractHorseEntity) this.getRidingEntity();
+    public void performRangedAttack(LivingEntity target, float distanceFactor) {
+        super.performRangedAttack(target, distanceFactor);
+        if(this.getVehicle() instanceof AbstractHorseEntity){
+            AbstractHorseEntity horseEntity = (AbstractHorseEntity) this.getVehicle();
             horseEntity.makeMad();
         }
     }
@@ -145,13 +145,13 @@ public class SkeletonHorsemanEntity extends ArmoredSkeletonEntity implements IMo
         @Override
         public void tick() {
             super.tick();
-            if(this.mob.isPassenger() && this.mob.getAttackTarget() != null && isNotGettingAttackedByAWolf()){
-                this.setLookPositionWithEntity(this.mob.getAttackTarget(), this.mob.getHorizontalFaceSpeed(), this.mob.getVerticalFaceSpeed());
+            if(this.mob.isPassenger() && this.mob.getTarget() != null && isNotGettingAttackedByAWolf()){
+                this.setLookAt(this.mob.getTarget(), this.mob.getMaxHeadYRot(), this.mob.getMaxHeadXRot());
             }
         }
 
         private boolean isNotGettingAttackedByAWolf() {
-            return !(this.mob.getAttackingEntity() instanceof WolfEntity);
+            return !(this.mob.getKillCredit() instanceof WolfEntity);
         }
     }
 }

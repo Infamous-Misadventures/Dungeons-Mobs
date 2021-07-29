@@ -17,7 +17,7 @@ public class TornadoRenderer extends EntityRenderer<TornadoEntity> {
    /**
     * Returns the location of an entity's texture.
     */
-   public ResourceLocation getEntityTexture(TornadoEntity entity) {
-      return AtlasTexture.LOCATION_BLOCKS_TEXTURE;
+   public ResourceLocation getTextureLocation(TornadoEntity entity) {
+      return AtlasTexture.LOCATION_BLOCKS;
    }
 }

@@ -20,21 +20,21 @@ public class LeapleafRenderer extends MobRenderer<LeapleafEntity, LeapleafModel<
    }
 
    @Override
-   protected void preRenderCallback(LeapleafEntity entitylivingbaseIn, MatrixStack matrixStackIn, float partialTickTime) {
+   protected void scale(LeapleafEntity entitylivingbaseIn, MatrixStack matrixStackIn, float partialTickTime) {
       float scaleFactor = 1.25F;
       matrixStackIn.scale(scaleFactor, scaleFactor, scaleFactor);
-      super.preRenderCallback(entitylivingbaseIn, matrixStackIn, partialTickTime);
+      super.scale(entitylivingbaseIn, matrixStackIn, partialTickTime);
    }
 
    /**
     * Returns the location of an entity's texture.
     */
-   public ResourceLocation getEntityTexture(LeapleafEntity entity) {
+   public ResourceLocation getTextureLocation(LeapleafEntity entity) {
       return LEAPLEAF_TEXTURE;
    }
 
-   protected void applyRotations(LeapleafEntity entityLiving, MatrixStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks) {
-      super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
+   protected void setupRotations(LeapleafEntity entityLiving, MatrixStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks) {
+      super.setupRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
       /*
       if (!((double)entityLiving.limbSwingAmount < 0.01D)) {
          float f = 13.0F;
