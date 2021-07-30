@@ -43,7 +43,7 @@ public class RaidEntries {
         }
         
         if(DungeonsMobsConfig.COMMON.ENABLE_ILLUSIONERS_IN_RAIDS.get()){
-            Raid.WaveMember.create("illusioner", EntityType.ILLUSIONER, new int[] {0, 0, 0, 0, 0, 1, 1, 2});
+            Raid.WaveMember.create("illusioner", ModEntityTypes.ILLUSIONER.get(), new int[] {0, 0, 0, 0, 0, 1, 1, 2});
         }
         
         if(DungeonsMobsConfig.COMMON.ENABLE_ICEOLOGERS_IN_RAIDS.get()){           

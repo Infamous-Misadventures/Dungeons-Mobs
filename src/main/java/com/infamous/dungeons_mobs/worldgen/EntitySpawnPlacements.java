@@ -93,6 +93,10 @@ public class EntitySpawnPlacements {
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                 EntitySpawnPlacements::canIllagerSpawn);
+        EntitySpawnPlacementRegistry.register(ModEntityTypes.ILLUSIONER.get(),
+                EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
+                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
+                EntitySpawnPlacements::canIllagerSpawn);
         EntitySpawnPlacementRegistry.register(ModEntityTypes.ILLUSIONER_CLONE.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,

@@ -115,7 +115,6 @@ public class DungeonsMobsConfig {
 
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_STRONGER_HUSKS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_RANGED_SPIDERS;
-        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_CLONING_ILLUSIONERS;
 
         public Common(ForgeConfigSpec.Builder builder){
             // MOB CONFIGURATION
@@ -583,9 +582,6 @@ public class DungeonsMobsConfig {
             ENABLE_RANGED_SPIDERS = builder
                     .comment("Enables Spiders and Cave Spiders shooting webs as a ranged attack like they do in Minecraft Dungeons. [true / false]")
                     .define("enableRangedSpiders", true);
-            ENABLE_CLONING_ILLUSIONERS = builder
-                    .comment("Enables Illusioners to have the same cloning behavior as they do in Minecraft Dungeons. [true / false]")
-                    .define("enableCloningIllusioners", true);
             builder.pop();
         }
     }

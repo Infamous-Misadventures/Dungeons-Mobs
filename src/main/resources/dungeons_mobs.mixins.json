@@ -7,16 +7,18 @@
   "mixins": [
     "AbstractHorseEntityMixin",
     "CropsBlockMixin",
+    "GoalSelectorAccessor",
     "IllusionerEntityMixin",
     "MansionTemplateMixin",
     "PatrolSpawnerMixin",
+    "PiglinEntityMixin",
     "RaidMixin",
     "SpiderEntityMixin",
     "ZombifiedPiglinEntityMixin"
   ],
   "client": [
-    "SpiderModelMixin",
-    "PiglinModelMixin"
+    "PiglinModelMixin",
+    "SpiderModelMixin"
   ],
   "injectors": {
     "defaultRequire": 1

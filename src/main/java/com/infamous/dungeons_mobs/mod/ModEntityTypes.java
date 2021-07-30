@@ -7,6 +7,8 @@ import com.infamous.dungeons_mobs.entities.jungle.LeapleafEntity;
 import com.infamous.dungeons_mobs.entities.jungle.PoisonQuillVineEntity;
 import com.infamous.dungeons_mobs.entities.jungle.QuickGrowingVineEntity;
 import com.infamous.dungeons_mobs.entities.jungle.WhispererEntity;
+import com.infamous.dungeons_mobs.entities.piglin.ArmoredPiglinEntity;
+import com.infamous.dungeons_mobs.entities.piglin.ZombifiedArmoredPiglin;
 import com.infamous.dungeons_mobs.entities.projectiles.CobwebTrapEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.CobwebProjectileEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.SlimeballEntity;
@@ -159,6 +161,13 @@ public class ModEntityTypes {
                     .clientTrackingRange(8)
                     .setCustomClientFactory((spawnEntity,world) -> new VindicatorChefEntity(world))
                     .build(new ResourceLocation(MODID, "vindicator_chef").toString())
+    );
+
+    public static final RegistryObject<EntityType<DungeonsIllusionerEntity>> ILLUSIONER = ENTITY_TYPES.register("illusioner", () ->
+            EntityType.Builder.<DungeonsIllusionerEntity>of(DungeonsIllusionerEntity::new, EntityClassification.MONSTER)
+                    .sized(0.6F, 1.95F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(MODID, "illusioner").toString())
     );
 
     public static final RegistryObject<EntityType<IllusionerCloneEntity>> ILLUSIONER_CLONE = ENTITY_TYPES.register("illusioner_clone", () ->
@@ -367,5 +376,22 @@ public class ModEntityTypes {
                     .updateInterval(Integer.MAX_VALUE)
                     .setCustomClientFactory((spawnEntity,world) -> new TornadoEntity(world))
                     .build(new ResourceLocation(MODID, "tornado").toString())
+    );
+
+    // PIGLIN
+
+    public static final RegistryObject<EntityType<ArmoredPiglinEntity>> ARMORED_PIGLIN = ENTITY_TYPES.register("armored_piglin", () ->
+            EntityType.Builder.<ArmoredPiglinEntity>of(ArmoredPiglinEntity::new, EntityClassification.MONSTER)
+                    .sized(0.6F * 1.1F, 1.95F * 1.1F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(MODID, "armored_piglin").toString())
+    );
+
+    public static final RegistryObject<EntityType<ZombifiedArmoredPiglin>> ZOMBIFIED_ARMORED_PIGLIN = ENTITY_TYPES.register("zombified_armored_piglin", () ->
+            EntityType.Builder.<ZombifiedArmoredPiglin>of(ZombifiedArmoredPiglin::new, EntityClassification.MONSTER)
+                   .fireImmune()
+                    .sized(0.6F * 1.1F, 1.95F * 1.1F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(MODID, "zombified_armored_piglin").toString())
     );
 }

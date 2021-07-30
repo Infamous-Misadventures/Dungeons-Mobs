@@ -1,52 +1,57 @@
 package com.infamous.dungeons_mobs.entities.piglin;
 
 import com.infamous.dungeons_mobs.DungeonsGearCompat;
+import com.infamous.dungeons_mobs.interfaces.IArmoredMob;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.monster.ZombifiedPiglinEntity;
+import net.minecraft.entity.monster.piglin.PiglinEntity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 
-public class ArmoredZombifiedPiglin extends ZombifiedPiglinEntity {
-    private static final DataParameter<Boolean> IS_GOLDEN = EntityDataManager.defineId(ArmoredZombifiedPiglin.class, DataSerializers.BOOLEAN);
+public class ArmoredPiglinEntity extends PiglinEntity implements IArmoredMob {
+    private static final DataParameter<Boolean> STRONG_ARMOR = EntityDataManager.defineId(ZombifiedArmoredPiglin.class, DataSerializers.BOOLEAN);
 
-    public ArmoredZombifiedPiglin(EntityType<? extends ArmoredZombifiedPiglin> entityType, World world) {
+    public ArmoredPiglinEntity(EntityType<? extends ArmoredPiglinEntity> entityType, World world) {
         super(entityType, world);
     }
 
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(IS_GOLDEN, false);
+        this.entityData.define(STRONG_ARMOR, false);
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
-        return ZombifiedPiglinEntity.createAttributes()
+        return PiglinEntity.createAttributes()
                 .add(Attributes.MAX_HEALTH, 36.0D)
                 .add(Attributes.ATTACK_DAMAGE, 7.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE);
     }
 
+    @Nullable
+    @Override
+    public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+
+        this.designateStrongArmor(this);
+
+        return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+    }
+
     @Override
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficultyInstance) {
-        if(this.isGolden()){
+        if(this.hasStrongArmor()){
             this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Items.GOLDEN_HELMET));
         }
 
@@ -65,7 +70,7 @@ public class ArmoredZombifiedPiglin extends ZombifiedPiglinEntity {
         if(DungeonsGearCompat.isLoaded()){
             ItemStack goldAxe = new ItemStack(DungeonsGearCompat.getGoldAxe().get());
             ItemStack firebrand = new ItemStack(DungeonsGearCompat.getFirebrand().get());
-            ItemStack mainhandWeapon = this.isGolden() ? firebrand : goldAxe;
+            ItemStack mainhandWeapon = this.hasStrongArmor() ? firebrand : goldAxe;
 
             this.setItemSlot(EquipmentSlotType.MAINHAND, mainhandWeapon);
         }
@@ -77,43 +82,28 @@ public class ArmoredZombifiedPiglin extends ZombifiedPiglinEntity {
     @Override
     public void addAdditionalSaveData(CompoundNBT compound) {
         super.addAdditionalSaveData(compound);
-        if (this.isGolden()){
-            compound.putBoolean("Golden", true);
-        }
+        this.writeStrongArmorNBT(compound);
     }
 
     @Override
     public void readAdditionalSaveData(CompoundNBT compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Golden", 99)) {
-            this.setGolden(compound.getBoolean("Golden"));
-        }
+        this.readStrongArmorNBT(compound);
     }
 
-    public boolean isGolden(){
-        return this.entityData.get(IS_GOLDEN);
-    }
-
-    public void setGolden(boolean isGolden){
-        this.entityData.set(IS_GOLDEN, isGolden);
-    }
-
-    @Nullable
     @Override
-    public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
-
-        float goldenChance = random.nextFloat();
-        if(goldenChance < 0.25F){
-            this.setGolden(true);
-            this.applyGoldenArmorBoosts();
-        }
-
-        return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+    public boolean hasStrongArmor(){
+        return this.entityData.get(STRONG_ARMOR);
     }
 
-    private void applyGoldenArmorBoosts() {
-        this.getAttribute(Attributes.ARMOR).addPermanentModifier(new AttributeModifier("Golden armor boost", 10.0D, AttributeModifier.Operation.ADDITION));
-        this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).addPermanentModifier(new AttributeModifier("Golden knockback resistance boost", 0.6D, AttributeModifier.Operation.ADDITION));
-        this.getAttribute(Attributes.ATTACK_DAMAGE).addPermanentModifier(new AttributeModifier("Golden attack boost", 1.0D, AttributeModifier.Operation.ADDITION));
+    @Override
+    public void setStrongArmor(boolean strongArmor){
+        this.entityData.set(STRONG_ARMOR, strongArmor);
+    }
+
+
+    @Override
+    public String getArmorName() {
+        return this.hasStrongArmor() ? "gold" : "netherite";
     }
 }

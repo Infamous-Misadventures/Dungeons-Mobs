@@ -7,7 +7,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IServerWorld;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
 import net.minecraft.world.gen.feature.structure.TemplateStructurePiece;
 import net.minecraft.world.gen.feature.structure.WoodlandMansionPieces;
@@ -36,7 +35,7 @@ public abstract class MansionTemplateMixin extends TemplateStructurePiece {
     private void handleDataMarker(String function, BlockPos pos, IServerWorld worldIn, Random rand, MutableBoundingBox sbb, CallbackInfo callbackInfo) {
         if (!function.startsWith("Chest") && !function.equals("Warrior") && !function.equals("Mage")) {
             ResourceLocation entityResourceLocation = new ResourceLocation(function);
-            EntityType entityType = ForgeRegistries.ENTITIES.getValue(entityResourceLocation);
+            EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(entityResourceLocation);
             if (entityType != null) {
                 Entity entity = entityType.create(worldIn.getLevel());
                 if(entity instanceof MobEntity){

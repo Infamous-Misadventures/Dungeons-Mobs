@@ -3,8 +3,8 @@ package com.infamous.dungeons_mobs;
 import com.infamous.dungeons_mobs.capabilities.CloneableHelper;
 import com.infamous.dungeons_mobs.capabilities.CloneableProvider;
 import com.infamous.dungeons_mobs.capabilities.ICloneable;
-import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.entities.creepers.IcyCreeperEntity;
+import com.infamous.dungeons_mobs.entities.illagers.DungeonsIllusionerEntity;
 import com.infamous.dungeons_mobs.entities.illagers.GeomancerEntity;
 import com.infamous.dungeons_mobs.entities.illagers.IllusionerCloneEntity;
 import com.infamous.dungeons_mobs.entities.jungle.VineEntity;
@@ -14,12 +14,9 @@ import com.infamous.dungeons_mobs.entities.undead.FrozenZombieEntity;
 import com.infamous.dungeons_mobs.goals.AvoidBaseEntityGoal;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.AvoidEntityGoal;
-import net.minecraft.entity.ai.goal.GoalSelector;
-import net.minecraft.entity.ai.goal.PrioritizedGoal;
 import net.minecraft.entity.monster.IllusionerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.SnowballEntity;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
@@ -27,9 +24,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.Explosion;
-import net.minecraft.world.IServerWorld;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -37,7 +32,6 @@ import net.minecraftforge.event.entity.EntityMobGriefingEvent;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.living.PotionEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -61,7 +55,7 @@ public class MobEvents {
     }
 
     private static boolean isCloneableEntity(Entity object) {
-        if(object instanceof IllusionerEntity){
+        if(object instanceof DungeonsIllusionerEntity){
             return true;
         }
         return false;
@@ -77,75 +71,6 @@ public class MobEvents {
         if(event.getEntity() instanceof CreatureEntity && !(event.getEntity() instanceof WhispererEntity)){
             CreatureEntity creatureEntity = (CreatureEntity) event.getEntity();
             creatureEntity.goalSelector.addGoal(3, new AvoidEntityGoal<>(creatureEntity, VineEntity.class, 8.0F, 0.6D, 1.0D));
-        }
-        if(event.getEntity() instanceof IllusionerCloneEntity){
-            IllusionerCloneEntity illusionerCloneEntity = (IllusionerCloneEntity)event.getEntity();
-            if(illusionerCloneEntity.getCaster() != null && !illusionerCloneEntity.level.isClientSide){
-                LivingEntity caster = illusionerCloneEntity.getCaster();
-                if(caster instanceof IllusionerEntity){
-                    ICloneable cloneable = CloneableHelper.getCloneableCapability(caster);
-                    if(cloneable != null){
-                        cloneable.addClone(illusionerCloneEntity.getUUID());
-                    }
-                }
-            }
-        }
-        /*
-        if(event.getEntity() instanceof IllusionerEntity){
-            IllusionerEntity illusionerEntity = (IllusionerEntity)event.getEntity();
-            GoalSelector goalSelector = illusionerEntity.goalSelector;
-
-        }
-         */
-    }
-
-    @SubscribeEvent
-    public static void onIllusionerAttacked(LivingAttackEvent event){
-        if(event.getEntityLiving() instanceof IllusionerEntity && !(event.getSource().getEntity() instanceof IllusionerCloneEntity)){
-            IllusionerEntity illusionerEntity = (IllusionerEntity) event.getEntityLiving();
-            ICloneable cloneable = CloneableHelper.getCloneableCapability(illusionerEntity);
-            if(cloneable != null && illusionerEntity.level instanceof ServerWorld){
-                UUID[] clones = cloneable.getClones();
-                for(int i = 0; i < clones.length; i++){
-                    UUID currentClone = clones[i];
-                    if(currentClone != null){
-                        ServerWorld serverWorld = (ServerWorld) illusionerEntity.level;
-                        Entity entity = serverWorld.getEntity(currentClone);
-                        if(entity != null){
-                            entity.remove();
-                        }
-                        clones[i] = null;
-                    }
-                }
-            }
-        }
-    }
-
-    @SubscribeEvent
-    public static void onIllusionerBecomesInvisible(PotionEvent.PotionAddedEvent event){
-        if(DungeonsMobsConfig.COMMON.ENABLE_CLONING_ILLUSIONERS.get()){
-            if(event.getEntityLiving() instanceof IllusionerEntity){
-                IllusionerEntity illusionerEntity = (IllusionerEntity) event.getEntityLiving();
-                if(!illusionerEntity.hasEffect(Effects.INVISIBILITY)
-                        && event.getPotionEffect().getEffect() == Effects.INVISIBILITY
-                        && !illusionerEntity.level.isClientSide
-                        && illusionerEntity.isCastingSpell()){
-                    summonIllusionerClones(illusionerEntity);
-                }
-            }
-        }
-    }
-
-    private static void summonIllusionerClones(IllusionerEntity illusionerEntity){
-        int difficultyAsInt = illusionerEntity.level.getDifficulty().getId();
-        int mobsToSummon = difficultyAsInt * 2 + 1; // 3 on easy, 5 on normal, 7 on hard
-        for(int i = 0; i < mobsToSummon; ++i) {
-            BlockPos blockpos = illusionerEntity.blockPosition().offset(-2 + illusionerEntity.getRandom().nextInt(5), 1, -2 + illusionerEntity.getRandom().nextInt(5));
-            IllusionerCloneEntity illusionerCloneEntity = new IllusionerCloneEntity(illusionerEntity.level, illusionerEntity, 30 * 20);
-            DifficultyInstance difficultyForLocation = illusionerEntity.level.getCurrentDifficultyAt(blockpos);
-            illusionerCloneEntity.moveTo(blockpos, 0.0F, 0.0F);
-            illusionerCloneEntity.finalizeSpawn((IServerWorld) illusionerCloneEntity.level, difficultyForLocation, SpawnReason.MOB_SUMMONED, (ILivingEntityData)null, (CompoundNBT)null);
-            illusionerEntity.level.addFreshEntity(illusionerCloneEntity);
         }
     }
 

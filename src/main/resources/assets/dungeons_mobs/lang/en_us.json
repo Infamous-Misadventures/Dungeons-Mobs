@@ -36,6 +36,7 @@
   "entity.dungeons_mobs.armored_mountaineer": "Armored Mountaineer",
   "item.dungeons_mobs.armored_mountaineer_spawn_egg": "Armored Mountaineer Spawn Egg",
 
+  "entity.dungeons_mobs.illusioner": "Illusioner",
   "item.dungeons_mobs.illusioner_spawn_egg": "Illusioner Spawn Egg",
 
   "entity.dungeons_mobs.geomancer_wall": "Geomancer Wall",
@@ -74,6 +75,12 @@
 
   "entity.dungeons_mobs.squall_golem": "Squall Golem",
   "item.dungeons_mobs.squall_golem_spawn_egg": "Squall Golem Spawn Egg",
+
+  "entity.dungeons_mobs.armored_piglin": "Armored Piglin",
+  "item.dungeons_mobs.armored_piglin_spawn_egg": "Armored Piglin Spawn Egg",
+
+  "entity.dungeons_mobs.zombified_armored_piglin": "Zombified Armored Piglin",
+  "item.dungeons_mobs.zombified_armored_piglin_spawn_egg": "Zombified Armored Piglin Spawn Egg",
 
   "block.dungeons_mobs.wraith_fire": "Wraith Fire",
   "item.dungeons_mobs.wraith_fire_charge": "Wraith Fire Charge",

@@ -79,7 +79,7 @@ public class ModItems {
                     new Item.Properties().tab(DUNGEONS_MOBS)));
 
     public static final RegistryObject<ModSpawnEggItem> ILLUSIONER_SPAWN_EGG = ITEMS.register("illusioner_spawn_egg",
-            () -> new ModSpawnEggItem(EntityType.ILLUSIONER,
+            () -> new ModSpawnEggItem(ModEntityTypes.ILLUSIONER,
                     9804699, 1973274,
                     new Item.Properties().tab(DUNGEONS_MOBS)));
 
@@ -166,6 +166,17 @@ public class ModItems {
     public static final RegistryObject<ModSpawnEggItem> SQUALL_GOLEM_SPAWN_EGG = ITEMS.register("squall_golem_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityTypes.SQUALL_GOLEM,
                     13552826, 7632531,
+                    new Item.Properties().tab(DUNGEONS_MOBS)));
+
+    // PIGLIN
+    public static final RegistryObject<ModSpawnEggItem> ARMORED_PIGLIN_SPAWN_EGG = ITEMS.register("armored_piglin_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityTypes.ARMORED_PIGLIN,
+                    5843472, 16380836,
+                    new Item.Properties().tab(DUNGEONS_MOBS)));
+
+    public static final RegistryObject<ModSpawnEggItem> ARMORED_ZOMBIFIED_PIGLIN_SPAWN_EGG = ITEMS.register("zombified_armored_piglin_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityTypes.ZOMBIFIED_ARMORED_PIGLIN,
+                    15373203, 5009705,
                     new Item.Properties().tab(DUNGEONS_MOBS)));
 
     // SHIELD

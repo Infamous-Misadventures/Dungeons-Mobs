@@ -90,7 +90,7 @@ public class BiomeSpawnEntries {
                     DungeonsMobsConfig.COMMON.GEOMANCER_MAX_GROUP_SIZE.get());
 
             List<String> illusionerBiomeTypes = (List<String>) DungeonsMobsConfig.COMMON.ILLUSIONER_BIOME_TYPES.get();
-            tryAddMonsterSpawnToBiome(biomeRegistryKey, mobSpawnInfoBuilder, illusionerBiomeTypes, EntityType.ILLUSIONER,
+            tryAddMonsterSpawnToBiome(biomeRegistryKey, mobSpawnInfoBuilder, illusionerBiomeTypes, ModEntityTypes.ILLUSIONER.get(),
                     DungeonsMobsConfig.COMMON.ILLUSIONER_SPAWN_WEIGHT.get(),
                     DungeonsMobsConfig.COMMON.ILLUSIONER_MIN_GROUP_SIZE.get(),
                     DungeonsMobsConfig.COMMON.ILLUSIONER_MAX_GROUP_SIZE.get());

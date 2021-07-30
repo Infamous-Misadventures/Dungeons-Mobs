@@ -116,5 +116,7 @@
   "itemGroup.dungeonsMobs": "Dungeons - Mobs",
 
   "death.attack.iceCloud": "%1$s was crushed by an Ice Cloud",
-  "death.attack.iceCloud.player": "%1$s was crushed by an Ice Cloud whilst fighting %2$s"
+  "death.attack.iceCloud.player": "%1$s was crushed by an Ice Cloud whilst fighting %2$s",
+  "entity.dungeons_mobs.zombified_armored_piglin": "Zombified Armored Piglin",
+  "item.dungeons_mobs.zombified_armored_piglin_spawn_egg": "Zombified Armored Piglin Spawn Egg"
 }
