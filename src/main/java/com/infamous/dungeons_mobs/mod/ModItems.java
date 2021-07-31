@@ -7,6 +7,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemTier;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -179,6 +180,16 @@ public class ModItems {
                     15373203, 5009705,
                     new Item.Properties().tab(DUNGEONS_MOBS)));
 
+    public static final RegistryObject<ModSpawnEggItem> FUNGUS_THROWER_SPAWN_EGG = ITEMS.register("fungus_thrower_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityTypes.FUNGUS_THROWER,
+                    5843472, 16380836,
+                    new Item.Properties().tab(DUNGEONS_MOBS)));
+
+    public static final RegistryObject<ModSpawnEggItem> ZOMBIFIED_FUNGUS_THROWER_SPAWN_EGG = ITEMS.register("zombified_fungus_thrower_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityTypes.ZOMBIFIED_FUNGUS_THROWER,
+                    15373203, 5009705,
+                    new Item.Properties().tab(DUNGEONS_MOBS)));
+
     // SHIELD
     public static final RegistryObject<Item> ROYAL_GUARD_SHIELD = ITEMS.register("royal_guard_shield",
             () -> new RoyalGuardShieldItem(new Item.Properties().tab(DUNGEONS_MOBS).durability(336)));
@@ -233,4 +244,7 @@ public class ModItems {
 
     public static final RegistryObject<Item> NECROMANCER_STAFF = ITEMS.register("necromancer_staff",
             () -> new NecromancerStaffItem(new Item.Properties().tab(DUNGEONS_MOBS).durability(64)));
+
+    public static final RegistryObject<Item> BLUE_NETHERSHROOM = ITEMS.register("blue_nethershroom",
+            () -> new BlueNethershroomItem(new Item.Properties().tab(DUNGEONS_MOBS).stacksTo(16)));
 }

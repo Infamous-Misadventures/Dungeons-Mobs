@@ -118,5 +118,14 @@
   "death.attack.iceCloud": "%1$s was crushed by an Ice Cloud",
   "death.attack.iceCloud.player": "%1$s was crushed by an Ice Cloud whilst fighting %2$s",
   "entity.dungeons_mobs.zombified_armored_piglin": "Zombified Armored Piglin",
-  "item.dungeons_mobs.zombified_armored_piglin_spawn_egg": "Zombified Armored Piglin Spawn Egg"
+  "item.dungeons_mobs.zombified_armored_piglin_spawn_egg": "Zombified Armored Piglin Spawn Egg",
+  "entity.dungeons_mobs.illusioner": "Illusioner",
+  "entity.dungeons_mobs.blue_nethershrooom": "Blue Nethershroom",
+  "entity.dungeons_mobs.armored_piglin": "Armored Piglin",
+  "item.dungeons_mobs.armored_piglin_spawn_egg": "Armored Piglin Spawn Egg",
+  "entity.dungeons_mobs.fungus_thrower": "Fungus Thrower",
+  "item.dungeons_mobs.fungus_thrower_spawn_egg": "Fungus Thrower Spawn Egg",
+  "entity.dungeons_mobs.zombified_fungus_thrower": "Zombified Fungus Thrower",
+  "item.dungeons_mobs.zombified_fungus_thrower_spawn_egg": "Zombified Fungus Thrower Spawn Egg",
+  "item.dungeons_mobs.blue_nethershroom": "Blue Nethershroom"
 }

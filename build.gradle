@@ -51,6 +51,8 @@ minecraft {
 
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
+            arg "-mixin.config=dungeons_mobs.mixins.json"
+            property 'mixin.debug.export', 'true'
 
             mods {
                 dungeons_mobs {
@@ -67,6 +69,7 @@ minecraft {
 
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
+            arg "-mixin.config=dungeons_mobs.mixins.json"
 
             mods {
                 dungeons_mobs {

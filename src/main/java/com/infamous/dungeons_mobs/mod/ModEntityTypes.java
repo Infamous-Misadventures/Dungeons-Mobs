@@ -8,12 +8,11 @@ import com.infamous.dungeons_mobs.entities.jungle.PoisonQuillVineEntity;
 import com.infamous.dungeons_mobs.entities.jungle.QuickGrowingVineEntity;
 import com.infamous.dungeons_mobs.entities.jungle.WhispererEntity;
 import com.infamous.dungeons_mobs.entities.piglin.ArmoredPiglinEntity;
-import com.infamous.dungeons_mobs.entities.piglin.ZombifiedArmoredPiglin;
-import com.infamous.dungeons_mobs.entities.projectiles.CobwebTrapEntity;
-import com.infamous.dungeons_mobs.entities.projectiles.CobwebProjectileEntity;
-import com.infamous.dungeons_mobs.entities.projectiles.SlimeballEntity;
+import com.infamous.dungeons_mobs.entities.piglin.FungusThrowerEntity;
+import com.infamous.dungeons_mobs.entities.piglin.ZombifiedArmoredPiglinEntity;
+import com.infamous.dungeons_mobs.entities.piglin.ZombifiedFungusThrowerEntity;
+import com.infamous.dungeons_mobs.entities.projectiles.*;
 import com.infamous.dungeons_mobs.entities.summonables.*;
-import com.infamous.dungeons_mobs.entities.projectiles.WraithFireballEntity;
 import com.infamous.dungeons_mobs.entities.redstone.RedstoneCubeEntity;
 import com.infamous.dungeons_mobs.entities.redstone.RedstoneGolemEntity;
 import com.infamous.dungeons_mobs.entities.redstone.RedstoneMineEntity;
@@ -319,6 +318,14 @@ public class ModEntityTypes {
                     .build(new ResourceLocation(MODID, "cobweb_projectile").toString())
     );
 
+    public static final RegistryObject<EntityType<BlueNethershroomEntity>> BLUE_NETHERSHROOM = ENTITY_TYPES.register("blue_nethershroom", () ->
+            EntityType.Builder.<BlueNethershroomEntity>of(BlueNethershroomEntity::new, EntityClassification.MISC)
+                    .sized(0.25F, 0.25F)
+                    .clientTrackingRange(4)
+                    .updateInterval(10)
+                    .build(new ResourceLocation(MODID, "blue_nethershroom").toString())
+    );
+
     public static final RegistryObject<EntityType<CobwebTrapEntity>> COBWEB_TRAP = ENTITY_TYPES.register("cobweb_trap", () ->
             EntityType.Builder.<CobwebTrapEntity>of(CobwebTrapEntity::new, EntityClassification.MISC)
                     .sized(1.0F, 1.0F)
@@ -387,11 +394,26 @@ public class ModEntityTypes {
                     .build(new ResourceLocation(MODID, "armored_piglin").toString())
     );
 
-    public static final RegistryObject<EntityType<ZombifiedArmoredPiglin>> ZOMBIFIED_ARMORED_PIGLIN = ENTITY_TYPES.register("zombified_armored_piglin", () ->
-            EntityType.Builder.<ZombifiedArmoredPiglin>of(ZombifiedArmoredPiglin::new, EntityClassification.MONSTER)
+    public static final RegistryObject<EntityType<ZombifiedArmoredPiglinEntity>> ZOMBIFIED_ARMORED_PIGLIN = ENTITY_TYPES.register("zombified_armored_piglin", () ->
+            EntityType.Builder.<ZombifiedArmoredPiglinEntity>of(ZombifiedArmoredPiglinEntity::new, EntityClassification.MONSTER)
                    .fireImmune()
                     .sized(0.6F * 1.1F, 1.95F * 1.1F)
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(MODID, "zombified_armored_piglin").toString())
+    );
+
+    public static final RegistryObject<EntityType<FungusThrowerEntity>> FUNGUS_THROWER = ENTITY_TYPES.register("fungus_thrower", () ->
+            EntityType.Builder.<FungusThrowerEntity>of(FungusThrowerEntity::new, EntityClassification.MONSTER)
+                    .sized(0.6F, 1.95F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(MODID, "fungus_thrower").toString())
+    );
+
+    public static final RegistryObject<EntityType<ZombifiedFungusThrowerEntity>> ZOMBIFIED_FUNGUS_THROWER = ENTITY_TYPES.register("zombified_fungus_thrower", () ->
+            EntityType.Builder.<ZombifiedFungusThrowerEntity>of(ZombifiedFungusThrowerEntity::new, EntityClassification.MONSTER)
+                    .fireImmune()
+                    .sized(0.6F, 1.95F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(MODID, "zombified_fungus_thrower").toString())
     );
 }

@@ -21,10 +21,10 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class ZombifiedArmoredPiglin extends ZombifiedPiglinEntity implements IArmoredMob {
-    private static final DataParameter<Boolean> STRONG_ARMOR = EntityDataManager.defineId(ZombifiedArmoredPiglin.class, DataSerializers.BOOLEAN);
+public class ZombifiedArmoredPiglinEntity extends ZombifiedPiglinEntity implements IArmoredMob {
+    private static final DataParameter<Boolean> STRONG_ARMOR = EntityDataManager.defineId(ZombifiedArmoredPiglinEntity.class, DataSerializers.BOOLEAN);
 
-    public ZombifiedArmoredPiglin(EntityType<? extends ZombifiedArmoredPiglin> entityType, World world) {
+    public ZombifiedArmoredPiglinEntity(EntityType<? extends ZombifiedArmoredPiglinEntity> entityType, World world) {
         super(entityType, world);
     }
 

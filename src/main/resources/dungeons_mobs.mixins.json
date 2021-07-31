@@ -6,11 +6,12 @@
   "refmap": "dungeons_mobs.refmap.json",
   "mixins": [
     "AbstractHorseEntityMixin",
+    "BrainAccessor",
     "CropsBlockMixin",
     "GoalSelectorAccessor",
-    "IllusionerEntityMixin",
     "MansionTemplateMixin",
     "PatrolSpawnerMixin",
+    "PiglinAccessor",
     "PiglinEntityMixin",
     "RaidMixin",
     "SpiderEntityMixin",

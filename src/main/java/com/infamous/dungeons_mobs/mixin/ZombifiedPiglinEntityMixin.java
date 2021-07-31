@@ -88,8 +88,8 @@ public abstract class ZombifiedPiglinEntityMixin extends ZombieEntity implements
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.set(DATA_IS_CHARGING_CROSSBOW, false);
-        this.entityData.set(DATA_IS_CROSSBOW_USER, false);
+        this.entityData.define(DATA_IS_CHARGING_CROSSBOW, false);
+        this.entityData.define(DATA_IS_CROSSBOW_USER, false);
     }
 
     @Override

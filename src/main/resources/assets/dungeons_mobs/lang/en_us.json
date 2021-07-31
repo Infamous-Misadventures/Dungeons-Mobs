@@ -49,6 +49,7 @@
   "entity.dungeons_mobs.slimeball": "Slimeball",
   "entity.dungeons_mobs.wraith_fireball": "Wraith Fireball",
   "entity.dungeons_mobs.cobweb_projectile": "Cobweb Projectile",
+  "entity.dungeons_mobs.blue_nethershrooom": "Blue Nethershroom",
 
   "entity.dungeons_mobs.icy_creeper": "Icy Creeper",
   "item.dungeons_mobs.icy_creeper_spawn_egg": "Icy Creeper Spawn Egg",
@@ -78,12 +79,16 @@
 
   "entity.dungeons_mobs.armored_piglin": "Armored Piglin",
   "item.dungeons_mobs.armored_piglin_spawn_egg": "Armored Piglin Spawn Egg",
-
+  "entity.dungeons_mobs.fungus_thrower": "Fungus Thrower",
+  "item.dungeons_mobs.fungus_thrower_spawn_egg": "Fungus Thrower Spawn Egg",
   "entity.dungeons_mobs.zombified_armored_piglin": "Zombified Armored Piglin",
   "item.dungeons_mobs.zombified_armored_piglin_spawn_egg": "Zombified Armored Piglin Spawn Egg",
+  "entity.dungeons_mobs.zombified_fungus_thrower": "Zombified Fungus Thrower",
+  "item.dungeons_mobs.zombified_fungus_thrower_spawn_egg": "Zombified Fungus Thrower Spawn Egg",
 
   "block.dungeons_mobs.wraith_fire": "Wraith Fire",
   "item.dungeons_mobs.wraith_fire_charge": "Wraith Fire Charge",
+  "item.dungeons_mobs.blue_nethershroom": "Blue Nethershroom",
   "item.dungeons_mobs.spatula": "Spatula",
   "item.dungeons_mobs.mountaineer_axe": "Mountaineer Axe",
   "item.dungeons_mobs.gold_mountaineer_axe": "Gold Mountaineer Axe",

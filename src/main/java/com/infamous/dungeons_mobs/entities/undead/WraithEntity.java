@@ -156,14 +156,14 @@ public class WraithEntity extends MonsterEntity implements IMagicUser {
                 double d0 = this.getX() + (this.random.nextDouble() - 0.5D) * 64.0D;
                 double d1 = this.getY() + (double)(this.random.nextInt(64) - 32);
                 double d2 = this.getZ() + (this.random.nextDouble() - 0.5D) * 64.0D;
-                hasSuccessfullyTeleported = this.teleportTo(d0, d1, d2);
+                hasSuccessfullyTeleported = this.teleportWraithTo(d0, d1, d2);
                 teleportAttemptCounter++;
             }
         }
         return false;
     }
 
-    private boolean teleportTo(double x, double y, double z) {
+    private boolean teleportWraithTo(double x, double y, double z) {
         BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable(x, y, z);
 
         while(blockpos$mutable.getY() > 0 && !this.level.getBlockState(blockpos$mutable).getMaterial().blocksMotion()) {

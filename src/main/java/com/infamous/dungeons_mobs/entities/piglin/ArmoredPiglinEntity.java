@@ -2,11 +2,14 @@ package com.infamous.dungeons_mobs.entities.piglin;
 
 import com.infamous.dungeons_mobs.DungeonsGearCompat;
 import com.infamous.dungeons_mobs.interfaces.IArmoredMob;
+import com.infamous.dungeons_mobs.mixin.PiglinAccessor;
+import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.monster.piglin.PiglinEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
@@ -15,14 +18,18 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
+import net.minecraft.util.Hand;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
 
 public class ArmoredPiglinEntity extends PiglinEntity implements IArmoredMob {
-    private static final DataParameter<Boolean> STRONG_ARMOR = EntityDataManager.defineId(ZombifiedArmoredPiglin.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> STRONG_ARMOR = EntityDataManager.defineId(ZombifiedArmoredPiglinEntity.class, DataSerializers.BOOLEAN);
 
     public ArmoredPiglinEntity(EntityType<? extends ArmoredPiglinEntity> entityType, World world) {
         super(entityType, world);
@@ -59,6 +66,20 @@ public class ArmoredPiglinEntity extends PiglinEntity implements IArmoredMob {
             this.setRangedWeapon();
         } else{
             this.setMeleeWeapon();
+        }
+    }
+
+    @Override
+    protected void finishConversion(ServerWorld serverWorld) {
+        if (this.getBrain().hasMemoryValue(MemoryModuleType.ADMIRING_ITEM) && !this.getOffhandItem().isEmpty()) {
+            this.spawnAtLocation(this.getOffhandItem());
+            this.setItemInHand(Hand.OFF_HAND, ItemStack.EMPTY);
+        }
+        ((PiglinAccessor)this).getInventory().removeAllItems().forEach(this::spawnAtLocation);
+        ZombifiedArmoredPiglinEntity zombifiedArmoredPiglin = this.convertTo(ModEntityTypes.ZOMBIFIED_ARMORED_PIGLIN.get(), true);
+        if (zombifiedArmoredPiglin != null) {
+            zombifiedArmoredPiglin.addEffect(new EffectInstance(Effects.CONFUSION, 200, 0));
+            net.minecraftforge.event.ForgeEventFactory.onLivingConvert(this, zombifiedArmoredPiglin);
         }
     }
 
