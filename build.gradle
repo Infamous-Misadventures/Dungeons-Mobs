@@ -22,7 +22,7 @@ mixin {
     add sourceSets.main, "dungeons_mobs.refmap.json"
 }
 
-version = '1.0.7'
+version = '1.0.8'
 group = 'com.infamous.dungeons_mobs' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'dungeons_mobs-1.16.5'
 

@@ -18,7 +18,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class ChefHatModel<T extends LivingEntity> extends BipedModel<T> {
 	private final EquipmentSlotType slot;
 	private final LivingEntity entity;
-	private final ModelRenderer head;
+	private final ModelRenderer helmet;
 
 	public ChefHatModel(float modelSize, EquipmentSlotType slot, LivingEntity entity) {
 		super(modelSize, 0.0F, 64, 64);
@@ -36,22 +36,22 @@ public class ChefHatModel<T extends LivingEntity> extends BipedModel<T> {
 
 		int testificateHelmetShiftUp = testificate ? 2 : 0;
 
-		head = new ModelRenderer(this);
-		head.setPos(0.0F, 0.0F, 0.0F);
-		head.texOffs(0, 20).addBox(-5.0F, 11.0F - 20.0F - testificateHelmetShiftUp, -5.0F, 10.0F, 3.0F, 10.0F, 0.0F, false);
-		head.texOffs(0, 0).addBox(-6.0F, 4.0F - 20.0F - testificateHelmetShiftUp, -6.0F, 12.0F, 7.0F, 12.0F, 0.0F, false);
+		helmet = new ModelRenderer(this);
+		helmet.setPos(0.0F, 0.0F, 0.0F);
+		helmet.texOffs(0, 20).addBox(-5.0F, 11.0F - 20.0F - testificateHelmetShiftUp, -5.0F, 10.0F, 3.0F, 10.0F, 0.0F, false);
+		helmet.texOffs(0, 0).addBox(-6.0F, 4.0F - 20.0F - testificateHelmetShiftUp, -6.0F, 12.0F, 7.0F, 12.0F, 0.0F, false);
 	}
 
 	@Override
 	public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
 		if (this.slot == EquipmentSlotType.HEAD) {
 			matrixStack.pushPose();
-			this.head.copyFrom(this.head);
+			this.helmet.copyFrom(this.head);
 			if (this.entity.isBaby()) {
 				matrixStack.scale(0.8F, 0.8F, 0.8F);
-				this.head.setPos(0.0F, 15.0F, 0.0F);
+				this.helmet.setPos(0.0F, 15.0F, 0.0F);
 			}
-			this.head.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+			this.helmet.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
 			matrixStack.popPose();
 		}
 	}

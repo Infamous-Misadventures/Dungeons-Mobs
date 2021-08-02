@@ -24,7 +24,7 @@ public class PillagerHelmetModel<T extends LivingEntity> extends BipedModel<T> {
 	private final EquipmentSlotType slot;
 	private final LivingEntity entity;
 	private final ModelRenderer everything;
-	private final ModelRenderer head;
+	private final ModelRenderer helmet;
 	private final ModelRenderer flap1;
 	private final ModelRenderer flap2;
 	private final ModelRenderer flap3;
@@ -48,26 +48,26 @@ public class PillagerHelmetModel<T extends LivingEntity> extends BipedModel<T> {
 
 		int testificateHelmetShiftUp = testificate ? 2 : 0;
 
-		head = new ModelRenderer(this);
-		head.setPos(0.0F, -24.0F, 0.0F);
-		everything.addChild(head);
-		head.texOffs(32, 0).addBox(-4.0F, -10.0F, -4.0F, 8.0F, 6.0F, 8.0F, 1.0F, false);
+		helmet = new ModelRenderer(this);
+		helmet.setPos(0.0F, -24.0F, 0.0F);
+		everything.addChild(helmet);
+		helmet.texOffs(32, 0).addBox(-4.0F, -10.0F, -4.0F, 8.0F, 6.0F, 8.0F, 1.0F, false);
 
 		flap1 = new ModelRenderer(this);
 		flap1.setPos(-1.0F, 0.0F, -4.0F);
-		head.addChild(flap1);
+		helmet.addChild(flap1);
 		setRotationAngle(flap1, 0.0F, 0.0F, 0.4363F);
 		flap1.texOffs(46, 27).addBox(-5.0F, -3.0F, 0.0F, 1.0F, 3.0F, 8.0F, 1.0F, false);
 
 		flap2 = new ModelRenderer(this);
 		flap2.setPos(1.0F, 0.0F, -4.0F);
-		head.addChild(flap2);
+		helmet.addChild(flap2);
 		setRotationAngle(flap2, 0.0F, 0.0F, -0.4363F);
 		flap2.texOffs(46, 27).addBox(4.0F, -3.0F, 0.0F, 1.0F, 3.0F, 8.0F, 1.0F, true);
 
 		flap3 = new ModelRenderer(this);
 		flap3.setPos(4.0F, -3.0F, 7.0F);
-		head.addChild(flap3);
+		helmet.addChild(flap3);
 		setRotationAngle(flap3, 0.4363F, 0.0F, 0.0F);
 		flap3.texOffs(45, 30).addBox(-8.0F, -3.0F, 0.0F, 8.0F, 3.0F, 1.0F, 1.0F, false);
 	}
@@ -115,12 +115,12 @@ public class PillagerHelmetModel<T extends LivingEntity> extends BipedModel<T> {
 
 		 */
 			matrixStackIn.pushPose();
-			this.head.copyFrom(this.head);
+			this.helmet.copyFrom(this.head);
 			if (this.entity.isBaby()) {
 				matrixStackIn.scale(0.8F, 0.8F, 0.8F);
-				this.head.setPos(0.0F, 15.0F, 0.0F);
+				this.helmet.setPos(0.0F, 15.0F, 0.0F);
 			}
-			this.head.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+			this.helmet.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
 			matrixStackIn.popPose();
 			//}
 		}

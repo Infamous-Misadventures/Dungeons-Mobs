@@ -32,9 +32,8 @@ public class BlueNethershroomItem extends ShootableItem {
       ItemStack itemstack = player.getItemInHand(hand);
       if (!world.isClientSide) {
          BlueNethershroomEntity blueNethershroom = new BlueNethershroomEntity(world, player);
-         ItemStack blueNethershroomStack = blueNethershroom.getItem();
-         BlueNethershroomEntity.setLightBluePotionColor(blueNethershroomStack);
-         blueNethershroom.setItem(PotionUtils.setPotion(blueNethershroomStack, Potions.POISON));
+         BlueNethershroomEntity.setLightBluePotionColor(itemstack);
+         blueNethershroom.setItem(PotionUtils.setPotion(itemstack, Potions.POISON));
          blueNethershroom.shootFromRotation(player, player.xRot, player.yRot, -20.0F, 0.5F, 1.0F);
          world.addFreshEntity(blueNethershroom);
       }

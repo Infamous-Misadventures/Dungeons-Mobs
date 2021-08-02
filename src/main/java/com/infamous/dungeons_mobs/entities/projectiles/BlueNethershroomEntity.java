@@ -14,12 +14,14 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 @OnlyIn(
@@ -61,18 +63,29 @@ public class BlueNethershroomEntity extends ProjectileItemEntity implements IRen
       List<EffectInstance> list = PotionUtils.getMobEffects(itemstack);
       if (!list.isEmpty()) {
          if(!this.level.isClientSide){
-            this.makeAreaOfEffectCloud(itemstack, potion);
+            Entity target = null;
+            if(rtr instanceof EntityRayTraceResult){
+               target = ((EntityRayTraceResult) rtr).getEntity();
+            }
+            this.makeAreaOfEffectCloud(target, itemstack, potion);
             this.remove();
          } else{
             BlockPos blockPos = this.blockPosition();
             int color = PotionUtils.getColor(potion);
+            CompoundNBT tag = itemstack.getTag();
+            if (tag != null && tag.contains("CustomPotionColor", 99)) {
+               color = tag.getInt("CustomPotionColor");
+            }
             com.infamous.dungeons_mobs.client.util.ParticleGenerator.generatePotionImpact(this.level, potion, this.getItem(), blockPos, color, SoundEvents.FUNGUS_BREAK);
          }
       }
    }
 
-   private void makeAreaOfEffectCloud(ItemStack itemStack, Potion potion) {
-      AreaEffectCloudEntity aoeCloud = new AreaEffectCloudEntity(this.level, this.getX(), this.getY(), this.getZ());
+   private void makeAreaOfEffectCloud(@Nullable Entity target, ItemStack itemStack, Potion potion) {
+      AreaEffectCloudEntity aoeCloud = new AreaEffectCloudEntity(this.level,
+              target != null ? target.getX() : this.getX(),
+              target != null ? target.getY() : this.getY(),
+              target != null ? target.getZ() : this.getZ());
       Entity owner = this.getOwner();
       if (owner instanceof LivingEntity) {
          aoeCloud.setOwner((LivingEntity)owner);

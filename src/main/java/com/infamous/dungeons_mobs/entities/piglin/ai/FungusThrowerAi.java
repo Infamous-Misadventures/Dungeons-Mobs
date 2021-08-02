@@ -15,10 +15,12 @@ import net.minecraft.entity.ai.brain.task.AttackStrafingTask;
 import net.minecraft.entity.ai.brain.task.SupplementedTask;
 import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.potion.Potions;
+import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
@@ -61,6 +63,7 @@ public class FungusThrowerAi {
         }
 
         fungusThrower.level.addFreshEntity(blueNethershroom);
+        fungusThrower.swing(ProjectileHelper.getWeaponHoldingHand(fungusThrower, FUNGUS_ITEM_PREDICATE));
     }
 
     private static boolean hasBlueNethershroom(LivingEntity living) {
