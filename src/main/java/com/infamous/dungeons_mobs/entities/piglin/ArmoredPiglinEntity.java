@@ -4,23 +4,21 @@ import com.infamous.dungeons_mobs.DungeonsGearCompat;
 import com.infamous.dungeons_mobs.interfaces.IArmoredMob;
 import com.infamous.dungeons_mobs.mixin.PiglinAccessor;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
+import com.infamous.dungeons_mobs.utils.PiglinHelper;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.monster.piglin.PiglinEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.Hand;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
@@ -47,6 +45,16 @@ public class ArmoredPiglinEntity extends PiglinEntity implements IArmoredMob {
                 .add(Attributes.KNOCKBACK_RESISTANCE);
     }
 
+    @Override
+    public void setBaby(boolean baby) {
+        // NO-OP
+    }
+
+    @Override
+    public boolean isBaby() {
+        return false;
+    }
+
     @Nullable
     @Override
     public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
@@ -58,29 +66,24 @@ public class ArmoredPiglinEntity extends PiglinEntity implements IArmoredMob {
 
     @Override
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficultyInstance) {
-        if(this.hasStrongArmor()){
-            this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Items.GOLDEN_HELMET));
-        }
-
         if (this.random.nextFloat() < 0.5D) {
             this.setRangedWeapon();
         } else{
             this.setMeleeWeapon();
         }
+
+        if(this.hasStrongArmor()){
+            this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Items.GOLDEN_HELMET));
+        } else if(this.isHolding(item -> item instanceof CrossbowItem)){
+            this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Items.NETHERITE_HELMET));
+        }
     }
 
     @Override
     protected void finishConversion(ServerWorld serverWorld) {
-        if (this.getBrain().hasMemoryValue(MemoryModuleType.ADMIRING_ITEM) && !this.getOffhandItem().isEmpty()) {
-            this.spawnAtLocation(this.getOffhandItem());
-            this.setItemInHand(Hand.OFF_HAND, ItemStack.EMPTY);
-        }
+        PiglinHelper.stopAdmiringItem(this);
         ((PiglinAccessor)this).getInventory().removeAllItems().forEach(this::spawnAtLocation);
-        ZombifiedArmoredPiglinEntity zombifiedArmoredPiglin = this.convertTo(ModEntityTypes.ZOMBIFIED_ARMORED_PIGLIN.get(), true);
-        if (zombifiedArmoredPiglin != null) {
-            zombifiedArmoredPiglin.addEffect(new EffectInstance(Effects.CONFUSION, 200, 0));
-            net.minecraftforge.event.ForgeEventFactory.onLivingConvert(this, zombifiedArmoredPiglin);
-        }
+        PiglinHelper.zombify(ModEntityTypes.ZOMBIFIED_ARMORED_PIGLIN.get(), this);
     }
 
     private void setRangedWeapon() {

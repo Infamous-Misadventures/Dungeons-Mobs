@@ -50,7 +50,7 @@ public abstract class ZombifiedPiglinEntityMixin extends ZombieEntity implements
         }
     }
 
-    @Inject(at = @At("HEAD"), method = "populateDefaultEquipmentSlots", cancellable = true)
+    @Inject(at = @At("TAIL"), method = "populateDefaultEquipmentSlots", cancellable = true)
     private void spawnWeapon(DifficultyInstance p_180481_1_, CallbackInfo ci){
         this.setItemSlot(EquipmentSlotType.MAINHAND, this.createSpawnWeapon());
     }

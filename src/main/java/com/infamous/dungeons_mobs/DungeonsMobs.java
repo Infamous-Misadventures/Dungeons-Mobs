@@ -43,10 +43,6 @@ public class DungeonsMobs
         // Register the setup method for modloading
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, DungeonsMobsConfig.COMMON_SPEC);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-        // Register the enqueueIMC method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
-        // Register the processIMC method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
         // Register the doClientStuff method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onLoadComplete);
@@ -63,12 +59,11 @@ public class DungeonsMobs
     }
 
     private void setup(final FMLCommonSetupEvent event){
-        DeferredWorkQueue.runLater(() -> {
-            EntitySpawnPlacements.initSpawnPlacements();
-            RaidEntries.initWaveMemberEntries();
-            SensorMapModifier.replaceSensorMaps();
-            CapabilityManager.INSTANCE.register(ICloneable.class, new CloneableStorage(), Cloneable::new);
-        });
+        event.enqueueWork(EntitySpawnPlacements::initSpawnPlacements);
+        event.enqueueWork(RaidEntries::initWaveMemberEntries);
+        event.enqueueWork(SensorMapModifier::replaceSensorMaps);
+        event.enqueueWork(BiomeSpawnEntries::addCustomTypesToBiomes);
+        CapabilityManager.INSTANCE.register(ICloneable.class, new CloneableStorage(), Cloneable::new);
     }
 
 
@@ -80,20 +75,8 @@ public class DungeonsMobs
     }
 
     private void onLoadComplete(final FMLLoadCompleteEvent event){
-        EntityType.HUSK.dimensions = EntitySize.scalable(0.6F * 1.2F, 1.95F * 1.2F);
-    }
-
-    private void enqueueIMC(final InterModEnqueueEvent event)
-    {
-        // some example code to dispatch IMC to another mod
-        InterModComms.sendTo("examplemod", "helloworld", () -> { LOGGER.info("Hello world from the MDK"); return "Hello world";});
-    }
-
-    private void processIMC(final InterModProcessEvent event)
-    {
-        // some example code to receive and process InterModComms from other mods
-        LOGGER.info("Got IMC {}", event.getIMCStream().
-                map(m->m.getMessageSupplier().get()).
-                collect(Collectors.toList()));
+        if(DungeonsMobsConfig.COMMON.ENABLE_STRONGER_HUSKS.get()){
+            EntityType.HUSK.dimensions = EntitySize.scalable(0.6F * 1.2F, 1.95F * 1.2F);
+        }
     }
 }

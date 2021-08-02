@@ -17,6 +17,8 @@ public class DungeonsGearCompat {
     private static boolean IS_LOADED = false;
     private static Supplier<Item> GOLD_AXE = () -> Items.AIR;
     private static Supplier<Item> FIREBRAND = () -> Items.AIR;
+    private static Supplier<Item> RED_SNAKE = () -> Items.AIR;
+    private static Supplier<Item> STONE_SWORD = () -> Items.AIR;
 
     @SubscribeEvent
     public static void onInterMod(InterModProcessEvent event){
@@ -24,6 +26,8 @@ public class DungeonsGearCompat {
             IS_LOADED = true;
             GOLD_AXE = () -> getRegisteredItem("gold_axe");
             FIREBRAND = () -> getRegisteredItem("firebrand");
+            RED_SNAKE = () -> getRegisteredItem("red_snake");
+            STONE_SWORD = () -> getRegisteredItem("stone_sword");
         }
     }
 
@@ -37,6 +41,14 @@ public class DungeonsGearCompat {
 
     public static Supplier<Item> getFirebrand() {
         return FIREBRAND;
+    }
+
+    public static Supplier<Item> getRedSnake() {
+        return RED_SNAKE;
+    }
+
+    public static Supplier<Item> getStoneSword() {
+        return STONE_SWORD;
     }
 
     public static boolean isLoaded(){

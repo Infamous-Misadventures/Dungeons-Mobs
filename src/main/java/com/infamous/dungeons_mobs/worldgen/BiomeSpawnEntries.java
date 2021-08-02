@@ -9,6 +9,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.world.MobSpawnInfoBuilder;
@@ -18,6 +19,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -25,6 +27,18 @@ import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
 @Mod.EventBusSubscriber(modid = MODID)
 public class BiomeSpawnEntries {
+
+    public static final BiomeDictionary.Type CRIMSON = BiomeDictionary.Type.getType("CRIMSON");
+    public static final BiomeDictionary.Type WARPED = BiomeDictionary.Type.getType("WARPED");
+    public static final BiomeDictionary.Type DELTA = BiomeDictionary.Type.getType("DELTA");
+    public static final BiomeDictionary.Type SOULSAND = BiomeDictionary.Type.getType("SOULSAND");
+
+    public static void addCustomTypesToBiomes(){
+        BiomeDictionary.addTypes(Biomes.CRIMSON_FOREST, CRIMSON);
+        BiomeDictionary.addTypes(Biomes.WARPED_FOREST, WARPED);
+        BiomeDictionary.addTypes(Biomes.BASALT_DELTAS, DELTA);
+        BiomeDictionary.addTypes(Biomes.SOUL_SAND_VALLEY, SOULSAND);
+    }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onBiomeLoadingEvent(BiomeLoadingEvent event){
@@ -137,6 +151,24 @@ public class BiomeSpawnEntries {
                     DungeonsMobsConfig.COMMON.POISON_QUILL_VINE_MIN_GROUP_SIZE.get(),
                     DungeonsMobsConfig.COMMON.POISON_QUILL_VINE_MAX_GROUP_SIZE.get());
 
+        List<String> fungusThrowerBiomeTypes = (List<String>) DungeonsMobsConfig.COMMON.FUNGUS_THROWER_BIOME_TYPES.get();
+        tryAddMonsterSpawnToBiome(biomeRegistryKey, mobSpawnInfoBuilder, fungusThrowerBiomeTypes, ModEntityTypes.FUNGUS_THROWER.get(),
+                DungeonsMobsConfig.COMMON.FUNGUS_THROWER_SPAWN_WEIGHT.get(),
+                DungeonsMobsConfig.COMMON.FUNGUS_THROWER_MIN_GROUP_SIZE.get(),
+                DungeonsMobsConfig.COMMON.FUNGUS_THROWER_MAX_GROUP_SIZE.get());
+
+        List<String> zombifiedFungusThrowerBiomeTypes = (List<String>) DungeonsMobsConfig.COMMON.ZOMBIFIED_FUNGUS_THROWER_BIOME_TYPES.get();
+        tryAddMonsterSpawnToBiome(biomeRegistryKey, mobSpawnInfoBuilder, zombifiedFungusThrowerBiomeTypes, ModEntityTypes.ZOMBIFIED_FUNGUS_THROWER.get(),
+                DungeonsMobsConfig.COMMON.ZOMBIFIED_FUNGUS_THROWER_SPAWN_WEIGHT.get(),
+                DungeonsMobsConfig.COMMON.ZOMBIFIED_FUNGUS_THROWER_MIN_GROUP_SIZE.get(),
+                DungeonsMobsConfig.COMMON.ZOMBIFIED_FUNGUS_THROWER_MAX_GROUP_SIZE.get());
+
+        List<String> witherSkeletonBiomeTypes = (List<String>) DungeonsMobsConfig.COMMON.WITHER_SKELETON_BIOME_TYPES.get();
+        tryAddMonsterSpawnToBiome(biomeRegistryKey, mobSpawnInfoBuilder, witherSkeletonBiomeTypes, EntityType.WITHER_SKELETON,
+                DungeonsMobsConfig.COMMON.WITHER_SKELETON_SPAWN_WEIGHT.get(),
+                DungeonsMobsConfig.COMMON.WITHER_SKELETON_MIN_GROUP_SIZE.get(),
+                DungeonsMobsConfig.COMMON.WITHER_SKELETON_MAX_GROUP_SIZE.get());
+
         //}
     }
 
@@ -155,6 +187,12 @@ public class BiomeSpawnEntries {
         }
         if(DungeonsMobsConfig.COMMON.ENABLE_ARMORED_PILLAGER_REPLACES_PILLAGER.get()){
             handleVariantReplacement(mobSpawnInfoBuilder, EntityType.PILLAGER, ModEntityTypes.ARMORED_PILLAGER.get(), 0.9);
+        }
+        if(DungeonsMobsConfig.COMMON.ENABLE_ARMORED_PIGLIN_REPLACES_PIGLIN.get()){
+            handleVariantReplacement(mobSpawnInfoBuilder, EntityType.PIGLIN, ModEntityTypes.ARMORED_PIGLIN.get(), 0.9);
+        }
+        if(DungeonsMobsConfig.COMMON.ENABLE_ZOMBIFIED_ARMORED_PIGLIN_REPLACES_ZOMBIFIED_PIGLIN.get()){
+            handleVariantReplacement(mobSpawnInfoBuilder, EntityType.ZOMBIFIED_PIGLIN, ModEntityTypes.ZOMBIFIED_ARMORED_PIGLIN.get(), 0.9);
         }
         if(DungeonsMobsConfig.COMMON.ENABLE_JUNGLE_ZOMBIE_REPLACES_ZOMBIE.get()){
             handleVariantReplacementWithCategoryCheck(mobSpawnInfoBuilder, foundCategory, Biome.Category.JUNGLE, EntityType.ZOMBIE, ModEntityTypes.JUNGLE_ZOMBIE.get(), 0.8);

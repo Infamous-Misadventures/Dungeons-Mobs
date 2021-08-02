@@ -6,6 +6,7 @@ import net.minecraft.entity.projectile.PotionEntity;
 import net.minecraft.entity.projectile.SnowballEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ShootableItem;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -13,9 +14,16 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
 
-public class BlueNethershroomItem extends Item {
+import java.util.function.Predicate;
+
+public class BlueNethershroomItem extends ShootableItem {
    public BlueNethershroomItem(Item.Properties properties) {
       super(properties);
+   }
+
+   @Override
+   public Predicate<ItemStack> getAllSupportedProjectiles() {
+      return itemStack -> itemStack.getItem() instanceof BlueNethershroomItem;
    }
 
    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
@@ -33,5 +41,10 @@ public class BlueNethershroomItem extends Item {
       }
 
       return ActionResult.sidedSuccess(itemstack, world.isClientSide());
+   }
+
+
+   public int getDefaultProjectileRange() {
+      return 8;
    }
 }

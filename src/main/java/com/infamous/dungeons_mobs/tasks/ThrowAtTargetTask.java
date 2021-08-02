@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.tasks;
 
 import com.google.common.collect.ImmutableMap;
+import com.infamous.dungeons_mobs.entities.piglin.ai.FungusThrowerAi;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.brain.BrainUtil;
@@ -12,6 +13,7 @@ import net.minecraft.util.math.EntityPosWrapper;
 import net.minecraft.world.server.ServerWorld;
 
 import java.util.function.BiConsumer;
+import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 public class ThrowAtTargetTask<E extends MobEntity> extends Task<E> {
@@ -26,8 +28,8 @@ public class ThrowAtTargetTask<E extends MobEntity> extends Task<E> {
    }
 
    protected boolean checkExtraStartConditions(ServerWorld serverWorld, E thrower) {
-      LivingEntity livingentity = getAttackTarget(thrower);
-      return thrower.isHolding(this.throwItemPredicate) && BrainUtil.canSee(thrower, livingentity) && BrainUtil.isWithinAttackRange(thrower, livingentity, 0);
+      LivingEntity attackTarget = getAttackTarget(thrower);
+      return thrower.isHolding(this.throwItemPredicate) && BrainUtil.canSee(thrower, attackTarget) && BrainUtil.isWithinAttackRange(thrower, attackTarget, 0);
    }
 
    protected boolean canStillUse(ServerWorld serverWorld, E thrower, long gameTime) {
@@ -46,7 +48,7 @@ public class ThrowAtTargetTask<E extends MobEntity> extends Task<E> {
       }
       if (this.attackDelay <= 0) {
          this.performRangedAttack.accept(thrower, attackTarget);
-         this.attackDelay = 20 + thrower.getRandom().nextInt(20);
+         this.attackDelay = 50 + thrower.getRandom().nextInt(20); // average delay of 60 ticks
       }
    }
 

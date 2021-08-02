@@ -9,6 +9,7 @@ import com.infamous.dungeons_mobs.client.renderer.jungle.PoisonQuillVineRenderer
 import com.infamous.dungeons_mobs.client.renderer.jungle.QuickGrowingVineRenderer;
 import com.infamous.dungeons_mobs.client.renderer.jungle.WhispererRenderer;
 import com.infamous.dungeons_mobs.client.renderer.piglin.CustomPiglinRenderer;
+import com.infamous.dungeons_mobs.client.renderer.projectiles.BlueNethershroomRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.CobwebProjectileRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.CustomFireballRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.SlimeballRenderer;
@@ -84,16 +85,17 @@ public class ClientEvents {
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SQUALL_GOLEM.get(), SquallGolemRenderer::new);
 
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_PIGLIN.get(), manager -> new CustomPiglinRenderer(manager, false));
-        RenderingRegistry.registerEntityRenderingHandler(EntityType.PIGLIN, manager -> new CustomPiglinRenderer(manager, false));
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.FUNGUS_THROWER.get(), manager -> new CustomPiglinRenderer(manager, false));
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ZOMBIFIED_ARMORED_PIGLIN.get(), manager -> new CustomPiglinRenderer(manager, true));
-        RenderingRegistry.registerEntityRenderingHandler(EntityType.ZOMBIFIED_PIGLIN, manager -> new CustomPiglinRenderer(manager, true));
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ZOMBIFIED_FUNGUS_THROWER.get(), manager -> new CustomPiglinRenderer(manager, true));
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_PIGLIN.get(), manager -> new CustomPiglinRenderer(manager, false, false));
+        RenderingRegistry.registerEntityRenderingHandler(EntityType.PIGLIN, manager -> new CustomPiglinRenderer(manager, false, false));
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.FUNGUS_THROWER.get(), manager -> new CustomPiglinRenderer(manager, false, true));
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ZOMBIFIED_ARMORED_PIGLIN.get(), manager -> new CustomPiglinRenderer(manager, true, false));
+        RenderingRegistry.registerEntityRenderingHandler(EntityType.ZOMBIFIED_PIGLIN, manager -> new CustomPiglinRenderer(manager, true, false));
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ZOMBIFIED_FUNGUS_THROWER.get(), manager -> new CustomPiglinRenderer(manager, true, true));
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WRAITH_FIREBALL.get(), CustomFireballRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SLIMEBALL.get(), SlimeballRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.COBWEB_PROJECTILE.get(), CobwebProjectileRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.BLUE_NETHERSHROOM.get(), BlueNethershroomRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.GEOMANCER_WALL.get(), GeomancerWallRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.GEOMANCER_BOMB.get(), GeomancerBombRenderer::new);

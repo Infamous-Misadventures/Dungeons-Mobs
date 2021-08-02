@@ -2,6 +2,7 @@ package com.infamous.dungeons_mobs.client.renderer.illager;
 
 import com.infamous.dungeons_mobs.client.models.armor.IllagerArmorModel;
 import com.infamous.dungeons_mobs.client.models.illager.WindcallerModel;
+import com.infamous.dungeons_mobs.client.renderer.layer.WindcallerCapeLayer;
 import com.infamous.dungeons_mobs.entities.illagers.WindcallerEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;

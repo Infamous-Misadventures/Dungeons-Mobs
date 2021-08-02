@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.config;
 
 import com.google.common.collect.Lists;
+import cpw.mods.modlauncher.LaunchPluginHandler;
 import net.minecraftforge.common.ForgeConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -21,6 +22,8 @@ public class DungeonsMobsConfig {
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ICY_CREEPER_REPLACES_CREEPER;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_JUNGLE_ZOMBIE_REPLACES_ZOMBIE;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_MOSSY_SKELETON_REPLACES_SKELETON;
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_PIGLIN_REPLACES_PIGLIN;
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ZOMBIFIED_ARMORED_PIGLIN_REPLACES_ZOMBIFIED_PIGLIN;
 
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> ICEOLOGER_BIOME_TYPES;
         public final ForgeConfigSpec.ConfigValue<Integer> ICEOLOGER_SPAWN_WEIGHT;
@@ -98,6 +101,21 @@ public class DungeonsMobsConfig {
         public final ForgeConfigSpec.ConfigValue<Integer> POISON_QUILL_VINE_SPAWN_WEIGHT;
         public final ForgeConfigSpec.ConfigValue<Integer> POISON_QUILL_VINE_MIN_GROUP_SIZE;
         public final ForgeConfigSpec.ConfigValue<Integer> POISON_QUILL_VINE_MAX_GROUP_SIZE;
+
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> FUNGUS_THROWER_BIOME_TYPES;
+        public final ForgeConfigSpec.ConfigValue<Integer> FUNGUS_THROWER_SPAWN_WEIGHT;
+        public final ForgeConfigSpec.ConfigValue<Integer> FUNGUS_THROWER_MIN_GROUP_SIZE;
+        public final ForgeConfigSpec.ConfigValue<Integer> FUNGUS_THROWER_MAX_GROUP_SIZE;
+
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> ZOMBIFIED_FUNGUS_THROWER_BIOME_TYPES;
+        public final ForgeConfigSpec.ConfigValue<Integer> ZOMBIFIED_FUNGUS_THROWER_SPAWN_WEIGHT;
+        public final ForgeConfigSpec.ConfigValue<Integer> ZOMBIFIED_FUNGUS_THROWER_MIN_GROUP_SIZE;
+        public final ForgeConfigSpec.ConfigValue<Integer> ZOMBIFIED_FUNGUS_THROWER_MAX_GROUP_SIZE;
+
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> WITHER_SKELETON_BIOME_TYPES;
+        public final ForgeConfigSpec.ConfigValue<Integer> WITHER_SKELETON_SPAWN_WEIGHT;
+        public final ForgeConfigSpec.ConfigValue<Integer> WITHER_SKELETON_MIN_GROUP_SIZE;
+        public final ForgeConfigSpec.ConfigValue<Integer> WITHER_SKELETON_MAX_GROUP_SIZE;
 
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_BIOME_SPECIFIC_RAIDERS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_MOUNTAINEERS_IN_RAIDS;
@@ -177,6 +195,14 @@ public class DungeonsMobsConfig {
                     .comment("Enable Armored Pillagers replacing 10% of Pillager spawns in the biomes they can spawn in. \n" +
                             "If you prefer to not have them do this, disable this feature. [true / false]")
                     .define("enableArmoredPillagerReplacesPillager", true);
+            ENABLE_ARMORED_PIGLIN_REPLACES_PIGLIN = builder
+                    .comment("Enable Armored Piglins replacing 10% of Piglins spawns in the biomes they can spawn in. \n" +
+                            "If you prefer to not have them do this, disable this feature. [true / false]")
+                    .define("enableArmoredPiglinReplacesPiglin", true);
+            ENABLE_ZOMBIFIED_ARMORED_PIGLIN_REPLACES_ZOMBIFIED_PIGLIN = builder
+                    .comment("Enable Zombified Armored Piglins replacing 10% of Zombified Piglin spawns in the biomes they can spawn in. \n" +
+                            "If you prefer to not have them do this, disable this feature. [true / false]")
+                    .define("enabledArmoredZombifiedPiglinReplacesZombifiedPiglin", true);
 
             ICEOLOGER_BIOME_TYPES = builder
                     .comment("Add biome types that the Iceologer can spawn in. \n"
@@ -505,6 +531,79 @@ public class DungeonsMobsConfig {
             POISON_QUILL_VINE_MAX_GROUP_SIZE = builder
                     .comment("Maximum spawn group size of Poison-Quill Vines in the biomes they can spawn in. [default:1]")
                     .defineInRange("poisonQuillVineMaxGroupSize", 1, 0, 128);
+
+            FUNGUS_THROWER_BIOME_TYPES = builder
+                    .comment("Add biome types that the Fungus Thrower can spawn in. \n"
+                            + "Put a \"!\" before the type to prevent spawning in that biome type. \n"
+                            + "Leave this blank if you don't want them to spawn at all.")
+                    .defineList("fungusThrowerBiomeTypes", Lists.newArrayList(
+                            "NETHER",
+                            "CRIMSON",
+                            "!WARPED",
+                            "!SOULSAND",
+                            "!DELTA",
+                            "!OVERWORLD",
+                            "!END"
+                            ),
+                            (itemRaw) -> itemRaw instanceof String);
+            FUNGUS_THROWER_SPAWN_WEIGHT = builder
+                    .comment("Spawn weight of Fungus Throwers in the biomes they can spawn in. [default:5]")
+                    .defineInRange("fungusThrowerSpawnWeight", 5, 0, 1024);
+            FUNGUS_THROWER_MIN_GROUP_SIZE = builder
+                    .comment("Minimum spawn group size of Fungus Throwers in the biomes they can spawn in. [default:1]")
+                    .defineInRange("fungusThrowerMinGroupSize", 3, 0, 128);
+            FUNGUS_THROWER_MAX_GROUP_SIZE = builder
+                    .comment("Maximum spawn group size of Fungus Throwers in the biomes they can spawn in. [default:1]")
+                    .defineInRange("fungusThrowerMaxGroupSize", 4, 0, 128);
+
+            ZOMBIFIED_FUNGUS_THROWER_BIOME_TYPES = builder
+                    .comment("Add biome types that the Zombified Fungus Thrower can spawn in. \n"
+                            + "Put a \"!\" before the type to prevent spawning in that biome type. \n"
+                            + "Leave this blank if you don't want them to spawn at all.")
+                    .defineList("zombifiedFungusThrowerBiomeTypes", Lists.newArrayList(
+                            "NETHER",
+                            "CRIMSON",
+                            "!WARPED",
+                            "!SOULSAND",
+                            "!DELTA",
+                            "!OVERWORLD",
+                            "!END"
+                            ),
+                            (itemRaw) -> itemRaw instanceof String);
+            ZOMBIFIED_FUNGUS_THROWER_SPAWN_WEIGHT = builder
+                    .comment("Spawn weight of Zombified Fungus Throwers in the biomes they can spawn in. [default:5]")
+                    .defineInRange("zombifiedFungusThrowerSpawnWeight", 5, 0, 1024);
+            ZOMBIFIED_FUNGUS_THROWER_MIN_GROUP_SIZE = builder
+                    .comment("Minimum spawn group size of Zombified Fungus Throwers in the biomes they can spawn in. [default:1]")
+                    .defineInRange("zombifiedFungusThrowerMinGroupSize", 3, 0, 128);
+            ZOMBIFIED_FUNGUS_THROWER_MAX_GROUP_SIZE = builder
+                    .comment("Maximum spawn group size of Zombified Fungus Throwers in the biomes they can spawn in. [default:1]")
+                    .defineInRange("zombifiedFungusThrowerMaxGroupSize", 4, 0, 128);
+
+
+            WITHER_SKELETON_BIOME_TYPES = builder
+                    .comment("Add biome types that the Wither Skeleton can spawn in. \n"
+                            + "Put a \"!\" before the type to prevent spawning in that biome type. \n"
+                            + "Leave this blank if you don't want them to spawn at all.")
+                    .defineList("witherSkeletonBiomeTypes", Lists.newArrayList(
+                            "NETHER",
+                            "SOULSAND",
+                            "!CRIMSON",
+                            "!WARPED",
+                            "!DELTA",
+                            "!OVERWORLD",
+                            "!END"
+                            ),
+                            (itemRaw) -> itemRaw instanceof String);
+            WITHER_SKELETON_SPAWN_WEIGHT = builder
+                    .comment("Spawn weight of Wither Skeletons in the biomes they can spawn in. [default:5]")
+                    .defineInRange("witherSkeletonSpawnWeight", 5, 0, 1024);
+            WITHER_SKELETON_MIN_GROUP_SIZE = builder
+                    .comment("Minimum spawn group size of Wither Skeletons in the biomes they can spawn in. [default:1]")
+                    .defineInRange("witherSkeletonMinGroupSize", 1, 0, 128);
+            WITHER_SKELETON_MAX_GROUP_SIZE = builder
+                    .comment("Maximum spawn group size of Wither Skeletons in the biomes they can spawn in. [default:1]")
+                    .defineInRange("witherSkeletonMaxGroupSize", 4, 0, 128);
 
             builder.pop();
 

@@ -1,36 +1,34 @@
 package com.infamous.dungeons_mobs.entities.projectiles;
 
-import java.util.List;
-import javax.annotation.Nullable;
-
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModItems;
-import net.minecraft.entity.AreaEffectCloudEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.IRendersAsItem;
-import net.minecraft.entity.LivingEntity;
+import com.infamous.dungeons_mobs.utils.PotionHelper;
+import net.minecraft.entity.*;
 import net.minecraft.entity.projectile.ProjectileItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.potion.Effect;
+import net.minecraft.network.IPacket;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionUtils;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.EntityRayTraceResult;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.network.NetworkHooks;
+
+import java.util.List;
 
 @OnlyIn(
    value = Dist.CLIENT,
    _interface = IRendersAsItem.class
 )
 public class BlueNethershroomEntity extends ProjectileItemEntity implements IRendersAsItem {
+
+   public static final int LIGHT_BLUE_HEX_COLOR_CODE = 0x00e0ff;
 
    public BlueNethershroomEntity(EntityType<? extends BlueNethershroomEntity> entityType, World world) {
       super(entityType, world);
@@ -44,6 +42,10 @@ public class BlueNethershroomEntity extends ProjectileItemEntity implements IRen
       super(ModEntityTypes.BLUE_NETHERSHROOM.get(), x, y, z, world);
    }
 
+   public static void setLightBluePotionColor(ItemStack itemStack){
+      PotionHelper.setColor(itemStack, LIGHT_BLUE_HEX_COLOR_CODE);
+   }
+
    protected Item getDefaultItem() {
       return ModItems.BLUE_NETHERSHROOM.get();
    }
@@ -54,17 +56,18 @@ public class BlueNethershroomEntity extends ProjectileItemEntity implements IRen
 
    protected void onHit(RayTraceResult rtr) {
       super.onHit(rtr);
-      if (!this.level.isClientSide) {
-         ItemStack itemstack = this.getItem();
-         Potion potion = PotionUtils.getPotion(itemstack);
-         List<EffectInstance> list = PotionUtils.getMobEffects(itemstack);
-         if (!list.isEmpty()) {
+      ItemStack itemstack = this.getItem();
+      Potion potion = PotionUtils.getPotion(itemstack);
+      List<EffectInstance> list = PotionUtils.getMobEffects(itemstack);
+      if (!list.isEmpty()) {
+         if(!this.level.isClientSide){
             this.makeAreaOfEffectCloud(itemstack, potion);
+            this.remove();
+         } else{
+            BlockPos blockPos = this.blockPosition();
+            int color = PotionUtils.getColor(potion);
+            com.infamous.dungeons_mobs.client.util.ParticleGenerator.generatePotionImpact(this.level, potion, this.getItem(), blockPos, color, SoundEvents.FUNGUS_BREAK);
          }
-
-         int levelEventId = potion.hasInstantEffects() ? 2007 : 2002;
-         this.level.levelEvent(levelEventId, this.blockPosition(), PotionUtils.getColor(itemstack));
-         this.remove();
       }
    }
 
@@ -91,5 +94,10 @@ public class BlueNethershroomEntity extends ProjectileItemEntity implements IRen
       }
 
       this.level.addFreshEntity(aoeCloud);
+   }
+
+   @Override
+   public IPacket<?> getAddEntityPacket() {
+      return NetworkHooks.getEntitySpawningPacket(this);
    }
 }

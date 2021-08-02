@@ -1,5 +1,6 @@
 package com.infamous.dungeons_mobs.client.renderer.illager;
 
+import com.infamous.dungeons_mobs.client.renderer.layer.IceologerCapeLayer;
 import com.infamous.dungeons_mobs.entities.illagers.IceologerEntity;
 import com.infamous.dungeons_mobs.client.models.armor.IllagerArmorModel;
 import com.infamous.dungeons_mobs.client.models.illager.IllagerBipedModel;

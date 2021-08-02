@@ -1,12 +1,13 @@
 package com.infamous.dungeons_mobs.entities.piglin;
 
-import com.infamous.dungeons_mobs.goals.SmartZombieAttackGoal;
+import com.infamous.dungeons_mobs.entities.piglin.ai.FungusThrowerAi;
+import com.infamous.dungeons_mobs.goals.SimpleRangedAttackGoal;
 import com.infamous.dungeons_mobs.items.BlueNethershroomItem;
-import com.infamous.dungeons_mobs.mixin.GoalSelectorAccessor;
 import com.infamous.dungeons_mobs.mod.ModItems;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.monster.ZombifiedPiglinEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ShootableItem;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
@@ -16,26 +17,14 @@ public class ZombifiedFungusThrowerEntity extends ZombifiedPiglinEntity {
     }
 
     @Override
+    public boolean canFireProjectileWeapon(ShootableItem shootableItem) {
+        return super.canFireProjectileWeapon(shootableItem) || shootableItem instanceof BlueNethershroomItem;
+    }
+
+    @Override
     protected void addBehaviourGoals() {
         super.addBehaviourGoals();
-        ((GoalSelectorAccessor)this.goalSelector)
-                .getAvailableGoals()
-                .removeIf(pg -> pg.getPriority() == 2 && pg.getGoal() instanceof SmartZombieAttackGoal);
-        this.goalSelector.addGoal(2, new SmartZombieAttackGoal(this, 1.0D, false){
-            @Override
-            public boolean canUse() {
-                return !isHoldingBlueNethershroom() && super.canUse();
-            }
-
-            @Override
-            public boolean canContinueToUse() {
-                return !isHoldingBlueNethershroom() && super.canContinueToUse();
-            }
-
-            private boolean isHoldingBlueNethershroom() {
-                return this.mob.isHolding(item -> item instanceof BlueNethershroomItem);
-            }
-        });
+        this.goalSelector.addGoal(2, new SimpleRangedAttackGoal<>(this, FungusThrowerAi.FUNGUS_ITEM_PREDICATE, FungusThrowerAi::performFungusThrow, 0.75D, 60, 6.0F));
     }
 
     @Override

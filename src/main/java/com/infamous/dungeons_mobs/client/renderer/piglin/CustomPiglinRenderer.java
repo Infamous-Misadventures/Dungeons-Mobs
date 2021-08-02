@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.client.renderer.piglin;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
+import com.infamous.dungeons_mobs.client.renderer.layer.FungusSackLayer;
 import com.infamous.dungeons_mobs.interfaces.IArmoredMob;
 import com.infamous.dungeons_mobs.interfaces.ISmartCrossbowUser;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -16,8 +17,11 @@ import java.util.Map;
 public class CustomPiglinRenderer extends PiglinRenderer {
    public static final Map<EntityType<?>, Map<String, ResourceLocation>> RESOURCE_LOCATION_MAP = new HashMap<>();
 
-   public CustomPiglinRenderer(EntityRendererManager rendererManager, boolean isZombified) {
+   public CustomPiglinRenderer(EntityRendererManager rendererManager, boolean isZombified, boolean isFungusThrower) {
       super(rendererManager, isZombified);
+      if(isFungusThrower){
+         this.addLayer(new FungusSackLayer<>(this));
+      }
    }
 
    @Override

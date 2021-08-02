@@ -9,6 +9,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.monster.ZombifiedPiglinEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
@@ -40,6 +41,16 @@ public class ZombifiedArmoredPiglinEntity extends ZombifiedPiglinEntity implemen
                 .add(Attributes.KNOCKBACK_RESISTANCE);
     }
 
+    @Override
+    public void setBaby(boolean baby) {
+        // NO-OP
+    }
+
+    @Override
+    public boolean isBaby() {
+        return false;
+    }
+
     @Nullable
     @Override
     public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
@@ -51,14 +62,16 @@ public class ZombifiedArmoredPiglinEntity extends ZombifiedPiglinEntity implemen
 
     @Override
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficultyInstance) {
-        if(this.hasStrongArmor()){
-            this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Items.GOLDEN_HELMET));
-        }
-
         if (this.random.nextFloat() < 0.5D) {
             this.setRangedWeapon();
         } else{
             this.setMeleeWeapon();
+        }
+
+        if(this.hasStrongArmor()){
+            this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Items.GOLDEN_HELMET));
+        } else if(this.isHolding(item -> item instanceof CrossbowItem)){
+            this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Items.NETHERITE_HELMET));
         }
     }
 

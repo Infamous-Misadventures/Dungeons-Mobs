@@ -1,8 +1,8 @@
-package com.infamous.dungeons_mobs.client.renderer.illager;
+package com.infamous.dungeons_mobs.client.renderer.layer;
 
 import com.infamous.dungeons_mobs.client.models.ModdedCapeModel;
-import com.infamous.dungeons_mobs.client.models.illager.IllagerBipedModel;
-import com.infamous.dungeons_mobs.entities.illagers.IceologerEntity;
+import com.infamous.dungeons_mobs.client.models.illager.WindcallerModel;
+import com.infamous.dungeons_mobs.entities.illagers.WindcallerEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -22,17 +22,17 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
 @OnlyIn(Dist.CLIENT)
-public class IceologerCapeLayer extends LayerRenderer<IceologerEntity, IllagerBipedModel<IceologerEntity>> {
+public class WindcallerCapeLayer extends LayerRenderer<WindcallerEntity, WindcallerModel<WindcallerEntity>> {
 
-    private static final ResourceLocation ICEOLOGER_CAPE_TEXTURE = new ResourceLocation(MODID,"textures/entity/illager/iceologer_cape.png");
+    private static final ResourceLocation WINDCALLER_CAPE_TEXTURE = new ResourceLocation(MODID,"textures/entity/illager/windcaller_cape.png");
 
-    ModdedCapeModel iceologerCapeModel = new ModdedCapeModel(0.0F);
+    ModdedCapeModel windcallerCapeModel = new ModdedCapeModel(0.0F);
 
-    public IceologerCapeLayer(IEntityRenderer<IceologerEntity, IllagerBipedModel<IceologerEntity>> iceologerRendererIn) {
-        super(iceologerRendererIn);
+    public WindcallerCapeLayer(IEntityRenderer<WindcallerEntity, WindcallerModel<WindcallerEntity>> windcallerRendererIn) {
+        super(windcallerRendererIn);
     }
 
-    public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, IceologerEntity illagerEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, WindcallerEntity illagerEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if (!illagerEntity.isInvisible()) {
             ItemStack itemstack = illagerEntity.getItemBySlot(EquipmentSlotType.CHEST);
             if (itemstack.getItem() != Items.ELYTRA) {
@@ -63,8 +63,8 @@ public class IceologerCapeLayer extends LayerRenderer<IceologerEntity, IllagerBi
                 matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(6.0F + f2 / 2.0F + f1));
                 matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(f3 / 2.0F));
                 matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(180.0F - f3 / 2.0F));
-                IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.entitySolid(ICEOLOGER_CAPE_TEXTURE));
-                this.iceologerCapeModel.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY);
+                IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.entitySolid(WINDCALLER_CAPE_TEXTURE));
+                this.windcallerCapeModel.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY);
                 matrixStackIn.popPose();
             }
         }

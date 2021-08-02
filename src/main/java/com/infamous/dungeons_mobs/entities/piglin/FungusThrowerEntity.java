@@ -1,22 +1,22 @@
 package com.infamous.dungeons_mobs.entities.piglin;
 
 import com.infamous.dungeons_mobs.entities.piglin.ai.FungusThrowerAi;
+import com.infamous.dungeons_mobs.interfaces.ISmartCrossbowUser;
+import com.infamous.dungeons_mobs.items.BlueNethershroomItem;
 import com.infamous.dungeons_mobs.mixin.PiglinAccessor;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModItems;
+import com.infamous.dungeons_mobs.utils.PiglinHelper;
 import com.mojang.serialization.Dynamic;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.brain.Brain;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.monster.piglin.PiglinEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ShootableItem;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.Hand;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
@@ -31,6 +31,11 @@ public class FungusThrowerEntity extends PiglinEntity {
     }
 
     @Override
+    public boolean canFireProjectileWeapon(ShootableItem shootableItem) {
+        return super.canFireProjectileWeapon(shootableItem) || shootableItem instanceof BlueNethershroomItem;
+    }
+
+    @Override
     protected Brain<?> makeBrain(Dynamic<?> dynamic) {
         Brain<?> brain = super.makeBrain(dynamic);
         //noinspection unchecked
@@ -42,6 +47,9 @@ public class FungusThrowerEntity extends PiglinEntity {
     @Override
     public ILivingEntityData finalizeSpawn(IServerWorld serverWorld, DifficultyInstance difficultyInstance, SpawnReason spawnReason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT compoundNBT) {
         ILivingEntityData spawnData = super.finalizeSpawn(serverWorld, difficultyInstance, spawnReason, spawnDataIn, compoundNBT);
+        if(this instanceof ISmartCrossbowUser && ((ISmartCrossbowUser) this).isCrossbowUser()){
+            ((ISmartCrossbowUser) this).setCrossbowUser(false);
+        }
         if(spawnReason != SpawnReason.STRUCTURE){
             if(this.isAdult()){
                 this.setItemSlot(EquipmentSlotType.MAINHAND, ModItems.BLUE_NETHERSHROOM.get().getDefaultInstance());
@@ -52,16 +60,9 @@ public class FungusThrowerEntity extends PiglinEntity {
 
     @Override
     protected void finishConversion(ServerWorld serverWorld) {
-        if (this.getBrain().hasMemoryValue(MemoryModuleType.ADMIRING_ITEM) && !this.getOffhandItem().isEmpty()) {
-            this.spawnAtLocation(this.getOffhandItem());
-            this.setItemInHand(Hand.OFF_HAND, ItemStack.EMPTY);
-        }
+        PiglinHelper.stopAdmiringItem(this);
         ((PiglinAccessor)this).getInventory().removeAllItems().forEach(this::spawnAtLocation);
-        ZombifiedFungusThrowerEntity zombifiedFungusThrower = this.convertTo(ModEntityTypes.ZOMBIFIED_FUNGUS_THROWER.get(), true);
-        if (zombifiedFungusThrower != null) {
-            zombifiedFungusThrower.addEffect(new EffectInstance(Effects.CONFUSION, 200, 0));
-            net.minecraftforge.event.ForgeEventFactory.onLivingConvert(this, zombifiedFungusThrower);
-        }
+        PiglinHelper.zombify(ModEntityTypes.ZOMBIFIED_FUNGUS_THROWER.get(), this);
     }
 
     @Override
