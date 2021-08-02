@@ -2,6 +2,7 @@ package com.infamous.dungeons_mobs.entities.piglin;
 
 import com.infamous.dungeons_mobs.DungeonsGearCompat;
 import com.infamous.dungeons_mobs.interfaces.IArmoredMob;
+import com.infamous.dungeons_mobs.mod.ModItems;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.SpawnReason;
@@ -69,9 +70,9 @@ public class ZombifiedArmoredPiglinEntity extends ZombifiedPiglinEntity implemen
         }
 
         if(this.hasStrongArmor()){
-            this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Items.GOLDEN_HELMET));
+            this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.CRACKED_GOLD_PIGLIN_HELMET.get()));
         } else if(this.isHolding(item -> item instanceof CrossbowItem)){
-            this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Items.NETHERITE_HELMET));
+            this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.CRACKED_NETHERITE_PIGLIN_HELMET.get()));
         }
     }
 

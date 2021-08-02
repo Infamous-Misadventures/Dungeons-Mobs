@@ -1,5 +1,6 @@
 package com.infamous.dungeons_mobs.client.renderer.illager;
 
+import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.client.models.illager.IllagerBipedModel;
 import com.infamous.dungeons_mobs.client.models.armor.IllagerArmorModel;
 import com.infamous.dungeons_mobs.entities.illagers.IllusionerCloneEntity;
@@ -15,7 +16,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class IllusionerCloneRenderer extends MobRenderer<IllusionerCloneEntity, IllagerBipedModel<IllusionerCloneEntity>> {
 
-    private static final ResourceLocation ILLUSIONER_CLONE_TEXTURE = new ResourceLocation("textures/entity/illager/illusioner.png");
+    private static final ResourceLocation ILLUSIONER_CLONE_TEXTURE = new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/illusioner.png");
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public IllusionerCloneRenderer(EntityRendererManager renderManagerIn) {

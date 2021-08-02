@@ -7,6 +7,8 @@ import net.minecraft.entity.projectile.SnowballEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ShootableItem;
+import net.minecraft.potion.PotionUtils;
+import net.minecraft.potion.Potions;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -30,7 +32,9 @@ public class BlueNethershroomItem extends ShootableItem {
       ItemStack itemstack = player.getItemInHand(hand);
       if (!world.isClientSide) {
          BlueNethershroomEntity blueNethershroom = new BlueNethershroomEntity(world, player);
-         blueNethershroom.setItem(itemstack);
+         ItemStack blueNethershroomStack = blueNethershroom.getItem();
+         BlueNethershroomEntity.setLightBluePotionColor(blueNethershroomStack);
+         blueNethershroom.setItem(PotionUtils.setPotion(blueNethershroomStack, Potions.POISON));
          blueNethershroom.shootFromRotation(player, player.xRot, player.yRot, -20.0F, 0.5F, 1.0F);
          world.addFreshEntity(blueNethershroom);
       }

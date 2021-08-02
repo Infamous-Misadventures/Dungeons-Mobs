@@ -5,32 +5,16 @@ import javax.annotation.Nullable;
 import com.infamous.dungeons_mobs.capabilities.CloneableHelper;
 import com.infamous.dungeons_mobs.capabilities.ICloneable;
 import com.infamous.dungeons_mobs.mixin.GoalSelectorAccessor;
-import net.minecraft.entity.CreatureAttribute;
+import com.infamous.dungeons_mobs.utils.ModProjectileHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.HurtByTargetGoal;
-import net.minecraft.entity.ai.goal.LookAtGoal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.ai.goal.RandomWalkingGoal;
-import net.minecraft.entity.ai.goal.RangedBowAttackGoal;
-import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.monster.*;
-import net.minecraft.entity.passive.IronGolemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.entity.projectile.ProjectileHelper;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.BowItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.entity.projectile.FireworkRocketEntity;
+import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
@@ -39,7 +23,6 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
@@ -83,26 +66,35 @@ public class DungeonsIllusionerEntity extends IllusionerEntity implements IRange
    }
 
    @Override
-   public boolean hurt(DamageSource damageSource, float amount) {
-      boolean didHurt = super.hurt(damageSource, amount);
-      if(didHurt){
-         ICloneable cloneable = CloneableHelper.getCloneableCapability(this);
-         if(cloneable != null && this.level instanceof ServerWorld){
-            UUID[] cloneUUIDs = cloneable.getClones();
-            for(int i = 0; i < cloneUUIDs.length; i++){
-               UUID currentCloneUUID = cloneUUIDs[i];
-               if(currentCloneUUID != null){
-                  ServerWorld serverWorld = (ServerWorld) this.level;
-                  Entity clone = serverWorld.getEntity(currentCloneUUID);
-                  if(clone != null){
-                     clone.remove();
-                  }
-                  cloneUUIDs[i] = null;
+   public void performRangedAttack(LivingEntity target, float p_82196_2_) {
+      ItemStack fireworkRocket = ModProjectileHelper.createRocket(DyeColor.PINK);
+      FireworkRocketEntity fireworkrocketentity = new FireworkRocketEntity(this.level, fireworkRocket, this, this.getX(), this.getEyeY() - (double)0.15F, this.getZ(), true);
+      double xDifference = target.getX() - this.getX();
+      double yDifference = target.getY(0.3333333333333333D) - fireworkrocketentity.getY();
+      double zDifference = target.getZ() - this.getZ();
+      double horizontalDifference = (double) MathHelper.sqrt(xDifference * xDifference + zDifference * zDifference);
+      fireworkrocketentity.shoot(xDifference, yDifference + horizontalDifference * (double)0.2F, zDifference, 1.6F, (float)(14 - this.level.getDifficulty().getId() * 4));
+      this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+      this.level.addFreshEntity(fireworkrocketentity);
+   }
+
+   @Override
+   public void die(DamageSource damageSource) {
+      ICloneable cloneable = CloneableHelper.getCloneableCapability(this);
+      if(cloneable != null && this.level instanceof ServerWorld){
+         UUID[] cloneUUIDs = cloneable.getClones();
+         for(int i = 0; i < cloneUUIDs.length; i++){
+            UUID currentCloneUUID = cloneUUIDs[i];
+            if(currentCloneUUID != null){
+               ServerWorld serverWorld = (ServerWorld) this.level;
+               Entity clone = serverWorld.getEntity(currentCloneUUID);
+               if(clone != null){
+                  clone.remove();
                }
+               cloneUUIDs[i] = null;
             }
          }
       }
-      return didHurt;
    }
 
    class MirrorSpellGoal extends SpellcastingIllagerEntity.UseSpellGoal {

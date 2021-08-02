@@ -127,5 +127,9 @@
   "item.dungeons_mobs.fungus_thrower_spawn_egg": "Fungus Thrower Spawn Egg",
   "entity.dungeons_mobs.zombified_fungus_thrower": "Zombified Fungus Thrower",
   "item.dungeons_mobs.zombified_fungus_thrower_spawn_egg": "Zombified Fungus Thrower Spawn Egg",
-  "item.dungeons_mobs.blue_nethershroom": "Blue Nethershroom"
+  "item.dungeons_mobs.blue_nethershroom": "Blue Nethershroom",
+  "item.dungeons_mobs.netherite_piglin_helmet": "Netherite Piglin Helmet",
+  "item.dungeons_mobs.cracked_netherite_piglin_helmet": "Cracked Netherite Piglin Helmet",
+  "item.dungeons_mobs.gold_piglin_helmet": "Gold Piglin Helmet",
+  "item.dungeons_mobs.cracked_gold_piglin_helmet": "Cracked Gold Piglin Helmet"
 }

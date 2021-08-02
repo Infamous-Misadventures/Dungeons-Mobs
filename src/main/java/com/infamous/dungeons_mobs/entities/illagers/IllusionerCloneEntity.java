@@ -15,6 +15,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.BowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
@@ -213,7 +214,7 @@ public class IllusionerCloneEntity extends AbstractIllagerEntity implements IRan
      * Attack the specified entity using a ranged attack.
      */
     public void performRangedAttack(LivingEntity target, float distanceFactor) {
-        ItemStack itemstack = this.getProjectile(this.getItemInHand(ProjectileHelper.getWeaponHoldingHand(this, Items.BOW)));
+        ItemStack itemstack = this.getProjectile(this.getItemInHand(ProjectileHelper.getWeaponHoldingHand(this, item -> item instanceof BowItem)));
         AbstractArrowEntity abstractarrowentity = ProjectileHelper.getMobArrow(this, itemstack, distanceFactor);
         if (this.getMainHandItem().getItem() instanceof net.minecraft.item.BowItem)
             abstractarrowentity = ((net.minecraft.item.BowItem)this.getMainHandItem().getItem()).customArrow(abstractarrowentity);
@@ -228,7 +229,15 @@ public class IllusionerCloneEntity extends AbstractIllagerEntity implements IRan
 
     @OnlyIn(Dist.CLIENT)
     public AbstractIllagerEntity.ArmPose getArmPose() {
-        return this.isAggressive() ? AbstractIllagerEntity.ArmPose.BOW_AND_ARROW : ArmPose.NEUTRAL;
+        if(this.isAggressive()){
+            if(this.isHolding(item -> item instanceof BowItem)){
+                return AbstractIllagerEntity.ArmPose.BOW_AND_ARROW;
+            } else{
+                return AbstractIllagerEntity.ArmPose.ATTACKING;
+            }
+        } else{
+            return ArmPose.CROSSED;
+        }
     }
 
     @Override

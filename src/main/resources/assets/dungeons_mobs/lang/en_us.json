@@ -105,6 +105,11 @@
   "item.dungeons_mobs.skeleton_vanguard_helmet": "Skeleton Vanguard Helmet",
   "item.dungeons_mobs.chef_hat": "Chef Hat",
 
+  "item.dungeons_mobs.netherite_piglin_helmet": "Netherite Piglin Helmet",
+  "item.dungeons_mobs.cracked_netherite_piglin_helmet": "Cracked Netherite Piglin Helmet",
+  "item.dungeons_mobs.gold_piglin_helmet": "Gold Piglin Helmet",
+  "item.dungeons_mobs.cracked_gold_piglin_helmet": "Cracked Gold Piglin Helmet",
+
   "item.dungeons_mobs.skeleton_vanguard_shield": "Skeleton Vanguard Shield",
 
   "item.dungeons_mobs.royal_guard_shield": "Royal Guard Shield",

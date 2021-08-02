@@ -4,6 +4,7 @@ import com.infamous.dungeons_mobs.DungeonsGearCompat;
 import com.infamous.dungeons_mobs.interfaces.IArmoredMob;
 import com.infamous.dungeons_mobs.mixin.PiglinAccessor;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
+import com.infamous.dungeons_mobs.mod.ModItems;
 import com.infamous.dungeons_mobs.utils.PiglinHelper;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
@@ -27,7 +28,7 @@ import net.minecraft.world.server.ServerWorld;
 import javax.annotation.Nullable;
 
 public class ArmoredPiglinEntity extends PiglinEntity implements IArmoredMob {
-    private static final DataParameter<Boolean> STRONG_ARMOR = EntityDataManager.defineId(ZombifiedArmoredPiglinEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> STRONG_ARMOR = EntityDataManager.defineId(ArmoredPiglinEntity.class, DataSerializers.BOOLEAN);
 
     public ArmoredPiglinEntity(EntityType<? extends ArmoredPiglinEntity> entityType, World world) {
         super(entityType, world);
@@ -73,9 +74,9 @@ public class ArmoredPiglinEntity extends PiglinEntity implements IArmoredMob {
         }
 
         if(this.hasStrongArmor()){
-            this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Items.GOLDEN_HELMET));
+            this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.GOLD_PIGLIN_HELMET.get()));
         } else if(this.isHolding(item -> item instanceof CrossbowItem)){
-            this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Items.NETHERITE_HELMET));
+            this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.NETHERITE_PIGLIN_HELMET.get()));
         }
     }
 
