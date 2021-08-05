@@ -3,6 +3,7 @@ package com.infamous.dungeons_mobs;
 import com.infamous.dungeons_mobs.capabilities.CloneableHelper;
 import com.infamous.dungeons_mobs.capabilities.CloneableProvider;
 import com.infamous.dungeons_mobs.capabilities.ICloneable;
+import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.entities.creepers.IcyCreeperEntity;
 import com.infamous.dungeons_mobs.entities.illagers.DungeonsIllusionerEntity;
 import com.infamous.dungeons_mobs.entities.illagers.GeomancerEntity;
@@ -116,7 +117,10 @@ public class MobEvents {
     @SubscribeEvent
     public static void onExplosionDetonate(ExplosionEvent.Detonate event){
         handlePillarProtection(event);
-        if(event.getExplosion().getExploder() instanceof IcyCreeperEntity){
+        if(event.getExplosion().getSourceMob() instanceof IcyCreeperEntity){
+            if(!DungeonsMobsConfig.COMMON.ENABLE_ICY_CREEPER_GRIEFING.get()){
+                event.getAffectedBlocks().clear();
+            }
             List<Entity> entityList = event.getAffectedEntities();
             for(Entity entity : entityList){
                 if(entity instanceof LivingEntity){

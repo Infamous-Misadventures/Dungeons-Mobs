@@ -30,12 +30,16 @@ public class PoisonQuillVineEntity extends VineEntity implements IRangedAttackMo
         super(entityType, world);
     }
 
-    public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return VineEntity.setCustomAttributes();
+    public PoisonQuillVineEntity(EntityType<? extends PoisonQuillVineEntity> entityType, World worldIn, double x, double y, double z, LivingEntity casterIn, int lifeTicks) {
+        super(entityType, worldIn, x, y, z, casterIn, lifeTicks);
     }
 
     public PoisonQuillVineEntity(World worldIn, double x, double y, double z, LivingEntity casterIn, int lifeTicks) {
         super(ModEntityTypes.POISON_QUILL_VINE.get(), worldIn, x, y, z, casterIn, lifeTicks);
+    }
+
+    public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
+        return VineEntity.setCustomAttributes();
     }
 
     @Override
@@ -49,9 +53,7 @@ public class PoisonQuillVineEntity extends VineEntity implements IRangedAttackMo
 
     @Override
     public void performRangedAttack(LivingEntity target, float distanceFactor) {
-        ItemStack itemstack = new ItemStack(Items.TIPPED_ARROW);
-        PotionUtils.setPotion(itemstack, Potions.POISON);
-        AbstractArrowEntity abstractarrowentity = ProjectileHelper.getMobArrow(this, itemstack, distanceFactor);
+        AbstractArrowEntity abstractarrowentity = this.getPoisonQuill(distanceFactor);
         double xDifference = target.getX() - this.getX();
         double yDifference = target.getY(0.3333333333333333D) - abstractarrowentity.getY();
         double zDifference = target.getZ() - this.getZ();
@@ -62,6 +64,12 @@ public class PoisonQuillVineEntity extends VineEntity implements IRangedAttackMo
         }
 
         this.level.addFreshEntity(abstractarrowentity);
+    }
+
+    protected AbstractArrowEntity getPoisonQuill(float distanceFactor) {
+        ItemStack itemstack = new ItemStack(Items.TIPPED_ARROW);
+        PotionUtils.setPotion(itemstack, Potions.POISON);
+        return ProjectileHelper.getMobArrow(this, itemstack, distanceFactor);
     }
 
 }

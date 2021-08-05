@@ -17,6 +17,10 @@ public class QuickGrowingVineEntity extends VineEntity {
         super(entityType, world);
     }
 
+    public QuickGrowingVineEntity(EntityType<? extends QuickGrowingVineEntity> entityType, World worldIn, double x, double y, double z, LivingEntity casterIn, int lifeTicks) {
+        super(entityType, worldIn, x, y, z, casterIn, lifeTicks);
+    }
+
     public QuickGrowingVineEntity(World worldIn, double x, double y, double z, LivingEntity casterIn, int lifeTicks) {
         super(ModEntityTypes.QUICK_GROWING_VINE.get(), worldIn, x, y, z, casterIn, lifeTicks);
     }

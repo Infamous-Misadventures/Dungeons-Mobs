@@ -2,6 +2,7 @@ package com.infamous.dungeons_mobs.client.renderer.undead;
 
 import com.infamous.dungeons_mobs.entities.undead.ArmoredSkeletonEntity;
 import com.infamous.dungeons_mobs.entities.undead.MossySkeletonEntity;
+import com.infamous.dungeons_mobs.interfaces.IArmoredMob;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.SkeletonRenderer;
@@ -20,7 +21,7 @@ public class CustomSkeletonRenderer extends SkeletonRenderer {
 
     @Override
     protected void scale(AbstractSkeletonEntity abstractSkeletonEntity, MatrixStack matrixStack, float v) {
-        if(abstractSkeletonEntity instanceof ArmoredSkeletonEntity){
+        if(abstractSkeletonEntity instanceof ArmoredSkeletonEntity || abstractSkeletonEntity instanceof IArmoredMob){
             float scaleFactor = 1.1F;
             matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
         }

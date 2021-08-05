@@ -26,6 +26,7 @@ import com.infamous.dungeons_mobs.mod.ModBlocks;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.entity.DrownedRenderer;
 import net.minecraft.entity.EntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
@@ -105,6 +106,14 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.COBWEB_TRAP.get(), CobwebTrapRenderer::new);
 
         RenderTypeLookup.setRenderLayer(ModBlocks.WRAITH_FIRE_BLOCK.get(), RenderType.cutout());
+
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WAVEWHISPERER.get(), WhispererRenderer::new); // TODO
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.POISON_ANEMONE.get(), PoisonQuillVineRenderer::new); // TODO
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.QUICK_GROWING_ANEMONE.get(), QuickGrowingVineRenderer::new); // TODO
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_DROWNED.get(), DrownedRenderer::new); // TODO
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.DROWNED_NECROMANCER.get(), DrownedRenderer::new); // TODO
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SUNKEN_SKELETON.get(), CustomSkeletonRenderer::new); // TODO
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_SUNKEN_SKELETON.get(), CustomSkeletonRenderer::new); // TODO
 
     }
 

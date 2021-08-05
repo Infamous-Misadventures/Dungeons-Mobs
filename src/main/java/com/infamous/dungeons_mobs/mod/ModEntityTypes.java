@@ -20,6 +20,7 @@ import com.infamous.dungeons_mobs.entities.slime.ConjuredSlimeEntity;
 import com.infamous.dungeons_mobs.entities.undead.*;
 import com.infamous.dungeons_mobs.entities.undead.horseman.SkeletonHorsemanEntity;
 import com.infamous.dungeons_mobs.entities.undead.WraithEntity;
+import com.infamous.dungeons_mobs.entities.water.*;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
@@ -261,7 +262,7 @@ public class ModEntityTypes {
 
     public static final RegistryObject<EntityType<QuickGrowingVineEntity>> QUICK_GROWING_VINE = ENTITY_TYPES.register("quick_growing_vine", () ->
             EntityType.Builder.<QuickGrowingVineEntity>of(QuickGrowingVineEntity::new, EntityClassification.MONSTER)
-                    .fireImmune()
+                    //.fireImmune()
                     .sized(1.0F, 2.5F)
                     .clientTrackingRange(10)
                     .setCustomClientFactory((spawnEntity,world) -> new QuickGrowingVineEntity(world))
@@ -270,7 +271,7 @@ public class ModEntityTypes {
 
     public static final RegistryObject<EntityType<PoisonQuillVineEntity>> POISON_QUILL_VINE = ENTITY_TYPES.register("poison_quill_vine", () ->
             EntityType.Builder.<PoisonQuillVineEntity>of(PoisonQuillVineEntity::new, EntityClassification.MONSTER)
-                    .fireImmune()
+                    //.fireImmune()
                     .sized(1.0F, 2.5F)
                     .clientTrackingRange(10)
                     .setCustomClientFactory((spawnEntity,world) -> new PoisonQuillVineEntity(world))
@@ -415,5 +416,61 @@ public class ModEntityTypes {
                     .sized(0.6F, 1.95F)
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(MODID, "zombified_fungus_thrower").toString())
+    );
+
+    // WATER
+
+    public static final RegistryObject<EntityType<WavewhispererEntity>> WAVEWHISPERER = ENTITY_TYPES.register("wavewhisperer", () ->
+            EntityType.Builder.<WavewhispererEntity>of(WavewhispererEntity::new, EntityClassification.MONSTER)
+                    .sized(0.6F, 2.99F)
+                    .clientTrackingRange(10)
+                    .build(new ResourceLocation(MODID, "wavewhisperer").toString())
+    );
+
+    public static final RegistryObject<EntityType<QuickGrowingAnemoneEntity>> QUICK_GROWING_ANEMONE = ENTITY_TYPES.register("quick_growing_anemone", () ->
+            EntityType.Builder.<QuickGrowingAnemoneEntity>of(QuickGrowingAnemoneEntity::new, EntityClassification.MONSTER)
+                    //.fireImmune()
+                    .sized(1.0F, 2.5F)
+                    .clientTrackingRange(10)
+                    .build(new ResourceLocation(MODID, "quick_growing_anemone").toString())
+    );
+
+    public static final RegistryObject<EntityType<PoisonAnemoneEntity>> POISON_ANEMONE = ENTITY_TYPES.register("poison_anemone", () ->
+            EntityType.Builder.<PoisonAnemoneEntity>of(PoisonAnemoneEntity::new, EntityClassification.MONSTER)
+                    //.fireImmune()
+                    .sized(1.0F, 2.5F)
+                    .clientTrackingRange(10)
+                    .build(new ResourceLocation(MODID, "poison_anemone").toString())
+    );
+
+
+    public static final RegistryObject<EntityType<ArmoredDrownedEntity>> ARMORED_DROWNED = ENTITY_TYPES.register("armored_drowned", () ->
+            EntityType.Builder.<ArmoredDrownedEntity>of(ArmoredDrownedEntity::new, EntityClassification.MONSTER)
+                    .sized(0.6F * 1.1F, 1.95F * 1.1F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(MODID, "armored_drowned").toString())
+    );
+
+
+    public static final RegistryObject<EntityType<DrownedNecromancerEntity>> DROWNED_NECROMANCER = ENTITY_TYPES.register("drowned_necromancer", () ->
+            EntityType.Builder.<DrownedNecromancerEntity>of(DrownedNecromancerEntity::new, EntityClassification.MONSTER)
+                    .sized(0.6F * 1.2F, 1.95F * 1.2F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(MODID, "drowned_necromancer").toString())
+    );
+
+    public static final RegistryObject<EntityType<ArmoredSunkenSkeletonEntity>> ARMORED_SUNKEN_SKELETON = ENTITY_TYPES.register("armored_sunken_skeleton", () ->
+            EntityType.Builder.<ArmoredSunkenSkeletonEntity>of(ArmoredSunkenSkeletonEntity::new, EntityClassification.MONSTER)
+                    .sized(0.6F * 1.1F, 1.99F * 1.1F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(MODID, "armored_sunken_skeleton").toString())
+    );
+
+
+    public static final RegistryObject<EntityType<SunkenSkeletonEntity>> SUNKEN_SKELETON = ENTITY_TYPES.register("sunken_skeleton", () ->
+            EntityType.Builder.<SunkenSkeletonEntity>of(SunkenSkeletonEntity::new, EntityClassification.MONSTER)
+                    .sized(0.6F, 1.99F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(MODID, "sunken_skeleton").toString())
     );
 }

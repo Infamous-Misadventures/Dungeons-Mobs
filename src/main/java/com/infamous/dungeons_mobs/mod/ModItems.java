@@ -188,6 +188,42 @@ public class ModItems {
                     15373203, 5009705,
                     new Item.Properties().tab(DUNGEONS_MOBS)));
 
+
+    public static final RegistryObject<ModSpawnEggItem> WAVEWHISPERER_SPAWN_EGG = ITEMS.register("wavewhisperer_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityTypes.WAVEWHISPERER,
+                    894731, 0,
+                    new Item.Properties().tab(DUNGEONS_MOBS)));
+
+    public static final RegistryObject<ModSpawnEggItem> POISON_ANEMONE_SPAWN_EGG = ITEMS.register("poison_anemone_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityTypes.POISON_ANEMONE,
+                    894731, 0,
+                    new Item.Properties().tab(DUNGEONS_MOBS)));
+
+    public static final RegistryObject<ModSpawnEggItem> QUICK_GROWING_ANEMONE_SPAWN_EGG = ITEMS.register("quick_growing_anemone_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityTypes.QUICK_GROWING_ANEMONE,
+                    894731, 0,
+                    new Item.Properties().tab(DUNGEONS_MOBS)));
+
+    public static final RegistryObject<ModSpawnEggItem> ARMORED_SUNKEN_SKELETON_SPAWN_EGG = ITEMS.register("armored_sunken_skeleton_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityTypes.ARMORED_SUNKEN_SKELETON,
+                    12698049, 4802889,
+                    new Item.Properties().tab(DUNGEONS_MOBS)));
+
+    public static final RegistryObject<ModSpawnEggItem> SUNKEN_SKELETON_SPAWN_EGG = ITEMS.register("sunken_skeleton_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityTypes.SUNKEN_SKELETON,
+                    12698049, 4802889,
+                    new Item.Properties().tab(DUNGEONS_MOBS)));
+
+    public static final RegistryObject<ModSpawnEggItem> ARMORED_DROWNED_SPAWN_EGG = ITEMS.register("armored_drowned_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityTypes.ARMORED_DROWNED,
+                    44975, 7969893,
+                    new Item.Properties().tab(DUNGEONS_MOBS)));
+
+    public static final RegistryObject<ModSpawnEggItem> DROWNED_NECROMANCER_SPAWN_EGG = ITEMS.register("drowned_necromancer_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityTypes.DROWNED_NECROMANCER,
+                    44975, 7969893,
+                    new Item.Properties().tab(DUNGEONS_MOBS)));
+
     // SHIELD
     public static final RegistryObject<Item> ROYAL_GUARD_SHIELD = ITEMS.register("royal_guard_shield",
             () -> new RoyalGuardShieldItem(new Item.Properties().tab(DUNGEONS_MOBS).durability(336)));

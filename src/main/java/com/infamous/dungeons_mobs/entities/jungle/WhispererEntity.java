@@ -1,8 +1,6 @@
 package com.infamous.dungeons_mobs.entities.jungle;
 
 import com.infamous.dungeons_mobs.entities.magic.MagicType;
-import com.infamous.dungeons_mobs.entities.summonables.ConstructEntity;
-import com.infamous.dungeons_mobs.goals.AvoidBaseEntityGoal;
 import com.infamous.dungeons_mobs.goals.magic.UseMagicGoal;
 import com.infamous.dungeons_mobs.goals.magic.UsingMagicGoal;
 import com.infamous.dungeons_mobs.interfaces.IMagicUser;
@@ -36,24 +34,28 @@ public class WhispererEntity extends MonsterEntity implements IMagicUser {
         super(ModEntityTypes.WHISPERER.get(), worldIn);
     }
 
-    public WhispererEntity(EntityType<? extends MonsterEntity> type, World worldIn) {
+    public WhispererEntity(EntityType<? extends WhispererEntity> type, World worldIn) {
         super(type, worldIn);
     }
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new SwimGoal(this));
+        this.addMovementBehaviors();
         this.goalSelector.addGoal(1, new UsingMagicGoal<>(this));
         this.goalSelector.addGoal(2, new WhispererEntity.SummonVinesGoal());
         this.goalSelector.addGoal(3, new WhispererEntity.AttackGoal());
         this.goalSelector.addGoal(4, new AvoidEntityGoal<>(this, VineEntity.class, 8.0F, 0.6D, 1.0D));
-        this.goalSelector.addGoal(5, new RandomWalkingGoal(this, 0.6D));
         this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
         this.goalSelector.addGoal(7, new LookAtGoal(this, MobEntity.class, 8.0F));
 
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, WhispererEntity.class)).setAlertOthers());
         this.targetSelector.addGoal(2, (new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true)).setUnseenMemoryTicks(300));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, false));
+    }
+
+    protected void addMovementBehaviors() {
+        this.goalSelector.addGoal(0, new SwimGoal(this));
+        this.goalSelector.addGoal(5, new RandomWalkingGoal(this, 0.6D));
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
@@ -106,11 +108,11 @@ public class WhispererEntity extends MonsterEntity implements IMagicUser {
             LivingEntity targetEntity = WhispererEntity.this.getTarget();
             if (targetEntity != null) {
                 if(WhispererEntity.this.getRandom().nextFloat() < 0.25F){
-                    GeomancyHelper.summonOffensiveVine(WhispererEntity.this, WhispererEntity.this, ModEntityTypes.POISON_QUILL_VINE.get());
+                    GeomancyHelper.summonOffensiveVine(WhispererEntity.this, WhispererEntity.this, WhispererEntity.this.getPoisonVineType());
                 }
                 else{
                     int[] rowToRemove = Util.getRandom(GeomancyHelper.ROWS, WhispererEntity.this.getRandom());
-                    GeomancyHelper.summonAreaDenialVineTrap(targetEntity, targetEntity, ModEntityTypes.QUICK_GROWING_VINE.get(), rowToRemove);
+                    GeomancyHelper.summonAreaDenialVineTrap(targetEntity, targetEntity, WhispererEntity.this.getQuickGrowingVineType(), rowToRemove);
                 }
             }
         }
@@ -123,6 +125,14 @@ public class WhispererEntity extends MonsterEntity implements IMagicUser {
         protected MagicType getMagicType() {
             return MagicType.SUMMON_VINES;
         }
+    }
+
+    protected EntityType<? extends QuickGrowingVineEntity> getQuickGrowingVineType() {
+        return ModEntityTypes.QUICK_GROWING_VINE.get();
+    }
+
+    protected EntityType<? extends PoisonQuillVineEntity> getPoisonVineType() {
+        return ModEntityTypes.POISON_QUILL_VINE.get();
     }
 
     protected void defineSynchedData() {

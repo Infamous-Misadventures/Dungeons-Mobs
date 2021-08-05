@@ -65,7 +65,7 @@ public class ArmoredSkeletonEntity extends SkeletonEntity {
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return AbstractSkeletonEntity.createAttributes()
                 .add(Attributes.MAX_HEALTH, 30.0D) // normal skeletons have 20
-                .add(Attributes.ATTACK_DAMAGE, 2.0D)
+                .add(Attributes.ATTACK_DAMAGE, 4.0D) // normal skeletons have 2
                 ;
     }
 

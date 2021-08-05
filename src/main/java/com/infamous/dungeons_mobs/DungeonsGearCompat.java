@@ -19,6 +19,10 @@ public class DungeonsGearCompat {
     private static Supplier<Item> FIREBRAND = () -> Items.AIR;
     private static Supplier<Item> RED_SNAKE = () -> Items.AIR;
     private static Supplier<Item> STONE_SWORD = () -> Items.AIR;
+    private static Supplier<Item> HEAVY_CROSSBOW = () -> Items.AIR;
+    private static Supplier<Item> ELITE_POWER_BOW = () -> Items.AIR;
+    private static Supplier<Item> SOUL_KNIFE = () -> Items.AIR;
+    private static Supplier<Item> ETERNAL_KNIFE = () -> Items.AIR;
 
     @SubscribeEvent
     public static void onInterMod(InterModProcessEvent event){
@@ -28,6 +32,10 @@ public class DungeonsGearCompat {
             FIREBRAND = () -> getRegisteredItem("firebrand");
             RED_SNAKE = () -> getRegisteredItem("red_snake");
             STONE_SWORD = () -> getRegisteredItem("stone_sword");
+            HEAVY_CROSSBOW = () -> getRegisteredItem("heavy_crossbow");
+            ELITE_POWER_BOW = () -> getRegisteredItem("elite_power_bow");
+            SOUL_KNIFE = () -> getRegisteredItem("soul_knife");
+            ETERNAL_KNIFE = () -> getRegisteredItem("eternal_knife");
         }
     }
 
@@ -49,6 +57,22 @@ public class DungeonsGearCompat {
 
     public static Supplier<Item> getStoneSword() {
         return STONE_SWORD;
+    }
+
+    public static Supplier<Item> getHeavyCrossbow() {
+        return HEAVY_CROSSBOW;
+    }
+
+    public static Supplier<Item> getElitePowerBow() {
+        return ELITE_POWER_BOW;
+    }
+
+    public static Supplier<Item> getSoulKnife() {
+        return SOUL_KNIFE;
+    }
+
+    public static Supplier<Item> getEternalKnife() {
+        return ETERNAL_KNIFE;
     }
 
     public static boolean isLoaded(){

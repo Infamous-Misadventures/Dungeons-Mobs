@@ -11,7 +11,9 @@ public class DungeonsMobsConfig {
 
     public static class Common {
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_WRAITH_FIRE_SUMMON;
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ICY_CREEPER_GRIEFING;
         public static ForgeConfigSpec.ConfigValue<List<? extends String>> NECROMANCER_MOB_SUMMONS;
+        public static ForgeConfigSpec.ConfigValue<List<? extends String>> DROWNED_NECROMANCER_MOB_SUMMONS;
 
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_ZOMBIE_REPLACES_ZOMBIE;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_SKELETON_REPLACES_SKELETON;
@@ -141,6 +143,10 @@ public class DungeonsMobsConfig {
                     .comment("Enable the default ability of Wraiths to summon Wraith Fire around the player as an attack. \n" +
                             "If you prefer a less griefy attack using Soul Fireballs akin to the Blaze, disable this feature. [true / false]")
                     .define("enableWraithFireSummon", true);
+            ENABLE_ICY_CREEPER_GRIEFING = builder
+                    .comment("Enable the default ability of Icy Creeper Explosions to grief the environment. \n" +
+                            "If you prefer their explosions to not damage the environment, disable this feature. [true / false]")
+                    .define("enablyIcyCreeperGriefing", true);
             NECROMANCER_MOB_SUMMONS = builder
                     .comment("Add mobs (preferably undead) that the Necromancer can summon. \n"
                             + "To do so, enter the namespace ID of the mob, like \"minecraft:zombie\".\n" +
@@ -152,6 +158,16 @@ public class DungeonsMobsConfig {
                             "dungeons_mobs:armored_zombie",
                             "dungeons_mobs:armored_skeleton",
                             "dungeons_mobs:wraith"
+                            ),
+                            (itemRaw) -> itemRaw instanceof String);
+            DROWNED_NECROMANCER_MOB_SUMMONS = builder
+                    .comment("Add mobs (preferably undead and aquatic) that the Drowned Necromancer can summon. \n"
+                            + "To do so, enter the namespace ID of the mob, like \"minecraft:drowned\".\n" +
+                            "If this list is empty, drowned will be summoned instead.\n" +
+                            "If a mob chosen from this list cannot be spawned, a drowned will be summoned instead." )
+                    .defineList("drownedNecromancerMobSummons", Lists.newArrayList(
+                            "minecraft:drowned",
+                            "dungeons_mobs:armored_drowned"
                             ),
                             (itemRaw) -> itemRaw instanceof String);
 

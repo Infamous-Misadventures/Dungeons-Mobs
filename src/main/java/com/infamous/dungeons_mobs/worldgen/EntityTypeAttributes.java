@@ -18,6 +18,7 @@ import com.infamous.dungeons_mobs.entities.slime.ConjuredSlimeEntity;
 import com.infamous.dungeons_mobs.entities.undead.*;
 import com.infamous.dungeons_mobs.entities.undead.horseman.SkeletonHorsemanEntity;
 import com.infamous.dungeons_mobs.entities.undead.WraithEntity;
+import com.infamous.dungeons_mobs.entities.water.*;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -81,6 +82,14 @@ public class EntityTypeAttributes {
         event.put(ModEntityTypes.FUNGUS_THROWER.get(), PiglinEntity.createAttributes().build());
         event.put(ModEntityTypes.ZOMBIFIED_ARMORED_PIGLIN.get(), ZombifiedArmoredPiglinEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.ZOMBIFIED_FUNGUS_THROWER.get(), ZombifiedPiglinEntity.createAttributes().build());
+
+        event.put(ModEntityTypes.ARMORED_DROWNED.get(), ArmoredDrownedEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.DROWNED_NECROMANCER.get(), DrownedNecromancerEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.SUNKEN_SKELETON.get(), SunkenSkeletonEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.ARMORED_SUNKEN_SKELETON.get(), ArmoredSunkenSkeletonEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.WAVEWHISPERER.get(), WavewhispererEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.QUICK_GROWING_ANEMONE.get(), QuickGrowingAnemoneEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.POISON_ANEMONE.get(), PoisonAnemoneEntity.setCustomAttributes().build());
 
     }
 

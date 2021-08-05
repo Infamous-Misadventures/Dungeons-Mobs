@@ -3,6 +3,7 @@ package com.infamous.dungeons_mobs.entities.undead;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.goals.magic.UseMagicGoal;
 import com.infamous.dungeons_mobs.goals.magic.UsingMagicGoal;
+import com.infamous.dungeons_mobs.items.NecromancerStaffItem;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.interfaces.IMagicUser;
 import com.infamous.dungeons_mobs.entities.magic.MagicType;
@@ -21,6 +22,7 @@ import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.passive.TurtleEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -219,7 +221,7 @@ public class NecromancerEntity extends AbstractSkeletonEntity implements IMagicU
     }
 
     public void performRangedAttack(LivingEntity target, float distanceFactor) {
-        NecromancerEntity.this.swing(Hand.MAIN_HAND);
+        this.swing(ProjectileHelper.getWeaponHoldingHand(this, item -> item instanceof NecromancerStaffItem));
         double squareDistanceToTarget = NecromancerEntity.this.distanceToSqr(target);
         double xDifference = target.getX() - NecromancerEntity.this.getX();
         double yDifference = target.getY(0.5D) - NecromancerEntity.this.getY(0.5D);

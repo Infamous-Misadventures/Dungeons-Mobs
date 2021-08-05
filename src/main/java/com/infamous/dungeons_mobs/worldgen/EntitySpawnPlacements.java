@@ -2,6 +2,8 @@ package com.infamous.dungeons_mobs.worldgen;
 
 import com.infamous.dungeons_mobs.entities.creepers.IcyCreeperEntity;
 import com.infamous.dungeons_mobs.entities.jungle.VineEntity;
+import com.infamous.dungeons_mobs.entities.water.WavewhispererEntity;
+import com.infamous.dungeons_mobs.interfaces.IAquaticMob;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.entities.undead.FrozenZombieEntity;
 import com.infamous.dungeons_mobs.entities.undead.JungleZombieEntity;
@@ -13,12 +15,18 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.monster.piglin.PiglinEntity;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.gen.Heightmap;
 
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Random;
 
 public class EntitySpawnPlacements {
@@ -152,25 +160,61 @@ public class EntitySpawnPlacements {
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                 EntitySpawnPlacements::checkPiglinSpawnRules);
-
-
         EntitySpawnPlacementRegistry.register(ModEntityTypes.FUNGUS_THROWER.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                 EntitySpawnPlacements::checkPiglinSpawnRules);
-
-
         EntitySpawnPlacementRegistry.register(ModEntityTypes.ZOMBIFIED_ARMORED_PIGLIN.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                 EntitySpawnPlacements::checkZombifiedPiglinSpawnRules);
-
 
         EntitySpawnPlacementRegistry.register(ModEntityTypes.ZOMBIFIED_FUNGUS_THROWER.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                 EntitySpawnPlacements::checkZombifiedPiglinSpawnRules);
 
+
+
+        EntitySpawnPlacementRegistry.register(ModEntityTypes.WAVEWHISPERER.get(),
+                EntitySpawnPlacementRegistry.PlacementType.IN_WATER,
+                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
+                EntitySpawnPlacements::checkAquaticMobSpawnRules);
+        EntitySpawnPlacementRegistry.register(ModEntityTypes.QUICK_GROWING_VINE.get(),
+                EntitySpawnPlacementRegistry.PlacementType.IN_WATER,
+                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
+                EntitySpawnPlacements::checkAquaticMobSpawnRules);
+        EntitySpawnPlacementRegistry.register(ModEntityTypes.POISON_QUILL_VINE.get(),
+                EntitySpawnPlacementRegistry.PlacementType.IN_WATER,
+                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
+                EntitySpawnPlacements::checkAquaticMobSpawnRules);
+        EntitySpawnPlacementRegistry.register(ModEntityTypes.ARMORED_DROWNED.get(),
+                EntitySpawnPlacementRegistry.PlacementType.IN_WATER,
+                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
+                EntitySpawnPlacements::checkAquaticMobSpawnRules);
+        EntitySpawnPlacementRegistry.register(ModEntityTypes.DROWNED_NECROMANCER.get(),
+                EntitySpawnPlacementRegistry.PlacementType.IN_WATER,
+                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
+                EntitySpawnPlacements::checkAquaticMobSpawnRules);
+        EntitySpawnPlacementRegistry.register(ModEntityTypes.SUNKEN_SKELETON.get(),
+                EntitySpawnPlacementRegistry.PlacementType.IN_WATER,
+                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
+                EntitySpawnPlacements::checkAquaticMobSpawnRules);
+        EntitySpawnPlacementRegistry.register(ModEntityTypes.ARMORED_SUNKEN_SKELETON.get(),
+                EntitySpawnPlacementRegistry.PlacementType.IN_WATER,
+                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
+                EntitySpawnPlacements::checkAquaticMobSpawnRules);
+
+    }
+
+    public static boolean checkAquaticMobSpawnRules(EntityType<? extends MobEntity> type, IServerWorld serverWorld, SpawnReason spawnReason, BlockPos blockPos, Random random) {
+        Optional<RegistryKey<Biome>> biomeName = serverWorld.getBiomeName(blockPos);
+        boolean canSpawn = serverWorld.getDifficulty() != Difficulty.PEACEFUL && MonsterEntity.isDarkEnoughToSpawn(serverWorld, blockPos, random) && (spawnReason == SpawnReason.SPAWNER || serverWorld.getFluidState(blockPos).is(FluidTags.WATER));
+        if (!Objects.equals(biomeName, Optional.of(Biomes.RIVER)) && !Objects.equals(biomeName, Optional.of(Biomes.FROZEN_RIVER))) {
+            return random.nextInt(40) == 0 && IAquaticMob.isDeepEnoughToSpawn(serverWorld, blockPos) && canSpawn;
+        } else {
+            return random.nextInt(15) == 0 && canSpawn;
+        }
     }
 
     public static boolean checkZombifiedPiglinSpawnRules(EntityType<? extends ZombifiedPiglinEntity> p_234351_0_, IWorld p_234351_1_, SpawnReason p_234351_2_, BlockPos p_234351_3_, Random p_234351_4_) {
