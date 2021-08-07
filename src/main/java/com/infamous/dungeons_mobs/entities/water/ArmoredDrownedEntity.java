@@ -3,6 +3,7 @@ package com.infamous.dungeons_mobs.entities.water;
 import com.infamous.dungeons_mobs.DungeonsGearCompat;
 import com.infamous.dungeons_mobs.entities.jungle.WhispererEntity;
 import com.infamous.dungeons_mobs.interfaces.IArmoredMob;
+import com.infamous.dungeons_mobs.mod.ModItems;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.SpawnReason;
@@ -38,7 +39,7 @@ public class ArmoredDrownedEntity extends DrownedEntity implements IArmoredMob {
 
     @Override
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficultyInstance) {
-        if (this.random.nextFloat() < 0.5D) {
+        if ((double)this.random.nextFloat() > 0.9D) {
             this.setRangedWeapon();
         } else{
             this.setMeleeWeapon();
@@ -46,8 +47,8 @@ public class ArmoredDrownedEntity extends DrownedEntity implements IArmoredMob {
     }
 
     private void setRangedWeapon() {
-        ItemStack purpleTrident = new ItemStack(Items.TRIDENT); // TODO
-        ItemStack yellowTrident = new ItemStack(Items.TRIDENT); // TODO
+        ItemStack purpleTrident = new ItemStack(ModItems.PURPLE_TRIDENT.get());
+        ItemStack yellowTrident = new ItemStack(ModItems.YELLOW_TRIDENT.get());
         ItemStack mainhandWeapon = this.hasStrongArmor() ? yellowTrident : purpleTrident;
         this.setItemSlot(EquipmentSlotType.MAINHAND, mainhandWeapon);
     }

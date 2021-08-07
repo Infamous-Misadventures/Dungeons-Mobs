@@ -145,5 +145,6 @@
   "entity.dungeons_mobs.poison_anemone": "Poison Anemone",
   "item.dungeons_mobs.poison_anemone_spawn_egg": "Poison Anemone Spawn Egg",
   "entity.dungeons_mobs.quick_growing_anemone": "Quick-Growing Anemone",
-  "item.dungeons_mobs.quick_growing_anemone_spawn_egg": "Quick-Growing Anemone Spawn Egg"
+  "item.dungeons_mobs.quick_growing_anemone_spawn_egg": "Quick-Growing Anemone Spawn Egg",
+  "item.dungeons_mobs.necromancer_trident": "Necromancer Trident"
 }

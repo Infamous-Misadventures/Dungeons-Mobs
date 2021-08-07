@@ -1,9 +1,7 @@
 package com.infamous.dungeons_mobs.client.renderer.jungle;
 
-import com.infamous.dungeons_mobs.client.models.jungle.WhispererModel;
-import com.infamous.dungeons_mobs.client.models.undead.NecromancerModel;
+import com.infamous.dungeons_mobs.client.models.jungle.WhispererModel2;
 import com.infamous.dungeons_mobs.entities.jungle.WhispererEntity;
-import com.infamous.dungeons_mobs.entities.undead.NecromancerEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.entity.BipedRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
@@ -15,16 +13,15 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
 @OnlyIn(Dist.CLIENT)
-public class WhispererRenderer extends BipedRenderer<WhispererEntity, WhispererModel<WhispererEntity>> {
-    private static final ResourceLocation NECROMANCER_TEXTURE = new ResourceLocation(MODID, "textures/entity/jungle/whisperer.png");
+public class WhispererRenderer<T extends WhispererEntity> extends BipedRenderer<T, WhispererModel2<T>> {
+    private static final ResourceLocation WHISPERER_TEXTURE = new ResourceLocation(MODID, "textures/entity/jungle/whisperer.png");
 
     public WhispererRenderer(EntityRendererManager renderManagerIn) {
-        super(renderManagerIn, new WhispererModel<>(), 0.5F);
-        this.addLayer(new BipedArmorLayer<>(this, new WhispererModel<>(0.5F), new WhispererModel(1.0F)));
+        super(renderManagerIn, new WhispererModel2<>(), 0.5F);
     }
 
     @Override
-    protected void scale(WhispererEntity whispererEntity, MatrixStack matrixStack, float v) {
+    protected void scale(T whispererEntity, MatrixStack matrixStack, float v) {
         float scaleFactor = 1.2F;
         matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
         super.scale(whispererEntity, matrixStack, v);
@@ -33,7 +30,7 @@ public class WhispererRenderer extends BipedRenderer<WhispererEntity, WhispererM
     /**
      * Returns the location of an entity's texture.
      */
-    public ResourceLocation getTextureLocation(WhispererEntity whispererEntity) {
-        return NECROMANCER_TEXTURE;
+    public ResourceLocation getTextureLocation(T whispererEntity) {
+        return WHISPERER_TEXTURE;
     }
 }

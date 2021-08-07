@@ -1,12 +1,14 @@
 package com.infamous.dungeons_mobs.entities.water;
 
-import com.infamous.dungeons_mobs.entities.jungle.WhispererEntity;
 import com.infamous.dungeons_mobs.goals.AquaticMoveHelperController;
 import com.infamous.dungeons_mobs.goals.GoToBeachGoal;
 import com.infamous.dungeons_mobs.goals.GoToWaterGoal;
 import com.infamous.dungeons_mobs.goals.SwimUpGoal;
 import com.infamous.dungeons_mobs.interfaces.IAquaticMob;
-import net.minecraft.entity.*;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ICrossbowUser;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
@@ -14,7 +16,6 @@ import net.minecraft.entity.monster.AbstractSkeletonEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.passive.TurtleEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -22,7 +23,10 @@ import net.minecraft.item.*;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.*;
+import net.minecraft.pathfinding.GroundPathNavigator;
+import net.minecraft.pathfinding.PathNavigator;
+import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.pathfinding.SwimmerPathNavigator;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.RegistryKey;
@@ -230,11 +234,6 @@ public class SunkenSkeletonEntity extends AbstractSkeletonEntity implements ICro
         } else{
             this.performCrossbowAttack(this, 1.6F);
         }
-    }
-
-    @Override
-    protected AbstractArrowEntity getArrow(ItemStack ammoStack, float p_213624_2_) {
-        return super.getArrow(ammoStack, p_213624_2_);
     }
 
     @Override

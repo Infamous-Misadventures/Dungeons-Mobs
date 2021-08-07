@@ -1,7 +1,5 @@
 package com.infamous.dungeons_mobs.entities.illagers;
 
-import com.infamous.dungeons_mobs.capabilities.CloneableHelper;
-import com.infamous.dungeons_mobs.capabilities.ICloneable;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -27,7 +25,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
@@ -35,8 +32,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
-
-import net.minecraft.entity.monster.AbstractIllagerEntity.ArmPose;
 
 public class IllusionerCloneEntity extends AbstractIllagerEntity implements IRangedAttackMob {
     private LivingEntity caster;

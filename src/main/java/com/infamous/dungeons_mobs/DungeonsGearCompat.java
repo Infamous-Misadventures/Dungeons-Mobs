@@ -11,7 +11,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.function.Supplier;
 
-@Mod.EventBusSubscriber(modid = DungeonsMobs.MODID)
+@Mod.EventBusSubscriber(modid = DungeonsMobs.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class DungeonsGearCompat {
     public static final String DUNGEONS_GEAR_MOD_ID = "dungeons_gear";
     private static boolean IS_LOADED = false;
@@ -41,6 +41,15 @@ public class DungeonsGearCompat {
 
     private static Item getRegisteredItem(String item) {
         return ForgeRegistries.ITEMS.getValue(getDungeonsGearResource(item));
+    }
+
+    public static Item getOrDefault(Supplier<Item> dungeonsItemSupplier, Item defaultTo){
+        Item dungeonsItem = dungeonsItemSupplier.get();
+        if(dungeonsItem == Items.AIR){
+            return defaultTo;
+        } else{
+            return dungeonsItem;
+        }
     }
 
     public static Supplier<Item> getGoldAxe() {

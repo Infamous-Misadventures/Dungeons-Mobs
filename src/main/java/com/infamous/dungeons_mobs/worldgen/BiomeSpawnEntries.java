@@ -169,6 +169,36 @@ public class BiomeSpawnEntries {
                 DungeonsMobsConfig.COMMON.WITHER_SKELETON_MIN_GROUP_SIZE.get(),
                 DungeonsMobsConfig.COMMON.WITHER_SKELETON_MAX_GROUP_SIZE.get());
 
+        List<String> sunkenSkeletonBiomeTypes = (List<String>) DungeonsMobsConfig.COMMON.SUNKEN_SKELETON_BIOME_TYPES.get();
+        tryAddMonsterSpawnToBiome(biomeRegistryKey, mobSpawnInfoBuilder, sunkenSkeletonBiomeTypes, ModEntityTypes.SUNKEN_SKELETON.get(),
+                DungeonsMobsConfig.COMMON.SUNKEN_SKELETON_SPAWN_WEIGHT.get(),
+                DungeonsMobsConfig.COMMON.SUNKEN_SKELETON_MIN_GROUP_SIZE.get(),
+                DungeonsMobsConfig.COMMON.SUNKEN_SKELETON_MAX_GROUP_SIZE.get());
+
+        List<String> drownedNecromancerBiomeTypes = (List<String>) DungeonsMobsConfig.COMMON.DROWNED_NECROMANCER_BIOME_TYPES.get();
+        tryAddMonsterSpawnToBiome(biomeRegistryKey, mobSpawnInfoBuilder, drownedNecromancerBiomeTypes, ModEntityTypes.SUNKEN_SKELETON.get(),
+                DungeonsMobsConfig.COMMON.DROWNED_NECROMANCER_SPAWN_WEIGHT.get(),
+                DungeonsMobsConfig.COMMON.DROWNED_NECROMANCER_MIN_GROUP_SIZE.get(),
+                DungeonsMobsConfig.COMMON.DROWNED_NECROMANCER_MAX_GROUP_SIZE.get());
+
+        List<String> wavewhispererBiomeTypes = (List<String>) DungeonsMobsConfig.COMMON.WAVEWHISPERER_BIOME_TYPES.get();
+        tryAddMonsterSpawnToBiome(biomeRegistryKey, mobSpawnInfoBuilder, wavewhispererBiomeTypes, ModEntityTypes.WAVEWHISPERER.get(),
+                DungeonsMobsConfig.COMMON.WAVEWHISPERER_SPAWN_WEIGHT.get(),
+                DungeonsMobsConfig.COMMON.WAVEWHISPERER_MIN_GROUP_SIZE.get(),
+                DungeonsMobsConfig.COMMON.WAVEWHISPERER_MAX_GROUP_SIZE.get());
+
+        List<String> quickGrowingAnemoneBiomeTypes = (List<String>) DungeonsMobsConfig.COMMON.QUICK_GROWING_ANEMONE_BIOME_TYPES.get();
+        tryAddMonsterSpawnToBiome(biomeRegistryKey, mobSpawnInfoBuilder, quickGrowingAnemoneBiomeTypes, ModEntityTypes.QUICK_GROWING_ANEMONE.get(),
+                DungeonsMobsConfig.COMMON.QUICK_GROWING_ANEMONE_SPAWN_WEIGHT.get(),
+                DungeonsMobsConfig.COMMON.QUICK_GROWING_ANEMONE_MIN_GROUP_SIZE.get(),
+                DungeonsMobsConfig.COMMON.QUICK_GROWING_ANEMONE_MAX_GROUP_SIZE.get());
+
+        List<String> poisonAnemoneBiomeTypes = (List<String>) DungeonsMobsConfig.COMMON.POISON_ANEMONE_BIOME_TYPES.get();
+        tryAddMonsterSpawnToBiome(biomeRegistryKey, mobSpawnInfoBuilder, poisonAnemoneBiomeTypes, ModEntityTypes.POISON_ANEMONE.get(),
+                DungeonsMobsConfig.COMMON.POISON_ANEMONE_SPAWN_WEIGHT.get(),
+                DungeonsMobsConfig.COMMON.POISON_ANEMONE_MIN_GROUP_SIZE.get(),
+                DungeonsMobsConfig.COMMON.POISON_ANEMONE_MAX_GROUP_SIZE.get());
+
         //}
     }
 
@@ -205,6 +235,12 @@ public class BiomeSpawnEntries {
         }
         if(DungeonsMobsConfig.COMMON.ENABLE_ICY_CREEPER_REPLACES_CREEPER.get()){
             handleVariantReplacementWithCategoryCheck(mobSpawnInfoBuilder, foundCategory, Biome.Category.ICY, EntityType.CREEPER, ModEntityTypes.ICY_CREEPER.get(), 0.8);
+        }
+        if(DungeonsMobsConfig.COMMON.ENABLE_ARMORED_DROWNED_REPLACES_DROWNED.get()){
+            handleVariantReplacement(mobSpawnInfoBuilder, EntityType.DROWNED, ModEntityTypes.ARMORED_DROWNED.get(), 0.9);
+        }
+        if(DungeonsMobsConfig.COMMON.ENABLE_ARMORED_SUNKEN_SKELETON_REPLACES_SUNKEN_SKELETON.get()){
+            handleVariantReplacement(mobSpawnInfoBuilder, ModEntityTypes.SUNKEN_SKELETON.get(), ModEntityTypes.ARMORED_SUNKEN_SKELETON.get(), 0.9);
         }
     }
 

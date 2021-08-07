@@ -26,6 +26,8 @@ public class DungeonsMobsConfig {
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_MOSSY_SKELETON_REPLACES_SKELETON;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_PIGLIN_REPLACES_PIGLIN;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ZOMBIFIED_ARMORED_PIGLIN_REPLACES_ZOMBIFIED_PIGLIN;
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_DROWNED_REPLACES_DROWNED;
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_SUNKEN_SKELETON_REPLACES_SUNKEN_SKELETON;
 
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> ICEOLOGER_BIOME_TYPES;
         public final ForgeConfigSpec.ConfigValue<Integer> ICEOLOGER_SPAWN_WEIGHT;
@@ -118,6 +120,31 @@ public class DungeonsMobsConfig {
         public final ForgeConfigSpec.ConfigValue<Integer> WITHER_SKELETON_SPAWN_WEIGHT;
         public final ForgeConfigSpec.ConfigValue<Integer> WITHER_SKELETON_MIN_GROUP_SIZE;
         public final ForgeConfigSpec.ConfigValue<Integer> WITHER_SKELETON_MAX_GROUP_SIZE;
+
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> SUNKEN_SKELETON_BIOME_TYPES;
+        public final ForgeConfigSpec.ConfigValue<Integer> SUNKEN_SKELETON_SPAWN_WEIGHT;
+        public final ForgeConfigSpec.ConfigValue<Integer> SUNKEN_SKELETON_MIN_GROUP_SIZE;
+        public final ForgeConfigSpec.ConfigValue<Integer> SUNKEN_SKELETON_MAX_GROUP_SIZE;
+
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> DROWNED_NECROMANCER_BIOME_TYPES;
+        public final ForgeConfigSpec.ConfigValue<Integer> DROWNED_NECROMANCER_SPAWN_WEIGHT;
+        public final ForgeConfigSpec.ConfigValue<Integer> DROWNED_NECROMANCER_MIN_GROUP_SIZE;
+        public final ForgeConfigSpec.ConfigValue<Integer> DROWNED_NECROMANCER_MAX_GROUP_SIZE;
+
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> WAVEWHISPERER_BIOME_TYPES;
+        public final ForgeConfigSpec.ConfigValue<Integer> WAVEWHISPERER_SPAWN_WEIGHT;
+        public final ForgeConfigSpec.ConfigValue<Integer> WAVEWHISPERER_MIN_GROUP_SIZE;
+        public final ForgeConfigSpec.ConfigValue<Integer> WAVEWHISPERER_MAX_GROUP_SIZE;
+
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> QUICK_GROWING_ANEMONE_BIOME_TYPES;
+        public final ForgeConfigSpec.ConfigValue<Integer> QUICK_GROWING_ANEMONE_SPAWN_WEIGHT;
+        public final ForgeConfigSpec.ConfigValue<Integer> QUICK_GROWING_ANEMONE_MIN_GROUP_SIZE;
+        public final ForgeConfigSpec.ConfigValue<Integer> QUICK_GROWING_ANEMONE_MAX_GROUP_SIZE;
+
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> POISON_ANEMONE_BIOME_TYPES;
+        public final ForgeConfigSpec.ConfigValue<Integer> POISON_ANEMONE_SPAWN_WEIGHT;
+        public final ForgeConfigSpec.ConfigValue<Integer> POISON_ANEMONE_MIN_GROUP_SIZE;
+        public final ForgeConfigSpec.ConfigValue<Integer> POISON_ANEMONE_MAX_GROUP_SIZE;
 
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_BIOME_SPECIFIC_RAIDERS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_MOUNTAINEERS_IN_RAIDS;
@@ -219,6 +246,16 @@ public class DungeonsMobsConfig {
                     .comment("Enable Zombified Armored Piglins replacing 10% of Zombified Piglin spawns in the biomes they can spawn in. \n" +
                             "If you prefer to not have them do this, disable this feature. [true / false]")
                     .define("enabledArmoredZombifiedPiglinReplacesZombifiedPiglin", true);
+
+            ENABLE_ARMORED_DROWNED_REPLACES_DROWNED = builder
+                    .comment("Enable Armored Drowned replacing 10% of Drowned spawns in the biomes they can spawn in. \n" +
+                            "If you prefer to not have them do this, disable this feature. [true / false]")
+                    .define("enabledArmoredDrownedReplacesDrowned", true);
+
+            ENABLE_ARMORED_SUNKEN_SKELETON_REPLACES_SUNKEN_SKELETON = builder
+                    .comment("Enable Armored Sunken Skeletons replacing 10% of Sunken Skeleton spawns in the biomes they can spawn in. \n" +
+                            "If you prefer to not have them do this, disable this feature. [true / false]")
+                    .define("enableArmoredSunkenSkeletonReplacesSunkenSkeleton", true);
 
             ICEOLOGER_BIOME_TYPES = builder
                     .comment("Add biome types that the Iceologer can spawn in. \n"
@@ -483,7 +520,7 @@ public class DungeonsMobsConfig {
                     .defineInRange("whispererMinGroupSize", 1, 0, 128);
             WHISPERER_MAX_GROUP_SIZE = builder
                     .comment("Maximum spawn group size of Whisperers in the biomes they can spawn in. [default:4]")
-                    .defineInRange("whispererMaxGroupSize", 4, 0, 128);
+                    .defineInRange("whispererMaxGroupSize", 1, 0, 128);
 
             LEAPLEAF_BIOME_TYPES = builder
                     .comment("Add biome types that the Leapleaf can spawn in. \n"
@@ -620,6 +657,112 @@ public class DungeonsMobsConfig {
             WITHER_SKELETON_MAX_GROUP_SIZE = builder
                     .comment("Maximum spawn group size of Wither Skeletons in the biomes they can spawn in. [default:1]")
                     .defineInRange("witherSkeletonMaxGroupSize", 4, 0, 128);
+
+            SUNKEN_SKELETON_BIOME_TYPES = builder
+                    .comment("Add biome types that the Sunken Skeleton can spawn in. \n"
+                            + "Put a \"!\" before the type to prevent spawning in that biome type. \n"
+                            + "Leave this blank if you don't want them to spawn at all.")
+                    .defineList("sunkenSkeletonBiomeTypes", Lists.newArrayList(
+                            "WATER",
+                            "!MUSHROOM",
+                            "!NETHER",
+                            "!END"
+                            ),
+                            (itemRaw) -> itemRaw instanceof String);
+            SUNKEN_SKELETON_SPAWN_WEIGHT = builder
+                    .comment("Spawn weight of Sunken Skeletons in the biomes they can spawn in. [default:5]")
+                    .defineInRange("sunkenSkeletonSpawnWeight", 5, 0, 1024);
+            SUNKEN_SKELETON_MIN_GROUP_SIZE = builder
+                    .comment("Minimum spawn group size of Sunken Skeletons in the biomes they can spawn in. [default:1]")
+                    .defineInRange("sunkenSkeletonMinGroupSize", 1, 0, 128);
+            SUNKEN_SKELETON_MAX_GROUP_SIZE = builder
+                    .comment("Maximum spawn group size of Sunken Skeletons in the biomes they can spawn in. [default:4]")
+                    .defineInRange("sunkenSkeletonMaxGroupSize", 1, 0, 128);
+
+            DROWNED_NECROMANCER_BIOME_TYPES = builder
+                    .comment("Add biome types that the Drowned Necromancer can spawn in. \n"
+                            + "Put a \"!\" before the type to prevent spawning in that biome type. \n"
+                            + "Leave this blank if you don't want them to spawn at all.")
+                    .defineList("drownedNecromancerBiomeTypes", Lists.newArrayList(
+                            "OCEAN",
+                            "!MUSHROOM",
+                            "!NETHER",
+                            "!END"
+                            ),
+                            (itemRaw) -> itemRaw instanceof String);
+            DROWNED_NECROMANCER_SPAWN_WEIGHT = builder
+                    .comment("Spawn weight of Drowned Necromancers in the biomes they can spawn in. [default:5]")
+                    .defineInRange("drownedNecromancerSpawnWeight", 5, 0, 1024);
+            DROWNED_NECROMANCER_MIN_GROUP_SIZE = builder
+                    .comment("Minimum spawn group size of Drowned Necromancers in the biomes they can spawn in. [default:1]")
+                    .defineInRange("drownedNecromancerMinGroupSize", 1, 0, 128);
+            DROWNED_NECROMANCER_MAX_GROUP_SIZE = builder
+                    .comment("Maximum spawn group size of Drowned Necromancers in the biomes they can spawn in. [default:4]")
+                    .defineInRange("drownedNecromancerMaxGroupSize", 1, 0, 128);
+
+
+            WAVEWHISPERER_BIOME_TYPES = builder
+                    .comment("Add biome types that the Wavehisperer can spawn in. \n"
+                            + "Put a \"!\" before the type to prevent spawning in that biome type. \n"
+                            + "Leave this blank if you don't want them to spawn at all.")
+                    .defineList("wavewhispererBiomeTypes", Lists.newArrayList(
+                            "OCEAN",
+                            "!MUSHROOM",
+                            "!NETHER",
+                            "!END"
+                            ),
+                            (itemRaw) -> itemRaw instanceof String);
+            WAVEWHISPERER_SPAWN_WEIGHT = builder
+                    .comment("Spawn weight of Wavehisperers in the biomes they can spawn in. [default:5]")
+                    .defineInRange("wavewhispererSpawnWeight", 5, 0, 1024);
+            WAVEWHISPERER_MIN_GROUP_SIZE = builder
+                    .comment("Minimum spawn group size of Wavehisperers in the biomes they can spawn in. [default:1]")
+                    .defineInRange("wavewhispererMinGroupSize", 1, 0, 128);
+            WAVEWHISPERER_MAX_GROUP_SIZE = builder
+                    .comment("Maximum spawn group size of Wavehisperers in the biomes they can spawn in. [default:4]")
+                    .defineInRange("wavewhispererMaxGroupSize", 1, 0, 128);
+
+            QUICK_GROWING_ANEMONE_BIOME_TYPES = builder
+                    .comment("Add biome types that the Quick-Growing Anemone can spawn in. \n"
+                            + "Put a \"!\" before the type to prevent spawning in that biome type. \n"
+                            + "Leave this blank if you don't want them to spawn at all.")
+                    .defineList("quickGrowingAnemoneBiomeTypes", Lists.newArrayList(
+                            "OCEAN",
+                            "!MUSHROOM",
+                            "!NETHER",
+                            "!END"
+                            ),
+                            (itemRaw) -> itemRaw instanceof String);
+            QUICK_GROWING_ANEMONE_SPAWN_WEIGHT = builder
+                    .comment("Spawn weight of Quick-Growing Anemone in the biomes they can spawn in. [default:5]")
+                    .defineInRange("quickGrowingAnemoneSpawnWeight", 5, 0, 1024);
+            QUICK_GROWING_ANEMONE_MIN_GROUP_SIZE = builder
+                    .comment("Minimum spawn group size of Quick-Growing Anemone in the biomes they can spawn in. [default:1]")
+                    .defineInRange("quickGrowingAnemoneMinGroupSize", 1, 0, 128);
+            QUICK_GROWING_ANEMONE_MAX_GROUP_SIZE = builder
+                    .comment("Maximum spawn group size of Quick-Growing Anemone in the biomes they can spawn in. [default:1]")
+                    .defineInRange("quickGrowingAnemoneMaxGroupSize", 1, 0, 128);
+
+            POISON_ANEMONE_BIOME_TYPES = builder
+                    .comment("Add biome types that the Poison Anemone can spawn in. \n"
+                            + "Put a \"!\" before the type to prevent spawning in that biome type. \n"
+                            + "Leave this blank if you don't want them to spawn at all.")
+                    .defineList("poisonAnemoneBiomeTypes", Lists.newArrayList(
+                            "OCEAN",
+                            "!MUSHROOM",
+                            "!NETHER",
+                            "!END"
+                            ),
+                            (itemRaw) -> itemRaw instanceof String);
+            POISON_ANEMONE_SPAWN_WEIGHT = builder
+                    .comment("Spawn weight of Poison Anemone in the biomes they can spawn in. [default:5]")
+                    .defineInRange("poisonAnemoneSpawnWeight", 5, 0, 1024);
+            POISON_ANEMONE_MIN_GROUP_SIZE = builder
+                    .comment("Minimum spawn group size of Poison Anemone in the biomes they can spawn in. [default:1]")
+                    .defineInRange("poisonAnemoneMinGroupSize", 1, 0, 128);
+            POISON_ANEMONE_MAX_GROUP_SIZE = builder
+                    .comment("Maximum spawn group size of Poison Anemone in the biomes they can spawn in. [default:1]")
+                    .defineInRange("poisonAnemoneMaxGroupSize", 1, 0, 128);
 
             builder.pop();
 

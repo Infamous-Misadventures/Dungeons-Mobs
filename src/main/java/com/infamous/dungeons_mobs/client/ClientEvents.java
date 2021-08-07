@@ -20,16 +20,20 @@ import com.infamous.dungeons_mobs.client.renderer.redstone.RedstoneCubeRenderer;
 import com.infamous.dungeons_mobs.client.renderer.redstone.RedstoneGolemRenderer;
 import com.infamous.dungeons_mobs.client.renderer.redstone.RedstoneMineRenderer;
 import com.infamous.dungeons_mobs.client.renderer.slime.ConjuredSlimeRenderer;
+import com.infamous.dungeons_mobs.client.renderer.water.*;
 import com.infamous.dungeons_mobs.items.ModSpawnEggItem;
 import com.infamous.dungeons_mobs.items.WraithFireChargeItem;
+import com.infamous.dungeons_mobs.items.shield.CustomISTER;
 import com.infamous.dungeons_mobs.mod.ModBlocks;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.entity.DrownedRenderer;
 import net.minecraft.entity.EntityType;
+import net.minecraft.item.DyeColor;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -41,6 +45,14 @@ import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientEvents {
+
+    @SubscribeEvent
+    public static void onClientSetup(final ModelRegistryEvent event){
+        ModelLoader.addSpecialModel(CustomISTER.getTridentMRL(DyeColor.YELLOW, false));
+        ModelLoader.addSpecialModel(CustomISTER.getTridentMRL(DyeColor.PURPLE, false));
+        ModelLoader.addSpecialModel(CustomISTER.getTridentMRL(DyeColor.YELLOW, true));
+        ModelLoader.addSpecialModel(CustomISTER.getTridentMRL(DyeColor.PURPLE, true));
+    }
 
     @SubscribeEvent
     public static void onClientSetup(final FMLClientSetupEvent event){
@@ -107,13 +119,13 @@ public class ClientEvents {
 
         RenderTypeLookup.setRenderLayer(ModBlocks.WRAITH_FIRE_BLOCK.get(), RenderType.cutout());
 
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WAVEWHISPERER.get(), WhispererRenderer::new); // TODO
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.POISON_ANEMONE.get(), PoisonQuillVineRenderer::new); // TODO
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.QUICK_GROWING_ANEMONE.get(), QuickGrowingVineRenderer::new); // TODO
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_DROWNED.get(), DrownedRenderer::new); // TODO
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.DROWNED_NECROMANCER.get(), DrownedRenderer::new); // TODO
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SUNKEN_SKELETON.get(), CustomSkeletonRenderer::new); // TODO
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_SUNKEN_SKELETON.get(), CustomSkeletonRenderer::new); // TODO
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WAVEWHISPERER.get(), WavewhispererRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.POISON_ANEMONE.get(), PoisonAnemoneRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.QUICK_GROWING_ANEMONE.get(), QuickGrowingAnemoneRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_DROWNED.get(), CustomDrownedRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.DROWNED_NECROMANCER.get(), DrownedNecromancerRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SUNKEN_SKELETON.get(), SmartSkeletonRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_SUNKEN_SKELETON.get(), SmartSkeletonRenderer::new);
 
     }
 

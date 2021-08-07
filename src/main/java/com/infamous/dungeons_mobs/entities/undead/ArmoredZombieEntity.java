@@ -1,11 +1,13 @@
 package com.infamous.dungeons_mobs.entities.undead;
 
+import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.monster.ZombieEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -35,6 +37,14 @@ public class ArmoredZombieEntity extends ZombieEntity {
                 .add(Attributes.MAX_HEALTH, 30.0D) // normal zombies have 20
                 .add(Attributes.ATTACK_DAMAGE, 4.0D)
         ;
+    }
+
+    @Override
+    protected void doUnderWaterConversion() {
+        this.convertToZombieType(ModEntityTypes.ARMORED_DROWNED.get());
+        if (!this.isSilent()) {
+            this.level.levelEvent((PlayerEntity)null, 1040, this.blockPosition(), 0);
+        }
     }
 
     @Override

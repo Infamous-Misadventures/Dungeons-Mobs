@@ -10,8 +10,6 @@ import net.minecraft.item.ShieldItem;
 import javax.annotation.Nullable;
 import java.util.concurrent.Callable;
 
-import net.minecraft.item.Item.Properties;
-
 public class SkeletonVanguardShieldItem extends ShieldItem {
     public SkeletonVanguardShieldItem(Properties builder) {
         super(builder.setISTER(SkeletonVanguardShieldItem::getISTER));
@@ -27,7 +25,7 @@ public class SkeletonVanguardShieldItem extends ShieldItem {
 
     //@OnlyIn(Dist.CLIENT)
     private static Callable<ItemStackTileEntityRenderer> getISTER() {
-        return ShieldTileEntityRenderer::new;
+        return CustomISTER::new;
     }
 
     @Override

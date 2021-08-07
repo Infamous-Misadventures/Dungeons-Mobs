@@ -1,4 +1,4 @@
-package com.infamous.dungeons_mobs.capabilities;
+package com.infamous.dungeons_mobs.capabilities.cloneable;
 
 import java.util.UUID;
 

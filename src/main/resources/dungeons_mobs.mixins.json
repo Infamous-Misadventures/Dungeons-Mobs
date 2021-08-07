@@ -5,10 +5,12 @@
   "minVersion": "0.8",
   "refmap": "dungeons_mobs.refmap.json",
   "mixins": [
+    "AbstractArrowEntityMixin",
     "AbstractHorseEntityMixin",
     "ArrowAccessor",
     "BrainAccessor",
     "CropsBlockMixin",
+    "DrownedEntityMixin",
     "GoalSelectorAccessor",
     "MansionTemplateMixin",
     "PatrolSpawnerMixin",
@@ -16,12 +18,16 @@
     "PiglinEntityMixin",
     "RaidMixin",
     "SpiderEntityMixin",
+    "TridentEntityMixin",
     "WitherSkeletonEntityMixin",
     "ZombifiedPiglinEntityMixin"
   ],
   "client": [
+    "DrownedModelMixin",
+    "ItemRendererMixin",
     "PiglinModelMixin",
-    "SpiderModelMixin"
+    "SpiderModelMixin",
+    "TridentRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

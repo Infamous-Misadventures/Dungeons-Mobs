@@ -9,8 +9,6 @@ import net.minecraft.item.UseAction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
 
-import net.minecraft.client.renderer.entity.model.BipedModel.ArmPose;
-
 public class SkeletonVanguardModel<T extends SkeletonVanguardEntity> extends BipedModel<T> {
 
   public SkeletonVanguardModel() {

@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.interfaces;
 
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.nbt.CompoundNBT;
@@ -33,12 +34,18 @@ public interface IArmoredMob {
 
         float strongArmorChance = RANDOM.nextFloat();
         if(strongArmorChance < STRONG_ARMOR_SPAWN_CHANCE){
-            this.setStrongArmor(true);
-            this.applyStrongArmorBoosts(armoredMob);
+            this.setStrongArmored((MobEntity) armoredMob);
         }
     }
 
-    default <T extends LivingEntity & IArmoredMob> void applyStrongArmorBoosts(T armoredMob){
+    default void setStrongArmored(MobEntity armoredMob) {
+        if(this != armoredMob) throw new IllegalArgumentException("Supplied armored mob does not match this instance!");
+
+        this.setStrongArmor(true);
+        this.applyStrongArmorBoosts(armoredMob);
+    }
+
+    default void applyStrongArmorBoosts(MobEntity armoredMob){
         if(this != armoredMob) throw new IllegalArgumentException("Supplied armored mob does not match this instance!");
 
         armoredMob.getAttribute(Attributes.ARMOR).addPermanentModifier(new AttributeModifier("Strong armor boost", 10.0D, AttributeModifier.Operation.ADDITION));

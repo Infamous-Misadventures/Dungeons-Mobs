@@ -1,10 +1,8 @@
 package com.infamous.dungeons_mobs.entities.water;
 
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
-import com.infamous.dungeons_mobs.entities.jungle.WhispererEntity;
 import com.infamous.dungeons_mobs.entities.magic.MagicType;
 import com.infamous.dungeons_mobs.entities.projectiles.WraithFireballEntity;
-import com.infamous.dungeons_mobs.entities.undead.WraithEntity;
 import com.infamous.dungeons_mobs.goals.SimpleRangedAttackGoal;
 import com.infamous.dungeons_mobs.goals.magic.UseMagicGoal;
 import com.infamous.dungeons_mobs.goals.magic.UsingMagicGoal;
@@ -12,6 +10,7 @@ import com.infamous.dungeons_mobs.interfaces.IMagicUser;
 import com.infamous.dungeons_mobs.items.NecromancerStaffItem;
 import com.infamous.dungeons_mobs.mixin.GoalSelectorAccessor;
 import com.infamous.dungeons_mobs.mod.ModItems;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -30,10 +29,13 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
@@ -41,7 +43,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
@@ -58,6 +59,11 @@ public class DrownedNecromancerEntity extends DrownedEntity implements IMagicUse
         super(entityType, world);
     }
 
+    @Override
+    protected boolean isSunBurnTick() {
+        return false; // TODO: Not the best solution to prevent Drowned Necromancers burning in daylight, but since this method is only used in AbstractSkeletonEntity#livingTick, it's fine for now
+    }
+
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return ZombieEntity.createAttributes();
     }
@@ -71,7 +77,7 @@ public class DrownedNecromancerEntity extends DrownedEntity implements IMagicUse
                         pg -> pg.getPriority() == 2
                                 && (pg.getGoal() instanceof ZombieAttackGoal || pg.getGoal() instanceof RangedAttackGoal)
                 );
-        this.goalSelector.addGoal(1, new DrownedNecromancerEntity.UsingNecromancy());
+        this.goalSelector.addGoal(1, new DrownedNecromancerEntity.UsingOceanMagic());
         this.goalSelector.addGoal(4, new DrownedNecromancerEntity.UseHydromancy());
         this.goalSelector.addGoal(4, new DrownedNecromancerEntity.UseNeptunesWrath());
         this.goalSelector.addGoal(5, new SimpleRangedAttackGoal<>(this, STAFF_PREDICATE, DrownedNecromancerEntity::performRangedAttack, 1.25D, 20, 20.0F));
@@ -100,7 +106,7 @@ public class DrownedNecromancerEntity extends DrownedEntity implements IMagicUse
     }
 
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
-        this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModItems.NECROMANCER_STAFF.get()));
+        this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModItems.NECROMANCER_TRIDENT.get()));
     }
 
     protected void populateDefaultEquipmentEnchantments(DifficultyInstance difficulty) {
@@ -180,9 +186,9 @@ public class DrownedNecromancerEntity extends DrownedEntity implements IMagicUse
 
 
 
-    class UsingNecromancy extends UsingMagicGoal<DrownedNecromancerEntity> {
+    class UsingOceanMagic extends UsingMagicGoal<DrownedNecromancerEntity> {
 
-        UsingNecromancy() {
+        UsingOceanMagic() {
             super(DrownedNecromancerEntity.this);
         }
     }
@@ -336,56 +342,52 @@ public class DrownedNecromancerEntity extends DrownedEntity implements IMagicUse
         }
 
         private void summonLightning(LivingEntity targetEntity) {
-            BlockPos originalNecromancerPos = new BlockPos(
-                    DrownedNecromancerEntity.this.getX() + 0.5D,
-                    DrownedNecromancerEntity.this.getY() + 0.5D,
-                    DrownedNecromancerEntity.this.getZ() + 0.5D );
+            float atan2 = (float)MathHelper.atan2(targetEntity.getZ() - DrownedNecromancerEntity.this.getZ(), targetEntity.getX() - DrownedNecromancerEntity.this.getX());
+            double minY = Math.min(targetEntity.getY(), DrownedNecromancerEntity.this.getY());
+            double maxY = Math.max(targetEntity.getY(), DrownedNecromancerEntity.this.getY()) + 1.0D;
 
-            BlockPos originalTargetPosition = new BlockPos(
-                    targetEntity.getX() + 0.5D,
-                    targetEntity.getY() + 0.5D,
-                    targetEntity.getZ() + 0.5D );
-
-            List<BlockPos> possibleTargetPositions = new ArrayList<>();
-            for(int i = 0; i < 9; i++){
-                double xshift = 0;
-                double zshift = 0;
-
-                // positive x shift
-                if(i == 1 || i == 2 || i == 8){
-                    xshift = 2.0D;
-                }
-                // negative x shift
-                if(i == 4 || i == 5 || i == 6){
-                    xshift = -2.0D;
-                }
-                // positive z shift
-                if(i == 2 || i == 3 || i == 4){
-                    zshift = 2.0D;
-                }
-                // negative z shift
-                if(i == 6 || i == 7 || i == 8){
-                    zshift = -2.0D;
-                }
-                BlockPos targetBlockPos = pickBlockPosForAttack(originalTargetPosition, xshift, zshift);
-                possibleTargetPositions.add(targetBlockPos);
-            }
-
-            World world = targetEntity.getCommandSenderWorld();
-            BlockPos targetBlockPos = possibleTargetPositions.get(world.random.nextInt(possibleTargetPositions.size()));
-            LightningBoltEntity lightningboltentity = EntityType.LIGHTNING_BOLT.create(world);
-            if (lightningboltentity != null) {
-                lightningboltentity.moveTo(Vector3d.atBottomCenterOf(targetBlockPos));
-                lightningboltentity.setCause(null); // Not ideal, but the method only takes in a ServerPlayerEntity
-                world.addFreshEntity(lightningboltentity);
+            // We summon 6  lightning bolts around the summoner
+            for(int boltCounter = 0; boltCounter < 5; ++boltCounter) {
+                float randomShift = atan2 + (float)boltCounter * (float)Math.PI * 0.4F;
+                this.createSpellEntity(DrownedNecromancerEntity.this.getX() + (double) MathHelper.cos(randomShift) * 1.5D, DrownedNecromancerEntity.this.getZ() + (double)MathHelper.sin(randomShift) * 1.5D, minY, maxY);
             }
         }
 
-        private BlockPos pickBlockPosForAttack(BlockPos originalTargetPosition, double xshift, double zshift) {
-            return new BlockPos(
-                    originalTargetPosition.getX() + xshift,
-                    originalTargetPosition.getY(),
-                    originalTargetPosition.getZ() + zshift);
+        private void createSpellEntity(double x, double z, double minY, double maxY) {
+            BlockPos blockpos = new BlockPos(x, maxY, z);
+            boolean doSummon = false;
+            double yShift = 0.0D;
+
+            World level = DrownedNecromancerEntity.this.level;
+            do {
+                BlockPos below = blockpos.below();
+                BlockState stateAtBelowPos = level.getBlockState(below);
+                if (stateAtBelowPos.isFaceSturdy(level, below, Direction.UP)) {
+                    if (!level.isEmptyBlock(blockpos)) {
+                        BlockState stateAtPos = level.getBlockState(blockpos);
+                        VoxelShape shapeAtPos = stateAtPos.getCollisionShape(level, blockpos);
+                        if (!shapeAtPos.isEmpty()) {
+                            yShift = shapeAtPos.max(Direction.Axis.Y);
+                        }
+                    }
+
+                    doSummon = true;
+                    break;
+                }
+
+                blockpos = blockpos.below();
+            } while(blockpos.getY() >= MathHelper.floor(minY) - 1);
+
+            if (doSummon) {
+                LightningBoltEntity lightningboltentity = EntityType.LIGHTNING_BOLT.create(level);
+                if (lightningboltentity != null) {
+                    Vector3d targetPosVec = new Vector3d(x, (double)blockpos.getY() + yShift, z);
+                    lightningboltentity.moveTo(targetPosVec);
+                    lightningboltentity.setCause(null); // Not ideal, but the method only takes in a ServerPlayerEntity
+                    level.addFreshEntity(lightningboltentity);
+                }
+            }
+
         }
 
         @Override

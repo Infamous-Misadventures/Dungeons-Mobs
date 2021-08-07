@@ -1,5 +1,6 @@
 package com.infamous.dungeons_mobs.blocks;
 
+import com.infamous.dungeons_mobs.entities.undead.WraithEntity;
 import com.infamous.dungeons_mobs.mod.ModBlocks;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import net.minecraft.block.*;
@@ -103,7 +104,7 @@ public class WraithFireBlock extends AbstractFireBlock {
     }
 
     public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
-        if (!entityIn.fireImmune() || entityIn.getType() != ModEntityTypes.WRAITH.get()) {
+        if (!entityIn.fireImmune() || entityIn instanceof WraithEntity) {
             entityIn.setRemainingFireTicks(entityIn.getRemainingFireTicks() + 1);
             if (entityIn.getRemainingFireTicks() == 0) {
                 entityIn.setSecondsOnFire(8);

@@ -1,6 +1,13 @@
 package com.infamous.dungeons_mobs.entities.undead;
 
+import com.infamous.dungeons_mobs.DungeonsGearCompat;
+import com.infamous.dungeons_mobs.entities.water.ArmoredDrownedEntity;
+import com.infamous.dungeons_mobs.interfaces.IArmoredMob;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.world.*;
 import com.infamous.dungeons_mobs.utils.ModProjectileHelper;
 import com.infamous.dungeons_mobs.goals.ModdedRangedBowAttackGoal;
@@ -24,7 +31,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 
-public class ArmoredSkeletonEntity extends SkeletonEntity {
+public class ArmoredSkeletonEntity extends SkeletonEntity implements IArmoredMob {
+    private static final DataParameter<Boolean> STRONG_ARMOR = EntityDataManager.defineId(ArmoredSkeletonEntity.class, DataSerializers.BOOLEAN);
+
     private final ModdedRangedBowAttackGoal<AbstractSkeletonEntity> rangedAI = new ModdedRangedBowAttackGoal<>(this, 1.0D, 20, 15.0F);
     private final MeleeAttackGoal meleeAI = new MeleeAttackGoal(this, 1.2D, false) {
         /**
@@ -57,6 +66,12 @@ public class ArmoredSkeletonEntity extends SkeletonEntity {
     }
 
     @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(STRONG_ARMOR, false);
+    }
+
+    @Override
     protected void registerGoals() {
         super.registerGoals();
         //this.goalSelector.addGoal(4, new ModdedRangedBowAttackGoal<>(this, 1.0D, 20, 15.0F));
@@ -71,8 +86,7 @@ public class ArmoredSkeletonEntity extends SkeletonEntity {
 
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficultyInstance) {
         //super.setEquipmentBasedOnDifficulty(difficultyInstance);
-        if(ModList.get().isLoaded("dungeons_gear")){
-
+        if(DungeonsGearCompat.isLoaded()){
             Item REINFORCED_MAIL_HELMET = ForgeRegistries.ITEMS.getValue(new ResourceLocation("dungeons_gear", "reinforced_mail_helmet"));
             Item REINFORCED_MAIL_CHESTPLATE = ForgeRegistries.ITEMS.getValue(new ResourceLocation("dungeons_gear", "reinforced_mail_chestplate"));
             Item POWER_BOW = ForgeRegistries.ITEMS.getValue(new ResourceLocation("dungeons_gear", "power_bow"));
@@ -82,13 +96,20 @@ public class ArmoredSkeletonEntity extends SkeletonEntity {
             ItemStack powerBow = new ItemStack(POWER_BOW);
 
             this.setItemSlot(EquipmentSlotType.HEAD, reinforcedMailHelmet);
-            this.setItemSlot(EquipmentSlotType.CHEST, reinforcedMailChestplate);
-            this.setItemSlot(EquipmentSlotType.MAINHAND, powerBow);
+            if(this.hasStrongArmor()){
+                this.setItemSlot(EquipmentSlotType.CHEST, reinforcedMailChestplate);
+                this.setItemSlot(EquipmentSlotType.MAINHAND, powerBow);
+            } else{
+                this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.BOW));
+            }
         }
         else{
             this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Items.IRON_HELMET));
-            this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
             this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.BOW));
+            if(this.hasStrongArmor()){
+                this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
+                this.getMainHandItem().enchant(Enchantments.POWER_ARROWS, 1);
+            }
         }
     }
 
@@ -111,6 +132,7 @@ public class ArmoredSkeletonEntity extends SkeletonEntity {
 
     @Nullable
     public ILivingEntityData finalizeSpawn(IServerWorld world, DifficultyInstance difficultyInstance, SpawnReason spawnReason, @Nullable ILivingEntityData livingEntityDataIn, @Nullable CompoundNBT compoundNBT) {
+        this.designateStrongArmor(this);
         livingEntityDataIn = super.finalizeSpawn(world, difficultyInstance, spawnReason, livingEntityDataIn, compoundNBT);
         return livingEntityDataIn;
     }
@@ -150,5 +172,32 @@ public class ArmoredSkeletonEntity extends SkeletonEntity {
 
     protected SoundEvent getStepSound() {
         return SoundEvents.SKELETON_STEP;
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundNBT p_70037_1_) {
+        super.readAdditionalSaveData(p_70037_1_);
+        this.readStrongArmorNBT(p_70037_1_);
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundNBT p_213281_1_) {
+        super.addAdditionalSaveData(p_213281_1_);
+        this.writeStrongArmorNBT(p_213281_1_);
+    }
+
+    @Override
+    public boolean hasStrongArmor() {
+        return this.entityData.get(STRONG_ARMOR);
+    }
+
+    @Override
+    public void setStrongArmor(boolean strongArmor) {
+        this.entityData.set(STRONG_ARMOR, strongArmor);
+    }
+
+    @Override
+    public String getArmorName() {
+        return "";
     }
 }

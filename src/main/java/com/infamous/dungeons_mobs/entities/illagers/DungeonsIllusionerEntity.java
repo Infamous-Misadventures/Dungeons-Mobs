@@ -2,8 +2,8 @@ package com.infamous.dungeons_mobs.entities.illagers;
 
 import javax.annotation.Nullable;
 
-import com.infamous.dungeons_mobs.capabilities.CloneableHelper;
-import com.infamous.dungeons_mobs.capabilities.ICloneable;
+import com.infamous.dungeons_mobs.capabilities.cloneable.CloneableHelper;
+import com.infamous.dungeons_mobs.capabilities.cloneable.ICloneable;
 import com.infamous.dungeons_mobs.mixin.GoalSelectorAccessor;
 import com.infamous.dungeons_mobs.utils.ModProjectileHelper;
 import net.minecraft.entity.Entity;

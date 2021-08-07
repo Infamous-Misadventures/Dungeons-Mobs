@@ -1,5 +1,6 @@
 package com.infamous.dungeons_mobs.entities.projectiles;
 
+import com.infamous.dungeons_mobs.entities.undead.WraithEntity;
 import com.infamous.dungeons_mobs.mod.ModBlocks;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModItems;
@@ -53,7 +54,7 @@ public class WraithFireballEntity extends AbstractFireballEntity {
       super.onHitEntity(p_213868_1_);
       if (!this.level.isClientSide) {
          Entity entity = p_213868_1_.getEntity();
-         if (!entity.fireImmune() || entity.getType() != ModEntityTypes.WRAITH.get()) {
+         if (!entity.fireImmune() || entity instanceof WraithEntity) {
             Entity entity1 = this.getOwner();
             int i = entity.getRemainingFireTicks();
             entity.setSecondsOnFire(5);

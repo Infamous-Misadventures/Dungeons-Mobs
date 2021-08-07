@@ -15,8 +15,7 @@ public class SkeletonVanguardRenderer extends BipedRenderer<SkeletonVanguardEnti
 
     public SkeletonVanguardRenderer(EntityRendererManager renderManagerIn) {
         super(renderManagerIn, new SkeletonVanguardModel<>(), 0.5F);
-        this.addLayer(new BipedArmorLayer<>(this, new SkeletonVanguardModel<>(0.5F), new SkeletonVanguardModel(1.0F)));
-        //this.addLayer(new WraithClothingLayer<>(this));
+        this.addLayer(new BipedArmorLayer<>(this, new SkeletonVanguardModel<>(0.5F), new SkeletonVanguardModel<>(1.0F)));
     }
 
     @Override

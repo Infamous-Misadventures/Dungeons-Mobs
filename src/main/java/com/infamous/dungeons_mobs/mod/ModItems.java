@@ -4,9 +4,7 @@ import com.infamous.dungeons_mobs.items.*;
 import com.infamous.dungeons_mobs.items.shield.RoyalGuardShieldItem;
 import com.infamous.dungeons_mobs.items.shield.SkeletonVanguardShieldItem;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ArmorMaterial;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemTier;
+import net.minecraft.item.*;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -287,6 +285,15 @@ public class ModItems {
     public static final RegistryObject<Item> NECROMANCER_STAFF = ITEMS.register("necromancer_staff",
             () -> new NecromancerStaffItem(new Item.Properties().tab(DUNGEONS_MOBS).durability(64)));
 
+    public static final RegistryObject<Item> NECROMANCER_TRIDENT = ITEMS.register("necromancer_trident",
+            () -> new NecromancerStaffItem(new Item.Properties().tab(DUNGEONS_MOBS).durability(64)));
+
     public static final RegistryObject<Item> BLUE_NETHERSHROOM = ITEMS.register("blue_nethershroom",
             () -> new BlueNethershroomItem(new Item.Properties().tab(DUNGEONS_MOBS).stacksTo(16)));
+
+    public static final RegistryObject<Item> YELLOW_TRIDENT = ITEMS.register("yellow_trident",
+            () -> new ColoredTridentItem((new Item.Properties().durability(250).tab(DUNGEONS_MOBS)), DyeColor.YELLOW));
+
+    public static final RegistryObject<Item> PURPLE_TRIDENT = ITEMS.register("purple_trident",
+            () -> new ColoredTridentItem((new Item.Properties().durability(250).tab(DUNGEONS_MOBS)), DyeColor.PURPLE));
 }

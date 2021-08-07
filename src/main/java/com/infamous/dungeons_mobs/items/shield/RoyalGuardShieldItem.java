@@ -6,13 +6,9 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ShieldItem;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.concurrent.Callable;
-
-import net.minecraft.item.Item.Properties;
 
 public class RoyalGuardShieldItem extends ShieldItem {
     public RoyalGuardShieldItem(Properties builder) {
@@ -29,7 +25,7 @@ public class RoyalGuardShieldItem extends ShieldItem {
 
     //@OnlyIn(Dist.CLIENT)
     private static Callable<ItemStackTileEntityRenderer> getISTER() {
-        return ShieldTileEntityRenderer::new;
+        return CustomISTER::new;
     }
 
     @Override

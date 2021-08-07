@@ -1,9 +1,10 @@
-package com.infamous.dungeons_mobs.capabilities;
+package com.infamous.dungeons_mobs.capabilities.cloneable;
 
-import java.util.Arrays;
+import com.infamous.dungeons_mobs.capabilities.cloneable.ICloneable;
+
 import java.util.UUID;
 
-public class Cloneable implements ICloneable{
+public class Cloneable implements ICloneable {
     private UUID[] clones = new UUID[7];
 
     public Cloneable(){

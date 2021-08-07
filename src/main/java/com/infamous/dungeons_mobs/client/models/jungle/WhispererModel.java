@@ -70,6 +70,16 @@ public class WhispererModel<T extends WhispererEntity> extends BipedModel<T> {
 			this.rightArm.yRot = 0.0F;
 			this.leftArm.yRot = 0.0F;
 		}
+
+		if (this.swimAmount > 0.0F) {
+			this.rightArm.xRot = this.rotlerpRad(this.swimAmount, this.rightArm.xRot, -2.5132742F) + this.swimAmount * 0.35F * MathHelper.sin(0.1F * ageInTicks);
+			this.leftArm.xRot = this.rotlerpRad(this.swimAmount, this.leftArm.xRot, -2.5132742F) - this.swimAmount * 0.35F * MathHelper.sin(0.1F * ageInTicks);
+			this.rightArm.zRot = this.rotlerpRad(this.swimAmount, this.rightArm.zRot, -0.15F);
+			this.leftArm.zRot = this.rotlerpRad(this.swimAmount, this.leftArm.zRot, 0.15F);
+			this.leftLeg.xRot -= this.swimAmount * 0.55F * MathHelper.sin(0.1F * ageInTicks);
+			this.rightLeg.xRot += this.swimAmount * 0.55F * MathHelper.sin(0.1F * ageInTicks);
+			this.head.xRot = 0.0F;
+		}
 	}
 
 	public void translateToHand(HandSide sideIn, MatrixStack matrixStackIn) {

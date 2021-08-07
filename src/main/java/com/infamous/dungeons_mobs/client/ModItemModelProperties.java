@@ -17,5 +17,15 @@ public class ModItemModelProperties {
                 (stack, clientWorld, livingEntity) -> {
                     return livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == stack ? 1.0F : 0.0F;
                 });
+        ItemModelsProperties.register(ModItems.YELLOW_TRIDENT.get(),
+                new ResourceLocation("throwing"),
+                (stack, clientWorld, livingEntity) -> {
+                    return livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == stack ? 1.0F : 0.0F;
+                });
+        ItemModelsProperties.register(ModItems.PURPLE_TRIDENT.get(),
+                new ResourceLocation("throwing"),
+                (stack, clientWorld, livingEntity) -> {
+                    return livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == stack ? 1.0F : 0.0F;
+                });
     }
 }

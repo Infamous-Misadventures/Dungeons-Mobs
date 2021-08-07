@@ -1,8 +1,10 @@
 package com.infamous.dungeons_mobs.client.renderer.jungle;
 
 import com.infamous.dungeons_mobs.client.models.jungle.LeapleafModel;
+import com.infamous.dungeons_mobs.client.models.jungle.LeapleafModel2;
 import com.infamous.dungeons_mobs.entities.jungle.LeapleafEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.renderer.entity.BipedRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;
@@ -12,11 +14,11 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
 @OnlyIn(Dist.CLIENT)
-public class LeapleafRenderer extends MobRenderer<LeapleafEntity, LeapleafModel<LeapleafEntity>> {
+public class LeapleafRenderer extends MobRenderer<LeapleafEntity, LeapleafModel2<LeapleafEntity>> {
    private static final ResourceLocation LEAPLEAF_TEXTURE = new ResourceLocation(MODID, "textures/entity/jungle/leapleaf.png");
 
    public LeapleafRenderer(EntityRendererManager renderManagerIn) {
-      super(renderManagerIn, new LeapleafModel<>(), 1.4F);
+      super(renderManagerIn, new LeapleafModel2<>(), 1.4F);
    }
 
    @Override
@@ -33,16 +35,4 @@ public class LeapleafRenderer extends MobRenderer<LeapleafEntity, LeapleafModel<
       return LEAPLEAF_TEXTURE;
    }
 
-   protected void setupRotations(LeapleafEntity entityLiving, MatrixStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks) {
-      super.setupRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
-      /*
-      if (!((double)entityLiving.limbSwingAmount < 0.01D)) {
-         float f = 13.0F;
-         float f1 = entityLiving.limbSwing - entityLiving.limbSwingAmount * (1.0F - partialTicks) + 6.0F;
-         float f2 = (Math.abs(f1 % 13.0F - 6.5F) - 3.25F) / 3.25F;
-         matrixStackIn.rotate(Vector3f.ZP.rotationDegrees(6.5F * f2));
-      }
-
-       */
-   }
 }

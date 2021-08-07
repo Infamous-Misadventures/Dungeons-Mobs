@@ -37,8 +37,12 @@ public class ConjuredSlimeEntity extends SlimeEntity implements IRangedAttackMob
         this.goalSelector.addGoal(2, new ImmobileRangedAttackGoal( 40, 10.0F));
         this.goalSelector.addGoal(3, new ConjuredSlimeEntity.FaceRandomGoal(this));
         //this.goalSelector.addGoal(5, new ConjuredSlimeEntity.HopGoal(this));
-        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, 10, true, false, (entity) -> Math.abs(entity.getY() - this.getY()) <= 4.0D));
+        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, 10, true, false, this::canSlimeReach));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
+    }
+
+    private boolean canSlimeReach(LivingEntity target){
+        return Math.abs(target.getY() - this.getY()) <= 4.0D;
     }
 
     @Override
