@@ -48,7 +48,7 @@ public class TornadoEntity extends Entity {
     private float radiusPerTick;
     private LivingEntity owner;
     private UUID ownerUniqueId;
-    private LivingEntity target;
+    private Entity target;
     private UUID targetUniqueId;
 
     public TornadoEntity(World world){
@@ -67,9 +67,9 @@ public class TornadoEntity extends Entity {
         this.setPos(x, y, z);
     }
 
-    public TornadoEntity(World world, LivingEntity caster, LivingEntity livingEntity) {
-        this(world, caster, livingEntity.getX(), livingEntity.getY(), livingEntity.getZ());
-        this.setTarget(livingEntity);
+    public TornadoEntity(World world, LivingEntity caster, Entity target) {
+        this(world, caster, target.getX(), target.getY(), target.getZ());
+        this.setTarget(target);
     }
 
     protected void defineSynchedData() {
@@ -310,7 +310,7 @@ public class TornadoEntity extends Entity {
         this.ownerUniqueId = ownerIn == null ? null : ownerIn.getUUID();
     }
 
-    public void setTarget(@Nullable LivingEntity targetIn) {
+    public void setTarget(@Nullable Entity targetIn) {
         this.target = targetIn;
         this.targetUniqueId = targetIn == null ? null : targetIn.getUUID();
     }
@@ -326,12 +326,10 @@ public class TornadoEntity extends Entity {
         return this.owner;
     }
     @Nullable
-    public LivingEntity getTarget() {
+    public Entity getTarget() {
         if (this.target == null && this.targetUniqueId != null && this.level instanceof ServerWorld) {
             Entity entity = ((ServerWorld)this.level).getEntity(this.targetUniqueId);
-            if (entity instanceof LivingEntity) {
-                this.target = (LivingEntity)entity;
-            }
+            this.target = entity;
         }
 
         return this.target;

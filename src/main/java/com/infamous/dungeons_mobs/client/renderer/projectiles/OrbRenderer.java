@@ -28,23 +28,23 @@ public class OrbRenderer<T extends AbstractOrbEntity> extends EntityRenderer<T> 
     }
 
     @Override
-    public void render(T entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+    public void render(T orb, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
         matrixStackIn.pushPose();
         matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(180));
         matrixStackIn.translate(0.0D, -1.5D, 0.0D);
-        ResourceLocation resourceLocation = this.getTextureLocation(entityIn);
-        RenderType renderType = this.orbModel.renderType(resourceLocation);
+        ResourceLocation texture = this.getTextureLocation(orb);
+        RenderType renderType = this.orbModel.renderType(texture);
         IVertexBuilder ivertexbuilder = bufferIn.getBuffer(renderType);
         this.orbModel.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         matrixStackIn.popPose();
-        super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
+        super.render(orb, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
     }
 
     @Override
-    public ResourceLocation getTextureLocation(T p_110775_1_) {
-        if(p_110775_1_ instanceof LaserOrbEntity){
+    public ResourceLocation getTextureLocation(T orb) {
+        if(orb instanceof LaserOrbEntity){
             return LASER_ORB_TEXTURE;
-        } else if(p_110775_1_ instanceof TridentFumeEntity){
+        } else if(orb instanceof TridentFumeEntity){
             return TRIDENT_FUME_TEXTURE;
         } else{
             return LASER_ORB_TEXTURE;

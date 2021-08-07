@@ -603,10 +603,10 @@ public class DungeonsMobsConfig {
                     .comment("Spawn weight of Fungus Throwers in the biomes they can spawn in. [default:5]")
                     .defineInRange("fungusThrowerSpawnWeight", 5, 0, 1024);
             FUNGUS_THROWER_MIN_GROUP_SIZE = builder
-                    .comment("Minimum spawn group size of Fungus Throwers in the biomes they can spawn in. [default:1]")
+                    .comment("Minimum spawn group size of Fungus Throwers in the biomes they can spawn in. [default:3]")
                     .defineInRange("fungusThrowerMinGroupSize", 3, 0, 128);
             FUNGUS_THROWER_MAX_GROUP_SIZE = builder
-                    .comment("Maximum spawn group size of Fungus Throwers in the biomes they can spawn in. [default:1]")
+                    .comment("Maximum spawn group size of Fungus Throwers in the biomes they can spawn in. [default:4]")
                     .defineInRange("fungusThrowerMaxGroupSize", 4, 0, 128);
 
             ZOMBIFIED_FUNGUS_THROWER_BIOME_TYPES = builder
@@ -627,10 +627,10 @@ public class DungeonsMobsConfig {
                     .comment("Spawn weight of Zombified Fungus Throwers in the biomes they can spawn in. [default:5]")
                     .defineInRange("zombifiedFungusThrowerSpawnWeight", 5, 0, 1024);
             ZOMBIFIED_FUNGUS_THROWER_MIN_GROUP_SIZE = builder
-                    .comment("Minimum spawn group size of Zombified Fungus Throwers in the biomes they can spawn in. [default:1]")
+                    .comment("Minimum spawn group size of Zombified Fungus Throwers in the biomes they can spawn in. [default:3]")
                     .defineInRange("zombifiedFungusThrowerMinGroupSize", 3, 0, 128);
             ZOMBIFIED_FUNGUS_THROWER_MAX_GROUP_SIZE = builder
-                    .comment("Maximum spawn group size of Zombified Fungus Throwers in the biomes they can spawn in. [default:1]")
+                    .comment("Maximum spawn group size of Zombified Fungus Throwers in the biomes they can spawn in. [default:4]")
                     .defineInRange("zombifiedFungusThrowerMaxGroupSize", 4, 0, 128);
 
 
@@ -655,7 +655,7 @@ public class DungeonsMobsConfig {
                     .comment("Minimum spawn group size of Wither Skeletons in the biomes they can spawn in. [default:1]")
                     .defineInRange("witherSkeletonMinGroupSize", 1, 0, 128);
             WITHER_SKELETON_MAX_GROUP_SIZE = builder
-                    .comment("Maximum spawn group size of Wither Skeletons in the biomes they can spawn in. [default:1]")
+                    .comment("Maximum spawn group size of Wither Skeletons in the biomes they can spawn in. [default:4]")
                     .defineInRange("witherSkeletonMaxGroupSize", 4, 0, 128);
 
             SUNKEN_SKELETON_BIOME_TYPES = builder

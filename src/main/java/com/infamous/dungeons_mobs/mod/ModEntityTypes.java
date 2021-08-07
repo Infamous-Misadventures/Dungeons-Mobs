@@ -479,6 +479,7 @@ public class ModEntityTypes {
                     .sized(0.25F, 0.25F)
                     .clientTrackingRange(4)
                     .updateInterval(10)
+                    .setCustomClientFactory((spawnEntity,world) -> new LaserOrbEntity(world))
                     .build(new ResourceLocation(MODID, "laser_orb").toString())
     );
 
@@ -487,6 +488,7 @@ public class ModEntityTypes {
                     .sized(0.25F, 0.25F)
                     .clientTrackingRange(4)
                     .updateInterval(10)
+                    .setCustomClientFactory((spawnEntity,world) -> new TridentFumeEntity(world))
                     .build(new ResourceLocation(MODID, "trident_fume").toString())
     );
 }

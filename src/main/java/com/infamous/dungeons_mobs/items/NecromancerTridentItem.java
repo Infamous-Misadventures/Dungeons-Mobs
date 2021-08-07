@@ -4,7 +4,7 @@ import com.infamous.dungeons_mobs.entities.projectiles.AbstractOrbEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.TridentFumeEntity;
 import net.minecraft.entity.player.PlayerEntity;
 
-public class NecromancerTridentItem extends NecromancerStaffItem{
+public class NecromancerTridentItem extends AbstractNecromancerStaffItem{
     public NecromancerTridentItem(Properties properties) {
         super(properties);
     }

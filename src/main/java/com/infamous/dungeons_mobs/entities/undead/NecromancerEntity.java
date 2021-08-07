@@ -2,6 +2,8 @@ package com.infamous.dungeons_mobs.entities.undead;
 
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.entities.projectiles.LaserOrbEntity;
+import com.infamous.dungeons_mobs.entities.water.DrownedNecromancerEntity;
+import com.infamous.dungeons_mobs.goals.SimpleRangedAttackGoal;
 import com.infamous.dungeons_mobs.goals.magic.UseMagicGoal;
 import com.infamous.dungeons_mobs.goals.magic.UsingMagicGoal;
 import com.infamous.dungeons_mobs.items.NecromancerStaffItem;
@@ -23,8 +25,10 @@ import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.passive.TurtleEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.FireballEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -33,6 +37,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.IWorld;
@@ -44,11 +49,13 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoField;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class NecromancerEntity extends AbstractSkeletonEntity implements IMagicUser {
 
     // Required to make use of IMagicUser
     private static final DataParameter<Byte> MAGIC = EntityDataManager.defineId(WraithEntity.class, DataSerializers.BYTE);
+    public static final Predicate<Item> STAFF_PREDICATE = item -> item instanceof NecromancerStaffItem;
     private int magicUseTicks;
     private MagicType activeMagic = MagicType.NONE;
 
@@ -68,7 +75,7 @@ public class NecromancerEntity extends AbstractSkeletonEntity implements IMagicU
         this.goalSelector.addGoal(2, new RestrictSunGoal(this));
         this.goalSelector.addGoal(3, new FleeSunGoal(this, 1.0D));
         this.goalSelector.addGoal(4, new NecromancerEntity.UseNecromancy());
-        this.goalSelector.addGoal(5, new RangedAttackGoal(this, 1.25D, 20, 20.0F));
+        this.goalSelector.addGoal(5, new SimpleRangedAttackGoal<>(this, STAFF_PREDICATE, NecromancerEntity::performRangedAttack, 1.25D, 20, 20.0F));
         //this.goalSelector.addGoal(5, new MagicAttackGoal<>(this, 1.0D, 6.0F));
         this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, WolfEntity.class, 6.0F, 1.0D, 1.2D));
         this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, PlayerEntity.class, 6.0F, 1.0D, 1.2D));
@@ -221,17 +228,17 @@ public class NecromancerEntity extends AbstractSkeletonEntity implements IMagicU
         // NO-OP
     }
 
-    public void performRangedAttack(LivingEntity target, float distanceFactor) {
-        this.swing(ProjectileHelper.getWeaponHoldingHand(this, item -> item instanceof NecromancerStaffItem));
-        double squareDistanceToTarget = NecromancerEntity.this.distanceToSqr(target);
-        double xDifference = target.getX() - NecromancerEntity.this.getX();
-        double yDifference = target.getY(0.5D) - NecromancerEntity.this.getY(0.5D);
-        double zDifference = target.getZ() - NecromancerEntity.this.getZ();
-        float f = MathHelper.sqrt(MathHelper.sqrt(squareDistanceToTarget)) * 0.5F;
+    private static void performRangedAttack(LivingEntity shooter, LivingEntity target) {
+        shooter.swing(ProjectileHelper.getWeaponHoldingHand(shooter, STAFF_PREDICATE));
+        double scale = 4.0D;
+        Vector3d viewVector = shooter.getViewVector(1.0F);
+        double xAccel = target.getX() - (shooter.getX() + viewVector.x * scale);
+        double yAccel = target.getY(0.5D) - (0.5D + shooter.getY(0.5D));
+        double zAccel = target.getZ() - (shooter.getZ() + viewVector.z * scale);
 
-        LaserOrbEntity laserOrb = new LaserOrbEntity(this.level, this, xDifference, yDifference, zDifference);
-        laserOrb.setPos(laserOrb.getX(), NecromancerEntity.this.getY(0.5D) + 0.5D, laserOrb.getZ());
-        NecromancerEntity.this.level.addFreshEntity(laserOrb);
+        LaserOrbEntity laserOrb = new LaserOrbEntity(shooter.level, shooter, xAccel, yAccel, zAccel);
+        laserOrb.setPos(shooter.getX() + viewVector.x * scale, shooter.getY(0.5D) + 0.5D, laserOrb.getZ() + viewVector.z * scale);
+        shooter.level.addFreshEntity(laserOrb);
     }
 
     @Nullable

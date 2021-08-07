@@ -3,12 +3,10 @@ package com.infamous.dungeons_mobs.entities.water;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.entities.magic.MagicType;
 import com.infamous.dungeons_mobs.entities.projectiles.TridentFumeEntity;
-import com.infamous.dungeons_mobs.entities.projectiles.WraithFireballEntity;
 import com.infamous.dungeons_mobs.goals.SimpleRangedAttackGoal;
 import com.infamous.dungeons_mobs.goals.magic.UseMagicGoal;
 import com.infamous.dungeons_mobs.goals.magic.UsingMagicGoal;
 import com.infamous.dungeons_mobs.interfaces.IMagicUser;
-import com.infamous.dungeons_mobs.items.NecromancerStaffItem;
 import com.infamous.dungeons_mobs.items.NecromancerTridentItem;
 import com.infamous.dungeons_mobs.mixin.GoalSelectorAccessor;
 import com.infamous.dungeons_mobs.mod.ModItems;
@@ -53,7 +51,7 @@ public class DrownedNecromancerEntity extends DrownedEntity implements IMagicUse
 
     // Required to make use of IMagicUser
     private static final DataParameter<Byte> MAGIC = EntityDataManager.defineId(DrownedNecromancerEntity.class, DataSerializers.BYTE);
-    public static final Predicate<Item> STAFF_PREDICATE = item -> item instanceof NecromancerTridentItem;
+    public static final Predicate<Item> TRIDENT_STAFF_PREDICATE = item -> item instanceof NecromancerTridentItem;
     private int magicUseTicks;
     private MagicType activeMagic = MagicType.NONE;
 
@@ -82,19 +80,21 @@ public class DrownedNecromancerEntity extends DrownedEntity implements IMagicUse
         this.goalSelector.addGoal(1, new DrownedNecromancerEntity.UsingOceanMagic());
         this.goalSelector.addGoal(4, new DrownedNecromancerEntity.UseHydromancy());
         this.goalSelector.addGoal(4, new DrownedNecromancerEntity.UseNeptunesWrath());
-        this.goalSelector.addGoal(5, new SimpleRangedAttackGoal<>(this, STAFF_PREDICATE, DrownedNecromancerEntity::performRangedAttack, 1.25D, 20, 20.0F));
+        this.goalSelector.addGoal(5, new SimpleRangedAttackGoal<>(this, TRIDENT_STAFF_PREDICATE, DrownedNecromancerEntity::performRangedAttack, 1.25D, 20, 20.0F));
 
     }
 
     private static void performRangedAttack(LivingEntity shooter, LivingEntity target) {
-        shooter.swing(ProjectileHelper.getWeaponHoldingHand(shooter, item -> item instanceof NecromancerStaffItem));
-        double xDifference = target.getX() - shooter.getX();
-        double yDifference = target.getY(0.5D) - shooter.getY(0.5D);
-        double zDifference = target.getZ() - shooter.getZ();
+        shooter.swing(ProjectileHelper.getWeaponHoldingHand(shooter, TRIDENT_STAFF_PREDICATE));
+        double scale = 4.0D;
+        Vector3d viewVector = shooter.getViewVector(1.0F);
+        double xAccel = target.getX() - (shooter.getX() + viewVector.x * scale);
+        double yAccel = target.getY(0.5D) - (0.5D + shooter.getY(0.5D));
+        double zAccel = target.getZ() - (shooter.getZ() + viewVector.z * scale);
 
-        TridentFumeEntity tridentFume = new TridentFumeEntity(shooter.level, shooter, xDifference, yDifference, zDifference);
-        tridentFume.setPos(tridentFume.getX(), shooter.getY(0.5D) + 0.5D, tridentFume.getZ());
-        shooter.level.addFreshEntity(tridentFume);
+        TridentFumeEntity tridentFumeEntity = new TridentFumeEntity(shooter.level, shooter, xAccel, yAccel, zAccel);
+        tridentFumeEntity.setPos(shooter.getX() + viewVector.x * scale, shooter.getY(0.5D) + 0.5D, tridentFumeEntity.getZ() + viewVector.z * scale);
+        shooter.level.addFreshEntity(tridentFumeEntity);
     }
 
     @Override

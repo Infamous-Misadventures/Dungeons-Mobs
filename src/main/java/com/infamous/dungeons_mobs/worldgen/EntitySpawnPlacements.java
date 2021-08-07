@@ -54,11 +54,11 @@ public class EntitySpawnPlacements {
                 IcyCreeperEntity::canIcyCreeperSpawn);
         EntitySpawnPlacementRegistry.register(ModEntityTypes.JUNGLE_ZOMBIE.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
-                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
+                Heightmap.Type.MOTION_BLOCKING,
                 JungleZombieEntity::canJungleZombieSpawn);
         EntitySpawnPlacementRegistry.register(ModEntityTypes.MOSSY_SKELETON.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
-                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
+                Heightmap.Type.MOTION_BLOCKING,
                 MossySkeletonEntity::canMossySkeletonSpawn);
 
 
@@ -140,19 +140,19 @@ public class EntitySpawnPlacements {
 
         EntitySpawnPlacementRegistry.register(ModEntityTypes.WHISPERER.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
-                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
+                Heightmap.Type.MOTION_BLOCKING,
                 EntitySpawnPlacements::canJungleMobSpawn);
         EntitySpawnPlacementRegistry.register(ModEntityTypes.LEAPLEAF.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
-                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
+                Heightmap.Type.MOTION_BLOCKING,
                 EntitySpawnPlacements::canJungleMobSpawn);
         EntitySpawnPlacementRegistry.register(ModEntityTypes.QUICK_GROWING_VINE.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
-                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
+                Heightmap.Type.MOTION_BLOCKING,
                 VineEntity::canVineSpawnInLight);
         EntitySpawnPlacementRegistry.register(ModEntityTypes.POISON_QUILL_VINE.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
-                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
+                Heightmap.Type.MOTION_BLOCKING,
                 VineEntity::canVineSpawnInLight);
 
 
@@ -182,11 +182,11 @@ public class EntitySpawnPlacements {
                 EntitySpawnPlacements::checkAquaticMobSpawnRules);
         EntitySpawnPlacementRegistry.register(ModEntityTypes.QUICK_GROWING_VINE.get(),
                 EntitySpawnPlacementRegistry.PlacementType.IN_WATER,
-                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
+                Heightmap.Type.OCEAN_FLOOR,
                 EntitySpawnPlacements::checkAquaticMobSpawnRules);
         EntitySpawnPlacementRegistry.register(ModEntityTypes.POISON_QUILL_VINE.get(),
                 EntitySpawnPlacementRegistry.PlacementType.IN_WATER,
-                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
+                Heightmap.Type.OCEAN_FLOOR,
                 EntitySpawnPlacements::checkAquaticMobSpawnRules);
         EntitySpawnPlacementRegistry.register(ModEntityTypes.ARMORED_DROWNED.get(),
                 EntitySpawnPlacementRegistry.PlacementType.IN_WATER,
@@ -215,6 +215,20 @@ public class EntitySpawnPlacements {
         } else {
             return random.nextInt(15) == 0 && canSpawn;
         }
+    }
+
+    public static boolean checkDrownedSpawnRules(EntityType<DrownedEntity> type, IServerWorld serverWorld, SpawnReason spawnReason, BlockPos blockPos, Random random) {
+        Optional<RegistryKey<Biome>> biomeName = serverWorld.getBiomeName(blockPos);
+        boolean canSpawn = serverWorld.getDifficulty() != Difficulty.PEACEFUL && MonsterEntity.isDarkEnoughToSpawn(serverWorld, blockPos, random) && (spawnReason == SpawnReason.SPAWNER || serverWorld.getFluidState(blockPos).is(FluidTags.WATER));
+        if (!Objects.equals(biomeName, Optional.of(Biomes.RIVER)) && !Objects.equals(biomeName, Optional.of(Biomes.FROZEN_RIVER))) {
+            return random.nextInt(40) == 0 && isDeepEnoughToSpawn(serverWorld, blockPos) && canSpawn;
+        } else {
+            return random.nextInt(15) == 0 && canSpawn;
+        }
+    }
+
+    private static boolean isDeepEnoughToSpawn(IWorld world, BlockPos blockPos) {
+        return blockPos.getY() < world.getSeaLevel() - 5;
     }
 
     public static boolean checkZombifiedPiglinSpawnRules(EntityType<? extends ZombifiedPiglinEntity> p_234351_0_, IWorld p_234351_1_, SpawnReason p_234351_2_, BlockPos p_234351_3_, Random p_234351_4_) {
