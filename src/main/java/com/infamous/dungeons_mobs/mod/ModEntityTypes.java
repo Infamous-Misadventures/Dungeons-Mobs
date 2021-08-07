@@ -473,4 +473,20 @@ public class ModEntityTypes {
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(MODID, "sunken_skeleton").toString())
     );
+
+    public static final RegistryObject<EntityType<LaserOrbEntity>> LASER_ORB = ENTITY_TYPES.register("laser_orb", () ->
+            EntityType.Builder.<LaserOrbEntity>of(LaserOrbEntity::new, EntityClassification.MISC)
+                    .sized(0.25F, 0.25F)
+                    .clientTrackingRange(4)
+                    .updateInterval(10)
+                    .build(new ResourceLocation(MODID, "laser_orb").toString())
+    );
+
+    public static final RegistryObject<EntityType<TridentFumeEntity>> TRIDENT_FUME = ENTITY_TYPES.register("trident_fume", () ->
+            EntityType.Builder.<TridentFumeEntity>of(TridentFumeEntity::new, EntityClassification.MISC)
+                    .sized(0.25F, 0.25F)
+                    .clientTrackingRange(4)
+                    .updateInterval(10)
+                    .build(new ResourceLocation(MODID, "trident_fume").toString())
+    );
 }

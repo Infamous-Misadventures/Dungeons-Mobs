@@ -286,7 +286,7 @@ public class ModItems {
             () -> new NecromancerStaffItem(new Item.Properties().tab(DUNGEONS_MOBS).durability(64)));
 
     public static final RegistryObject<Item> NECROMANCER_TRIDENT = ITEMS.register("necromancer_trident",
-            () -> new NecromancerStaffItem(new Item.Properties().tab(DUNGEONS_MOBS).durability(64)));
+            () -> new NecromancerTridentItem(new Item.Properties().tab(DUNGEONS_MOBS).durability(64)));
 
     public static final RegistryObject<Item> BLUE_NETHERSHROOM = ITEMS.register("blue_nethershroom",
             () -> new BlueNethershroomItem(new Item.Properties().tab(DUNGEONS_MOBS).stacksTo(16)));

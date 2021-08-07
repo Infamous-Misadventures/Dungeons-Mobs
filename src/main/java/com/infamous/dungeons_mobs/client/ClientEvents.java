@@ -9,10 +9,7 @@ import com.infamous.dungeons_mobs.client.renderer.jungle.PoisonQuillVineRenderer
 import com.infamous.dungeons_mobs.client.renderer.jungle.QuickGrowingVineRenderer;
 import com.infamous.dungeons_mobs.client.renderer.jungle.WhispererRenderer;
 import com.infamous.dungeons_mobs.client.renderer.piglin.CustomPiglinRenderer;
-import com.infamous.dungeons_mobs.client.renderer.projectiles.BlueNethershroomRenderer;
-import com.infamous.dungeons_mobs.client.renderer.projectiles.CobwebProjectileRenderer;
-import com.infamous.dungeons_mobs.client.renderer.projectiles.CustomFireballRenderer;
-import com.infamous.dungeons_mobs.client.renderer.projectiles.SlimeballRenderer;
+import com.infamous.dungeons_mobs.client.renderer.projectiles.*;
 import com.infamous.dungeons_mobs.client.renderer.summonables.*;
 import com.infamous.dungeons_mobs.client.renderer.undead.*;
 import com.infamous.dungeons_mobs.client.renderer.illager.*;
@@ -126,6 +123,9 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.DROWNED_NECROMANCER.get(), DrownedNecromancerRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SUNKEN_SKELETON.get(), SmartSkeletonRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_SUNKEN_SKELETON.get(), SmartSkeletonRenderer::new);
+
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.LASER_ORB.get(), OrbRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.TRIDENT_FUME.get(), OrbRenderer::new);
 
     }
 

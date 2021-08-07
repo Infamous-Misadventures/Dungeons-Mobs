@@ -28,7 +28,7 @@ public class SmartSkeletonRenderer<T extends AbstractSkeletonEntity> extends Bip
 
    public SmartSkeletonRenderer(EntityRendererManager renderManagerIn) {
       super(renderManagerIn, new SmartSkeletonModel<>(), 0.5F);
-      this.addLayer(new BipedArmorLayer<>(this, new SmartSkeletonModel<>(0.5F), new SmartSkeletonModel<>(1.0F)));
+      this.addLayer(new BipedArmorLayer<>(this, new SmartSkeletonModel<>(0.5F, true), new SmartSkeletonModel<>(1.0F, true)));
    }
 
    @Override

@@ -2,12 +2,14 @@ package com.infamous.dungeons_mobs.entities.water;
 
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.entities.magic.MagicType;
+import com.infamous.dungeons_mobs.entities.projectiles.TridentFumeEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.WraithFireballEntity;
 import com.infamous.dungeons_mobs.goals.SimpleRangedAttackGoal;
 import com.infamous.dungeons_mobs.goals.magic.UseMagicGoal;
 import com.infamous.dungeons_mobs.goals.magic.UsingMagicGoal;
 import com.infamous.dungeons_mobs.interfaces.IMagicUser;
 import com.infamous.dungeons_mobs.items.NecromancerStaffItem;
+import com.infamous.dungeons_mobs.items.NecromancerTridentItem;
 import com.infamous.dungeons_mobs.mixin.GoalSelectorAccessor;
 import com.infamous.dungeons_mobs.mod.ModItems;
 import net.minecraft.block.BlockState;
@@ -51,7 +53,7 @@ public class DrownedNecromancerEntity extends DrownedEntity implements IMagicUse
 
     // Required to make use of IMagicUser
     private static final DataParameter<Byte> MAGIC = EntityDataManager.defineId(DrownedNecromancerEntity.class, DataSerializers.BYTE);
-    public static final Predicate<Item> STAFF_PREDICATE = item -> item instanceof NecromancerStaffItem;
+    public static final Predicate<Item> STAFF_PREDICATE = item -> item instanceof NecromancerTridentItem;
     private int magicUseTicks;
     private MagicType activeMagic = MagicType.NONE;
 
@@ -90,9 +92,9 @@ public class DrownedNecromancerEntity extends DrownedEntity implements IMagicUse
         double yDifference = target.getY(0.5D) - shooter.getY(0.5D);
         double zDifference = target.getZ() - shooter.getZ();
 
-        WraithFireballEntity wraithFireballEntity = new WraithFireballEntity(shooter.level, shooter, xDifference, yDifference, zDifference);
-        wraithFireballEntity.setPos(wraithFireballEntity.getX(), shooter.getY(0.5D) + 0.5D, wraithFireballEntity.getZ());
-        shooter.level.addFreshEntity(wraithFireballEntity);
+        TridentFumeEntity tridentFume = new TridentFumeEntity(shooter.level, shooter, xDifference, yDifference, zDifference);
+        tridentFume.setPos(tridentFume.getX(), shooter.getY(0.5D) + 0.5D, tridentFume.getZ());
+        shooter.level.addFreshEntity(tridentFume);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.entities.undead;
 
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
+import com.infamous.dungeons_mobs.entities.projectiles.LaserOrbEntity;
 import com.infamous.dungeons_mobs.goals.magic.UseMagicGoal;
 import com.infamous.dungeons_mobs.goals.magic.UsingMagicGoal;
 import com.infamous.dungeons_mobs.items.NecromancerStaffItem;
@@ -228,9 +229,9 @@ public class NecromancerEntity extends AbstractSkeletonEntity implements IMagicU
         double zDifference = target.getZ() - NecromancerEntity.this.getZ();
         float f = MathHelper.sqrt(MathHelper.sqrt(squareDistanceToTarget)) * 0.5F;
 
-        WraithFireballEntity wraithFireballEntity = new WraithFireballEntity(this.level, this, xDifference, yDifference, zDifference);
-        wraithFireballEntity.setPos(wraithFireballEntity.getX(), NecromancerEntity.this.getY(0.5D) + 0.5D, wraithFireballEntity.getZ());
-        NecromancerEntity.this.level.addFreshEntity(wraithFireballEntity);
+        LaserOrbEntity laserOrb = new LaserOrbEntity(this.level, this, xDifference, yDifference, zDifference);
+        laserOrb.setPos(laserOrb.getX(), NecromancerEntity.this.getY(0.5D) + 0.5D, laserOrb.getZ());
+        NecromancerEntity.this.level.addFreshEntity(laserOrb);
     }
 
     @Nullable

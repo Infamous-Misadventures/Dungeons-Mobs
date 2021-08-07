@@ -146,5 +146,9 @@
   "item.dungeons_mobs.poison_anemone_spawn_egg": "Poison Anemone Spawn Egg",
   "entity.dungeons_mobs.quick_growing_anemone": "Quick-Growing Anemone",
   "item.dungeons_mobs.quick_growing_anemone_spawn_egg": "Quick-Growing Anemone Spawn Egg",
-  "item.dungeons_mobs.necromancer_trident": "Necromancer Trident"
+  "item.dungeons_mobs.necromancer_trident": "Necromancer Trident",
+  "entity.dungeons_mobs.laser_orb": "Laser Orb",
+  "entity.dungeons_mobs.trident_fume": "Trident Fume",
+  "item.dungeons_mobs.yellow_trident": "Yellow Trident",
+  "item.dungeons_mobs.purple_trident": "Purple Trident"
 }
