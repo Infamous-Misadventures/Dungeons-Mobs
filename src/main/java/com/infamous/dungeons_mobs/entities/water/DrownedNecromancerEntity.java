@@ -1,5 +1,6 @@
 package com.infamous.dungeons_mobs.entities.water;
 
+import com.infamous.dungeons_mobs.capabilities.teamable.TeamableHelper;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.entities.magic.MagicType;
 import com.infamous.dungeons_mobs.entities.projectiles.TridentFumeEntity;
@@ -29,10 +30,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -86,14 +84,16 @@ public class DrownedNecromancerEntity extends DrownedEntity implements IMagicUse
 
     private static void performRangedAttack(LivingEntity shooter, LivingEntity target) {
         shooter.swing(ProjectileHelper.getWeaponHoldingHand(shooter, TRIDENT_STAFF_PREDICATE));
-        double scale = 4.0D;
+        double scale = 1.0D;
         Vector3d viewVector = shooter.getViewVector(1.0F);
         double xAccel = target.getX() - (shooter.getX() + viewVector.x * scale);
         double yAccel = target.getY(0.5D) - (0.5D + shooter.getY(0.5D));
         double zAccel = target.getZ() - (shooter.getZ() + viewVector.z * scale);
+        float euclidDist = MathHelper.sqrt(xAccel * xAccel + yAccel * yAccel + zAccel * zAccel);
 
         TridentFumeEntity tridentFumeEntity = new TridentFumeEntity(shooter.level, shooter, xAccel, yAccel, zAccel);
         tridentFumeEntity.setPos(shooter.getX() + viewVector.x * scale, shooter.getY(0.5D) + 0.5D, tridentFumeEntity.getZ() + viewVector.z * scale);
+        tridentFumeEntity.shoot(xAccel, yAccel, zAccel, euclidDist, 0.0F);
         shooter.level.addFreshEntity(tridentFumeEntity);
     }
 
@@ -266,6 +266,7 @@ public class DrownedNecromancerEntity extends DrownedEntity implements IMagicUse
                 spawnReinforcementsAttribute.setBaseValue(0);
             }
             mobEntity.finalizeSpawn((IServerWorld) DrownedNecromancerEntity.this.level, difficultyForLocation, SpawnReason.MOB_SUMMONED, (ILivingEntityData)null, (CompoundNBT)null);
+            TeamableHelper.makeTeammates(mobEntity, DrownedNecromancerEntity.this);
             return DrownedNecromancerEntity.this.level.addFreshEntity(mobEntity);
         }
 
@@ -279,6 +280,7 @@ public class DrownedNecromancerEntity extends DrownedEntity implements IMagicUse
                     spawnReinforcementsAttribute.setBaseValue(0);
                 }
                 drownedEntity.finalizeSpawn((IServerWorld) DrownedNecromancerEntity.this.level, difficultyForLocation, SpawnReason.MOB_SUMMONED, (ILivingEntityData)null, (CompoundNBT)null);
+                TeamableHelper.makeTeammates(drownedEntity, DrownedNecromancerEntity.this);
                 DrownedNecromancerEntity.this.level.addFreshEntity(drownedEntity);
             }
         }
@@ -412,5 +414,13 @@ public class DrownedNecromancerEntity extends DrownedEntity implements IMagicUse
         protected MagicType getMagicType() {
             return MagicType.SUMMON_LIGHTNING;
         }
+    }
+
+    @Override
+    public boolean hurt(DamageSource damageSource, float amount) {
+        if(damageSource == DamageSource.LIGHTNING_BOLT && this.getMagicType() == MagicType.SUMMON_LIGHTNING){
+            return false;
+        }
+        return super.hurt(damageSource, amount);
     }
 }

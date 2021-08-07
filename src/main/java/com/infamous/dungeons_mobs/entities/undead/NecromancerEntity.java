@@ -1,8 +1,8 @@
 package com.infamous.dungeons_mobs.entities.undead;
 
+import com.infamous.dungeons_mobs.capabilities.teamable.TeamableHelper;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.entities.projectiles.LaserOrbEntity;
-import com.infamous.dungeons_mobs.entities.water.DrownedNecromancerEntity;
 import com.infamous.dungeons_mobs.goals.SimpleRangedAttackGoal;
 import com.infamous.dungeons_mobs.goals.magic.UseMagicGoal;
 import com.infamous.dungeons_mobs.goals.magic.UsingMagicGoal;
@@ -10,7 +10,6 @@ import com.infamous.dungeons_mobs.items.NecromancerStaffItem;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.interfaces.IMagicUser;
 import com.infamous.dungeons_mobs.entities.magic.MagicType;
-import com.infamous.dungeons_mobs.entities.projectiles.WraithFireballEntity;
 import com.infamous.dungeons_mobs.mod.ModItems;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
@@ -25,7 +24,6 @@ import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.passive.TurtleEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.FireballEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
@@ -40,7 +38,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -171,6 +168,7 @@ public class NecromancerEntity extends AbstractSkeletonEntity implements IMagicU
                 spawnReinforcementsAttribute.setBaseValue(0);
             }
             mobEntity.finalizeSpawn((IServerWorld) NecromancerEntity.this.level, difficultyForLocation, SpawnReason.MOB_SUMMONED, (ILivingEntityData)null, (CompoundNBT)null);
+            TeamableHelper.makeTeammates(mobEntity, NecromancerEntity.this);
             return NecromancerEntity.this.level.addFreshEntity(mobEntity);
         }
 
@@ -184,6 +182,7 @@ public class NecromancerEntity extends AbstractSkeletonEntity implements IMagicU
                     spawnReinforcementsAttribute.setBaseValue(0);
                 }
                 zombieEntity.finalizeSpawn((IServerWorld) NecromancerEntity.this.level, difficultyForLocation, SpawnReason.MOB_SUMMONED, (ILivingEntityData)null, (CompoundNBT)null);
+                TeamableHelper.makeTeammates(zombieEntity, NecromancerEntity.this);
                 NecromancerEntity.this.level.addFreshEntity(zombieEntity);
             }
         }
@@ -230,14 +229,16 @@ public class NecromancerEntity extends AbstractSkeletonEntity implements IMagicU
 
     private static void performRangedAttack(LivingEntity shooter, LivingEntity target) {
         shooter.swing(ProjectileHelper.getWeaponHoldingHand(shooter, STAFF_PREDICATE));
-        double scale = 4.0D;
+        double scale = 1.0D;
         Vector3d viewVector = shooter.getViewVector(1.0F);
         double xAccel = target.getX() - (shooter.getX() + viewVector.x * scale);
         double yAccel = target.getY(0.5D) - (0.5D + shooter.getY(0.5D));
         double zAccel = target.getZ() - (shooter.getZ() + viewVector.z * scale);
+        float euclidDist = MathHelper.sqrt(xAccel * xAccel + yAccel * yAccel + zAccel * zAccel);
 
-        LaserOrbEntity laserOrb = new LaserOrbEntity(shooter.level, shooter, xAccel, yAccel, zAccel);
+        LaserOrbEntity laserOrb = new LaserOrbEntity(shooter.level, shooter, 0, 0, 0);
         laserOrb.setPos(shooter.getX() + viewVector.x * scale, shooter.getY(0.5D) + 0.5D, laserOrb.getZ() + viewVector.z * scale);
+        laserOrb.shoot(xAccel, yAccel, zAccel, euclidDist, 0.0F);
         shooter.level.addFreshEntity(laserOrb);
     }
 

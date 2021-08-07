@@ -479,7 +479,7 @@ public class ModEntityTypes {
                     .sized(0.25F, 0.25F)
                     .clientTrackingRange(4)
                     .updateInterval(10)
-                    .setCustomClientFactory((spawnEntity,world) -> new LaserOrbEntity(world))
+                    //.setCustomClientFactory((spawnEntity,world) -> new LaserOrbEntity(world, spawnEntity.getPosX(), spawnEntity.getPosY(), spawnEntity.getPosZ(), spawnEntity.getVelX(), spawnEntity.getVelY(), spawnEntity.getVelZ()))
                     .build(new ResourceLocation(MODID, "laser_orb").toString())
     );
 
@@ -488,7 +488,7 @@ public class ModEntityTypes {
                     .sized(0.25F, 0.25F)
                     .clientTrackingRange(4)
                     .updateInterval(10)
-                    .setCustomClientFactory((spawnEntity,world) -> new TridentFumeEntity(world))
+                    //.setCustomClientFactory((spawnEntity,world) -> new TridentFumeEntity(world, spawnEntity.getPosX(), spawnEntity.getPosY(), spawnEntity.getPosZ(), spawnEntity.getVelX(), spawnEntity.getVelY(), spawnEntity.getVelZ()))
                     .build(new ResourceLocation(MODID, "trident_fume").toString())
     );
 }

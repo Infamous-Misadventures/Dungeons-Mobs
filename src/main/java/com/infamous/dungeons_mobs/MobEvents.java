@@ -4,6 +4,8 @@ import com.infamous.dungeons_mobs.capabilities.cloneable.CloneableProvider;
 import com.infamous.dungeons_mobs.capabilities.convertible.ConvertibleHelper;
 import com.infamous.dungeons_mobs.capabilities.convertible.ConvertibleProvider;
 import com.infamous.dungeons_mobs.capabilities.convertible.IConvertible;
+import com.infamous.dungeons_mobs.capabilities.teamable.TeamableHelper;
+import com.infamous.dungeons_mobs.capabilities.teamable.TeamableProvider;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.entities.creepers.IcyCreeperEntity;
 import com.infamous.dungeons_mobs.entities.illagers.DungeonsIllusionerEntity;
@@ -18,6 +20,7 @@ import com.infamous.dungeons_mobs.mixin.GoalSelectorAccessor;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.entity.ai.goal.RangedAttackGoal;
+import net.minecraft.entity.item.ArmorStandEntity;
 import net.minecraft.entity.monster.DrownedEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.SnowballEntity;
@@ -30,12 +33,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.Explosion;
+import net.minecraft.world.World;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.EntityMobGriefingEvent;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -44,11 +49,41 @@ import net.minecraftforge.fml.common.Mod;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
 @Mod.EventBusSubscriber(modid = MODID)
 public class MobEvents {
+    private static ArmorStandEntity DUMMY_TARGET;
+
+    @SubscribeEvent
+    public static void onSetAttackTarget(LivingSetAttackTargetEvent event){
+        LivingEntity attacker = event.getEntityLiving();
+        World level = attacker.level;
+        LivingEntity target = event.getTarget();
+        if(attacker instanceof MobEntity && target instanceof MobEntity){
+            if(TeamableHelper.areTeammates((MobEntity) attacker, (MobEntity)target)){
+                createDummyTarget(level);
+                if(attacker instanceof IAngerable)
+                {
+                    ((IAngerable) attacker).setPersistentAngerTarget((UUID)null);
+                    ((IAngerable) attacker).setRemainingPersistentAngerTime(0);
+                }
+                ((MobEntity) attacker).setTarget(DUMMY_TARGET);
+                attacker.setLastHurtByMob(DUMMY_TARGET);
+            }
+        }
+    }
+
+    private static void createDummyTarget(World level) {
+        if(DUMMY_TARGET == null){
+            DUMMY_TARGET = EntityType.ARMOR_STAND.create(level);
+            if (DUMMY_TARGET != null) {
+                DUMMY_TARGET.remove();
+            }
+        }
+    }
 
 
     @SubscribeEvent
@@ -58,6 +93,9 @@ public class MobEvents {
         }
         if(event.getObject() instanceof MobEntity && ConvertibleHelper.convertsInWater(((MobEntity) event.getObject()))){
             event.addCapability(new ResourceLocation(DungeonsMobs.MODID, "convertible"), new ConvertibleProvider());
+        }
+        if(event.getObject() instanceof MobEntity){
+            event.addCapability(new ResourceLocation(MODID, "teammable"), new TeamableProvider());
         }
     }
 

@@ -2,12 +2,12 @@ package com.infamous.dungeons_mobs.worldgen;
 
 import com.infamous.dungeons_mobs.entities.creepers.IcyCreeperEntity;
 import com.infamous.dungeons_mobs.entities.jungle.VineEntity;
-import com.infamous.dungeons_mobs.entities.water.WavewhispererEntity;
-import com.infamous.dungeons_mobs.interfaces.IAquaticMob;
-import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.entities.undead.FrozenZombieEntity;
 import com.infamous.dungeons_mobs.entities.undead.JungleZombieEntity;
 import com.infamous.dungeons_mobs.entities.undead.MossySkeletonEntity;
+import com.infamous.dungeons_mobs.interfaces.IAquaticMob;
+import com.infamous.dungeons_mobs.mod.ModEntityTypes;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityType;
@@ -15,10 +15,13 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.monster.piglin.PiglinEntity;
+import net.minecraft.fluid.FluidState;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.Biome;
@@ -30,6 +33,38 @@ import java.util.Optional;
 import java.util.Random;
 
 public class EntitySpawnPlacements {
+
+    public static EntitySpawnPlacementRegistry.PlacementType IN_WATER_ON_GROUND;
+
+    public static void createPlacementTypes(){
+        IN_WATER_ON_GROUND = EntitySpawnPlacementRegistry.PlacementType.create("in_water_on_ground",
+                (iWorldReader, blockPos, entityType) -> {
+                    BlockState blockstate = iWorldReader.getBlockState(blockPos);
+                    FluidState fluidstate = iWorldReader.getFluidState(blockPos);
+                    BlockPos above = blockPos.above();
+                    BlockPos below = blockPos.below();
+                    BlockState stateAtPos = iWorldReader.getBlockState(blockPos);
+                    boolean inWater = fluidstate.is(FluidTags.WATER) && iWorldReader.getFluidState(below).is(FluidTags.WATER) && !iWorldReader.getBlockState(above).isRedstoneConductor(iWorldReader, above);
+                    if (!stateAtPos.canCreatureSpawn(iWorldReader, below, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, entityType)) {
+                        return false;
+                    } else {
+                        boolean validEmptySpawn = isValidEmptySpawnBlockNoFluidCheck(iWorldReader, blockPos, blockstate, entityType) && isValidEmptySpawnBlockNoFluidCheck(iWorldReader, above, iWorldReader.getBlockState(above), entityType);
+                        return validEmptySpawn && inWater;
+                    }
+                });
+    }
+
+    public static boolean isValidEmptySpawnBlockNoFluidCheck(IBlockReader blockReader, BlockPos blockPos, BlockState blockState, EntityType<?> entityType) {
+        if (blockState.isCollisionShapeFullBlock(blockReader, blockPos)) {
+            return false;
+        } else if (blockState.isSignalSource()) {
+            return false;
+        } else if (blockState.is(BlockTags.PREVENT_MOB_SPAWNING_INSIDE)) {
+            return false;
+        } else {
+            return !entityType.isBlockDangerous(blockState);
+        }
+    }
 
     public static void initSpawnPlacements(){
         EntitySpawnPlacementRegistry.register(ModEntityTypes.ARMORED_ZOMBIE.get(),
@@ -180,13 +215,13 @@ public class EntitySpawnPlacements {
                 EntitySpawnPlacementRegistry.PlacementType.IN_WATER,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                 EntitySpawnPlacements::checkAquaticMobSpawnRules);
-        EntitySpawnPlacementRegistry.register(ModEntityTypes.QUICK_GROWING_VINE.get(),
-                EntitySpawnPlacementRegistry.PlacementType.IN_WATER,
-                Heightmap.Type.OCEAN_FLOOR,
+        EntitySpawnPlacementRegistry.register(ModEntityTypes.QUICK_GROWING_ANEMONE.get(),
+                IN_WATER_ON_GROUND,
+                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                 EntitySpawnPlacements::checkAquaticMobSpawnRules);
-        EntitySpawnPlacementRegistry.register(ModEntityTypes.POISON_QUILL_VINE.get(),
-                EntitySpawnPlacementRegistry.PlacementType.IN_WATER,
-                Heightmap.Type.OCEAN_FLOOR,
+        EntitySpawnPlacementRegistry.register(ModEntityTypes.POISON_ANEMONE.get(),
+                IN_WATER_ON_GROUND,
+                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                 EntitySpawnPlacements::checkAquaticMobSpawnRules);
         EntitySpawnPlacementRegistry.register(ModEntityTypes.ARMORED_DROWNED.get(),
                 EntitySpawnPlacementRegistry.PlacementType.IN_WATER,

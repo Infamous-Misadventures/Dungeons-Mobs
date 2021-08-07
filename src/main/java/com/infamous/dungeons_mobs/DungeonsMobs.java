@@ -6,6 +6,9 @@ import com.infamous.dungeons_mobs.capabilities.cloneable.ICloneable;
 import com.infamous.dungeons_mobs.capabilities.convertible.Convertible;
 import com.infamous.dungeons_mobs.capabilities.convertible.ConvertibleStorage;
 import com.infamous.dungeons_mobs.capabilities.convertible.IConvertible;
+import com.infamous.dungeons_mobs.capabilities.teamable.ITeamable;
+import com.infamous.dungeons_mobs.capabilities.teamable.Teamable;
+import com.infamous.dungeons_mobs.capabilities.teamable.TeamableStorage;
 import com.infamous.dungeons_mobs.client.ModItemModelProperties;
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
@@ -14,6 +17,7 @@ import com.infamous.dungeons_mobs.mod.ModBlocks;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModItems;
 import com.infamous.dungeons_mobs.mod.ModRecipes;
+import com.infamous.dungeons_mobs.network.NetworkHandler;
 import com.infamous.dungeons_mobs.worldgen.*;
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;
@@ -58,12 +62,15 @@ public class DungeonsMobs
     }
 
     private void setup(final FMLCommonSetupEvent event){
+        event.enqueueWork(EntitySpawnPlacements::createPlacementTypes);
         event.enqueueWork(EntitySpawnPlacements::initSpawnPlacements);
         event.enqueueWork(RaidEntries::initWaveMemberEntries);
         event.enqueueWork(SensorMapModifier::replaceSensorMaps);
         event.enqueueWork(BiomeSpawnEntries::addCustomTypesToBiomes);
         CapabilityManager.INSTANCE.register(ICloneable.class, new CloneableStorage(), Cloneable::new);
         CapabilityManager.INSTANCE.register(IConvertible.class, new ConvertibleStorage(), Convertible::new);
+        CapabilityManager.INSTANCE.register(ITeamable.class, new TeamableStorage(), Teamable::new);
+        event.enqueueWork(NetworkHandler::init);
     }
 
 

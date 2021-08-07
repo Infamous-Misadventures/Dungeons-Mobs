@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 
 public abstract class AbstractStaffItem extends Item {
 
-    private static final double RAYTRACE_DISTANCE = 16;
+    private static final double RAYTRACE_DISTANCE = 256;
 
     public AbstractStaffItem(Properties properties) {
         super(properties);
@@ -32,20 +32,17 @@ public abstract class AbstractStaffItem extends Item {
         Vector3d rayTraceVector = eyeVector.add(lookVector.x * RAYTRACE_DISTANCE, lookVector.y * RAYTRACE_DISTANCE, lookVector.z * RAYTRACE_DISTANCE);
         AxisAlignedBB rayTraceBoundingBox = player.getBoundingBox().expandTowards(lookVector.scale(RAYTRACE_DISTANCE)).inflate(1.0D, 1.0D, 1.0D);
         EntityRayTraceResult entityRTR = ProjectileHelper.getEntityHitResult(world, player, eyeVector, rayTraceVector, rayTraceBoundingBox, entity -> entity instanceof LivingEntity && !entity.isSpectator() && entity.isPickable());
-        if (blockRTR.getType() != RayTraceResult.Type.MISS || entityRTR != null) {
-            world.playSound(player, player.blockPosition(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.PLAYERS, 1.0f, 1.0f);
-            if (!world.isClientSide()) {
-                if (entityRTR != null) {
-                    Entity target = entityRTR.getEntity();
-                    this.activateStaff(player, target, itemStack, hand);
-                } else {
-                    BlockPos pos = blockRTR.getBlockPos();
-                    this.activateStaff(player, pos, itemStack, hand);
-                }
+        world.playSound(player, player.blockPosition(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.PLAYERS, 1.0f, 1.0f);
+        if (!world.isClientSide()) {
+            if (entityRTR != null) {
+                Entity target = entityRTR.getEntity();
+                this.activateStaff(player, target, itemStack, hand);
+            } else {
+                BlockPos pos = blockRTR.getBlockPos();
+                this.activateStaff(player, pos, itemStack, hand);
             }
-            return ActionResult.success(player.getItemInHand(hand));
         }
-        return ActionResult.pass(player.getItemInHand(hand));
+        return ActionResult.success(player.getItemInHand(hand));
     }
 
     protected abstract void activateStaff(PlayerEntity playerIn, Entity target, ItemStack itemStack, Hand hand);

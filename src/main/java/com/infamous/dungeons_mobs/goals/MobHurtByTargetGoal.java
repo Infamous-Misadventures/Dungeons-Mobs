@@ -77,17 +77,18 @@ public class MobHurtByTargetGoal extends TargetGoal {
       double d0 = this.getFollowDistance();
       AxisAlignedBB axisalignedbb = AxisAlignedBB.unitCubeFromLowerCorner(this.mob.position()).inflate(d0, 10.0D, d0);
       List<MobEntity> list = this.mob.level.getLoadedEntitiesOfClass(this.mob.getClass(), axisalignedbb);
-      Iterator iterator = list.iterator();
+      Iterator<MobEntity> iterator = list.iterator();
 
       while(true) {
          MobEntity mobentity;
+         LivingEntity lastHurtByMob = this.mob.getLastHurtByMob();
          while(true) {
             if (!iterator.hasNext()) {
                return;
             }
 
             mobentity = (MobEntity)iterator.next();
-            if (this.mob != mobentity && mobentity.getTarget() == null && (!(this.mob instanceof TameableEntity) || ((TameableEntity)this.mob).getOwner() == ((TameableEntity)mobentity).getOwner()) && !mobentity.isAlliedTo(this.mob.getLastHurtByMob())) {
+            if (this.mob != mobentity && mobentity.getTarget() == null && (!(this.mob instanceof TameableEntity) || ((TameableEntity)this.mob).getOwner() == ((TameableEntity)mobentity).getOwner()) && lastHurtByMob != null && !mobentity.isAlliedTo(lastHurtByMob)) {
                if (this.reinforcementTypes == null) {
                   break;
                }
@@ -107,7 +108,7 @@ public class MobHurtByTargetGoal extends TargetGoal {
             }
          }
 
-         this.setAttackTarget(mobentity, this.mob.getLastHurtByMob());
+         this.setAttackTarget(mobentity, lastHurtByMob);
       }
    }
 
