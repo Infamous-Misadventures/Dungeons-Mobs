@@ -103,6 +103,15 @@
   "entity.dungeons_mobs.quick_growing_anemone": "Quick-Growing Anemone",
   "item.dungeons_mobs.quick_growing_anemone_spawn_egg": "Quick-Growing Anemone Spawn Egg",
 
+  "entity.dungeons_mobs.endersent": "Endersent",
+  "item.dungeons_mobs.endersent_spawn_egg": "Endersent Spawn Egg",
+  "entity.dungeons_mobs.blastling": "Blastling",
+  "item.dungeons_mobs.blastling_spawn_egg": "Blastling Spawn Egg",
+  "entity.dungeons_mobs.watchling": "Watchling",
+  "item.dungeons_mobs.watchling_spawn_egg": "Watchling Spawn Egg",
+  "entity.dungeons_mobs.snareling": "Snareling",
+  "item.dungeons_mobs.snareling_spawn_egg": "Snareling Spawn Egg",
+
   "block.dungeons_mobs.wraith_fire": "Wraith Fire",
   "item.dungeons_mobs.wraith_fire_charge": "Wraith Fire Charge",
   "item.dungeons_mobs.blue_nethershroom": "Blue Nethershroom",

@@ -121,20 +121,20 @@ public class ConjuredSlimeEntity extends SlimeEntity implements IRangedAttackMob
 
     @Override
     public void performRangedAttack(LivingEntity target, float distanceFactor) {
-        double squareDistanceToTarget = this.distanceToSqr(target);
         double xDifference = target.getX() - this.getX();
         double yDifference = target.getY(0.5D) - this.getY(0.5D);
         double zDifference = target.getZ() - this.getZ();
-        float f = MathHelper.sqrt(MathHelper.sqrt(squareDistanceToTarget)) * 0.5F;
+        float euclidDist = MathHelper.sqrt(xDifference * xDifference + yDifference * yDifference + zDifference * zDifference);
 
         SlimeballEntity slimeballEntity = new SlimeballEntity(this.level,
                 this,
-                xDifference * (double)f,
-                yDifference,
-                zDifference * (double)f);
+                0,
+                0,
+                0);
         slimeballEntity.setPos(slimeballEntity.getX(),
-                this.getY(0.25D),
+                this.getY(0.5D),
                 slimeballEntity.getZ());
+        slimeballEntity.shoot(xDifference, yDifference, zDifference, euclidDist, 0.0F);
         this.level.addFreshEntity(slimeballEntity);
     }
 

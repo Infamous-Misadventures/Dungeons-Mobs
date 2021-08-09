@@ -146,13 +146,13 @@ public class WraithEntity extends MonsterEntity implements IMagicUser {
 
     // TELEPORT METHODS - FROM ENDERMANENTITY
     /**
-     * Try to teleport the mob to a random nearby position - keeps trying until Integer.MAX_VALUE is reached
+     * Try to teleport the mob to a random nearby position - keeps trying until 64 is reached
      */
     private boolean teleportRandomly() {
         if (!this.level.isClientSide() && this.isAlive()) {
             boolean hasSuccessfullyTeleported = false;
             int teleportAttemptCounter = 0;
-            while(!hasSuccessfullyTeleported && teleportAttemptCounter < Integer.MAX_VALUE){
+            while(!hasSuccessfullyTeleported && teleportAttemptCounter < 64){
                 double d0 = this.getX() + (this.random.nextDouble() - 0.5D) * 64.0D;
                 double d1 = this.getY() + (double)(this.random.nextInt(64) - 32);
                 double d2 = this.getZ() + (this.random.nextDouble() - 0.5D) * 64.0D;

@@ -11,31 +11,31 @@ import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
 public class SimpleRangedAttackGoal<T extends MobEntity> extends Goal {
-    private final T mob;
-    private final BiConsumer<T, LivingEntity> performRangedAttack;
-    private final Predicate<Item> weaponPredicate;
-    private LivingEntity target;
-    private int attackTime = -1;
-    private final double speedModifier;
-    private int seeTime;
-    private final int attackIntervalMin;
-    private final int attackIntervalMax;
-    private final float attackRadius;
-    private final float attackRadiusSqr;
+    protected final T mob;
+    protected final BiConsumer<T, LivingEntity> performRangedAttack;
+    protected final Predicate<Item> weaponPredicate;
+    protected LivingEntity target;
+    protected int attackTime = -1;
+    protected final double speedModifier;
+    protected int seeTime;
+    protected final int attackIntervalMin;
+    protected final int attackIntervalMax;
+    protected final float attackRadius;
+    protected final float attackRadiusSqr;
 
-    public SimpleRangedAttackGoal(T p_i1649_1_, Predicate<Item> weaponPredicate, BiConsumer<T, LivingEntity> performRangedAttack, double p_i1649_2_, int p_i1649_4_, float p_i1649_5_) {
-        this(p_i1649_1_, weaponPredicate, performRangedAttack, p_i1649_2_, p_i1649_4_, p_i1649_4_, p_i1649_5_);
+    public SimpleRangedAttackGoal(T p_i1649_1_, Predicate<Item> weaponPredicate, BiConsumer<T, LivingEntity> performRangedAttack, double speedModifier, int attackInterval, float attackRadius) {
+        this(p_i1649_1_, weaponPredicate, performRangedAttack, speedModifier, attackInterval, attackInterval, attackRadius);
     }
 
-    public SimpleRangedAttackGoal(T p_i1650_1_, Predicate<Item> weaponPredicate, BiConsumer<T, LivingEntity> performRangedAttack, double p_i1650_2_, int p_i1650_4_, int p_i1650_5_, float p_i1650_6_) {
+    public SimpleRangedAttackGoal(T p_i1650_1_, Predicate<Item> weaponPredicate, BiConsumer<T, LivingEntity> performRangedAttack, double speedModifier, int attackIntervalMin, int attackIntervalMax, float attackRadius) {
         this.mob = p_i1650_1_;
         this.weaponPredicate = weaponPredicate;
         this.performRangedAttack = performRangedAttack;
-        this.speedModifier = p_i1650_2_;
-        this.attackIntervalMin = p_i1650_4_;
-        this.attackIntervalMax = p_i1650_5_;
-        this.attackRadius = p_i1650_6_;
-        this.attackRadiusSqr = p_i1650_6_ * p_i1650_6_;
+        this.speedModifier = speedModifier;
+        this.attackIntervalMin = attackIntervalMin;
+        this.attackIntervalMax = attackIntervalMax;
+        this.attackRadius = attackRadius;
+        this.attackRadiusSqr = attackRadius * attackRadius;
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
 

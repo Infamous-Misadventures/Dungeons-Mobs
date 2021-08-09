@@ -63,7 +63,7 @@ public class DrownedNecromancerEntity extends DrownedEntity implements IMagicUse
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return ZombieEntity.createAttributes();
+        return ZombieEntity.createAttributes().add(Attributes.MAX_HEALTH, 40.0D);
     }
 
     @Override
@@ -103,6 +103,10 @@ public class DrownedNecromancerEntity extends DrownedEntity implements IMagicUse
         // remove the shell that drowned spawn with naturally
         if (this.getItemBySlot(EquipmentSlotType.OFFHAND).getItem() == Items.NAUTILUS_SHELL) {
             this.setItemSlot(EquipmentSlotType.OFFHAND, ItemStack.EMPTY);
+        }
+        this.setBaby(false);
+        if(this.getVehicle() != null){
+            this.stopRiding();
         }
         return spawnData;
     }

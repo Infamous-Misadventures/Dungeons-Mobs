@@ -2,6 +2,10 @@ package com.infamous.dungeons_mobs.worldgen;
 
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.entities.creepers.IcyCreeperEntity;
+import com.infamous.dungeons_mobs.entities.ender.BlastlingEntity;
+import com.infamous.dungeons_mobs.entities.ender.EndersentEntity;
+import com.infamous.dungeons_mobs.entities.ender.SnarelingEntity;
+import com.infamous.dungeons_mobs.entities.ender.WatchlingEntity;
 import com.infamous.dungeons_mobs.entities.golem.SquallGolemEntity;
 import com.infamous.dungeons_mobs.entities.illagers.*;
 import com.infamous.dungeons_mobs.entities.jungle.LeapleafEntity;
@@ -90,6 +94,11 @@ public class EntityTypeAttributes {
         event.put(ModEntityTypes.WAVEWHISPERER.get(), WavewhispererEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.QUICK_GROWING_ANEMONE.get(), QuickGrowingAnemoneEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.POISON_ANEMONE.get(), PoisonAnemoneEntity.setCustomAttributes().build());
+
+        event.put(ModEntityTypes.ENDERSENT.get(), EndersentEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.BLASTLING.get(), BlastlingEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.WATCHLING.get(), WatchlingEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.SNARELING.get(), SnarelingEntity.setCustomAttributes().build());
 
     }
 

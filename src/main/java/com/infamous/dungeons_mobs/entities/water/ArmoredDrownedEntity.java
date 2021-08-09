@@ -6,6 +6,7 @@ import com.infamous.dungeons_mobs.interfaces.IArmoredMob;
 import com.infamous.dungeons_mobs.mod.ModItems;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -88,7 +89,12 @@ public class ArmoredDrownedEntity extends DrownedEntity implements IArmoredMob {
     public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance p_213386_2_, SpawnReason p_213386_3_, @Nullable ILivingEntityData p_213386_4_, @Nullable CompoundNBT p_213386_5_) {
         this.designateStrongArmor(this);
 
-        return super.finalizeSpawn(p_213386_1_, p_213386_2_, p_213386_3_, p_213386_4_, p_213386_5_);
+        ILivingEntityData spawnData = super.finalizeSpawn(p_213386_1_, p_213386_2_, p_213386_3_, p_213386_4_, p_213386_5_);
+        this.setBaby(false);
+        if(this.getVehicle() != null){
+            this.stopRiding();
+        }
+        return spawnData;
     }
 
     @Override

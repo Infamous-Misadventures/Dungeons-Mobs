@@ -150,5 +150,13 @@
   "entity.dungeons_mobs.laser_orb": "Laser Orb",
   "entity.dungeons_mobs.trident_fume": "Trident Fume",
   "item.dungeons_mobs.yellow_trident": "Yellow Trident",
-  "item.dungeons_mobs.purple_trident": "Purple Trident"
+  "item.dungeons_mobs.purple_trident": "Purple Trident",
+  "entity.dungeons_mobs.endersent": "Endersent",
+  "item.dungeons_mobs.endersent_spawn_egg": "Endersent Spawn Egg",
+  "entity.dungeons_mobs.blastling": "Blastling",
+  "item.dungeons_mobs.blastling_spawn_egg": "Blastling Spawn Egg",
+  "entity.dungeons_mobs.watchling": "Watchling",
+  "item.dungeons_mobs.watchling_spawn_egg": "Watchling Spawn Egg",
+  "entity.dungeons_mobs.snareling": "Snareling",
+  "item.dungeons_mobs.snareling_spawn_egg": "Snareling Spawn Egg"
 }

@@ -64,7 +64,7 @@ public class NecromancerEntity extends AbstractSkeletonEntity implements IMagicU
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.25D);
+        return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.25D).add(Attributes.MAX_HEALTH, 40.0D);
     }
 
     protected void registerGoals() {

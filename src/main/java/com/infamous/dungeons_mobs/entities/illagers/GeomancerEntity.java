@@ -37,7 +37,7 @@ public class GeomancerEntity extends SpellcastingIllagerEntity {
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
-        return EvokerEntity.createAttributes().add(Attributes.MOVEMENT_SPEED, 0.25D);
+        return EvokerEntity.createAttributes().add(Attributes.MOVEMENT_SPEED, 0.25D).add(Attributes.FOLLOW_RANGE, 32.0D);
     }
 
     @Override

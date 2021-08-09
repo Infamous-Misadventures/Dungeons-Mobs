@@ -1,6 +1,10 @@
 package com.infamous.dungeons_mobs.mod;
 
 import com.infamous.dungeons_mobs.entities.creepers.IcyCreeperEntity;
+import com.infamous.dungeons_mobs.entities.ender.BlastlingEntity;
+import com.infamous.dungeons_mobs.entities.ender.EndersentEntity;
+import com.infamous.dungeons_mobs.entities.ender.SnarelingEntity;
+import com.infamous.dungeons_mobs.entities.ender.WatchlingEntity;
 import com.infamous.dungeons_mobs.entities.golem.SquallGolemEntity;
 import com.infamous.dungeons_mobs.entities.illagers.*;
 import com.infamous.dungeons_mobs.entities.jungle.LeapleafEntity;
@@ -23,6 +27,7 @@ import com.infamous.dungeons_mobs.entities.undead.WraithEntity;
 import com.infamous.dungeons_mobs.entities.water.*;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.monster.EndermanEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -491,4 +496,35 @@ public class ModEntityTypes {
                     //.setCustomClientFactory((spawnEntity,world) -> new TridentFumeEntity(world, spawnEntity.getPosX(), spawnEntity.getPosY(), spawnEntity.getPosZ(), spawnEntity.getVelX(), spawnEntity.getVelY(), spawnEntity.getVelZ()))
                     .build(new ResourceLocation(MODID, "trident_fume").toString())
     );
+
+    // ENDER MOBS
+
+    public static final RegistryObject<EntityType<EndersentEntity>> ENDERSENT = ENTITY_TYPES.register("endersent", () ->
+            EntityType.Builder.<EndersentEntity>of(EndersentEntity::new, EntityClassification.MONSTER)
+                    .sized(0.6F * 1.5F, 2.9F * 1.5F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(MODID, "endersent").toString())
+    );
+
+    public static final RegistryObject<EntityType<BlastlingEntity>> BLASTLING = ENTITY_TYPES.register("blastling", () ->
+            EntityType.Builder.<BlastlingEntity>of(BlastlingEntity::new, EntityClassification.MONSTER)
+                    .sized(0.6F, 2.9F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(MODID, "blastling").toString())
+    );
+
+    public static final RegistryObject<EntityType<WatchlingEntity>> WATCHLING = ENTITY_TYPES.register("watchling", () ->
+            EntityType.Builder.<WatchlingEntity>of(WatchlingEntity::new, EntityClassification.MONSTER)
+                    .sized(0.6F * 0.9375F, 2.9F * 0.9375F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(MODID, "watchling").toString())
+    );
+
+    public static final RegistryObject<EntityType<SnarelingEntity>> SNARELING = ENTITY_TYPES.register("snareling", () ->
+            EntityType.Builder.<SnarelingEntity>of(SnarelingEntity::new, EntityClassification.MONSTER)
+                    .sized(0.6F, 2.9F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(MODID, "snareling").toString())
+    );
+
 }

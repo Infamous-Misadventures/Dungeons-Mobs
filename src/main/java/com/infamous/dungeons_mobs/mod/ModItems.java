@@ -222,6 +222,29 @@ public class ModItems {
                     44975, 7969893,
                     new Item.Properties().tab(DUNGEONS_MOBS)));
 
+    // END MOBS
+
+
+    public static final RegistryObject<ModSpawnEggItem> ENDERSENT_SPAWN_EGG = ITEMS.register("endersent_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityTypes.ENDERSENT,
+                    1447446, 0,
+                    new Item.Properties().tab(DUNGEONS_MOBS)));
+
+    public static final RegistryObject<ModSpawnEggItem> BLASTLING_SPAWN_EGG = ITEMS.register("blastling_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityTypes.BLASTLING,
+                    1447446, 0,
+                    new Item.Properties().tab(DUNGEONS_MOBS)));
+
+    public static final RegistryObject<ModSpawnEggItem> WATCHLING_SPAWN_EGG = ITEMS.register("watchling_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityTypes.WATCHLING,
+                    1447446, 0,
+                    new Item.Properties().tab(DUNGEONS_MOBS)));
+
+    public static final RegistryObject<ModSpawnEggItem> SNARELING_SPAWN_EGG = ITEMS.register("snareling_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityTypes.SNARELING,
+                    1447446, 0,
+                    new Item.Properties().tab(DUNGEONS_MOBS)));
+
     // SHIELD
     public static final RegistryObject<Item> ROYAL_GUARD_SHIELD = ITEMS.register("royal_guard_shield",
             () -> new RoyalGuardShieldItem(new Item.Properties().tab(DUNGEONS_MOBS).durability(336)));

@@ -46,23 +46,17 @@ public class ArmoredPiglinEntity extends PiglinEntity implements IArmoredMob {
                 .add(Attributes.KNOCKBACK_RESISTANCE);
     }
 
-    @Override
-    public void setBaby(boolean baby) {
-        // NO-OP
-    }
-
-    @Override
-    public boolean isBaby() {
-        return false;
-    }
-
     @Nullable
     @Override
     public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
 
         this.designateStrongArmor(this);
 
-        return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+        ILivingEntityData spawnData = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+
+        this.setBaby(false);
+
+        return spawnData;
     }
 
     @Override

@@ -3,6 +3,10 @@ package com.infamous.dungeons_mobs.client;
 import com.infamous.dungeons_mobs.client.particle.SnowflakeParticle;
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
 import com.infamous.dungeons_mobs.client.renderer.creeper.CustomCreeperRenderer;
+import com.infamous.dungeons_mobs.client.renderer.ender.BlastlingRenderer;
+import com.infamous.dungeons_mobs.client.renderer.ender.EndersentRenderer;
+import com.infamous.dungeons_mobs.client.renderer.ender.SnarelingRenderer;
+import com.infamous.dungeons_mobs.client.renderer.ender.WatchlingRenderer;
 import com.infamous.dungeons_mobs.client.renderer.golem.SquallGolemRenderer;
 import com.infamous.dungeons_mobs.client.renderer.jungle.LeapleafRenderer;
 import com.infamous.dungeons_mobs.client.renderer.jungle.PoisonQuillVineRenderer;
@@ -126,6 +130,11 @@ public class ClientEvents {
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.LASER_ORB.get(), OrbRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.TRIDENT_FUME.get(), OrbRenderer::new);
+
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ENDERSENT.get(), EndersentRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.BLASTLING.get(), BlastlingRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WATCHLING.get(), WatchlingRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SNARELING.get(), SnarelingRenderer::new);
 
     }
 

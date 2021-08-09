@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.goals;
 
 import com.infamous.dungeons_mobs.interfaces.IWebShooter;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.RangedAttackGoal;
 
@@ -14,12 +15,14 @@ public class RangedWebAttackGoal<T extends MobEntity & IWebShooter> extends Rang
 
     @Override
     public boolean canUse() {
-        return super.canUse() && this.webShooter.shouldShootWeb() && !this.webShooter.isTargetSlowedDown();
+        LivingEntity target = this.webShooter.getTarget();
+        return super.canUse() && target != null && !this.webShooter.isTargetTrapped(target);
     }
 
     @Override
     public boolean canContinueToUse() {
-        return super.canContinueToUse() && !this.webShooter.isTargetSlowedDown();
+        LivingEntity target = this.webShooter.getTarget();
+        return super.canContinueToUse() && target != null && !this.webShooter.isTargetTrapped(target);
     }
 
     @Override
