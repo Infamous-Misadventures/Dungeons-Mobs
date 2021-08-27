@@ -25,14 +25,14 @@ public abstract class GeomancerConstructRenderer<T extends ConstructEntity> exte
 
    @Override
    public void render(T entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
-      matrixStackIn.push();
-      matrixStackIn.rotate(Vector3f.ZP.rotationDegrees(180));
-      matrixStackIn.rotate(Vector3f.YP.rotationDegrees(entityIn.rotationYaw));
-      ResourceLocation resourceLocation = this.getEntityTexture(entityIn);
-      RenderType renderType = this.pillarModel.getRenderType(resourceLocation);
+      matrixStackIn.pushPose();
+      matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(180));
+      matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(entityIn.yRot));
+      ResourceLocation resourceLocation = this.getTextureLocation(entityIn);
+      RenderType renderType = this.pillarModel.renderType(resourceLocation);
       IVertexBuilder ivertexbuilder = bufferIn.getBuffer(renderType);
-      this.pillarModel.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-      matrixStackIn.pop();
+      this.pillarModel.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+      matrixStackIn.popPose();
       super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
    }
 }

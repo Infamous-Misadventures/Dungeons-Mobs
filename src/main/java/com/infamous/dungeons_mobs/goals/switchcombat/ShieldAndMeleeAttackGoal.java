@@ -26,72 +26,72 @@ public class ShieldAndMeleeAttackGoal<T extends CreatureEntity & IShieldUser> ex
     }
 
     private boolean hasShieldInOffhand(){
-        return this.hostCreature.getHeldItemOffhand().isShield(this.hostCreature); // using the Forge ItemStack-sensitive version
+        return this.hostCreature.getOffhandItem().isShield(this.hostCreature); // using the Forge ItemStack-sensitive version
     }
 
     private void useShield(){
         if(this.hasShieldInOffhand() && !this.hostCreature.isShieldDisabled()){
-            this.hostCreature.setActiveHand(Hand.OFF_HAND);
+            this.hostCreature.startUsingItem(Hand.OFF_HAND);
         }
     }
 
     private void stopUsingShield(){
-        if(this.hostCreature.isActiveItemStackBlocking()){
-            this.hostCreature.stopActiveHand();
+        if(this.hostCreature.isBlocking()){
+            this.hostCreature.releaseUsingItem();
         }
     }
 
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
 
         if(this.hasShieldInOffhand() && !this.hostCreature.isShieldDisabled()){
-            LivingEntity attackTarget = this.hostCreature.getAttackTarget();
+            LivingEntity attackTarget = this.hostCreature.getTarget();
             return attackTarget != null && attackTarget.isAlive();
         }
         else{
-            return super.shouldExecute();
+            return super.canUse();
         }
     }
 
     @Override
-    public void startExecuting() {
-        super.startExecuting();
+    public void start() {
+        super.start();
     }
 
     @Override
-    public boolean shouldContinueExecuting() {
+    public boolean canContinueToUse() {
         if(this.hasShieldInOffhand() && !this.hostCreature.isShieldDisabled()){
-            return this.shouldExecute();
+            return this.canUse();
         }
         else{
-            return super.shouldContinueExecuting();
+            return super.canContinueToUse();
         }
     }
 
     @Override
-    public void resetTask() {
-        if(this.hasShieldInOffhand() && this.hostCreature.isActiveItemStackBlocking()){
+    public void stop() {
+        if(this.hasShieldInOffhand() && this.hostCreature.isBlocking()){
             this.seeTime = 0;
             this.closeQuartersShieldUseCounter = 0;
             this.stopUsingShield();
         }
-        super.resetTask();
+        super.stop();
     }
 
     @Override
     public void tick() {
-        LivingEntity attackTarget = this.hostCreature.getAttackTarget();
-        boolean dontShieldAgainst = attackTarget != null && attackTarget.getType().isContained(CustomTags.DONT_SHIELD_AGAINST);
+        LivingEntity attackTarget = this.hostCreature.getTarget();
+        boolean dontShieldAgainst = attackTarget != null && attackTarget.getType().is(CustomTags.DONT_SHIELD_AGAINST);
         boolean shieldDisabled = this.hostCreature.isShieldDisabled();
         boolean hasShield = this.hasShieldInOffhand();
         if(hasShield // check if we have a shield - if not, we must default to melee attack AI
                 && !shieldDisabled // check if our shield is disabled - if so, we must default to melee attack AI
                 && attackTarget != null // check if our target exists - otherwise we will get a NPE below
                 && !dontShieldAgainst){ // check if the target is a villager - if so, default to melee attack AI since it cannot fight back
-            double hostDistanceSq = this.hostCreature.getDistanceSq(attackTarget.getPosX(), attackTarget.getPosY(), attackTarget.getPosZ());
+            double hostDistanceSq = this.hostCreature.distanceToSqr(attackTarget.getX(), attackTarget.getY(), attackTarget.getZ());
             double detectRange = this.hostCreature.getAttributeValue(Attributes.FOLLOW_RANGE);
             double detectRangeSq = detectRange * detectRange;
-            boolean canSee = this.hostCreature.getEntitySenses().canSee(attackTarget);
+            boolean canSee = this.hostCreature.getSensing().canSee(attackTarget);
             if (canSee) {
                 ++this.seeTime;
             } else {
@@ -99,12 +99,12 @@ public class ShieldAndMeleeAttackGoal<T extends CreatureEntity & IShieldUser> ex
             }
 
             if (hostDistanceSq <= detectRangeSq && this.seeTime >= 5) {
-                this.hostCreature.getNavigator().clearPath();
+                this.hostCreature.getNavigation().stop();
             }
 
             boolean closeQuarters = hostDistanceSq <= this.closeQuartersRangeSq;
 
-            if(closeQuarters && this.hostCreature.isActiveItemStackBlocking()){
+            if(closeQuarters && this.hostCreature.isBlocking()){
                 this.closeQuartersShieldUseCounter++;
             }
 
@@ -115,13 +115,13 @@ public class ShieldAndMeleeAttackGoal<T extends CreatureEntity & IShieldUser> ex
                 return;
             }
 
-            this.hostCreature.getLookController().setLookPositionWithEntity(attackTarget, 30.0F, 30.0F);
+            this.hostCreature.getLookControl().setLookAt(attackTarget, 30.0F, 30.0F);
             if (!canSee) {
                 this.stopUsingShield();
                 return;
             }
 
-            if(!this.hostCreature.isActiveItemStackBlocking()){
+            if(!this.hostCreature.isBlocking()){
                 this.useShield();
             }
         } else if(attackTarget != null){

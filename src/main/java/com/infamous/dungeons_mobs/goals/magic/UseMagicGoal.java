@@ -22,13 +22,13 @@ public abstract class UseMagicGoal<T extends MobEntity & IMagicUser> extends Goa
      * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
      * method as well.
      */
-    public boolean shouldExecute() {
-        LivingEntity livingentity = this.hostMobEntity.getAttackTarget();
+    public boolean canUse() {
+        LivingEntity livingentity = this.hostMobEntity.getTarget();
         if (livingentity != null && livingentity.isAlive()) {
             if (this.hostMobEntity.isUsingMagic()) {
                 return false;
             } else {
-               return this.hostMobEntity.ticksExisted >= this.magicCooldown;
+               return this.hostMobEntity.tickCount >= this.magicCooldown;
             }
         } else {
             return false;
@@ -38,18 +38,18 @@ public abstract class UseMagicGoal<T extends MobEntity & IMagicUser> extends Goa
     /**
      * Returns whether an in-progress EntityAIBase should continue executing
      */
-    public boolean shouldContinueExecuting() {
-        LivingEntity livingentity = this.hostMobEntity.getAttackTarget();
+    public boolean canContinueToUse() {
+        LivingEntity livingentity = this.hostMobEntity.getTarget();
         return livingentity != null && livingentity.isAlive() && this.magicWarmup > 0;
     }
 
     /**
      * Execute a one shot task or start executing a continuous task
      */
-    public void startExecuting() {
+    public void start() {
         this.magicWarmup = this.getMagicWarmupTime();
         this.hostMobEntity.setMagicUseTicks(this.getMagicUseTime());
-        this.magicCooldown = this.hostMobEntity.ticksExisted + this.getMagicUseInterval();
+        this.magicCooldown = this.hostMobEntity.tickCount + this.getMagicUseInterval();
         SoundEvent soundevent = this.getMagicPrepareSound();
         if (soundevent != null) {
             this.hostMobEntity.playSound(soundevent, 1.0F, 1.0F);

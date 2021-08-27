@@ -24,7 +24,7 @@ public class GeomancerBombRenderer extends GeomancerConstructRenderer<GeomancerB
     }
 
     @Override
-    public ResourceLocation getEntityTexture(GeomancerBombEntity entity) {
+    public ResourceLocation getTextureLocation(GeomancerBombEntity entity) {
         return EXPLODING_PILLAR_TEXTURE;
     }
 }

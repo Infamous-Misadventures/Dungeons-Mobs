@@ -26,9 +26,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.EnumSet;
 
 public class LeapleafEntity extends MonsterEntity {
-    private static final DataParameter<Boolean> IS_STALKING = EntityDataManager.createKey(LeapleafEntity.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> IS_CROUCHING = EntityDataManager.createKey(LeapleafEntity.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> IS_LEAPING = EntityDataManager.createKey(LeapleafEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> IS_STALKING = EntityDataManager.defineId(LeapleafEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> IS_CROUCHING = EntityDataManager.defineId(LeapleafEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> IS_LEAPING = EntityDataManager.defineId(LeapleafEntity.class, DataSerializers.BOOLEAN);
 
     private float primaryCrouchAmount;
     private float secondaryCrouchAmount;
@@ -39,19 +39,19 @@ public class LeapleafEntity extends MonsterEntity {
 
     public LeapleafEntity(EntityType<? extends MonsterEntity> type, World worldIn) {
         super(type, worldIn);
-        this.lookController = new LeapleafEntity.LookHelperController();
-        this.stepHeight = 1.0F;
-        this.experienceValue = 20;
+        this.lookControl = new LeapleafEntity.LookHelperController();
+        this.maxUpStep = 1.0F;
+        this.xpReward = 20;
     }
 
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return MonsterEntity.func_234295_eP_()
-                .createMutableAttribute(Attributes.MAX_HEALTH, 100.0D) // 1x Golem Health
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.25D)
-                .createMutableAttribute(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 15.0D) // 1x Golem Attack
-                .createMutableAttribute(Attributes.ATTACK_KNOCKBACK, 1.5D); // 1x Ravager knockback
+        return MonsterEntity.createMonsterAttributes()
+                .add(Attributes.MAX_HEALTH, 100.0D) // 1x Golem Health
+                .add(Attributes.MOVEMENT_SPEED, 0.25D)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
+                .add(Attributes.ATTACK_DAMAGE, 15.0D) // 1x Golem Attack
+                .add(Attributes.ATTACK_KNOCKBACK, 1.5D); // 1x Ravager knockback
     }
 
     @Override
@@ -64,17 +64,17 @@ public class LeapleafEntity extends MonsterEntity {
         this.goalSelector.addGoal(5, new LeapAtTargetGoal(this, 0.4F));
         this.goalSelector.addGoal(6, new LeapleafEntity.WatchGoal(this, PlayerEntity.class, 24.0F));
 
-        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, LeapleafEntity.class)).setCallsForHelp());
+        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, LeapleafEntity.class)).setAlertOthers());
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
     }
 
     @Override
-    protected void registerData() {
-        super.registerData();
-        this.dataManager.register(IS_STALKING, false);
-        this.dataManager.register(IS_CROUCHING, false);
-        this.dataManager.register(IS_LEAPING, false);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(IS_STALKING, false);
+        this.entityData.define(IS_CROUCHING, false);
+        this.entityData.define(IS_LEAPING, false);
     }
 
     @Override
@@ -96,15 +96,15 @@ public class LeapleafEntity extends MonsterEntity {
     }
 
     @Override
-    public void writeAdditional(CompoundNBT compound) {
-        super.writeAdditional(compound);
+    public void addAdditionalSaveData(CompoundNBT compound) {
+        super.addAdditionalSaveData(compound);
 
         compound.putBoolean("Crouching", this.isCrouching());
     }
 
     @Override
-    public void readAdditional(CompoundNBT compound) {
-        super.readAdditional(compound);
+    public void readAdditionalSaveData(CompoundNBT compound) {
+        super.readAdditionalSaveData(compound);
 
         this.setCrouching(compound.getBoolean("Crouching"));
     }
@@ -119,28 +119,28 @@ public class LeapleafEntity extends MonsterEntity {
     }
 
     public void setStalking(boolean isStalking) {
-        this.dataManager.set(IS_STALKING, isStalking);
+        this.entityData.set(IS_STALKING, isStalking);
     }
 
     public boolean isStalking() {
-        return this.dataManager.get(IS_STALKING);
+        return this.entityData.get(IS_STALKING);
     }
 
     public void setCrouching(boolean isCrouching) {
-        this.dataManager.set(IS_CROUCHING, isCrouching);
+        this.entityData.set(IS_CROUCHING, isCrouching);
     }
 
     public boolean isLeaping() {
-        return this.dataManager.get(IS_LEAPING);
+        return this.entityData.get(IS_LEAPING);
     }
 
     public void setLeaping(boolean isLeaping) {
-        this.dataManager.set(IS_LEAPING, isLeaping);
+        this.entityData.set(IS_LEAPING, isLeaping);
     }
 
     public static boolean canLeapTowardsTarget(LeapleafEntity leapleafEntity, LivingEntity targetEntity) {
-        double zDifference = targetEntity.getPosZ() - leapleafEntity.getPosZ();
-        double xDifference = targetEntity.getPosX() - leapleafEntity.getPosX();
+        double zDifference = targetEntity.getZ() - leapleafEntity.getZ();
+        double xDifference = targetEntity.getX() - leapleafEntity.getX();
         double zToXRatio = zDifference / xDifference;
         int leapDistance = 6;
         int leapHeight = 4;
@@ -150,7 +150,7 @@ public class LeapleafEntity extends MonsterEntity {
             double xAddition = zToXRatio == 0.0D ? xDifference * (double)((float)horizontalAddition / leapDistance) : zAddition / zToXRatio;
 
             for(int yAddition = 1; yAddition < leapHeight; ++yAddition) {
-                if (!leapleafEntity.world.getBlockState(new BlockPos(leapleafEntity.getPosX() + xAddition, leapleafEntity.getPosY() + (double)yAddition, leapleafEntity.getPosZ() + zAddition)).getMaterial().isReplaceable()) {
+                if (!leapleafEntity.level.getBlockState(new BlockPos(leapleafEntity.getX() + xAddition, leapleafEntity.getY() + (double)yAddition, leapleafEntity.getZ() + zAddition)).getMaterial().isReplaceable()) {
                     return false;
                 }
             }
@@ -164,38 +164,38 @@ public class LeapleafEntity extends MonsterEntity {
             super(LeapleafEntity.this);
         }
 
-        protected boolean shouldResetPitch() {
+        protected boolean resetXRotOnTick() {
             return !LeapleafEntity.this.isStalking() && !LeapleafEntity.this.isCrouching() && !LeapleafEntity.this.isLeaping();
         }
     }
 
     class StalkGoal extends Goal {
         public StalkGoal() {
-            this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
         }
 
         /**
          * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
          * method as well.
          */
-        public boolean shouldExecute() {
+        public boolean canUse() {
             if (LeapleafEntity.this.isSleeping()) {
                 return false;
             } else {
-                LivingEntity livingentity = LeapleafEntity.this.getAttackTarget();
+                LivingEntity livingentity = LeapleafEntity.this.getTarget();
                 return livingentity != null
                         && livingentity.isAlive()
-                        && LeapleafEntity.this.getDistanceSq(livingentity) > 36.0D
+                        && LeapleafEntity.this.distanceToSqr(livingentity) > 36.0D
                         && !LeapleafEntity.this.isCrouching()
                         && !LeapleafEntity.this.isStalking()
-                        && !LeapleafEntity.this.isJumping;
+                        && !LeapleafEntity.this.jumping;
             }
         }
 
         /**
          * Execute a one shot task or start executing a continuous task
          */
-        public void startExecuting() {
+        public void start() {
             //LeapleafEntity.this.setSitting(false);
             //.this.setStuck(false);
         }
@@ -203,13 +203,13 @@ public class LeapleafEntity extends MonsterEntity {
         /**
          * Reset the task's internal state. Called when this task is interrupted by another one
          */
-        public void resetTask() {
-            LivingEntity livingentity = LeapleafEntity.this.getAttackTarget();
+        public void stop() {
+            LivingEntity livingentity = LeapleafEntity.this.getTarget();
             if (livingentity != null && LeapleafEntity.canLeapTowardsTarget(LeapleafEntity.this, livingentity)) {
                 LeapleafEntity.this.setStalking(true);
                 LeapleafEntity.this.setCrouching(true);
-                LeapleafEntity.this.getNavigator().clearPath();
-                LeapleafEntity.this.getLookController().setLookPositionWithEntity(livingentity, (float)LeapleafEntity.this.getHorizontalFaceSpeed(), (float)LeapleafEntity.this.getVerticalFaceSpeed());
+                LeapleafEntity.this.getNavigation().stop();
+                LeapleafEntity.this.getLookControl().setLookAt(livingentity, (float)LeapleafEntity.this.getMaxHeadYRot(), (float)LeapleafEntity.this.getMaxHeadXRot());
             } else {
                 LeapleafEntity.this.setStalking(false);
                 LeapleafEntity.this.setCrouching(false);
@@ -221,15 +221,15 @@ public class LeapleafEntity extends MonsterEntity {
          * Keep ticking a continuous task that has already been started
          */
         public void tick() {
-            LivingEntity livingentity = LeapleafEntity.this.getAttackTarget();
+            LivingEntity livingentity = LeapleafEntity.this.getTarget();
             if(livingentity != null){
-                LeapleafEntity.this.getLookController().setLookPositionWithEntity(livingentity, (float)LeapleafEntity.this.getHorizontalFaceSpeed(), (float)LeapleafEntity.this.getVerticalFaceSpeed());
-                if (LeapleafEntity.this.getDistanceSq(livingentity) <= 36.0D) {
+                LeapleafEntity.this.getLookControl().setLookAt(livingentity, (float)LeapleafEntity.this.getMaxHeadYRot(), (float)LeapleafEntity.this.getMaxHeadXRot());
+                if (LeapleafEntity.this.distanceToSqr(livingentity) <= 36.0D) {
                     LeapleafEntity.this.setStalking(true);
                     LeapleafEntity.this.setCrouching(true);
-                    LeapleafEntity.this.getNavigator().clearPath();
+                    LeapleafEntity.this.getNavigation().stop();
                 } else {
-                    LeapleafEntity.this.getNavigator().tryMoveToEntityLiving(livingentity, 1.5D);
+                    LeapleafEntity.this.getNavigation().moveTo(livingentity, 1.5D);
                 }
             }
         }
@@ -240,18 +240,18 @@ public class LeapleafEntity extends MonsterEntity {
          * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
          * method as well.
          */
-        public boolean shouldExecute() {
+        public boolean canUse() {
             if (!LeapleafEntity.this.canLeap()) {
                 return false;
             } else {
-                LivingEntity livingentity = LeapleafEntity.this.getAttackTarget();
+                LivingEntity livingentity = LeapleafEntity.this.getTarget();
                 if (livingentity != null && livingentity.isAlive()) {
-                    if (livingentity.getAdjustedHorizontalFacing() != livingentity.getHorizontalFacing()) {
+                    if (livingentity.getMotionDirection() != livingentity.getDirection()) {
                         return false;
                     } else {
                         boolean canLeapTowardsTarget = LeapleafEntity.canLeapTowardsTarget(LeapleafEntity.this, livingentity);
                         if (!canLeapTowardsTarget) {
-                            LeapleafEntity.this.getNavigator().getPathToEntity(livingentity, 0);
+                            LeapleafEntity.this.getNavigation().createPath(livingentity, 0);
                             LeapleafEntity.this.setCrouching(false);
                             LeapleafEntity.this.setStalking(false);
                         }
@@ -267,40 +267,40 @@ public class LeapleafEntity extends MonsterEntity {
         /**
          * Returns whether an in-progress EntityAIBase should continue executing
          */
-        public boolean shouldContinueExecuting() {
-            LivingEntity livingentity = LeapleafEntity.this.getAttackTarget();
+        public boolean canContinueToUse() {
+            LivingEntity livingentity = LeapleafEntity.this.getTarget();
             if (livingentity != null && livingentity.isAlive()) {
-                double d0 = LeapleafEntity.this.getMotion().y;
-                return (!(d0 * d0 < (double)0.05F) || !(Math.abs(LeapleafEntity.this.rotationPitch) < 15.0F) || !LeapleafEntity.this.onGround);
+                double d0 = LeapleafEntity.this.getDeltaMovement().y;
+                return (!(d0 * d0 < (double)0.05F) || !(Math.abs(LeapleafEntity.this.xRot) < 15.0F) || !LeapleafEntity.this.onGround);
             } else {
                 return false;
             }
         }
 
-        public boolean isPreemptible() {
+        public boolean isInterruptable() {
             return false;
         }
 
         /**
          * Execute a one shot task or start executing a continuous task
          */
-        public void startExecuting() {
+        public void start() {
             LeapleafEntity.this.setJumping(true);
             LeapleafEntity.this.setLeaping(true);
             LeapleafEntity.this.setStalking(false);
-            LivingEntity attackTarget = LeapleafEntity.this.getAttackTarget();
+            LivingEntity attackTarget = LeapleafEntity.this.getTarget();
             if (attackTarget != null) {
-                LeapleafEntity.this.getLookController().setLookPositionWithEntity(attackTarget, 60.0F, 30.0F);
-                Vector3d vector3d = (new Vector3d(attackTarget.getPosX() - LeapleafEntity.this.getPosX(), attackTarget.getPosY() - LeapleafEntity.this.getPosY(), attackTarget.getPosZ() - LeapleafEntity.this.getPosZ())).normalize();
-                LeapleafEntity.this.setMotion(LeapleafEntity.this.getMotion().add(vector3d.x * 0.8D, 0.9D, vector3d.z * 0.8D));
-                LeapleafEntity.this.getNavigator().clearPath();
+                LeapleafEntity.this.getLookControl().setLookAt(attackTarget, 60.0F, 30.0F);
+                Vector3d vector3d = (new Vector3d(attackTarget.getX() - LeapleafEntity.this.getX(), attackTarget.getY() - LeapleafEntity.this.getY(), attackTarget.getZ() - LeapleafEntity.this.getZ())).normalize();
+                LeapleafEntity.this.setDeltaMovement(LeapleafEntity.this.getDeltaMovement().add(vector3d.x * 0.8D, 0.9D, vector3d.z * 0.8D));
+                LeapleafEntity.this.getNavigation().stop();
             }
         }
 
         /**
          * Reset the task's internal state. Called when this task is interrupted by another one
          */
-        public void resetTask() {
+        public void stop() {
             LeapleafEntity.this.setCrouching(false);
             LeapleafEntity.this.primaryCrouchAmount = 0.0F;
             LeapleafEntity.this.secondaryCrouchAmount = 0.0F;
@@ -312,9 +312,9 @@ public class LeapleafEntity extends MonsterEntity {
          * Keep ticking a continuous task that has already been started
          */
         public void tick() {
-            LivingEntity attackTarget = LeapleafEntity.this.getAttackTarget();
+            LivingEntity attackTarget = LeapleafEntity.this.getTarget();
             if (attackTarget != null) {
-                LeapleafEntity.this.getLookController().setLookPositionWithEntity(attackTarget, 60.0F, 30.0F);
+                LeapleafEntity.this.getLookControl().setLookAt(attackTarget, 60.0F, 30.0F);
             }
 
             /*
@@ -328,8 +328,8 @@ public class LeapleafEntity extends MonsterEntity {
             }
              */
 
-            if (attackTarget != null && LeapleafEntity.this.getDistanceSq(attackTarget) <= 4.0F) {
-                LeapleafEntity.this.attackEntityAsMob(attackTarget);
+            if (attackTarget != null && LeapleafEntity.this.distanceToSqr(attackTarget) <= 4.0F) {
+                LeapleafEntity.this.doHurtTarget(attackTarget);
             }
         }
     }
@@ -342,9 +342,9 @@ public class LeapleafEntity extends MonsterEntity {
 
         @Override
         protected double getAttackReachSqr(LivingEntity attackTarget) {
-            float adjustedAttackerWidth = LeapleafEntity.this.getWidth() - 0.8F;
+            float adjustedAttackerWidth = LeapleafEntity.this.getBbWidth() - 0.8F;
             float attackerWidthSquaredTimes4 = adjustedAttackerWidth * 2.0F * adjustedAttackerWidth * 2.0F;
-            return (double)(attackerWidthSquaredTimes4 + attackTarget.getWidth());
+            return (double)(attackerWidthSquaredTimes4 + attackTarget.getBbWidth());
         }
 
 
@@ -352,17 +352,17 @@ public class LeapleafEntity extends MonsterEntity {
         /**
          * Execute a one shot task or start executing a continuous task
          */
-        public void startExecuting() {
+        public void start() {
             LeapleafEntity.this.setStalking(false);
-            super.startExecuting();
+            super.start();
         }
 
         /**
          * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
          * method as well.
          */
-        public boolean shouldExecute() {
-            return !LeapleafEntity.this.isSleeping() && !LeapleafEntity.this.isCrouching() && super.shouldExecute();
+        public boolean canUse() {
+            return !LeapleafEntity.this.isSleeping() && !LeapleafEntity.this.isCrouching() && super.canUse();
         }
     }
 
@@ -375,15 +375,15 @@ public class LeapleafEntity extends MonsterEntity {
          * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
          * method as well.
          */
-        public boolean shouldExecute() {
-            return super.shouldExecute() && !LeapleafEntity.this.isStalking();
+        public boolean canUse() {
+            return super.canUse() && !LeapleafEntity.this.isStalking();
         }
 
         /**
          * Returns whether an in-progress EntityAIBase should continue executing
          */
-        public boolean shouldContinueExecuting() {
-            return super.shouldContinueExecuting() && !LeapleafEntity.this.isStalking();
+        public boolean canContinueToUse() {
+            return super.canContinueToUse() && !LeapleafEntity.this.isStalking();
         }
     }
 }

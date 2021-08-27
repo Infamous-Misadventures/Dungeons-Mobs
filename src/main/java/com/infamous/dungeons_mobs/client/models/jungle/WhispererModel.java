@@ -18,71 +18,81 @@ public class WhispererModel<T extends WhispererEntity> extends BipedModel<T> {
 
 	public WhispererModel(float modelSize) {
 		super(modelSize);
-		textureWidth = 128;
-		textureHeight = 128;
+		texWidth = 128;
+		texHeight = 128;
 
-		this.bipedHead = new ModelRenderer(this);
-		this.bipedHead.setRotationPoint(0.0F, 0.0F, 0.0F);
-		this.bipedHead.setTextureOffset(0, 107).addBox(-5.0F, -14.0F, -5.0F, 11.0F, 7.0F, 10.0F, modelSize, false);
-		this.bipedHead.setTextureOffset(0, 90).addBox(-5.0F, -10.0F, -5.0F, 11.0F, 5.0F, 10.0F, modelSize, false);
-		this.bipedHead.setTextureOffset(0, 75).addBox(-5.0F, -12.0F, -5.0F, 11.0F, 6.0F, 9.0F, modelSize, false);
+		this.head = new ModelRenderer(this);
+		this.head.setPos(0.0F, 0.0F, 0.0F);
+		this.head.texOffs(0, 107).addBox(-5.0F, -14.0F, -5.0F, 11.0F, 7.0F, 10.0F, modelSize, false);
+		this.head.texOffs(0, 90).addBox(-5.0F, -10.0F, -5.0F, 11.0F, 5.0F, 10.0F, modelSize, false);
+		this.head.texOffs(0, 75).addBox(-5.0F, -12.0F, -5.0F, 11.0F, 6.0F, 9.0F, modelSize, false);
 
-		this.bipedHeadwear = new ModelRenderer(this);
-		this.bipedHead.setRotationPoint(0.0F, 0.0F, 0.0F);
-		this.bipedHead.setTextureOffset(0, 107).addBox(-5.0F, -14.0F, -5.0F, 11.0F, 7.0F, 10.0F, 0.5F + modelSize, false);
-		this.bipedHeadwear.showModel = false;
+		this.hat = new ModelRenderer(this);
+		this.head.setPos(0.0F, 0.0F, 0.0F);
+		this.head.texOffs(0, 107).addBox(-5.0F, -14.0F, -5.0F, 11.0F, 7.0F, 10.0F, 0.5F + modelSize, false);
+		this.hat.visible = false;
 
-		this.bipedBody = new ModelRenderer(this);
-		this.bipedBody.setRotationPoint(0.0F, 0.0F, 0.0F);
-		this.bipedBody.setTextureOffset(42, 71).addBox(-4.0F, -5.0F, -2.0F, 9.0F, 14.0F, 4.0F, modelSize, false);
-		this.bipedBody.setTextureOffset(52, 109).addBox(-9.0F, -5.0F, -10.0F, 19.0F, 0.0F - 0.001F, 19.0F, modelSize, false);
-		this.bipedBody.setTextureOffset(42, 89).addBox(-4.0F, -5.0F, -2.0F, 9.0F, 14.0F, 4.0F, 0.25F + modelSize, false);
+		this.body = new ModelRenderer(this);
+		this.body.setPos(0.0F, 0.0F, 0.0F);
+		this.body.texOffs(42, 71).addBox(-4.0F, -5.0F, -2.0F, 9.0F, 14.0F, 4.0F, modelSize, false);
+		this.body.texOffs(52, 109).addBox(-9.0F, -5.0F, -10.0F, 19.0F, 0.0F - 0.001F, 19.0F, modelSize, false);
+		this.body.texOffs(42, 89).addBox(-4.0F, -5.0F, -2.0F, 9.0F, 14.0F, 4.0F, 0.25F + modelSize, false);
 
-		this.bipedRightArm = new ModelRenderer(this);
-		this.bipedRightArm.setRotationPoint(-5.0F, 2.0F, 0.0F);
-		this.bipedRightArm.setTextureOffset(84, 80).addBox(-3.0F, -5.0F, -2.0F, 4.0F, 23.0F, 4.0F, modelSize, false);
+		this.rightArm = new ModelRenderer(this);
+		this.rightArm.setPos(-5.0F, 2.0F, 0.0F);
+		this.rightArm.texOffs(84, 80).addBox(-3.0F, -5.0F, -2.0F, 4.0F, 23.0F, 4.0F, modelSize, false);
 
-		this.bipedLeftArm = new ModelRenderer(this);
-		this.bipedLeftArm.setRotationPoint(5.0F, 2.0F, 0.0F);
-		this.bipedLeftArm.setTextureOffset(68, 80).addBox(0.0F, -5.0F, -2.0F, 4.0F, 23.0F, 4.0F, modelSize, false);
+		this.leftArm = new ModelRenderer(this);
+		this.leftArm.setPos(5.0F, 2.0F, 0.0F);
+		this.leftArm.texOffs(68, 80).addBox(0.0F, -5.0F, -2.0F, 4.0F, 23.0F, 4.0F, modelSize, false);
 
-		this.bipedRightLeg = new ModelRenderer(this);
-		this.bipedRightLeg.setRotationPoint(-1.9F, 12.0F, 0.0F);
-		this.bipedRightLeg.setTextureOffset(114, 89).addBox(-1.1F, -3.0F, -2.0F, 3.0F, 15.0F, 4.0F, modelSize, false);
+		this.rightLeg = new ModelRenderer(this);
+		this.rightLeg.setPos(-1.9F, 12.0F, 0.0F);
+		this.rightLeg.texOffs(114, 89).addBox(-1.1F, -3.0F, -2.0F, 3.0F, 15.0F, 4.0F, modelSize, false);
 
-		this.bipedLeftLeg = new ModelRenderer(this);
-		this.bipedLeftLeg.setRotationPoint(1.9F, 12.0F, 0.0F);
-		this.bipedLeftLeg.setTextureOffset(100, 89).addBox(-0.9F, -3.0F, -2.0F, 3.0F, 15.0F, 4.0F, modelSize, false);
+		this.leftLeg = new ModelRenderer(this);
+		this.leftLeg.setPos(1.9F, 12.0F, 0.0F);
+		this.leftLeg.texOffs(100, 89).addBox(-0.9F, -3.0F, -2.0F, 3.0F, 15.0F, 4.0F, modelSize, false);
 	}
 
 	@Override
-	public void setRotationAngles(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		super.setRotationAngles(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+	public void setupAnim(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+		super.setupAnim(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
 		if(entityIn.isUsingMagic()){
-			this.bipedRightArm.rotationPointZ = 0.0F;
-			this.bipedRightArm.rotationPointX = -5.0F;
-			this.bipedLeftArm.rotationPointZ = 0.0F;
-			this.bipedLeftArm.rotationPointX = 5.0F;
-			this.bipedRightArm.rotateAngleX = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
-			this.bipedLeftArm.rotateAngleX = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
-			this.bipedRightArm.rotateAngleZ = 2.3561945F;
-			this.bipedLeftArm.rotateAngleZ = -2.3561945F;
-			this.bipedRightArm.rotateAngleY = 0.0F;
-			this.bipedLeftArm.rotateAngleY = 0.0F;
+			this.rightArm.z = 0.0F;
+			this.rightArm.x = -5.0F;
+			this.leftArm.z = 0.0F;
+			this.leftArm.x = 5.0F;
+			this.rightArm.xRot = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
+			this.leftArm.xRot = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
+			this.rightArm.zRot = 2.3561945F;
+			this.leftArm.zRot = -2.3561945F;
+			this.rightArm.yRot = 0.0F;
+			this.leftArm.yRot = 0.0F;
+		}
+
+		if (this.swimAmount > 0.0F) {
+			this.rightArm.xRot = this.rotlerpRad(this.swimAmount, this.rightArm.xRot, -2.5132742F) + this.swimAmount * 0.35F * MathHelper.sin(0.1F * ageInTicks);
+			this.leftArm.xRot = this.rotlerpRad(this.swimAmount, this.leftArm.xRot, -2.5132742F) - this.swimAmount * 0.35F * MathHelper.sin(0.1F * ageInTicks);
+			this.rightArm.zRot = this.rotlerpRad(this.swimAmount, this.rightArm.zRot, -0.15F);
+			this.leftArm.zRot = this.rotlerpRad(this.swimAmount, this.leftArm.zRot, 0.15F);
+			this.leftLeg.xRot -= this.swimAmount * 0.55F * MathHelper.sin(0.1F * ageInTicks);
+			this.rightLeg.xRot += this.swimAmount * 0.55F * MathHelper.sin(0.1F * ageInTicks);
+			this.head.xRot = 0.0F;
 		}
 	}
 
-	public void translateHand(HandSide sideIn, MatrixStack matrixStackIn) {
+	public void translateToHand(HandSide sideIn, MatrixStack matrixStackIn) {
 		float f = sideIn == HandSide.RIGHT ? 1.0F : -1.0F;
-		ModelRenderer modelrenderer = this.getArmForSide(sideIn);
-		modelrenderer.rotationPointX += f;
-		modelrenderer.translateRotate(matrixStackIn);
-		modelrenderer.rotationPointX -= f;
+		ModelRenderer modelrenderer = this.getArm(sideIn);
+		modelrenderer.x += f;
+		modelrenderer.translateAndRotate(matrixStackIn);
+		modelrenderer.x -= f;
 	}
 
 	public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
-		modelRenderer.rotateAngleX = x;
-		modelRenderer.rotateAngleY = y;
-		modelRenderer.rotateAngleZ = z;
+		modelRenderer.xRot = x;
+		modelRenderer.yRot = y;
+		modelRenderer.zRot = z;
 	}
 }

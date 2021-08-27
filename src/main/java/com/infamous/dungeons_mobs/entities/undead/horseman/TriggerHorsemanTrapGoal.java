@@ -33,14 +33,14 @@ public class TriggerHorsemanTrapGoal extends Goal {
     * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
     * method as well.
     */
-   public boolean shouldExecute() {
-      PlayerEntity closestPlayer = this.leaderSkeletonHorseman.world
-              .getClosestPlayer(this.leaderSkeletonHorseman.getPosX(),
-                      this.leaderSkeletonHorseman.getPosY(),
-                      this.leaderSkeletonHorseman.getPosZ(),
+   public boolean canUse() {
+      PlayerEntity closestPlayer = this.leaderSkeletonHorseman.level
+              .getNearestPlayer(this.leaderSkeletonHorseman.getX(),
+                      this.leaderSkeletonHorseman.getY(),
+                      this.leaderSkeletonHorseman.getZ(),
                       10.0D,
                       true);
-      return closestPlayer != null && this.leaderSkeletonHorseman.canEntityBeSeen(closestPlayer);
+      return closestPlayer != null && this.leaderSkeletonHorseman.canSee(closestPlayer);
    }
 
    /**
@@ -48,9 +48,9 @@ public class TriggerHorsemanTrapGoal extends Goal {
     */
    public void tick() {
       // Using Forge PR #7509 that fixes MC-206338
-      ServerWorld serverWorld = (ServerWorld) this.leaderSkeletonHorseman.world;
-      DifficultyInstance difficultyinstance = serverWorld.getDifficultyForLocation(this.leaderSkeletonHorseman.getPosition());
-      serverWorld.getServer().enqueue(new net.minecraft.util.concurrent.TickDelayedTask(serverWorld.getServer().getTickCounter(), () -> this.leaderSkeletonHorseman.setTrap(false)));
+      ServerWorld serverWorld = (ServerWorld) this.leaderSkeletonHorseman.level;
+      DifficultyInstance difficultyinstance = serverWorld.getCurrentDifficultyAt(this.leaderSkeletonHorseman.blockPosition());
+      serverWorld.getServer().tell(new net.minecraft.util.concurrent.TickDelayedTask(serverWorld.getServer().getTickCount(), () -> this.leaderSkeletonHorseman.setTrap(false)));
 
       this.createLightningBolt(this.leaderSkeletonHorseman);
 
@@ -63,48 +63,48 @@ public class TriggerHorsemanTrapGoal extends Goal {
          SkeletonHorsemanEntity additionalSkeletonHorseman = this.createSkeletonHorseman(difficultyinstance, additionalSkeletonHorse);
          additionalSkeletonHorseman.startRiding(additionalSkeletonHorse);
          additionalSkeletonHorse.makeMad();
-         additionalSkeletonHorse.addVelocity(this.leaderSkeletonHorseman.getRNG().nextGaussian() * 0.5D, 0.0D, this.leaderSkeletonHorseman.getRNG().nextGaussian() * 0.5D);
+         additionalSkeletonHorse.push(this.leaderSkeletonHorseman.getRandom().nextGaussian() * 0.5D, 0.0D, this.leaderSkeletonHorseman.getRandom().nextGaussian() * 0.5D);
          this.createLightningBolt(this.leaderSkeletonHorseman);
       }
    }
 
    private void createLightningBolt(SkeletonHorsemanEntity skeletonHorsemanEntity) {
-      LightningBoltEntity lightningboltentity = EntityType.LIGHTNING_BOLT.create(skeletonHorsemanEntity.world);
+      LightningBoltEntity lightningboltentity = EntityType.LIGHTNING_BOLT.create(skeletonHorsemanEntity.level);
       if (lightningboltentity != null) {
-         lightningboltentity.moveForced(skeletonHorsemanEntity.getPosX(), skeletonHorsemanEntity.getPosY(), skeletonHorsemanEntity.getPosZ());
-         lightningboltentity.setEffectOnly(true);
-         skeletonHorsemanEntity.world.addEntity(lightningboltentity);
+         lightningboltentity.moveTo(skeletonHorsemanEntity.getX(), skeletonHorsemanEntity.getY(), skeletonHorsemanEntity.getZ());
+         lightningboltentity.setVisualOnly(true);
+         skeletonHorsemanEntity.level.addFreshEntity(lightningboltentity);
       }
    }
 
    private SkeletonHorseEntity createHorse(DifficultyInstance difficultyInstance) {
-      SkeletonHorseEntity skeletonHorseEntity = EntityType.SKELETON_HORSE.create(this.leaderSkeletonHorseman.world);
+      SkeletonHorseEntity skeletonHorseEntity = EntityType.SKELETON_HORSE.create(this.leaderSkeletonHorseman.level);
       if (skeletonHorseEntity != null) {
-         skeletonHorseEntity.onInitialSpawn((IServerWorld) this.leaderSkeletonHorseman.world, difficultyInstance, SpawnReason.TRIGGERED, (ILivingEntityData)null, (CompoundNBT)null);
-         skeletonHorseEntity.setPosition(this.leaderSkeletonHorseman.getPosX(), this.leaderSkeletonHorseman.getPosY(), this.leaderSkeletonHorseman.getPosZ());
-         skeletonHorseEntity.hurtResistantTime = 60;
-         skeletonHorseEntity.setHorseTamed(true);
-         skeletonHorseEntity.enablePersistence();
-         skeletonHorseEntity.setGrowingAge(0);
+         skeletonHorseEntity.finalizeSpawn((IServerWorld) this.leaderSkeletonHorseman.level, difficultyInstance, SpawnReason.TRIGGERED, (ILivingEntityData)null, (CompoundNBT)null);
+         skeletonHorseEntity.setPos(this.leaderSkeletonHorseman.getX(), this.leaderSkeletonHorseman.getY(), this.leaderSkeletonHorseman.getZ());
+         skeletonHorseEntity.invulnerableTime = 60;
+         skeletonHorseEntity.setTamed(true);
+         skeletonHorseEntity.setPersistenceRequired();
+         skeletonHorseEntity.setAge(0);
 
          Inventory horseChest = ObfuscationReflectionHelper.getPrivateValue(AbstractHorseEntity.class, skeletonHorseEntity, "field_110296_bG");
          if (horseChest != null) {
-            horseChest.setInventorySlotContents(0, new ItemStack(Items.SADDLE));
+            horseChest.setItem(0, new ItemStack(Items.SADDLE));
          }
          //skeletonHorseEntity.goalSelector.addGoal(0, new MountedRoamingGoal(skeletonHorseEntity, 1.2D));
-         skeletonHorseEntity.world.addEntity(skeletonHorseEntity);
+         skeletonHorseEntity.level.addFreshEntity(skeletonHorseEntity);
       }
       return skeletonHorseEntity;
    }
 
    private SkeletonHorsemanEntity createSkeletonHorseman(DifficultyInstance difficultyInstance, AbstractHorseEntity horse) {
-      SkeletonHorsemanEntity skeletonHorsemanEntity = ModEntityTypes.SKELETON_HORSEMAN.get().create(horse.world);
+      SkeletonHorsemanEntity skeletonHorsemanEntity = ModEntityTypes.SKELETON_HORSEMAN.get().create(horse.level);
       if (skeletonHorsemanEntity != null) {
-         skeletonHorsemanEntity.onInitialSpawn((IServerWorld) horse.world, difficultyInstance, SpawnReason.TRIGGERED, (ILivingEntityData)null, (CompoundNBT)null);
-         skeletonHorsemanEntity.setPosition(horse.getPosX(), horse.getPosY(), horse.getPosZ());
-         skeletonHorsemanEntity.hurtResistantTime = 60;
-         skeletonHorsemanEntity.enablePersistence();
-         skeletonHorsemanEntity.world.addEntity(skeletonHorsemanEntity);
+         skeletonHorsemanEntity.finalizeSpawn((IServerWorld) horse.level, difficultyInstance, SpawnReason.TRIGGERED, (ILivingEntityData)null, (CompoundNBT)null);
+         skeletonHorsemanEntity.setPos(horse.getX(), horse.getY(), horse.getZ());
+         skeletonHorsemanEntity.invulnerableTime = 60;
+         skeletonHorsemanEntity.setPersistenceRequired();
+         skeletonHorsemanEntity.level.addFreshEntity(skeletonHorsemanEntity);
       }
       return skeletonHorsemanEntity;
    }

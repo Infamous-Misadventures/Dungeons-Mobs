@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import net.minecraft.item.Item.Properties;
+
 public class ModSpawnEggItem extends SpawnEggItem {
     protected static final List<ModSpawnEggItem> UNADDED_EGGS = new ArrayList<>();
     private final Lazy<? extends EntityType<?>> entityTypeSupplier;
@@ -43,10 +45,10 @@ public class ModSpawnEggItem extends SpawnEggItem {
         DefaultDispenseItemBehavior dispenseItemBehavior = new DefaultDispenseItemBehavior(){
 
             @Override
-            protected ItemStack dispenseStack(IBlockSource source, ItemStack stack){
-                Direction direction = source.getBlockState().get(DispenserBlock.FACING);
+            protected ItemStack execute(IBlockSource source, ItemStack stack){
+                Direction direction = source.getBlockState().getValue(DispenserBlock.FACING);
                 EntityType<?> entityType = ((SpawnEggItem)stack.getItem()).getType(stack.getTag());
-                entityType.spawn(source.getWorld(), stack, null, source.getBlockPos(), SpawnReason.DISPENSER, direction != Direction.UP, false);
+                entityType.spawn(source.getLevel(), stack, null, source.getPos(), SpawnReason.DISPENSER, direction != Direction.UP, false);
                 stack.shrink(1);
                 return stack;
             }
@@ -54,7 +56,7 @@ public class ModSpawnEggItem extends SpawnEggItem {
 
         for(final SpawnEggItem spawnEggItem : UNADDED_EGGS){
             EGGS.put(spawnEggItem.getType(null), spawnEggItem);
-            DispenserBlock.registerDispenseBehavior(spawnEggItem, dispenseItemBehavior);
+            DispenserBlock.registerBehavior(spawnEggItem, dispenseItemBehavior);
         }
         UNADDED_EGGS.clear();
     }
@@ -63,7 +65,7 @@ public class ModSpawnEggItem extends SpawnEggItem {
         if (compoundNBT != null && compoundNBT.contains("EntityTag", 10)) {
             CompoundNBT compoundnbt = compoundNBT.getCompound("EntityTag");
             if (compoundnbt.contains("id", 8)) {
-                return EntityType.byKey(compoundnbt.getString("id")).orElse(this.typeIn);
+                return EntityType.byString(compoundnbt.getString("id")).orElse(this.typeIn);
             }
         }
         return this.typeIn;

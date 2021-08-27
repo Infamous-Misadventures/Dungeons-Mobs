@@ -32,26 +32,26 @@ public class VindicatorHelmetModel<T extends LivingEntity> extends BipedModel<T>
 		this.slot = slot;
 		this.entity = entity;
 		this.isDiamond = isDiamond;
-		textureWidth = 64;
-		textureHeight = 64;
+		texWidth = 64;
+		texHeight = 64;
 
 		Head = new ModelRenderer(this);
-		Head.setRotationPoint(0.0F, 24.0F, 0.0F);
-		Head.setTextureOffset(0, 0).addBox(-5.0F, -35.0F + 25.0F, -5.0F, 10.0F, 10.0F, 10.0F, 0.0F, false);
+		Head.setPos(0.0F, 24.0F, 0.0F);
+		Head.texOffs(0, 0).addBox(-5.0F, -35.0F + 25.0F, -5.0F, 10.0F, 10.0F, 10.0F, 0.0F, false);
 
 		Horns = new ModelRenderer(this);
-		Horns.setRotationPoint(0.0F, 16.0F, -23.0F);
+		Horns.setPos(0.0F, 16.0F, -23.0F);
 		setRotationAngle(Horns, -0.7854F, 0.0F, 0.0F);
 		Head.addChild(Horns);
 		if(this.isDiamond){
-			Horns.setTextureOffset(0, 24).addBox(5.0F, -34.5F, -6.0F, 2.0F, 2.0F, 4.0F, 0.0F, false);
-			Horns.setTextureOffset(0, 24).addBox(-7.0F, -34.5F, -6.0F, 2.0F, 2.0F, 4.0F, 0.0F, false);
+			Horns.texOffs(0, 24).addBox(5.0F, -34.5F, -6.0F, 2.0F, 2.0F, 4.0F, 0.0F, false);
+			Horns.texOffs(0, 24).addBox(-7.0F, -34.5F, -6.0F, 2.0F, 2.0F, 4.0F, 0.0F, false);
 
 		}
 	}
 
 	@Override
-	public void render(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha){
+	public void renderToBuffer(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha){
 		boolean testificate =
 				this.entity instanceof AbstractIllagerEntity ||
 						this.entity.getType() == ForgeRegistries.ENTITIES.getValue(new ResourceLocation("savageandravage:skeleton_villager")) ||
@@ -89,21 +89,21 @@ public class VindicatorHelmetModel<T extends LivingEntity> extends BipedModel<T>
 			} else {
 
 		 */
-			matrixStackIn.push();
-			this.Head.copyModelAngles(this.bipedHead);
-			if (this.entity.isChild()) {
+			matrixStackIn.pushPose();
+			this.Head.copyFrom(this.head);
+			if (this.entity.isBaby()) {
 				matrixStackIn.scale(0.8F, 0.8F, 0.8F);
-				this.Head.setRotationPoint(0.0F, 15.0F, 0.0F);
+				this.Head.setPos(0.0F, 15.0F, 0.0F);
 			}
 			this.Head.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-			matrixStackIn.pop();
+			matrixStackIn.popPose();
 			//}
 		}
 	}
 
 	public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
-		modelRenderer.rotateAngleX = x;
-		modelRenderer.rotateAngleY = y;
-		modelRenderer.rotateAngleZ = z;
+		modelRenderer.xRot = x;
+		modelRenderer.yRot = y;
+		modelRenderer.zRot = z;
 	}
 }

@@ -25,30 +25,30 @@ import java.util.Random;
 public class CobwebTrapRenderer extends EntityRenderer<CobwebTrapEntity> {
    public CobwebTrapRenderer(EntityRendererManager renderManagerIn) {
       super(renderManagerIn);
-      this.shadowSize = 0.5F;
+      this.shadowRadius = 0.5F;
    }
 
    public void render(CobwebTrapEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
-      BlockState blockstate = Blocks.COBWEB.getDefaultState();
-      if (blockstate.getRenderType() == BlockRenderType.MODEL) {
-         World world = entityIn.getEntityWorld();
-         if (blockstate != world.getBlockState(entityIn.getPosition()) && blockstate.getRenderType() != BlockRenderType.INVISIBLE) {
-            matrixStackIn.push();
-            BlockPos blockpos = new BlockPos(entityIn.getPosX(), entityIn.getBoundingBox().maxY, entityIn.getPosZ());
+      BlockState blockstate = Blocks.COBWEB.defaultBlockState();
+      if (blockstate.getRenderShape() == BlockRenderType.MODEL) {
+         World world = entityIn.getCommandSenderWorld();
+         if (blockstate != world.getBlockState(entityIn.blockPosition()) && blockstate.getRenderShape() != BlockRenderType.INVISIBLE) {
+            matrixStackIn.pushPose();
+            BlockPos blockpos = new BlockPos(entityIn.getX(), entityIn.getBoundingBox().maxY, entityIn.getZ());
             matrixStackIn.translate(-0.5D, 0.0D, -0.5D);
-            BlockRendererDispatcher blockrendererdispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
-            for (net.minecraft.client.renderer.RenderType type : net.minecraft.client.renderer.RenderType.getBlockRenderTypes()) {
+            BlockRendererDispatcher blockrendererdispatcher = Minecraft.getInstance().getBlockRenderer();
+            for (net.minecraft.client.renderer.RenderType type : net.minecraft.client.renderer.RenderType.chunkBufferLayers()) {
                if (RenderTypeLookup.canRenderInLayer(blockstate, type)) {
                   net.minecraftforge.client.ForgeHooksClient.setRenderLayer(type);
                   blockrendererdispatcher
-                          .getBlockModelRenderer()
-                          .renderModel(world,
-                                  blockrendererdispatcher.getModelForState(blockstate),
-                                  blockstate, blockpos, matrixStackIn, bufferIn.getBuffer(type), false, new Random(), blockstate.getPositionRandom(entityIn.getOrigin()), OverlayTexture.NO_OVERLAY);
+                          .getModelRenderer()
+                          .tesselateBlock(world,
+                                  blockrendererdispatcher.getBlockModel(blockstate),
+                                  blockstate, blockpos, matrixStackIn, bufferIn.getBuffer(type), false, new Random(), blockstate.getSeed(entityIn.getOrigin()), OverlayTexture.NO_OVERLAY);
                }
             }
             net.minecraftforge.client.ForgeHooksClient.setRenderLayer(null);
-            matrixStackIn.pop();
+            matrixStackIn.popPose();
             super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
          }
       }
@@ -57,7 +57,7 @@ public class CobwebTrapRenderer extends EntityRenderer<CobwebTrapEntity> {
    /**
     * Returns the location of an entity's texture.
     */
-   public ResourceLocation getEntityTexture(CobwebTrapEntity entity) {
-      return AtlasTexture.LOCATION_BLOCKS_TEXTURE;
+   public ResourceLocation getTextureLocation(CobwebTrapEntity entity) {
+      return AtlasTexture.LOCATION_BLOCKS;
    }
 }

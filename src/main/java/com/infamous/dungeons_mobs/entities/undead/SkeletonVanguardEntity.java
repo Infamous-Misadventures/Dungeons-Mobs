@@ -41,52 +41,52 @@ public class SkeletonVanguardEntity extends ArmoredSkeletonEntity implements ISh
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return ArmoredSkeletonEntity.setCustomAttributes().createMutableAttribute(Attributes.ARMOR, 6.0D);
+        return ArmoredSkeletonEntity.setCustomAttributes().add(Attributes.ARMOR, 6.0D);
     }
 
-    protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficultyInstance) {
+    protected void populateDefaultEquipmentSlots(DifficultyInstance difficultyInstance) {
         if(ModList.get().isLoaded("dungeons_gear")){
 
             Item GLAIVE = ForgeRegistries.ITEMS.getValue(new ResourceLocation("dungeons_gear", "glaive"));
             ItemStack glaive = new ItemStack(GLAIVE);
 
-            this.setItemStackToSlot(EquipmentSlotType.MAINHAND, glaive);
+            this.setItemSlot(EquipmentSlotType.MAINHAND, glaive);
         }
         else{
-            this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_SWORD));
+            this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_SWORD));
         }
-        this.setItemStackToSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.SKELETON_VANGUARD_HELMET.get()));
-        this.setItemStackToSlot(EquipmentSlotType.OFFHAND, new ItemStack(ModItems.SKELETON_VANGUARD_SHIELD.get()));
+        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.SKELETON_VANGUARD_HELMET.get()));
+        this.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(ModItems.SKELETON_VANGUARD_SHIELD.get()));
     }
 
     @Nullable
-    public ILivingEntityData onInitialSpawn(IServerWorld world, DifficultyInstance difficultyInstance, SpawnReason spawnReason, @Nullable ILivingEntityData livingEntityDataIn, @Nullable CompoundNBT compoundNBT) {
-        livingEntityDataIn = super.onInitialSpawn(world, difficultyInstance, spawnReason, livingEntityDataIn, compoundNBT);
+    public ILivingEntityData finalizeSpawn(IServerWorld world, DifficultyInstance difficultyInstance, SpawnReason spawnReason, @Nullable ILivingEntityData livingEntityDataIn, @Nullable CompoundNBT compoundNBT) {
+        livingEntityDataIn = super.finalizeSpawn(world, difficultyInstance, spawnReason, livingEntityDataIn, compoundNBT);
 
         return livingEntityDataIn;
     }
 
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.ENTITY_SKELETON_AMBIENT;
+        return SoundEvents.SKELETON_AMBIENT;
     }
 
     protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
-        return SoundEvents.ENTITY_SKELETON_HURT;
+        return SoundEvents.SKELETON_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return SoundEvents.ENTITY_SKELETON_DEATH;
+        return SoundEvents.SKELETON_DEATH;
     }
 
     protected SoundEvent getStepSound() {
-        return SoundEvents.ENTITY_SKELETON_STEP;
+        return SoundEvents.SKELETON_STEP;
     }
 
     // SHIELD STUFF
 
     @Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
         if(this.shieldCooldownTime > 0){
             this.shieldCooldownTime--;
         }
@@ -97,8 +97,8 @@ public class SkeletonVanguardEntity extends ArmoredSkeletonEntity implements ISh
 
     @Override
     protected void playHurtSound(DamageSource damageSource) {
-        if(this.isActiveItemStackBlocking()){
-            this.playSound(SoundEvents.ITEM_SHIELD_BLOCK, 1.0F, 0.8F + this.world.rand.nextFloat() * 0.4F);
+        if(this.isBlocking()){
+            this.playSound(SoundEvents.SHIELD_BLOCK, 1.0F, 0.8F + this.level.random.nextFloat() * 0.4F);
         }
         else{
             super.playHurtSound(damageSource);
@@ -108,30 +108,30 @@ public class SkeletonVanguardEntity extends ArmoredSkeletonEntity implements ISh
     @Override
     public void blockUsingShield(LivingEntity livingEntity) {
         super.blockUsingShield(livingEntity);
-        if (livingEntity.getHeldItemMainhand().canDisableShield(this.activeItemStack, this, livingEntity)) {
+        if (livingEntity.getMainHandItem().canDisableShield(this.useItem, this, livingEntity)) {
             this.disableShield(true);
         }
     }
 
     @Override
-    protected void damageShield(float amount) {
-        if (this.activeItemStack.isShield(this)) {
+    protected void hurtCurrentlyUsedShield(float amount) {
+        if (this.useItem.isShield(this)) {
             if (amount >= 3.0F) {
                 int i = 1 + MathHelper.floor(amount);
-                Hand hand = this.getActiveHand();
-                this.activeItemStack.damageItem(i, this, (skeletonVanguardEntity) -> {
-                    skeletonVanguardEntity.sendBreakAnimation(hand);
+                Hand hand = this.getUsedItemHand();
+                this.useItem.hurtAndBreak(i, this, (skeletonVanguardEntity) -> {
+                    skeletonVanguardEntity.broadcastBreakEvent(hand);
                     // Forge would have called onPlayerDestroyItem here
                 });
-                if (this.activeItemStack.isEmpty()) {
+                if (this.useItem.isEmpty()) {
                     if (hand == Hand.MAIN_HAND) {
-                        this.setItemStackToSlot(EquipmentSlotType.MAINHAND, ItemStack.EMPTY);
+                        this.setItemSlot(EquipmentSlotType.MAINHAND, ItemStack.EMPTY);
                     } else {
-                        this.setItemStackToSlot(EquipmentSlotType.OFFHAND, ItemStack.EMPTY);
+                        this.setItemSlot(EquipmentSlotType.OFFHAND, ItemStack.EMPTY);
                     }
 
-                    this.activeItemStack = ItemStack.EMPTY;
-                    this.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.8F, 0.8F + this.world.rand.nextFloat() * 0.4F);
+                    this.useItem = ItemStack.EMPTY;
+                    this.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.8F + this.level.random.nextFloat() * 0.4F);
                 }
             }
         }
@@ -149,15 +149,15 @@ public class SkeletonVanguardEntity extends ArmoredSkeletonEntity implements ISh
 
     @Override
     public void disableShield(boolean guaranteeDisable) {
-        float f = 0.25F + (float) EnchantmentHelper.getEfficiencyModifier(this) * 0.05F;
+        float f = 0.25F + (float) EnchantmentHelper.getBlockEfficiency(this) * 0.05F;
         if (guaranteeDisable) {
             f += 0.75F;
         }
-        if (this.rand.nextFloat() < f) {
-            this.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.8F, 0.8F + this.world.rand.nextFloat() * 0.4F);
+        if (this.random.nextFloat() < f) {
+            this.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.8F + this.level.random.nextFloat() * 0.4F);
             this.shieldCooldownTime = 100;
-            this.resetActiveHand();
-            this.world.setEntityState(this, (byte)30);
+            this.stopUsingItem();
+            this.level.broadcastEntityEvent(this, (byte)30);
         }
     }
 
@@ -177,14 +177,14 @@ public class SkeletonVanguardEntity extends ArmoredSkeletonEntity implements ISh
                 Item VENOM_GLAIVE = ForgeRegistries.ITEMS.getValue(new ResourceLocation("dungeons_gear", "venom_glaive"));
                 Item GRAVE_BANE = ForgeRegistries.ITEMS.getValue(new ResourceLocation("dungeons_gear", "grave_bane"));
 
-                boolean isHoldingGlaive = this.attacker.getHeldItemMainhand().getItem() == GLAIVE
-                        || this.attacker.getHeldItemMainhand().getItem() == VENOM_GLAIVE
-                        || this.attacker.getHeldItemMainhand().getItem() == GRAVE_BANE;
+                boolean isHoldingGlaive = this.mob.getMainHandItem().getItem() == GLAIVE
+                        || this.mob.getMainHandItem().getItem() == VENOM_GLAIVE
+                        || this.mob.getMainHandItem().getItem() == GRAVE_BANE;
 
                 if (isHoldingGlaive) {
                     float glaiveAttackReach = 3.0F;
-                    float attackerWidthSquaredTimes4 = this.attacker.getWidth() * glaiveAttackReach * this.attacker.getWidth() * glaiveAttackReach;
-                    return (double)(attackerWidthSquaredTimes4 + attackTarget.getWidth());
+                    float attackerWidthSquaredTimes4 = this.mob.getBbWidth() * glaiveAttackReach * this.mob.getBbWidth() * glaiveAttackReach;
+                    return (double)(attackerWidthSquaredTimes4 + attackTarget.getBbWidth());
                 }
             }
             return super.getAttackReachSqr(attackTarget);

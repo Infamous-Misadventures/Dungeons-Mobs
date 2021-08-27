@@ -61,24 +61,39 @@ public class GeomancyHelper {
         return xshift;
     }
 
-    private static BlockPos createCenteredBlockPosOnTarget(LivingEntity targetEntity) {
+    private static BlockPos createCenteredBlockPosOnTarget(Entity targetEntity) {
         return new BlockPos(
-                Math.floor(targetEntity.getPosX()),
-                Math.floor(targetEntity.getPosY()),
-                Math.floor(targetEntity.getPosZ()));
+                Math.floor(targetEntity.getX()),
+                Math.floor(targetEntity.getY()),
+                Math.floor(targetEntity.getZ()));
     }
 
-    private static void summonAreaDenialConstruct(LivingEntity casterEntity, LivingEntity targetEntity, EntityType<? extends ConstructEntity> wallEntityType, double xshift, double zshift, Direction pillarFacing) {
-        BlockPos targetPos = createCenteredBlockPosOnTarget(targetEntity).add(xshift, 0, zshift);
+    private static void summonAreaDenialConstruct(LivingEntity casterEntity, Entity targetEntity, EntityType<? extends ConstructEntity> wallEntityType, double xshift, double zshift, Direction pillarFacing) {
+        BlockPos targetPos = createCenteredBlockPosOnTarget(targetEntity).offset(xshift, 0, zshift);
         // verify that the construct will be summoned on valid ground
         if(canAllowBlockEntitySpawn(casterEntity, targetPos)){
-            ConstructEntity constructEntity = wallEntityType.create(casterEntity.world);
+            ConstructEntity constructEntity = wallEntityType.create(casterEntity.level);
             if (constructEntity != null) {
                 constructEntity.setCaster(casterEntity);
-                constructEntity.setPosition(targetPos.getX(), targetPos.getY(), targetPos.getZ());
+                constructEntity.setPos(targetPos.getX(), targetPos.getY(), targetPos.getZ());
                 constructEntity.setLifeTicks(100);
                 constructEntity.faceDirection(pillarFacing);
-                casterEntity.world.addEntity(constructEntity);
+                casterEntity.level.addFreshEntity(constructEntity);
+            }
+        }
+    }
+
+    private static void summonAreaDenialConstruct(LivingEntity casterEntity, BlockPos targetPos, EntityType<? extends ConstructEntity> wallEntityType, double xshift, double zshift, Direction pillarFacing) {
+        targetPos = targetPos.offset(xshift, 0, zshift);
+        // verify that the construct will be summoned on valid ground
+        if(canAllowBlockEntitySpawn(casterEntity, targetPos)){
+            ConstructEntity constructEntity = wallEntityType.create(casterEntity.level);
+            if (constructEntity != null) {
+                constructEntity.setCaster(casterEntity);
+                constructEntity.setPos(targetPos.getX(), targetPos.getY(), targetPos.getZ());
+                constructEntity.setLifeTicks(100);
+                constructEntity.faceDirection(pillarFacing);
+                casterEntity.level.addFreshEntity(constructEntity);
             }
         }
     }
@@ -87,44 +102,57 @@ public class GeomancyHelper {
         BlockPos targetPos = createCenteredBlockPosOnTarget(targetEntity);
         // verify that the construct will be summoned on valid ground
         if(canAllowBlockEntitySpawn(casterEntity, targetPos)){
-            VineEntity vineEntity = entityType.create(casterEntity.world);
+            VineEntity vineEntity = entityType.create(casterEntity.level);
             if (vineEntity != null) {
                 vineEntity.setCaster(casterEntity);
-                vineEntity.setPosition(targetPos.getX(), targetPos.getY(), targetPos.getZ());
-                casterEntity.world.addEntity(vineEntity);
+                vineEntity.setPos(targetPos.getX(), targetPos.getY(), targetPos.getZ());
+                casterEntity.level.addFreshEntity(vineEntity);
             }
         }
     }
 
     private static void summonAreaDenialVine(LivingEntity casterEntity, LivingEntity targetEntity, EntityType<? extends VineEntity> entityType, double xshift, double zshift, Direction pillarFacing) {
-        BlockPos targetPos = createCenteredBlockPosOnTarget(targetEntity).add(xshift, 0, zshift);
+        BlockPos targetPos = createCenteredBlockPosOnTarget(targetEntity).offset(xshift, 0, zshift);
         // verify that the construct will be summoned on valid ground
         if(canAllowBlockEntitySpawn(casterEntity, targetPos)){
-            VineEntity vineEntity = entityType.create(casterEntity.world);
+            VineEntity vineEntity = entityType.create(casterEntity.level);
             if (vineEntity != null) {
                 vineEntity.setCaster(casterEntity);
                 vineEntity.setLifeTicks(100);
-                vineEntity.setPosition(targetPos.getX(), targetPos.getY(), targetPos.getZ());
-                casterEntity.world.addEntity(vineEntity);
+                vineEntity.setPos(targetPos.getX(), targetPos.getY(), targetPos.getZ());
+                casterEntity.level.addFreshEntity(vineEntity);
             }
         }
     }
 
-    public static void summonOffensiveConstruct(LivingEntity casterEntity, LivingEntity targetEntity, EntityType<? extends ConstructEntity> entityType) {
+    public static void summonOffensiveConstruct(LivingEntity casterEntity, Entity targetEntity, EntityType<? extends ConstructEntity> entityType) {
         BlockPos targetPos = createCenteredBlockPosOnTarget(targetEntity);
         // verify that the construct will be summoned on valid ground
         if(canAllowBlockEntitySpawn(casterEntity, targetPos)){
-            ConstructEntity constructEntity = entityType.create(casterEntity.world);
+            ConstructEntity constructEntity = entityType.create(casterEntity.level);
             if (constructEntity != null) {
                 constructEntity.setCaster(casterEntity);
-                constructEntity.setPosition(targetPos.getX(), targetPos.getY(), targetPos.getZ());
+                constructEntity.setPos(targetPos.getX(), targetPos.getY(), targetPos.getZ());
                 constructEntity.setLifeTicks(100);
-                casterEntity.world.addEntity(constructEntity);
+                casterEntity.level.addFreshEntity(constructEntity);
             }
         }
     }
 
-    public static void summonAreaDenialTrap(LivingEntity casterEntity, LivingEntity targetEntity, EntityType<? extends ConstructEntity> entityType, int[] rowToRemove) {
+    public static void summonOffensiveConstruct(LivingEntity casterEntity, BlockPos targetPos, EntityType<? extends ConstructEntity> entityType) {
+        // verify that the construct will be summoned on valid ground
+        if(canAllowBlockEntitySpawn(casterEntity, targetPos)){
+            ConstructEntity constructEntity = entityType.create(casterEntity.level);
+            if (constructEntity != null) {
+                constructEntity.setCaster(casterEntity);
+                constructEntity.setPos(targetPos.getX(), targetPos.getY(), targetPos.getZ());
+                constructEntity.setLifeTicks(100);
+                casterEntity.level.addFreshEntity(constructEntity);
+            }
+        }
+    }
+
+    public static void summonAreaDenialTrap(LivingEntity casterEntity, Entity targetEntity, EntityType<? extends ConstructEntity> entityType, int[] rowToRemove) {
 
         for(int constructPositionIndex = 0; constructPositionIndex <= 15; constructPositionIndex++){
 
@@ -137,9 +165,28 @@ public class GeomancyHelper {
 
             xshift = getXShift(constructPositionIndex, xshift);
             zshift = getZShift(constructPositionIndex, zshift);
-            Direction pillarFacing = Util.getRandomObject(DIRECTIONS, casterEntity.getRNG());
+            Direction pillarFacing = Util.getRandom(DIRECTIONS, casterEntity.getRandom());
 
             summonAreaDenialConstruct(casterEntity, targetEntity, entityType, xshift, zshift, pillarFacing);
+        }
+    }
+
+    public static void summonAreaDenialTrap(LivingEntity casterEntity, BlockPos targetPos, EntityType<? extends ConstructEntity> entityType, int[] rowToRemove) {
+
+        for(int constructPositionIndex = 0; constructPositionIndex <= 15; constructPositionIndex++){
+
+            if(isValueInArray(rowToRemove, constructPositionIndex)){
+                continue;
+            }
+
+            double xshift = 0;
+            double zshift = 0;
+
+            xshift = getXShift(constructPositionIndex, xshift);
+            zshift = getZShift(constructPositionIndex, zshift);
+            Direction pillarFacing = Util.getRandom(DIRECTIONS, casterEntity.getRandom());
+
+            summonAreaDenialConstruct(casterEntity, targetPos, entityType, xshift, zshift, pillarFacing);
         }
     }
 
@@ -156,13 +203,13 @@ public class GeomancyHelper {
 
             xshift = getXShift(constructPositionIndex, xshift);
             zshift = getZShift(constructPositionIndex, zshift);
-            Direction pillarFacing = Util.getRandomObject(DIRECTIONS, casterEntity.getRNG());
+            Direction pillarFacing = Util.getRandom(DIRECTIONS, casterEntity.getRandom());
 
             summonAreaDenialVine(casterEntity, targetEntity, entityType, xshift, zshift, pillarFacing);
         }
     }
 
     public static boolean canAllowBlockEntitySpawn(Entity entity, BlockPos blockPos){
-        return (entity.world.isAirBlock(blockPos) || entity.world.getBlockState(blockPos).isReplaceable(Fluids.EMPTY)) && !entity.world.isAirBlock(blockPos.down());
+        return (entity.level.isEmptyBlock(blockPos) || entity.level.getBlockState(blockPos).canBeReplaced(Fluids.EMPTY)) && !entity.level.isEmptyBlock(blockPos.below());
     }
 }

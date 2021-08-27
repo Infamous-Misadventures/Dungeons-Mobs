@@ -35,52 +35,52 @@ public class FrozenZombieEntity extends ZombieEntity implements IRangedAttackMob
     }
 
     public static boolean canFrozenZombieSpawn(EntityType<FrozenZombieEntity> entityType, IServerWorld iWorld, SpawnReason spawnReason, BlockPos blockPos, Random rand) {
-        return canMonsterSpawnInLight(entityType, iWorld, spawnReason, blockPos, rand) && (spawnReason == SpawnReason.SPAWNER || iWorld.canSeeSky(blockPos));
+        return checkMonsterSpawnRules(entityType, iWorld, spawnReason, blockPos, rand) && (spawnReason == SpawnReason.SPAWNER || iWorld.canSeeSky(blockPos));
     }
 
     @Override
-    protected void applyEntityAI() {
+    protected void addBehaviourGoals() {
         this.goalSelector.addGoal(2, new FrozenZombieAttackGoal(this, 1.0D, 20, 15.0F, false));
         this.goalSelector.addGoal(3, new SwitchCombatItemGoal(this, 6.0D, 6.0D));
-        this.goalSelector.addGoal(6, new MoveThroughVillageGoal(this, 1.0D, true, 4, this::isBreakDoorsTaskSet));
+        this.goalSelector.addGoal(6, new MoveThroughVillageGoal(this, 1.0D, true, 4, this::canBreakDoors));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
-        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setCallsForHelp(ZombifiedPiglinEntity.class));
+        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setAlertOthers(ZombifiedPiglinEntity.class));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, false));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
-        this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, TurtleEntity.class, 10, true, false, TurtleEntity.TARGET_DRY_BABY));
+        this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, TurtleEntity.class, 10, true, false, TurtleEntity.BABY_ON_LAND_SELECTOR));
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return ZombieEntity.func_234342_eQ_();
+        return ZombieEntity.createAttributes();
     }
 
-    protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficultyInstance) {
-        super.setEquipmentBasedOnDifficulty(difficultyInstance);
-        this.setItemStackToSlot(EquipmentSlotType.OFFHAND, new ItemStack(Items.SNOWBALL));
+    protected void populateDefaultEquipmentSlots(DifficultyInstance difficultyInstance) {
+        super.populateDefaultEquipmentSlots(difficultyInstance);
+        this.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(Items.SNOWBALL));
     }
 
     @Override
-    public void livingTick() {
-        if (this.world.isRemote) {
-            this.world.addParticle(ModParticleTypes.SNOWFLAKE.get(), this.getPosXRandom(0.5D), this.getPosYRandom() - 0.25D, this.getPosZRandom(0.5D), (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D);
+    public void aiStep() {
+        if (this.level.isClientSide) {
+            this.level.addParticle(ModParticleTypes.SNOWFLAKE.get(), this.getRandomX(0.5D), this.getRandomY() - 0.25D, this.getRandomZ(0.5D), (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(), (this.random.nextDouble() - 0.5D) * 2.0D);
         }
-        super.livingTick();
+        super.aiStep();
     }
 
     @Override
-    public boolean attackEntityAsMob(Entity targetEntity) {
-        if (super.attackEntityAsMob(targetEntity)) {
+    public boolean doHurtTarget(Entity targetEntity) {
+        if (super.doHurtTarget(targetEntity)) {
             if (targetEntity instanceof LivingEntity) {
                 int i = 0;
-                if (this.world.getDifficulty() == Difficulty.NORMAL) {
+                if (this.level.getDifficulty() == Difficulty.NORMAL) {
                     i = 4;
-                } else if (this.world.getDifficulty() == Difficulty.HARD) {
+                } else if (this.level.getDifficulty() == Difficulty.HARD) {
                     i = 8;
                 }
 
                 if (i > 0) {
-                    ((LivingEntity)targetEntity).addPotionEffect(new EffectInstance(Effects.SLOWNESS, i * 20, 0));
+                    ((LivingEntity)targetEntity).addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, i * 20, 0));
                 }
             }
 
@@ -91,16 +91,16 @@ public class FrozenZombieEntity extends ZombieEntity implements IRangedAttackMob
     }
 
     @Override
-    public void attackEntityWithRangedAttack(LivingEntity livingEntity, float v) {
-        SnowballEntity snowballentity = new SnowballEntity(this.world, this);
-        double adjustedEyeY = livingEntity.getPosYEye() - 1.100000023841858D;
-        double xDifference = livingEntity.getPosX() - this.getPosX();
-        double yDifference = adjustedEyeY - snowballentity.getPosY();
-        double zDifference = livingEntity.getPosZ() - this.getPosZ();
+    public void performRangedAttack(LivingEntity livingEntity, float v) {
+        SnowballEntity snowballentity = new SnowballEntity(this.level, this);
+        double adjustedEyeY = livingEntity.getEyeY() - 1.100000023841858D;
+        double xDifference = livingEntity.getX() - this.getX();
+        double yDifference = adjustedEyeY - snowballentity.getY();
+        double zDifference = livingEntity.getZ() - this.getZ();
         float adjustedHorizontalDistance = MathHelper.sqrt(xDifference * xDifference + zDifference * zDifference) * 0.2F;
         snowballentity.shoot(xDifference, yDifference + (double)adjustedHorizontalDistance, zDifference, 1.6F, 12.0F);
-        this.playSound(SoundEvents.ENTITY_SNOW_GOLEM_SHOOT, 1.0F, 0.4F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-        this.world.addEntity(snowballentity);
+        this.playSound(SoundEvents.SNOW_GOLEM_SHOOT, 1.0F, 0.4F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+        this.level.addFreshEntity(snowballentity);
     }
 
     static class FrozenZombieAttackGoal extends ThrowAndMeleeAttackGoal {
@@ -112,23 +112,23 @@ public class FrozenZombieEntity extends ZombieEntity implements IRangedAttackMob
             this.zombie = zombieEntity;
         }
 
-        public void startExecuting() {
-            super.startExecuting();
+        public void start() {
+            super.start();
             this.raiseArmTicks = 0;
         }
 
-        public void resetTask() {
-            super.resetTask();
-            this.zombie.setAggroed(false);
+        public void stop() {
+            super.stop();
+            this.zombie.setAggressive(false);
         }
 
         public void tick() {
             super.tick();
             ++this.raiseArmTicks;
-            if (this.raiseArmTicks >= 5 && this.func_234041_j_() < this.func_234042_k_() / 2) {
-                this.zombie.setAggroed(true);
+            if (this.raiseArmTicks >= 5 && this.getTicksUntilNextAttack() < this.getAttackInterval() / 2) {
+                this.zombie.setAggressive(true);
             } else {
-                this.zombie.setAggroed(false);
+                this.zombie.setAggressive(false);
             }
 
         }

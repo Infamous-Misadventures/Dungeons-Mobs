@@ -33,44 +33,44 @@ public class MossySkeletonEntity extends AbstractSkeletonEntity {
     }
 
     public static boolean canMossySkeletonSpawn(EntityType<MossySkeletonEntity> entityType, IServerWorld iWorld, SpawnReason spawnReason, BlockPos blockPos, Random rand) {
-        return canMonsterSpawnInLight(entityType, iWorld, spawnReason, blockPos, rand) && (spawnReason == SpawnReason.SPAWNER || iWorld.canSeeSky(blockPos));
+        return checkMonsterSpawnRules(entityType, iWorld, spawnReason, blockPos, rand) && (spawnReason == SpawnReason.SPAWNER || iWorld.canSeeSky(blockPos));
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return AbstractSkeletonEntity.registerAttributes();
+        return AbstractSkeletonEntity.createAttributes();
     }
 
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.ENTITY_SKELETON_AMBIENT;
+        return SoundEvents.SKELETON_AMBIENT;
     }
 
     protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
-        return SoundEvents.ENTITY_SKELETON_HURT;
+        return SoundEvents.SKELETON_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return SoundEvents.ENTITY_SKELETON_DEATH;
+        return SoundEvents.SKELETON_DEATH;
     }
 
     @Override
     protected SoundEvent getStepSound() {
-        return SoundEvents.ENTITY_SKELETON_STEP;
+        return SoundEvents.SKELETON_STEP;
     }
 
 
     @Override
-    public boolean attackEntityAsMob(Entity targetEntity) {
-        if (super.attackEntityAsMob(targetEntity)) {
+    public boolean doHurtTarget(Entity targetEntity) {
+        if (super.doHurtTarget(targetEntity)) {
             if (targetEntity instanceof LivingEntity) {
                 int i = 0;
-                if (this.world.getDifficulty() == Difficulty.NORMAL) {
+                if (this.level.getDifficulty() == Difficulty.NORMAL) {
                     i = 4;
-                } else if (this.world.getDifficulty() == Difficulty.HARD) {
+                } else if (this.level.getDifficulty() == Difficulty.HARD) {
                     i = 8;
                 }
 
                 if (i > 0) {
-                    ((LivingEntity)targetEntity).addPotionEffect(new EffectInstance(Effects.POISON, i * 20, 0));
+                    ((LivingEntity)targetEntity).addEffect(new EffectInstance(Effects.POISON, i * 20, 0));
                 }
             }
 
@@ -80,12 +80,12 @@ public class MossySkeletonEntity extends AbstractSkeletonEntity {
         }
     }
 
-    protected AbstractArrowEntity fireArrow(ItemStack stack, float damageMultiplier) {
-        AbstractArrowEntity abstractArrowEntity = super.fireArrow(stack, damageMultiplier);
+    protected AbstractArrowEntity getArrow(ItemStack stack, float damageMultiplier) {
+        AbstractArrowEntity abstractArrowEntity = super.getArrow(stack, damageMultiplier);
         int i = 0;
-        if (this.world.getDifficulty() == Difficulty.NORMAL) {
+        if (this.level.getDifficulty() == Difficulty.NORMAL) {
             i = 4;
-        } else if (this.world.getDifficulty() == Difficulty.HARD) {
+        } else if (this.level.getDifficulty() == Difficulty.HARD) {
             i = 8;
         }
         if (abstractArrowEntity instanceof ArrowEntity && i > 0) {

@@ -33,26 +33,26 @@ public class AvoidBaseEntityGoal<T extends Entity> extends Goal {
       this.avoidDistance = distance;
       this.farSpeed = farSpeedIn;
       this.nearSpeed = nearSpeedIn;
-      this.navigation = entityIn.getNavigator();
-      this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE));
+      this.navigation = entityIn.getNavigation();
+      this.setFlags(EnumSet.of(Goal.Flag.MOVE));
    }
 
    /**
     * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
     * method as well.
     */
-   public boolean shouldExecute() {
-      this.avoidTarget = this.getNearestEntity(this.classToAvoid, this.hostCreature, this.hostCreature.getPosX(), this.hostCreature.getPosY(), this.hostCreature.getPosZ(), this.hostCreature.getBoundingBox().grow((double)this.avoidDistance, 3.0D, (double)this.avoidDistance));
+   public boolean canUse() {
+      this.avoidTarget = this.getNearestEntity(this.classToAvoid, this.hostCreature, this.hostCreature.getX(), this.hostCreature.getY(), this.hostCreature.getZ(), this.hostCreature.getBoundingBox().inflate((double)this.avoidDistance, 3.0D, (double)this.avoidDistance));
       if (this.avoidTarget == null) {
          return false;
       } else {
-         Vector3d vector3d = RandomPositionGenerator.findRandomTargetBlockAwayFrom(this.hostCreature, 16, 7, this.avoidTarget.getPositionVec());
+         Vector3d vector3d = RandomPositionGenerator.getPosAvoid(this.hostCreature, 16, 7, this.avoidTarget.position());
          if (vector3d == null) {
             return false;
-         } else if (this.avoidTarget.getDistanceSq(vector3d.x, vector3d.y, vector3d.z) < this.avoidTarget.getDistanceSq(this.hostCreature)) {
+         } else if (this.avoidTarget.distanceToSqr(vector3d.x, vector3d.y, vector3d.z) < this.avoidTarget.distanceToSqr(this.hostCreature)) {
             return false;
          } else {
-            this.path = this.navigation.getPathToPos(vector3d.x, vector3d.y, vector3d.z, 0);
+            this.path = this.navigation.createPath(vector3d.x, vector3d.y, vector3d.z, 0);
             return this.path != null;
          }
       }
@@ -61,21 +61,21 @@ public class AvoidBaseEntityGoal<T extends Entity> extends Goal {
    /**
     * Returns whether an in-progress EntityAIBase should continue executing
     */
-   public boolean shouldContinueExecuting() {
-      return !this.navigation.noPath();
+   public boolean canContinueToUse() {
+      return !this.navigation.isDone();
    }
 
    /**
     * Execute a one shot task or start executing a continuous task
     */
-   public void startExecuting() {
-      this.navigation.setPath(this.path, this.farSpeed);
+   public void start() {
+      this.navigation.moveTo(this.path, this.farSpeed);
    }
 
    /**
     * Reset the task's internal state. Called when this task is interrupted by another one
     */
-   public void resetTask() {
+   public void stop() {
       this.avoidTarget = null;
    }
 
@@ -83,10 +83,10 @@ public class AvoidBaseEntityGoal<T extends Entity> extends Goal {
     * Keep ticking a continuous task that has already been started
     */
    public void tick() {
-      if (this.hostCreature.getDistanceSq(this.avoidTarget) < 49.0D) {
-         this.hostCreature.getNavigator().setSpeed(this.nearSpeed);
+      if (this.hostCreature.distanceToSqr(this.avoidTarget) < 49.0D) {
+         this.hostCreature.getNavigation().setSpeedModifier(this.nearSpeed);
       } else {
-         this.hostCreature.getNavigator().setSpeed(this.farSpeed);
+         this.hostCreature.getNavigation().setSpeedModifier(this.farSpeed);
       }
 
    }
@@ -95,7 +95,7 @@ public class AvoidBaseEntityGoal<T extends Entity> extends Goal {
 
    @Nullable
    private <T extends Entity> T getNearestEntity(Class<? extends T> entityClass, LivingEntity livingEntity, double xPos, double yPos, double zPos, AxisAlignedBB axisAlignedBB) {
-      return this.getClosestEntity(livingEntity.world.getLoadedEntitiesWithinAABB(entityClass, axisAlignedBB, (Predicate<? super T>)null), livingEntity, xPos, yPos, zPos);
+      return this.getClosestEntity(livingEntity.level.getLoadedEntitiesOfClass(entityClass, axisAlignedBB, (Predicate<? super T>)null), livingEntity, xPos, yPos, zPos);
    }
 
 
@@ -107,7 +107,7 @@ public class AvoidBaseEntityGoal<T extends Entity> extends Goal {
 
       for(T nearbyEntity : nearbyEntities) {
          if (canDetect(livingEntity, nearbyEntity)) {
-            double distanceSq = nearbyEntity.getDistanceSq(xPos, yPos, zPos);
+            double distanceSq = nearbyEntity.distanceToSqr(xPos, yPos, zPos);
             if (closestDistanceSq == -1.0D || distanceSq < closestDistanceSq) {
                closestDistanceSq = distanceSq;
                closestEntity = nearbyEntity;
@@ -127,11 +127,11 @@ public class AvoidBaseEntityGoal<T extends Entity> extends Goal {
          return false;
       } else {
          if (detector != null) {
-            if (detector.isOnSameTeam(target)) {
+            if (detector.isAlliedTo(target)) {
                return false;
             }
 
-            return !(detector instanceof MobEntity) || ((MobEntity) detector).getEntitySenses().canSee(target);
+            return !(detector instanceof MobEntity) || ((MobEntity) detector).getSensing().canSee(target);
          }
 
          return true;

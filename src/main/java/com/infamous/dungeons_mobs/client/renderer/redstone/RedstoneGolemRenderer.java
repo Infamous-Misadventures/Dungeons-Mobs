@@ -22,21 +22,21 @@ public class RedstoneGolemRenderer extends MobRenderer<RedstoneGolemEntity, Reds
    }
 
    @Override
-   protected void preRenderCallback(RedstoneGolemEntity entitylivingbaseIn, MatrixStack matrixStackIn, float partialTickTime) {
+   protected void scale(RedstoneGolemEntity entitylivingbaseIn, MatrixStack matrixStackIn, float partialTickTime) {
       float scaleFactor = 1.00F;
       matrixStackIn.scale(scaleFactor, scaleFactor, scaleFactor);
-      super.preRenderCallback(entitylivingbaseIn, matrixStackIn, partialTickTime);
+      super.scale(entitylivingbaseIn, matrixStackIn, partialTickTime);
    }
 
    /**
     * Returns the location of an entity's texture.
     */
-   public ResourceLocation getEntityTexture(RedstoneGolemEntity entity) {
+   public ResourceLocation getTextureLocation(RedstoneGolemEntity entity) {
       return REDSTONE_GOLEM_TEXTURE;
    }
 
-   protected void applyRotations(RedstoneGolemEntity entityLiving, MatrixStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks) {
-      super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
+   protected void setupRotations(RedstoneGolemEntity entityLiving, MatrixStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks) {
+      super.setupRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
       /*
       if (!((double)entityLiving.limbSwingAmount < 0.01D)) {
          float f = 13.0F;

@@ -23,7 +23,7 @@ public class CustomZombieRenderer extends ZombieRenderer {
     }
 
     @Override
-    protected void preRenderCallback(ZombieEntity zombieEntity, MatrixStack matrixStack, float v) {
+    protected void scale(ZombieEntity zombieEntity, MatrixStack matrixStack, float v) {
         if(zombieEntity instanceof ArmoredZombieEntity){
             float scaleFactor = 1.1F;
             matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
@@ -32,10 +32,10 @@ public class CustomZombieRenderer extends ZombieRenderer {
             float scaleFactor = 1.2F;
             matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
         }
-        super.preRenderCallback(zombieEntity, matrixStack, v);
+        super.scale(zombieEntity, matrixStack, v);
     }
 
-    public ResourceLocation getEntityTexture(ZombieEntity zombieEntity) {
+    public ResourceLocation getTextureLocation(ZombieEntity zombieEntity) {
         if(zombieEntity instanceof JungleZombieEntity){
             return JUNGLE_ZOMBIE_TEXUTRE;
         }
@@ -46,7 +46,7 @@ public class CustomZombieRenderer extends ZombieRenderer {
             return HUSK_ZOMBIE_TEXTURE;
         }
         else {
-            return super.getEntityTexture(zombieEntity);
+            return super.getTextureLocation(zombieEntity);
         }
     }
 }

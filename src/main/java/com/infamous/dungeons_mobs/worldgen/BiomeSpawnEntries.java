@@ -9,6 +9,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.world.MobSpawnInfoBuilder;
@@ -18,6 +19,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -26,11 +28,23 @@ import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 @Mod.EventBusSubscriber(modid = MODID)
 public class BiomeSpawnEntries {
 
+    public static final BiomeDictionary.Type CRIMSON = BiomeDictionary.Type.getType("CRIMSON");
+    public static final BiomeDictionary.Type WARPED = BiomeDictionary.Type.getType("WARPED");
+    public static final BiomeDictionary.Type DELTA = BiomeDictionary.Type.getType("DELTA");
+    public static final BiomeDictionary.Type SOULSAND = BiomeDictionary.Type.getType("SOULSAND");
+
+    public static void addCustomTypesToBiomes(){
+        BiomeDictionary.addTypes(Biomes.CRIMSON_FOREST, CRIMSON);
+        BiomeDictionary.addTypes(Biomes.WARPED_FOREST, WARPED);
+        BiomeDictionary.addTypes(Biomes.BASALT_DELTAS, DELTA);
+        BiomeDictionary.addTypes(Biomes.SOUL_SAND_VALLEY, SOULSAND);
+    }
+
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onBiomeLoadingEvent(BiomeLoadingEvent event){
         ResourceLocation biomeRegistryName = event.getName();
         if (biomeRegistryName != null) {
-            RegistryKey<Biome> biomeRegistryKey = RegistryKey.getOrCreateKey(Registry.BIOME_KEY, biomeRegistryName);
+            RegistryKey<Biome> biomeRegistryKey = RegistryKey.create(Registry.BIOME_REGISTRY, biomeRegistryName);
             MobSpawnInfoBuilder mobSpawnInfoBuilder = event.getSpawns();
             addMonsterSpawnsToBiome(biomeRegistryKey, mobSpawnInfoBuilder);
         }
@@ -90,7 +104,7 @@ public class BiomeSpawnEntries {
                     DungeonsMobsConfig.COMMON.GEOMANCER_MAX_GROUP_SIZE.get());
 
             List<String> illusionerBiomeTypes = (List<String>) DungeonsMobsConfig.COMMON.ILLUSIONER_BIOME_TYPES.get();
-            tryAddMonsterSpawnToBiome(biomeRegistryKey, mobSpawnInfoBuilder, illusionerBiomeTypes, EntityType.ILLUSIONER,
+            tryAddMonsterSpawnToBiome(biomeRegistryKey, mobSpawnInfoBuilder, illusionerBiomeTypes, ModEntityTypes.ILLUSIONER.get(),
                     DungeonsMobsConfig.COMMON.ILLUSIONER_SPAWN_WEIGHT.get(),
                     DungeonsMobsConfig.COMMON.ILLUSIONER_MIN_GROUP_SIZE.get(),
                     DungeonsMobsConfig.COMMON.ILLUSIONER_MAX_GROUP_SIZE.get());
@@ -137,6 +151,54 @@ public class BiomeSpawnEntries {
                     DungeonsMobsConfig.COMMON.POISON_QUILL_VINE_MIN_GROUP_SIZE.get(),
                     DungeonsMobsConfig.COMMON.POISON_QUILL_VINE_MAX_GROUP_SIZE.get());
 
+        List<String> fungusThrowerBiomeTypes = (List<String>) DungeonsMobsConfig.COMMON.FUNGUS_THROWER_BIOME_TYPES.get();
+        tryAddMonsterSpawnToBiome(biomeRegistryKey, mobSpawnInfoBuilder, fungusThrowerBiomeTypes, ModEntityTypes.FUNGUS_THROWER.get(),
+                DungeonsMobsConfig.COMMON.FUNGUS_THROWER_SPAWN_WEIGHT.get(),
+                DungeonsMobsConfig.COMMON.FUNGUS_THROWER_MIN_GROUP_SIZE.get(),
+                DungeonsMobsConfig.COMMON.FUNGUS_THROWER_MAX_GROUP_SIZE.get());
+
+        List<String> zombifiedFungusThrowerBiomeTypes = (List<String>) DungeonsMobsConfig.COMMON.ZOMBIFIED_FUNGUS_THROWER_BIOME_TYPES.get();
+        tryAddMonsterSpawnToBiome(biomeRegistryKey, mobSpawnInfoBuilder, zombifiedFungusThrowerBiomeTypes, ModEntityTypes.ZOMBIFIED_FUNGUS_THROWER.get(),
+                DungeonsMobsConfig.COMMON.ZOMBIFIED_FUNGUS_THROWER_SPAWN_WEIGHT.get(),
+                DungeonsMobsConfig.COMMON.ZOMBIFIED_FUNGUS_THROWER_MIN_GROUP_SIZE.get(),
+                DungeonsMobsConfig.COMMON.ZOMBIFIED_FUNGUS_THROWER_MAX_GROUP_SIZE.get());
+
+        List<String> witherSkeletonBiomeTypes = (List<String>) DungeonsMobsConfig.COMMON.WITHER_SKELETON_BIOME_TYPES.get();
+        tryAddMonsterSpawnToBiome(biomeRegistryKey, mobSpawnInfoBuilder, witherSkeletonBiomeTypes, EntityType.WITHER_SKELETON,
+                DungeonsMobsConfig.COMMON.WITHER_SKELETON_SPAWN_WEIGHT.get(),
+                DungeonsMobsConfig.COMMON.WITHER_SKELETON_MIN_GROUP_SIZE.get(),
+                DungeonsMobsConfig.COMMON.WITHER_SKELETON_MAX_GROUP_SIZE.get());
+
+        List<String> sunkenSkeletonBiomeTypes = (List<String>) DungeonsMobsConfig.COMMON.SUNKEN_SKELETON_BIOME_TYPES.get();
+        tryAddMonsterSpawnToBiome(biomeRegistryKey, mobSpawnInfoBuilder, sunkenSkeletonBiomeTypes, ModEntityTypes.SUNKEN_SKELETON.get(),
+                DungeonsMobsConfig.COMMON.SUNKEN_SKELETON_SPAWN_WEIGHT.get(),
+                DungeonsMobsConfig.COMMON.SUNKEN_SKELETON_MIN_GROUP_SIZE.get(),
+                DungeonsMobsConfig.COMMON.SUNKEN_SKELETON_MAX_GROUP_SIZE.get());
+
+        List<String> drownedNecromancerBiomeTypes = (List<String>) DungeonsMobsConfig.COMMON.DROWNED_NECROMANCER_BIOME_TYPES.get();
+        tryAddMonsterSpawnToBiome(biomeRegistryKey, mobSpawnInfoBuilder, drownedNecromancerBiomeTypes, ModEntityTypes.SUNKEN_SKELETON.get(),
+                DungeonsMobsConfig.COMMON.DROWNED_NECROMANCER_SPAWN_WEIGHT.get(),
+                DungeonsMobsConfig.COMMON.DROWNED_NECROMANCER_MIN_GROUP_SIZE.get(),
+                DungeonsMobsConfig.COMMON.DROWNED_NECROMANCER_MAX_GROUP_SIZE.get());
+
+        List<String> wavewhispererBiomeTypes = (List<String>) DungeonsMobsConfig.COMMON.WAVEWHISPERER_BIOME_TYPES.get();
+        tryAddMonsterSpawnToBiome(biomeRegistryKey, mobSpawnInfoBuilder, wavewhispererBiomeTypes, ModEntityTypes.WAVEWHISPERER.get(),
+                DungeonsMobsConfig.COMMON.WAVEWHISPERER_SPAWN_WEIGHT.get(),
+                DungeonsMobsConfig.COMMON.WAVEWHISPERER_MIN_GROUP_SIZE.get(),
+                DungeonsMobsConfig.COMMON.WAVEWHISPERER_MAX_GROUP_SIZE.get());
+
+        List<String> quickGrowingAnemoneBiomeTypes = (List<String>) DungeonsMobsConfig.COMMON.QUICK_GROWING_ANEMONE_BIOME_TYPES.get();
+        tryAddMonsterSpawnToBiome(biomeRegistryKey, mobSpawnInfoBuilder, quickGrowingAnemoneBiomeTypes, ModEntityTypes.QUICK_GROWING_ANEMONE.get(),
+                DungeonsMobsConfig.COMMON.QUICK_GROWING_ANEMONE_SPAWN_WEIGHT.get(),
+                DungeonsMobsConfig.COMMON.QUICK_GROWING_ANEMONE_MIN_GROUP_SIZE.get(),
+                DungeonsMobsConfig.COMMON.QUICK_GROWING_ANEMONE_MAX_GROUP_SIZE.get());
+
+        List<String> poisonAnemoneBiomeTypes = (List<String>) DungeonsMobsConfig.COMMON.POISON_ANEMONE_BIOME_TYPES.get();
+        tryAddMonsterSpawnToBiome(biomeRegistryKey, mobSpawnInfoBuilder, poisonAnemoneBiomeTypes, ModEntityTypes.POISON_ANEMONE.get(),
+                DungeonsMobsConfig.COMMON.POISON_ANEMONE_SPAWN_WEIGHT.get(),
+                DungeonsMobsConfig.COMMON.POISON_ANEMONE_MIN_GROUP_SIZE.get(),
+                DungeonsMobsConfig.COMMON.POISON_ANEMONE_MAX_GROUP_SIZE.get());
+
         //}
     }
 
@@ -156,6 +218,12 @@ public class BiomeSpawnEntries {
         if(DungeonsMobsConfig.COMMON.ENABLE_ARMORED_PILLAGER_REPLACES_PILLAGER.get()){
             handleVariantReplacement(mobSpawnInfoBuilder, EntityType.PILLAGER, ModEntityTypes.ARMORED_PILLAGER.get(), 0.9);
         }
+        if(DungeonsMobsConfig.COMMON.ENABLE_ARMORED_PIGLIN_REPLACES_PIGLIN.get()){
+            handleVariantReplacement(mobSpawnInfoBuilder, EntityType.PIGLIN, ModEntityTypes.ARMORED_PIGLIN.get(), 0.9);
+        }
+        if(DungeonsMobsConfig.COMMON.ENABLE_ZOMBIFIED_ARMORED_PIGLIN_REPLACES_ZOMBIFIED_PIGLIN.get()){
+            handleVariantReplacement(mobSpawnInfoBuilder, EntityType.ZOMBIFIED_PIGLIN, ModEntityTypes.ZOMBIFIED_ARMORED_PIGLIN.get(), 0.9);
+        }
         if(DungeonsMobsConfig.COMMON.ENABLE_JUNGLE_ZOMBIE_REPLACES_ZOMBIE.get()){
             handleVariantReplacementWithCategoryCheck(mobSpawnInfoBuilder, foundCategory, Biome.Category.JUNGLE, EntityType.ZOMBIE, ModEntityTypes.JUNGLE_ZOMBIE.get(), 0.8);
         }
@@ -167,6 +235,12 @@ public class BiomeSpawnEntries {
         }
         if(DungeonsMobsConfig.COMMON.ENABLE_ICY_CREEPER_REPLACES_CREEPER.get()){
             handleVariantReplacementWithCategoryCheck(mobSpawnInfoBuilder, foundCategory, Biome.Category.ICY, EntityType.CREEPER, ModEntityTypes.ICY_CREEPER.get(), 0.8);
+        }
+        if(DungeonsMobsConfig.COMMON.ENABLE_ARMORED_DROWNED_REPLACES_DROWNED.get()){
+            handleVariantReplacement(mobSpawnInfoBuilder, EntityType.DROWNED, ModEntityTypes.ARMORED_DROWNED.get(), 0.9);
+        }
+        if(DungeonsMobsConfig.COMMON.ENABLE_ARMORED_SUNKEN_SKELETON_REPLACES_SUNKEN_SKELETON.get()){
+            handleVariantReplacement(mobSpawnInfoBuilder, ModEntityTypes.SUNKEN_SKELETON.get(), ModEntityTypes.ARMORED_SUNKEN_SKELETON.get(), 0.9);
         }
     }
 
@@ -211,17 +285,17 @@ public class BiomeSpawnEntries {
         List<MobSpawnInfo.Spawners> monsterSpawnList = mobSpawnInfoBuilder.getSpawner(EntityClassification.MONSTER);
         for(int i = 0; i < monsterSpawnList.size(); i++) {
             MobSpawnInfo.Spawners spawnListEntry = monsterSpawnList.get(i);
-            int weight = spawnListEntry.itemWeight;
+            int weight = spawnListEntry.weight;
             int minGroupCount = spawnListEntry.minCount;
             int maxGroupCount = spawnListEntry.maxCount;
             EntityType<?> entityType = spawnListEntry.type;
             if (entityType == typeToReplace) {
                 MobSpawnInfo.SpawnCosts spawnCosts = mobSpawnInfoBuilder.getCost(typeToReplace);
                 if(spawnCosts != null){
-                    double maxSpawnCost = spawnCosts.getMaxSpawnCost();
-                    double entitySpawnCost = spawnCosts.getEntitySpawnCost();
-                    mobSpawnInfoBuilder.withSpawnCost(typeToReplace, maxSpawnCost * retainAmount, entitySpawnCost * retainAmount);
-                    mobSpawnInfoBuilder.withSpawnCost(typeReplaceBy, maxSpawnCost * replaceAmount, entitySpawnCost * replaceAmount);
+                    double maxSpawnCost = spawnCosts.getEnergyBudget();
+                    double entitySpawnCost = spawnCosts.getCharge();
+                    mobSpawnInfoBuilder.addMobCharge(typeToReplace, maxSpawnCost * retainAmount, entitySpawnCost * retainAmount);
+                    mobSpawnInfoBuilder.addMobCharge(typeReplaceBy, maxSpawnCost * replaceAmount, entitySpawnCost * replaceAmount);
                 }
                 MobSpawnInfo.Spawners typeReplaceByEntry = new MobSpawnInfo.Spawners(typeReplaceBy, (int) (weight * replaceAmount), minGroupCount, maxGroupCount);
                 MobSpawnInfo.Spawners typeToReplaceEntry = new MobSpawnInfo.Spawners(typeToReplace, (int) (weight * retainAmount), minGroupCount, maxGroupCount);

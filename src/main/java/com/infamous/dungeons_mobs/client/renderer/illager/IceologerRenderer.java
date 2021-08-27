@@ -1,5 +1,6 @@
 package com.infamous.dungeons_mobs.client.renderer.illager;
 
+import com.infamous.dungeons_mobs.client.renderer.layer.IceologerCapeLayer;
 import com.infamous.dungeons_mobs.entities.illagers.IceologerEntity;
 import com.infamous.dungeons_mobs.client.models.armor.IllagerArmorModel;
 import com.infamous.dungeons_mobs.client.models.illager.IllagerBipedModel;
@@ -28,23 +29,23 @@ public class IceologerRenderer extends MobRenderer<IceologerEntity, IllagerBiped
         this.addLayer(new HeldItemLayer<IceologerEntity, IllagerBipedModel<IceologerEntity>>(this) {
             @Override
             public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, IceologerEntity iceologerEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-                if (iceologerEntity.isSpellcasting() || iceologerEntity.isAggressive() || iceologerEntity.getArmPose() == AbstractIllagerEntity.ArmPose.NEUTRAL) {
+                if (iceologerEntity.isCastingSpell() || iceologerEntity.isAggressive() || iceologerEntity.getArmPose() == AbstractIllagerEntity.ArmPose.NEUTRAL) {
                     super.render(matrixStackIn, bufferIn, packedLightIn, iceologerEntity, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
                 }
             }
         });
-        this.entityModel.bipedHeadwear.showModel = true; // apparently this cost tallestred hours of his life
+        this.model.hat.visible = true; // apparently this cost tallestred hours of his life
     }
 
     @Override
-    protected void preRenderCallback(IceologerEntity iceologerEntity, MatrixStack matrixStack, float v) {
+    protected void scale(IceologerEntity iceologerEntity, MatrixStack matrixStack, float v) {
         float scaleFactor = 0.9375F;
         matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
-        super.preRenderCallback(iceologerEntity, matrixStack, v);
+        super.scale(iceologerEntity, matrixStack, v);
     }
 
     @Override
-    public ResourceLocation getEntityTexture(IceologerEntity entity) {
+    public ResourceLocation getTextureLocation(IceologerEntity entity) {
         return ICEOLOGER_TEXTURE;
     }
 }

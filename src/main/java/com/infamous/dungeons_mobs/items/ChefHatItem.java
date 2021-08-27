@@ -16,6 +16,8 @@ import javax.annotation.Nullable;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
+import net.minecraft.item.Item.Properties;
+
 public class ChefHatItem extends ArmorItem {
     public ChefHatItem(IArmorMaterial armorMaterial, EquipmentSlotType slotType, Properties group) {
         super(armorMaterial, slotType, group);

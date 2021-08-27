@@ -9,6 +9,8 @@ import net.minecraft.item.ToolItem;
 
 import java.util.Set;
 
+import net.minecraft.item.Item.Properties;
+
 public class SpatulaItem extends ToolItem {
     private static final Set<Block> EFFECTIVE_ON = ImmutableSet.of();
 

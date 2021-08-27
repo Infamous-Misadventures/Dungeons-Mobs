@@ -24,16 +24,16 @@ public class RedstoneCubeRenderer extends MobRenderer<RedstoneCubeEntity, Redsto
    }
 
    public void render(RedstoneCubeEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
-      this.shadowSize = 0.5F;
+      this.shadowRadius = 0.5F;
       super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
    }
 
    @Override
-   protected void applyRotations(RedstoneCubeEntity redstoneCubeEntity, MatrixStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks) {
-      super.applyRotations(redstoneCubeEntity, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
+   protected void setupRotations(RedstoneCubeEntity redstoneCubeEntity, MatrixStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks) {
+      super.setupRotations(redstoneCubeEntity, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
       if (redstoneCubeEntity.isRolling()) {
          float rotationPerTick = 360.0F / 20.0F;
-         float rotationAmount = ((float)redstoneCubeEntity.ticksExisted + partialTicks) * -rotationPerTick;
+         float rotationAmount = ((float)redstoneCubeEntity.tickCount + partialTicks) * -rotationPerTick;
          this.rollCube(matrixStackIn, rotationAmount);
       }
    }
@@ -41,11 +41,11 @@ public class RedstoneCubeRenderer extends MobRenderer<RedstoneCubeEntity, Redsto
    private void rollCube(MatrixStack matrixStackIn, float rotationAmount) {
       Vector3d offset = new Vector3d(0.0, 0.5, 0);
       matrixStackIn.translate(offset.x, offset.y, offset.z);
-      matrixStackIn.rotate(Vector3f.XP.rotationDegrees(rotationAmount)); // Forward roll
+      matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(rotationAmount)); // Forward roll
       matrixStackIn.translate(-offset.x, -offset.y, -offset.z);
    }
 
-   protected void preRenderCallback(RedstoneCubeEntity redstoneCubeEntity, MatrixStack matrixStackIn, float partialTickTime) {
+   protected void scale(RedstoneCubeEntity redstoneCubeEntity, MatrixStack matrixStackIn, float partialTickTime) {
       matrixStackIn.translate(0.0D, (double)0.001F, 0.0D);
       float sizeScaleFactor = 2.0F; // Big slimes have a size of 2
       //float f2 = MathHelper.lerp(partialTickTime, redstoneCubeEntity.prevSquishFactor, redstoneCubeEntity.squishFactor) / (sizeScaleFactor * 0.5F + 1.0F);
@@ -57,7 +57,7 @@ public class RedstoneCubeRenderer extends MobRenderer<RedstoneCubeEntity, Redsto
     * Returns the location of an entity's texture.
     */
    @Override
-   public ResourceLocation getEntityTexture(RedstoneCubeEntity entity) {
+   public ResourceLocation getTextureLocation(RedstoneCubeEntity entity) {
       return REDSTONE_CUBE_TEXTURE;
    }
 }

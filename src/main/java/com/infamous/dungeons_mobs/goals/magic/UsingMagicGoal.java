@@ -12,30 +12,30 @@ public class UsingMagicGoal<T extends MobEntity & IMagicUser> extends Goal {
 
       public UsingMagicGoal(T magicUserMob) {
           this.hostMobEntity = magicUserMob;
-         this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
+         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
       }
 
       /**
        * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
        * method as well.
        */
-      public boolean shouldExecute() {
+      public boolean canUse() {
          return this.hostMobEntity.getMagicUseTicks() > 0;
       }
 
       /**
        * Execute a one shot task or start executing a continuous task
        */
-      public void startExecuting() {
-         super.startExecuting();
-         this.hostMobEntity.getNavigator().clearPath();
+      public void start() {
+         super.start();
+         this.hostMobEntity.getNavigation().stop();
       }
 
       /**
        * Reset the task's internal state. Called when this task is interrupted by another one
        */
-      public void resetTask() {
-         super.resetTask();
+      public void stop() {
+         super.stop();
          this.hostMobEntity.setMagicType(MagicType.NONE);
       }
 
@@ -43,11 +43,11 @@ public class UsingMagicGoal<T extends MobEntity & IMagicUser> extends Goal {
        * Keep ticking a continuous task that has already been started
        */
       public void tick() {
-         if (this.hostMobEntity.getAttackTarget() != null) {
-            this.hostMobEntity.getLookController()
-                    .setLookPositionWithEntity(this.hostMobEntity.getAttackTarget(),
-                            (float)this.hostMobEntity.getHorizontalFaceSpeed(),
-                            (float)this.hostMobEntity.getVerticalFaceSpeed());
+         if (this.hostMobEntity.getTarget() != null) {
+            this.hostMobEntity.getLookControl()
+                    .setLookAt(this.hostMobEntity.getTarget(),
+                            (float)this.hostMobEntity.getMaxHeadYRot(),
+                            (float)this.hostMobEntity.getMaxHeadXRot());
          }
 
       }

@@ -27,7 +27,7 @@ public class GeomancerRenderer extends MobRenderer<GeomancerEntity, GeomancerMod
         this.addLayer(new HeldItemLayer<GeomancerEntity, GeomancerModel<GeomancerEntity>>(this) {
             @Override
             public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, GeomancerEntity geomancerEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-                if (geomancerEntity.isSpellcasting() || geomancerEntity.isAggressive() || geomancerEntity.getArmPose() == AbstractIllagerEntity.ArmPose.NEUTRAL) {
+                if (geomancerEntity.isCastingSpell() || geomancerEntity.isAggressive() || geomancerEntity.getArmPose() == AbstractIllagerEntity.ArmPose.NEUTRAL) {
                     super.render(matrixStackIn, bufferIn, packedLightIn, geomancerEntity, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
                 }
             }
@@ -35,14 +35,14 @@ public class GeomancerRenderer extends MobRenderer<GeomancerEntity, GeomancerMod
     }
 
     @Override
-    protected void preRenderCallback(GeomancerEntity geomancerEntity, MatrixStack matrixStack, float v) {
+    protected void scale(GeomancerEntity geomancerEntity, MatrixStack matrixStack, float v) {
         float scaleFactor = 0.9375F;
         matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
-        super.preRenderCallback(geomancerEntity, matrixStack, v);
+        super.scale(geomancerEntity, matrixStack, v);
     }
 
     @Override
-    public ResourceLocation getEntityTexture(GeomancerEntity geomancerEntity) {
+    public ResourceLocation getTextureLocation(GeomancerEntity geomancerEntity) {
         return GEOMANCER_TEXTURE;
     }
 }

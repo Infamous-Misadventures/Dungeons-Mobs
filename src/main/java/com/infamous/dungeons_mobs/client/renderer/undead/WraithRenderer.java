@@ -1,30 +1,30 @@
 package com.infamous.dungeons_mobs.client.renderer.undead;
 
-import com.infamous.dungeons_mobs.client.models.undead.WraithBipedModel;
+import com.infamous.dungeons_mobs.DungeonsMobs;
+import com.infamous.dungeons_mobs.client.models.undead.WraithModel;
+import com.infamous.dungeons_mobs.client.renderer.layer.GeoEyeLayer;
+import com.infamous.dungeons_mobs.client.renderer.layer.GeoHeldItemLayer;
 import com.infamous.dungeons_mobs.entities.undead.WraithEntity;
-import net.minecraft.client.renderer.entity.BipedRenderer;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.layers.BipedArmorLayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
+public class WraithRenderer extends GeoEntityRenderer<WraithEntity> {
+	public WraithRenderer(EntityRendererManager renderManager) {
+		super(renderManager, new WraithModel());
+		this.addLayer(new GeoEyeLayer<>(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/wraith/wraith_eyes.png")));
+		this.addLayer(new GeoHeldItemLayer<>(this, 0.0, 0.0, 0.5));
+	}
 
-@OnlyIn(Dist.CLIENT)
-public class WraithRenderer extends BipedRenderer<WraithEntity, WraithBipedModel<WraithEntity>> {
-    private static final ResourceLocation WRAITH_TEXTURE = new ResourceLocation(MODID, "textures/entity/wraith/wraith.png");
-
-    public WraithRenderer(EntityRendererManager renderManagerIn) {
-        super(renderManagerIn, new WraithBipedModel<>(), 0.5F);
-        this.addLayer(new BipedArmorLayer<>(this, new WraithBipedModel<>(0.5F, true), new WraithBipedModel(1.0F, true)));
-        this.addLayer(new WraithClothingLayer<>(this));
-    }
-
-    /**
-     * Returns the location of an entity's texture.
-     */
-    public ResourceLocation getEntityTexture(WraithEntity entity) {
-        return WRAITH_TEXTURE;
-    }
+	@Override
+	public RenderType getRenderType(WraithEntity animatable, float partialTicks, MatrixStack stack,
+			IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn,
+			ResourceLocation textureLocation) {
+		return RenderType.entityTranslucent(getTextureLocation(animatable));
+	}
 }

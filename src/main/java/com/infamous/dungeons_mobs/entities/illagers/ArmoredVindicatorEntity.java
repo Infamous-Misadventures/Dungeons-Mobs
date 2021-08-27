@@ -30,8 +30,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 import javax.annotation.Nullable;
 import java.util.Map;
 
+import net.minecraft.entity.monster.AbstractIllagerEntity.ArmPose;
+
 public class ArmoredVindicatorEntity extends VindicatorEntity {
-    private static final DataParameter<Boolean> IS_DIAMOND = EntityDataManager.createKey(ArmoredVindicatorEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> IS_DIAMOND = EntityDataManager.defineId(ArmoredVindicatorEntity.class, DataSerializers.BOOLEAN);
 
     public ArmoredVindicatorEntity(World world){
         super(ModEntityTypes.ARMORED_VINDICATOR.get(), world);
@@ -41,26 +43,26 @@ public class ArmoredVindicatorEntity extends VindicatorEntity {
         super(p_i50189_1_, p_i50189_2_);
     }
 
-    protected void registerData() {
-        super.registerData();
-        this.dataManager.register(IS_DIAMOND, false);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(IS_DIAMOND, false);
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
-        return VindicatorEntity.func_234322_eI_()
-                .createMutableAttribute(Attributes.MAX_HEALTH, 36.0D)
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 7.0D)
-                .createMutableAttribute(Attributes.KNOCKBACK_RESISTANCE);
+        return VindicatorEntity.createAttributes()
+                .add(Attributes.MAX_HEALTH, 36.0D)
+                .add(Attributes.ATTACK_DAMAGE, 7.0D)
+                .add(Attributes.KNOCKBACK_RESISTANCE);
     }
 
     @Override
-    protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficultyInstance) {
-        if(this.getRaid() == null){
+    protected void populateDefaultEquipmentSlots(DifficultyInstance difficultyInstance) {
+        if(this.getCurrentRaid() == null){
             if(this.isDiamond()){
-                this.setItemStackToSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.DIAMOND_VINDICATOR_HELMET.get()));
+                this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.DIAMOND_VINDICATOR_HELMET.get()));
             }
             else{
-                this.setItemStackToSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.GOLD_VINDICATOR_HELMET.get()));
+                this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.GOLD_VINDICATOR_HELMET.get()));
             }
 
             this.setWeaponBasedOnMod();
@@ -76,35 +78,35 @@ public class ArmoredVindicatorEntity extends VindicatorEntity {
             ItemStack whirlwind = new ItemStack(WHIRLWIND);
             ItemStack mainhandWeapon = this.isDiamond() ? whirlwind : doubleAxe;
 
-            this.setItemStackToSlot(EquipmentSlotType.MAINHAND, mainhandWeapon);
+            this.setItemSlot(EquipmentSlotType.MAINHAND, mainhandWeapon);
         }
         else{
-            this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_AXE));
+            this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_AXE));
         }
     }
 
     @Override
-    public void writeAdditional(CompoundNBT compound) {
-        super.writeAdditional(compound);
+    public void addAdditionalSaveData(CompoundNBT compound) {
+        super.addAdditionalSaveData(compound);
         if (this.isDiamond()){
             compound.putBoolean("Diamond", true);
         }
     }
 
     @Override
-    public void readAdditional(CompoundNBT compound) {
-        super.readAdditional(compound);
+    public void readAdditionalSaveData(CompoundNBT compound) {
+        super.readAdditionalSaveData(compound);
         if (compound.contains("Diamond", 99)) {
             this.setDiamond(compound.getBoolean("Diamond"));
         }
     }
 
     public boolean isDiamond(){
-        return this.dataManager.get(IS_DIAMOND);
+        return this.entityData.get(IS_DIAMOND);
     }
 
     public void setDiamond(boolean isDiamond){
-        this.dataManager.set(IS_DIAMOND, isDiamond);
+        this.entityData.set(IS_DIAMOND, isDiamond);
     }
 
     @Override
@@ -114,45 +116,45 @@ public class ArmoredVindicatorEntity extends VindicatorEntity {
 
     @Nullable
     @Override
-    public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+    public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
 
-        float diamondChance = rand.nextFloat();
+        float diamondChance = random.nextFloat();
         if(diamondChance < 0.25F){
             this.setDiamond(true);
             this.applyDiamondArmorBoosts();
         }
 
-        return super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+        return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 
     private void applyDiamondArmorBoosts() {
-        this.getAttribute(Attributes.ARMOR).applyPersistentModifier(new AttributeModifier("Diamond armor boost", 10.0D, AttributeModifier.Operation.ADDITION));
-        this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).applyPersistentModifier(new AttributeModifier("Diamond knockback resistance boost", 0.6D, AttributeModifier.Operation.ADDITION));
-        this.getAttribute(Attributes.ATTACK_DAMAGE).applyPersistentModifier(new AttributeModifier("Diamond attack boost", 1.0D, AttributeModifier.Operation.ADDITION));
+        this.getAttribute(Attributes.ARMOR).addPermanentModifier(new AttributeModifier("Diamond armor boost", 10.0D, AttributeModifier.Operation.ADDITION));
+        this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).addPermanentModifier(new AttributeModifier("Diamond knockback resistance boost", 0.6D, AttributeModifier.Operation.ADDITION));
+        this.getAttribute(Attributes.ATTACK_DAMAGE).addPermanentModifier(new AttributeModifier("Diamond attack boost", 1.0D, AttributeModifier.Operation.ADDITION));
     }
 
     @Override
-    public void applyWaveBonus(int waveAmount, boolean b) {
+    public void applyRaidBuffs(int waveAmount, boolean b) {
         ItemStack mainhandWeapon = this.getWeaponBasedOnMod();
         ItemStack helmet = this.isDiamond() ? new ItemStack(ModItems.DIAMOND_VINDICATOR_HELMET.get()) : new ItemStack(ModItems.GOLD_VINDICATOR_HELMET.get());
-        Raid raid = this.getRaid();
+        Raid raid = this.getCurrentRaid();
         int enchantmentLevel = 1;
-        if (waveAmount > raid.getWaves(Difficulty.NORMAL)) {
+        if (waveAmount > raid.getNumGroups(Difficulty.NORMAL)) {
             enchantmentLevel = 2;
         }
 
-        boolean applyEnchant = this.rand.nextFloat() <= raid.getEnchantOdds();
+        boolean applyEnchant = this.random.nextFloat() <= raid.getEnchantOdds();
         if (applyEnchant) {
             Map<Enchantment, Integer> weaponEnchantmentMap = Maps.newHashMap();
             Map<Enchantment, Integer> armorEnchantmentMap = Maps.newHashMap();
             weaponEnchantmentMap.put(Enchantments.SHARPNESS, enchantmentLevel);
-            armorEnchantmentMap.put(Enchantments.PROTECTION, enchantmentLevel);
+            armorEnchantmentMap.put(Enchantments.ALL_DAMAGE_PROTECTION, enchantmentLevel);
             EnchantmentHelper.setEnchantments(weaponEnchantmentMap, mainhandWeapon);
             EnchantmentHelper.setEnchantments(armorEnchantmentMap, helmet);
         }
 
-        this.setItemStackToSlot(EquipmentSlotType.MAINHAND, mainhandWeapon);
-        this.setItemStackToSlot(EquipmentSlotType.HEAD, helmet);
+        this.setItemSlot(EquipmentSlotType.MAINHAND, mainhandWeapon);
+        this.setItemSlot(EquipmentSlotType.HEAD, helmet);
     }
 
     private ItemStack getWeaponBasedOnMod() {

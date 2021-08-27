@@ -19,10 +19,10 @@ public class TextureHandler {
 
 	@SubscribeEvent
 	public static void onStitch(TextureStitchEvent.Pre event) {
-		if (event.getMap().getTextureLocation().equals(AtlasTexture.LOCATION_BLOCKS_TEXTURE)) {
-			event.addSprite(ShieldTextures.LOCATION_ROYAL_GUARD_SHIELD_BASE.getTextureLocation());
-			event.addSprite(ShieldTextures.LOCATION_ROYAL_GUARD_SHIELD_NO_PATTERN.getTextureLocation());
-			event.addSprite(ShieldTextures.LOCATION_SKELETON_VANGUARD_SHIELD.getTextureLocation());
+		if (event.getMap().location().equals(AtlasTexture.LOCATION_BLOCKS)) {
+			event.addSprite(ShieldTextures.LOCATION_ROYAL_GUARD_SHIELD_BASE.texture());
+			event.addSprite(ShieldTextures.LOCATION_ROYAL_GUARD_SHIELD_NO_PATTERN.texture());
+			event.addSprite(ShieldTextures.LOCATION_SKELETON_VANGUARD_SHIELD.texture());
 		}
 	}
 

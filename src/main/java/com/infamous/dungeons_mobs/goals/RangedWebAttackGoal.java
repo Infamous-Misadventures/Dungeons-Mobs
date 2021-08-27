@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.goals;
 
 import com.infamous.dungeons_mobs.interfaces.IWebShooter;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.RangedAttackGoal;
 
@@ -13,24 +14,26 @@ public class RangedWebAttackGoal<T extends MobEntity & IWebShooter> extends Rang
     }
 
     @Override
-    public boolean shouldExecute() {
-        return super.shouldExecute() && this.webShooter.shouldShootWeb() && !this.webShooter.isTargetSlowedDown();
+    public boolean canUse() {
+        LivingEntity target = this.webShooter.getTarget();
+        return super.canUse() && target != null && !this.webShooter.isTargetTrapped(target);
     }
 
     @Override
-    public boolean shouldContinueExecuting() {
-        return super.shouldContinueExecuting() && !this.webShooter.isTargetSlowedDown();
+    public boolean canContinueToUse() {
+        LivingEntity target = this.webShooter.getTarget();
+        return super.canContinueToUse() && target != null && !this.webShooter.isTargetTrapped(target);
     }
 
     @Override
-    public void startExecuting() {
-        super.startExecuting();
+    public void start() {
+        super.start();
         this.webShooter.setWebShooting(true);
     }
 
     @Override
-    public void resetTask() {
-        super.resetTask();
+    public void stop() {
+        super.stop();
         this.webShooter.setWebShooting(false);
     }
 }
