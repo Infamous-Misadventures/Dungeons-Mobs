@@ -1,0 +1,251 @@
+{
+		"entity.wraith.idle": {
+		"category": "entity",
+		"subtitle": "Wraith wails",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/wraith/idle1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/wraith/idle2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/wraith/idle3",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/wraith/idle4",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/wraith/idle5",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/wraith/idle6",
+				"stream": true
+			}
+		]
+	},
+			"entity.wraith.hurt": {
+		"category": "entity",
+		"subtitle": "Wraith hurts",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/wraith/hurt1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/wraith/hurt2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/wraith/hurt3",
+				"stream": true
+			}
+		]
+	},
+			"entity.wraith.death": {
+		"category": "entity",
+		"subtitle": "Wraith dies",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/wraith/death1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/wraith/death2",
+				"stream": true
+			}
+		]
+	},
+			"entity.wraith.attack": {
+		"category": "entity",
+		"subtitle": "Wraith attacks",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/wraith/attack",
+				"stream": true
+			}
+		]
+	},
+			"entity.wraith.fire": {
+		"category": "entity",
+		"subtitle": "Wraith summons fire",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/wraith/fire",
+				"stream": true
+			}
+		]
+	},
+			"entity.wraith.fly": {
+		"category": "entity",
+		"subtitle": "Wraith flies",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/wraith/fly1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/wraith/fly2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/wraith/fly3",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/wraith/fly4",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/wraith/fly5",
+				"stream": true
+			}
+		]
+	},
+			"entity.wraith.teleport": {
+		"category": "entity",
+		"subtitle": "Wraith teleports",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/wraith/teleport1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/wraith/teleport2",
+				"stream": true
+			}
+		]
+	},
+	
+	
+	
+	
+				"entity.enchanter.idle": {
+		"category": "entity",
+		"subtitle": "Enchanter Grumbles",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/enchanter/idle1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/enchanter/idle2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/enchanter/idle3",
+				"stream": true
+			}
+		]
+	},
+				"entity.enchanter.hurt": {
+		"category": "entity",
+		"subtitle": "Enchanter Hurts",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/enchanter/hurt1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/enchanter/hurt2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/enchanter/hurt3",
+				"stream": true
+			}
+		]
+	},
+				"entity.enchanter.death": {
+		"category": "entity",
+		"subtitle": "Enchanter Dies",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/enchanter/death1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/enchanter/death2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/enchanter/death3",
+				"stream": true
+			}
+		]
+	},
+				"entity.enchanter.pre_attack": {
+		"category": "entity",
+		"subtitle": "Enchanter Raises Book",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/enchanter/pre_attack1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/enchanter/pre_attack2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/enchanter/pre_attack3",
+				"stream": true
+			}
+		]
+	},
+				"entity.enchanter.attack": {
+		"category": "entity",
+		"subtitle": "Enchanter Attacks",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/enchanter/attack1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/enchanter/attack2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/enchanter/attack3",
+				"stream": true
+			}
+		]
+	},
+				"entity.enchanter.spell": {
+		"category": "entity",
+		"subtitle": "Enchanter Prepares To Enchant",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/enchanter/spell1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/enchanter/spell2",
+				"stream": true
+			}
+		]
+	},
+				"entity.enchanter.beam": {
+		"category": "entity",
+		"subtitle": "Enchanter Enchants Mob",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/enchanter/beam",
+				"stream": true
+			}
+		]
+	},
+				"entity.enchanter.beam_loop": {
+		"category": "entity",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/enchanter/beam_loop",
+				"stream": true
+			}
+		]
+	}
+}
