@@ -1,8 +1,6 @@
 package com.infamous.dungeons_mobs.entities.jungle;
 
 import com.infamous.dungeons_mobs.entities.magic.MagicType;
-import com.infamous.dungeons_mobs.entities.summonables.ConstructEntity;
-import com.infamous.dungeons_mobs.goals.AvoidBaseEntityGoal;
 import com.infamous.dungeons_mobs.goals.magic.UseMagicGoal;
 import com.infamous.dungeons_mobs.goals.magic.UsingMagicGoal;
 import com.infamous.dungeons_mobs.interfaces.IMagicUser;
@@ -28,7 +26,7 @@ import net.minecraft.world.World;
 
 public class WhispererEntity extends MonsterEntity implements IMagicUser {
     // Required to make use of IMagicUser
-    private static final DataParameter<Byte> MAGIC = EntityDataManager.createKey(WhispererEntity.class, DataSerializers.BYTE);
+    private static final DataParameter<Byte> MAGIC = EntityDataManager.defineId(WhispererEntity.class, DataSerializers.BYTE);
     private int magicUseTicks;
     private MagicType activeMagic = MagicType.NONE;
 
@@ -36,32 +34,36 @@ public class WhispererEntity extends MonsterEntity implements IMagicUser {
         super(ModEntityTypes.WHISPERER.get(), worldIn);
     }
 
-    public WhispererEntity(EntityType<? extends MonsterEntity> type, World worldIn) {
+    public WhispererEntity(EntityType<? extends WhispererEntity> type, World worldIn) {
         super(type, worldIn);
     }
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new SwimGoal(this));
+        this.addMovementBehaviors();
         this.goalSelector.addGoal(1, new UsingMagicGoal<>(this));
         this.goalSelector.addGoal(2, new WhispererEntity.SummonVinesGoal());
         this.goalSelector.addGoal(3, new WhispererEntity.AttackGoal());
         this.goalSelector.addGoal(4, new AvoidEntityGoal<>(this, VineEntity.class, 8.0F, 0.6D, 1.0D));
-        this.goalSelector.addGoal(5, new RandomWalkingGoal(this, 0.6D));
         this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
         this.goalSelector.addGoal(7, new LookAtGoal(this, MobEntity.class, 8.0F));
 
-        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, WhispererEntity.class)).setCallsForHelp());
+        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, WhispererEntity.class)).setAlertOthers());
         this.targetSelector.addGoal(2, (new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true)).setUnseenMemoryTicks(300));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, false));
     }
 
+    protected void addMovementBehaviors() {
+        this.goalSelector.addGoal(0, new SwimGoal(this));
+        this.goalSelector.addGoal(5, new RandomWalkingGoal(this, 0.6D));
+    }
+
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
-        return MonsterEntity.func_234295_eP_()
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.5D) // same as Evoker
-                .createMutableAttribute(Attributes.FOLLOW_RANGE, 12.0D) // same as Evoker
-                .createMutableAttribute(Attributes.MAX_HEALTH, 24.0D) // same as Evoker
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 5.0D); // same as Pillager
+        return MonsterEntity.createMonsterAttributes()
+                .add(Attributes.MOVEMENT_SPEED, 0.5D) // same as Evoker
+                .add(Attributes.FOLLOW_RANGE, 12.0D) // same as Evoker
+                .add(Attributes.MAX_HEALTH, 24.0D) // same as Evoker
+                .add(Attributes.ATTACK_DAMAGE, 5.0D); // same as Pillager
     }
 
     class AttackGoal extends MeleeAttackGoal{
@@ -71,10 +73,10 @@ public class WhispererEntity extends MonsterEntity implements IMagicUser {
         }
 
         @Override
-        public boolean shouldExecute() {
-            LivingEntity targetEntity = WhispererEntity.this.getAttackTarget();
-            if (targetEntity != null && WhispererEntity.this.getDistanceSq(targetEntity) < 16.0D) {
-                return super.shouldExecute();
+        public boolean canUse() {
+            LivingEntity targetEntity = WhispererEntity.this.getTarget();
+            if (targetEntity != null && WhispererEntity.this.distanceToSqr(targetEntity) < 16.0D) {
+                return super.canUse();
             }
             return false;
         }
@@ -86,10 +88,10 @@ public class WhispererEntity extends MonsterEntity implements IMagicUser {
         }
 
         @Override
-        public boolean shouldExecute() {
-            LivingEntity targetEntity = WhispererEntity.this.getAttackTarget();
-            if (targetEntity != null && WhispererEntity.this.getDistanceSq(targetEntity) >= 16.0D) {
-                return super.shouldExecute();
+        public boolean canUse() {
+            LivingEntity targetEntity = WhispererEntity.this.getTarget();
+            if (targetEntity != null && WhispererEntity.this.distanceToSqr(targetEntity) >= 16.0D) {
+                return super.canUse();
             }
             return false;
         }
@@ -103,21 +105,21 @@ public class WhispererEntity extends MonsterEntity implements IMagicUser {
         }
 
         protected void useMagic() {
-            LivingEntity targetEntity = WhispererEntity.this.getAttackTarget();
+            LivingEntity targetEntity = WhispererEntity.this.getTarget();
             if (targetEntity != null) {
-                if(WhispererEntity.this.getRNG().nextFloat() < 0.25F){
-                    GeomancyHelper.summonOffensiveVine(WhispererEntity.this, WhispererEntity.this, ModEntityTypes.POISON_QUILL_VINE.get());
+                if(WhispererEntity.this.getRandom().nextFloat() < 0.25F){
+                    GeomancyHelper.summonOffensiveVine(WhispererEntity.this, WhispererEntity.this, WhispererEntity.this.getPoisonVineType());
                 }
                 else{
-                    int[] rowToRemove = Util.getRandomObject(GeomancyHelper.ROWS, WhispererEntity.this.getRNG());
-                    GeomancyHelper.summonAreaDenialVineTrap(targetEntity, targetEntity, ModEntityTypes.QUICK_GROWING_VINE.get(), rowToRemove);
+                    int[] rowToRemove = Util.getRandom(GeomancyHelper.ROWS, WhispererEntity.this.getRandom());
+                    GeomancyHelper.summonAreaDenialVineTrap(targetEntity, targetEntity, WhispererEntity.this.getQuickGrowingVineType(), rowToRemove);
                 }
             }
         }
 
 
         protected SoundEvent getMagicPrepareSound() {
-            return SoundEvents.ENTITY_EVOKER_PREPARE_SUMMON;
+            return SoundEvents.EVOKER_PREPARE_SUMMON;
         }
 
         protected MagicType getMagicType() {
@@ -125,9 +127,17 @@ public class WhispererEntity extends MonsterEntity implements IMagicUser {
         }
     }
 
-    protected void registerData() {
-        super.registerData();
-        this.dataManager.register(MAGIC, (byte)0);
+    protected EntityType<? extends QuickGrowingVineEntity> getQuickGrowingVineType() {
+        return ModEntityTypes.QUICK_GROWING_VINE.get();
+    }
+
+    protected EntityType<? extends PoisonQuillVineEntity> getPoisonVineType() {
+        return ModEntityTypes.POISON_QUILL_VINE.get();
+    }
+
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(MAGIC, (byte)0);
     }
 
     @Override
@@ -137,8 +147,8 @@ public class WhispererEntity extends MonsterEntity implements IMagicUser {
     }
 
     @Override
-    protected void updateAITasks() {
-        super.updateAITasks();
+    protected void customServerAiStep() {
+        super.customServerAiStep();
         if (this.magicUseTicks > 0) {
             --this.magicUseTicks;
         }
@@ -146,22 +156,22 @@ public class WhispererEntity extends MonsterEntity implements IMagicUser {
 
 
     @Override
-    public void readAdditional(CompoundNBT compound) {
-        super.readAdditional(compound);
+    public void readAdditionalSaveData(CompoundNBT compound) {
+        super.readAdditionalSaveData(compound);
         this.magicUseTicks = compound.getInt("MagicUseTicks");
     }
 
     @Override
-    public void writeAdditional(CompoundNBT compound) {
-        super.writeAdditional(compound);
+    public void addAdditionalSaveData(CompoundNBT compound) {
+        super.addAdditionalSaveData(compound);
         compound.putInt("MagicUseTicks", this.magicUseTicks);
     }
 
     // IMAGICUSER METHODS
     @Override
     public boolean isUsingMagic() {
-        if (this.world.isRemote) {
-            return this.dataManager.get(MAGIC) > 0;
+        if (this.level.isClientSide) {
+            return this.entityData.get(MAGIC) > 0;
         } else {
             return this.magicUseTicks > 0;
         }
@@ -178,17 +188,17 @@ public class WhispererEntity extends MonsterEntity implements IMagicUser {
 
     @Override
     public MagicType getMagicType() {
-        return !this.world.isRemote ? this.activeMagic : MagicType.getFromId(this.dataManager.get(MAGIC));
+        return !this.level.isClientSide ? this.activeMagic : MagicType.getFromId(this.entityData.get(MAGIC));
     }
 
     @Override
     public void setMagicType(MagicType magicType) {
         this.activeMagic = magicType;
-        this.dataManager.set(MAGIC, (byte)magicType.getId());
+        this.entityData.set(MAGIC, (byte)magicType.getId());
     }
 
     @Override
     public SoundEvent getMagicSound() {
-        return SoundEvents.ENTITY_EVOKER_CAST_SPELL;
+        return SoundEvents.EVOKER_CAST_SPELL;
     }
 }

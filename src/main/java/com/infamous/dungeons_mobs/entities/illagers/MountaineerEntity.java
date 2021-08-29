@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import net.minecraft.entity.monster.AbstractIllagerEntity.ArmPose;
+
 public class MountaineerEntity extends VindicatorEntity {
 
     public MountaineerEntity(World worldIn){
@@ -33,27 +35,27 @@ public class MountaineerEntity extends VindicatorEntity {
 
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return VindicatorEntity.func_234322_eI_();
+        return VindicatorEntity.createAttributes();
     }
 
     @Override
-    protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
-        if(this.getRaid() == null){
-            this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModItems.MOUNTAINEER_AXE.get()));
+    protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
+        if(this.getCurrentRaid() == null){
+            this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModItems.MOUNTAINEER_AXE.get()));
         }
     }
 
-    public void applyWaveBonus(int waveNumber, boolean bool) {
+    public void applyRaidBuffs(int waveNumber, boolean bool) {
         ItemStack itemStack = new ItemStack(ModItems.MOUNTAINEER_AXE.get());
-        Raid raid = this.getRaid();
+        Raid raid = this.getCurrentRaid();
         int i = 1;
-        if (raid != null && waveNumber > raid.getWaves(Difficulty.NORMAL)) {
+        if (raid != null && waveNumber > raid.getNumGroups(Difficulty.NORMAL)) {
             i = 2;
         }
 
         boolean flag = false;
         if (raid != null) {
-            flag = this.rand.nextFloat() <= raid.getEnchantOdds();
+            flag = this.random.nextFloat() <= raid.getEnchantOdds();
         }
         if (flag) {
             Map<Enchantment, Integer> map = Maps.newHashMap();
@@ -61,7 +63,7 @@ public class MountaineerEntity extends VindicatorEntity {
             EnchantmentHelper.setEnchantments(map, itemStack);
         }
 
-        this.setItemStackToSlot(EquipmentSlotType.MAINHAND, itemStack);
+        this.setItemSlot(EquipmentSlotType.MAINHAND, itemStack);
     }
 
     @Override

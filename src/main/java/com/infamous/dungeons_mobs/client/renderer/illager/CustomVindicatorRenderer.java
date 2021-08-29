@@ -41,7 +41,7 @@ public class CustomVindicatorRenderer extends MobRenderer<VindicatorEntity, Illa
     }
 
     @Override
-    protected void preRenderCallback(VindicatorEntity vindicatorEntity, MatrixStack matrixStack, float v) {
+    protected void scale(VindicatorEntity vindicatorEntity, MatrixStack matrixStack, float v) {
         if(vindicatorEntity instanceof ArmoredVindicatorEntity){
             float scaleFactor = 1.1F;
             matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
@@ -50,11 +50,11 @@ public class CustomVindicatorRenderer extends MobRenderer<VindicatorEntity, Illa
             float scaleFactor = 0.9375F;
             matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
         }
-        super.preRenderCallback(vindicatorEntity, matrixStack, v);
+        super.scale(vindicatorEntity, matrixStack, v);
     }
 
     @Override
-    public ResourceLocation getEntityTexture(VindicatorEntity entity) {
+    public ResourceLocation getTextureLocation(VindicatorEntity entity) {
         if(entity.getClass() == ArmoredVindicatorEntity.class){
             ArmoredVindicatorEntity armoredVindicatorEntity = (ArmoredVindicatorEntity)entity;
             if(armoredVindicatorEntity.isDiamond()){

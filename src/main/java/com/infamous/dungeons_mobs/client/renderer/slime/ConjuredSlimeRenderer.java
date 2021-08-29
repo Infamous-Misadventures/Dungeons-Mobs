@@ -19,7 +19,7 @@ public class ConjuredSlimeRenderer extends SlimeRenderer {
    }
 
    @Override
-   public ResourceLocation getEntityTexture(SlimeEntity entity) {
+   public ResourceLocation getTextureLocation(SlimeEntity entity) {
       return CONJURED_SLIME_TEXTURE;
    }
 }

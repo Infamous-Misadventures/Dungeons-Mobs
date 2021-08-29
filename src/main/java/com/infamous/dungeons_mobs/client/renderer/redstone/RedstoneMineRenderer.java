@@ -28,18 +28,18 @@ public class RedstoneMineRenderer<T extends RedstoneMineEntity> extends EntityRe
 
    @Override
    public void render(T entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
-      matrixStackIn.push();
-      matrixStackIn.rotate(Vector3f.ZP.rotationDegrees(180));
-      ResourceLocation resourceLocation = this.getEntityTexture(entityIn);
-      RenderType renderType = this.mineModel.getRenderType(resourceLocation);
+      matrixStackIn.pushPose();
+      matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(180));
+      ResourceLocation resourceLocation = this.getTextureLocation(entityIn);
+      RenderType renderType = this.mineModel.renderType(resourceLocation);
       IVertexBuilder ivertexbuilder = bufferIn.getBuffer(renderType);
-      this.mineModel.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-      matrixStackIn.pop();
+      this.mineModel.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+      matrixStackIn.popPose();
       super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
    }
 
    @Override
-   public ResourceLocation getEntityTexture(T entity) {
+   public ResourceLocation getTextureLocation(T entity) {
       return REDSTONE_MINE_TEXTURE;
    }
 }

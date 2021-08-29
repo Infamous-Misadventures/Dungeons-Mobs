@@ -12,6 +12,8 @@ import net.minecraft.util.math.MathHelper;
 
 import java.util.EnumSet;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class ThrowAndMeleeAttackGoal<T extends CreatureEntity & IRangedAttackMob> extends MeleeAttackGoal
 {
 	private final T hostCreature;
@@ -33,52 +35,52 @@ public class ThrowAndMeleeAttackGoal<T extends CreatureEntity & IRangedAttackMob
 			this.maxRangedAttackTime = attackInterval;
 			this.attackRadius = maxDistance;
 			this.maxAttackDistance = maxDistance * maxDistance;
-			this.setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+			this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
 	}
 
 	/**
 	 * Returns whether the EntityAIBase should begin execution.
 	 */
-	public boolean shouldExecute()
+	public boolean canUse()
 	{
 		if(hasThrowableItemInMainhand()){
-			LivingEntity attackTarget = this.hostCreature.getAttackTarget();
+			LivingEntity attackTarget = this.hostCreature.getTarget();
 			return attackTarget != null && attackTarget.isAlive();
 		}
 		else{
-			return super.shouldExecute();
+			return super.canUse();
 		}
 	}
 
 	private boolean hasThrowableItemInMainhand(){
-		return this.hostCreature.getHeldItemMainhand().getItem() instanceof SnowballItem
-				| this.hostCreature.getHeldItemMainhand().getItem() instanceof EggItem;
+		return this.hostCreature.getMainHandItem().getItem() instanceof SnowballItem
+				| this.hostCreature.getMainHandItem().getItem() instanceof EggItem;
 	}
 
 	/**
 	 * Returns whether an in-progress EntityAIBase should continue executing
 	 */
-	public boolean shouldContinueExecuting()
+	public boolean canContinueToUse()
 	{
 		if(hasThrowableItemInMainhand()){
-			return this.shouldExecute() || !this.hostCreature.getNavigator().noPath();
+			return this.canUse() || !this.hostCreature.getNavigation().isDone();
 		}
 		else{
-			return super.shouldContinueExecuting();
+			return super.canContinueToUse();
 		}
 	}
 
 	/**
 	 * Resets the task
 	 */
-	public void resetTask()
+	public void stop()
 	{
 		if(hasThrowableItemInMainhand()){
 			this.seeTime = 0;
 			this.rangedAttackTime = -1;
 		}
 		else{
-			super.resetTask();
+			super.stop();
 		}
 	}
 
@@ -87,10 +89,10 @@ public class ThrowAndMeleeAttackGoal<T extends CreatureEntity & IRangedAttackMob
 	 */
 	public void tick()
 	{
-		LivingEntity attackTarget = this.hostCreature.getAttackTarget();
+		LivingEntity attackTarget = this.hostCreature.getTarget();
 		if (hasThrowableItemInMainhand() && attackTarget != null) {
-			double hostDistanceSq = this.hostCreature.getDistanceSq(attackTarget.getPosX(), attackTarget.getPosY(), attackTarget.getPosZ());
-			boolean canSee = this.hostCreature.getEntitySenses().canSee(attackTarget);
+			double hostDistanceSq = this.hostCreature.distanceToSqr(attackTarget.getX(), attackTarget.getY(), attackTarget.getZ());
+			boolean canSee = this.hostCreature.getSensing().canSee(attackTarget);
 			if (canSee) {
 				++this.seeTime;
 			} else {
@@ -98,12 +100,12 @@ public class ThrowAndMeleeAttackGoal<T extends CreatureEntity & IRangedAttackMob
 			}
 
 			if (hostDistanceSq <= (double)this.maxAttackDistance && this.seeTime >= 5) {
-				this.hostCreature.getNavigator().clearPath();
+				this.hostCreature.getNavigation().stop();
 			} else {
-				this.hostCreature.getNavigator().tryMoveToEntityLiving(attackTarget, this.entityMoveSpeed);
+				this.hostCreature.getNavigation().moveTo(attackTarget, this.entityMoveSpeed);
 			}
 
-			this.hostCreature.getLookController().setLookPositionWithEntity(attackTarget, 30.0F, 30.0F);
+			this.hostCreature.getLookControl().setLookAt(attackTarget, 30.0F, 30.0F);
 			float distanceOverAttackRadius;
 			if (--this.rangedAttackTime == 0) {
 				if (!canSee) {
@@ -114,9 +116,9 @@ public class ThrowAndMeleeAttackGoal<T extends CreatureEntity & IRangedAttackMob
 				float clampedDistanceOverAttackRadius = MathHelper.clamp(distanceOverAttackRadius, 0.1F, 1.0F);
 
 				// Used to animate snowball or egg throwing
-				if(this.hasThrowableItemInMainhand()) this.hostCreature.swingArm(Hand.MAIN_HAND);
+				if(this.hasThrowableItemInMainhand()) this.hostCreature.swing(Hand.MAIN_HAND);
 
-				this.hostCreature.attackEntityWithRangedAttack(attackTarget, clampedDistanceOverAttackRadius);
+				this.hostCreature.performRangedAttack(attackTarget, clampedDistanceOverAttackRadius);
 				this.rangedAttackTime = MathHelper.floor(distanceOverAttackRadius * (float)(this.maxRangedAttackTime - this.attackIntervalMin) + (float)this.attackIntervalMin);
 			} else if (this.rangedAttackTime < 0) {
 				distanceOverAttackRadius = MathHelper.sqrt(hostDistanceSq) / this.attackRadius;

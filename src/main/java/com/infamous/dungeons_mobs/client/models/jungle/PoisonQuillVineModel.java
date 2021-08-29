@@ -22,84 +22,84 @@ public class PoisonQuillVineModel<T extends PoisonQuillVineEntity> extends Entit
 	private final ModelRenderer cube_r4;
 
 	public PoisonQuillVineModel() {
-		textureWidth = 128;
-		textureHeight = 128;
+		texWidth = 128;
+		texHeight = 128;
 
 		body = new ModelRenderer(this);
-		body.setRotationPoint(1.0F, 15.0F, 0.0F);
-		body.setTextureOffset(0, 87).addBox(-6.0F, -20.5F, -5.0F, 11.0F, 29.0F, 11.0F, 0.0F, true);
-		body.setTextureOffset(92, 90).addBox(-5.0F, -20.0F, -3.5F, 9.0F, 28.0F, 8.0F, 0.0F, true);
+		body.setPos(1.0F, 15.0F, 0.0F);
+		body.texOffs(0, 87).addBox(-6.0F, -20.5F, -5.0F, 11.0F, 29.0F, 11.0F, 0.0F, true);
+		body.texOffs(92, 90).addBox(-5.0F, -20.0F, -3.5F, 9.0F, 28.0F, 8.0F, 0.0F, true);
 
 		head = new ModelRenderer(this);
-		head.setRotationPoint(1.0F, -4.0F, -4.0F);
+		head.setPos(1.0F, -4.0F, -4.0F);
 		setRotationAngle(head, 0.4363F, 0.0F, 0.0F);
-		head.setTextureOffset(0, 97).addBox(-5.0F, -18.0F, 0.0F, 9.0F, 21.0F, 9.0F, 0.0F, false);
-		head.setTextureOffset(98, 92).addBox(-3.0F, -18.0F, 1.0F, 5.0F, 20.0F, 7.0F, 0.0F, false);
+		head.texOffs(0, 97).addBox(-5.0F, -18.0F, 0.0F, 9.0F, 21.0F, 9.0F, 0.0F, false);
+		head.texOffs(98, 92).addBox(-3.0F, -18.0F, 1.0F, 5.0F, 20.0F, 7.0F, 0.0F, false);
 
 		neck = new ModelRenderer(this);
-		neck.setRotationPoint(-1.3333F, -18.1239F, 8.4115F);
+		neck.setPos(-1.3333F, -18.1239F, 8.4115F);
 		head.addChild(neck);
 		setRotationAngle(neck, 0.7854F, 0.0F, 0.0F);
-		neck.setTextureOffset(3, 106).addBox(-2.6667F, -11.8761F, -7.4115F, 7.0F, 12.0F, 7.0F, 0.0F, false);
-		neck.setTextureOffset(102, 101).addBox(-1.6667F, -11.8761F, -6.4115F, 5.0F, 12.0F, 5.0F, 0.0F, false);
+		neck.texOffs(3, 106).addBox(-2.6667F, -11.8761F, -7.4115F, 7.0F, 12.0F, 7.0F, 0.0F, false);
+		neck.texOffs(102, 101).addBox(-1.6667F, -11.8761F, -6.4115F, 5.0F, 12.0F, 5.0F, 0.0F, false);
 
 		flowerHead = new ModelRenderer(this);
-		flowerHead.setRotationPoint(0.4583F, -12.4097F, -2.0482F);
+		flowerHead.setPos(0.4583F, -12.4097F, -2.0482F);
 		neck.addChild(flowerHead);
 		setRotationAngle(flowerHead, 0.3491F, 0.0F, 0.0F);
-		flowerHead.setTextureOffset(110, 42).addBox(-1.125F, -9.4664F, -3.3634F, 3.0F, 8.0F, 3.0F, 0.0F, false);
-		flowerHead.setTextureOffset(4, 2).addBox(-14.125F, 0.5336F, -19.3634F, 29.0F, 1.0F, 31.0F, 0.0F, false);
-		flowerHead.setTextureOffset(105, 1).addBox(-2.125F, -14.4664F, -4.3634F, 5.0F, 5.0F, 5.0F, 0.0F, false);
+		flowerHead.texOffs(110, 42).addBox(-1.125F, -9.4664F, -3.3634F, 3.0F, 8.0F, 3.0F, 0.0F, false);
+		flowerHead.texOffs(4, 2).addBox(-14.125F, 0.5336F, -19.3634F, 29.0F, 1.0F, 31.0F, 0.0F, false);
+		flowerHead.texOffs(105, 1).addBox(-2.125F, -14.4664F, -4.3634F, 5.0F, 5.0F, 5.0F, 0.0F, false);
 
 		petals = new ModelRenderer(this);
-		petals.setRotationPoint(0.875F, 88.5336F, -2.3634F);
+		petals.setPos(0.875F, 88.5336F, -2.3634F);
 		flowerHead.addChild(petals);
 
 		body_r1 = new ModelRenderer(this);
-		body_r1.setRotationPoint(-0.5F, -88.9449F, 0.5815F);
+		body_r1.setPos(-0.5F, -88.9449F, 0.5815F);
 		petals.addChild(body_r1);
 		setRotationAngle(body_r1, 1.5708F, 0.0F, 0.0F);
-		body_r1.setTextureOffset(89, 59).addBox(-7.5F, -8.0F, -1.0F, 15.0F, 16.0F, 2.0F, 0.0F, true);
+		body_r1.texOffs(89, 59).addBox(-7.5F, -8.0F, -1.0F, 15.0F, 16.0F, 2.0F, 0.0F, true);
 
 		cube_r1 = new ModelRenderer(this);
-		cube_r1.setRotationPoint(-6.5F, -88.0F, 1.5F);
+		cube_r1.setPos(-6.5F, -88.0F, 1.5F);
 		petals.addChild(cube_r1);
 		setRotationAngle(cube_r1, 1.8762F, -1.5708F, -3.1416F);
-		cube_r1.setTextureOffset(3, 51).addBox(-8.5F, -2.0F, -28.5F, 15.0F, 0.0F, 27.0F, 0.0F, false);
+		cube_r1.texOffs(3, 51).addBox(-8.5F, -2.0F, -28.5F, 15.0F, 0.0F, 27.0F, 0.0F, false);
 
 		cube_r2 = new ModelRenderer(this);
-		cube_r2.setRotationPoint(5.5F, -89.0F, -1.5F);
+		cube_r2.setPos(5.5F, -89.0F, -1.5F);
 		petals.addChild(cube_r2);
 		setRotationAngle(cube_r2, 1.8762F, 1.5708F, -3.1416F);
-		cube_r2.setTextureOffset(3, 52).addBox(-9.5F, -1.5176F, -27.4319F, 15.0F, 0.0F, 27.0F, 0.0F, false);
+		cube_r2.texOffs(3, 52).addBox(-9.5F, -1.5176F, -27.4319F, 15.0F, 0.0F, 27.0F, 0.0F, false);
 
 		cube_r3 = new ModelRenderer(this);
-		cube_r3.setRotationPoint(-0.5F, -93.0F, -9.5F);
+		cube_r3.setPos(-0.5F, -93.0F, -9.5F);
 		petals.addChild(cube_r3);
 		setRotationAngle(cube_r3, 1.8762F, 0.0F, -3.1416F);
-		cube_r3.setTextureOffset(3, 52).addBox(-7.5F, 3.0F, -24.5F, 15.0F, 0.0F, 27.0F, 0.0F, false);
+		cube_r3.texOffs(3, 52).addBox(-7.5F, 3.0F, -24.5F, 15.0F, 0.0F, 27.0F, 0.0F, false);
 
 		cube_r4 = new ModelRenderer(this);
-		cube_r4.setRotationPoint(0.5F, -89.0F, 7.5F);
+		cube_r4.setPos(0.5F, -89.0F, 7.5F);
 		petals.addChild(cube_r4);
 		setRotationAngle(cube_r4, 1.8762F, 3.1416F, -3.1416F);
-		cube_r4.setTextureOffset(3, 52).addBox(-8.5F, -1.0F, -27.5F, 15.0F, 0.0F, 27.0F, 0.0F, false);
+		cube_r4.texOffs(3, 52).addBox(-8.5F, -1.0F, -27.5F, 15.0F, 0.0F, 27.0F, 0.0F, false);
 	}
 
 	@Override
-	public void setRotationAngles(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
+	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
 		//previously the render function, render code was moved to a method below
 	}
 
 	@Override
-	public void render(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
+	public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
 		body.render(matrixStack, buffer, packedLight, packedOverlay);
 		head.render(matrixStack, buffer, packedLight, packedOverlay);
 	}
 
 	public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
-		modelRenderer.rotateAngleX = x;
-		modelRenderer.rotateAngleY = y;
-		modelRenderer.rotateAngleZ = z;
+		modelRenderer.xRot = x;
+		modelRenderer.yRot = y;
+		modelRenderer.zRot = z;
 	}
 }

@@ -25,18 +25,18 @@ public class GeomancerBombEntity extends ConstructEntity {
     @Override
     public void handleExpiration() {
         super.handleExpiration();
-        if (!this.world.isRemote) {
+        if (!this.level.isClientSide) {
             this.explode();
         }
     }
 
     private void explode() {
-        this.world.createExplosion(this, this.getPosX(), this.getPosYHeight(0.0625D), this.getPosZ(), this.explosionRadius, Explosion.Mode.NONE);
+        this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), this.explosionRadius, Explosion.Mode.NONE);
     }
 
 
     @Override
-    public IPacket<?> createSpawnPacket() {
+    public IPacket<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 }

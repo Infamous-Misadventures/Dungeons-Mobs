@@ -9,7 +9,8 @@ public enum MagicType {
     NONE(0, 0.0D, 0.0D, 0.0D),
     WRAITH_FIRE(1, 0.4D, 0.3D, 0.35D),
     SUMMON_UNDEAD(2, 0.7D, 0.7D, 0.8D),
-    SUMMON_VINES(3, 0.7D, 0.7D, 0.8D);
+    SUMMON_VINES(3, 0.7D, 0.7D, 0.8D),
+    SUMMON_LIGHTNING(1, 0.4D, 0.3D, 0.35D);
 
     private final int id;
     private final double[] particleSpeed;

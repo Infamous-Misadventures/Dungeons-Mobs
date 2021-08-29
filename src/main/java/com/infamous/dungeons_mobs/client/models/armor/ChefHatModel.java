@@ -18,14 +18,14 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class ChefHatModel<T extends LivingEntity> extends BipedModel<T> {
 	private final EquipmentSlotType slot;
 	private final LivingEntity entity;
-	private final ModelRenderer head;
+	private final ModelRenderer helmet;
 
 	public ChefHatModel(float modelSize, EquipmentSlotType slot, LivingEntity entity) {
 		super(modelSize, 0.0F, 64, 64);
 		this.slot = slot;
 		this.entity = entity;
-		textureWidth = 64;
-		textureHeight = 64;
+		texWidth = 64;
+		texHeight = 64;
 
 		boolean testificate =
 				this.entity instanceof AbstractIllagerEntity ||
@@ -36,29 +36,29 @@ public class ChefHatModel<T extends LivingEntity> extends BipedModel<T> {
 
 		int testificateHelmetShiftUp = testificate ? 2 : 0;
 
-		head = new ModelRenderer(this);
-		head.setRotationPoint(0.0F, 0.0F, 0.0F);
-		head.setTextureOffset(0, 20).addBox(-5.0F, 11.0F - 20.0F - testificateHelmetShiftUp, -5.0F, 10.0F, 3.0F, 10.0F, 0.0F, false);
-		head.setTextureOffset(0, 0).addBox(-6.0F, 4.0F - 20.0F - testificateHelmetShiftUp, -6.0F, 12.0F, 7.0F, 12.0F, 0.0F, false);
+		helmet = new ModelRenderer(this);
+		helmet.setPos(0.0F, 0.0F, 0.0F);
+		helmet.texOffs(0, 20).addBox(-5.0F, 11.0F - 20.0F - testificateHelmetShiftUp, -5.0F, 10.0F, 3.0F, 10.0F, 0.0F, false);
+		helmet.texOffs(0, 0).addBox(-6.0F, 4.0F - 20.0F - testificateHelmetShiftUp, -6.0F, 12.0F, 7.0F, 12.0F, 0.0F, false);
 	}
 
 	@Override
-	public void render(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
+	public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
 		if (this.slot == EquipmentSlotType.HEAD) {
-			matrixStack.push();
-			this.head.copyModelAngles(this.bipedHead);
-			if (this.entity.isChild()) {
+			matrixStack.pushPose();
+			this.helmet.copyFrom(this.head);
+			if (this.entity.isBaby()) {
 				matrixStack.scale(0.8F, 0.8F, 0.8F);
-				this.head.setRotationPoint(0.0F, 15.0F, 0.0F);
+				this.helmet.setPos(0.0F, 15.0F, 0.0F);
 			}
-			this.head.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
-			matrixStack.pop();
+			this.helmet.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+			matrixStack.popPose();
 		}
 	}
 
 	public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
-		modelRenderer.rotateAngleX = x;
-		modelRenderer.rotateAngleY = y;
-		modelRenderer.rotateAngleZ = z;
+		modelRenderer.xRot = x;
+		modelRenderer.yRot = y;
+		modelRenderer.zRot = z;
 	}
 }

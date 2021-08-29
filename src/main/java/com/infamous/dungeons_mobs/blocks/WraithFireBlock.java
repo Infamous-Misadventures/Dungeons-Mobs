@@ -1,5 +1,6 @@
 package com.infamous.dungeons_mobs.blocks;
 
+import com.infamous.dungeons_mobs.entities.undead.WraithEntity;
 import com.infamous.dungeons_mobs.mod.ModBlocks;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import net.minecraft.block.*;
@@ -18,14 +19,16 @@ import net.minecraft.world.server.ServerWorld;
 
 import java.util.Random;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class WraithFireBlock extends AbstractFireBlock {
-    public static final IntegerProperty AGE = BlockStateProperties.AGE_0_15;
+    public static final IntegerProperty AGE = BlockStateProperties.AGE_15;
     private final float fireDamage;
 
     public WraithFireBlock(Properties properties) {
         super(properties, 2.0F);
         this.fireDamage = 2.0F;
-        this.setDefaultState(this.stateContainer.getBaseState().with(AGE, Integer.valueOf(0)));
+        this.registerDefaultState(this.stateDefinition.any().setValue(AGE, Integer.valueOf(0)));
     }
 
     /**
@@ -34,37 +37,37 @@ public class WraithFireBlock extends AbstractFireBlock {
      * returns its solidified counterpart.
      * Note that this method should ideally consider only the specific face passed in.
      */
-    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos){
-        return this.isValidPosition(stateIn, worldIn, currentPos) ? this.getFireWithAge(worldIn, currentPos, stateIn.get(AGE)) : Blocks.AIR.getDefaultState();
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos){
+        return this.canSurvive(stateIn, worldIn, currentPos) ? this.getFireWithAge(worldIn, currentPos, stateIn.getValue(AGE)) : Blocks.AIR.defaultBlockState();
     }
 
-    public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
-        BlockPos blockpos = pos.down();
-        return worldIn.getBlockState(blockpos).isSolidSide(worldIn, blockpos, Direction.UP);
+    public boolean canSurvive(BlockState state, IWorldReader worldIn, BlockPos pos) {
+        BlockPos blockpos = pos.below();
+        return worldIn.getBlockState(blockpos).isFaceSturdy(worldIn, blockpos, Direction.UP);
     }
 
     public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
-        worldIn.getPendingBlockTicks().scheduleTick(pos, this, getTickCooldown(worldIn.rand));
-        if (worldIn.getGameRules().getBoolean(GameRules.DO_FIRE_TICK)) {
-            if (!state.isValidPosition(worldIn, pos)) {
+        worldIn.getBlockTicks().scheduleTick(pos, this, getTickCooldown(worldIn.random));
+        if (worldIn.getGameRules().getBoolean(GameRules.RULE_DOFIRETICK)) {
+            if (!state.canSurvive(worldIn, pos)) {
                 worldIn.removeBlock(pos, false);
             }
 
-            BlockState blockstate = worldIn.getBlockState(pos.down());
+            BlockState blockstate = worldIn.getBlockState(pos.below());
 
             boolean isOnFireSourceBlock = blockstate.isFireSource(worldIn, pos, Direction.UP)
-                    || SoulFireBlock.shouldLightSoulFire(worldIn.getBlockState(pos.down()).getBlock());
-            int i = state.get(AGE);
+                    || SoulFireBlock.canSurviveOnBlock(worldIn.getBlockState(pos.below()).getBlock());
+            int i = state.getValue(AGE);
                 int j = Math.min(15, i + rand.nextInt(3) / 2);
                 if (i != j) {
-                    state = state.with(AGE, Integer.valueOf(j));
-                    worldIn.setBlockState(pos, state, 4);
+                    state = state.setValue(AGE, Integer.valueOf(j));
+                    worldIn.setBlock(pos, state, 4);
                 }
 
                 if (!isOnFireSourceBlock) {
                     //if (!this.areNeighborsFlammable(worldIn, pos)) {
-                        BlockPos blockpos = pos.down();
-                        if (!worldIn.getBlockState(blockpos).isSolidSide(worldIn, blockpos, Direction.UP) || i > 3) {
+                        BlockPos blockpos = pos.below();
+                        if (!worldIn.getBlockState(blockpos).isFaceSturdy(worldIn, blockpos, Direction.UP) || i > 3) {
                             worldIn.removeBlock(pos, false);
                         }
 
@@ -83,9 +86,9 @@ public class WraithFireBlock extends AbstractFireBlock {
     }
 
 
-    public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
-        super.onBlockAdded(state, worldIn, pos, oldState, isMoving);
-        worldIn.getPendingBlockTicks().scheduleTick(pos, this, getTickCooldown(worldIn.rand));
+    public void onPlace(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
+        super.onPlace(state, worldIn, pos, oldState, isMoving);
+        worldIn.getBlockTicks().scheduleTick(pos, this, getTickCooldown(worldIn.random));
     }
 
     /**
@@ -96,18 +99,20 @@ public class WraithFireBlock extends AbstractFireBlock {
     }
 
     private BlockState getFireWithAge(IWorld world, BlockPos pos, int age) {
-        BlockState blockstate = ModBlocks.WRAITH_FIRE_BLOCK.get().getDefaultState();
-        return blockstate.isIn(ModBlocks.WRAITH_FIRE_BLOCK.get()) ? blockstate.with(AGE, age) : blockstate;
+        BlockState blockstate = ModBlocks.WRAITH_FIRE_BLOCK.get().defaultBlockState();
+        return blockstate.is(ModBlocks.WRAITH_FIRE_BLOCK.get()) ? blockstate.setValue(AGE, age) : blockstate;
     }
 
-    public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
-        if (!entityIn.isImmuneToFire() || entityIn.getType() != ModEntityTypes.WRAITH.get()) {
-            entityIn.forceFireTicks(entityIn.getFireTimer() + 1);
-            if (entityIn.getFireTimer() == 0) {
-                entityIn.setFire(8);
+    @Override
+    public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
+    	System.out.print("\r\n");
+        if (!entityIn.fireImmune() && !(entityIn instanceof WraithEntity)) {
+            entityIn.setRemainingFireTicks(entityIn.getRemainingFireTicks() + 1);
+            if (entityIn.getRemainingFireTicks() == 0) {
+                entityIn.setSecondsOnFire(8);
             }
 
-            entityIn.attackEntityFrom(DamageSource.IN_FIRE, this.fireDamage);
+            entityIn.hurt(DamageSource.IN_FIRE, this.fireDamage);
         }
     }
 
@@ -115,7 +120,7 @@ public class WraithFireBlock extends AbstractFireBlock {
         return true;
     }
 
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(AGE);
     }
 }

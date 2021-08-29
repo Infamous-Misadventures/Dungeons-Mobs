@@ -18,6 +18,8 @@ import net.minecraft.world.raid.Raid;
 
 import java.util.Map;
 
+import net.minecraft.entity.monster.AbstractIllagerEntity.ArmPose;
+
 public class VindicatorChefEntity extends VindicatorEntity {
 
     public VindicatorChefEntity(World worldIn){
@@ -34,41 +36,41 @@ public class VindicatorChefEntity extends VindicatorEntity {
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return VindicatorEntity.func_234322_eI_();
+        return VindicatorEntity.createAttributes();
     }
 
     @Override
-    protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
-        if(this.getRaid() == null){
-            this.setItemStackToSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.CHEF_HAT.get()));
-            this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModItems.SPATULA.get()));
+    protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
+        if(this.getCurrentRaid() == null){
+            this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.CHEF_HAT.get()));
+            this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModItems.SPATULA.get()));
         }
     }
 
-    public void applyWaveBonus(int waveNumber, boolean bool) {
+    public void applyRaidBuffs(int waveNumber, boolean bool) {
         ItemStack helmet = new ItemStack(ModItems.CHEF_HAT.get());
         ItemStack weapon = new ItemStack(ModItems.SPATULA.get());
-        Raid raid = this.getRaid();
+        Raid raid = this.getCurrentRaid();
         int i = 1;
-        if (raid != null && waveNumber > raid.getWaves(Difficulty.NORMAL)) {
+        if (raid != null && waveNumber > raid.getNumGroups(Difficulty.NORMAL)) {
             i = 2;
         }
 
         boolean flag = false;
         if (raid != null) {
-            flag = this.rand.nextFloat() <= raid.getEnchantOdds();
+            flag = this.random.nextFloat() <= raid.getEnchantOdds();
         }
         if (flag) {
             Map<Enchantment, Integer> helmetMap = Maps.newHashMap();
             Map<Enchantment, Integer> weaponMap = Maps.newHashMap();
-            helmetMap.put(Enchantments.PROTECTION, i);
+            helmetMap.put(Enchantments.ALL_DAMAGE_PROTECTION, i);
             weaponMap.put(Enchantments.SHARPNESS, i);
             EnchantmentHelper.setEnchantments(helmetMap, helmet);
             EnchantmentHelper.setEnchantments(weaponMap, weapon);
         }
 
-        this.setItemStackToSlot(EquipmentSlotType.HEAD, helmet);
-        this.setItemStackToSlot(EquipmentSlotType.MAINHAND, weapon);
+        this.setItemSlot(EquipmentSlotType.HEAD, helmet);
+        this.setItemSlot(EquipmentSlotType.MAINHAND, weapon);
     }
 
     @Override

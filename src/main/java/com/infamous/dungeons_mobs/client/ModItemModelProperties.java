@@ -7,15 +7,25 @@ import net.minecraft.util.ResourceLocation;
 public class ModItemModelProperties {
 
     public ModItemModelProperties(){
-        ItemModelsProperties.registerProperty(ModItems.ROYAL_GUARD_SHIELD.get(),
+        ItemModelsProperties.register(ModItems.ROYAL_GUARD_SHIELD.get(),
                 new ResourceLocation("blocking"),
                 (stack, clientWorld, livingEntity) -> {
-            return livingEntity != null && livingEntity.isHandActive() && livingEntity.getActiveItemStack() == stack ? 1.0F : 0.0F;
+            return livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == stack ? 1.0F : 0.0F;
         });
-        ItemModelsProperties.registerProperty(ModItems.SKELETON_VANGUARD_SHIELD.get(),
+        ItemModelsProperties.register(ModItems.SKELETON_VANGUARD_SHIELD.get(),
                 new ResourceLocation("blocking"),
                 (stack, clientWorld, livingEntity) -> {
-                    return livingEntity != null && livingEntity.isHandActive() && livingEntity.getActiveItemStack() == stack ? 1.0F : 0.0F;
+                    return livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == stack ? 1.0F : 0.0F;
+                });
+        ItemModelsProperties.register(ModItems.YELLOW_TRIDENT.get(),
+                new ResourceLocation("throwing"),
+                (stack, clientWorld, livingEntity) -> {
+                    return livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == stack ? 1.0F : 0.0F;
+                });
+        ItemModelsProperties.register(ModItems.PURPLE_TRIDENT.get(),
+                new ResourceLocation("throwing"),
+                (stack, clientWorld, livingEntity) -> {
+                    return livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == stack ? 1.0F : 0.0F;
                 });
     }
 }

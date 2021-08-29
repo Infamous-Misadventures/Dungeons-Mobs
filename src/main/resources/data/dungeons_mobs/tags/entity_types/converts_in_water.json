@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:skeleton",
+    "minecraft:stray",
+    "dungeons_mobs:skeleton_horseman",
+    "dungeons_mobs:skeleton_vanguard",
+    "dungeons_mobs:mossy_skeleton",
+    "dungeons_mobs:armored_skeleton"
+  ]
+}

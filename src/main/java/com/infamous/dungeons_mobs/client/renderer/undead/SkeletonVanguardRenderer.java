@@ -15,21 +15,20 @@ public class SkeletonVanguardRenderer extends BipedRenderer<SkeletonVanguardEnti
 
     public SkeletonVanguardRenderer(EntityRendererManager renderManagerIn) {
         super(renderManagerIn, new SkeletonVanguardModel<>(), 0.5F);
-        this.addLayer(new BipedArmorLayer<>(this, new SkeletonVanguardModel<>(0.5F), new SkeletonVanguardModel(1.0F)));
-        //this.addLayer(new WraithClothingLayer<>(this));
+        this.addLayer(new BipedArmorLayer<>(this, new SkeletonVanguardModel<>(0.5F), new SkeletonVanguardModel<>(1.0F)));
     }
 
     @Override
-    protected void preRenderCallback(SkeletonVanguardEntity skeletonVanguardEntity, MatrixStack matrixStack, float v) {
+    protected void scale(SkeletonVanguardEntity skeletonVanguardEntity, MatrixStack matrixStack, float v) {
         float scaleFactor = 1.1F;
         matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
-        super.preRenderCallback(skeletonVanguardEntity, matrixStack, v);
+        super.scale(skeletonVanguardEntity, matrixStack, v);
     }
 
     /**
      * Returns the location of an entity's texture.
      */
-    public ResourceLocation getEntityTexture(SkeletonVanguardEntity entity) {
+    public ResourceLocation getTextureLocation(SkeletonVanguardEntity entity) {
         return SKELETON_VANGUARD_TEXTURE;
     }
 }

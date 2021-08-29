@@ -27,19 +27,19 @@ public class RaidMixin {
     private static final String RAID_WAVE_MEMBER_TYPE_FIELD = "field_221285_g";
     @Shadow
     @Final
-    private ServerWorld world;
+    private ServerWorld level;
 
-    @ModifyVariable(at = @At(value = "STORE", ordinal = 0), method = "spawnNextWave")
+    @ModifyVariable(at = @At(value = "STORE", ordinal = 0), method = "spawnGroup")
     private AbstractRaiderEntity spawnNextWave(AbstractRaiderEntity abstractRaiderEntity, BlockPos blockPos){
 
         if(!DungeonsMobsConfig.COMMON.ENABLE_BIOME_SPECIFIC_RAIDERS.get()){
             return abstractRaiderEntity;
         }
 
-        Biome raidBiome = world.getBiome(blockPos);
+        Biome raidBiome = level.getBiome(blockPos);
         ResourceLocation biomeRegistryName = raidBiome.getRegistryName();
         if (biomeRegistryName != null) {
-            RegistryKey<Biome> biomeRegistryKey = RegistryKey.getOrCreateKey(Registry.BIOME_KEY, biomeRegistryName);
+            RegistryKey<Biome> biomeRegistryKey = RegistryKey.create(Registry.BIOME_REGISTRY, biomeRegistryName);
 
             // the name of the current raid's biome
             Set<BiomeDictionary.Type> raidBiomeTypes = BiomeDictionary.getTypes(biomeRegistryKey);
@@ -72,7 +72,7 @@ public class RaidMixin {
                 if(!biomeTypeMatch
                         && currentBiomeSpecificRaiderType == originalRaiderType){
                     // replace the biome specific raider type to spawn with its replacement and return it
-                    abstractRaiderEntity = equivalentType.create(this.world);
+                    abstractRaiderEntity = equivalentType.create(this.level);
                     return abstractRaiderEntity;
                 }
 
@@ -97,7 +97,7 @@ public class RaidMixin {
                         && originalRaiderType == equivalentType
                         && !raiderFoundInWaveMembers){
                     // replace the raider type to spawn with its biome specific replacement and return it
-                    abstractRaiderEntity = currentBiomeSpecificRaiderType.create(this.world);
+                    abstractRaiderEntity = currentBiomeSpecificRaiderType.create(this.level);
                     return abstractRaiderEntity;
                 }
             }

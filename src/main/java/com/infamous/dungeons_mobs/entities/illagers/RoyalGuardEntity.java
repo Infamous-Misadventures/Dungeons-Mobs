@@ -31,6 +31,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Map;
 
+import net.minecraft.entity.monster.AbstractIllagerEntity.ArmPose;
+
 public class RoyalGuardEntity extends ArmoredVindicatorEntity implements IShieldUser {
     private int shieldCooldownTime;
 
@@ -56,11 +58,11 @@ public class RoyalGuardEntity extends ArmoredVindicatorEntity implements IShield
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return ArmoredVindicatorEntity.setCustomAttributes()
-                .createMutableAttribute(Attributes.KNOCKBACK_RESISTANCE, 0.6D);
+                .add(Attributes.KNOCKBACK_RESISTANCE, 0.6D);
     }
 
     @Override
-    protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficultyInstance) {
+    protected void populateDefaultEquipmentSlots(DifficultyInstance difficultyInstance) {
 
         if(ModList.get().isLoaded("dungeons_gear")){
             Item MACE = ForgeRegistries.ITEMS.getValue(new ResourceLocation("dungeons_gear", "mace"));
@@ -70,39 +72,39 @@ public class RoyalGuardEntity extends ArmoredVindicatorEntity implements IShield
             ItemStack mace = new ItemStack(MACE);
             ItemStack royalGuardHelmet = new ItemStack(ROYAL_GUARD_HELMET);
             ItemStack royalGuardChestplate = new ItemStack(ROYAL_GUARD_CHESTPLATE);
-            if (this.getRaid() == null) {
-                this.setItemStackToSlot(EquipmentSlotType.MAINHAND, mace);
+            if (this.getCurrentRaid() == null) {
+                this.setItemSlot(EquipmentSlotType.MAINHAND, mace);
             }
-            this.setItemStackToSlot(EquipmentSlotType.HEAD, royalGuardHelmet);
-            this.setItemStackToSlot(EquipmentSlotType.CHEST, royalGuardChestplate);
+            this.setItemSlot(EquipmentSlotType.HEAD, royalGuardHelmet);
+            this.setItemSlot(EquipmentSlotType.CHEST, royalGuardChestplate);
         }
         else{
-            if (this.getRaid() == null) {
-                this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_AXE));
-                this.setItemStackToSlot(EquipmentSlotType.HEAD, new ItemStack(Items.IRON_HELMET));
-                this.setItemStackToSlot(EquipmentSlotType.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
+            if (this.getCurrentRaid() == null) {
+                this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_AXE));
+                this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Items.IRON_HELMET));
+                this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
             }
         }
-        this.setItemStackToSlot(EquipmentSlotType.OFFHAND, new ItemStack(ModItems.ROYAL_GUARD_SHIELD.get()));
+        this.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(ModItems.ROYAL_GUARD_SHIELD.get()));
     }
 
     @Override
-    public void applyWaveBonus(int waveAmount, boolean b) {
+    public void applyRaidBuffs(int waveAmount, boolean b) {
         ItemStack mainhandWeapon = new ItemStack(Items.IRON_AXE);
         if(ModList.get().isLoaded("dungeons_gear")){
             Item MACE = ForgeRegistries.ITEMS.getValue(new ResourceLocation("dungeons_gear", "mace"));
 
             mainhandWeapon = new ItemStack(MACE);
         }
-        Raid raid = this.getRaid();
+        Raid raid = this.getCurrentRaid();
         int enchantmentLevel = 1;
-        if (raid != null && waveAmount > raid.getWaves(Difficulty.NORMAL)) {
+        if (raid != null && waveAmount > raid.getNumGroups(Difficulty.NORMAL)) {
             enchantmentLevel = 2;
         }
 
         boolean applyEnchant = false;
         if (raid != null) {
-            applyEnchant = this.rand.nextFloat() <= raid.getEnchantOdds();
+            applyEnchant = this.random.nextFloat() <= raid.getEnchantOdds();
         }
         if (applyEnchant) {
             Map<Enchantment, Integer> enchantmentIntegerMap = Maps.newHashMap();
@@ -110,7 +112,7 @@ public class RoyalGuardEntity extends ArmoredVindicatorEntity implements IShield
             EnchantmentHelper.setEnchantments(enchantmentIntegerMap, mainhandWeapon);
         }
 
-        this.setItemStackToSlot(EquipmentSlotType.MAINHAND, mainhandWeapon);
+        this.setItemSlot(EquipmentSlotType.MAINHAND, mainhandWeapon);
     }
 
 
@@ -127,8 +129,8 @@ public class RoyalGuardEntity extends ArmoredVindicatorEntity implements IShield
     // SHIELD STUFF
 
     @Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
         if(this.shieldCooldownTime > 0){
             this.shieldCooldownTime--;
         }
@@ -149,15 +151,15 @@ public class RoyalGuardEntity extends ArmoredVindicatorEntity implements IShield
 
     @Override
     public void disableShield(boolean guaranteeDisable) {
-        float f = 0.25F + (float) EnchantmentHelper.getEfficiencyModifier(this) * 0.05F;
+        float f = 0.25F + (float) EnchantmentHelper.getBlockEfficiency(this) * 0.05F;
         if (guaranteeDisable) {
             f += 0.75F;
         }
-        if (this.rand.nextFloat() < f) {
-            this.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.8F, 0.8F + this.world.rand.nextFloat() * 0.4F);
+        if (this.random.nextFloat() < f) {
+            this.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.8F + this.level.random.nextFloat() * 0.4F);
             this.shieldCooldownTime = 100;
-            this.resetActiveHand();
-            this.world.setEntityState(this, (byte)30);
+            this.stopUsingItem();
+            this.level.broadcastEntityEvent(this, (byte)30);
         }
     }
 
@@ -168,8 +170,8 @@ public class RoyalGuardEntity extends ArmoredVindicatorEntity implements IShield
 
     @Override
     protected void playHurtSound(DamageSource damageSource) {
-        if(this.isActiveItemStackBlocking()){
-            this.playSound(SoundEvents.ITEM_SHIELD_BLOCK, 1.0F, 0.8F + this.world.rand.nextFloat() * 0.4F);
+        if(this.isBlocking()){
+            this.playSound(SoundEvents.SHIELD_BLOCK, 1.0F, 0.8F + this.level.random.nextFloat() * 0.4F);
         }
         else{
             super.playHurtSound(damageSource);
@@ -179,30 +181,30 @@ public class RoyalGuardEntity extends ArmoredVindicatorEntity implements IShield
     @Override
     public void blockUsingShield(LivingEntity livingEntity) {
         super.blockUsingShield(livingEntity);
-        if (livingEntity.getHeldItemMainhand().canDisableShield(this.activeItemStack, this, livingEntity)) {
+        if (livingEntity.getMainHandItem().canDisableShield(this.useItem, this, livingEntity)) {
             this.disableShield(true);
         }
     }
 
     @Override
-    protected void damageShield(float amount) {
-        if (this.activeItemStack.isShield(this)) {
+    protected void hurtCurrentlyUsedShield(float amount) {
+        if (this.useItem.isShield(this)) {
             if (amount >= 3.0F) {
                 int i = 1 + MathHelper.floor(amount);
-                Hand hand = this.getActiveHand();
-                this.activeItemStack.damageItem(i, this, (royalGuardEntity) -> {
-                    royalGuardEntity.sendBreakAnimation(hand);
+                Hand hand = this.getUsedItemHand();
+                this.useItem.hurtAndBreak(i, this, (royalGuardEntity) -> {
+                    royalGuardEntity.broadcastBreakEvent(hand);
                     // Forge would have called onPlayerDestroyItem here
                 });
-                if (this.activeItemStack.isEmpty()) {
+                if (this.useItem.isEmpty()) {
                     if (hand == Hand.MAIN_HAND) {
-                        this.setItemStackToSlot(EquipmentSlotType.MAINHAND, ItemStack.EMPTY);
+                        this.setItemSlot(EquipmentSlotType.MAINHAND, ItemStack.EMPTY);
                     } else {
-                        this.setItemStackToSlot(EquipmentSlotType.OFFHAND, ItemStack.EMPTY);
+                        this.setItemSlot(EquipmentSlotType.OFFHAND, ItemStack.EMPTY);
                     }
 
-                    this.activeItemStack = ItemStack.EMPTY;
-                    this.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.8F, 0.8F + this.world.rand.nextFloat() * 0.4F);
+                    this.useItem = ItemStack.EMPTY;
+                    this.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.8F + this.level.random.nextFloat() * 0.4F);
                 }
             }
         }
@@ -225,9 +227,9 @@ public class RoyalGuardEntity extends ArmoredVindicatorEntity implements IShield
         }
 
         protected double getAttackReachSqr(LivingEntity livingEntity) {
-            if (this.attacker.getRidingEntity() instanceof RavagerEntity) {
-                float width = this.attacker.getRidingEntity().getWidth() - 0.1F;
-                return (double)(width * 2.0F * width * 2.0F + livingEntity.getWidth());
+            if (this.mob.getVehicle() instanceof RavagerEntity) {
+                float width = this.mob.getVehicle().getBbWidth() - 0.1F;
+                return (double)(width * 2.0F * width * 2.0F + livingEntity.getBbWidth());
             } else {
                 return super.getAttackReachSqr(livingEntity);
             }

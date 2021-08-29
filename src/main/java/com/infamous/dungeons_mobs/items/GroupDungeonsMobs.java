@@ -11,7 +11,7 @@ public class GroupDungeonsMobs extends ItemGroup {
     }
 
     @Override
-    public ItemStack createIcon() {
+    public ItemStack makeIcon() {
         return new ItemStack(Items.ZOMBIE_SPAWN_EGG);
     }
 }

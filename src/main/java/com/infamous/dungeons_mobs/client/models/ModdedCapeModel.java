@@ -15,9 +15,9 @@ public class ModdedCapeModel<T extends LivingEntity> extends BipedModel<T> {
     private final ModelRenderer bipedCape;
 
     public ModdedCapeModel(float modelSize) {
-        super(RenderType::getEntityTranslucent, modelSize, 0.0F, 64, 64);
+        super(RenderType::entityTranslucent, modelSize, 0.0F, 64, 64);
         this.bipedCape = new ModelRenderer(this, 0, 0);
-        this.bipedCape.setTextureSize(64, 32);
+        this.bipedCape.setTexSize(64, 32);
         this.bipedCape.addBox(-5.0F, 0.0F, -1.0F, 10.0F, 16.0F, 1.0F, modelSize);
     }
 
@@ -28,27 +28,27 @@ public class ModdedCapeModel<T extends LivingEntity> extends BipedModel<T> {
     /**
      * Sets this entity's model rotation angles
      */
-    public void setRotationAngles(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        if (entityIn.getItemStackFromSlot(EquipmentSlotType.CHEST).isEmpty()) {
+    public void setupAnim(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        if (entityIn.getItemBySlot(EquipmentSlotType.CHEST).isEmpty()) {
             if (entityIn.isCrouching()) {
-                this.bipedCape.rotationPointZ = 1.4F;
-                this.bipedCape.rotationPointY = 1.85F;
+                this.bipedCape.z = 1.4F;
+                this.bipedCape.y = 1.85F;
             } else {
-                this.bipedCape.rotationPointZ = 0.0F;
-                this.bipedCape.rotationPointY = 0.0F;
+                this.bipedCape.z = 0.0F;
+                this.bipedCape.y = 0.0F;
             }
         } else if (entityIn.isCrouching()) {
-            this.bipedCape.rotationPointZ = 0.3F;
-            this.bipedCape.rotationPointY = 0.8F;
+            this.bipedCape.z = 0.3F;
+            this.bipedCape.y = 0.8F;
         } else {
-            this.bipedCape.rotationPointZ = -1.1F;
-            this.bipedCape.rotationPointY = -0.85F;
+            this.bipedCape.z = -1.1F;
+            this.bipedCape.y = -0.85F;
         }
 
     }
 
-    public void setVisible(boolean visible) {
-        super.setVisible(visible);
-        this.bipedCape.showModel = visible;
+    public void setAllVisible(boolean visible) {
+        super.setAllVisible(visible);
+        this.bipedCape.visible = visible;
     }
 }

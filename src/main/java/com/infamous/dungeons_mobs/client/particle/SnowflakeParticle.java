@@ -17,15 +17,15 @@ public class SnowflakeParticle extends SpriteTexturedParticle {
 
     private SnowflakeParticle(ClientWorld clientWorld, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeed, double ySpeed, double zSpeed) {
         super(clientWorld, xCoordIn, yCoordIn, zCoordIn, 0.5D - RANDOM.nextDouble(), ySpeed, 0.5D - RANDOM.nextDouble());
-        this.motionY *= (double)0.2F;
+        this.yd *= (double)0.2F;
         if (xSpeed == 0.0D && zSpeed == 0.0D) {
-            this.motionX *= (double)0.1F;
-            this.motionZ *= (double)0.1F;
+            this.xd *= (double)0.1F;
+            this.zd *= (double)0.1F;
         }
 
-        this.particleScale *= 0.75F;
-        this.maxAge = (int)(8.0D / (Math.random() * 0.8D + 0.2D));
-        this.canCollide = false;
+        this.quadSize *= 0.75F;
+        this.lifetime = (int)(8.0D / (Math.random() * 0.8D + 0.2D));
+        this.hasPhysics = false;
     }
 
     public IParticleRenderType getRenderType() {
@@ -34,25 +34,25 @@ public class SnowflakeParticle extends SpriteTexturedParticle {
 
 
     public void tick() {
-        this.prevPosX = this.posX;
-        this.prevPosY = this.posY;
-        this.prevPosZ = this.posZ;
-        if (this.age++ >= this.maxAge) {
-            this.setExpired();
+        this.xo = this.x;
+        this.yo = this.y;
+        this.zo = this.z;
+        if (this.age++ >= this.lifetime) {
+            this.remove();
         } else {
-            this.motionY += 0.004D;
-            this.move(this.motionX, this.motionY, this.motionZ);
-            if (this.posY == this.prevPosY) {
-                this.motionX *= 1.1D;
-                this.motionZ *= 1.1D;
+            this.yd += 0.004D;
+            this.move(this.xd, this.yd, this.zd);
+            if (this.y == this.yo) {
+                this.xd *= 1.1D;
+                this.zd *= 1.1D;
             }
 
-            this.motionX *= (double)0.96F;
-            this.motionY *= (double)0.96F;
-            this.motionZ *= (double)0.96F;
+            this.xd *= (double)0.96F;
+            this.yd *= (double)0.96F;
+            this.zd *= (double)0.96F;
             if (this.onGround) {
-                this.motionX *= (double)0.7F;
-                this.motionZ *= (double)0.7F;
+                this.xd *= (double)0.7F;
+                this.zd *= (double)0.7F;
             }
 
         }
@@ -68,9 +68,9 @@ public class SnowflakeParticle extends SpriteTexturedParticle {
 
         @Nullable
         @Override
-        public Particle makeParticle(BasicParticleType typeIn, ClientWorld worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+        public Particle createParticle(BasicParticleType typeIn, ClientWorld worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
             SnowflakeParticle snowflakeParticle = new SnowflakeParticle(worldIn, x, y, z, xSpeed, ySpeed, zSpeed);
-            snowflakeParticle.selectSpriteRandomly(this.spriteSet);
+            snowflakeParticle.pickSprite(this.spriteSet);
             return snowflakeParticle;
         }
     }

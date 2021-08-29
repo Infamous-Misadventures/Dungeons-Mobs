@@ -22,16 +22,16 @@ public class IcyCreeperEntity extends CreeperEntity {
     }
 
     public static boolean canIcyCreeperSpawn(EntityType<IcyCreeperEntity> entityType, IServerWorld iWorld, SpawnReason spawnReason, BlockPos blockPos, Random rand) {
-        return canMonsterSpawnInLight(entityType, iWorld, spawnReason, blockPos, rand) && (spawnReason == SpawnReason.SPAWNER || iWorld.canSeeSky(blockPos));
+        return checkMonsterSpawnRules(entityType, iWorld, spawnReason, blockPos, rand) && (spawnReason == SpawnReason.SPAWNER || iWorld.canSeeSky(blockPos));
     }
 
     @Override
-    public void livingTick() {
+    public void aiStep() {
 
-        if (this.world.isRemote) {
-            this.world.addParticle(ModParticleTypes.SNOWFLAKE.get(), this.getPosXRandom(0.5D), this.getPosYRandom() - 0.25D, this.getPosZRandom(0.5D), (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D);
+        if (this.level.isClientSide) {
+            this.level.addParticle(ModParticleTypes.SNOWFLAKE.get(), this.getRandomX(0.5D), this.getRandomY() - 0.25D, this.getRandomZ(0.5D), (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(), (this.random.nextDouble() - 0.5D) * 2.0D);
         }
-        super.livingTick();
+        super.aiStep();
     }
 
     public IcyCreeperEntity(EntityType<? extends CreeperEntity> type, World worldIn) {
@@ -39,6 +39,6 @@ public class IcyCreeperEntity extends CreeperEntity {
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
-        return CreeperEntity.registerAttributes();
+        return CreeperEntity.createAttributes();
     }
 }

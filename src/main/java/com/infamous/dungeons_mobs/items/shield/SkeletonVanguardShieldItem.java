@@ -13,19 +13,19 @@ import java.util.concurrent.Callable;
 public class SkeletonVanguardShieldItem extends ShieldItem {
     public SkeletonVanguardShieldItem(Properties builder) {
         super(builder.setISTER(SkeletonVanguardShieldItem::getISTER));
-        DispenserBlock.registerDispenseBehavior(this, ArmorItem.DISPENSER_BEHAVIOR);
+        DispenserBlock.registerBehavior(this, ArmorItem.DISPENSE_ITEM_BEHAVIOR);
     }
 
     /**
      * Return whether this item is repairable in an anvil.
      */
-    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
+    public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) {
         return false;
     }
 
     //@OnlyIn(Dist.CLIENT)
     private static Callable<ItemStackTileEntityRenderer> getISTER() {
-        return ShieldTileEntityRenderer::new;
+        return CustomISTER::new;
     }
 
     @Override

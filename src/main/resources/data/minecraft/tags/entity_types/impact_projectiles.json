@@ -3,6 +3,8 @@
   "values": [
     "dungeons_mobs:slimeball",
     "dungeons_mobs:wraith_fireball",
-    "dungeons_mobs:cobweb_projectile"
+    "dungeons_mobs:cobweb_projectile",
+    "dungeons_mobs:laser_orb",
+    "dungeons_mobs:trident_fume"
   ]
 }

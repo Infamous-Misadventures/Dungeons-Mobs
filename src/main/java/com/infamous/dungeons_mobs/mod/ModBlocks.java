@@ -17,9 +17,9 @@ public class ModBlocks {
 
     // WRAITH FIRE
     public static final RegistryObject<WraithFireBlock> WRAITH_FIRE_BLOCK = BLOCKS.register("wraith_fire",
-            () -> new WraithFireBlock(AbstractBlock.Properties.create(Material.FIRE, MaterialColor.LIGHT_BLUE)
-                    .doesNotBlockMovement()
-                    .zeroHardnessAndResistance()
-                    .setLightLevel((state) -> 10)
-                    .sound(SoundType.CLOTH)));
+            () -> new WraithFireBlock(AbstractBlock.Properties.of(Material.FIRE, MaterialColor.COLOR_LIGHT_BLUE)
+                    .noCollission()
+                    .instabreak()
+                    .lightLevel((state) -> 10)
+                    .sound(SoundType.WOOL)));
 }

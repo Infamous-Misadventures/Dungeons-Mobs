@@ -17,56 +17,56 @@ public class SkeletonVanguardModel<T extends SkeletonVanguardEntity> extends Bip
 
   public SkeletonVanguardModel(float modelSize) {
     super(modelSize);
-    this.textureHeight = 128;
-    this.textureWidth = 128;
-    this.bipedBody = new ModelRenderer(this);
-    this.bipedBody.setRotationPoint(0.0F, 0.0F, 0.0F);
-    this.bipedBody.setTextureOffset(0, 38).addBox(-4.0F, 0.0F, -2.0F, 8.0F, 12.0F, 4.0F, 0.0F);
-    this.bipedBody.setTextureOffset(32, 0).addBox(-5.0F, 0.0F, -3.0F, 10.0F, 6.0F, 6.0F, 0.0F); // pants
+    this.texHeight = 128;
+    this.texWidth = 128;
+    this.body = new ModelRenderer(this);
+    this.body.setPos(0.0F, 0.0F, 0.0F);
+    this.body.texOffs(0, 38).addBox(-4.0F, 0.0F, -2.0F, 8.0F, 12.0F, 4.0F, 0.0F);
+    this.body.texOffs(32, 0).addBox(-5.0F, 0.0F, -3.0F, 10.0F, 6.0F, 6.0F, 0.0F); // pants
 
-    this.bipedHead = new ModelRenderer(this);
-    this.bipedHead.setRotationPoint(0.0F, 0.0F, 0.0F);
-    this.bipedHead.setTextureOffset(32, 32).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, 0.0F);
+    this.head = new ModelRenderer(this);
+    this.head.setPos(0.0F, 0.0F, 0.0F);
+    this.head.texOffs(32, 32).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, 0.0F);
 
-    this.bipedRightArm = new ModelRenderer(this);
-    this.bipedRightArm.setRotationPoint(5.0F, 2.0F, 0.0F);
-    this.bipedRightArm.setTextureOffset(22, 63).addBox(-1.0F, -2.0F, -1.0F, 2.0F, 12.0F, 2.0F, modelSize);
+    this.rightArm = new ModelRenderer(this);
+    this.rightArm.setPos(5.0F, 2.0F, 0.0F);
+    this.rightArm.texOffs(22, 63).addBox(-1.0F, -2.0F, -1.0F, 2.0F, 12.0F, 2.0F, modelSize);
 
-    this.bipedLeftArm = new ModelRenderer(this);
-    this.bipedLeftArm.setRotationPoint(-5.0F, 2.0F, 0.0F);
-    this.bipedLeftArm.setTextureOffset(56, 59).addBox(-1.0F, -2.0F, -1.0F, 2.0F, 12.0F, 2.0F, modelSize);
+    this.leftArm = new ModelRenderer(this);
+    this.leftArm.setPos(-5.0F, 2.0F, 0.0F);
+    this.leftArm.texOffs(56, 59).addBox(-1.0F, -2.0F, -1.0F, 2.0F, 12.0F, 2.0F, modelSize);
 
-    this.bipedRightLeg = new ModelRenderer(this);
-    this.bipedRightLeg.setRotationPoint(2.0F, 12.0F, 0.0F);
-    this.bipedRightLeg.setTextureOffset(48, 59).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 12.0F, 2.0F, modelSize);
-    this.bipedRightLeg.setTextureOffset(18, 48).addBox(-2.0F, -2.0F, -3.0F, 5.0F, 9.0F, 6.0F, modelSize); // right legwear
+    this.rightLeg = new ModelRenderer(this);
+    this.rightLeg.setPos(2.0F, 12.0F, 0.0F);
+    this.rightLeg.texOffs(48, 59).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 12.0F, 2.0F, modelSize);
+    this.rightLeg.texOffs(18, 48).addBox(-2.0F, -2.0F, -3.0F, 5.0F, 9.0F, 6.0F, modelSize); // right legwear
 
-    this.bipedLeftLeg = new ModelRenderer(this);
-    this.bipedLeftLeg.setRotationPoint(-2.0F, 12.0F, 0.0F);
-    this.bipedLeftLeg.setTextureOffset(40, 59).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 12.0F, 2.0F, modelSize);
-    this.bipedLeftLeg.setTextureOffset(46, 15).addBox(-3.0F, -2.0F, -3.0F, 5.0F, 9.0F, 6.0F, modelSize); // left legwear
+    this.leftLeg = new ModelRenderer(this);
+    this.leftLeg.setPos(-2.0F, 12.0F, 0.0F);
+    this.leftLeg.texOffs(40, 59).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 12.0F, 2.0F, modelSize);
+    this.leftLeg.texOffs(46, 15).addBox(-3.0F, -2.0F, -3.0F, 5.0F, 9.0F, 6.0F, modelSize); // left legwear
   }
 
   @Override
-  public void setLivingAnimations(T entityIn, float limbSwing, float limbSwingAmount, float partialTick) {
+  public void prepareMobModel(T entityIn, float limbSwing, float limbSwingAmount, float partialTick) {
     this.rightArmPose = BipedModel.ArmPose.EMPTY;
     this.leftArmPose = BipedModel.ArmPose.EMPTY;
-    if (entityIn.getPrimaryHand() == HandSide.RIGHT) {
+    if (entityIn.getMainArm() == HandSide.RIGHT) {
       this.giveModelRightArmPoses(Hand.MAIN_HAND, entityIn);
       this.giveModelLeftArmPoses(Hand.OFF_HAND, entityIn);
     } else {
       this.giveModelRightArmPoses(Hand.OFF_HAND, entityIn);
       this.giveModelLeftArmPoses(Hand.MAIN_HAND, entityIn);
     }
-    super.setLivingAnimations(entityIn, limbSwing, limbSwingAmount, partialTick);
+    super.prepareMobModel(entityIn, limbSwing, limbSwingAmount, partialTick);
   }
 
   private void giveModelRightArmPoses(Hand hand, T entityIn) {
-    ItemStack itemstack = entityIn.getHeldItem(hand);
-    UseAction useaction = itemstack.getUseAction();
+    ItemStack itemstack = entityIn.getItemInHand(hand);
+    UseAction useaction = itemstack.getUseAnimation();
     switch (useaction) {
       case BLOCK:
-        if(entityIn.isActiveItemStackBlocking()){
+        if(entityIn.isBlocking()){
           this.rightArmPose = ArmPose.BLOCK;
         }
         else{
@@ -75,7 +75,7 @@ public class SkeletonVanguardModel<T extends SkeletonVanguardEntity> extends Bip
         break;
       case CROSSBOW:
         this.rightArmPose = ArmPose.CROSSBOW_HOLD;
-        if (entityIn.isHandActive()) {
+        if (entityIn.isUsingItem()) {
           this.rightArmPose = ArmPose.CROSSBOW_CHARGE;
         }
         break;
@@ -95,11 +95,11 @@ public class SkeletonVanguardModel<T extends SkeletonVanguardEntity> extends Bip
   }
 
   private void giveModelLeftArmPoses(Hand hand, T entityIn) {
-    ItemStack itemstack = entityIn.getHeldItem(hand);
-    UseAction useaction = itemstack.getUseAction();
+    ItemStack itemstack = entityIn.getItemInHand(hand);
+    UseAction useaction = itemstack.getUseAnimation();
     switch (useaction) {
       case BLOCK:
-        if(entityIn.isActiveItemStackBlocking()){
+        if(entityIn.isBlocking()){
           this.leftArmPose = ArmPose.BLOCK;
         }
         else{
@@ -108,7 +108,7 @@ public class SkeletonVanguardModel<T extends SkeletonVanguardEntity> extends Bip
         break;
       case CROSSBOW:
         this.leftArmPose = ArmPose.CROSSBOW_HOLD;
-        if (entityIn.isHandActive()) {
+        if (entityIn.isUsingItem()) {
           this.leftArmPose = ArmPose.CROSSBOW_CHARGE;
         }
         break;
@@ -127,11 +127,11 @@ public class SkeletonVanguardModel<T extends SkeletonVanguardEntity> extends Bip
     }
   }
 
-  public void translateHand(HandSide sideIn, MatrixStack matrixStackIn) {
+  public void translateToHand(HandSide sideIn, MatrixStack matrixStackIn) {
     float f = sideIn == HandSide.RIGHT ? 1.0F : -1.0F;
-    ModelRenderer modelrenderer = this.getArmForSide(sideIn);
-    modelrenderer.rotationPointX += f;
-    modelrenderer.translateRotate(matrixStackIn);
-    modelrenderer.rotationPointX -= f;
+    ModelRenderer modelrenderer = this.getArm(sideIn);
+    modelrenderer.x += f;
+    modelrenderer.translateAndRotate(matrixStackIn);
+    modelrenderer.x -= f;
   }
 }

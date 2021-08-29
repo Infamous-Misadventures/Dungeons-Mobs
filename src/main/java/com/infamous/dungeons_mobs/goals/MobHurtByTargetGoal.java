@@ -15,7 +15,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.GameRules;
 
 public class MobHurtByTargetGoal extends TargetGoal {
-   private static final EntityPredicate field_220795_a = (new EntityPredicate()).setLineOfSiteRequired().setUseInvisibilityCheck();
+   private static final EntityPredicate HURT_BY_TARGETING = (new EntityPredicate()).allowUnseeable().ignoreInvisibilityTesting();
    private boolean entityCallsForHelp;
    /** Store the previous revengeTimer value */
    private int revengeTimerOld;
@@ -25,18 +25,18 @@ public class MobHurtByTargetGoal extends TargetGoal {
    public MobHurtByTargetGoal(MobEntity creatureIn, Class<?>... excludeReinforcementTypes) {
       super(creatureIn, true);
       this.excludedReinforcementTypes = excludeReinforcementTypes;
-      this.setMutexFlags(EnumSet.of(Goal.Flag.TARGET));
+      this.setFlags(EnumSet.of(Goal.Flag.TARGET));
    }
 
    /**
     * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
     * method as well.
     */
-   public boolean shouldExecute() {
-      int i = this.goalOwner.getRevengeTimer();
-      LivingEntity livingentity = this.goalOwner.getRevengeTarget();
+   public boolean canUse() {
+      int i = this.mob.getLastHurtByMobTimestamp();
+      LivingEntity livingentity = this.mob.getLastHurtByMob();
       if (i != this.revengeTimerOld && livingentity != null) {
-         if (livingentity.getType() == EntityType.PLAYER && this.goalOwner.world.getGameRules().getBoolean(GameRules.UNIVERSAL_ANGER)) {
+         if (livingentity.getType() == EntityType.PLAYER && this.mob.level.getGameRules().getBoolean(GameRules.RULE_UNIVERSAL_ANGER)) {
             return false;
          } else {
             for(Class<?> oclass : this.excludedReinforcementTypes) {
@@ -45,7 +45,7 @@ public class MobHurtByTargetGoal extends TargetGoal {
                }
             }
 
-            return this.isSuitableTarget(livingentity, field_220795_a);
+            return this.canAttack(livingentity, HURT_BY_TARGETING);
          }
       } else {
          return false;
@@ -61,33 +61,34 @@ public class MobHurtByTargetGoal extends TargetGoal {
    /**
     * Execute a one shot task or start executing a continuous task
     */
-   public void startExecuting() {
-      this.goalOwner.setAttackTarget(this.goalOwner.getRevengeTarget());
-      this.target = this.goalOwner.getAttackTarget();
-      this.revengeTimerOld = this.goalOwner.getRevengeTimer();
+   public void start() {
+      this.mob.setTarget(this.mob.getLastHurtByMob());
+      this.targetMob = this.mob.getTarget();
+      this.revengeTimerOld = this.mob.getLastHurtByMobTimestamp();
       this.unseenMemoryTicks = 300;
       if (this.entityCallsForHelp) {
          this.alertOthers();
       }
 
-      super.startExecuting();
+      super.start();
    }
 
    protected void alertOthers() {
-      double d0 = this.getTargetDistance();
-      AxisAlignedBB axisalignedbb = AxisAlignedBB.fromVector(this.goalOwner.getPositionVec()).grow(d0, 10.0D, d0);
-      List<MobEntity> list = this.goalOwner.world.getLoadedEntitiesWithinAABB(this.goalOwner.getClass(), axisalignedbb);
-      Iterator iterator = list.iterator();
+      double d0 = this.getFollowDistance();
+      AxisAlignedBB axisalignedbb = AxisAlignedBB.unitCubeFromLowerCorner(this.mob.position()).inflate(d0, 10.0D, d0);
+      List<MobEntity> list = this.mob.level.getLoadedEntitiesOfClass(this.mob.getClass(), axisalignedbb);
+      Iterator<MobEntity> iterator = list.iterator();
 
       while(true) {
          MobEntity mobentity;
+         LivingEntity lastHurtByMob = this.mob.getLastHurtByMob();
          while(true) {
             if (!iterator.hasNext()) {
                return;
             }
 
             mobentity = (MobEntity)iterator.next();
-            if (this.goalOwner != mobentity && mobentity.getAttackTarget() == null && (!(this.goalOwner instanceof TameableEntity) || ((TameableEntity)this.goalOwner).getOwner() == ((TameableEntity)mobentity).getOwner()) && !mobentity.isOnSameTeam(this.goalOwner.getRevengeTarget())) {
+            if (this.mob != mobentity && mobentity.getTarget() == null && (!(this.mob instanceof TameableEntity) || ((TameableEntity)this.mob).getOwner() == ((TameableEntity)mobentity).getOwner()) && lastHurtByMob != null && !mobentity.isAlliedTo(lastHurtByMob)) {
                if (this.reinforcementTypes == null) {
                   break;
                }
@@ -107,11 +108,11 @@ public class MobHurtByTargetGoal extends TargetGoal {
             }
          }
 
-         this.setAttackTarget(mobentity, this.goalOwner.getRevengeTarget());
+         this.setAttackTarget(mobentity, lastHurtByMob);
       }
    }
 
    protected void setAttackTarget(MobEntity mobIn, LivingEntity targetIn) {
-      mobIn.setAttackTarget(targetIn);
+      mobIn.setTarget(targetIn);
    }
 }
