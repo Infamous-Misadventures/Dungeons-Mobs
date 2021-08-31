@@ -56,6 +56,7 @@ import java.util.UUID;
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 import static com.infamous.dungeons_mobs.capabilities.enchantable.EnchantableHelper.getEnchantableCapability;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.DOUBLE_DAMAGE;
+import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.PROTECTION;
 
 @Mod.EventBusSubscriber(modid = MODID)
 public class MobEvents {
@@ -122,7 +123,7 @@ public class MobEvents {
         LivingEntity livingEntity = event.getEntityLiving();
         if (!livingEntity.level.isClientSide) {
             getEnchantableCapability(livingEntity).ifPresent(cap ->
-                    cap.addEnchant(DOUBLE_DAMAGE.get()));
+                    cap.addEnchant(PROTECTION.get()));
         }
     }
 
