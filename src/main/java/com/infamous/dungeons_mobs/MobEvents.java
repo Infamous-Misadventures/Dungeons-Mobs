@@ -1,9 +1,6 @@
 package com.infamous.dungeons_mobs;
 
-import com.infamous.dungeons_mobs.capabilities.CloneableHelper;
-import com.infamous.dungeons_mobs.capabilities.CloneableProvider;
-import com.infamous.dungeons_mobs.capabilities.EnchantableProvider;
-import com.infamous.dungeons_mobs.capabilities.ICloneable;
+import com.infamous.dungeons_mobs.capabilities.enchantable.EnchantableProvider;
 import com.infamous.dungeons_mobs.capabilities.cloneable.CloneableProvider;
 import com.infamous.dungeons_mobs.capabilities.convertible.ConvertibleHelper;
 import com.infamous.dungeons_mobs.capabilities.convertible.ConvertibleProvider;
@@ -23,8 +20,6 @@ import com.infamous.dungeons_mobs.goals.SmartTridentAttackGoal;
 import com.infamous.dungeons_mobs.mixin.GoalSelectorAccessor;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.AvoidEntityGoal;
-import net.minecraft.entity.ai.goal.GoalSelector;
-import net.minecraft.entity.monster.IllusionerEntity;
 import net.minecraft.entity.ai.goal.RangedAttackGoal;
 import net.minecraft.entity.item.ArmorStandEntity;
 import net.minecraft.entity.monster.DrownedEntity;
@@ -46,9 +41,8 @@ import net.minecraftforge.event.entity.EntityMobGriefingEvent;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent;
-import net.minecraftforge.event.entity.living.PotionEvent;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
+import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -60,7 +54,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
-import static com.infamous.dungeons_mobs.capabilities.EnchantableHelper.getEnchantableCapability;
+import static com.infamous.dungeons_mobs.capabilities.enchantable.EnchantableHelper.getEnchantableCapability;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.DOUBLE_DAMAGE;
 
 @Mod.EventBusSubscriber(modid = MODID)
@@ -126,7 +120,7 @@ public class MobEvents {
     @SubscribeEvent
     public static void onLivingSpawn(LivingSpawnEvent.CheckSpawn event) {
         LivingEntity livingEntity = event.getEntityLiving();
-        if (!livingEntity.world.isRemote) {
+        if (!livingEntity.level.isClientSide) {
             getEnchantableCapability(livingEntity).ifPresent(cap ->
                     cap.addEnchant(DOUBLE_DAMAGE.get()));
         }

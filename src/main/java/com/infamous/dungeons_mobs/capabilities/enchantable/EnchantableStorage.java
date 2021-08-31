@@ -1,4 +1,4 @@
-package com.infamous.dungeons_mobs.capabilities;
+package com.infamous.dungeons_mobs.capabilities.enchantable;
 
 import com.infamous.dungeons_mobs.mobenchants.MobEnchantment;
 import net.minecraft.nbt.CompoundNBT;
@@ -34,7 +34,7 @@ public class EnchantableStorage implements Capability.IStorage<IEnchantable> {
 
         for(int i = 0; i < listNBT.size(); ++i) {
             CompoundNBT compoundnbt = listNBT.getCompound(i);
-            ResourceLocation resourcelocation = ResourceLocation.tryCreate(compoundnbt.getString("id"));
+            ResourceLocation resourcelocation = ResourceLocation.tryParse(compoundnbt.getString("id"));
             MobEnchantment mobEnchantment = MOB_ENCHANTMENTS.get().getValue(resourcelocation);
             instance.addEnchant(mobEnchantment);
         }

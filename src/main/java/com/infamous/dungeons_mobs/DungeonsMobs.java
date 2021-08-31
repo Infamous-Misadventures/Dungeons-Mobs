@@ -1,10 +1,8 @@
 package com.infamous.dungeons_mobs;
 
-import com.infamous.dungeons_mobs.capabilities.Cloneable;
-import com.infamous.dungeons_mobs.capabilities.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
+import com.infamous.dungeons_mobs.capabilities.enchantable.Enchantable;
+import com.infamous.dungeons_mobs.capabilities.enchantable.EnchantableStorage;
+import com.infamous.dungeons_mobs.capabilities.enchantable.IEnchantable;
 import com.infamous.dungeons_mobs.capabilities.cloneable.Cloneable;
 import com.infamous.dungeons_mobs.capabilities.cloneable.CloneableStorage;
 import com.infamous.dungeons_mobs.capabilities.cloneable.ICloneable;
@@ -19,21 +17,11 @@ import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.items.GroupDungeonsMobs;
 import com.infamous.dungeons_mobs.mod.*;
-import com.infamous.dungeons_mobs.worldgen.EntitySpawnPlacements;
-import com.infamous.dungeons_mobs.worldgen.EntityTypeAttributes;
-import com.infamous.dungeons_mobs.worldgen.RaidEntries;
-import com.infamous.dungeons_mobs.worldgen.SensorMapModifier;
-import com.infamous.dungeons_mobs.mod.ModBlocks;
-import com.infamous.dungeons_mobs.mod.ModEntityTypes;
-import com.infamous.dungeons_mobs.mod.ModItems;
-import com.infamous.dungeons_mobs.mod.ModRecipes;
-import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 import com.infamous.dungeons_mobs.network.NetworkHandler;
 import com.infamous.dungeons_mobs.worldgen.BiomeSpawnEntries;
 import com.infamous.dungeons_mobs.worldgen.EntitySpawnPlacements;
 import com.infamous.dungeons_mobs.worldgen.RaidEntries;
 import com.infamous.dungeons_mobs.worldgen.SensorMapModifier;
-
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemGroup;
@@ -47,6 +35,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import software.bernie.geckolib3.GeckoLib;
 
 // The value here should match an entry in the META-INF/mods.toml file

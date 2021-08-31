@@ -1,4 +1,4 @@
-package com.infamous.dungeons_mobs.capabilities;
+package com.infamous.dungeons_mobs.capabilities.enchantable;
 
 import net.minecraft.entity.Entity;
 import net.minecraftforge.common.util.LazyOptional;

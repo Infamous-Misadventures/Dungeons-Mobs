@@ -1,4 +1,4 @@
-package com.infamous.dungeons_mobs.capabilities;
+package com.infamous.dungeons_mobs.capabilities.enchantable;
 
 import com.infamous.dungeons_mobs.mobenchants.MobEnchantment;
 
