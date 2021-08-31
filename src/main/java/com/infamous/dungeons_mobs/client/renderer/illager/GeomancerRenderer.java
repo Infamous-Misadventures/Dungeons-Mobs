@@ -1,48 +1,34 @@
 package com.infamous.dungeons_mobs.client.renderer.illager;
 
-import com.infamous.dungeons_mobs.client.models.armor.IllagerArmorModel;
 import com.infamous.dungeons_mobs.client.models.illager.GeomancerModel;
 import com.infamous.dungeons_mobs.entities.illagers.GeomancerEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.entity.layers.BipedArmorLayer;
-import net.minecraft.client.renderer.entity.layers.HeadLayer;
-import net.minecraft.client.renderer.entity.layers.HeldItemLayer;
-import net.minecraft.entity.monster.AbstractIllagerEntity;
 import net.minecraft.util.ResourceLocation;
+import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
-
-public class GeomancerRenderer extends MobRenderer<GeomancerEntity, GeomancerModel<GeomancerEntity>> {
-
-    private static final ResourceLocation GEOMANCER_TEXTURE = new ResourceLocation(MODID,"textures/entity/illager/geomancer.png");
-
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public GeomancerRenderer(EntityRendererManager renderManagerIn) {
-        super(renderManagerIn, new GeomancerModel<>(0.0F, 0.0F, 64, 64), 0.5F);
-        this.addLayer(new HeadLayer<>(this));
-        this.addLayer(new BipedArmorLayer(this, new IllagerArmorModel(0.5F), new IllagerArmorModel(1.0F)));
-        this.addLayer(new HeldItemLayer<GeomancerEntity, GeomancerModel<GeomancerEntity>>(this) {
-            @Override
-            public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, GeomancerEntity geomancerEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-                if (geomancerEntity.isCastingSpell() || geomancerEntity.isAggressive() || geomancerEntity.getArmPose() == AbstractIllagerEntity.ArmPose.NEUTRAL) {
-                    super.render(matrixStackIn, bufferIn, packedLightIn, geomancerEntity, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
-                }
-            }
-        });
-    }
-
-    @Override
-    protected void scale(GeomancerEntity geomancerEntity, MatrixStack matrixStack, float v) {
+public class GeomancerRenderer extends GeoEntityRenderer<GeomancerEntity> {
+	public GeomancerRenderer(EntityRendererManager renderManager) {
+		super(renderManager, new GeomancerModel());
+		//this.addLayer(new GeoEyeLayer<>(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/enchanter/enchanter_eyes.png")));
+		//this.addLayer(new GeoHeldItemLayer<>(this, 0.0, 0.0, 0.5));
+	}
+	
+	protected void applyRotations(GeomancerEntity entityLiving, MatrixStack matrixStackIn, float ageInTicks,
+			float rotationYaw, float partialTicks) {
         float scaleFactor = 0.9375F;
-        matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
-        super.scale(geomancerEntity, matrixStack, v);
-    }
+        matrixStackIn.scale(scaleFactor, scaleFactor, scaleFactor);
+		super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
+	}
 
-    @Override
-    public ResourceLocation getTextureLocation(GeomancerEntity geomancerEntity) {
-        return GEOMANCER_TEXTURE;
-    }
+	@Override
+	public RenderType getRenderType(GeomancerEntity animatable, float partialTicks, MatrixStack stack,
+			IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn,
+			ResourceLocation textureLocation) {
+		return RenderType.entityTranslucent(getTextureLocation(animatable));
+	}
 }

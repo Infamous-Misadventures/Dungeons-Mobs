@@ -3,38 +3,69 @@ package com.infamous.dungeons_mobs.client.models.summonables;// Made with Blockb
 // Paste this class into your mod and generate all required imports
 
 
+import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.entities.summonables.ConstructEntity;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.entity.Entity;
+import com.infamous.dungeons_mobs.entities.summonables.GeomancerBombEntity;
 
-public class GeomancerConstructModel<T extends ConstructEntity> extends EntityModel<Entity> {
-	private final ModelRenderer pillarModel;
+import net.minecraft.util.ResourceLocation;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.processor.IBone;
+import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib3.model.provider.data.EntityModelData;
 
-	public GeomancerConstructModel() {
-		texWidth = 64;
-		texHeight = 64;
-
-		pillarModel = new ModelRenderer(this);
-		pillarModel.setPos(0.0F, 24.0F, 0.0F);
-		pillarModel.texOffs(0, 0).addBox(-7.0F, -48.0F - 20.0F, -7.0F, 14.0F, 50.0F, 14.0F, 0.0F, false);
+public class GeomancerConstructModel extends AnimatedGeoModel {
+	   
+	@Override
+	public ResourceLocation getAnimationFileLocation(Object entity) {
+		return new ResourceLocation(DungeonsMobs.MODID, "animations/geomancer_pillar.animation.json");
 	}
 
 	@Override
-	public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
-		//previously the render function, render code was moved to a method below
+	public ResourceLocation getModelLocation(Object entity) {
+		return new ResourceLocation(DungeonsMobs.MODID, "geo/geomancer_pillar.geo.json");
 	}
 
 	@Override
-	public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
-		pillarModel.render(matrixStack, buffer, packedLight, packedOverlay);
+	public ResourceLocation getTextureLocation(Object entity) {
+		//ChorusGormandizerEntity entityIn = (ChorusGormandizerEntity) entity;
+		return entity instanceof GeomancerBombEntity ? new ResourceLocation(DungeonsMobs.MODID, "textures/entity/constructs/geomancer_bomb.png") : new ResourceLocation(DungeonsMobs.MODID, "textures/entity/constructs/geomancer_wall.png");
 	}
 
-	public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
-		modelRenderer.xRot = x;
-		modelRenderer.yRot = y;
-		modelRenderer.zRot = z;
+	@Override
+	public void setLivingAnimations(IAnimatable entity, Integer uniqueID, AnimationEvent customPredicate) {
+		super.setLivingAnimations(entity, uniqueID, customPredicate);
+		
+		ConstructEntity entityIn = (ConstructEntity) entity;
+		
 	}
+
+	/*public IBone getArm(HandSide p_191216_1_) {
+		return this.getAnimationProcessor().getBone("rightArm");
+	}
+
+
+	public void translateToHand(HandSide p_225599_1_, MatrixStack p_225599_2_) {
+		this.translateAndRotate(this.getAnimationProcessor().getBone("body"), p_225599_2_, 0.0, 0.0, 0.0);
+		this.translateAndRotate(this.getAnimationProcessor().getBone("rightArm"), p_225599_2_, 0.0, 0.0, 0.0);
+	}
+
+	public void translateAndRotate(IBone bone, MatrixStack p_228307_1_, double moveX, double moveY, double moveZ) {
+
+		if (bone.getRotationZ() != 0.0F) {
+			p_228307_1_.mulPose(Vector3f.ZP.rotation(bone.getRotationZ()));
+		}
+
+		if (bone.getRotationY() != 0.0F) {
+			p_228307_1_.mulPose(Vector3f.YP.rotation(bone.getRotationY()));
+		}
+
+		if (bone.getRotationX() != 0.0F) {
+			p_228307_1_.mulPose(Vector3f.XP.rotation(bone.getRotationX()));
+		}
+		
+		p_228307_1_.translate((double)((bone.getPivotX() + moveX) / 16.0F), (double)((bone.getPivotY() + moveY) / 16.0F), (double)((bone.getPivotZ() + moveZ) / 16.0F));
+   
+      
+	}*/
 }

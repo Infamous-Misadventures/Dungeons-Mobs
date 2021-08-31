@@ -1,5 +1,7 @@
 package com.infamous.dungeons_mobs.client.renderer.layer;
 
+import com.infamous.dungeons_mobs.DungeonsMobs;
+import com.infamous.dungeons_mobs.entities.summonables.GeomancerBombEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -33,11 +35,15 @@ public class GeoEyeLayer<T extends LivingEntity & IAnimatable> extends GeoLayerR
 			
 		      GeoModelProvider<T> geomodel = (GeoModelProvider<T>)this.getEntityModel();
 				//IGeoRenderer<LivingEntity> renderer = (IGeoRenderer<LivingEntity>) AnimationUtils.getRenderer(entitylivingbaseIn);
-		     // if (entitylivingbaseIn instanceof ChorusGormandizerEntity && !((ChorusGormandizerEntity)entitylivingbaseIn).hasFur()) {
-			  //    renderModel(geomodel, new ResourceLocation(ChorusGormandizers.MOD_ID, "textures/entities/chorus_gormandizer_eyes_shaved.png"), matrixStackIn, bufferIn, 1572, entitylivingbaseIn, 1.0F, 1.0F, 1.0F, 1.0F);  
-		     // } else {
+		      if (entitylivingbaseIn instanceof GeomancerBombEntity && ((GeomancerBombEntity)entitylivingbaseIn).getLifeTicks() < 60 && ((GeomancerBombEntity)entitylivingbaseIn).getLifeTicks() >= 30) {
+			      renderModel(geomodel, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/constructs/geomancer_bomb_eyes_1.png"), matrixStackIn, bufferIn, 1572, entitylivingbaseIn, 1.0F, 1.0F, 1.0F, 1.0F);  
+		      } else if (entitylivingbaseIn instanceof GeomancerBombEntity && ((GeomancerBombEntity)entitylivingbaseIn).getLifeTicks() < 30 && ((GeomancerBombEntity)entitylivingbaseIn).getLifeTicks() >= 0) {
+			      renderModel(geomodel, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/constructs/geomancer_bomb_eyes_2.png"), matrixStackIn, bufferIn, 1572, entitylivingbaseIn, 1.0F, 1.0F, 1.0F, 1.0F); 
+		      } else if (entitylivingbaseIn instanceof GeomancerBombEntity) {
+ 
+		      } else {
 			      renderModel(geomodel, textureLocation, matrixStackIn, bufferIn, 1572, entitylivingbaseIn, 1.0F, 1.0F, 1.0F, 1.0F);    
-		     // }
+		      }
 		      
 			//	if (entitylivingbaseIn instanceof CrimsonerEntity) {
 			//		matrixStackIn.scale(((CrimsonerEntity)entitylivingbaseIn).getAge(), ((CrimsonerEntity)entitylivingbaseIn).getAge(), ((CrimsonerEntity)entitylivingbaseIn).getAge());
