@@ -1,5 +1,7 @@
 package com.infamous.dungeons_mobs;
 
+import com.infamous.dungeons_mobs.capabilities.Cloneable;
+import com.infamous.dungeons_mobs.capabilities.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,6 +18,11 @@ import com.infamous.dungeons_mobs.client.ModItemModelProperties;
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.items.GroupDungeonsMobs;
+import com.infamous.dungeons_mobs.mod.*;
+import com.infamous.dungeons_mobs.worldgen.EntitySpawnPlacements;
+import com.infamous.dungeons_mobs.worldgen.EntityTypeAttributes;
+import com.infamous.dungeons_mobs.worldgen.RaidEntries;
+import com.infamous.dungeons_mobs.worldgen.SensorMapModifier;
 import com.infamous.dungeons_mobs.mod.ModBlocks;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModItems;
@@ -63,7 +70,7 @@ public class DungeonsMobs
         MinecraftForge.EVENT_BUS.register(this);
 
         GeckoLib.initialize();
-        
+
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
     	ModSoundEvents.SOUNDS.register(modEventBus);
         ModEntityTypes.ENTITY_TYPES.register(modEventBus);
@@ -71,6 +78,7 @@ public class DungeonsMobs
         ModBlocks.BLOCKS.register(modEventBus);
         ModRecipes.RECIPES.register(modEventBus);
         ModParticleTypes.PARTICLES.register(modEventBus);
+        ModMobEnchantments.MOB_ENCHANTMENTS_DEFERRED.register(modEventBus);
     }
 
     private void setup(final FMLCommonSetupEvent event){
@@ -82,6 +90,7 @@ public class DungeonsMobs
         CapabilityManager.INSTANCE.register(ICloneable.class, new CloneableStorage(), Cloneable::new);
         CapabilityManager.INSTANCE.register(IConvertible.class, new ConvertibleStorage(), Convertible::new);
         CapabilityManager.INSTANCE.register(ITeamable.class, new TeamableStorage(), Teamable::new);
+        CapabilityManager.INSTANCE.register(IEnchantable.class, new EnchantableStorage(), Enchantable::new);
         event.enqueueWork(NetworkHandler::init);
     }
 
