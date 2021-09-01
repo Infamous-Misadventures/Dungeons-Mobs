@@ -247,5 +247,158 @@
 				"stream": true
 			}
 		]
+	},
+	
+	
+	
+	
+	
+		"entity.geomancer.idle": {
+		"category": "entity",
+		"subtitle": "Geomancer Cackles",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/geomancer/idle1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/geomancer/idle2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/geomancer/idle3",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/geomancer/idle4",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/geomancer/idle5",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/geomancer/idle6",
+				"stream": true
+			}
+		]
+	},
+			"entity.geomancer.hurt": {
+		"category": "entity",
+				"subtitle": "Geomancer Hurts",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/geomancer/hurt1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/geomancer/hurt2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/geomancer/hurt3",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/geomancer/hurt4",
+				"stream": true
+			}
+		]
+	},
+			"entity.geomancer.death": {
+		"category": "entity",
+				"subtitle": "Geomancer Dies",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/geomancer/death1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/geomancer/death2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/geomancer/death3",
+				"stream": true
+			}
+		]
+	},
+			"entity.geomancer.pre_attack": {
+		"category": "entity",
+				"subtitle": "Geomancer Prepares Geomancy",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/geomancer/pre_attack1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/geomancer/pre_attack2",
+				"stream": true
+			}
+		]
+	},
+			"entity.geomancer.attack": {
+		"category": "entity",
+						"subtitle": "Geomancer Summons Pillars",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/geomancer/attack1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/geomancer/attack",
+				"stream": true
+			}
+		]
+	},
+			"entity.geomancer.wall_spawn": {
+		"category": "entity",
+						"subtitle": "Geomancer Wall Emerges",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/geomancer/wall_spawn1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/geomancer/wall_spawn2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/geomancer/wall_spawn3",
+				"stream": true
+			}
+		]
+	},
+			"entity.geomancer.wall_despawn": {
+		"category": "entity",
+						"subtitle": "Geomancer Wall Vanishes",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/geomancer/wall_despawn1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/geomancer/wall_despawn2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/geomancer/wall_despawn3",
+				"stream": true
+			}
+		]
+	},
+			"entity.geomancer.bomb_spawn": {
+		"category": "entity",
+						"subtitle": "Geomancer Bomb Emerges",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/geomancer/bomb_spawn1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/geomancer/bomb_spawn2",
+				"stream": true
+			}
+		]
 	}
 }

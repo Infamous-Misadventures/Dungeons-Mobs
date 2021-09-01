@@ -1,30 +1,32 @@
 package com.infamous.dungeons_mobs.client.renderer.summonables;
 
+import com.infamous.dungeons_mobs.client.models.summonables.GeomancerConstructModel;
 import com.infamous.dungeons_mobs.entities.summonables.GeomancerWallEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
+public class GeomancerWallRenderer extends GeoEntityRenderer<GeomancerWallEntity> {
+	public GeomancerWallRenderer(EntityRendererManager renderManager) {
+		super(renderManager, new GeomancerConstructModel());
+		//this.addLayer(new GeoEyeLayer<>(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/enchanter/enchanter_eyes.png")));
+		//this.addLayer(new GeoHeldItemLayer<>(this, 0.0, 0.0, 0.5));
+	}
+	
+	protected void applyRotations(GeomancerWallEntity entityLiving, MatrixStack matrixStackIn, float ageInTicks,
+			float rotationYaw, float partialTicks) {
+		super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
+	}
 
-@OnlyIn(Dist.CLIENT)
-public class GeomancerWallRenderer extends GeomancerConstructRenderer<GeomancerWallEntity> {
-    private static final ResourceLocation BLOCKING_PILLAR_TEXTURE = new ResourceLocation(MODID, "textures/entity/constructs/geomancer_wall.png");
-
-    public GeomancerWallRenderer(EntityRendererManager renderManagerIn) {
-        super(renderManagerIn);
-    }
-
-    @Override
-    public void render(GeomancerWallEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
-        super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
-    }
-
-    @Override
-    public ResourceLocation getTextureLocation(GeomancerWallEntity entity) {
-        return BLOCKING_PILLAR_TEXTURE;
-    }
+	@Override
+	public RenderType getRenderType(GeomancerWallEntity animatable, float partialTicks, MatrixStack stack,
+			IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn,
+			ResourceLocation textureLocation) {
+		return RenderType.entityTranslucent(getTextureLocation(animatable));
+	}
 }

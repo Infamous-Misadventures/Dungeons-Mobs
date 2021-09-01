@@ -87,7 +87,7 @@ public class ModItems {
 
     public static final RegistryObject<ModSpawnEggItem> GEOMANCER_SPAWN_EGG = ITEMS.register("geomancer_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityTypes.GEOMANCER,
-                    9804699, 1973274,
+                    0x373b3b, 0x8b5ea3,
                     new Item.Properties().tab(DUNGEONS_MOBS)));
 
     public static final RegistryObject<ModSpawnEggItem> WINDCALLER_SPAWN_EGG = ITEMS.register("windcaller_spawn_egg",

@@ -111,7 +111,7 @@ public class WhispererEntity extends MonsterEntity implements IMagicUser {
                     GeomancyHelper.summonOffensiveVine(WhispererEntity.this, WhispererEntity.this, WhispererEntity.this.getPoisonVineType());
                 }
                 else{
-                    int[] rowToRemove = Util.getRandom(GeomancyHelper.ROWS, WhispererEntity.this.getRandom());
+                    int[] rowToRemove = Util.getRandom(GeomancyHelper.CONFIG_1_ROWS, WhispererEntity.this.getRandom());
                     GeomancyHelper.summonAreaDenialVineTrap(targetEntity, targetEntity, WhispererEntity.this.getQuickGrowingVineType(), rowToRemove);
                 }
             }

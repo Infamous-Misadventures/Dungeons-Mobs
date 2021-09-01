@@ -57,6 +57,8 @@ import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 import static com.infamous.dungeons_mobs.capabilities.enchantable.EnchantableHelper.getEnchantableCapability;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.DOUBLE_DAMAGE;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.PROTECTION;
+import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.QUICK;
+import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.FIRE_TRAIL;
 
 @Mod.EventBusSubscriber(modid = MODID)
 public class MobEvents {
@@ -115,15 +117,15 @@ public class MobEvents {
     }
 
     private static boolean isEnchantableEntity(Entity object) {
-        return object instanceof LivingEntity;
+        return object instanceof LivingEntity && !(object instanceof PlayerEntity);
     }
 
     @SubscribeEvent
     public static void onLivingSpawn(LivingSpawnEvent.CheckSpawn event) {
         LivingEntity livingEntity = event.getEntityLiving();
-        if (!livingEntity.level.isClientSide) {
+        if (!livingEntity.level.isClientSide && isEnchantableEntity(livingEntity)) {
             getEnchantableCapability(livingEntity).ifPresent(cap ->
-                    cap.addEnchant(PROTECTION.get()));
+                    cap.addEnchant(FIRE_TRAIL.get()));
         }
     }
 
