@@ -24,7 +24,8 @@ public class ThornsMobEnchantment extends MobEnchantment {
     public static void onLivingHurt(LivingHurtEvent event) {
         LivingEntity defender = (LivingEntity) event.getEntity();
         executeIfPresent(defender, THORNS.get(), () -> {
-            float thornsDamage = event.getAmount() * 0.40F;
+            // TODO Make Config Option
+            float thornsDamage = event.getAmount() * 0.33F;
             if(thornsDamage > 0.5F) {
                 Entity attacker = event.getSource().getEntity();
                 if(attacker != null && attacker.isAlive()) {
@@ -32,6 +33,5 @@ public class ThornsMobEnchantment extends MobEnchantment {
                 }
             }
         });
-
     }
 }
