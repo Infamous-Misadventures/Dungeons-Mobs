@@ -15,6 +15,7 @@ import net.minecraftforge.fml.common.Mod;
 
 import static com.infamous.dungeons_mobs.capabilities.enchantable.EnchantableHelper.getEnchantableCapability;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.DOUBLE_DAMAGE;
+import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.QUICK;
 
 import java.util.UUID;
 
@@ -28,6 +29,10 @@ public class QuickMobEnchantment extends MobEnchantment {
     @SubscribeEvent
     public static void onLivingUpdate(LivingUpdateEvent event) {
         LivingEntity entity = (LivingEntity) event.getEntityLiving();
+        getEnchantableCapability(entity).ifPresent(cap -> {
+            if(cap.hasEnchantment(QUICK.get())) {
         entity.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 10, 1, false, false));
+            }
+        });
     }
 }

@@ -1,10 +1,17 @@
 package com.infamous.dungeons_mobs.blocks;
 
-import com.infamous.dungeons_mobs.capabilities.enchantable.EnchantableProvider;
-import com.infamous.dungeons_mobs.entities.undead.WraithEntity;
+import static com.infamous.dungeons_mobs.capabilities.enchantable.EnchantableHelper.getEnchantableCapability;
+
+import java.util.Random;
+
 import com.infamous.dungeons_mobs.mod.ModBlocks;
-import com.infamous.dungeons_mobs.mod.ModEntityTypes;
-import net.minecraft.block.*;
+import com.infamous.dungeons_mobs.mod.ModMobEnchantments;
+
+import net.minecraft.block.AbstractFireBlock;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.SoulFireBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
@@ -18,17 +25,13 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
-import java.util.Random;
-
-import net.minecraft.block.AbstractBlock.Properties;
-
 public class CorruptedPyreBlock extends AbstractFireBlock {
     public static final IntegerProperty AGE = BlockStateProperties.AGE_5;
     private final float fireDamage;
 
     public CorruptedPyreBlock(Properties properties) {
         super(properties, 2.0F);
-        this.fireDamage = 2.0F;
+        this.fireDamage = 3.0F;
         this.registerDefaultState(this.stateDefinition.any().setValue(AGE, Integer.valueOf(0)));
     }
 
@@ -107,13 +110,26 @@ public class CorruptedPyreBlock extends AbstractFireBlock {
     @Override
     public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
     	System.out.print("\r\n");
-        if (!entityIn.fireImmune() && entityIn.getCapability(EnchantableProvider.ENCHANTABLE_CAPABILITY) == null) {
+        if (!entityIn.fireImmune()) {
+        	if (getEnchantableCapability(entityIn).isPresent()) {
+                getEnchantableCapability(entityIn).ifPresent(cap -> {
+                    if(!cap.hasEnchantment(ModMobEnchantments.FIRE_TRAIL.get())) {
             entityIn.setRemainingFireTicks(entityIn.getRemainingFireTicks() + 1);
-            if (entityIn.getRemainingFireTicks() == 0) {
-                entityIn.setSecondsOnFire(4);
-            }
+            	if (entityIn.getRemainingFireTicks() == 0) {
+            		entityIn.setSecondsOnFire(4);
+            	}
 
-            entityIn.hurt(DamageSource.IN_FIRE, this.fireDamage);
+            entityIn.hurt(DamageSource.MAGIC, this.fireDamage);
+                    }
+        		});
+        	} else {
+                entityIn.setRemainingFireTicks(entityIn.getRemainingFireTicks() + 1);
+            	if (entityIn.getRemainingFireTicks() == 0) {
+            		entityIn.setSecondsOnFire(4);
+            	}
+
+            	entityIn.hurt(DamageSource.MAGIC, this.fireDamage);
+        	}
         }
     }
 
