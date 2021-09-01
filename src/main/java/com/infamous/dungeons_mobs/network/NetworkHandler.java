@@ -2,11 +2,8 @@ package com.infamous.dungeons_mobs.network;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
-
-import java.util.Optional;
 
 public class NetworkHandler {
     public static final SimpleChannel INSTANCE = NetworkRegistry.ChannelBuilder.named(
@@ -22,6 +19,10 @@ public class NetworkHandler {
     }
 
     public static void init() {
+        INSTANCE.messageBuilder(MobEnchantmentMessage.class, 0)
+                .encoder(MobEnchantmentMessage::encode).decoder(MobEnchantmentMessage::decode)
+                .consumer(MobEnchantmentMessage::handle)
+                .add();
     }
 
     public static int incrementAndGetPacketCounter() {

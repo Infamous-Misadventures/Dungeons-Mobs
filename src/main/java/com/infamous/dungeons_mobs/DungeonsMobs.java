@@ -108,21 +108,5 @@ public class DungeonsMobs
         if(DungeonsMobsConfig.COMMON.ENABLE_STRONGER_HUSKS.get()){
             EntityType.HUSK.dimensions = EntitySize.scalable(0.6F * 1.2F, 1.95F * 1.2F);
         }
-        
-        Minecraft.getInstance().getEntityRenderDispatcher().renderers.values().forEach((r) -> {
-            if (r instanceof LivingRenderer) {
-                ((LivingRenderer)r).addLayer(new MobEnchantmentGlintLayer((LivingRenderer)r));
-            } else if (r instanceof GeoEntityRenderer) {
-                ((GeoEntityRenderer)r).addLayer(new GeoMobEnchantmentGlintLayer((GeoEntityRenderer)r));
-            }
-
-        });
-        
-        Minecraft.getInstance().getEntityRenderDispatcher().getSkinMap().values().forEach((r) -> {
-            if (r instanceof LivingRenderer) {
-                r.addLayer(new MobEnchantmentGlintLayer(r));
-            }
-
-        });
     }
 }

@@ -1,14 +1,11 @@
 package com.infamous.dungeons_mobs.client.renderer.layer;
 
-import com.infamous.dungeons_mobs.capabilities.enchantable.EnchantableHelper;
 import com.infamous.dungeons_mobs.capabilities.enchantable.EnchantableProvider;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.IEntityRenderer;
-import net.minecraft.client.renderer.entity.layers.AbstractEyesLayer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.texture.OverlayTexture;

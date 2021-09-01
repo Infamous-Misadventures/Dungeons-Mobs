@@ -6,9 +6,11 @@ import java.util.List;
 
 public interface IEnchantable {
 
-    boolean addEnchant(MobEnchantment enchantment);
+    boolean addEnchantment(MobEnchantment enchantment);
 
-    boolean removeEnchant(MobEnchantment enchantment);
+    boolean removeEnchantment(MobEnchantment enchantment);
+
+    boolean clearAllEnchantments();
 
     List<MobEnchantment> getEnchantments();
 

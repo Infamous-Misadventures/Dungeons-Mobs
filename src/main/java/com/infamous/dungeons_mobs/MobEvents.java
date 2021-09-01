@@ -55,9 +55,6 @@ import java.util.UUID;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 import static com.infamous.dungeons_mobs.capabilities.enchantable.EnchantableHelper.getEnchantableCapability;
-import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.DOUBLE_DAMAGE;
-import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.PROTECTION;
-import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.QUICK;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.FIRE_TRAIL;
 
 @Mod.EventBusSubscriber(modid = MODID)
@@ -125,7 +122,7 @@ public class MobEvents {
         LivingEntity livingEntity = event.getEntityLiving();
         if (!livingEntity.level.isClientSide && isEnchantableEntity(livingEntity)) {
             getEnchantableCapability(livingEntity).ifPresent(cap ->
-                    cap.addEnchant(FIRE_TRAIL.get()));
+                    cap.addEnchantment(FIRE_TRAIL.get()));
         }
     }
 
