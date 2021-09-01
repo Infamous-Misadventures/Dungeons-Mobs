@@ -7,7 +7,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import static com.infamous.dungeons_mobs.capabilities.enchantable.EnchantableHelper.getEnchantableCapability;
+import static com.infamous.dungeons_mobs.mobenchants.MobEnchantmentHelper.executeIfPresent;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.DOUBLE_DAMAGE;
+import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.PROTECTION;
 
 @Mod.EventBusSubscriber(modid = DungeonsMobs.MODID)
 public class DoubleDamageMobEnchantment extends MobEnchantment {
@@ -19,16 +21,12 @@ public class DoubleDamageMobEnchantment extends MobEnchantment {
     @SubscribeEvent
     public static void onLivingDamage(LivingDamageEvent event) {
         LivingEntity attacker = (LivingEntity) event.getSource().getEntity();
-        if (attacker != null) {
-            getEnchantableCapability(attacker).ifPresent(cap -> {
-                if(cap.hasEnchantment(DOUBLE_DAMAGE.get())) {
-                    if (event.getAmount() == 0) {
-                        event.setAmount(1);
-                    } else {
-                        event.setAmount(event.getAmount() * 2);
-                    }
-                }
-            });
-        }
+        executeIfPresent(attacker, DOUBLE_DAMAGE.get(), () -> {
+            if (event.getAmount() == 0) {
+                event.setAmount(1);
+            } else {
+                event.setAmount(event.getAmount() * 2);
+            }
+        });
     }
 }
