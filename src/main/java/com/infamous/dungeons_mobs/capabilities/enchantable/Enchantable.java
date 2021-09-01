@@ -9,14 +9,20 @@ public class Enchantable implements IEnchantable{
     ArrayList<MobEnchantment> enchantments = new ArrayList<>();
 
     @Override
-    public boolean addEnchant(MobEnchantment enchantment) {
+    public boolean addEnchantment(MobEnchantment enchantment) {
         enchantments.add(enchantment);
         return true;
     }
 
     @Override
-    public boolean removeEnchant(MobEnchantment enchantment) {
+    public boolean removeEnchantment(MobEnchantment enchantment) {
         enchantments.remove(enchantment);
+        return true;
+    }
+
+    @Override
+    public boolean clearAllEnchantments() {
+        enchantments.clear();
         return true;
     }
 

@@ -23,6 +23,8 @@ import com.infamous.dungeons_mobs.client.renderer.jungle.LeapleafRenderer;
 import com.infamous.dungeons_mobs.client.renderer.jungle.PoisonQuillVineRenderer;
 import com.infamous.dungeons_mobs.client.renderer.jungle.QuickGrowingVineRenderer;
 import com.infamous.dungeons_mobs.client.renderer.jungle.WhispererRenderer;
+import com.infamous.dungeons_mobs.client.renderer.layer.GeoMobEnchantmentGlintLayer;
+import com.infamous.dungeons_mobs.client.renderer.layer.MobEnchantmentGlintLayer;
 import com.infamous.dungeons_mobs.client.renderer.piglin.CustomPiglinRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.BlueNethershroomRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.CobwebProjectileRenderer;
@@ -58,6 +60,7 @@ import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.client.renderer.entity.LivingRenderer;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.DyeColor;
 import net.minecraftforge.api.distmarker.Dist;
@@ -70,6 +73,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientEvents {
@@ -172,6 +176,26 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WATCHLING.get(), WatchlingRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SNARELING.get(), SnarelingRenderer::new);
 
+        mobEnchantmentRenderers();
+
+    }
+
+    private static void mobEnchantmentRenderers() {
+        Minecraft.getInstance().getEntityRenderDispatcher().renderers.values().forEach((r) -> {
+            if (r instanceof LivingRenderer) {
+                ((LivingRenderer)r).addLayer(new MobEnchantmentGlintLayer((LivingRenderer)r));
+            } else if (r instanceof GeoEntityRenderer) {
+                ((GeoEntityRenderer)r).addLayer(new GeoMobEnchantmentGlintLayer((GeoEntityRenderer)r));
+            }
+
+        });
+
+        Minecraft.getInstance().getEntityRenderDispatcher().getSkinMap().values().forEach((r) -> {
+            if (r instanceof LivingRenderer) {
+                r.addLayer(new MobEnchantmentGlintLayer(r));
+            }
+
+        });
     }
 
     @SubscribeEvent

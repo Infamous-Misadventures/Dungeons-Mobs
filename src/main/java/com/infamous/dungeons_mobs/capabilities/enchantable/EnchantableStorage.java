@@ -36,7 +36,7 @@ public class EnchantableStorage implements Capability.IStorage<IEnchantable> {
             CompoundNBT compoundnbt = listNBT.getCompound(i);
             ResourceLocation resourcelocation = ResourceLocation.tryParse(compoundnbt.getString("id"));
             MobEnchantment mobEnchantment = MOB_ENCHANTMENTS.get().getValue(resourcelocation);
-            instance.addEnchant(mobEnchantment);
+            instance.addEnchantment(mobEnchantment);
         }
     }
 }
