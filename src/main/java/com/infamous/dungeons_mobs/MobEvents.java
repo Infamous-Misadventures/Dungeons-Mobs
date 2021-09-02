@@ -18,6 +18,7 @@ import com.infamous.dungeons_mobs.entities.undead.FrozenZombieEntity;
 import com.infamous.dungeons_mobs.goals.AvoidBaseEntityGoal;
 import com.infamous.dungeons_mobs.goals.SmartTridentAttackGoal;
 import com.infamous.dungeons_mobs.mixin.GoalSelectorAccessor;
+import com.infamous.dungeons_mobs.mobenchants.MobEnchantmentHelper;
 import com.infamous.dungeons_mobs.network.MobEnchantmentMessage;
 import com.infamous.dungeons_mobs.network.NetworkHandler;
 import net.minecraft.entity.*;
@@ -125,16 +126,25 @@ public class MobEvents {
         LivingEntity livingEntity = event.getEntityLiving();
         if (!livingEntity.level.isClientSide && !(livingEntity instanceof PlayerEntity)  && isEnchantableEntity(livingEntity)) {
             getEnchantableCapability(livingEntity).ifPresent(cap -> {
-//                int difficultyAsInt = livingEntity.level.getDifficulty().getId();
-//                if(livingEntity.getRandom().nextFloat() > 0.10f * difficultyAsInt) {
-//                    for(int i = 0; i < livingEntity.getRandom().nextInt(difficultyAsInt+1)+1; i++) {
-//                        cap.addEnchantment(event.getEntityLiving(), MobEnchantmentHelper.getRandomMobEnchantment(event.getEntityLiving().getRandom()));
-//                    }
-//                }
-                cap.addEnchantment(FIRE_TRAIL.get());
-                NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> livingEntity), new MobEnchantmentMessage(livingEntity.getId(), cap.getEnchantments()));
+//                addEnchantmentOnSpawn(event, livingEntity, cap);
+                addEnchantmentOnSpawnDEVELOPMENT(livingEntity, cap);
             });
         }
+    }
+
+    private static void addEnchantmentOnSpawn(LivingSpawnEvent.CheckSpawn event, LivingEntity livingEntity, com.infamous.dungeons_mobs.capabilities.enchantable.IEnchantable cap) {
+        int difficultyAsInt = livingEntity.level.getDifficulty().getId();
+        if(livingEntity.getRandom().nextFloat() > 0.10f * difficultyAsInt) {
+            for(int i = 0; i < livingEntity.getRandom().nextInt(difficultyAsInt+1)+1; i++) {
+                cap.addEnchantment(MobEnchantmentHelper.getRandomMobEnchantment(event.getEntityLiving().getRandom()));
+            }
+        }
+        NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> livingEntity), new MobEnchantmentMessage(livingEntity.getId(), cap.getEnchantments()));
+    }
+
+    private static void addEnchantmentOnSpawnDEVELOPMENT(LivingEntity livingEntity, com.infamous.dungeons_mobs.capabilities.enchantable.IEnchantable cap) {
+        cap.addEnchantment(FIRE_TRAIL.get());
+        NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> livingEntity), new MobEnchantmentMessage(livingEntity.getId(), cap.getEnchantments()));
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
