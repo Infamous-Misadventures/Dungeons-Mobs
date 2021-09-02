@@ -1,6 +1,5 @@
 package com.infamous.dungeons_mobs.network;
 
-import com.infamous.dungeons_mobs.capabilities.enchantable.IEnchantable;
 import com.infamous.dungeons_mobs.mobenchants.MobEnchantment;
 import com.infamous.dungeons_mobs.mod.ModMobEnchantments;
 import net.minecraft.client.Minecraft;
@@ -42,18 +41,19 @@ public class MobEnchantmentMessage {
         return new MobEnchantmentMessage(entityId, mobEnchantments);
     }
 
-    public static boolean handle(MobEnchantmentMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
+    public static boolean onPacketReceived(MobEnchantmentMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
         NetworkEvent.Context context = contextSupplier.get();
-
         if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT) {
             context.enqueueWork(() -> {
                 Entity entity = Minecraft.getInstance().player.level.getEntity(message.entityId);
                 if (entity instanceof LivingEntity) {
-                    getEnchantableCapability(entity).ifPresent(IEnchantable::clearAllEnchantments);
+                    getEnchantableCapability(entity).ifPresent(iEnchantable -> {
+                        iEnchantable.clearAllEnchantments();
+                        message.mobEnchantments.forEach(iEnchantable::addEnchantment);
+                    });
                 }
             });
         }
-
         return true;
     }
 }

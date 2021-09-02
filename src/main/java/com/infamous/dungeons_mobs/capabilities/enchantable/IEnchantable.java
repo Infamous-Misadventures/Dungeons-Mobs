@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.capabilities.enchantable;
 
 import com.infamous.dungeons_mobs.mobenchants.MobEnchantment;
+import net.minecraft.entity.Entity;
 
 import java.util.List;
 
