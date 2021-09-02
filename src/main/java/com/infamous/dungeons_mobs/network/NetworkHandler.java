@@ -21,7 +21,7 @@ public class NetworkHandler {
     public static void init() {
         INSTANCE.messageBuilder(MobEnchantmentMessage.class, 0)
                 .encoder(MobEnchantmentMessage::encode).decoder(MobEnchantmentMessage::decode)
-                .consumer(MobEnchantmentMessage::handle)
+                .consumer(MobEnchantmentMessage::onPacketReceived)
                 .add();
     }
 
