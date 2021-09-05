@@ -18,7 +18,7 @@ public class WraithRenderer extends GeoEntityRenderer<WraithEntity> {
 	public WraithRenderer(EntityRendererManager renderManager) {
 		super(renderManager, new WraithModel());
 		this.addLayer(new GeoEyeLayer<>(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/wraith/wraith_eyes.png")));
-		this.addLayer(new GeoHeldItemLayer<>(this, 0.0, 0.0, 0.5));
+		this.addLayer(new GeoHeldItemLayer<>(this, 0.0, 0.0, 0.0));
 	}
 
 	@Override

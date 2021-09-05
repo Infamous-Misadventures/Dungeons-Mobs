@@ -37,22 +37,15 @@ public class GeoMobEnchantmentGlintLayer<T extends Entity & IAnimatable> extends
 			public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn,
 					T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks,
 					float netHeadYaw, float headPitch) {
-		        getEnchantableCapability(entitylivingbaseIn).ifPresent(cap -> {
-		            if(cap.hasEnchantment()) {
-					
-					float f = (float) entitylivingbaseIn.tickCount + ageInTicks;
-					IVertexBuilder ivertexbuilder = bufferIn
-							.getBuffer(RenderType.energySwirl(this.getTextureLocation(), this.xOffset(f), f * 0.01F));
-					RenderType renderType = this.getRenderType(this.getTextureLocation());
-					this.modelProvider = (GeoModelProvider<T>) this.getEntityModel();
-					GeoModel model = modelProvider.getModel(modelProvider.getModelLocation(entitylivingbaseIn));
-					this.getRenderer().render(model, entitylivingbaseIn, partialTicks, renderType, matrixStackIn,
-							bufferIn, ivertexbuilder, packedLightIn,
-							LivingRenderer.getOverlayCoords((LivingEntity) entitylivingbaseIn, 0.0F), 1.0F, 1.0F, 1.0F,
-							1.0F);
-		            }
+		    //    getEnchantableCapability(entitylivingbaseIn).ifPresent(cap -> {
+		    //        if(cap.hasEnchantment()) {
+		            	
+		  		          GeoModelProvider<T> geomodel = (GeoModelProvider<T>)this.getEntityModel();
+					      renderModel(geomodel, this.getTextureLocation(), matrixStackIn, bufferIn, 1572, entitylivingbaseIn, 1.0F, 1.0F, 1.0F, 1.0F);    
+					      
+		         //   }
 		            
-				});
+				//});
 			}
 			
 			@Override

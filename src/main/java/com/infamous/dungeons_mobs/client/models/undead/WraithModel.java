@@ -54,11 +54,12 @@ public class WraithModel extends AnimatedGeoModel implements IHasGeoArm {
 
 
 		public void translateToHand(HandSide p_225599_1_, MatrixStack p_225599_2_) {
-			this.translateAndRotate(this.getAnimationProcessor().getBone("wraith"), p_225599_2_, 0.0, 0.0, 0.0);
-			this.translateAndRotate(this.getAnimationProcessor().getBone("rightArm"), p_225599_2_, 0.0, 0.0, 0.0);
+			this.translateAndRotate(this.getAnimationProcessor().getBone("wraith"), p_225599_2_);
+			this.translateAndRotate(this.getAnimationProcessor().getBone("body"), p_225599_2_);
+			this.translateAndRotate(this.getAnimationProcessor().getBone("rightArm"), p_225599_2_);
 		}
  
-		public void translateAndRotate(IBone bone, MatrixStack p_228307_1_, double moveX, double moveY, double moveZ) {
+		public void translateAndRotate(IBone bone, MatrixStack p_228307_1_) {
 
 			if (bone.getRotationZ() != 0.0F) {
 				p_228307_1_.mulPose(Vector3f.ZP.rotation(bone.getRotationZ()));
@@ -72,7 +73,7 @@ public class WraithModel extends AnimatedGeoModel implements IHasGeoArm {
 				p_228307_1_.mulPose(Vector3f.XP.rotation(bone.getRotationX()));
 			}
 			
-			p_228307_1_.translate((double)((bone.getPivotX() + moveX) / 16.0F), (double)((bone.getPivotY() + moveY) / 16.0F), (double)((bone.getPivotZ() + moveZ) / 16.0F));
+			p_228307_1_.translate((double)(bone.getPivotX() / 16.0F), (double)(bone.getPivotY() / 16.0F), (double)(bone.getPivotZ() / 16.0F));
 	   
 	      
 		}

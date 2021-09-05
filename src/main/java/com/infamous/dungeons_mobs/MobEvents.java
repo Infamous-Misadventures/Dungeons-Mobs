@@ -126,7 +126,7 @@ public class MobEvents {
         LivingEntity livingEntity = event.getEntityLiving();
         if (!livingEntity.level.isClientSide && !(livingEntity instanceof PlayerEntity)  && isEnchantableEntity(livingEntity)) {
             getEnchantableCapability(livingEntity).ifPresent(cap -> {
-//                addEnchantmentOnSpawn(event, livingEntity, cap);
+         //       addEnchantmentOnSpawn(event, livingEntity, cap);
                 addEnchantmentOnSpawnDEVELOPMENT(livingEntity, cap);
             });
         }
@@ -143,7 +143,7 @@ public class MobEvents {
     }
 
     private static void addEnchantmentOnSpawnDEVELOPMENT(LivingEntity livingEntity, com.infamous.dungeons_mobs.capabilities.enchantable.IEnchantable cap) {
-        cap.addEnchantment(FIRE_TRAIL.get());
+        cap.addEnchantment(THORNS.get());
         NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> livingEntity), new MobEnchantmentMessage(livingEntity.getId(), cap.getEnchantments()));
     }
 
