@@ -15,5 +15,5 @@ public interface IHasGeoArm {
 	
 	void translateToHand(HandSide p_225599_1_, MatrixStack p_225599_2_);
 	
-	void translateAndRotate(IBone bone, MatrixStack p_228307_1_, double moveX, double moveY, double moveZ);
+	void translateAndRotate(IBone bone, MatrixStack p_228307_1_);
 }

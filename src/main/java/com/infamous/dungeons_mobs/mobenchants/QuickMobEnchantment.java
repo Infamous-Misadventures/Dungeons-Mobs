@@ -1,6 +1,8 @@
 package com.infamous.dungeons_mobs.mobenchants;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
+import com.infamous.dungeons_mobs.mod.ModMobEnchantments;
+
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -15,7 +17,6 @@ import net.minecraftforge.fml.common.Mod;
 
 import static com.infamous.dungeons_mobs.capabilities.enchantable.EnchantableHelper.getEnchantableCapability;
 import static com.infamous.dungeons_mobs.mobenchants.MobEnchantmentHelper.executeIfPresent;
-import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.*;
 
 import java.util.UUID;
 
@@ -29,7 +30,7 @@ public class QuickMobEnchantment extends MobEnchantment {
     @SubscribeEvent
     public static void onLivingUpdate(LivingUpdateEvent event) {
         LivingEntity entity = event.getEntityLiving();
-        executeIfPresent(entity, QUICK.get(), () -> {
+        executeIfPresent(entity, ModMobEnchantments.QUICK.get(), () -> {
             entity.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 10, 1, false, false));
         });
     }

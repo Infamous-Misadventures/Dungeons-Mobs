@@ -7,6 +7,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.FIRE_TRAIL;
 
 import static com.infamous.dungeons_mobs.mobenchants.MobEnchantmentHelper.executeIfPresent;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.DOUBLE_DAMAGE;
