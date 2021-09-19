@@ -28,6 +28,7 @@ import net.minecraft.entity.item.ArmorStandEntity;
 import net.minecraft.entity.monster.DrownedEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.SnowballEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.tags.FluidTags;
@@ -52,13 +53,11 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.network.PacketDistributor;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 import static com.infamous.dungeons_mobs.capabilities.enchantable.EnchantableHelper.getEnchantableCapability;
+import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.MULTISHOT;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.TEMPO_THEFT;
 
 @Mod.EventBusSubscriber(modid = MODID)
@@ -122,32 +121,44 @@ public class MobEvents {
     }
 
     @SubscribeEvent
-    public static void enchantOnEntityJoinWorld(EntityJoinWorldEvent event) {
+    public static void enchantOnEntityJoinWorld(LivingSpawnEvent.SpecialSpawn event) {
         Entity entity = event.getEntity();
         if(entity instanceof LivingEntity){
             LivingEntity livingEntity = (LivingEntity) entity;
             if (!livingEntity.level.isClientSide && isEnchantableEntity(livingEntity) && !(livingEntity instanceof PlayerEntity) && DungeonsMobsConfig.COMMON.ENABLE_ENCHANTED_MOBS.get()) {
                 getEnchantableCapability(livingEntity).ifPresent(cap -> {
-             //       addEnchantmentOnSpawn(event, livingEntity, cap);
+//                    addEnchantmentOnSpawn(event, livingEntity, cap);
                     addEnchantmentOnSpawnDEVELOPMENT(livingEntity, cap);
                 });
             }
         }
     }
 
-    //TODO: Add ranged only to ranged mobs.
-    private static void addEnchantmentOnSpawn(LivingSpawnEvent.CheckSpawn event, LivingEntity livingEntity, com.infamous.dungeons_mobs.capabilities.enchantable.IEnchantable cap) {
-        int difficultyAsInt = livingEntity.level.getDifficulty().getId();
-        if(livingEntity.getRandom().nextFloat() > 0.10f * difficultyAsInt) {
-            for(int i = 0; i < livingEntity.getRandom().nextInt(difficultyAsInt+1)+1; i++) {
-                cap.addEnchantment(MobEnchantmentHelper.getRandomMobEnchantment(event.getEntityLiving().getRandom()));
+    private static void addEnchantmentOnSpawn(LivingSpawnEvent.SpecialSpawn event, Entity entity, com.infamous.dungeons_mobs.capabilities.enchantable.IEnchantable cap) {
+        int difficultyAsInt = entity.level.getDifficulty().getId();
+        Random random = entity.level.getRandom();
+        if(random.nextFloat() > 0.015f * difficultyAsInt) {
+            for(int i = 0; i < random.nextInt(difficultyAsInt+1)+1; i++) {
+                cap.addEnchantment(MobEnchantmentHelper.getRandomMobEnchantment(event.getEntityLiving(), event.getEntityLiving().getRandom()));
             }
+            NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new MobEnchantmentMessage(entity.getId(), cap.getEnchantments()));
+            createCopy(entity);
+            createCopy(entity);
         }
-        NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> livingEntity), new MobEnchantmentMessage(livingEntity.getId(), cap.getEnchantments()));
+    }
+
+    private static void createCopy(Entity entity) {
+        Entity newProjectile = entity.getType().create(entity.level);
+        CompoundNBT compoundNBT = new CompoundNBT();
+        compoundNBT = entity.saveWithoutId(compoundNBT);
+        UUID uuid = newProjectile.getUUID();
+        newProjectile.load(compoundNBT);
+        newProjectile.setUUID(uuid);
+        entity.level.addFreshEntity(newProjectile);
     }
 
     private static void addEnchantmentOnSpawnDEVELOPMENT(LivingEntity livingEntity, com.infamous.dungeons_mobs.capabilities.enchantable.IEnchantable cap) {
-        cap.addEnchantment(TEMPO_THEFT.get());
+        cap.addEnchantment(MULTISHOT.get());
         NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> livingEntity), new MobEnchantmentMessage(livingEntity.getId(), cap.getEnchantments()));
     }
 

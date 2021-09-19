@@ -24,7 +24,7 @@ import static com.sun.javafx.font.FontResource.ZERO;
 public class TempoTheftMobEnchantment extends MobEnchantment {
 
     public TempoTheftMobEnchantment(Rarity rarity) {
-        super(rarity);
+        super(rarity, Type.RANGED);
     }
 
     //TODO: Verify if enchant should be applied to projectile instead of checking for owner.

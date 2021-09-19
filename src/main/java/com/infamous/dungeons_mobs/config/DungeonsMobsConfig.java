@@ -164,6 +164,7 @@ public class DungeonsMobsConfig {
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_RANGED_SPIDERS;
 
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ENCHANTED_MOBS;
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> DISABLED_SPAWN_ENCHANTMENTS;
 
         public Common(ForgeConfigSpec.Builder builder){
             // MOB CONFIGURATION
@@ -848,6 +849,9 @@ public class DungeonsMobsConfig {
             ENABLE_ENCHANTED_MOBS = builder
                     .comment("Enable the the spawning of enchanted mobs. [true / false]")
                     .define("enableEnchantedMobs", true);
+            DISABLED_SPAWN_ENCHANTMENTS = builder
+                    .comment("Disables specific mob enchantments from appearing on mobs. Use the full name, eg: dungeons_mobs:protection. Defaults to empty list")
+                    .define("disabledSpawnEnchantments", Lists.newArrayList());
             builder.pop();
         }
     }

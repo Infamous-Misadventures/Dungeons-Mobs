@@ -24,6 +24,10 @@ public class MobEnchantment extends ForgeRegistryEntry<MobEnchantment> {
         return rarity;
     }
 
+    public Type getType() {
+        return type;
+    }
+
     public enum Rarity {
         COMMON(10),
         UNCOMMON(5),
