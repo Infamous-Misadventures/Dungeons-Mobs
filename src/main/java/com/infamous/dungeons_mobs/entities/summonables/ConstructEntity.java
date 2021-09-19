@@ -1,17 +1,6 @@
 package com.infamous.dungeons_mobs.entities.summonables;
 
-import java.util.UUID;
-
-import javax.annotation.Nullable;
-
-import com.infamous.dungeons_mobs.entities.illagers.GeomancerEntity;
-
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MoverType;
-import net.minecraft.entity.item.BoatEntity;
+import net.minecraft.entity.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -21,6 +10,9 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+
+import javax.annotation.Nullable;
+import java.util.UUID;
 
 @SuppressWarnings("EntityConstructor")
 public abstract class ConstructEntity extends CreatureEntity {
@@ -124,7 +116,7 @@ public abstract class ConstructEntity extends CreatureEntity {
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundNBT compound) {
+    public void readAdditionalSaveData(CompoundNBT compound) {
         this.setLifeTicks(compound.getInt("LifeTicks"));
         if (compound.hasUUID("Owner")) {
             this.casterUuid = compound.getUUID("Owner");
@@ -134,7 +126,7 @@ public abstract class ConstructEntity extends CreatureEntity {
 
 
     @Override
-    protected void addAdditionalSaveData(CompoundNBT compound) {
+    public void addAdditionalSaveData(CompoundNBT compound) {
         compound.putInt("LifeTicks", this.getLifeTicks());
         if (this.casterUuid != null) {
             compound.putUUID("Owner", this.casterUuid);

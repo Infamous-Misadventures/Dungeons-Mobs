@@ -1,10 +1,10 @@
 package com.infamous.dungeons_mobs;
 
-import com.infamous.dungeons_mobs.capabilities.enchantable.EnchantableProvider;
 import com.infamous.dungeons_mobs.capabilities.cloneable.CloneableProvider;
 import com.infamous.dungeons_mobs.capabilities.convertible.ConvertibleHelper;
 import com.infamous.dungeons_mobs.capabilities.convertible.ConvertibleProvider;
 import com.infamous.dungeons_mobs.capabilities.convertible.IConvertible;
+import com.infamous.dungeons_mobs.capabilities.enchantable.EnchantableProvider;
 import com.infamous.dungeons_mobs.capabilities.teamable.TeamableHelper;
 import com.infamous.dungeons_mobs.capabilities.teamable.TeamableProvider;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
@@ -59,7 +59,7 @@ import java.util.UUID;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 import static com.infamous.dungeons_mobs.capabilities.enchantable.EnchantableHelper.getEnchantableCapability;
-import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.*;
+import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.DEFLECT;
 
 @Mod.EventBusSubscriber(modid = MODID)
 public class MobEvents {
