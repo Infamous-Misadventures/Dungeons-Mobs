@@ -60,6 +60,7 @@ import java.util.UUID;
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 import static com.infamous.dungeons_mobs.capabilities.enchantable.EnchantableHelper.getEnchantableCapability;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.DEFLECT;
+import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.REGENERATION;
 
 @Mod.EventBusSubscriber(modid = MODID)
 public class MobEvents {
@@ -146,7 +147,7 @@ public class MobEvents {
     }
 
     private static void addEnchantmentOnSpawnDEVELOPMENT(LivingEntity livingEntity, com.infamous.dungeons_mobs.capabilities.enchantable.IEnchantable cap) {
-        cap.addEnchantment(DEFLECT.get());
+        cap.addEnchantment(REGENERATION.get());
         NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> livingEntity), new MobEnchantmentMessage(livingEntity.getId(), cap.getEnchantments()));
     }
 
