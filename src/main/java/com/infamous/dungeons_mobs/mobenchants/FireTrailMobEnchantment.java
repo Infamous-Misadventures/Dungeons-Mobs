@@ -24,7 +24,7 @@ public class FireTrailMobEnchantment extends MobEnchantment {
     public static void onLivingUpdate(LivingUpdateEvent event) {
         LivingEntity entity = event.getEntityLiving();
         executeIfPresent(entity, FIRE_TRAIL.get(), () -> {
-            if (entity.level.isEmptyBlock(entity.blockPosition())) {
+            if (entity.level.isEmptyBlock(entity.blockPosition()) && !entity.level.isEmptyBlock(entity.blockPosition().below())) {
                 entity.level.setBlock(entity.blockPosition(), ModBlocks.CORRUPTED_PYRE_BLOCK.get().defaultBlockState(), 3);
             }
         });
