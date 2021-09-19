@@ -56,17 +56,17 @@ public abstract class ConstructEntity extends CreatureEntity {
 
         return this.caster;
     }
-    
+
     @Override
     public void push(double p_70024_1_, double p_70024_3_, double p_70024_5_) {
-    	
+
     }
-    
+
     @Override
     public void move(MoverType p_213315_1_, Vector3d p_213315_2_) {
 
     }
-    
+
     public boolean canCollideWith(Entity p_241849_1_) {
         return canVehicleCollide(this, p_241849_1_);
      }
@@ -82,7 +82,7 @@ public abstract class ConstructEntity extends CreatureEntity {
      public boolean isPushable() {
         return false;
      }
-     
+
     public boolean hurt(DamageSource p_70097_1_, float p_70097_2_) {
     	return false;
     }
@@ -90,23 +90,23 @@ public abstract class ConstructEntity extends CreatureEntity {
     public void faceDirection(Direction directionToFace){
 
         float rotationAmount = 0;
-        
+
         if(directionToFace == Direction.NORTH){
             rotationAmount = 90.0F;
         }
-        
+
         if(directionToFace == Direction.SOUTH){
             rotationAmount = -90.0F;
         }
-        
+
         if(directionToFace == Direction.EAST){
             rotationAmount = 0.0F;
         }
-        
+
         if(directionToFace == Direction.WEST){
             rotationAmount = 180.0F;
         }
-        
+
         this.yRot = rotationAmount;
     }
 
@@ -123,7 +123,8 @@ public abstract class ConstructEntity extends CreatureEntity {
         return false;
     }
 
-	public void readAdditionalSaveData(CompoundNBT compound) {
+    @Override
+    protected void readAdditionalSaveData(CompoundNBT compound) {
         this.setLifeTicks(compound.getInt("LifeTicks"));
         if (compound.hasUUID("Owner")) {
             this.casterUuid = compound.getUUID("Owner");
@@ -132,7 +133,8 @@ public abstract class ConstructEntity extends CreatureEntity {
     }
 
 
-	public void addAdditionalSaveData(CompoundNBT compound) {
+    @Override
+    protected void addAdditionalSaveData(CompoundNBT compound) {
         compound.putInt("LifeTicks", this.getLifeTicks());
         if (this.casterUuid != null) {
             compound.putUUID("Owner", this.casterUuid);
@@ -143,10 +145,10 @@ public abstract class ConstructEntity extends CreatureEntity {
 		      return this.entityData.get(LIFE_TICKS);
 		   }
 
-		   public void setLifeTicks(int p_189794_1_) {	   
+		   public void setLifeTicks(int p_189794_1_) {
 		      this.entityData.set(LIFE_TICKS, p_189794_1_);
 		   }
- 
+
  protected void defineSynchedData() {
      super.defineSynchedData();
 	    this.entityData.define(LIFE_TICKS, 0);
@@ -167,9 +169,9 @@ public abstract class ConstructEntity extends CreatureEntity {
     @Override
     public void baseTick() {
         //super.tick();
-    	
+
     	//this.faceDirection(this.directionToFace);
-    	
+
         this.setLifeTicks(this.getLifeTicks() - 1);
         if(!this.level.isClientSide() && this.getLifeTicks() <= 0){
             this.handleExpiration();

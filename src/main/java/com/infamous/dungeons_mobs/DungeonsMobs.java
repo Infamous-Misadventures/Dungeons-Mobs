@@ -15,6 +15,15 @@ import com.infamous.dungeons_mobs.capabilities.enchantable.IEnchantable;
 import com.infamous.dungeons_mobs.capabilities.teamable.ITeamable;
 import com.infamous.dungeons_mobs.capabilities.teamable.Teamable;
 import com.infamous.dungeons_mobs.capabilities.teamable.TeamableStorage;
+import com.infamous.dungeons_mobs.capabilities.cloneable.Cloneable;
+import com.infamous.dungeons_mobs.capabilities.cloneable.CloneableStorage;
+import com.infamous.dungeons_mobs.capabilities.cloneable.ICloneable;
+import com.infamous.dungeons_mobs.capabilities.convertible.Convertible;
+import com.infamous.dungeons_mobs.capabilities.convertible.ConvertibleStorage;
+import com.infamous.dungeons_mobs.capabilities.convertible.IConvertible;
+import com.infamous.dungeons_mobs.capabilities.teamable.ITeamable;
+import com.infamous.dungeons_mobs.capabilities.teamable.Teamable;
+import com.infamous.dungeons_mobs.capabilities.teamable.TeamableStorage;
 import com.infamous.dungeons_mobs.client.ModItemModelProperties;
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
 import com.infamous.dungeons_mobs.client.renderer.layer.GeoMobEnchantmentGlintLayer;
@@ -35,6 +44,8 @@ import com.infamous.dungeons_mobs.worldgen.SensorMapModifier;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.LivingRenderer;
+import com.infamous.dungeons_mobs.network.NetworkHandler;
+import com.infamous.dungeons_mobs.worldgen.*;
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemGroup;
@@ -48,6 +59,9 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import software.bernie.geckolib3.GeckoLib;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 

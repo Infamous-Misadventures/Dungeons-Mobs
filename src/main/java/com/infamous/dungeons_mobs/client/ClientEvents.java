@@ -31,6 +31,11 @@ import com.infamous.dungeons_mobs.client.renderer.projectiles.CobwebProjectileRe
 import com.infamous.dungeons_mobs.client.renderer.projectiles.CustomFireballRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.OrbRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.SlimeballRenderer;
+import com.infamous.dungeons_mobs.client.renderer.piglin.CustomPiglinRenderer;
+import com.infamous.dungeons_mobs.client.renderer.projectiles.*;
+import com.infamous.dungeons_mobs.client.renderer.summonables.*;
+import com.infamous.dungeons_mobs.client.renderer.undead.*;
+import com.infamous.dungeons_mobs.client.renderer.illager.*;
 import com.infamous.dungeons_mobs.client.renderer.redstone.RedstoneCubeRenderer;
 import com.infamous.dungeons_mobs.client.renderer.redstone.RedstoneGolemRenderer;
 import com.infamous.dungeons_mobs.client.renderer.redstone.RedstoneMineRenderer;
@@ -51,6 +56,7 @@ import com.infamous.dungeons_mobs.client.renderer.water.DrownedNecromancerRender
 import com.infamous.dungeons_mobs.client.renderer.water.PoisonAnemoneRenderer;
 import com.infamous.dungeons_mobs.client.renderer.water.QuickGrowingAnemoneRenderer;
 import com.infamous.dungeons_mobs.client.renderer.water.WavewhispererRenderer;
+import com.infamous.dungeons_mobs.client.renderer.water.*;
 import com.infamous.dungeons_mobs.items.ModSpawnEggItem;
 import com.infamous.dungeons_mobs.items.WraithFireChargeItem;
 import com.infamous.dungeons_mobs.items.shield.CustomISTER;
@@ -58,6 +64,7 @@ import com.infamous.dungeons_mobs.mod.ModBlocks;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.entity.LivingRenderer;
@@ -149,7 +156,7 @@ public class ClientEvents {
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.GEOMANCER_WALL.get(),
 	    	    manager -> new GeomancerWallRenderer(manager));
-        
+
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.GEOMANCER_BOMB.get(),
 	    	    manager -> new GeomancerBombRenderer(manager));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.REDSTONE_MINE.get(), RedstoneMineRenderer::new);
