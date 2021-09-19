@@ -135,6 +135,7 @@ public class MobEvents {
         }
     }
 
+    //TODO: Add ranged only to ranged mobs.
     private static void addEnchantmentOnSpawn(LivingSpawnEvent.CheckSpawn event, LivingEntity livingEntity, com.infamous.dungeons_mobs.capabilities.enchantable.IEnchantable cap) {
         int difficultyAsInt = livingEntity.level.getDifficulty().getId();
         if(livingEntity.getRandom().nextFloat() > 0.10f * difficultyAsInt) {
