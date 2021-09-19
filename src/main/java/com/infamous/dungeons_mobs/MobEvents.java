@@ -118,17 +118,20 @@ public class MobEvents {
     }
 
     private static boolean isEnchantableEntity(Entity object) {
-        return object instanceof LivingEntity && !(object instanceof PlayerEntity);
+        return object instanceof LivingEntity;
     }
 
     @SubscribeEvent
-    public static void onLivingSpawn(LivingSpawnEvent.CheckSpawn event) {
-        LivingEntity livingEntity = event.getEntityLiving();
-        if (!livingEntity.level.isClientSide && !(livingEntity instanceof PlayerEntity)  && isEnchantableEntity(livingEntity)) {
-            getEnchantableCapability(livingEntity).ifPresent(cap -> {
-         //       addEnchantmentOnSpawn(event, livingEntity, cap);
-                addEnchantmentOnSpawnDEVELOPMENT(livingEntity, cap);
-            });
+    public static void enchantOnEntityJoinWorld(EntityJoinWorldEvent event) {
+        Entity entity = event.getEntity();
+        if(entity instanceof LivingEntity){
+            LivingEntity livingEntity = (LivingEntity) entity;
+            if (!livingEntity.level.isClientSide && isEnchantableEntity(livingEntity) && !(livingEntity instanceof PlayerEntity) && DungeonsMobsConfig.COMMON.ENABLE_ENCHANTED_MOBS.get()) {
+                getEnchantableCapability(livingEntity).ifPresent(cap -> {
+             //       addEnchantmentOnSpawn(event, livingEntity, cap);
+                    addEnchantmentOnSpawnDEVELOPMENT(livingEntity, cap);
+                });
+            }
         }
     }
 
@@ -143,7 +146,7 @@ public class MobEvents {
     }
 
     private static void addEnchantmentOnSpawnDEVELOPMENT(LivingEntity livingEntity, com.infamous.dungeons_mobs.capabilities.enchantable.IEnchantable cap) {
-        cap.addEnchantment(THORNS.get());
+        cap.addEnchantment(DEFLECT.get());
         NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> livingEntity), new MobEnchantmentMessage(livingEntity.getId(), cap.getEnchantments()));
     }
 

@@ -19,4 +19,5 @@ public class ModMobEnchantments {
     public static final RegistryObject<QuickMobEnchantment> QUICK = MOB_ENCHANTMENTS_DEFERRED.register("quick", () -> new QuickMobEnchantment(MobEnchantment.Rarity.COMMON));
     public static final RegistryObject<FireTrailMobEnchantment> FIRE_TRAIL = MOB_ENCHANTMENTS_DEFERRED.register("fire_trail", () -> new FireTrailMobEnchantment(MobEnchantment.Rarity.VERY_RARE));
     public static final RegistryObject<ThornsMobEnchantment> THORNS = MOB_ENCHANTMENTS_DEFERRED.register("thorns", () -> new ThornsMobEnchantment(MobEnchantment.Rarity.COMMON));
+    public static final RegistryObject<DeflectMobEnchantment> DEFLECT = MOB_ENCHANTMENTS_DEFERRED.register("deflect", () -> new DeflectMobEnchantment(MobEnchantment.Rarity.UNCOMMON));
 }

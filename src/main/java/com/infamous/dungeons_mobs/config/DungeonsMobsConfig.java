@@ -163,6 +163,8 @@ public class DungeonsMobsConfig {
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_STRONGER_HUSKS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_RANGED_SPIDERS;
 
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ENCHANTED_MOBS;
+
         public Common(ForgeConfigSpec.Builder builder){
             // MOB CONFIGURATION
             builder.comment("Mob Configuration").push("mob_configuration");
@@ -840,6 +842,12 @@ public class DungeonsMobsConfig {
             ENABLE_RANGED_SPIDERS = builder
                     .comment("Enables Spiders and Cave Spiders shooting webs as a ranged attack like they do in Minecraft Dungeons. [true / false]")
                     .define("enableRangedSpiders", true);
+            builder.pop();
+
+            builder.comment("Mob Enchantments Configuration").push("mob_enchantment_configuration");
+            ENABLE_ENCHANTED_MOBS = builder
+                    .comment("Enable the the spawning of enchanted mobs. [true / false]")
+                    .define("enableEnchantedMobs", true);
             builder.pop();
         }
     }
