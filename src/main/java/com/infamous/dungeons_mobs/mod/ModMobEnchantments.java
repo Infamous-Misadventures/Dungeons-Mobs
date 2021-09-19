@@ -21,4 +21,5 @@ public class ModMobEnchantments {
     public static final RegistryObject<ThornsMobEnchantment> THORNS = MOB_ENCHANTMENTS_DEFERRED.register("thorns", () -> new ThornsMobEnchantment(MobEnchantment.Rarity.COMMON));
     public static final RegistryObject<DeflectMobEnchantment> DEFLECT = MOB_ENCHANTMENTS_DEFERRED.register("deflect", () -> new DeflectMobEnchantment(MobEnchantment.Rarity.UNCOMMON));
     public static final RegistryObject<RegenerationMobEnchantment> REGENERATION = MOB_ENCHANTMENTS_DEFERRED.register("regeneration", () -> new RegenerationMobEnchantment(MobEnchantment.Rarity.UNCOMMON));
+    public static final RegistryObject<TempoTheftMobEnchantment> TEMPO_THEFT = MOB_ENCHANTMENTS_DEFERRED.register("tempo_theft", () -> new TempoTheftMobEnchantment(MobEnchantment.Rarity.RARE));
 }

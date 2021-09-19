@@ -28,11 +28,11 @@ public class DeflectMobEnchantment extends MobEnchantment {
 
     @SubscribeEvent
     public static void onDeflectImpact(ProjectileImpactEvent event){
-        RayTraceResult rayTraceResult = event.getRayTraceResult();
-        if(!projectileHitLivingEntity(rayTraceResult)) return;
         Entity entity = event.getEntity();
         if(entity instanceof ProjectileEntity) {
             ProjectileEntity projectile = (ProjectileEntity) entity;
+            RayTraceResult rayTraceResult = event.getRayTraceResult();
+            if(!projectileHitLivingEntity(rayTraceResult)) return;
             if (!shooterIsLiving(projectile)) return;
             LivingEntity victim = (LivingEntity) ((EntityRayTraceResult) rayTraceResult).getEntity();
             if (victimIsOwner(projectile, victim)) {
