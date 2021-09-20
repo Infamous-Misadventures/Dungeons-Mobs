@@ -53,7 +53,7 @@ public class MultishotMobEnchantment extends MobEnchantment {
         UUID uuid = newProjectile.getUUID();
         newProjectile.load(compoundNBT);
         newProjectile.setUUID(uuid);
-        Vector3d vector3d = newProjectile.getDeltaMovement().yRot(rotation);
+        Vector3d vector3d = newProjectile.getDeltaMovement().yRot((float) (Math.PI / rotation));
         newProjectile.setDeltaMovement(vector3d);
         float f = MathHelper.sqrt(getHorizontalDistanceSqr(vector3d));
         newProjectile.yRot = (float)(MathHelper.atan2(vector3d.x, vector3d.z) * (double)(180F / (float)Math.PI));
