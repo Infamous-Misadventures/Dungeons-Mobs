@@ -6,7 +6,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
@@ -15,7 +14,6 @@ import net.minecraftforge.fml.common.Mod;
 
 import static com.infamous.dungeons_mobs.mobenchants.MobEnchantmentHelper.executeIfPresent;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.LEVITATION_SHOT;
-import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.TEMPO_THEFT;
 
 @Mod.EventBusSubscriber(modid = DungeonsMobs.MODID)
 public class LevitationShotMobEnchantment extends MobEnchantment {

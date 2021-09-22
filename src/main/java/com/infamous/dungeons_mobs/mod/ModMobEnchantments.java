@@ -25,4 +25,5 @@ public class ModMobEnchantments {
     public static final RegistryObject<MultishotMobEnchantment> MULTISHOT = MOB_ENCHANTMENTS_DEFERRED.register("multishot", () -> new MultishotMobEnchantment(MobEnchantment.Rarity.RARE));
     public static final RegistryObject<EchoMobEnchantment> ECHO = MOB_ENCHANTMENTS_DEFERRED.register("echo", () -> new EchoMobEnchantment(MobEnchantment.Rarity.VERY_RARE));
     public static final RegistryObject<LevitationShotMobEnchantment> LEVITATION_SHOT = MOB_ENCHANTMENTS_DEFERRED.register("levitation_shot", () -> new LevitationShotMobEnchantment(MobEnchantment.Rarity.VERY_RARE));
+    public static final RegistryObject<RushMobEnchantment> RUSH = MOB_ENCHANTMENTS_DEFERRED.register("rush", () -> new RushMobEnchantment(MobEnchantment.Rarity.COMMON));
 }
