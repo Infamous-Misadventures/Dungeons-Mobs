@@ -5,6 +5,7 @@ import com.infamous.dungeons_mobs.capabilities.convertible.ConvertibleHelper;
 import com.infamous.dungeons_mobs.capabilities.convertible.ConvertibleProvider;
 import com.infamous.dungeons_mobs.capabilities.convertible.IConvertible;
 import com.infamous.dungeons_mobs.capabilities.enchantable.EnchantableProvider;
+import com.infamous.dungeons_mobs.capabilities.enchantable.IEnchantable;
 import com.infamous.dungeons_mobs.capabilities.teamable.TeamableHelper;
 import com.infamous.dungeons_mobs.capabilities.teamable.TeamableProvider;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
@@ -46,7 +47,6 @@ import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -57,8 +57,7 @@ import java.util.*;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 import static com.infamous.dungeons_mobs.capabilities.enchantable.EnchantableHelper.getEnchantableCapability;
-import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.MULTISHOT;
-import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.TEMPO_THEFT;
+import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.*;
 
 @Mod.EventBusSubscriber(modid = MODID)
 public class MobEvents {
@@ -121,26 +120,26 @@ public class MobEvents {
     }
 
     @SubscribeEvent
-    public static void enchantOnEntityJoinWorld(LivingSpawnEvent.SpecialSpawn event) {
+    public static void enchantOnEntityJoinWorld(EntityJoinWorldEvent event) {
         Entity entity = event.getEntity();
-        if(entity instanceof LivingEntity){
-            LivingEntity livingEntity = (LivingEntity) entity;
-            if (!livingEntity.level.isClientSide && isEnchantableEntity(livingEntity) && !(livingEntity instanceof PlayerEntity) && DungeonsMobsConfig.COMMON.ENABLE_ENCHANTED_MOBS.get()) {
-                getEnchantableCapability(livingEntity).ifPresent(cap -> {
-//                    addEnchantmentOnSpawn(event, livingEntity, cap);
-                    addEnchantmentOnSpawnDEVELOPMENT(livingEntity, cap);
-                });
-            }
+        if (!entity.level.isClientSide && isEnchantableEntity(entity) && !(entity instanceof PlayerEntity) && DungeonsMobsConfig.COMMON.ENABLE_ENCHANTED_MOBS.get()) {
+            getEnchantableCapability(entity).ifPresent(cap -> {
+                if(!cap.isSpawned()) {
+                    addEnchantmentOnSpawn(entity, cap);
+//                    addEnchantmentOnSpawnDEVELOPMENT(entity, cap);
+                }
+            });
         }
     }
 
-    private static void addEnchantmentOnSpawn(LivingSpawnEvent.SpecialSpawn event, Entity entity, com.infamous.dungeons_mobs.capabilities.enchantable.IEnchantable cap) {
+    private static void addEnchantmentOnSpawn(Entity entity, IEnchantable cap) {
         int difficultyAsInt = entity.level.getDifficulty().getId();
         Random random = entity.level.getRandom();
         if(random.nextFloat() > 0.015f * difficultyAsInt) {
             for(int i = 0; i < random.nextInt(difficultyAsInt+1)+1; i++) {
-                cap.addEnchantment(MobEnchantmentHelper.getRandomMobEnchantment(event.getEntityLiving(), event.getEntityLiving().getRandom()));
+                cap.addEnchantment(MobEnchantmentHelper.getRandomMobEnchantment(entity, random));
             }
+            cap.setSpawned(true);
             NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new MobEnchantmentMessage(entity.getId(), cap.getEnchantments()));
             createCopy(entity);
             createCopy(entity);
@@ -148,18 +147,19 @@ public class MobEvents {
     }
 
     private static void createCopy(Entity entity) {
-        Entity newProjectile = entity.getType().create(entity.level);
+        Entity copy = entity.getType().create(entity.level);
         CompoundNBT compoundNBT = new CompoundNBT();
         compoundNBT = entity.saveWithoutId(compoundNBT);
-        UUID uuid = newProjectile.getUUID();
-        newProjectile.load(compoundNBT);
-        newProjectile.setUUID(uuid);
-        entity.level.addFreshEntity(newProjectile);
+        UUID uuid = copy.getUUID();
+        copy.load(compoundNBT);
+        copy.setUUID(uuid);
+        entity.level.addFreshEntity(copy);
     }
 
-    private static void addEnchantmentOnSpawnDEVELOPMENT(LivingEntity livingEntity, com.infamous.dungeons_mobs.capabilities.enchantable.IEnchantable cap) {
-        cap.addEnchantment(MULTISHOT.get());
-        NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> livingEntity), new MobEnchantmentMessage(livingEntity.getId(), cap.getEnchantments()));
+    private static void addEnchantmentOnSpawnDEVELOPMENT(Entity entity, IEnchantable cap) {
+        cap.addEnchantment(LEVITATION_SHOT.get());
+        NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new MobEnchantmentMessage(entity.getId(), cap.getEnchantments()));
+        cap.setSpawned(true);
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)

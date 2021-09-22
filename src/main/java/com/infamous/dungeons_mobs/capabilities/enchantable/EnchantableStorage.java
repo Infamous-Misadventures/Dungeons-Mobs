@@ -13,6 +13,7 @@ import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.MOB_ENCHANTMENTS
 public class EnchantableStorage implements Capability.IStorage<IEnchantable> {
 
     public static final String ENCHANTS_KEY = "Enchants";
+    public static final String IS_SPAWNED_KEY = "isSpawned";
 
     @Override
     public INBT writeNBT(Capability<IEnchantable> capability, IEnchantable instance, Direction side) {
@@ -24,14 +25,15 @@ public class EnchantableStorage implements Capability.IStorage<IEnchantable> {
             listnbt.add(compoundnbt);
         });
         tag.put(ENCHANTS_KEY, listnbt);
+        tag.putBoolean(IS_SPAWNED_KEY, instance.isSpawned());
         return tag;
     }
 
     @Override
     public void readNBT(Capability<IEnchantable> capability, IEnchantable instance, Direction side, INBT nbt) {
         CompoundNBT tag = (CompoundNBT) nbt;
+        instance.setSpawned(tag.getBoolean(IS_SPAWNED_KEY));
         ListNBT listNBT = tag.getList(ENCHANTS_KEY, 10);
-
         for(int i = 0; i < listNBT.size(); ++i) {
             CompoundNBT compoundnbt = listNBT.getCompound(i);
             ResourceLocation resourcelocation = ResourceLocation.tryParse(compoundnbt.getString("id"));

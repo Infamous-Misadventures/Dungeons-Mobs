@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Enchantable implements IEnchantable{
-    ArrayList<MobEnchantment> enchantments = new ArrayList<>();
+    private ArrayList<MobEnchantment> enchantments = new ArrayList<>();
+    private boolean isSpawned = false;
 
     @Override
     public boolean addEnchantment(MobEnchantment enchantment) {
@@ -37,5 +38,15 @@ public class Enchantable implements IEnchantable{
 
     public boolean hasEnchantment(MobEnchantment mobEnchantment) {
         return this.enchantments.contains(mobEnchantment);
+    }
+
+    @Override
+    public boolean isSpawned() {
+        return isSpawned;
+    }
+
+    @Override
+    public void setSpawned(boolean spawned) {
+        isSpawned = spawned;
     }
 }

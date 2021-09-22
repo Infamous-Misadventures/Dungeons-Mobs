@@ -3,6 +3,7 @@ package com.infamous.dungeons_mobs.mobenchants;
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.projectile.DamagingProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.MathHelper;
@@ -38,17 +39,17 @@ public class MultishotMobEnchantment extends MobEnchantment {
                     isAdding = true;
                     CompoundNBT compoundNBT = new CompoundNBT();
                     compoundNBT = projectile.saveWithoutId(compoundNBT);
-                    addArrow(projectile, compoundNBT, 15.0F);
-                    addArrow(projectile, compoundNBT, -15.0F);
-                    addArrow(projectile, compoundNBT, 30.0F);
-                    addArrow(projectile, compoundNBT, -30.0F);
+                    addProjectile(projectile, compoundNBT, 15.0F);
+                    addProjectile(projectile, compoundNBT, -15.0F);
+                    addProjectile(projectile, compoundNBT, 30.0F);
+                    addProjectile(projectile, compoundNBT, -30.0F);
                     isAdding = false;
                 }
             });
         }
     }
 
-    private static void addArrow(ProjectileEntity projectile, CompoundNBT compoundNBT, float rotation) {
+    private static void addProjectile(ProjectileEntity projectile, CompoundNBT compoundNBT, float rotation) {
         ProjectileEntity newProjectile = (ProjectileEntity) projectile.getType().create(projectile.level);
         UUID uuid = newProjectile.getUUID();
         newProjectile.load(compoundNBT);
@@ -60,6 +61,13 @@ public class MultishotMobEnchantment extends MobEnchantment {
         newProjectile.xRot = (float)(MathHelper.atan2(vector3d.y, (double)f) * (double)(180F / (float)Math.PI));
         newProjectile.yRotO = newProjectile.yRot;
         newProjectile.xRotO = newProjectile.xRot;
+        if(newProjectile instanceof DamagingProjectileEntity){
+            DamagingProjectileEntity newDamagingProjectile = (DamagingProjectileEntity) newProjectile;
+            Vector3d newPower = new Vector3d(newDamagingProjectile.xPower, newDamagingProjectile.yPower, newDamagingProjectile.zPower).yRot((float) (Math.PI / rotation));
+            newDamagingProjectile.xPower = newPower.x;
+            newDamagingProjectile.yPower = newPower.y;
+            newDamagingProjectile.zPower = newPower.z;
+        }
         projectile.level.addFreshEntity(newProjectile);
     }
 

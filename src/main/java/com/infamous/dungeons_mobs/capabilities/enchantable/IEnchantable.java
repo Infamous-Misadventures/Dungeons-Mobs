@@ -18,4 +18,8 @@ public interface IEnchantable {
     boolean hasEnchantment();
 
     boolean hasEnchantment(MobEnchantment mobEnchantment);
+
+    boolean isSpawned();
+
+    void setSpawned(boolean hasSpawned);
 }
