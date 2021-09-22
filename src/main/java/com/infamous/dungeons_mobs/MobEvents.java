@@ -122,7 +122,7 @@ public class MobEvents {
     @SubscribeEvent
     public static void enchantOnEntityJoinWorld(EntityJoinWorldEvent event) {
         Entity entity = event.getEntity();
-        if (!entity.level.isClientSide && isEnchantableEntity(entity) && !(entity instanceof PlayerEntity) && DungeonsMobsConfig.COMMON.ENABLE_ENCHANTED_MOBS.get()) {
+        if (!entity.level.isClientSide && isEnchantableEntity(entity) && isSpawnEnchantableEntity(entity) && DungeonsMobsConfig.ENCHANTS.ENABLE_ENCHANTED_MOBS.get()) {
             getEnchantableCapability(entity).ifPresent(cap -> {
                 if(!cap.isSpawned()) {
                     addEnchantmentOnSpawn(entity, cap);
@@ -130,6 +130,10 @@ public class MobEvents {
                 }
             });
         }
+    }
+
+    private static boolean isSpawnEnchantableEntity(Entity entity) {
+        return !(entity instanceof PlayerEntity) && !DungeonsMobsConfig.ENCHANTS.DISABLED_MOBS_FOR_SPAWN_ENCHANTMENTS.get().contains(entity.getType().getRegistryName().toString());
     }
 
     private static void addEnchantmentOnSpawn(Entity entity, IEnchantable cap) {
@@ -141,8 +145,8 @@ public class MobEvents {
             }
             cap.setSpawned(true);
             NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new MobEnchantmentMessage(entity.getId(), cap.getEnchantments()));
-            createCopy(entity);
-            createCopy(entity);
+//            createCopy(entity);
+//            createCopy(entity);
         }
     }
 

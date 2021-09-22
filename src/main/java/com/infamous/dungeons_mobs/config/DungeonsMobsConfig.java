@@ -163,9 +163,6 @@ public class DungeonsMobsConfig {
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_STRONGER_HUSKS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_RANGED_SPIDERS;
 
-        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ENCHANTED_MOBS;
-        public final ForgeConfigSpec.ConfigValue<List<? extends String>> DISABLED_SPAWN_ENCHANTMENTS;
-
         public Common(ForgeConfigSpec.Builder builder){
             // MOB CONFIGURATION
             builder.comment("Mob Configuration").push("mob_configuration");
@@ -845,23 +842,21 @@ public class DungeonsMobsConfig {
                     .define("enableRangedSpiders", true);
             builder.pop();
 
-            builder.comment("Mob Enchantments Configuration").push("mob_enchantment_configuration");
-            ENABLE_ENCHANTED_MOBS = builder
-                    .comment("Enable the the spawning of enchanted mobs. [true / false]")
-                    .define("enableEnchantedMobs", true);
-            DISABLED_SPAWN_ENCHANTMENTS = builder
-                    .comment("Disables specific mob enchantments from appearing on mobs. Use the full name, eg: dungeons_mobs:protection. Defaults to empty list")
-                    .define("disabledSpawnEnchantments", Lists.newArrayList());
-            builder.pop();
         }
     }
 
     public static final ForgeConfigSpec COMMON_SPEC;
     public static final Common COMMON;
 
+    public static final ForgeConfigSpec ENCHANTS_SPEC;
+    public static final DungeonsMobsMobEnchantmentsConfig.MobEnchantmentsConfig ENCHANTS;
+
     static {
         final Pair<Common, ForgeConfigSpec> commonSpecPair = new ForgeConfigSpec.Builder().configure(Common::new);
         COMMON_SPEC = commonSpecPair.getRight();
         COMMON = commonSpecPair.getLeft();
+        final Pair<DungeonsMobsMobEnchantmentsConfig.MobEnchantmentsConfig, ForgeConfigSpec> enchantsSpecPair = new ForgeConfigSpec.Builder().configure(DungeonsMobsMobEnchantmentsConfig.MobEnchantmentsConfig::new);
+        ENCHANTS_SPEC = enchantsSpecPair.getRight();
+        ENCHANTS = enchantsSpecPair.getLeft();
     }
 }
