@@ -122,7 +122,7 @@ public class MobEvents {
     @SubscribeEvent
     public static void enchantOnEntityJoinWorld(EntityJoinWorldEvent event) {
         Entity entity = event.getEntity();
-        if (!entity.level.isClientSide && isEnchantableEntity(entity) && isSpawnEnchantableEntity(entity) && DungeonsMobsConfig.ENCHANTS.ENABLE_ENCHANTED_MOBS.get()) {
+        if (!entity.level.isClientSide && isEnchantableEntity(entity) && isSpawnEnchantableEntity(entity) && DungeonsMobsConfig.ENCHANTS.ENABLE_ENCHANTS_ON_SPAWN.get()) {
             getEnchantableCapability(entity).ifPresent(cap -> {
                 if(!cap.isSpawned()) {
                     addEnchantmentOnSpawn(entity, cap);
@@ -133,13 +133,13 @@ public class MobEvents {
     }
 
     private static boolean isSpawnEnchantableEntity(Entity entity) {
-        return !(entity instanceof PlayerEntity) && !DungeonsMobsConfig.ENCHANTS.DISABLED_MOBS_FOR_SPAWN_ENCHANTMENTS.get().contains(entity.getType().getRegistryName().toString());
+        return !(entity instanceof PlayerEntity) && !DungeonsMobsConfig.ENCHANTS.ENCHANT_ON_SPAWN_EXCLUSION_MOBS.get().contains(entity.getType().getRegistryName().toString());
     }
 
     private static void addEnchantmentOnSpawn(Entity entity, IEnchantable cap) {
         int difficultyAsInt = entity.level.getDifficulty().getId();
         Random random = entity.level.getRandom();
-        if(random.nextFloat() > 0.015f * difficultyAsInt) {
+        if(random.nextFloat() > DungeonsMobsConfig.ENCHANTS.ENCHANT_ON_SPAWN_CHANCE.get() * difficultyAsInt) {
             for(int i = 0; i < random.nextInt(difficultyAsInt+1)+1; i++) {
                 cap.addEnchantment(MobEnchantmentHelper.getRandomMobEnchantment(entity, random));
             }

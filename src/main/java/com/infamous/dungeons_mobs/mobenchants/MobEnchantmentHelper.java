@@ -64,7 +64,7 @@ public class MobEnchantmentHelper {
     }
 
     private static boolean isDisabled(MobEnchantment mobEnchantment) {
-        return !DungeonsMobsConfig.ENCHANTS.DISABLED_SPAWN_ENCHANTMENTS.get().contains(mobEnchantment.getRegistryName().toString());
+        return !DungeonsMobsConfig.ENCHANTS.ENCHANT_ON_SPAWN_EXCLUSION_ENCHANTMENTS.get().contains(mobEnchantment.getRegistryName().toString());
     }
 
     private static boolean hasType(MobEnchantment mobEnchantment, ArrayList<MobEnchantment.Type> possibleTypes) {
