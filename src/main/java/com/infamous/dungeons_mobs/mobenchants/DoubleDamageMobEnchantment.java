@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.mobenchants;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -20,13 +21,19 @@ public class DoubleDamageMobEnchantment extends MobEnchantment {
 
     @SubscribeEvent
     public static void onLivingDamage(LivingDamageEvent event) {
-        LivingEntity attacker = (LivingEntity) event.getSource().getEntity();
-        executeIfPresent(attacker, DOUBLE_DAMAGE.get(), () -> {
-            if (event.getAmount() == 0) {
-                event.setAmount(1);
-            } else {
-                event.setAmount(event.getAmount() * 2);
-            }
-        });
+        Entity attacker;
+        if (!event.getSource().isProjectile()) {
+            attacker = event.getSource().getDirectEntity();
+        } else {
+            attacker = event.getSource().getEntity();
+        }
+        if (attacker instanceof LivingEntity)
+            executeIfPresent((LivingEntity) attacker, DOUBLE_DAMAGE.get(), () -> {
+                if (event.getAmount() == 0) {
+                    event.setAmount(1);
+                } else {
+                    event.setAmount(event.getAmount() * 2);
+                }
+            });
     }
 }
