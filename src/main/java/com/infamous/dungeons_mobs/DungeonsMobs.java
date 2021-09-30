@@ -51,6 +51,7 @@ public class DungeonsMobs
     public DungeonsMobs() {
         // Register the setup method for modloading
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, DungeonsMobsConfig.COMMON_SPEC);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, DungeonsMobsConfig.ENCHANTS_SPEC);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         // Register the doClientStuff method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);

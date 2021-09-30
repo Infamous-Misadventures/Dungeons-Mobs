@@ -139,7 +139,7 @@ public class MobEvents {
     private static void addEnchantmentOnSpawn(Entity entity, IEnchantable cap) {
         int difficultyAsInt = entity.level.getDifficulty().getId();
         Random random = entity.level.getRandom();
-        if(random.nextFloat() > DungeonsMobsConfig.ENCHANTS.ENCHANT_ON_SPAWN_CHANCE.get() * difficultyAsInt) {
+        if(random.nextFloat() <= DungeonsMobsConfig.ENCHANTS.ENCHANT_ON_SPAWN_CHANCE.get() * difficultyAsInt) {
             for(int i = 0; i < random.nextInt(difficultyAsInt+1)+1; i++) {
                 cap.addEnchantment(MobEnchantmentHelper.getRandomMobEnchantment(entity, random));
             }
@@ -161,7 +161,7 @@ public class MobEvents {
     }
 
     private static void addEnchantmentOnSpawnDEVELOPMENT(Entity entity, IEnchantable cap) {
-        cap.addEnchantment(LEVITATION_SHOT.get());
+        cap.addEnchantment(RUSH.get());
         NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new MobEnchantmentMessage(entity.getId(), cap.getEnchantments()));
         cap.setSpawned(true);
     }
