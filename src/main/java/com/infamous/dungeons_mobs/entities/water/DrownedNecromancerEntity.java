@@ -63,7 +63,7 @@ public class DrownedNecromancerEntity extends DrownedEntity implements IMagicUse
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return ZombieEntity.createAttributes().add(Attributes.MAX_HEALTH, 40.0D);
+        return ZombieEntity.createAttributes().add(Attributes.MAX_HEALTH, 90.0D);
     }
 
     @Override
