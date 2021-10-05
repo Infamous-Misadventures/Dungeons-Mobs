@@ -1,6 +1,6 @@
 package com.infamous.dungeons_mobs.blocks;
 
-import static com.infamous.dungeons_mobs.capabilities.enchantable.EnchantableHelper.getEnchantableCapability;
+import static com.infamous.dungeons_libraries.capabilities.enchantable.EnchantableHelper.getEnchantableCapability;
 
 import java.util.Random;
 

@@ -1,10 +1,9 @@
 package com.infamous.dungeons_mobs.mobenchants;
 
+import com.infamous.dungeons_libraries.mobenchantments.MobEnchantment;
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.entity.projectile.DamagingProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.ShulkerBulletEntity;
 import net.minecraft.util.math.EntityRayTraceResult;
@@ -15,7 +14,7 @@ import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import static com.infamous.dungeons_mobs.mobenchants.MobEnchantmentHelper.executeIfPresent;
+import static com.infamous.dungeons_libraries.mobenchantments.MobEnchantmentHelper.executeIfPresent;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.DEFLECT;
 import static com.sun.javafx.font.FontResource.ZERO;
 

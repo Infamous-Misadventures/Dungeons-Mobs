@@ -1,7 +1,6 @@
 package com.infamous.dungeons_mobs.client.renderer.layer;
 
-import com.infamous.dungeons_mobs.capabilities.enchantable.EnchantableHelper;
-import com.infamous.dungeons_mobs.capabilities.enchantable.EnchantableProvider;
+import com.infamous.dungeons_libraries.capabilities.enchantable.EnchantableHelper;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;

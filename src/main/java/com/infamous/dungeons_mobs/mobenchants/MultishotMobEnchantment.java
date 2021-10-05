@@ -1,5 +1,6 @@
 package com.infamous.dungeons_mobs.mobenchants;
 
+import com.infamous.dungeons_libraries.mobenchantments.MobEnchantment;
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -14,7 +15,7 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.util.UUID;
 
-import static com.infamous.dungeons_mobs.mobenchants.MobEnchantmentHelper.executeIfPresent;
+import static com.infamous.dungeons_libraries.mobenchantments.MobEnchantmentHelper.executeIfPresent;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.MULTISHOT;
 import static net.minecraft.entity.Entity.getHorizontalDistanceSqr;
 

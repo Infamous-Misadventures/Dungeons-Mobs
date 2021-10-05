@@ -1,18 +1,17 @@
 package com.infamous.dungeons_mobs.mobenchants;
 
+import com.infamous.dungeons_libraries.mobenchantments.MobEnchantment;
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.utils.EchoDamageSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import static com.infamous.dungeons_mobs.mobenchants.MobEnchantmentHelper.executeIfPresent;
+import static com.infamous.dungeons_libraries.mobenchantments.MobEnchantmentHelper.executeIfPresent;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.ECHO;
-import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.PROTECTION;
 
 @Mod.EventBusSubscriber(modid = DungeonsMobs.MODID)
 public class EchoMobEnchantment extends MobEnchantment {

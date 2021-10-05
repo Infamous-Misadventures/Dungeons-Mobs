@@ -1,11 +1,12 @@
 package com.infamous.dungeons_mobs;
 
+import com.infamous.dungeons_libraries.network.MobEnchantmentMessage;
 import com.infamous.dungeons_mobs.capabilities.cloneable.CloneableProvider;
 import com.infamous.dungeons_mobs.capabilities.convertible.ConvertibleHelper;
 import com.infamous.dungeons_mobs.capabilities.convertible.ConvertibleProvider;
 import com.infamous.dungeons_mobs.capabilities.convertible.IConvertible;
-import com.infamous.dungeons_mobs.capabilities.enchantable.EnchantableProvider;
-import com.infamous.dungeons_mobs.capabilities.enchantable.IEnchantable;
+import com.infamous.dungeons_libraries.capabilities.enchantable.EnchantableProvider;
+import com.infamous.dungeons_libraries.capabilities.enchantable.IEnchantable;
 import com.infamous.dungeons_mobs.capabilities.teamable.TeamableHelper;
 import com.infamous.dungeons_mobs.capabilities.teamable.TeamableProvider;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
@@ -19,8 +20,7 @@ import com.infamous.dungeons_mobs.entities.undead.FrozenZombieEntity;
 import com.infamous.dungeons_mobs.goals.AvoidBaseEntityGoal;
 import com.infamous.dungeons_mobs.goals.SmartTridentAttackGoal;
 import com.infamous.dungeons_mobs.mixin.GoalSelectorAccessor;
-import com.infamous.dungeons_mobs.mobenchants.MobEnchantmentHelper;
-import com.infamous.dungeons_mobs.network.MobEnchantmentMessage;
+import com.infamous.dungeons_mobs.mobenchants.MobEnchantmentSelector;
 import com.infamous.dungeons_mobs.network.NetworkHandler;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.AvoidEntityGoal;
@@ -55,9 +55,9 @@ import net.minecraftforge.fml.network.PacketDistributor;
 
 import java.util.*;
 
+import static com.infamous.dungeons_libraries.capabilities.enchantable.EnchantableHelper.getEnchantableCapability;
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
-import static com.infamous.dungeons_mobs.capabilities.enchantable.EnchantableHelper.getEnchantableCapability;
-import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.*;
+import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.RUSH;
 
 @Mod.EventBusSubscriber(modid = MODID)
 public class MobEvents {
@@ -141,7 +141,7 @@ public class MobEvents {
         Random random = entity.level.getRandom();
         if(random.nextFloat() <= DungeonsMobsConfig.ENCHANTS.ENCHANT_ON_SPAWN_CHANCE.get() * difficultyAsInt) {
             for(int i = 0; i < random.nextInt(difficultyAsInt+1)+1; i++) {
-                cap.addEnchantment(MobEnchantmentHelper.getRandomMobEnchantment(entity, random));
+                cap.addEnchantment(MobEnchantmentSelector.getRandomMobEnchantment(entity, random));
             }
             cap.setSpawned(true);
             NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new MobEnchantmentMessage(entity.getId(), cap.getEnchantments()));

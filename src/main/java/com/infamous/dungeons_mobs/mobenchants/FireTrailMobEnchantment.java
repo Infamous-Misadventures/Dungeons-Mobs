@@ -1,16 +1,14 @@
 package com.infamous.dungeons_mobs.mobenchants;
 
+import com.infamous.dungeons_libraries.mobenchantments.MobEnchantment;
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.mod.ModBlocks;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.FIRE_TRAIL;
 
-import static com.infamous.dungeons_mobs.mobenchants.MobEnchantmentHelper.executeIfPresent;
-import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.DOUBLE_DAMAGE;
+import static com.infamous.dungeons_libraries.mobenchantments.MobEnchantmentHelper.executeIfPresent;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.FIRE_TRAIL;
 
 @Mod.EventBusSubscriber(modid = DungeonsMobs.MODID)

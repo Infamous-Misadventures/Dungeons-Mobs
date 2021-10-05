@@ -1,18 +1,14 @@
 package com.infamous.dungeons_mobs.mod;
 
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
-
+import com.infamous.dungeons_libraries.DungeonsLibraries;
+import com.infamous.dungeons_libraries.mobenchantments.MobEnchantment;
+import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.mobenchants.*;
-
-import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.RegistryBuilder;
 
 public class ModMobEnchantments {
-    public static final DeferredRegister<MobEnchantment> MOB_ENCHANTMENTS_DEFERRED = DeferredRegister.create(MobEnchantment.class, MODID);
-    public static final Lazy<IForgeRegistry<MobEnchantment>> MOB_ENCHANTMENTS = Lazy.of(ModMobEnchantments.MOB_ENCHANTMENTS_DEFERRED.makeRegistry("mob_enchantment", RegistryBuilder::new));
+    public static final DeferredRegister<MobEnchantment> MOB_ENCHANTMENTS_DEFERRED = DeferredRegister.create(MobEnchantment.class, DungeonsLibraries.MODID);
 
     public static final RegistryObject<DoubleDamageMobEnchantment> DOUBLE_DAMAGE = MOB_ENCHANTMENTS_DEFERRED.register("double_damage", () -> new DoubleDamageMobEnchantment(MobEnchantment.Rarity.RARE));
     public static final RegistryObject<ProtectionMobEnchantment> PROTECTION = MOB_ENCHANTMENTS_DEFERRED.register("protection", () -> new ProtectionMobEnchantment(MobEnchantment.Rarity.COMMON));
@@ -26,4 +22,9 @@ public class ModMobEnchantments {
     public static final RegistryObject<EchoMobEnchantment> ECHO = MOB_ENCHANTMENTS_DEFERRED.register("echo", () -> new EchoMobEnchantment(MobEnchantment.Rarity.VERY_RARE));
     public static final RegistryObject<LevitationShotMobEnchantment> LEVITATION_SHOT = MOB_ENCHANTMENTS_DEFERRED.register("levitation_shot", () -> new LevitationShotMobEnchantment(MobEnchantment.Rarity.VERY_RARE));
     public static final RegistryObject<RushMobEnchantment> RUSH = MOB_ENCHANTMENTS_DEFERRED.register("rush", () -> new RushMobEnchantment(MobEnchantment.Rarity.COMMON));
+    public static final RegistryObject<BurningMobEnchantment> BURNING = MOB_ENCHANTMENTS_DEFERRED.register("burning", () -> new BurningMobEnchantment(MobEnchantment.Rarity.UNCOMMON));
+
+    public static void init(){
+        // Empty, in order to ensure class got loaded.
+    }
 }

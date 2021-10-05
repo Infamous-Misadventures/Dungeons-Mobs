@@ -6,9 +6,9 @@ import com.infamous.dungeons_mobs.capabilities.cloneable.ICloneable;
 import com.infamous.dungeons_mobs.capabilities.convertible.Convertible;
 import com.infamous.dungeons_mobs.capabilities.convertible.ConvertibleStorage;
 import com.infamous.dungeons_mobs.capabilities.convertible.IConvertible;
-import com.infamous.dungeons_mobs.capabilities.enchantable.Enchantable;
-import com.infamous.dungeons_mobs.capabilities.enchantable.EnchantableStorage;
-import com.infamous.dungeons_mobs.capabilities.enchantable.IEnchantable;
+import com.infamous.dungeons_mobs.capabilities.properties.DungeonsMobProps;
+import com.infamous.dungeons_mobs.capabilities.properties.DungeonsMobsPropsStorage;
+import com.infamous.dungeons_mobs.capabilities.properties.IDungeonsMobProps;
 import com.infamous.dungeons_mobs.capabilities.teamable.ITeamable;
 import com.infamous.dungeons_mobs.capabilities.teamable.Teamable;
 import com.infamous.dungeons_mobs.capabilities.teamable.TeamableStorage;
@@ -50,8 +50,8 @@ public class DungeonsMobs
 
     public DungeonsMobs() {
         // Register the setup method for modloading
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, DungeonsMobsConfig.COMMON_SPEC);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, DungeonsMobsConfig.ENCHANTS_SPEC);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, DungeonsMobsConfig.COMMON_SPEC, "dungeons-mobs-common.toml");
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, DungeonsMobsConfig.ENCHANTS_SPEC, "dungeons-mobs-mob-enchantments-common.toml");
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         // Register the doClientStuff method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
@@ -81,7 +81,7 @@ public class DungeonsMobs
         CapabilityManager.INSTANCE.register(ICloneable.class, new CloneableStorage(), Cloneable::new);
         CapabilityManager.INSTANCE.register(IConvertible.class, new ConvertibleStorage(), Convertible::new);
         CapabilityManager.INSTANCE.register(ITeamable.class, new TeamableStorage(), Teamable::new);
-        CapabilityManager.INSTANCE.register(IEnchantable.class, new EnchantableStorage(), Enchantable::new);
+        CapabilityManager.INSTANCE.register(IDungeonsMobProps.class, new DungeonsMobsPropsStorage(), DungeonsMobProps::new);
         event.enqueueWork(NetworkHandler::init);
     }
 
