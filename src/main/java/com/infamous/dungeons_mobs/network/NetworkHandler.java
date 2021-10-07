@@ -1,5 +1,6 @@
 package com.infamous.dungeons_mobs.network;
 
+import com.infamous.dungeons_libraries.network.MobEnchantmentMessage;
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkRegistry;
@@ -19,6 +20,10 @@ public class NetworkHandler {
     }
 
     public static void init() {
+        INSTANCE.messageBuilder(MobEnchantmentMessage.class, 0)
+                .encoder(MobEnchantmentMessage::encode).decoder(MobEnchantmentMessage::decode)
+                .consumer(MobEnchantmentMessage::onPacketReceived)
+                .add();
     }
 
     public static int incrementAndGetPacketCounter() {

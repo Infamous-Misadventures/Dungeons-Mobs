@@ -5,16 +5,15 @@ import net.minecraft.nbt.DoubleNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.Nullable;
 
-public class DungeonsMobsPropsStorage implements Capability.IStorage<IDungeonsMobProps> {
+public class MobPropsStorage implements Capability.IStorage<IMobProps> {
 
     @Nullable
     @Override
-    public INBT writeNBT(Capability<IDungeonsMobProps> capability, IDungeonsMobProps instance, Direction side) {
+    public INBT writeNBT(Capability<IMobProps> capability, IMobProps instance, Direction side) {
         CompoundNBT tag = new CompoundNBT();
         tag.putInt("burnNearbyTimer", instance.getBurnNearbyTimer());
         tag.putInt("freezeNearbyTimer", instance.getFreezeNearbyTimer());
@@ -24,7 +23,7 @@ public class DungeonsMobsPropsStorage implements Capability.IStorage<IDungeonsMo
     }
 
     @Override
-    public void readNBT(Capability<IDungeonsMobProps> capability, IDungeonsMobProps instance, Direction side, INBT nbt) {
+    public void readNBT(Capability<IMobProps> capability, IMobProps instance, Direction side, INBT nbt) {
         CompoundNBT tag = (CompoundNBT) nbt;
         instance.setBurnNearbyTimer(tag.getInt("burnNearbyTimer"));
         instance.setFreezeNearbyTimer(tag.getInt("freezeNearbyTimer"));

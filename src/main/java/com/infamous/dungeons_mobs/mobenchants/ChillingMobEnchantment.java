@@ -1,14 +1,13 @@
 package com.infamous.dungeons_mobs.mobenchants;
 
 import com.infamous.dungeons_libraries.mobenchantments.MobEnchantment;
-import com.infamous.dungeons_libraries.utils.AreaOfEffectHelper;
-import com.infamous.dungeons_libraries.utils.CapabilityHelper;
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.capabilities.properties.IMobProps;
 import com.infamous.dungeons_mobs.capabilities.properties.MobPropsHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.DamageSource;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -17,12 +16,12 @@ import static com.infamous.dungeons_libraries.mobenchantments.MobEnchantmentHelp
 import static com.infamous.dungeons_libraries.utils.AreaOfEffectHelper.applyToNearbyEntities;
 import static com.infamous.dungeons_libraries.utils.AreaOfEffectHelper.getCanApplyToEnemyPredicate;
 import static com.infamous.dungeons_mobs.DungeonsMobs.PROXY;
-import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.BURNING;
+import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.CHILLING;
 
 @Mod.EventBusSubscriber(modid = DungeonsMobs.MODID)
-public class BurningMobEnchantment extends MobEnchantment {
+public class ChillingMobEnchantment extends MobEnchantment {
 
-    public BurningMobEnchantment(Rarity rarity) {
+    public ChillingMobEnchantment(Rarity rarity) {
         super(rarity);
     }
 
@@ -30,22 +29,29 @@ public class BurningMobEnchantment extends MobEnchantment {
     public static void OnLivingUpdate(LivingEvent.LivingUpdateEvent event) {
         LivingEntity entity = (LivingEntity) event.getEntity();
 
-        executeIfPresent(entity, BURNING.get(), () -> {
+        executeIfPresent(entity, CHILLING.get(), () -> {
             IMobProps comboCap = MobPropsHelper.getMobPropsCapability(entity);
             if(comboCap == null) return;
-            int burnNearbyTimer = comboCap.getBurnNearbyTimer();
-            if(burnNearbyTimer <= 0){
+            int freezeNearbyTimer = comboCap.getFreezeNearbyTimer();
+            if(freezeNearbyTimer <= 0){
                 applyToNearbyEntities(entity, 1.5F,
                         getCanApplyToEnemyPredicate(entity), (LivingEntity nearbyEntity) -> {
-                            nearbyEntity.hurt(DamageSource.ON_FIRE, 1F);
-                            PROXY.spawnParticles(nearbyEntity, ParticleTypes.FLAME);
+                            freezeEnemy(1, nearbyEntity, 1);
                         }
                 );
-                comboCap.setBurnNearbyTimer(20);
+                comboCap.setFreezeNearbyTimer(40);
             }
             else{
-                comboCap.setBurnNearbyTimer(burnNearbyTimer - 1);
+                comboCap.setFreezeNearbyTimer(freezeNearbyTimer - 1);
             }
         });
+    }
+
+    private static void freezeEnemy(int amplifier, LivingEntity nearbyEntity, int durationInSeconds) {
+        EffectInstance slowness = new EffectInstance(Effects.MOVEMENT_SLOWDOWN, durationInSeconds * 20, amplifier);
+        EffectInstance fatigue = new EffectInstance(Effects.DIG_SLOWDOWN, durationInSeconds * 20, Math.max(0, amplifier * 2 - 1));
+        nearbyEntity.addEffect(slowness);
+        nearbyEntity.addEffect(fatigue);
+        PROXY.spawnParticles(nearbyEntity, ParticleTypes.ITEM_SNOWBALL);
     }
 }

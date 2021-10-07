@@ -1,13 +1,13 @@
 package com.infamous.dungeons_mobs.capabilities.properties;
 
-public class DungeonsMobProps implements IDungeonsMobProps {
+public class MobProps implements IMobProps {
     private int burnNearbyTimer;
     private int freezeNearbyTimer;
     private int gravityPulseTimer;
 
-    public DungeonsMobProps() {
-        this.burnNearbyTimer = 10;
-        this.burnNearbyTimer = 40;
+    public MobProps() {
+        this.burnNearbyTimer = 20;
+        this.freezeNearbyTimer = 40;
         this.gravityPulseTimer = 100;
     }
 

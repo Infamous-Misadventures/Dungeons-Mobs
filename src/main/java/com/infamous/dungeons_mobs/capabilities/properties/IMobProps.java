@@ -1,7 +1,7 @@
 package com.infamous.dungeons_mobs.capabilities.properties;
 
 
-public interface IDungeonsMobProps {
+public interface IMobProps {
     int getBurnNearbyTimer();
     void setBurnNearbyTimer(int burnNearbyTimer);
 

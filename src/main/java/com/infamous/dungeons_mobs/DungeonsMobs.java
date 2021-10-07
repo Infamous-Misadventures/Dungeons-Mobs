@@ -1,14 +1,16 @@
 package com.infamous.dungeons_mobs;
 
+import com.infamous.dungeons_libraries.client.ClientProxy;
+import com.infamous.dungeons_libraries.network.CommonProxy;
 import com.infamous.dungeons_mobs.capabilities.cloneable.Cloneable;
 import com.infamous.dungeons_mobs.capabilities.cloneable.CloneableStorage;
 import com.infamous.dungeons_mobs.capabilities.cloneable.ICloneable;
 import com.infamous.dungeons_mobs.capabilities.convertible.Convertible;
 import com.infamous.dungeons_mobs.capabilities.convertible.ConvertibleStorage;
 import com.infamous.dungeons_mobs.capabilities.convertible.IConvertible;
-import com.infamous.dungeons_mobs.capabilities.properties.DungeonsMobProps;
-import com.infamous.dungeons_mobs.capabilities.properties.DungeonsMobsPropsStorage;
-import com.infamous.dungeons_mobs.capabilities.properties.IDungeonsMobProps;
+import com.infamous.dungeons_mobs.capabilities.properties.MobProps;
+import com.infamous.dungeons_mobs.capabilities.properties.MobPropsStorage;
+import com.infamous.dungeons_mobs.capabilities.properties.IMobProps;
 import com.infamous.dungeons_mobs.capabilities.teamable.ITeamable;
 import com.infamous.dungeons_mobs.capabilities.teamable.Teamable;
 import com.infamous.dungeons_mobs.capabilities.teamable.TeamableStorage;
@@ -28,6 +30,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -47,6 +50,8 @@ public class DungeonsMobs
     public static final Logger LOGGER = LogManager.getLogger();
     public static final String MODID = "dungeons_mobs";
     public static final ItemGroup DUNGEONS_MOBS = new GroupDungeonsMobs("dungeonsMobs");
+
+    public static CommonProxy PROXY;
 
     public DungeonsMobs() {
         // Register the setup method for modloading
@@ -70,6 +75,7 @@ public class DungeonsMobs
         ModRecipes.RECIPES.register(modEventBus);
         ModParticleTypes.PARTICLES.register(modEventBus);
         ModMobEnchantments.MOB_ENCHANTMENTS_DEFERRED.register(modEventBus);
+        PROXY = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
     }
 
     private void setup(final FMLCommonSetupEvent event){
@@ -81,7 +87,7 @@ public class DungeonsMobs
         CapabilityManager.INSTANCE.register(ICloneable.class, new CloneableStorage(), Cloneable::new);
         CapabilityManager.INSTANCE.register(IConvertible.class, new ConvertibleStorage(), Convertible::new);
         CapabilityManager.INSTANCE.register(ITeamable.class, new TeamableStorage(), Teamable::new);
-        CapabilityManager.INSTANCE.register(IDungeonsMobProps.class, new DungeonsMobsPropsStorage(), DungeonsMobProps::new);
+        CapabilityManager.INSTANCE.register(IMobProps.class, new MobPropsStorage(), MobProps::new);
         event.enqueueWork(NetworkHandler::init);
     }
 
