@@ -47,6 +47,7 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
+            arg "-mixin.config=dungeons_mobs.mixins.json"
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
@@ -66,6 +67,7 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
+            arg "-mixin.config=dungeons_mobs.mixins.json"
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
@@ -124,6 +126,7 @@ dependencies {
     implementation fg.deobf("dungeons_libraries:dungeons_libraries:1.16.5-0.0.1")
     implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.16.5:3.0.45')
     runtimeOnly fg.deobf("curse.maven:blame-406201:3440093")
+    runtimeOnly fg.deobf("curse.maven:neat-238372:3182258")
 
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"

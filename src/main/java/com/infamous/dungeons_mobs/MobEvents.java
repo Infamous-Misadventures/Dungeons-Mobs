@@ -1,5 +1,6 @@
 package com.infamous.dungeons_mobs;
 
+import com.infamous.dungeons_libraries.capabilities.enchantable.EnchantableHelper;
 import com.infamous.dungeons_libraries.capabilities.enchantable.EnchantableProvider;
 import com.infamous.dungeons_libraries.capabilities.enchantable.IEnchantable;
 import com.infamous.dungeons_libraries.network.MobEnchantmentMessage;
@@ -39,8 +40,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.RenderNameplateEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.EntityMobGriefingEvent;
@@ -49,16 +52,18 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.network.PacketDistributor;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
-import static com.infamous.dungeons_libraries.capabilities.enchantable.EnchantableHelper.getEnchantableCapability;
+import static com.infamous.dungeons_libraries.capabilities.enchantable.EnchantableHelper.getEnchantableCapabilityLazy;
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
-import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.GRAVITY_PULSE;
+import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.*;
 
 @Mod.EventBusSubscriber(modid = MODID)
 public class MobEvents {
@@ -104,9 +109,6 @@ public class MobEvents {
         if(event.getObject() instanceof MobEntity){
             event.addCapability(new ResourceLocation(MODID, "teammable"), new TeamableProvider());
         }
-        if (isEnchantableEntity(event.getObject())) {
-            event.addCapability(new ResourceLocation(DungeonsMobs.MODID, "enchantable"), new EnchantableProvider());
-        }
         if (event.getObject() instanceof LivingEntity) {
             event.addCapability(new ResourceLocation(DungeonsMobs.MODID, "dungeons_mobs_mob_props"), new MobPropsProvider());
         }
@@ -119,18 +121,14 @@ public class MobEvents {
         return false;
     }
 
-    private static boolean isEnchantableEntity(Entity object) {
-        return object instanceof LivingEntity;
-    }
-
     @SubscribeEvent
     public static void enchantOnEntityJoinWorld(EntityJoinWorldEvent event) {
         Entity entity = event.getEntity();
-        if (!entity.level.isClientSide && isEnchantableEntity(entity) && isSpawnEnchantableEntity(entity) && DungeonsMobsConfig.ENCHANTS.ENABLE_ENCHANTS_ON_SPAWN.get()) {
-            getEnchantableCapability(entity).ifPresent(cap -> {
+        if (!entity.level.isClientSide && EnchantableHelper.isEnchantableEntity(entity) && isSpawnEnchantableEntity(entity) && DungeonsMobsConfig.ENCHANTS.ENABLE_ENCHANTS_ON_SPAWN.get()) {
+            getEnchantableCapabilityLazy(entity).ifPresent(cap -> {
                 if(!cap.isSpawned()) {
-//                    addEnchantmentOnSpawn(entity, cap);
-                    addEnchantmentOnSpawnDEVELOPMENT(entity, cap);
+                    addEnchantmentOnSpawn(entity, cap);
+//                    addEnchantmentOnSpawnDEVELOPMENT(entity, cap);
                 }
             });
         }
@@ -165,9 +163,26 @@ public class MobEvents {
     }
 
     private static void addEnchantmentOnSpawnDEVELOPMENT(Entity entity, IEnchantable cap) {
-        cap.addEnchantment(GRAVITY_PULSE.get());
+        cap.addEnchantment(HEALS_ALLIES.get());
         NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new MobEnchantmentMessage(entity.getId(), cap.getEnchantments()));
         cap.setSpawned(true);
+    }
+
+    @SubscribeEvent
+    public static void onRenderNamePlateEvent(RenderNameplateEvent event){
+        Entity entity = event.getEntity();
+        IFormattableTextComponent copy = event.getContent().copy();
+        StringBuilder enchantmentString = new StringBuilder();
+        getEnchantableCapabilityLazy(entity).ifPresent(cap -> {
+            if(cap.hasEnchantment()){
+                enchantmentString.append(" (");
+                enchantmentString.append(cap.getEnchantments().stream().map(mobEnchantment -> mobEnchantment.getRegistryName().getPath()).collect(Collectors.joining(", ")));
+                enchantmentString.append(")");
+                event.setResult(Event.Result.ALLOW);
+            }
+        });
+        copy.append(enchantmentString.toString());
+        event.setContent(copy);
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)

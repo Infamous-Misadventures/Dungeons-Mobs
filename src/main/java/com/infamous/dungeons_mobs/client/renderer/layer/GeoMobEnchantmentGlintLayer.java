@@ -25,7 +25,7 @@ public class GeoMobEnchantmentGlintLayer<T extends Entity & IAnimatable> extends
 			public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn,
 					T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks,
 					float netHeadYaw, float headPitch) {
-		    //    getEnchantableCapability(entitylivingbaseIn).ifPresent(cap -> {
+		    //    getEnchantableCapabilityLazy(entitylivingbaseIn).ifPresent(cap -> {
 		    //        if(cap.hasEnchantment()) {
 		            	
 		  		          GeoModelProvider<T> geomodel = (GeoModelProvider<T>)this.getEntityModel();

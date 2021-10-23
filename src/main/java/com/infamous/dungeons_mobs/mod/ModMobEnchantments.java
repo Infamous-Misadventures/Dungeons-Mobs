@@ -24,4 +24,6 @@ public class ModMobEnchantments {
     public static final RegistryObject<BurningMobEnchantment> BURNING = MOB_ENCHANTMENTS_DEFERRED.register("burning", () -> new BurningMobEnchantment(MobEnchantment.Rarity.UNCOMMON));
     public static final RegistryObject<ChillingMobEnchantment> CHILLING = MOB_ENCHANTMENTS_DEFERRED.register("chilling", () -> new ChillingMobEnchantment(MobEnchantment.Rarity.UNCOMMON));
     public static final RegistryObject<GravityPulseMobEnchantment> GRAVITY_PULSE = MOB_ENCHANTMENTS_DEFERRED.register("gravity_pulse", () -> new GravityPulseMobEnchantment(MobEnchantment.Rarity.RARE));
+    public static final RegistryObject<RadianceMobEnchantment> RADIANCE = MOB_ENCHANTMENTS_DEFERRED.register("radiance", () -> new RadianceMobEnchantment(MobEnchantment.Rarity.RARE));
+    public static final RegistryObject<HealsAlliesMobEnchantment> HEALS_ALLIES = MOB_ENCHANTMENTS_DEFERRED.register("heals_allies", () -> new HealsAlliesMobEnchantment(MobEnchantment.Rarity.RARE));
 }

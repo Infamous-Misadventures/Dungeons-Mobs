@@ -20,6 +20,7 @@ import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.items.GroupDungeonsMobs;
 import com.infamous.dungeons_mobs.mod.*;
 import com.infamous.dungeons_mobs.network.NetworkHandler;
+import com.infamous.dungeons_mobs.network.datasync.ModDataSerializers;
 import com.infamous.dungeons_mobs.worldgen.BiomeSpawnEntries;
 import com.infamous.dungeons_mobs.worldgen.EntitySpawnPlacements;
 import com.infamous.dungeons_mobs.worldgen.RaidEntries;
@@ -75,6 +76,7 @@ public class DungeonsMobs
         ModRecipes.RECIPES.register(modEventBus);
         ModParticleTypes.PARTICLES.register(modEventBus);
         ModMobEnchantments.MOB_ENCHANTMENTS_DEFERRED.register(modEventBus);
+        ModDataSerializers.DATA_SERIALIZERS.register(modEventBus);
         PROXY = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
     }
 

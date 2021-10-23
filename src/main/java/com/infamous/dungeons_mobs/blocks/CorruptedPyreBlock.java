@@ -1,6 +1,6 @@
 package com.infamous.dungeons_mobs.blocks;
 
-import static com.infamous.dungeons_libraries.capabilities.enchantable.EnchantableHelper.getEnchantableCapability;
+import static com.infamous.dungeons_libraries.capabilities.enchantable.EnchantableHelper.getEnchantableCapabilityLazy;
 
 import java.util.Random;
 
@@ -111,8 +111,8 @@ public class CorruptedPyreBlock extends AbstractFireBlock {
     public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
     	System.out.print("\r\n");
         if (!entityIn.fireImmune()) {
-        	if (getEnchantableCapability(entityIn).isPresent()) {
-                getEnchantableCapability(entityIn).ifPresent(cap -> {
+        	if (getEnchantableCapabilityLazy(entityIn).isPresent()) {
+                getEnchantableCapabilityLazy(entityIn).ifPresent(cap -> {
                     if(!cap.hasEnchantment(ModMobEnchantments.FIRE_TRAIL.get())) {
             entityIn.setRemainingFireTicks(entityIn.getRemainingFireTicks() + 1);
             	if (entityIn.getRemainingFireTicks() == 0) {

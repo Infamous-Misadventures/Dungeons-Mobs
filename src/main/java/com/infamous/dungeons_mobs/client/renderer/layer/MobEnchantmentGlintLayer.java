@@ -23,7 +23,7 @@ public class MobEnchantmentGlintLayer<T extends Entity, M extends EntityModel<T>
     }
 
     public void render(MatrixStack p_225628_1_, IRenderTypeBuffer p_225628_2_, int p_225628_3_, T p_225628_4_, float p_225628_5_, float p_225628_6_, float p_225628_7_, float p_225628_8_, float p_225628_9_, float p_225628_10_) {
-        EnchantableHelper.getEnchantableCapability(p_225628_4_).ifPresent(cap -> {
+        EnchantableHelper.getEnchantableCapabilityLazy(p_225628_4_).ifPresent(cap -> {
             if (cap.hasEnchantment()) {
                 float f = (float) p_225628_4_.tickCount + p_225628_7_;
                 EntityModel<T> entitymodel = this.getParentModel();

@@ -165,5 +165,21 @@
   "itemGroup.dungeonsMobs": "Dungeons - Mobs",
 
   "death.attack.iceCloud": "%1$s was crushed by an Ice Cloud",
-  "death.attack.iceCloud.player": "%1$s was crushed by an Ice Cloud whilst fighting %2$s"
+  "death.attack.iceCloud.player": "%1$s was crushed by an Ice Cloud whilst fighting %2$s",
+
+  "mobEnchantment.dungeons_mobs.burning": "Burning",
+  "mobEnchantment.dungeons_mobs.chilling": "Chilling",
+  "mobEnchantment.dungeons_mobs.deflect": "Deflect",
+  "mobEnchantment.dungeons_mobs.double_damage": "Double Damage",
+  "mobEnchantment.dungeons_mobs.echo": "Echo",
+  "mobEnchantment.dungeons_mobs.fire_trail": "Fire Trail",
+  "mobEnchantment.dungeons_mobs.gravity_pulse": "Gravity Pulse",
+  "mobEnchantment.dungeons_mobs.levitation_shot": "Levitation Shot",
+  "mobEnchantment.dungeons_mobs.multishot": "Multishot",
+  "mobEnchantment.dungeons_mobs.protection": "Protection",
+  "mobEnchantment.dungeons_mobs.quick": "Quick",
+  "mobEnchantment.dungeons_mobs.regeneration": "Regeneration",
+  "mobEnchantment.dungeons_mobs.rush": "Rush",
+  "mobEnchantment.dungeons_mobs.tempo_theft": "Tempo Theft",
+  "mobEnchantment.dungeons_mobs.thorns": "Thorns"
 }
