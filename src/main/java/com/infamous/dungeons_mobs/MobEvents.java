@@ -3,6 +3,7 @@ package com.infamous.dungeons_mobs;
 import com.infamous.dungeons_libraries.capabilities.enchantable.EnchantableHelper;
 import com.infamous.dungeons_libraries.capabilities.enchantable.EnchantableProvider;
 import com.infamous.dungeons_libraries.capabilities.enchantable.IEnchantable;
+import com.infamous.dungeons_libraries.mobenchantments.MobEnchantment;
 import com.infamous.dungeons_libraries.network.MobEnchantmentMessage;
 import com.infamous.dungeons_mobs.capabilities.cloneable.CloneableProvider;
 import com.infamous.dungeons_mobs.capabilities.convertible.ConvertibleHelper;
@@ -143,7 +144,9 @@ public class MobEvents {
         Random random = entity.level.getRandom();
         if(random.nextFloat() <= DungeonsMobsConfig.ENCHANTS.ENCHANT_ON_SPAWN_CHANCE.get() * difficultyAsInt) {
             for(int i = 0; i < random.nextInt(difficultyAsInt+1)+1; i++) {
-                cap.addEnchantment(MobEnchantmentSelector.getRandomMobEnchantment(entity, random));
+                MobEnchantment randomMobEnchantment = MobEnchantmentSelector.getRandomMobEnchantment(entity, random);
+                cap.addEnchantment(randomMobEnchantment);
+                entity.refreshDimensions();
             }
             cap.setSpawned(true);
             NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new MobEnchantmentMessage(entity.getId(), cap.getEnchantments()));
@@ -165,6 +168,7 @@ public class MobEvents {
     private static void addEnchantmentOnSpawnDEVELOPMENT(Entity entity, IEnchantable cap) {
         cap.addEnchantment(HEALS_ALLIES.get());
         NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new MobEnchantmentMessage(entity.getId(), cap.getEnchantments()));
+        entity.refreshDimensions();
         cap.setSpawned(true);
     }
 

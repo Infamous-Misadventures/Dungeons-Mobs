@@ -1,6 +1,5 @@
 package com.infamous.dungeons_mobs.entities.illagers;
 
-import com.infamous.dungeons_libraries.capabilities.enchantable.EnchantableHelper;
 import com.infamous.dungeons_libraries.capabilities.enchantable.IEnchantable;
 import com.infamous.dungeons_libraries.network.MobEnchantmentMessage;
 import com.infamous.dungeons_libraries.utils.AreaOfEffectHelper;

@@ -16,7 +16,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class MobEnchantmentGlintLayer<T extends Entity, M extends EntityModel<T>> extends LayerRenderer<T, M> {
-    private static final ResourceLocation POWER_LOCATION = new ResourceLocation("textures/misc/enchanted_item_glint.png");
+    private static final ResourceLocation NORMAL_LOCATION = new ResourceLocation("textures/misc/enchanted_item_glint.png");
 
     public MobEnchantmentGlintLayer(IEntityRenderer<T, M> p_i226038_1_) {
         super(p_i226038_1_);
@@ -41,6 +41,6 @@ public class MobEnchantmentGlintLayer<T extends Entity, M extends EntityModel<T>
     }
 
     protected ResourceLocation getTextureLocation() {
-        return POWER_LOCATION;
+        return NORMAL_LOCATION;
     }
 }

@@ -45,6 +45,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
@@ -149,19 +150,16 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.BLASTLING.get(), BlastlingRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WATCHLING.get(), WatchlingRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SNARELING.get(), SnarelingRenderer::new);
-
-        mobEnchantmentRenderers();
-
     }
 
-    private static void mobEnchantmentRenderers() {
-        Minecraft.getInstance().getEntityRenderDispatcher().renderers.values().forEach((r) -> {
+    @SubscribeEvent
+    public static void onClientSetupComplete(final FMLLoadCompleteEvent event){
+        Minecraft.getInstance().getEntityRenderDispatcher().renderers.values().forEach(r -> {
             if (r instanceof LivingRenderer) {
                 ((LivingRenderer)r).addLayer(new MobEnchantmentGlintLayer((LivingRenderer)r));
             } else if (r instanceof GeoEntityRenderer) {
                 ((GeoEntityRenderer)r).addLayer(new GeoMobEnchantmentGlintLayer((GeoEntityRenderer)r));
             }
-
         });
 
         Minecraft.getInstance().getEntityRenderDispatcher().getSkinMap().values().forEach((r) -> {
