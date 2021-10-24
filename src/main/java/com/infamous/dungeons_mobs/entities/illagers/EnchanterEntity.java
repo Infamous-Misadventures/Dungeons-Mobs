@@ -151,13 +151,23 @@ public class EnchanterEntity extends SpellcastingIllagerEntity implements IAnima
             this.setEnchantTicks(this.getEnchantTicks() - 1);
         }
 
-        List<MonsterEntity> validEnchantmentTargets = this.enchantmentTargets.stream().filter(monsterEntity -> isValidEnchantmentTarget(monsterEntity)).collect(Collectors.toList());
-        this.enchantmentTargets.stream().filter(monsterEntity -> !validEnchantmentTargets.contains(monsterEntity)).filter(monsterEntity -> monsterEntity.isAlive()).forEach(entity -> {
-            IEnchantable enchantableCapability = getEnchantableCapability(entity);
-            enchantableCapability.clearAllEnchantments();
-            NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new MobEnchantmentMessage(entity.getId(), enchantableCapability.getEnchantments()));
-        });
+        List<MonsterEntity> validEnchantmentTargets = this.enchantmentTargets.stream().filter(this::isValidEnchantmentTarget).collect(Collectors.toList());
+        this.enchantmentTargets.stream().filter(monsterEntity -> !validEnchantmentTargets.contains(monsterEntity)).filter(LivingEntity::isAlive).forEach(this::clearEntityMobEnchantments);
         setEnchantmentTargets(validEnchantmentTargets);
+    }
+
+    @Override
+    public void remove(boolean keepData) {
+        super.remove(keepData);
+        this.enchantmentTargets.forEach(this::clearEntityMobEnchantments);
+        this.setEnchantmentTargets(new ArrayList<>());
+    }
+
+    private void clearEntityMobEnchantments(MonsterEntity entity) {
+        IEnchantable enchantableCapability = getEnchantableCapability(entity);
+        enchantableCapability.clearAllEnchantments();
+        entity.refreshDimensions();
+        NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new MobEnchantmentMessage(entity.getId(), enchantableCapability.getEnchantments()));
     }
 
     private boolean isValidEnchantmentTarget(MonsterEntity monsterEntity) {
@@ -293,6 +303,7 @@ public class EnchanterEntity extends SpellcastingIllagerEntity implements IAnima
                 getEnchantableCapabilityLazy(selectedMonsterEntity).ifPresent(cap -> {
                     cap.addEnchantment(DOUBLE_DAMAGE.get());
                     cap.addEnchantment(PROTECTION.get());
+                    selectedMonsterEntity.refreshDimensions();
                     NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> selectedMonsterEntity), new MobEnchantmentMessage(selectedMonsterEntity.getId(), cap.getEnchantments()));
                 });
                 EnchanterEntity.this.addEnchantmentTarget(selectedMonsterEntity);
