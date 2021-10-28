@@ -2,6 +2,9 @@ package com.infamous.dungeons_mobs;
 
 import com.infamous.dungeons_libraries.client.ClientProxy;
 import com.infamous.dungeons_libraries.network.CommonProxy;
+import com.infamous.dungeons_mobs.capabilities.ancient.properties.Ancient;
+import com.infamous.dungeons_mobs.capabilities.ancient.properties.AncientStorage;
+import com.infamous.dungeons_mobs.capabilities.ancient.properties.IAncient;
 import com.infamous.dungeons_mobs.capabilities.cloneable.Cloneable;
 import com.infamous.dungeons_mobs.capabilities.cloneable.CloneableStorage;
 import com.infamous.dungeons_mobs.capabilities.cloneable.ICloneable;
@@ -90,6 +93,7 @@ public class DungeonsMobs
         CapabilityManager.INSTANCE.register(IConvertible.class, new ConvertibleStorage(), Convertible::new);
         CapabilityManager.INSTANCE.register(ITeamable.class, new TeamableStorage(), Teamable::new);
         CapabilityManager.INSTANCE.register(IMobProps.class, new MobPropsStorage(), MobProps::new);
+        CapabilityManager.INSTANCE.register(IAncient.class, new AncientStorage(), Ancient::new);
         event.enqueueWork(NetworkHandler::init);
     }
 

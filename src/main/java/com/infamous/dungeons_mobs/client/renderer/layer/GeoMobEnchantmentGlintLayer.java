@@ -2,6 +2,8 @@ package com.infamous.dungeons_mobs.client.renderer.layer;
 
 import com.infamous.dungeons_libraries.capabilities.enchantable.EnchantableHelper;
 import com.infamous.dungeons_mobs.DungeonsMobs;
+import com.infamous.dungeons_mobs.capabilities.ancient.properties.AncientHelper;
+import com.infamous.dungeons_mobs.capabilities.ancient.properties.IAncient;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
@@ -10,14 +12,18 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.LazyOptional;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.model.provider.GeoModelProvider;
 import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 
+import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
+
 @OnlyIn(Dist.CLIENT)
 public class GeoMobEnchantmentGlintLayer<T extends Entity & IAnimatable> extends GeoLayerRenderer<T> {
-    private static final ResourceLocation POWER_LOCATION = new ResourceLocation("textures/misc/enchanted_item_glint.png");
+    private static final ResourceLocation NORMAL_LOCATION = new ResourceLocation(MODID, "textures/misc/mob_enchantment_glint.png");
+    private static final ResourceLocation ANCIENT_LOCATION = new ResourceLocation(MODID, "textures/misc/ancient_glint.png");
     private GeoModelProvider<T> modelProvider;
 
     public GeoMobEnchantmentGlintLayer(IGeoRenderer<T> geoRenderer) {
@@ -33,7 +39,7 @@ public class GeoMobEnchantmentGlintLayer<T extends Entity & IAnimatable> extends
                 float f = (float) entity.tickCount + partialTicks;
 //                GeoModelProvider<T> geomodel = (GeoModelProvider<T>) this.getEntityModel();
 //                renderModel(geomodel, this.getTextureLocation(), matrixStack, bufferIn, packedLightIn, entity, partialTicks, 1.0F, 1.0F, 1.0F);
-                RenderType glint =  RenderType.energySwirl(getTextureLocation(), this.xOffset(f), f * 0.01F);
+                RenderType glint =  RenderType.energySwirl(this.getTextureLocationForEnchantment(entity), this.xOffset(f), f * 0.01F);
                 this.getRenderer().render(this.getEntityModel().getModel(this.getEntityModel().getModelLocation(entity)), entity, partialTicks, glint, matrixStack, bufferIn,
                         bufferIn.getBuffer(glint), packedLightIn, OverlayTexture.NO_OVERLAY, 1f, 1f, 1f, 1f);
             }
@@ -48,8 +54,13 @@ public class GeoMobEnchantmentGlintLayer<T extends Entity & IAnimatable> extends
         return p_225634_1_ * 0.01F;
     }
 
-    protected ResourceLocation getTextureLocation() {
-        return POWER_LOCATION;
+
+    protected ResourceLocation getTextureLocationForEnchantment(T entity) {
+        LazyOptional<IAncient> ancientCap = AncientHelper.getAncientCapabilityLazy(entity);
+        if(ancientCap.isPresent() && AncientHelper.getAncientCapability(entity).isAncient()){
+            return ANCIENT_LOCATION;
+        }
+        return NORMAL_LOCATION;
     }
 
     protected ResourceLocation getModel(T entity){

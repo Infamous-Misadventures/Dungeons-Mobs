@@ -5,6 +5,8 @@ import com.infamous.dungeons_libraries.capabilities.enchantable.EnchantableProvi
 import com.infamous.dungeons_libraries.capabilities.enchantable.IEnchantable;
 import com.infamous.dungeons_libraries.mobenchantments.MobEnchantment;
 import com.infamous.dungeons_libraries.network.MobEnchantmentMessage;
+import com.infamous.dungeons_mobs.capabilities.ancient.properties.Ancient;
+import com.infamous.dungeons_mobs.capabilities.ancient.properties.AncientProvider;
 import com.infamous.dungeons_mobs.capabilities.cloneable.CloneableProvider;
 import com.infamous.dungeons_mobs.capabilities.convertible.ConvertibleHelper;
 import com.infamous.dungeons_mobs.capabilities.convertible.ConvertibleProvider;
@@ -113,6 +115,9 @@ public class MobEvents {
         if (event.getObject() instanceof LivingEntity) {
             event.addCapability(new ResourceLocation(DungeonsMobs.MODID, "dungeons_mobs_mob_props"), new MobPropsProvider());
         }
+        if (event.getObject() instanceof LivingEntity) {
+            event.addCapability(new ResourceLocation(DungeonsMobs.MODID, "ancient"), new AncientProvider());
+        }
     }
 
     private static boolean isCloneableEntity(Entity object) {
@@ -122,55 +127,6 @@ public class MobEvents {
         return false;
     }
 
-    @SubscribeEvent
-    public static void enchantOnEntityJoinWorld(EntityJoinWorldEvent event) {
-        Entity entity = event.getEntity();
-        if (!entity.level.isClientSide && EnchantableHelper.isEnchantableEntity(entity) && isSpawnEnchantableEntity(entity) && DungeonsMobsConfig.ENCHANTS.ENABLE_ENCHANTS_ON_SPAWN.get()) {
-            getEnchantableCapabilityLazy(entity).ifPresent(cap -> {
-                if(!cap.isSpawned()) {
-                    addEnchantmentOnSpawn(entity, cap);
-//                    addEnchantmentOnSpawnDEVELOPMENT(entity, cap);
-                }
-            });
-        }
-    }
-
-    private static boolean isSpawnEnchantableEntity(Entity entity) {
-        return !(entity instanceof PlayerEntity) && !DungeonsMobsConfig.ENCHANTS.ENCHANT_ON_SPAWN_EXCLUSION_MOBS.get().contains(entity.getType().getRegistryName().toString());
-    }
-
-    private static void addEnchantmentOnSpawn(Entity entity, IEnchantable cap) {
-        int difficultyAsInt = entity.level.getDifficulty().getId();
-        Random random = entity.level.getRandom();
-        if(random.nextFloat() <= DungeonsMobsConfig.ENCHANTS.ENCHANT_ON_SPAWN_CHANCE.get() * difficultyAsInt) {
-            for(int i = 0; i < random.nextInt(difficultyAsInt+1)+1; i++) {
-                MobEnchantment randomMobEnchantment = MobEnchantmentSelector.getRandomMobEnchantment(entity, random);
-                cap.addEnchantment(randomMobEnchantment);
-                entity.refreshDimensions();
-            }
-            cap.setSpawned(true);
-            NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new MobEnchantmentMessage(entity.getId(), cap.getEnchantments()));
-//            createCopy(entity);
-//            createCopy(entity);
-        }
-    }
-
-    private static void createCopy(Entity entity) {
-        Entity copy = entity.getType().create(entity.level);
-        CompoundNBT compoundNBT = new CompoundNBT();
-        compoundNBT = entity.saveWithoutId(compoundNBT);
-        UUID uuid = copy.getUUID();
-        copy.load(compoundNBT);
-        copy.setUUID(uuid);
-        entity.level.addFreshEntity(copy);
-    }
-
-    private static void addEnchantmentOnSpawnDEVELOPMENT(Entity entity, IEnchantable cap) {
-        cap.addEnchantment(HEALS_ALLIES.get());
-        NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new MobEnchantmentMessage(entity.getId(), cap.getEnchantments()));
-        entity.refreshDimensions();
-        cap.setSpawned(true);
-    }
 
     @SubscribeEvent
     public static void onRenderNamePlateEvent(RenderNameplateEvent event){

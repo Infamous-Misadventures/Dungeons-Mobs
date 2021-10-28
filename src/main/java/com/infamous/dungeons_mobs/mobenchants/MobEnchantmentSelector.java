@@ -1,5 +1,6 @@
 package com.infamous.dungeons_mobs.mobenchants;
 
+import com.infamous.dungeons_libraries.capabilities.enchantable.EnchantableHelper;
 import com.infamous.dungeons_libraries.mobenchantments.MobEnchantment;
 import com.infamous.dungeons_libraries.mobenchantments.MobEnchantmentHelper;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
@@ -18,6 +19,7 @@ public class MobEnchantmentSelector {
                 .stream()
                 .filter(MobEnchantmentSelector::isDisabled)
                 .filter(mobEnchantment -> MobEnchantmentHelper.hasType(mobEnchantment, MobEnchantmentHelper.getPossibleTypes(entity)))
+                .filter(mobEnchantment -> !EnchantableHelper.getEnchantableCapability(entity).hasEnchantment(mobEnchantment))
                 .collect(Collectors.toList());
         return MobEnchantmentHelper.getRandomMobEnchantment(random, mobEnchantments);
     }
