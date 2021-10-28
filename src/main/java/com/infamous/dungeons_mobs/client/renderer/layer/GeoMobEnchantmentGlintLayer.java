@@ -34,8 +34,9 @@ public class GeoMobEnchantmentGlintLayer<T extends Entity & IAnimatable> extends
 //                GeoModelProvider<T> geomodel = (GeoModelProvider<T>) this.getEntityModel();
 //                renderModel(geomodel, this.getTextureLocation(), matrixStack, bufferIn, packedLightIn, entity, partialTicks, 1.0F, 1.0F, 1.0F);
                 RenderType glint =  RenderType.energySwirl(getTextureLocation(), this.xOffset(f), f * 0.01F);
+                float intensity = cap.getEnchantments().size() < 3 ? ((float)cap.getEnchantments().size() / 3) : 3;
                 this.getRenderer().render(this.getEntityModel().getModel(this.getEntityModel().getModelLocation(entity)), entity, partialTicks, glint, matrixStack, bufferIn,
-                        bufferIn.getBuffer(glint), packedLightIn, OverlayTexture.NO_OVERLAY, 1f, 1f, 1f, 1f);
+                        bufferIn.getBuffer(glint), packedLightIn, OverlayTexture.NO_OVERLAY, intensity, intensity, intensity, intensity);
             }
         });
     }
