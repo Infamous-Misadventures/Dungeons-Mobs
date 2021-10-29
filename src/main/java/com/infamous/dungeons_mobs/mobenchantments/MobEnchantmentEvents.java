@@ -14,6 +14,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ArmorStandEntity;
+import net.minecraft.entity.item.BoatEntity;
+import net.minecraft.entity.item.minecart.MinecartEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
@@ -44,7 +46,7 @@ public class MobEnchantmentEvents {
         }
     }
     private static boolean isSpawnEnchantableEntity(Entity entity) {
-        return !(entity instanceof PlayerEntity) && !(entity instanceof ArmorStandEntity) && !DungeonsMobsConfig.ENCHANTS.ENCHANT_ON_SPAWN_EXCLUSION_MOBS.get().contains(entity.getType().getRegistryName().toString());
+        return !(entity instanceof PlayerEntity) && !(entity instanceof ArmorStandEntity) && !(entity instanceof BoatEntity) && !(entity instanceof MinecartEntity) && !DungeonsMobsConfig.ENCHANTS.ENCHANT_ON_SPAWN_EXCLUSION_MOBS.get().contains(entity.getType().getRegistryName().toString());
     }
 
     private static void addEnchantmentOnSpawn(Entity entity, IEnchantable cap) {
