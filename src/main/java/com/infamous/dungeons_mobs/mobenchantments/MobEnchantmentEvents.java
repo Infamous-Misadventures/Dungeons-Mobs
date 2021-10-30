@@ -7,6 +7,7 @@ import com.infamous.dungeons_libraries.network.MobEnchantmentMessage;
 import com.infamous.dungeons_mobs.capabilities.ancient.properties.AncientHelper;
 import com.infamous.dungeons_mobs.capabilities.ancient.properties.IAncient;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
+import com.infamous.dungeons_mobs.data.AncientDataHelper;
 import com.infamous.dungeons_mobs.mobenchants.MobEnchantmentSelector;
 import com.infamous.dungeons_mobs.network.NetworkHandler;
 import com.infamous.dungeons_mobs.network.message.AncientMessage;
@@ -16,8 +17,10 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ArmorStandEntity;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.item.minecart.MinecartEntity;
+import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -39,8 +42,8 @@ public class MobEnchantmentEvents {
         if (!entity.level.isClientSide && EnchantableHelper.isEnchantableEntity(entity) && isSpawnEnchantableEntity(entity) && DungeonsMobsConfig.ENCHANTS.ENABLE_ENCHANTS_ON_SPAWN.get()) {
             getEnchantableCapabilityLazy(entity).ifPresent(cap -> {
                 if(!cap.isSpawned()) {
-                    addEnchantmentOnSpawn(entity, cap);
-//                    addEnchantmentOnSpawnDEVELOPMENT(entity, cap);
+//                    addEnchantmentOnSpawn(entity, cap);
+                    addEnchantmentOnSpawnDEVELOPMENT(entity, cap);
                 }
             });
         }
@@ -70,8 +73,8 @@ public class MobEnchantmentEvents {
         }
         cap.setSpawned(true);
         NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new MobEnchantmentMessage(entity.getId(), cap.getEnchantments()));
-            createCopy(entity);
-            createCopy(entity);
+        createCopy(entity);
+        createCopy(entity);
     }
 
     private static void makeAncient(Entity entity, IEnchantable cap, Random random, int totalNumberOfEnchants) {
@@ -84,6 +87,8 @@ public class MobEnchantmentEvents {
             IAncient ancientCapability = AncientHelper.getAncientCapability(entity);
             ancientCapability.setAncient(true);
             cap.setSpawned(true);
+            entity.setCustomName(new StringTextComponent(AncientDataHelper.getAncientName((LivingEntity) entity)));
+            entity.setCustomNameVisible(true);
             NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new MobEnchantmentMessage(entity.getId(), cap.getEnchantments()));
             NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new AncientMessage(entity.getId(), true));
             createMinions();
@@ -104,9 +109,13 @@ public class MobEnchantmentEvents {
     }
 
     private static void addEnchantmentOnSpawnDEVELOPMENT(Entity entity, IEnchantable cap) {
-        cap.addEnchantment(HEALS_ALLIES.get());
-        NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new MobEnchantmentMessage(entity.getId(), cap.getEnchantments()));
-        entity.refreshDimensions();
-        cap.setSpawned(true);
+        if(entity instanceof ZombieEntity){
+            makeAncient(entity, cap, ((ZombieEntity) entity).getRandom(), 4);
+        }else {
+            /*cap.addEnchantment(HEALS_ALLIES.get());
+            NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new MobEnchantmentMessage(entity.getId(), cap.getEnchantments()));
+            entity.refreshDimensions();
+            cap.setSpawned(true);*/
+        }
     }
 }
