@@ -1,12 +1,6 @@
 package com.infamous.dungeons_mobs;
 
-import com.infamous.dungeons_libraries.capabilities.enchantable.EnchantableHelper;
-import com.infamous.dungeons_libraries.capabilities.enchantable.EnchantableProvider;
-import com.infamous.dungeons_libraries.capabilities.enchantable.IEnchantable;
-import com.infamous.dungeons_libraries.mobenchantments.MobEnchantment;
-import com.infamous.dungeons_libraries.network.MobEnchantmentMessage;
-import com.infamous.dungeons_mobs.capabilities.ancient.properties.Ancient;
-import com.infamous.dungeons_mobs.capabilities.ancient.properties.AncientProvider;
+import com.infamous.dungeons_mobs.capabilities.ancient.AncientProvider;
 import com.infamous.dungeons_mobs.capabilities.cloneable.CloneableProvider;
 import com.infamous.dungeons_mobs.capabilities.convertible.ConvertibleHelper;
 import com.infamous.dungeons_mobs.capabilities.convertible.ConvertibleProvider;
@@ -25,8 +19,6 @@ import com.infamous.dungeons_mobs.entities.undead.FrozenZombieEntity;
 import com.infamous.dungeons_mobs.goals.AvoidBaseEntityGoal;
 import com.infamous.dungeons_mobs.goals.SmartTridentAttackGoal;
 import com.infamous.dungeons_mobs.mixin.GoalSelectorAccessor;
-import com.infamous.dungeons_mobs.mobenchants.MobEnchantmentSelector;
-import com.infamous.dungeons_mobs.network.NetworkHandler;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.entity.ai.goal.RangedAttackGoal;
@@ -34,7 +26,6 @@ import net.minecraft.entity.item.ArmorStandEntity;
 import net.minecraft.entity.monster.DrownedEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.SnowballEntity;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.tags.FluidTags;
@@ -43,10 +34,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
-import net.minecraftforge.client.event.RenderNameplateEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.EntityMobGriefingEvent;
@@ -55,18 +44,13 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
-import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.network.PacketDistributor;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
-import static com.infamous.dungeons_libraries.capabilities.enchantable.EnchantableHelper.getEnchantableCapabilityLazy;
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
-import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.*;
 
 @Mod.EventBusSubscriber(modid = MODID)
 public class MobEvents {
@@ -125,24 +109,6 @@ public class MobEvents {
             return true;
         }
         return false;
-    }
-
-
-    @SubscribeEvent
-    public static void onRenderNamePlateEvent(RenderNameplateEvent event){
-        Entity entity = event.getEntity();
-        IFormattableTextComponent copy = event.getContent().copy();
-        StringBuilder enchantmentString = new StringBuilder();
-        getEnchantableCapabilityLazy(entity).ifPresent(cap -> {
-            if(cap.hasEnchantment()){
-                enchantmentString.append(" (");
-                enchantmentString.append(cap.getEnchantments().stream().map(mobEnchantment -> mobEnchantment.getRegistryName().getPath()).collect(Collectors.joining(", ")));
-                enchantmentString.append(")");
-                event.setResult(Event.Result.ALLOW);
-            }
-        });
-        copy.append(enchantmentString.toString());
-        event.setContent(copy);
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)

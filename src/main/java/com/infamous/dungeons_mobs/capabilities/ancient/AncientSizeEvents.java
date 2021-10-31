@@ -1,4 +1,4 @@
-package com.infamous.dungeons_mobs.capabilities.ancient.properties;
+package com.infamous.dungeons_mobs.capabilities.ancient;
 
 
 import com.infamous.dungeons_libraries.DungeonsLibraries;
@@ -13,8 +13,6 @@ import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import static com.infamous.dungeons_libraries.capabilities.enchantable.EnchantableHelper.getEnchantableCapabilityLazy;
-
 @Mod.EventBusSubscriber(modid = DungeonsLibraries.MODID)
 public class AncientSizeEvents {
     @SubscribeEvent
@@ -23,9 +21,9 @@ public class AncientSizeEvents {
 
         AncientHelper.getAncientCapabilityLazy(entity).ifPresent(cap -> {
             if (cap.isAncient()) {
-                float totalWidth = entity.getDimensions(entity.getPose()).width * 1.1F;
-                float totalHeight = entity.getDimensions(entity.getPose()).height * 1.1F;
-                event.setNewEyeHeight(entity.getEyeHeight(entity.getPose()) * 1.1F);
+                float totalWidth = event.getNewSize().width * 1.2F;
+                float totalHeight = event.getNewSize().height * 1.2F;
+                event.setNewEyeHeight(event.getNewEyeHeight() * 1.2F);
                 event.setNewSize(EntitySize.fixed(totalWidth, totalHeight));
             }
         });

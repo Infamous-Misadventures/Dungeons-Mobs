@@ -4,15 +4,17 @@ import com.infamous.dungeons_libraries.capabilities.enchantable.EnchantableHelpe
 import com.infamous.dungeons_libraries.capabilities.enchantable.IEnchantable;
 import com.infamous.dungeons_libraries.mobenchantments.MobEnchantment;
 import com.infamous.dungeons_libraries.network.MobEnchantmentMessage;
-import com.infamous.dungeons_mobs.capabilities.ancient.properties.AncientHelper;
-import com.infamous.dungeons_mobs.capabilities.ancient.properties.IAncient;
+import com.infamous.dungeons_mobs.capabilities.ancient.AncientHelper;
+import com.infamous.dungeons_mobs.capabilities.ancient.IAncient;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.data.AncientDataHelper;
+import com.infamous.dungeons_mobs.data.MobAncientData;
+import com.infamous.dungeons_mobs.data.UniqueAncientData;
 import com.infamous.dungeons_mobs.mobenchants.MobEnchantmentSelector;
 import com.infamous.dungeons_mobs.network.NetworkHandler;
 import com.infamous.dungeons_mobs.network.message.AncientMessage;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ArmorStandEntity;
 import net.minecraft.entity.item.BoatEntity;
@@ -20,18 +22,22 @@ import net.minecraft.entity.item.minecart.MinecartEntity;
 import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static com.infamous.dungeons_libraries.capabilities.enchantable.EnchantableHelper.getEnchantableCapabilityLazy;
+import static com.infamous.dungeons_libraries.mobenchantments.MobEnchantmentsRegistry.MOB_ENCHANTMENTS;
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
-import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.HEALS_ALLIES;
 
 @Mod.EventBusSubscriber(modid = MODID)
 public class MobEnchantmentEvents {
@@ -79,23 +85,80 @@ public class MobEnchantmentEvents {
 
     private static void makeAncient(Entity entity, IEnchantable cap, Random random, int totalNumberOfEnchants) {
         if(entity instanceof LivingEntity) {
-            for (int i = 0; i < totalNumberOfEnchants; i++) {
-                MobEnchantment randomMobEnchantment = MobEnchantmentSelector.getRandomMobEnchantment(entity, random);
-                cap.addEnchantment(randomMobEnchantment);
-                entity.refreshDimensions();
+            MobAncientData mobAncientData = AncientDataHelper.getMobAncientData(entity.getType().getRegistryName());
+            if(mobAncientData.getUniques().size() > 0){
+                generateUniqueAncient(entity, cap, random, totalNumberOfEnchants, mobAncientData);
+            }else {
+                generateRandomAncient(entity, cap, random, totalNumberOfEnchants, mobAncientData);
             }
-            IAncient ancientCapability = AncientHelper.getAncientCapability(entity);
-            ancientCapability.setAncient(true);
-            cap.setSpawned(true);
-            entity.setCustomName(new StringTextComponent(AncientDataHelper.getAncientName((LivingEntity) entity)));
-            entity.setCustomNameVisible(true);
-            NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new MobEnchantmentMessage(entity.getId(), cap.getEnchantments()));
-            NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new AncientMessage(entity.getId(), true));
-            createMinions();
         }
     }
 
-    private static void createMinions() {
+    private static void generateUniqueAncient(Entity entity, IEnchantable cap, Random random, int totalNumberOfEnchants, MobAncientData mobAncientData) {
+        UniqueAncientData uniqueAncientData = mobAncientData.getUniques().get(random.nextInt(mobAncientData.getUniques().size()));
+        IAncient ancientCapability = AncientHelper.getAncientCapability(entity);
+        ancientCapability.setAncient(true);
+        cap.setSpawned(true);
+        uniqueAncientData.getMobEnchantments().forEach(resourceLocation -> {
+            MobEnchantment mobEnchantment = MOB_ENCHANTMENTS.getValue(resourceLocation);
+            cap.addEnchantment(mobEnchantment);
+        });
+        entity.refreshDimensions();
+        StringTextComponent displayName = new StringTextComponent(uniqueAncientData.getName());
+        entity.setCustomName(displayName);
+        entity.setCustomNameVisible(true);
+        ancientCapability.initiateBossBar(displayName);
+        EntityType<?> minionEntityType = ForgeRegistries.ENTITIES.getValue(uniqueAncientData.getMinion());
+        for (int i = 0; i < uniqueAncientData.getMinionCount(); i++){
+            Entity minion = minionEntityType.create(entity.level);
+            minion.setPos(entity.position().x, entity.position().y, entity.position().z);
+            getEnchantableCapabilityLazy(minion).ifPresent(minionCap -> {
+                uniqueAncientData.getMinionMobEnchantments().forEach(resourceLocation -> {
+                    MobEnchantment mobEnchantment = MOB_ENCHANTMENTS.getValue(resourceLocation);
+                    minionCap.addEnchantment(mobEnchantment);
+                });
+                minionCap.setSpawned(true);
+                minion.refreshDimensions();
+                NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> minion), new MobEnchantmentMessage(minion.getId(), minionCap.getEnchantments()));
+            });
+            entity.level.addFreshEntity(minion);
+        }
+    }
+
+    private static void generateRandomAncient(Entity entity, IEnchantable cap, Random random, int totalNumberOfEnchants, MobAncientData mobAncientData) {
+        for (int i = 0; i < totalNumberOfEnchants; i++) {
+            MobEnchantment randomMobEnchantment = MobEnchantmentSelector.getRandomMobEnchantment(entity, random);
+            cap.addEnchantment(randomMobEnchantment);
+            entity.refreshDimensions();
+        }
+        IAncient ancientCapability = AncientHelper.getAncientCapability(entity);
+        ancientCapability.setAncient(true);
+        cap.setSpawned(true);
+        StringTextComponent displayName = new StringTextComponent(AncientDataHelper.getAncientName((LivingEntity) entity));
+        entity.setCustomName(displayName);
+        entity.setCustomNameVisible(true);
+        ancientCapability.initiateBossBar(displayName);
+        NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new MobEnchantmentMessage(entity.getId(), cap.getEnchantments()));
+        NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new AncientMessage(entity.getId(), true));
+        createMinions((LivingEntity) entity);
+    }
+
+    private static void createMinions(LivingEntity entity) {
+        List<ResourceLocation> minions = AncientDataHelper.getMobAncientData(entity.getType().getRegistryName()).getMinions();
+        List<? extends EntityType<?>> entityTypes = minions.stream().map(ForgeRegistries.ENTITIES::getValue).collect(Collectors.toList());
+        EntityType<?> entityType = entityTypes.get(entity.getRandom().nextInt(entityTypes.size()));
+        MobEnchantment minionMobEnchantment = MobEnchantmentSelector.getRandomMobEnchantment(entityType.create(entity.level), entity.getRandom());
+        for(int i = 0; i < entity.getRandom().nextInt(4) + 3; i++) {
+            Entity minion = entityType.create(entity.level);
+            minion.setPos(entity.position().x, entity.position().y, entity.position().z);
+            getEnchantableCapabilityLazy(minion).ifPresent(cap -> {
+                cap.addEnchantment(minionMobEnchantment);
+                cap.setSpawned(true);
+                minion.refreshDimensions();
+                NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> minion), new MobEnchantmentMessage(minion.getId(), cap.getEnchantments()));
+            });
+            entity.level.addFreshEntity(minion);
+        }
     }
 
     private static void createCopy(Entity entity) {

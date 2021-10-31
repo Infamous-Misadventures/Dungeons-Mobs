@@ -1,4 +1,14 @@
 {
   "adjectives": ["The Ancient", "The Forgotten", "The Grim", "The Mindless", "The Damned", "The Rotten", "The Aimless", "The Shambling"],
-  "nouns": ["Presence", "Husk", "Corpse", "Shade", "Wight"]
+  "nouns": ["Presence", "Husk", "Corpse", "Shade", "Wight"],
+  "minions": ["minecraft:zombie", "minecraft:skeleton", "dungeons_mobs:necromancer"],
+  "uniques": [
+    {
+      "name": "Grim Guardian",
+      "mob_enchantments": ["dungeons_mobs:echo", "dungeons_mobs:protection", "dungeons_mobs:quick", "dungeons_mobs:radiance"],
+      "minion": "dungeons_mobs:necromancer",
+      "minion_mob_enchantments": ["dungeons_mobs:heals_allies"],
+      "minion_count": 6
+    }
+  ]
 }

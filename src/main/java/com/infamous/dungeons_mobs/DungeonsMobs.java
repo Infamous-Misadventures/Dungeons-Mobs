@@ -2,9 +2,9 @@ package com.infamous.dungeons_mobs;
 
 import com.infamous.dungeons_libraries.client.ClientProxy;
 import com.infamous.dungeons_libraries.network.CommonProxy;
-import com.infamous.dungeons_mobs.capabilities.ancient.properties.Ancient;
-import com.infamous.dungeons_mobs.capabilities.ancient.properties.AncientStorage;
-import com.infamous.dungeons_mobs.capabilities.ancient.properties.IAncient;
+import com.infamous.dungeons_mobs.capabilities.ancient.Ancient;
+import com.infamous.dungeons_mobs.capabilities.ancient.AncientStorage;
+import com.infamous.dungeons_mobs.capabilities.ancient.IAncient;
 import com.infamous.dungeons_mobs.capabilities.cloneable.Cloneable;
 import com.infamous.dungeons_mobs.capabilities.cloneable.CloneableStorage;
 import com.infamous.dungeons_mobs.capabilities.cloneable.ICloneable;
@@ -36,6 +36,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemGroup;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -73,6 +74,7 @@ public class DungeonsMobs
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.addListener(this::onAddReloadListeners);
 
         GeckoLib.initialize();
 
@@ -116,5 +118,10 @@ public class DungeonsMobs
         if(DungeonsMobsConfig.COMMON.ENABLE_STRONGER_HUSKS.get()){
             EntityType.HUSK.dimensions = EntitySize.scalable(0.6F * 1.2F, 1.95F * 1.2F);
         }
+    }
+
+    void onAddReloadListeners(AddReloadListenerEvent event)
+    {
+        event.addListener(ANCIENT_DATA);
     }
 }

@@ -1,8 +1,6 @@
 package com.infamous.dungeons_mobs.network.message;
 
-import com.infamous.dungeons_libraries.mobenchantments.MobEnchantment;
-import com.infamous.dungeons_libraries.mobenchantments.MobEnchantmentsRegistry;
-import com.infamous.dungeons_mobs.capabilities.ancient.properties.AncientHelper;
+import com.infamous.dungeons_mobs.capabilities.ancient.AncientHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -10,11 +8,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.NetworkEvent;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Supplier;
-
-import static com.infamous.dungeons_libraries.capabilities.enchantable.EnchantableHelper.getEnchantableCapabilityLazy;
 
 public class AncientMessage {
     private int entityId;

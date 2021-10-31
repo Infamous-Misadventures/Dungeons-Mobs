@@ -1,4 +1,4 @@
-package com.infamous.dungeons_mobs.capabilities.ancient.properties;
+package com.infamous.dungeons_mobs.capabilities.ancient;
 
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
