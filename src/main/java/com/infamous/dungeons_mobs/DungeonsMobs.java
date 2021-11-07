@@ -22,6 +22,7 @@ import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.data.AncientDataHelper;
 import com.infamous.dungeons_mobs.data.MobAncientData;
+import com.infamous.dungeons_mobs.data.MobEnchantmentAncientData;
 import com.infamous.dungeons_mobs.data.util.MergeableCodecDataManager;
 import com.infamous.dungeons_mobs.items.GroupDungeonsMobs;
 import com.infamous.dungeons_mobs.mod.*;
@@ -61,8 +62,6 @@ public class DungeonsMobs
 
     public static CommonProxy PROXY;
 
-    public static final MergeableCodecDataManager<MobAncientData, MobAncientData> ANCIENT_DATA = new MergeableCodecDataManager<>("ancient/mob_ancient_data", DungeonsMobs.LOGGER, MobAncientData.CODEC, AncientDataHelper::merger);
-
     public DungeonsMobs() {
         // Register the setup method for modloading
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, DungeonsMobsConfig.COMMON_SPEC, "dungeons-mobs-common.toml");
@@ -74,7 +73,6 @@ public class DungeonsMobs
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
-        MinecraftForge.EVENT_BUS.addListener(this::onAddReloadListeners);
 
         GeckoLib.initialize();
 
@@ -118,10 +116,5 @@ public class DungeonsMobs
         if(DungeonsMobsConfig.COMMON.ENABLE_STRONGER_HUSKS.get()){
             EntityType.HUSK.dimensions = EntitySize.scalable(0.6F * 1.2F, 1.95F * 1.2F);
         }
-    }
-
-    void onAddReloadListeners(AddReloadListenerEvent event)
-    {
-        event.addListener(ANCIENT_DATA);
     }
 }

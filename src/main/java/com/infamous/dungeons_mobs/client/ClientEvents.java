@@ -15,6 +15,7 @@ import com.infamous.dungeons_mobs.client.renderer.jungle.QuickGrowingVineRendere
 import com.infamous.dungeons_mobs.client.renderer.jungle.WhispererRenderer;
 import com.infamous.dungeons_mobs.client.renderer.layer.GeoMobEnchantmentGlintLayer;
 import com.infamous.dungeons_mobs.client.renderer.layer.MobEnchantmentGlintLayer;
+import com.infamous.dungeons_mobs.client.renderer.layers.SkeletonEyesLayer;
 import com.infamous.dungeons_mobs.client.renderer.piglin.CustomPiglinRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.*;
 import com.infamous.dungeons_mobs.client.renderer.redstone.RedstoneCubeRenderer;
@@ -33,6 +34,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.entity.LivingRenderer;
+import net.minecraft.client.renderer.entity.SkeletonRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.DyeColor;
@@ -166,6 +168,9 @@ public class ClientEvents {
                 ((LivingRenderer)r).addLayer(new MobEnchantmentGlintLayer((LivingRenderer)r));
             } else if (r instanceof GeoEntityRenderer) {
                 ((GeoEntityRenderer)r).addLayer(new GeoMobEnchantmentGlintLayer((GeoEntityRenderer)r));
+            }
+            if(r instanceof SkeletonRenderer){
+                ((SkeletonRenderer)r).addLayer(new SkeletonEyesLayer<>((SkeletonRenderer)r));
             }
         });
 
