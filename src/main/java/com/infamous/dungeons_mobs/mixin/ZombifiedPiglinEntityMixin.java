@@ -32,7 +32,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import javax.annotation.Nullable;
 
 @Mixin(ZombifiedPiglinEntity.class)
-public abstract class ZombifiedPiglinEntityMixin extends ZombieEntity implements ISmartCrossbowUser {
+public abstract class ZombifiedPiglinEntityMixin extends ZombieEntity implements ISmartCrossbowUser, ICrossbowUser {
     private static final DataParameter<Boolean> DATA_IS_CROSSBOW_USER = EntityDataManager.defineId(ZombifiedPiglinEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> DATA_IS_CHARGING_CROSSBOW = EntityDataManager.defineId(ZombifiedPiglinEntity.class, DataSerializers.BOOLEAN);
 
@@ -43,7 +43,7 @@ public abstract class ZombifiedPiglinEntityMixin extends ZombieEntity implements
     @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ai/goal/GoalSelector;addGoal(ILnet/minecraft/entity/ai/goal/Goal;)V"), method = "addBehaviourGoals")
     private void addCustomGoal(GoalSelector goalSelector, int priority, Goal originalGoal){
         if(goalSelector == this.goalSelector && priority == 2 && originalGoal instanceof ZombieAttackGoal){
-            goalSelector.addGoal(priority, new SmartZombieAttackGoal(this, 1.0D, false));
+            goalSelector.addGoal(priority, (Goal)(Object)new SmartZombieAttackGoal(this, 1.0D, false));
             goalSelector.addGoal(priority, new RangedCrossbowAttackGoal<>(this, 1.0D, 8.0F));
         } else{
             goalSelector.addGoal(priority, originalGoal);

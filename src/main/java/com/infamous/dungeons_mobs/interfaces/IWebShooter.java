@@ -1,23 +1,17 @@
 package com.infamous.dungeons_mobs.interfaces;
 
 import com.infamous.dungeons_mobs.entities.projectiles.CobwebProjectileEntity;
-import net.minecraft.block.WebBlock;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
-public interface IWebShooter extends IRangedAttackMob, ITrapsTarget {
+public interface IWebShooter extends ITrapsTarget {
 
     boolean isWebShooting();
 
     void setWebShooting(boolean webShooting);
 
-    default void shootWeb(MobEntity webShooter, LivingEntity target){
+    static void shootWeb(MobEntity webShooter, LivingEntity target){
         double xDifference = target.getX() - webShooter.getX();
         double yDifference = target.getY(0.5D) - webShooter.getY(0.5D);
         double zDifference = target.getZ() - webShooter.getZ();

@@ -5,11 +5,11 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.RangedAttackGoal;
 
-public class RangedWebAttackGoal<T extends MobEntity & IWebShooter> extends RangedAttackGoal {
-    private T webShooter;
+public class RangedWebAttackGoal<T extends MobEntity & IWebShooter> extends SimpleRangedAttackGoal<T> {
+    private final T webShooter;
 
     public RangedWebAttackGoal(T attacker, double movespeed, int maxAttackTime, float maxAttackDistanceIn) {
-        super(attacker, movespeed, maxAttackTime, maxAttackDistanceIn);
+        super(attacker, (is) -> true, IWebShooter::shootWeb, movespeed, maxAttackTime, maxAttackDistanceIn);
         this.webShooter = attacker;
     }
 

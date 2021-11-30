@@ -5,6 +5,7 @@ import com.infamous.dungeons_mobs.goals.RangedWebAttackGoal;
 import com.infamous.dungeons_mobs.interfaces.IWebShooter;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.LeapAtTargetGoal;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.monster.MonsterEntity;
@@ -22,7 +23,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class SpiderEntityMixin extends MonsterEntity implements IWebShooter {
 
     private static final DataParameter<Boolean> WEBSHOOTING = EntityDataManager.defineId(SpiderEntity.class, DataSerializers.BOOLEAN);
-    private RangedWebAttackGoal<SpiderEntityMixin> rangedWebAttackGoal;
+    private RangedWebAttackGoal<?> rangedWebAttackGoal;
     private LeapAtTargetGoal leapAtTargetGoal;
     private MeleeAttackGoal meleeAttackGoal;
 
@@ -83,10 +84,10 @@ public abstract class SpiderEntityMixin extends MonsterEntity implements IWebSho
                 if(this.leapAtTargetGoal != null){
                     this.goalSelector.removeGoal(this.leapAtTargetGoal);
                 }
-                this.goalSelector.addGoal(4, this.rangedWebAttackGoal);
+                this.goalSelector.addGoal(4, (Goal)(Object)this.rangedWebAttackGoal);
             } else{
                 //DungeonsMobs.LOGGER.debug("Changing Spider {} to melee AI!", this);
-                this.goalSelector.removeGoal(this.rangedWebAttackGoal);
+                this.goalSelector.removeGoal((Goal)(Object)this.rangedWebAttackGoal);
                 if(this.leapAtTargetGoal != null){
                     this.goalSelector.addGoal(3, this.leapAtTargetGoal);
                 }
@@ -105,8 +106,4 @@ public abstract class SpiderEntityMixin extends MonsterEntity implements IWebSho
         return this.entityData.get(WEBSHOOTING);
     }
 
-    @Override
-    public void performRangedAttack(LivingEntity target, float distanceFactor) {
-        this.shootWeb(this, target);
-    }
 }
