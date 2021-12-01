@@ -169,9 +169,9 @@ public class ClientEvents {
             } else if (r instanceof GeoEntityRenderer) {
                 ((GeoEntityRenderer)r).addLayer(new GeoMobEnchantmentGlintLayer((GeoEntityRenderer)r));
             }
-            if(r instanceof SkeletonRenderer){
-                ((SkeletonRenderer)r).addLayer(new SkeletonEyesLayer<>((SkeletonRenderer)r));
-            }
+//            if(r instanceof SkeletonRenderer){
+//                ((SkeletonRenderer)r).addLayer(new SkeletonEyesLayer<>((SkeletonRenderer)r));
+//            }
         });
 
         Minecraft.getInstance().getEntityRenderDispatcher().getSkinMap().values().forEach((r) -> {

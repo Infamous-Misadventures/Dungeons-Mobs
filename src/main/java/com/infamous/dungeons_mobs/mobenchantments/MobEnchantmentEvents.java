@@ -48,8 +48,8 @@ public class MobEnchantmentEvents {
         if (!entity.level.isClientSide && EnchantableHelper.isEnchantableEntity(entity) && isSpawnEnchantableEntity(entity) && DungeonsMobsConfig.ENCHANTS.ENABLE_ENCHANTS_ON_SPAWN.get()) {
             getEnchantableCapabilityLazy(entity).ifPresent(cap -> {
                 if(!cap.isSpawned()) {
-//                    addEnchantmentOnSpawn(entity, cap);
-                    addEnchantmentOnSpawnDEVELOPMENT(entity, cap);
+                    addEnchantmentOnSpawn(entity, cap);
+//                    addEnchantmentOnSpawnDEVELOPMENT(entity, cap);
                 }
             });
         }
@@ -63,11 +63,11 @@ public class MobEnchantmentEvents {
         Random random = entity.level.getRandom();
         if(random.nextFloat() <= DungeonsMobsConfig.ENCHANTS.ENCHANT_ON_SPAWN_CHANCE.get() * difficultyAsInt) {
             int totalNumberOfEnchants = (int) (random.nextGaussian() * difficultyAsInt+1) + 1;
-            if(totalNumberOfEnchants < 4) {
+//            if(totalNumberOfEnchants < 4) {
                 makeEnchanted(entity, cap, random, totalNumberOfEnchants);
-            }else{
-                makeAncient(entity, cap, random, totalNumberOfEnchants);
-            }
+//            }else{
+//                makeAncient(entity, cap, random, totalNumberOfEnchants);
+//            }
         }
     }
 
