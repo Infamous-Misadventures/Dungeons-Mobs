@@ -48,8 +48,8 @@ public class MobEnchantmentEvents {
         if (!entity.level.isClientSide && EnchantableHelper.isEnchantableEntity(entity) && isSpawnEnchantableEntity(entity) && DungeonsMobsConfig.ENCHANTS.ENABLE_ENCHANTS_ON_SPAWN.get()) {
             getEnchantableCapabilityLazy(entity).ifPresent(cap -> {
                 if(!cap.isSpawned()) {
-//                    addEnchantmentOnSpawn(entity, cap);
-                    addEnchantmentOnSpawnDEVELOPMENT(entity, cap);
+                    addEnchantmentOnSpawn(entity, cap);
+//                    addEnchantmentOnSpawnDEVELOPMENT(entity, cap);
                 }
             });
         }
