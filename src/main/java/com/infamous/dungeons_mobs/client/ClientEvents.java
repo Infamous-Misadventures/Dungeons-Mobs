@@ -193,7 +193,7 @@ public class ClientEvents {
         Minecraft.getInstance().particleEngine.register(ModParticleTypes.SNOWFLAKE.get(), SnowflakeParticle.Factory::new);
     }
 
-    /*@SubscribeEvent
+    @SubscribeEvent
     public static void onRenderNamePlateEvent(RenderNameplateEvent event){
         Entity entity = event.getEntity();
         IFormattableTextComponent copy = event.getContent().copy();
@@ -208,5 +208,5 @@ public class ClientEvents {
         });
         copy.append(enchantmentString.toString());
         event.setContent(copy);
-    }*/
+    }
 }
