@@ -164,7 +164,7 @@
   "itemGroup.dungeonsMobs": "던전스: 몹",
 
   "death.attack.iceCloud": "%1$s은(는) 얼음 구름에 깔려 죽었습니다.",
-  "death.attack.iceCloud.player": "%1$s은(는) %2$s와(과) 싸우다 얼음 구름에 깔려 죽었습니다."
+  "death.attack.iceCloud.player": "%1$s은(는) %2$s와(과) 싸우다 얼음 구름에 깔려 죽었습니다.",
 
   "mobEnchantment.dungeons_mobs.burning": "화염",
   "mobEnchantment.dungeons_mobs.chilling": "냉기",
