@@ -28,6 +28,7 @@ import com.infamous.dungeons_mobs.items.GroupDungeonsMobs;
 import com.infamous.dungeons_mobs.mod.*;
 import com.infamous.dungeons_mobs.network.NetworkHandler;
 import com.infamous.dungeons_mobs.network.datasync.ModDataSerializers;
+import com.infamous.dungeons_mobs.tags.CustomTags;
 import com.infamous.dungeons_mobs.worldgen.BiomeSpawnEntries;
 import com.infamous.dungeons_mobs.worldgen.EntitySpawnPlacements;
 import com.infamous.dungeons_mobs.worldgen.RaidEntries;
@@ -75,6 +76,9 @@ public class DungeonsMobs
         MinecraftForge.EVENT_BUS.register(this);
 
         GeckoLib.initialize();
+
+        // Registering custom tags to ensure compat with Morph.
+        CustomTags.register();
 
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
     	ModSoundEvents.SOUNDS.register(modEventBus);
