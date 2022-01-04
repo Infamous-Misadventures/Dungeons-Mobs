@@ -129,6 +129,10 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:blame-406201:3440093")
     runtimeOnly fg.deobf("curse.maven:neat-238372:3182258")
 
+    //Compat
+    runtimeOnly fg.deobf("curse.maven:shulker_enchantments-414163:3536783")
+
+
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"
     // compile "some.group:artifact:version"

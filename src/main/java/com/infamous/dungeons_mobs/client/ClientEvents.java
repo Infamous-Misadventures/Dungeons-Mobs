@@ -192,21 +192,4 @@ public class ClientEvents {
     public static void onParticleFactory(ParticleFactoryRegisterEvent event){
         Minecraft.getInstance().particleEngine.register(ModParticleTypes.SNOWFLAKE.get(), SnowflakeParticle.Factory::new);
     }
-
-    @SubscribeEvent
-    public static void onRenderNamePlateEvent(RenderNameplateEvent event){
-        Entity entity = event.getEntity();
-        IFormattableTextComponent copy = event.getContent().copy();
-        StringBuilder enchantmentString = new StringBuilder();
-        getEnchantableCapabilityLazy(entity).ifPresent(cap -> {
-            if(cap.hasEnchantment()){
-                enchantmentString.append(" (");
-                enchantmentString.append(cap.getEnchantments().stream().map(mobEnchantment -> mobEnchantment.getRegistryName().getPath()).collect(Collectors.joining(", ")));
-                enchantmentString.append(")");
-                event.setResult(Event.Result.ALLOW);
-            }
-        });
-        copy.append(enchantmentString.toString());
-        event.setContent(copy);
-    }
 }

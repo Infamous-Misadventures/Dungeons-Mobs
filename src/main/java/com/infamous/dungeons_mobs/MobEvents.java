@@ -200,7 +200,6 @@ public class MobEvents {
         }
     }
 
-
     @SubscribeEvent
     public static void onExplosionDetonate(ExplosionEvent.Detonate event){
         handlePillarProtection(event);
