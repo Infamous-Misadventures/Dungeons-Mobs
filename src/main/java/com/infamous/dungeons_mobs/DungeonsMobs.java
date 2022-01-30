@@ -17,6 +17,7 @@ import com.infamous.dungeons_mobs.mod.ModBlocks;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModItems;
 import com.infamous.dungeons_mobs.mod.ModRecipes;
+import com.infamous.dungeons_mobs.tags.CustomTags;
 import com.infamous.dungeons_mobs.network.NetworkHandler;
 import com.infamous.dungeons_mobs.worldgen.*;
 import net.minecraft.entity.EntitySize;
@@ -52,6 +53,9 @@ public class DungeonsMobs
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
+
+        // Registering custom tags to ensure compat with Morph.
+        CustomTags.register();
 
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         ModEntityTypes.ENTITY_TYPES.register(modEventBus);
