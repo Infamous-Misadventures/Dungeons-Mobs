@@ -2,6 +2,9 @@ package com.infamous.dungeons_mobs;
 
 import com.infamous.dungeons_libraries.client.ClientProxy;
 import com.infamous.dungeons_libraries.network.CommonProxy;
+import com.infamous.dungeons_mobs.capabilities.ancient.Ancient;
+import com.infamous.dungeons_mobs.capabilities.ancient.AncientStorage;
+import com.infamous.dungeons_mobs.capabilities.ancient.IAncient;
 import com.infamous.dungeons_mobs.capabilities.cloneable.Cloneable;
 import com.infamous.dungeons_mobs.capabilities.cloneable.CloneableStorage;
 import com.infamous.dungeons_mobs.capabilities.cloneable.ICloneable;
@@ -17,6 +20,10 @@ import com.infamous.dungeons_mobs.capabilities.teamable.TeamableStorage;
 import com.infamous.dungeons_mobs.client.ModItemModelProperties;
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
+import com.infamous.dungeons_mobs.data.AncientDataHelper;
+import com.infamous.dungeons_mobs.data.MobAncientData;
+import com.infamous.dungeons_mobs.data.MobEnchantmentAncientData;
+import com.infamous.dungeons_mobs.data.util.MergeableCodecDataManager;
 import com.infamous.dungeons_mobs.items.GroupDungeonsMobs;
 import com.infamous.dungeons_mobs.mod.*;
 import com.infamous.dungeons_mobs.network.NetworkHandler;
@@ -30,6 +37,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemGroup;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -78,6 +86,8 @@ public class DungeonsMobs
         ModMobEnchantments.MOB_ENCHANTMENTS_DEFERRED.register(modEventBus);
         ModDataSerializers.DATA_SERIALIZERS.register(modEventBus);
         PROXY = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
+
+        //ANCIENT_DATA.subscribeAsSyncable(CHANNEL, AncientDatas::toPacket);
     }
 
     private void setup(final FMLCommonSetupEvent event){
@@ -90,6 +100,7 @@ public class DungeonsMobs
         CapabilityManager.INSTANCE.register(IConvertible.class, new ConvertibleStorage(), Convertible::new);
         CapabilityManager.INSTANCE.register(ITeamable.class, new TeamableStorage(), Teamable::new);
         CapabilityManager.INSTANCE.register(IMobProps.class, new MobPropsStorage(), MobProps::new);
+        CapabilityManager.INSTANCE.register(IAncient.class, new AncientStorage(), Ancient::new);
         event.enqueueWork(NetworkHandler::init);
     }
 

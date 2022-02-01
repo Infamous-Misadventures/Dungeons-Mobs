@@ -27,6 +27,7 @@ import com.infamous.dungeons_mobs.client.renderer.jungle.QuickGrowingVineRendere
 import com.infamous.dungeons_mobs.client.renderer.jungle.WhispererRenderer;
 import com.infamous.dungeons_mobs.client.renderer.layer.GeoMobEnchantmentGlintLayer;
 import com.infamous.dungeons_mobs.client.renderer.layer.MobEnchantmentGlintLayer;
+import com.infamous.dungeons_mobs.client.renderer.layers.SkeletonEyesLayer;
 import com.infamous.dungeons_mobs.client.renderer.piglin.CustomPiglinRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.BlueNethershroomRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.CobwebProjectileRenderer;
@@ -63,13 +64,18 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.entity.LivingRenderer;
+import net.minecraft.client.renderer.entity.SkeletonRenderer;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.DyeColor;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
+import net.minecraftforge.client.event.RenderNameplateEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -77,6 +83,11 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
+
+import java.util.stream.Collectors;
+
+import static com.infamous.dungeons_libraries.capabilities.enchantable.EnchantableHelper.getEnchantableCapabilityLazy;
+import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientEvents {
@@ -193,6 +204,9 @@ public class ClientEvents {
             } else if (r instanceof GeoEntityRenderer) {
                 ((GeoEntityRenderer)r).addLayer(new GeoMobEnchantmentGlintLayer((GeoEntityRenderer)r));
             }
+            if(r instanceof SkeletonRenderer){
+                ((SkeletonRenderer)r).addLayer(new SkeletonEyesLayer<>((SkeletonRenderer)r));
+            }
         });
 
         Minecraft.getInstance().getEntityRenderDispatcher().getSkinMap().values().forEach((r) -> {
@@ -213,4 +227,21 @@ public class ClientEvents {
     public static void onParticleFactory(ParticleFactoryRegisterEvent event){
         Minecraft.getInstance().particleEngine.register(ModParticleTypes.SNOWFLAKE.get(), SnowflakeParticle.Factory::new);
     }
+
+    /*@SubscribeEvent
+    public static void onRenderNamePlateEvent(RenderNameplateEvent event){
+        Entity entity = event.getEntity();
+        IFormattableTextComponent copy = event.getContent().copy();
+        StringBuilder enchantmentString = new StringBuilder();
+        getEnchantableCapabilityLazy(entity).ifPresent(cap -> {
+            if(cap.hasEnchantment()){
+                enchantmentString.append(" (");
+                enchantmentString.append(cap.getEnchantments().stream().map(mobEnchantment -> mobEnchantment.getRegistryName().getPath()).collect(Collectors.joining(", ")));
+                enchantmentString.append(")");
+                event.setResult(Event.Result.ALLOW);
+            }
+        });
+        copy.append(enchantmentString.toString());
+        event.setContent(copy);
+    }*/
 }

@@ -2,6 +2,7 @@ package com.infamous.dungeons_mobs.network;
 
 import com.infamous.dungeons_libraries.network.MobEnchantmentMessage;
 import com.infamous.dungeons_mobs.DungeonsMobs;
+import com.infamous.dungeons_mobs.network.message.AncientMessage;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
@@ -23,6 +24,10 @@ public class NetworkHandler {
         INSTANCE.messageBuilder(MobEnchantmentMessage.class, 0)
                 .encoder(MobEnchantmentMessage::encode).decoder(MobEnchantmentMessage::decode)
                 .consumer(MobEnchantmentMessage::onPacketReceived)
+                .add();
+        INSTANCE.messageBuilder(AncientMessage.class, 0)
+                .encoder(AncientMessage::encode).decoder(AncientMessage::decode)
+                .consumer(AncientMessage::onPacketReceived)
                 .add();
     }
 

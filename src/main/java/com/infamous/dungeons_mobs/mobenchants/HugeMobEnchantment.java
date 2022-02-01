@@ -41,9 +41,9 @@ public class HugeMobEnchantment extends MobEnchantment {
 
         getEnchantableCapabilityLazy(entity).ifPresent(cap -> {
             if (cap.hasEnchantment(HUGE.get())) {
-                float totalWidth = entity.getDimensions(entity.getPose()).width * 2.5F;
-                float totalHeight = entity.getDimensions(entity.getPose()).height * 2.5F;
-                event.setNewEyeHeight(entity.getEyeHeight(entity.getPose()) * 2.5F);
+                float totalWidth = event.getNewSize().width * 2.5F;
+                float totalHeight = event.getNewSize().height * 2.5F;
+                event.setNewEyeHeight(event.getNewEyeHeight() * 2.5F);
                 event.setNewSize(EntitySize.fixed(totalWidth, totalHeight));
             }
         });
