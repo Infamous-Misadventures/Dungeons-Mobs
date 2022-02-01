@@ -154,6 +154,7 @@ public class DungeonsMobsConfig {
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ROYAL_GUARDS_IN_RAIDS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_GEOMANCERS_IN_RAIDS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ILLUSIONERS_IN_RAIDS;
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_MAGES_IN_RAIDS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ICEOLOGERS_IN_RAIDS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_WINDCALLERS_IN_RAIDS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_PILLAGERS_IN_RAIDS;
@@ -816,6 +817,9 @@ public class DungeonsMobsConfig {
             ENABLE_ILLUSIONERS_IN_RAIDS = builder
                     .comment("Enable the addition of Illusioners to raids. [true / false]")
                     .define("enableIllusionersInRaids", false);
+            ENABLE_MAGES_IN_RAIDS = builder
+                    .comment("Enable the addition of Mages to raids. [true / false]")
+                    .define("enableMagesInRaids", false);
             ENABLE_ICEOLOGERS_IN_RAIDS = builder
                     .comment("Enable the addition of Iceologers to raids. [true / false]")
                     .define("enableIceologersInRaids", false);

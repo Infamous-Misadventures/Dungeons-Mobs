@@ -17,6 +17,8 @@ import com.infamous.dungeons_mobs.entities.illagers.EnchanterEntity;
 import com.infamous.dungeons_mobs.entities.illagers.GeomancerEntity;
 import com.infamous.dungeons_mobs.entities.illagers.IceologerEntity;
 import com.infamous.dungeons_mobs.entities.illagers.IllusionerCloneEntity;
+import com.infamous.dungeons_mobs.entities.illagers.MageCloneEntity;
+import com.infamous.dungeons_mobs.entities.illagers.MageEntity;
 import com.infamous.dungeons_mobs.entities.illagers.MountaineerEntity;
 import com.infamous.dungeons_mobs.entities.illagers.RoyalGuardEntity;
 import com.infamous.dungeons_mobs.entities.illagers.VindicatorChefEntity;
@@ -87,6 +89,8 @@ public class EntityTypeAttributes {
         event.put(ModEntityTypes.ILLUSIONER_CLONE.get(), IllusionerCloneEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.WINDCALLER.get(), WindcallerEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.ENCHANTER.get(), EnchanterEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.MAGE.get(), MageEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.MAGE_CLONE.get(), MageCloneEntity.setCustomAttributes().build());
 
         event.put(ModEntityTypes.ICY_CREEPER.get(), IcyCreeperEntity.setCustomAttributes().build());
 

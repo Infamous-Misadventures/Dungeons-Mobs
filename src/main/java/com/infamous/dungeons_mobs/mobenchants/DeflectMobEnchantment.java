@@ -1,7 +1,10 @@
 package com.infamous.dungeons_mobs.mobenchants;
 
+import static com.infamous.dungeons_libraries.mobenchantments.MobEnchantmentHelper.executeIfPresent;
+import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.DEFLECT;
 import com.infamous.dungeons_libraries.mobenchantments.MobEnchantment;
 import com.infamous.dungeons_mobs.DungeonsMobs;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
@@ -13,10 +16,6 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-
-import static com.infamous.dungeons_libraries.mobenchantments.MobEnchantmentHelper.executeIfPresent;
-import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.DEFLECT;
-import static com.sun.javafx.font.FontResource.ZERO;
 
 @Mod.EventBusSubscriber(modid = DungeonsMobs.MODID)
 public class DeflectMobEnchantment extends MobEnchantment {
@@ -73,7 +72,7 @@ public class DeflectMobEnchantment extends MobEnchantment {
         } else {
             Vector3d deltaMovement = projectile.getDeltaMovement();
             double speed = (double) MathHelper.sqrt(deltaMovement.x * deltaMovement.x + deltaMovement.y * deltaMovement.y + deltaMovement.z * deltaMovement.z);
-            speed = speed < 1.0E-4D ? ZERO : speed;
+            speed = speed < 1.0E-4D ? 0 : speed;
             double d0 = projectile.getOwner().getX() - victim.getX();
             double d1 = projectile.getOwner().getY(0.3333333333333333D) - projectile.getY();
             double d2 = projectile.getOwner().getZ() - victim.getZ();
