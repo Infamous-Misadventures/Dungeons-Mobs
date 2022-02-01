@@ -35,9 +35,10 @@ public class MobEnchantmentGlintLayer<T extends Entity, M extends EntityModel<T>
                 EntityModel<T> entitymodel = this.getParentModel();
                 entitymodel.prepareMobModel(entity, p_225628_5_, p_225628_6_, p_225628_7_);
                 this.getParentModel().copyPropertiesTo(entitymodel);
-                IVertexBuilder ivertexbuilder = p_225628_2_.getBuffer(RenderType.energySwirl(this.getTextureLocationForEnchantment(entity), this.xOffset(f), f * 0.01F));
-                entitymodel.setupAnim(entity, p_225628_5_, p_225628_6_, p_225628_8_, p_225628_9_, p_225628_10_);
-                entitymodel.renderToBuffer(p_225628_1_, ivertexbuilder, 15728640, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+                IVertexBuilder ivertexbuilder = p_225628_2_.getBuffer(RenderType.energySwirl(this.getTextureLocation(), this.xOffset(f), f * 0.01F));
+                entitymodel.setupAnim(p_225628_4_, p_225628_5_, p_225628_6_, p_225628_8_, p_225628_9_, p_225628_10_);
+                float intensity = cap.getEnchantments().size() < 3 ? ((float)cap.getEnchantments().size() / 3) : 3;
+                entitymodel.renderToBuffer(p_225628_1_, ivertexbuilder, 15728640, OverlayTexture.NO_OVERLAY, intensity, intensity, intensity, intensity);
             }
         });
     }
