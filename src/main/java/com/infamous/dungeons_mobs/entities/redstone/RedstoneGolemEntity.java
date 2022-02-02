@@ -187,7 +187,7 @@ public class RedstoneGolemEntity extends AbstractRaiderEntity implements IAnimat
                 .add(Attributes.MAX_HEALTH, 200.0D) // 2x Golem Health
                 .add(Attributes.MOVEMENT_SPEED, 0.25D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
-                .add(Attributes.ATTACK_DAMAGE, 30.0D) // 2x Golem Attack
+                .add(Attributes.ATTACK_DAMAGE, 16.0D) // >= Golem Attack
                 .add(Attributes.ATTACK_KNOCKBACK, 3.0D); // 2x Ravager knockback
     }
 
@@ -513,7 +513,7 @@ public class RedstoneGolemEntity extends AbstractRaiderEntity implements IAnimat
                     double randomNearbyX = centerPos.getX() + (RedstoneGolemEntity.this.random.nextGaussian() * 10.0D);
                     //double randomNearbyY = RedstoneGolemEntity.this.getPosY() + (double)(RedstoneGolemEntity.this.rand.nextInt(4) - 2);
                     double randomNearbyZ = centerPos.getZ() + (RedstoneGolemEntity.this.random.nextGaussian() * 10.0D);
-                    int j =  100 + 20 * i;
+                    int j =  RedstoneMineEntity.LIFE_TIME + 4 * i;
                     BlockPos randomBlockPos = new BlockPos(randomNearbyX, centerPos.getY(), randomNearbyZ);
                     RedstoneGolemEntity.this.createSpellEntity(randomBlockPos.getX(), randomBlockPos.getZ(), randomBlockPos.getY(), randomBlockPos.getY() + 1, j);
 

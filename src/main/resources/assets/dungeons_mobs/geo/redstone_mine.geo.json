@@ -7,22 +7,22 @@
 				"texture_width": 64,
 				"texture_height": 64,
 				"visible_bounds_width": 3,
-				"visible_bounds_height": 2,
-				"visible_bounds_offset": [0, 0, 0]
+				"visible_bounds_height": 1.5,
+				"visible_bounds_offset": [0, 0.25, 0]
 			},
 			"bones": [
 				{
-					"name": "body",
-					"pivot": [0, -16, 0],
+					"name": "RedstoneMine",
+					"pivot": [0, 0, 0],
 					"cubes": [
-						{"origin": [-8, -16, -8], "size": [16, 16, 16], "uv": [0, 0]}
+						{"origin": [-5, 0, -5], "size": [10, 3, 10], "uv": [0, 0]}
 					]
 				},
 				{
-					"name": "circle",
-					"pivot": [0, -16, 0],
+					"name": "ring",
+					"pivot": [0, 0, 0],
 					"cubes": [
-						{"origin": [-16, -16, -16], "size": [32, 0, 32], "uv": [-32, 32]}
+						{"origin": [-13, 0, -13], "size": [26, 0, 26], "uv": [-26, 21]}
 					]
 				}
 			]
