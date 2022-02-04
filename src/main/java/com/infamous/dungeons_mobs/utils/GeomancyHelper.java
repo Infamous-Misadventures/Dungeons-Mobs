@@ -176,7 +176,7 @@ public class GeomancyHelper {
             VineEntity vineEntity = entityType.create(casterEntity.level);
             if (vineEntity != null) {
                 vineEntity.setCaster(casterEntity);
-                vineEntity.setLifeTicks(300);
+                vineEntity.setLifeTicks(100);
                 vineEntity.setPos(targetPos.getX(), targetPos.getY(), targetPos.getZ());
                 casterEntity.level.addFreshEntity(vineEntity);
             }
