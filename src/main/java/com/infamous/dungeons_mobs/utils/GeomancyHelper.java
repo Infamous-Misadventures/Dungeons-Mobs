@@ -3,15 +3,12 @@ package com.infamous.dungeons_mobs.utils;
 import com.infamous.dungeons_mobs.entities.jungle.VineEntity;
 import com.infamous.dungeons_mobs.entities.summonables.ConstructEntity;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.monster.EvokerEntity;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.util.Direction;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -179,7 +176,7 @@ public class GeomancyHelper {
             VineEntity vineEntity = entityType.create(casterEntity.level);
             if (vineEntity != null) {
                 vineEntity.setCaster(casterEntity);
-                vineEntity.setLifeTicks(100);
+                vineEntity.setLifeTicks(300);
                 vineEntity.setPos(targetPos.getX(), targetPos.getY(), targetPos.getZ());
                 casterEntity.level.addFreshEntity(vineEntity);
             }

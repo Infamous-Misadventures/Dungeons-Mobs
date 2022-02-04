@@ -6,6 +6,9 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.IServerWorld;
@@ -18,16 +21,17 @@ import java.util.UUID;
 
 @SuppressWarnings({"EntityConstructor", "WeakerAccess"})
 public abstract class VineEntity extends MobEntity implements IMob {
+    public static final DataParameter<Integer> LIFE_TICKS = EntityDataManager.defineId(VineEntity.class, DataSerializers.INT);
+
     private LivingEntity caster;
     private UUID casterUuid;
-    private int lifeTicks;
     private boolean isPerishable;
 
     protected VineEntity(EntityType<? extends VineEntity> entityTypeIn, World worldIn) {
         super(entityTypeIn, worldIn);
     }
 
-    protected VineEntity(EntityType<? extends VineEntity> entityTypeIn, World worldIn, double x, double y, double z, LivingEntity casterIn, int lifeTicksIn){
+    protected VineEntity(EntityType<? extends VineEntity> entityTypeIn, World worldIn, double x, double y, double z, LivingEntity casterIn, int lifeTicksIn) {
         this(entityTypeIn, worldIn);
         this.setPos(x, y, z);
         this.setCaster(casterIn);
@@ -36,6 +40,11 @@ public abstract class VineEntity extends MobEntity implements IMob {
 
     protected static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes().add(Attributes.MAX_HEALTH, 30.0D);
+    }
+
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(LIFE_TICKS, 0);
     }
 
     @Override
@@ -85,12 +94,12 @@ public abstract class VineEntity extends MobEntity implements IMob {
     }
 
     public int getLifeTicks() {
-        return this.lifeTicks;
+        return this.entityData.get(LIFE_TICKS);
     }
 
     public void setLifeTicks(int lifeTicksIn){
         this.setPerishable(true);
-        this.lifeTicks = lifeTicksIn;
+        this.entityData.set(LIFE_TICKS, lifeTicksIn);
     }
 
     // used for some kind of collision checking
@@ -116,9 +125,9 @@ public abstract class VineEntity extends MobEntity implements IMob {
     @Override
     public void tick() {
         super.tick();
-        if(this.isPerishable && !this.level.isClientSide()){
-            this.lifeTicks--;
-            if(this.lifeTicks <= 0){
+        if(this.isPerishable && !this.level.isClientSide()) {
+            this.setLifeTicks(getLifeTicks() - 1);
+            if (this.getLifeTicks() <= 0) {
                 this.remove();
             }
         }
