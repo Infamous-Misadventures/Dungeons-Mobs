@@ -123,7 +123,7 @@ dependencies {
     annotationProcessor 'org.spongepowered:mixin:0.8.3:processor'
 
     //Library
-    implementation fg.deobf("dungeons_libraries:dungeons_libraries:1.16.5-0.0.1-alpha")
+    implementation fg.deobf("dungeons_libraries:dungeons_libraries:1.16.5-0.0.8-beta")
 //    implementation fg.deobf("mutantmore-test:mutantmore-test:11")
     implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.16.5:3.0.65')
     runtimeOnly fg.deobf("curse.maven:blame-406201:3440093")
@@ -131,6 +131,7 @@ dependencies {
 
     //Compat
     runtimeOnly fg.deobf("curse.maven:shulker_enchantments-414163:3536783")
+    runtimeOnly fg.deobf("curse.maven:factioncraft-564470:3651920")
 
 
     // You may put jars on which you depend on in ./libs or you may define them like so..
