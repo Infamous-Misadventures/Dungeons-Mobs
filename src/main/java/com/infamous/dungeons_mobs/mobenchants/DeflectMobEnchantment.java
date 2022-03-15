@@ -1,7 +1,10 @@
 package com.infamous.dungeons_mobs.mobenchants;
 
+import static com.infamous.dungeons_libraries.mobenchantments.MobEnchantmentHelper.executeIfPresent;
+import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.DEFLECT;
 import com.infamous.dungeons_libraries.mobenchantments.MobEnchantment;
 import com.infamous.dungeons_mobs.DungeonsMobs;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;

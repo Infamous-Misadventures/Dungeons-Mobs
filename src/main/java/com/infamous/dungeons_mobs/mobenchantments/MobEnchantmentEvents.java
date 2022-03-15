@@ -13,13 +13,12 @@ import com.infamous.dungeons_mobs.data.UniqueAncientData;
 import com.infamous.dungeons_mobs.mobenchants.MobEnchantmentSelector;
 import com.infamous.dungeons_mobs.network.NetworkHandler;
 import com.infamous.dungeons_mobs.network.message.AncientMessage;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.item.ArmorStandEntity;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.item.minecart.MinecartEntity;
 import net.minecraft.entity.monster.ZombieEntity;
+import net.minecraft.entity.passive.AmbientEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
@@ -30,6 +29,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -42,20 +42,30 @@ import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 @Mod.EventBusSubscriber(modid = MODID)
 public class MobEnchantmentEvents {
 
-    @SubscribeEvent
-    public static void enchantOnEntitySpawn(LivingSpawnEvent.SpecialSpawn event) {
-        Entity entity = event.getEntity();
-        if (!entity.level.isClientSide && EnchantableHelper.isEnchantableEntity(entity) && isSpawnEnchantableEntity(entity) && DungeonsMobsConfig.ENCHANTS.ENABLE_ENCHANTS_ON_SPAWN.get()) {
-            getEnchantableCapabilityLazy(entity).ifPresent(cap -> {
-                if(!cap.isSpawned()) {
-                    addEnchantmentOnSpawn(entity, cap);
-//                    addEnchantmentOnSpawnDEVELOPMENT(entity, cap);
-                }
-            });
-        }
-    }
+    private static List<SpawnReason> blockedSpawnReasons = Arrays.asList(SpawnReason.MOB_SUMMONED, SpawnReason.CONVERSION);
+
+//    @SubscribeEvent
+//    public static void enchantOnEntitySpawn(LivingSpawnEvent.SpecialSpawn event) {
+//        Entity entity = event.getEntity();
+//        if (!entity.level.isClientSide &&
+//                EnchantableHelper.isEnchantableEntity(entity) &&
+//                isSpawnEnchantableEntity(entity) &&
+//                DungeonsMobsConfig.ENCHANTS.ENABLE_ENCHANTS_ON_SPAWN.get() && !blockedSpawnReasons.contains(event.getSpawnReason())) {
+//            getEnchantableCapabilityLazy(entity).ifPresent(cap -> {
+//                if(!cap.isSpawned()) {
+//                    addEnchantmentOnSpawn(entity, cap);
+////                    addEnchantmentOnSpawnDEVELOPMENT(entity, cap);
+//                }
+//            });
+//        }
+//    }
     private static boolean isSpawnEnchantableEntity(Entity entity) {
-        return !(entity instanceof PlayerEntity) && !(entity instanceof ArmorStandEntity) && !(entity instanceof BoatEntity) && !(entity instanceof MinecartEntity) && !DungeonsMobsConfig.ENCHANTS.ENCHANT_ON_SPAWN_EXCLUSION_MOBS.get().contains(entity.getType().getRegistryName().toString());
+        return !(entity instanceof PlayerEntity) &&
+                !(entity instanceof ArmorStandEntity) &&
+                !(entity instanceof BoatEntity) &&
+                !(entity instanceof MinecartEntity) &&
+                !DungeonsMobsConfig.ENCHANTS.ENCHANT_ON_SPAWN_EXCLUSION_MOBS.get().contains(entity.getType().getRegistryName().toString()) &&
+                (DungeonsMobsConfig.ENCHANTS.ENABLE_ENCHANTS_ON_PASSIVES.get() || (!(entity instanceof CreatureEntity) && !(entity instanceof AmbientEntity)));
     }
 
     private static void addEnchantmentOnSpawn(Entity entity, IEnchantable cap) {

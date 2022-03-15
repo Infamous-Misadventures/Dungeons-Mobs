@@ -6,40 +6,29 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import software.bernie.geckolib3.renderers.geo.GeoProjectilesRenderer;
 
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
-
-@OnlyIn(Dist.CLIENT)
-public class RedstoneMineRenderer<T extends RedstoneMineEntity> extends EntityRenderer<T> {
-   private static final ResourceLocation REDSTONE_MINE_TEXTURE = new ResourceLocation(MODID, "textures/entity/redstone/redstone_mine.png");
-
-   protected final RedstoneMineModel<T> mineModel = new RedstoneMineModel<T>();
-
-   public RedstoneMineRenderer(EntityRendererManager renderManagerIn) {
-      super(renderManagerIn);
+public class RedstoneMineRenderer extends GeoProjectilesRenderer<RedstoneMineEntity> {
+   public RedstoneMineRenderer(EntityRendererManager renderManager) {
+      super(renderManager, new RedstoneMineModel());
+    //  this.addLayer(new GeoEyeLayer<>(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/enchanter/enchanter_eyes.png")));
+      //this.addLayer(new GeoHeldItemLayer<>(this, 0.0, 0.0, 0.5));
    }
 
    @Override
-   public void render(T entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
-      matrixStackIn.pushPose();
-      matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(180));
-      ResourceLocation resourceLocation = this.getTextureLocation(entityIn);
-      RenderType renderType = this.mineModel.renderType(resourceLocation);
-      IVertexBuilder ivertexbuilder = bufferIn.getBuffer(renderType);
-      this.mineModel.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-      matrixStackIn.popPose();
+   public void render(RedstoneMineEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+      if(entityIn.getLifeTicks() > RedstoneMineEntity.LIFE_TIME){
+         return;
+      }
       super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
    }
 
    @Override
-   public ResourceLocation getTextureLocation(T entity) {
-      return REDSTONE_MINE_TEXTURE;
+   public RenderType getRenderType(RedstoneMineEntity animatable, float partialTicks, MatrixStack stack,
+                                   IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn,
+                                   ResourceLocation textureLocation) {
+      return RenderType.entityTranslucent(getTextureLocation(animatable));
    }
 }

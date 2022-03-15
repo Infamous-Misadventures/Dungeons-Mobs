@@ -1,31 +1,39 @@
 package com.infamous.dungeons_mobs.entities.redstone;
 
+import com.infamous.dungeons_mobs.entities.summonables.ConstructEntity;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
-import net.minecraft.particles.RedstoneParticleData;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.NetworkHooks;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
-import java.util.List;
 import java.util.UUID;
 
-public class RedstoneMineEntity extends Entity {
-    private static final int LIFE_TICKS = 8 * 20;
-    private int lifeTicks;
+public class RedstoneMineEntity extends Entity implements IAnimatable {
+    public static final DataParameter<Integer> LIFE_TICKS = EntityDataManager.defineId(ConstructEntity.class, DataSerializers.INT);
+
     private LivingEntity caster;
     private UUID casterUuid;
-    private float explosionRadius = 3.0F;
+
+    //nerf
+    private float explosionRadius = 2.0F;
+    public static final int LIFE_TIME = 250;
 
     public RedstoneMineEntity(World worldIn) {
         super(ModEntityTypes.REDSTONE_MINE.get(), worldIn);
@@ -35,11 +43,31 @@ public class RedstoneMineEntity extends Entity {
         super(entityTypeIn, worldIn);
     }
 
-    public RedstoneMineEntity(World worldIn, double x, double y, double z, LivingEntity casterIn){
+    public RedstoneMineEntity(World worldIn, double x, double y, double z, int delay, LivingEntity casterIn){
         this(ModEntityTypes.REDSTONE_MINE.get(), worldIn);
+        this.setLifeTicks(delay);
         this.setCaster(casterIn);
         this.setPos(x, y, z);
-        this.lifeTicks = LIFE_TICKS;
+    }
+
+    private AnimationFactory factory = new AnimationFactory(this);
+
+    private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
+        if (this.getLifeTicks() == 6) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.redstone_mine.deactive", true));
+        }
+        if (this.getLifeTicks() == LIFE_TIME) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.redstone_mine.activate", true));
+        }
+        if (this.getLifeTicks() < LIFE_TIME - 3 && this.getLifeTicks() > 4){
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.redstone_mine.idle", true));
+        }
+        return PlayState.CONTINUE;
+    }
+
+    @Override
+    public void registerControllers(AnimationData data) {
+        data.addAnimationController(new AnimationController<>(this, "controller", 0, this::predicate));
     }
 
     public void setCaster(@Nullable LivingEntity livingEntity) {
@@ -59,92 +87,50 @@ public class RedstoneMineEntity extends Entity {
         return this.caster;
     }
 
-    /**
-     * Returns true if it's possible to attack this entity with an item.
-     */
-    public boolean isAttackable() {
-        return false;
-    }
 
-    @Override
-    protected boolean isMovementNoisy() {
-        return false;
-    }
-
-    /**
-     * Returns the <b>solid</b> collision bounding box for this entity. Used to make (e.g.) boats solid. Return null if
-     * this entity is not solid.
-     */
-    @Nullable
-    public AxisAlignedBB getCollisionBoundingBox() {
-        return this.getBoundingBox();
-    }
-
-    @Override
-    public boolean isPickable() {
-        return true;
-    }
-
-    /*
-    @Override
-    public void onCollideWithPlayer(PlayerEntity entityIn) {
-        super.onCollideWithPlayer(entityIn);
-        this.explode();
-    }
-
-     */
-
-    private void explode() {
-        this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), this.explosionRadius, Explosion.Mode.NONE);
-        this.remove();
-    }
-
-    public void handleExistence(){
-        this.updateInWaterStateAndDoFluidPushing(); // handles being in water
-    }
-
-    public void handleExpiration(){
-        this.remove();
-    }
 
     /**
      * Called to update the entity's position/logic.
      */
 
-    @Override
     public void tick() {
-        //super.tick();
-        if(!this.level.isClientSide){
-            this.lifeTicks--;
-            //this.checkCollisions();
-            if(this.lifeTicks <= 0){
-                this.handleExpiration();
+        super.tick();
+        this.setLifeTicks(this.getLifeTicks() - 1);
+        if (!this.level.isClientSide) {
+            if(this.getLifeTicks() <= 0) {
+                this.remove();
+            }else if (this.getLifeTicks() < LIFE_TIME - 3 && this.getLifeTicks() > 6){
+                for(LivingEntity livingentity : this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(0.3D, 0.3D, 0.3D))) {
+                    this.explode(livingentity);
+                }
             }
         }
-        else{
-            this.handleExistence();
+
+    }
+
+
+    private void explode(LivingEntity livingentity) {
+        LivingEntity Caster = this.getCaster();
+
+            if (livingentity.isAlive() && !livingentity.isInvulnerable()) {
+                if (Caster != null) {
+                    if (!Caster.isAlliedTo(livingentity) || livingentity != Caster) {
+                        this.level.explode(Caster, this.getX(), this.getY(0.0625D), this.getZ(), this.explosionRadius, Explosion.Mode.NONE);
+                        this.remove();
+                    }
+                } else {
+                    this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), this.explosionRadius, Explosion.Mode.NONE);
+                    this.remove();
+                }
+
         }
     }
 
-    @Override
-    public void playerTouch(PlayerEntity entityIn) {
-        if(entityIn != this.getCaster()){
-            this.explode();
-        }
-    }
 
-    private void checkCollisions() {
-        List<Entity> list = this.level.getEntities(this, this.getBoundingBox().inflate(0.2D, 0.2D, 0.2D));
-        for (Entity entity : list) {
-            if (!entity.removed && !this.removed && entity != this.getCaster()) {
-                this.explode();
-            }
-        }
-    }
 
     @Override
     protected void defineSynchedData() {
-
+        this.entityData.define(LIFE_TICKS, 0);
     }
 
     @Override
@@ -165,11 +151,17 @@ public class RedstoneMineEntity extends Entity {
     }
 
     public int getLifeTicks() {
-        return this.lifeTicks;
+        return this.entityData.get(LIFE_TICKS);
     }
 
-    public void setLifeTicks(int lifeTicksIn){
-        this.lifeTicks = lifeTicksIn;
+    public void setLifeTicks(int p_189794_1_) {
+        this.entityData.set(LIFE_TICKS, p_189794_1_);
+    }
+
+
+    @Override
+    public AnimationFactory getFactory() {
+        return factory;
     }
 
     @Override

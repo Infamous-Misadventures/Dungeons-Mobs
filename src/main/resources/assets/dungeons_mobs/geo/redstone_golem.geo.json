@@ -1,0 +1,142 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.redstone_golem",
+				"texture_width": 256,
+				"texture_height": 256,
+				"visible_bounds_width": 7,
+				"visible_bounds_height": 7,
+				"visible_bounds_offset": [0, 1.5, 0]
+			},
+			"bones": [
+				{
+					"name": "redstonegolem",
+					"pivot": [0, 0, 0]
+				},
+				{
+					"name": "pelvis",
+					"parent": "redstonegolem",
+					"pivot": [0, 28, 0],
+					"cubes": [
+						{"origin": [-11, 14, -1.25], "size": [22, 14, 8], "inflate": -0.08, "pivot": [0, 21, 0], "rotation": [90, 0, 0], "uv": [72, 6]}
+					]
+				},
+				{
+					"name": "body",
+					"parent": "pelvis",
+					"pivot": [0, 27.8, 1.6],
+					"cubes": [
+						{"origin": [-20, 46, -16], "size": [40, 20, 32], "inflate": 0.42, "pivot": [0, 50, 6], "rotation": [90, 0, 0], "uv": [0, 28]},
+						{"origin": [-8, 32, 0], "size": [16, 16, 16], "inflate": -0.08, "uv": [132, 16]}
+					]
+				},
+				{
+					"name": "head",
+					"parent": "body",
+					"pivot": [0, 52, -10],
+					"cubes": [
+						{"origin": [-8, 45.75, -28], "size": [16, 12, 16], "inflate": -0.08, "pivot": [0, 54, -18], "rotation": [90, 0, 0], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "hand1",
+					"parent": "body",
+					"pivot": [-19.5, 50, 0],
+					"cubes": [
+						{"origin": [-34, 34, -6], "size": [14, 24, 12], "inflate": -0.08, "uv": [31, 80]}
+					]
+				},
+				{
+					"name": "hand2",
+					"parent": "hand1",
+					"pivot": [-32, 33.75, 0],
+					"cubes": [
+						{"origin": [-37.5, 12, -6], "size": [11, 22, 12], "inflate": -0.08, "pivot": [-32, 23, 0], "rotation": [0, 0, 0], "uv": [83, 82]}
+					]
+				},
+				{
+					"name": "finger1",
+					"parent": "hand2",
+					"pivot": [-34, 12, -2.5],
+					"cubes": [
+						{"origin": [32, 2, -1.4375], "size": [3, 10, 5], "inflate": -0.08, "pivot": [-0.25, 22.625, -0.71875], "rotation": [0, 180, 0], "uv": [145, 80], "mirror": true}
+					]
+				},
+				{
+					"name": "finger2",
+					"parent": "hand2",
+					"pivot": [-34, 12, 3.25],
+					"cubes": [
+						{"origin": [32, 2, -7.1875], "size": [3, 10, 5], "inflate": -0.08, "pivot": [-0.25, 22.625, -0.71875], "rotation": [0, 180, 0], "uv": [145, 80], "mirror": true}
+					]
+				},
+				{
+					"name": "finger3",
+					"parent": "hand2",
+					"pivot": [-29.25, 11, -2.5],
+					"cubes": [
+						{"origin": [27.25, 4, -1.4375], "size": [3, 8, 5], "inflate": -0.08, "pivot": [-0.25, 22.625, -0.71875], "rotation": [0, 180, 0], "uv": [129, 82], "mirror": true}
+					]
+				},
+				{
+					"name": "hand3",
+					"parent": "body",
+					"pivot": [20, 50, 0],
+					"cubes": [
+						{"origin": [20, 34, -6], "size": [14, 24, 12], "inflate": -0.08, "pivot": [27, 46, 0], "rotation": [0, 0, 0], "uv": [31, 116]}
+					]
+				},
+				{
+					"name": "hand4",
+					"parent": "hand3",
+					"pivot": [31.5, 34, 0],
+					"cubes": [
+						{"origin": [25.5, 12, -6], "size": [11, 22, 12], "inflate": -0.08, "pivot": [31, 23, 0], "rotation": [0, 0, 0], "uv": [83, 118]}
+					]
+				},
+				{
+					"name": "finger4",
+					"parent": "hand4",
+					"pivot": [33, 11, -2.5],
+					"cubes": [
+						{"origin": [-35, 2, -1.4375], "size": [3, 10, 5], "inflate": -0.08, "pivot": [-0.25, 22.625, -0.71875], "rotation": [0, -180, 0], "uv": [145, 80]}
+					]
+				},
+				{
+					"name": "finger5",
+					"parent": "hand4",
+					"pivot": [33, 12, 3.25],
+					"cubes": [
+						{"origin": [-35, 2, -7.1875], "size": [3, 10, 5], "inflate": -0.08, "pivot": [-0.25, 22.625, -0.71875], "rotation": [0, -180, 0], "uv": [145, 80]}
+					]
+				},
+				{
+					"name": "finger6",
+					"parent": "hand4",
+					"pivot": [28.25, 12, -2.5],
+					"cubes": [
+						{"origin": [-30.25, 4, -1.4375], "size": [3, 8, 5], "inflate": -0.08, "pivot": [-0.25, 22.625, -0.71875], "rotation": [0, 180, 0], "uv": [129, 82], "mirror": true}
+					]
+				},
+				{
+					"name": "leg2",
+					"parent": "redstonegolem",
+					"pivot": [14, 20, 0],
+					"cubes": [
+						{"origin": [8, 0, -6], "size": [12, 20, 12], "inflate": -0.08, "uv": [192, 48]}
+					]
+				},
+				{
+					"name": "leg1",
+					"parent": "redstonegolem",
+					"pivot": [-14, 20, 0],
+					"cubes": [
+						{"origin": [-20, 0, -6], "size": [12, 20, 12], "inflate": -0.08, "uv": [144, 48]}
+					]
+				}
+			]
+		}
+	]
+}

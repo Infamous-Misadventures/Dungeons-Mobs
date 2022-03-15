@@ -1,0 +1,78 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.redstone_mine.activate": {
+			"animation_length": 1,
+			"bones": {
+				"RedstoneMine": {
+					"scale": {
+						"0.0": {
+							"vector": [0.3, 0, 0.3]
+						},
+						"0.125": {
+							"vector": [0.3, 6.8, 0.3],
+							"easing": "easeInOutQuad"
+						},
+						"0.25": {
+							"vector": [2, 0.4, 2.1],
+							"easing": "easeInOutQuad"
+						},
+						"0.375": {
+							"vector": [1, 1, 1],
+							"easing": "easeInOutBack"
+						}
+					}
+				},
+				"ring": {
+					"scale": {
+						"0.0": {
+							"vector": [0.3, 0, 0.3]
+						},
+						"0.375": {
+							"vector": [1, 0, 1],
+							"easing": "easeInOutBack"
+						}
+					}
+				}
+			}
+		},
+		"animation.redstone_mine.idle": {
+			"loop": true,
+			"animation_length": 0.29167,
+			"bones": {
+				"ring": {
+					"scale": {
+						"0.0": {
+							"vector": [1, 1, 1]
+						},
+						"0.125": {
+							"vector": [1.2, 1, 1.2],
+							"easing": "easeInOutQuad"
+						},
+						"0.25": {
+							"vector": [1, 1, 1],
+							"easing": "easeInOutQuad"
+						}
+					}
+				}
+			}
+		},
+		"animation.redstone_mine.deactivate": {
+			"animation_length": 1,
+			"bones": {
+				"ring": {
+					"scale": {
+						"0.0": {
+							"vector": [1, 1, 1]
+						},
+						"0.375": {
+							"vector": [0, 0, 0],
+							"easing": "easeInOutSine"
+						}
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}
