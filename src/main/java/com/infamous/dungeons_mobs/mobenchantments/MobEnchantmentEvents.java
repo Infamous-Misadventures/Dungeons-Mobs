@@ -44,21 +44,21 @@ public class MobEnchantmentEvents {
 
     private static List<SpawnReason> blockedSpawnReasons = Arrays.asList(SpawnReason.MOB_SUMMONED, SpawnReason.CONVERSION);
 
-    @SubscribeEvent
-    public static void enchantOnEntitySpawn(LivingSpawnEvent.SpecialSpawn event) {
-        Entity entity = event.getEntity();
-        if (!entity.level.isClientSide &&
-                EnchantableHelper.isEnchantableEntity(entity) &&
-                isSpawnEnchantableEntity(entity) &&
-                DungeonsMobsConfig.ENCHANTS.ENABLE_ENCHANTS_ON_SPAWN.get() && !blockedSpawnReasons.contains(event.getSpawnReason())) {
-            getEnchantableCapabilityLazy(entity).ifPresent(cap -> {
-                if(!cap.isSpawned()) {
-                    addEnchantmentOnSpawn(entity, cap);
-//                    addEnchantmentOnSpawnDEVELOPMENT(entity, cap);
-                }
-            });
-        }
-    }
+//    @SubscribeEvent
+//    public static void enchantOnEntitySpawn(LivingSpawnEvent.SpecialSpawn event) {
+//        Entity entity = event.getEntity();
+//        if (!entity.level.isClientSide &&
+//                EnchantableHelper.isEnchantableEntity(entity) &&
+//                isSpawnEnchantableEntity(entity) &&
+//                DungeonsMobsConfig.ENCHANTS.ENABLE_ENCHANTS_ON_SPAWN.get() && !blockedSpawnReasons.contains(event.getSpawnReason())) {
+//            getEnchantableCapabilityLazy(entity).ifPresent(cap -> {
+//                if(!cap.isSpawned()) {
+//                    addEnchantmentOnSpawn(entity, cap);
+////                    addEnchantmentOnSpawnDEVELOPMENT(entity, cap);
+//                }
+//            });
+//        }
+//    }
     private static boolean isSpawnEnchantableEntity(Entity entity) {
         return !(entity instanceof PlayerEntity) &&
                 !(entity instanceof ArmorStandEntity) &&
