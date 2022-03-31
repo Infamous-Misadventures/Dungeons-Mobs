@@ -18,6 +18,7 @@
     "PiglinEntityMixin",
     "RaidMixin",
     "SpiderEntityMixin",
+    "TridentEntityAccessor",
     "TridentEntityMixin",
     "WitherSkeletonEntityMixin",
     "ZombifiedPiglinEntityMixin"

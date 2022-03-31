@@ -13,6 +13,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -60,4 +61,7 @@ public abstract class TridentEntityMixin extends AbstractArrowEntity  implements
     public void setDataItem(ItemStack dataItem) {
         this.entityData.set(DATA_ITEM_STACK, dataItem);
     }
+
+    @Accessor
+    public abstract ItemStack getTridentItem();
 }
