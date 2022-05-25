@@ -11,7 +11,11 @@
     "dungeons_mobs:vindicator_chef",
     "dungeons_mobs:iceologer",
     "dungeons_mobs:windcaller",
-    "dungeons_mobs:illusioner_clone",
-    "dungeons_mobs:squall_golem"
+    "dungeons_mobs:illusioner",
+    "dungeons_mobs:squall_golem",
+    "dungeons_mobs:vindicator",
+    "dungeons_mobs:mage",
+    "dungeons_mobs:vindicator_raid_captain",
+    "dungeons_mobs:enchanter"
   ]
 }
