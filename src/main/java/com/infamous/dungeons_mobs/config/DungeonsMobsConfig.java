@@ -160,6 +160,11 @@ public class DungeonsMobsConfig {
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_PILLAGERS_IN_RAIDS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_SQUALL_GOLEMS_IN_RAIDS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_REDSTONE_GOLEMS_IN_RAIDS;
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_TOWER_GUARD_IN_RAIDS;
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_HEARY_ARMORED_GUARD_IN_RAIDS;
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ILLAGER_WARRIOR_IN_RAIDS;
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_VINDICATOR_RAID_CAPTAIN_IN_RAIDS;
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_RAMPART_CAPTAIN_IN_RAIDS;
 
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_STRONGER_HUSKS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_RANGED_SPIDERS;
@@ -819,7 +824,7 @@ public class DungeonsMobsConfig {
                     .define("enableIllusionersInRaids", false);
             ENABLE_MAGES_IN_RAIDS = builder
                     .comment("Enable the addition of Mages to raids. [true / false]")
-                    .define("enableMagesInRaids", true);
+                    .define("enableMagesInRaids", false);
             ENABLE_ICEOLOGERS_IN_RAIDS = builder
                     .comment("Enable the addition of Iceologers to raids. [true / false]")
                     .define("enableIceologersInRaids", false);
@@ -831,11 +836,32 @@ public class DungeonsMobsConfig {
                     .define("enableArmoredPillagersInRaids", true);
             ENABLE_SQUALL_GOLEMS_IN_RAIDS = builder
                     .comment("Enable the addition of Squall Golems to raids. [true / false]")
-                    .define("enableSquallGolemsInRaids", false);
+                    .define("enableSquallGolemsInRaids", true);
             ENABLE_REDSTONE_GOLEMS_IN_RAIDS = builder
                     .comment("Enable the addition of Redstone Golems to raids. [true / false]")
                     .define("enableRedstoneGolemsInRaids", true);
             builder.pop();
+            ENABLE_ILLAGER_WARRIOR_IN_RAIDS = builder
+                    .comment("Enable the addition of Illager Warriors to raids. [true / false]")
+                    .define("enableIWInRaids", false);
+            builder.pop();
+            ENABLE_TOWER_GUARD_IN_RAIDS = builder
+                    .comment("Enable the addition of Tower Guard to raids. [true / false]")
+                    .define("enableTGInRaids", false);
+            builder.pop();
+            ENABLE_HEARY_ARMORED_GUARD_IN_RAIDS = builder
+                    .comment("Enable the addition of Heavy Armored Guard to raids. [true / false]")
+                    .define("enableHAGInRaids", true);
+            builder.pop();
+            ENABLE_VINDICATOR_RAID_CAPTAIN_IN_RAIDS = builder
+                    .comment("Enable the addition of Vindicator raid captain to raids. [true / false]")
+                    .define("enableVRCInRaids", true);
+            builder.pop();
+            ENABLE_RAMPART_CAPTAIN_IN_RAIDS = builder
+                    .comment("Enable the addition of Rampart captain to raids. [true / false]")
+                    .define("enableRCInRaids", true);
+            builder.pop();
+
 
             builder.comment("Vanilla Mob Configuration").push("vanilla_mob_configuration");
             ENABLE_STRONGER_HUSKS = builder
