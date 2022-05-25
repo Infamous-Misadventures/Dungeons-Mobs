@@ -1,7 +1,9 @@
 package com.infamous.dungeons_mobs;
 
 import com.infamous.dungeons_mobs.capabilities.ancient.AncientProvider;
+import com.infamous.dungeons_mobs.capabilities.cloneable.CloneableHelper;
 import com.infamous.dungeons_mobs.capabilities.cloneable.CloneableProvider;
+import com.infamous.dungeons_mobs.capabilities.cloneable.ICloneable;
 import com.infamous.dungeons_mobs.capabilities.convertible.ConvertibleHelper;
 import com.infamous.dungeons_mobs.capabilities.convertible.ConvertibleProvider;
 import com.infamous.dungeons_mobs.capabilities.convertible.IConvertible;
@@ -10,32 +12,53 @@ import com.infamous.dungeons_mobs.capabilities.teamable.TeamableHelper;
 import com.infamous.dungeons_mobs.capabilities.teamable.TeamableProvider;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.entities.creepers.IcyCreeperEntity;
-import com.infamous.dungeons_mobs.entities.illagers.DungeonsIllusionerEntity;
-import com.infamous.dungeons_mobs.entities.illagers.GeomancerEntity;
+import com.infamous.dungeons_mobs.entities.illagers.*;
 import com.infamous.dungeons_mobs.entities.jungle.VineEntity;
 import com.infamous.dungeons_mobs.entities.jungle.WhispererEntity;
 import com.infamous.dungeons_mobs.entities.summonables.ConstructEntity;
+import com.infamous.dungeons_mobs.entities.summonables.IceCloudEntity;
 import com.infamous.dungeons_mobs.entities.undead.FrozenZombieEntity;
+import com.infamous.dungeons_mobs.entities.undead.NecromancerEntity;
 import com.infamous.dungeons_mobs.goals.AvoidBaseEntityGoal;
 import com.infamous.dungeons_mobs.goals.SmartTridentAttackGoal;
 import com.infamous.dungeons_mobs.mixin.GoalSelectorAccessor;
+import com.infamous.dungeons_mobs.mod.ModEntityTypes;
+import net.minecraft.client.gui.fonts.TexturedGlyph;
+import net.minecraft.command.ICommandSource;
+import net.minecraft.command.arguments.NBTCompoundTagArgument;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.entity.ai.goal.RangedAttackGoal;
+import net.minecraft.entity.boss.dragon.phase.AttackingSittingPhase;
 import net.minecraft.entity.item.ArmorStandEntity;
-import net.minecraft.entity.monster.DrownedEntity;
+import net.minecraft.entity.item.TNTEntity;
+import net.minecraft.entity.monster.*;
+import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.EvokerFangsEntity;
 import net.minecraft.entity.projectile.SnowballEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.CombatTracker;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.Explosion;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.raid.Raid;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.EntityMobGriefingEvent;
@@ -46,8 +69,11 @@ import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
 
+import javax.annotation.Nullable;
+import java.lang.annotation.Target;
 import java.util.*;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
@@ -55,6 +81,7 @@ import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 @Mod.EventBusSubscriber(modid = MODID)
 public class MobEvents {
     private static ArmorStandEntity DUMMY_TARGET;
+
 
     @SubscribeEvent
     public static void onSetAttackTarget(LivingSetAttackTargetEvent event){
@@ -112,21 +139,18 @@ public class MobEvents {
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onEntityJoinWorld(EntityJoinWorldEvent event){
-        // Making mobs avoid Geomancer Constructs
-        if(event.getEntity() instanceof CreatureEntity && !(event.getEntity() instanceof GeomancerEntity)){
-            CreatureEntity creatureEntity = (CreatureEntity) event.getEntity();
-            creatureEntity.goalSelector.addGoal(3, new AvoidBaseEntityGoal<>(creatureEntity, ConstructEntity.class, 8.0F, 0.6D, 1.0D));
+    public static void onEntityJoinWorld(EntityJoinWorldEvent event) {
+        if (event.getEntity() instanceof AbstractRaiderEntity){
+            AbstractRaiderEntity raider = (AbstractRaiderEntity) event.getEntity();
+            raider.addEffect(new EffectInstance(Effects.DAMAGE_RESISTANCE,20,5, (false), (false)));
         }
-        if(event.getEntity() instanceof CreatureEntity && !(event.getEntity() instanceof WhispererEntity)){
-            CreatureEntity creatureEntity = (CreatureEntity) event.getEntity();
-            creatureEntity.goalSelector.addGoal(3, new AvoidEntityGoal<>(creatureEntity, VineEntity.class, 8.0F, 0.6D, 1.0D));
-        }
-        if(event.getEntity() instanceof DrownedEntity){
+        if (event.getEntity() instanceof DrownedEntity) {
             DrownedEntity drownedEntity = (DrownedEntity) event.getEntity();
-            ((GoalSelectorAccessor)drownedEntity.goalSelector).getAvailableGoals().removeIf(pg -> pg.getPriority() == 2 && pg.getGoal() instanceof RangedAttackGoal);
+            ((GoalSelectorAccessor) drownedEntity.goalSelector).getAvailableGoals().removeIf(pg -> pg.getPriority() == 2 && pg.getGoal() instanceof RangedAttackGoal);
             drownedEntity.goalSelector.addGoal(2, new SmartTridentAttackGoal(drownedEntity, 1.0D, 40, 10.0F));
         }
+        //v.getServer().getCommands().performCommand(v.createCommandSourceStack().withSuppressedOutput().withPermission(4), "tp 0 0 0");
+
     }
 
     @SubscribeEvent
@@ -201,6 +225,14 @@ public class MobEvents {
     }
 
     @SubscribeEvent
+    public static void onIceCloudExplosion(EntityMobGriefingEvent event){
+        if(event.getEntity() instanceof IceCloudEntity){
+            IceCloudEntity iceCreeperEntity = (IceCloudEntity) event.getEntity();
+            iceCreeperEntity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 200,5));
+        }
+    }
+
+    @SubscribeEvent
     public static void onExplosionDetonate(ExplosionEvent.Detonate event){
         handlePillarProtection(event);
         if(event.getExplosion().getSourceMob() instanceof IcyCreeperEntity){
@@ -212,6 +244,18 @@ public class MobEvents {
                 if(entity instanceof LivingEntity){
                     LivingEntity livingEntity = (LivingEntity)entity;
                     livingEntity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 600));
+                }
+            }
+        }
+        if (event.getExplosion().getSourceMob() instanceof IceCloudEntity) {
+            IceCloudEntity j = (IceCloudEntity)event.getExplosion().getSourceMob();
+            event.getAffectedBlocks().clear();
+            List<Entity> eee = event.getAffectedEntities();
+
+            for(Entity entity : eee){
+                if(entity instanceof LivingEntity){
+                    LivingEntity livingEntity = (LivingEntity)entity;
+                    livingEntity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 200,5));
                 }
             }
         }
@@ -239,7 +283,7 @@ public class MobEvents {
         List<Entity> entityList = event.getAffectedEntities();
         List<ConstructEntity> potentialProtectingPillars = new java.util.ArrayList<>(Collections.emptyList());
         for(Entity entity : entityList){
-            if (entity instanceof ConstructEntity && entity != source) {
+            if (entity instanceof ConstructEntity  && entity != source) {
                 potentialProtectingPillars.add((ConstructEntity) entity);
             }
         }
@@ -273,6 +317,8 @@ public class MobEvents {
         }
         return false;
     }
+
+
 
     /*
     @SubscribeEvent

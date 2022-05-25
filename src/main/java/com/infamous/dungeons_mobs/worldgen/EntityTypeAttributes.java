@@ -3,26 +3,14 @@ package com.infamous.dungeons_mobs.worldgen;
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
+import com.infamous.dungeons_mobs.entities.allcustomentity.illagers.PowerfulRoyalGuardEntity;
 import com.infamous.dungeons_mobs.entities.creepers.IcyCreeperEntity;
 import com.infamous.dungeons_mobs.entities.ender.BlastlingEntity;
 import com.infamous.dungeons_mobs.entities.ender.EndersentEntity;
 import com.infamous.dungeons_mobs.entities.ender.SnarelingEntity;
 import com.infamous.dungeons_mobs.entities.ender.WatchlingEntity;
 import com.infamous.dungeons_mobs.entities.golem.SquallGolemEntity;
-import com.infamous.dungeons_mobs.entities.illagers.ArmoredMountaineerEntity;
-import com.infamous.dungeons_mobs.entities.illagers.ArmoredPillagerEntity;
-import com.infamous.dungeons_mobs.entities.illagers.ArmoredVindicatorEntity;
-import com.infamous.dungeons_mobs.entities.illagers.DungeonsIllusionerEntity;
-import com.infamous.dungeons_mobs.entities.illagers.EnchanterEntity;
-import com.infamous.dungeons_mobs.entities.illagers.GeomancerEntity;
-import com.infamous.dungeons_mobs.entities.illagers.IceologerEntity;
-import com.infamous.dungeons_mobs.entities.illagers.IllusionerCloneEntity;
-import com.infamous.dungeons_mobs.entities.illagers.MageCloneEntity;
-import com.infamous.dungeons_mobs.entities.illagers.MageEntity;
-import com.infamous.dungeons_mobs.entities.illagers.MountaineerEntity;
-import com.infamous.dungeons_mobs.entities.illagers.RoyalGuardEntity;
-import com.infamous.dungeons_mobs.entities.illagers.VindicatorChefEntity;
-import com.infamous.dungeons_mobs.entities.illagers.WindcallerEntity;
+import com.infamous.dungeons_mobs.entities.illagers.*;
 import com.infamous.dungeons_mobs.entities.jungle.LeapleafEntity;
 import com.infamous.dungeons_mobs.entities.jungle.PoisonQuillVineEntity;
 import com.infamous.dungeons_mobs.entities.jungle.QuickGrowingVineEntity;
@@ -34,6 +22,7 @@ import com.infamous.dungeons_mobs.entities.redstone.RedstoneGolemEntity;
 import com.infamous.dungeons_mobs.entities.slime.ConjuredSlimeEntity;
 import com.infamous.dungeons_mobs.entities.summonables.GeomancerBombEntity;
 import com.infamous.dungeons_mobs.entities.summonables.GeomancerWallEntity;
+import com.infamous.dungeons_mobs.entities.summonables.IceCloudEntity;
 import com.infamous.dungeons_mobs.entities.undead.ArmoredSkeletonEntity;
 import com.infamous.dungeons_mobs.entities.undead.ArmoredZombieEntity;
 import com.infamous.dungeons_mobs.entities.undead.FrozenZombieEntity;
@@ -60,6 +49,7 @@ import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.lwjgl.system.CallbackI;
 
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class EntityTypeAttributes {
@@ -85,7 +75,7 @@ public class EntityTypeAttributes {
 
         event.put(ModEntityTypes.ICEOLOGER.get(), IceologerEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.GEOMANCER.get(), GeomancerEntity.setCustomAttributes().build());
-        event.put(ModEntityTypes.ILLUSIONER.get(), DungeonsIllusionerEntity.createAttributes().build());
+        event.put(ModEntityTypes.ILLUSIONER.get(), DungeonsIllusionerEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.ILLUSIONER_CLONE.get(), IllusionerCloneEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.WINDCALLER.get(), WindcallerEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.ENCHANTER.get(), EnchanterEntity.setCustomAttributes().build());
@@ -129,6 +119,15 @@ public class EntityTypeAttributes {
         event.put(ModEntityTypes.WATCHLING.get(), WatchlingEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.SNARELING.get(), SnarelingEntity.setCustomAttributes().build());
 
+        event.put(ModEntityTypes.ICE_CLOUD.get(), IceCloudEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.VINDICATOR.get(), DungeonsVindicatorEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.TOWER_GUARD.get(), TowerGuardEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.DUNGEONS_EVOKER.get(), DungeonsEvokerEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.ILLAGER_WARRIOR.get(), IllagerWarriorEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.ILLAGER_WARRIOR_CLONE.get(), IllagerWarriorEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.VINDICATOR_RAID_CAPTAIN.get(), VindicatorRaidCaptainEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.RAMPART_CAPTAIN.get(), RampartCaptainEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.POWERFUL_ROYAL_GUARD.get(), PowerfulRoyalGuardEntity.setCustomAttributes().build());
     }
 
     @SubscribeEvent
@@ -139,5 +138,13 @@ public class EntityTypeAttributes {
             event.add(EntityType.HUSK, Attributes.MOVEMENT_SPEED, 0.17D);
             event.add(EntityType.HUSK, Attributes.KNOCKBACK_RESISTANCE, 0.6D);
         }
+
+        event.add(EntityType.EVOKER, Attributes.KNOCKBACK_RESISTANCE, 1.0D);
+        event.add(EntityType.EVOKER, Attributes.MAX_HEALTH, 328.0D);
+        event.add(EntityType.EVOKER, Attributes.ARMOR, 15.0D);
+
+        event.add(EntityType.VEX, Attributes.KNOCKBACK_RESISTANCE, 1.0D);
+        event.add(EntityType.VEX, Attributes.MAX_HEALTH, 10.0D);
+        event.add(EntityType.VEX, Attributes.ATTACK_DAMAGE, 9.0D);
     }
 }

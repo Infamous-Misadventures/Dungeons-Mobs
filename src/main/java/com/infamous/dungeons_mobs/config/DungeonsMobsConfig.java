@@ -819,7 +819,7 @@ public class DungeonsMobsConfig {
                     .define("enableIllusionersInRaids", false);
             ENABLE_MAGES_IN_RAIDS = builder
                     .comment("Enable the addition of Mages to raids. [true / false]")
-                    .define("enableMagesInRaids", false);
+                    .define("enableMagesInRaids", true);
             ENABLE_ICEOLOGERS_IN_RAIDS = builder
                     .comment("Enable the addition of Iceologers to raids. [true / false]")
                     .define("enableIceologersInRaids", false);
@@ -831,7 +831,7 @@ public class DungeonsMobsConfig {
                     .define("enableArmoredPillagersInRaids", true);
             ENABLE_SQUALL_GOLEMS_IN_RAIDS = builder
                     .comment("Enable the addition of Squall Golems to raids. [true / false]")
-                    .define("enableSquallGolemsInRaids", true);
+                    .define("enableSquallGolemsInRaids", false);
             ENABLE_REDSTONE_GOLEMS_IN_RAIDS = builder
                     .comment("Enable the addition of Redstone Golems to raids. [true / false]")
                     .define("enableRedstoneGolemsInRaids", true);
