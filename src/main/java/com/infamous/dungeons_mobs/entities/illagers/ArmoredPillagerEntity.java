@@ -1,5 +1,6 @@
 package com.infamous.dungeons_mobs.entities.illagers;
 
+import com.electronwill.nightconfig.core.conversion.ConversionTable;
 import com.google.common.collect.Maps;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModItems;
@@ -20,6 +21,8 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.world.*;
 import net.minecraft.world.raid.Raid;
 
@@ -34,6 +37,7 @@ public class ArmoredPillagerEntity extends PillagerEntity {
     public ArmoredPillagerEntity(World world){
         super(ModEntityTypes.ARMORED_PILLAGER.get(), world);
     }
+
 
     public ArmoredPillagerEntity(EntityType<? extends PillagerEntity> p_i50189_1_, World p_i50189_2_) {
         super(p_i50189_1_, p_i50189_2_);

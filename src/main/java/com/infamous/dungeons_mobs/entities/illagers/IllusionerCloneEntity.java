@@ -3,6 +3,7 @@ package com.infamous.dungeons_mobs.entities.illagers;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.monster.AbstractIllagerEntity;
@@ -38,13 +39,14 @@ public class IllusionerCloneEntity extends AbstractIllagerEntity implements IRan
     private UUID casterUuid;
     private int lifeTicks;
 
+
     public IllusionerCloneEntity(World world){
         super(ModEntityTypes.ILLUSIONER_CLONE.get(), world);
     }
 
     public IllusionerCloneEntity(EntityType<? extends IllusionerCloneEntity> type, World worldIn) {
         super(type, worldIn);
-        this.xpReward = 5;
+        this.xpReward = 0;
     }
 
     public IllusionerCloneEntity(World worldIn, LivingEntity caster, int lifeTicks) {
@@ -56,6 +58,14 @@ public class IllusionerCloneEntity extends AbstractIllagerEntity implements IRan
     public void setCaster(@Nullable LivingEntity caster) {
         this.caster = caster;
         this.casterUuid = caster == null ? null : caster.getUUID();
+    }
+
+    @Override
+    public boolean hurt(DamageSource p_70097_1_, float p_70097_2_) {
+        if (!this.isInvulnerable()) {
+            this.remove();
+        }
+        return super.hurt(p_70097_1_, p_70097_2_);
     }
 
     @Nullable
@@ -110,7 +120,7 @@ public class IllusionerCloneEntity extends AbstractIllagerEntity implements IRan
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return IllusionerEntity.createAttributes();
+        return DungeonsIllusionerEntity.createAttributes();
     }
 
     @Override
@@ -147,6 +157,7 @@ public class IllusionerCloneEntity extends AbstractIllagerEntity implements IRan
     @Override
     public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         this.populateDefaultEquipmentSlots(difficultyIn);
+        this.setCanJoinRaid(false);
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 
@@ -239,4 +250,10 @@ public class IllusionerCloneEntity extends AbstractIllagerEntity implements IRan
     public boolean canBeLeader() {
         return false;
     }
+
+    @Override
+    public boolean canJoinRaid() {
+        return false;
+    }
+
 }

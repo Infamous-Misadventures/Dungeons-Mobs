@@ -3,6 +3,7 @@ package com.infamous.dungeons_mobs.entities.illagers;
 import com.infamous.dungeons_libraries.capabilities.enchantable.IEnchantable;
 import com.infamous.dungeons_libraries.network.MobEnchantmentMessage;
 import com.infamous.dungeons_libraries.utils.AreaOfEffectHelper;
+import com.infamous.dungeons_mobs.mobenchantments.MobEnchantmentEvents;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 import com.infamous.dungeons_mobs.network.NetworkHandler;
@@ -22,6 +23,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
+import net.minecraft.world.raid.Raid;
 import net.minecraftforge.fml.network.PacketDistributor;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -40,8 +42,7 @@ import java.util.stream.Collectors;
 
 import static com.infamous.dungeons_libraries.capabilities.enchantable.EnchantableHelper.getEnchantableCapability;
 import static com.infamous.dungeons_libraries.capabilities.enchantable.EnchantableHelper.getEnchantableCapabilityLazy;
-import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.DOUBLE_DAMAGE;
-import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.PROTECTION;
+import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.*;
 import static com.infamous.dungeons_mobs.network.datasync.ModDataSerializers.UUID_LIST;
 
 public class EnchanterEntity extends SpellcastingIllagerEntity implements IAnimatable {
@@ -49,6 +50,10 @@ public class EnchanterEntity extends SpellcastingIllagerEntity implements IAnima
     public static final DataParameter<Integer> ATTACK_TICKS = EntityDataManager.defineId(EnchanterEntity.class, DataSerializers.INT);
     public static final DataParameter<Integer> ENCHANT_TICKS = EntityDataManager.defineId(EnchanterEntity.class, DataSerializers.INT);
     public static final DataParameter<List<UUID>> ENCHANTMENT_TARGETS = EntityDataManager.defineId(EnchanterEntity.class, UUID_LIST);
+
+    public MonsterEntity enchantingTargetEntity = null;
+    public int enchantmentCooldown;
+    public int timer;
 
     AnimationFactory factory = new AnimationFactory(this);
 
@@ -64,7 +69,11 @@ public class EnchanterEntity extends SpellcastingIllagerEntity implements IAnima
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return MonsterEntity.createMonsterAttributes().add(Attributes.ATTACK_DAMAGE, 8.0D).add(Attributes.MOVEMENT_SPEED, 0.2D).add(Attributes.FOLLOW_RANGE, 20.0D).add(Attributes.MAX_HEALTH, 14.0D);
+        return MonsterEntity.createMonsterAttributes()
+                .add(Attributes.ATTACK_DAMAGE, 8.0D)
+                .add(Attributes.MOVEMENT_SPEED, 0.2D)
+                .add(Attributes.FOLLOW_RANGE, 20.0D)
+                .add(Attributes.MAX_HEALTH, 24.0D);
     }
 
     protected void defineSynchedData() {
@@ -107,11 +116,8 @@ public class EnchanterEntity extends SpellcastingIllagerEntity implements IAnima
 
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new EnchanterEntity.AttackingGoal());
         this.goalSelector.addGoal(0, new SwimGoal(this));
-        this.goalSelector.addGoal(1, new EnchanterEntity.CastingSpellGoal());
         this.goalSelector.addGoal(2, new AvoidEntityGoal<>(this, PlayerEntity.class, 8.0F, 1.0D, 1.0D));
-        this.goalSelector.addGoal(4, new EnchanterEntity.EnchantSpellGoal());
         this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 1.0D));
         this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
         this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
@@ -132,15 +138,6 @@ public class EnchanterEntity extends SpellcastingIllagerEntity implements IAnima
 
     public void baseTick() {
         super.baseTick();
-        if (this.level.getNearestPlayer(this, 2) != null && this.getTarget() != null && this.level.getNearestPlayer(this, 2) == this.getTarget()) {
-            if (this.getAttackTicks() == 0 && this.random.nextInt(10) == 0) {
-                this.setAttackTicks(40);
-                this.playSound(ModSoundEvents.ENCHANTER_PRE_ATTACK.get(), this.getSoundVolume(), this.getVoicePitch());
-            } else if (this.getAttackTicks() == 12) {
-                this.doHurtTarget(this.level.getNearestPlayer(this, 2));
-                this.playSound(ModSoundEvents.ENCHANTER_ATTACK.get(), this.getSoundVolume(), this.getVoicePitch());
-            }
-        }
 
         if (this.getAttackTicks() > 0) {
             this.setAttackTicks(this.getAttackTicks() - 1);
@@ -150,9 +147,15 @@ public class EnchanterEntity extends SpellcastingIllagerEntity implements IAnima
             this.setEnchantTicks(this.getEnchantTicks() - 1);
         }
 
+        if (this.enchantmentCooldown > 0) {
+            this.enchantmentCooldown --;
+        }
+
         List<MonsterEntity> validEnchantmentTargets = this.enchantmentTargets.stream().filter(this::isValidEnchantmentTarget).collect(Collectors.toList());
         this.enchantmentTargets.stream().filter(monsterEntity -> !validEnchantmentTargets.contains(monsterEntity)).filter(LivingEntity::isAlive).forEach(this::clearEntityMobEnchantments);
         setEnchantmentTargets(validEnchantmentTargets);
+
+        this.timer ++;
     }
 
     @Override
@@ -248,101 +251,136 @@ public class EnchanterEntity extends SpellcastingIllagerEntity implements IAnima
         return illagerArmPose;
     }
 
-    class CastingSpellGoal extends SpellcastingIllagerEntity.CastingASpellGoal {
-        private CastingSpellGoal() {
-        }
+    class EnchantTargetGoal extends Goal{
 
-        public void tick() {
-            if (EnchanterEntity.this.getEnchantmentTarget() != null) {
-                EnchanterEntity.this.getLookControl().setLookAt(EnchanterEntity.this.getEnchantmentTarget(), (float) EnchanterEntity.this.getMaxHeadYRot(), (float) EnchanterEntity.this.getMaxHeadXRot());
-            }
-
-        }
-    }
-
-    public class EnchantSpellGoal extends SpellcastingIllagerEntity.UseSpellGoal {
-//        private final EntityPredicate wololoTargeting = (new EntityPredicate()).range(16.0D).allowInvulnerable().selector();
-
+        @Override
         public boolean canUse() {
-            if (EnchanterEntity.this.getTarget() == null) {
-                return false;
-            } else if (EnchanterEntity.this.isCastingSpell()) {
-                return false;
-            } else if (EnchanterEntity.this.tickCount < this.nextAttackTickCount) {
-                return false;
-            }else if(EnchanterEntity.this.enchantmentTargets.size() > 1){
-                return false;
-            } else {
-                List<LivingEntity> list = AreaOfEffectHelper.getNearbyEnemies(EnchanterEntity.this, 16, EnchanterEntity.this.level, livingEntity -> {
-                    IEnchantable enchantableCapability = getEnchantableCapability(livingEntity);
-                    return !enchantableCapability.hasEnchantment() && livingEntity instanceof MonsterEntity;
-                });
-                if (list.isEmpty()) {
-                    return false;
-                } else {
-                    EnchanterEntity.this.setEnchantmentTarget((MonsterEntity) list.get(EnchanterEntity.this.random.nextInt(list.size())));
-                    EnchanterEntity.this.setEnchantTicks(45);
-                    return true;
+            return true;
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return true;
+        }
+
+        @Override
+        public void tick() {
+            LivingEntity v = EnchanterEntity.this.getTarget();
+            if (v != null && v.isAlive())
+                if (v.getMobType() == CreatureAttribute.ILLAGER) {
+                    if (EnchanterEntity.this.distanceToSqr(EnchanterEntity.this.getTarget()) < 80.0D) {
+                        EnchanterEntity.this.enchantingTargetEntity = (MonsterEntity) v;
+                }else if (v.getMobType() == CreatureAttribute.UNDEAD) {
+                        if (EnchanterEntity.this.distanceToSqr(EnchanterEntity.this.getTarget()) < 80.0D) {
+                            EnchanterEntity.this.enchantingTargetEntity = (MonsterEntity) v;
+                        }
                 }
             }
-        }
-
-        public boolean canContinueToUse() {
-            return EnchanterEntity.this.getEnchantmentTarget() != null && this.attackWarmupDelay > 0;
-        }
-
-        public void stop() {
-            super.stop();
-            EnchanterEntity.this.setEnchantmentTarget((MonsterEntity) null);
-        }
-
-        protected void performSpellCasting() {
-            MonsterEntity selectedMonsterEntity = EnchanterEntity.this.getEnchantmentTarget();
-            if (selectedMonsterEntity != null && selectedMonsterEntity.isAlive()) {
-                getEnchantableCapabilityLazy(selectedMonsterEntity).ifPresent(cap -> {
-                    cap.addEnchantment(DOUBLE_DAMAGE.get());
-                    cap.addEnchantment(PROTECTION.get());
-                    selectedMonsterEntity.refreshDimensions();
-                    NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> selectedMonsterEntity), new MobEnchantmentMessage(selectedMonsterEntity.getId(), cap.getEnchantments()));
-                });
-                EnchanterEntity.this.addEnchantmentTarget(selectedMonsterEntity);
-            }
-        }
-
-        protected int getCastWarmupTime() {
-            return 40;
-        }
-
-        protected int getCastingTime() {
-            return 45;
-        }
-
-        protected int getCastingInterval() {
-            return 140;
-        }
-
-        protected SoundEvent getSpellPrepareSound() {
-            return ModSoundEvents.ENCHANTER_SPELL.get();
-        }
-
-        protected SpellcastingIllagerEntity.SpellType getSpell() {
-            return SpellcastingIllagerEntity.SpellType.NONE;
+            super.tick();
         }
     }
 
-    class AttackingGoal extends Goal {
-        public AttackingGoal() {
-            this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP, Goal.Flag.LOOK));
+    class EnchantingMobsGoal extends Goal {
+
+        public int enchantmentNumber;
+
+        @Override
+        public boolean canContinueToUse() {
+            return super.canContinueToUse();
         }
 
+        @Override
         public boolean canUse() {
-            return EnchanterEntity.this.getAttackTicks() > 0 && EnchanterEntity.this.getTarget() != null;
+            if (EnchanterEntity.this.enchantingTargetEntity != null)
+                if (EnchanterEntity.this.enchantmentTargets.get(1) == null) {
+                    this.enchantmentNumber = 1;
+                    return EnchanterEntity.this.enchantmentCooldown == 0 &&
+                            EnchanterEntity.this.getEnchantTicks() == 0;
+                } else if (EnchanterEntity.this.enchantmentTargets.get(2) == null) {
+                    this.enchantmentNumber = 2;
+                    return EnchanterEntity.this.enchantmentCooldown == 0 &&
+                            EnchanterEntity.this.getEnchantTicks() == 0;
+                } else {
+                    return false;
+                }else {
+                    return false;
+            }
         }
 
-        public void tick() {
-            EnchanterEntity.this.getNavigation().stop();
-            EnchanterEntity.this.getLookControl().setLookAt(EnchanterEntity.this.getTarget().getX(), EnchanterEntity.this.getTarget().getEyeY(), EnchanterEntity.this.getTarget().getZ());
+        @Override
+        public boolean isInterruptable() {
+            return EnchanterEntity.this.getEnchantTicks() > 0;
         }
+
+        @Override
+        public void tick() {
+            if (EnchanterEntity.this.getEnchantTicks() == 35)
+            if (this.enchantmentNumber == 1){
+                EnchanterEntity.this.enchantmentCooldown = 240;
+                if (EnchanterEntity.this.distanceToSqr(EnchanterEntity.this.enchantingTargetEntity) < 80.0D) {
+                    MonsterEntity v = EnchanterEntity.this.enchantingTargetEntity;
+                    EnchanterEntity.this.enchantmentTargets.set(1, EnchanterEntity.this.enchantingTargetEntity);
+                    getEnchantableCapabilityLazy(v).ifPresent(cap ->{
+                        cap.addEnchantment(DOUBLE_DAMAGE.get());
+                        cap.addEnchantment(PROTECTION.get());
+                        cap.addEnchantment(REGENERATION.get());
+                        cap.addEnchantment(HEALS_ALLIES.get());
+                        cap.addEnchantment(THORNS.get());
+                        v.refreshDimensions();
+                        NetworkHandler.INSTANCE.send((PacketDistributor.TRACKING_ENTITY.with(() -> v)), new MobEnchantmentMessage(v.getId(), cap.getEnchantments()));
+                    });
+                }
+
+            }else if (this.enchantmentNumber == 2){
+                EnchanterEntity.this.enchantmentCooldown = 240;
+                if (EnchanterEntity.this.distanceToSqr(EnchanterEntity.this.enchantingTargetEntity) < 80.0D) {
+                    MonsterEntity v = EnchanterEntity.this.enchantingTargetEntity;
+                    EnchanterEntity.this.enchantmentTargets.set(1, EnchanterEntity.this.enchantingTargetEntity);
+                    getEnchantableCapabilityLazy(v).ifPresent(cap ->{
+                        int f = EnchanterEntity.this.getRandom().nextInt(6);
+                        if(f==1)
+                        cap.addEnchantment(DOUBLE_DAMAGE.get());
+                        if(f==2)
+                        cap.addEnchantment(PROTECTION.get());
+                        if(f==3)
+                        cap.addEnchantment(REGENERATION.get());
+                        if(f==4)
+                        cap.addEnchantment(HEALS_ALLIES.get());
+                        if(f==5)
+                        cap.addEnchantment(THORNS.get());
+                        if(f==0)
+                        cap.addEnchantment(ECHO.get());
+                        v.refreshDimensions();
+                        NetworkHandler.INSTANCE.send((PacketDistributor.TRACKING_ENTITY.with(() -> v)), new MobEnchantmentMessage(v.getId(), cap.getEnchantments()));
+                    });
+                }
+            }
+            super.tick();
+        }
+
+        @Override
+        public void stop() {
+            EnchanterEntity.this.setEnchantTicks(0);
+            this.enchantmentNumber = 0;
+            super.stop();
+        }
+
+        @Override
+        public void start() {
+            addEnchantmentTarget(EnchanterEntity.this.enchantingTargetEntity);
+            EnchanterEntity.this.setEnchantTicks(45);
+            super.start();
+        }
+
+    }
+
+    class AttackGoal extends Goal {
+
+        @Override
+        public boolean canUse() {
+            return false;
+        }
+
     }
 
 }

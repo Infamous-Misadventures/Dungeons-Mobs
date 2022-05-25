@@ -1,6 +1,9 @@
-package com.infamous.dungeons_mobs.entities.illagers;
+package com.infamous.dungeons_mobs.entities.allcustomentity.illagers;
 
 import com.google.common.collect.Maps;
+import com.infamous.dungeons_mobs.entities.illagers.ArmoredVindicatorEntity;
+import com.infamous.dungeons_mobs.entities.illagers.DungeonsVindicatorEntity;
+import com.infamous.dungeons_mobs.entities.illagers.RoyalGuardEntity;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModItems;
 import net.minecraft.block.BlockState;
@@ -15,11 +18,10 @@ import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.monster.AbstractIllagerEntity;
 import net.minecraft.entity.monster.AbstractRaiderEntity;
+import net.minecraft.entity.monster.PillagerEntity;
 import net.minecraft.entity.monster.VindicatorEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -28,21 +30,23 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.*;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.IServerWorld;
+import net.minecraft.world.World;
 import net.minecraft.world.raid.Raid;
-import net.minecraft.world.spawner.WorldEntitySpawner;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
-import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.lwjgl.system.CallbackI;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -55,37 +59,97 @@ import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.Map;
 
-public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatable {
+public class PowerfulRoyalGuardEntity extends AbstractIllagerEntity implements IAnimatable {
     private int attackTimer;
     private int attackID;
     public static final byte MELEE_ATTACK = 1;
-    private static final DataParameter<Boolean> MELEEATTACKING = EntityDataManager.defineId(RoyalGuardEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> IS_DIAMOND = EntityDataManager.defineId(PowerfulRoyalGuardEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> IS_GOLD = EntityDataManager.defineId(PowerfulRoyalGuardEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> MELEEATTACKING = EntityDataManager.defineId(PowerfulRoyalGuardEntity.class, DataSerializers.BOOLEAN);
 
     AnimationFactory factory = new AnimationFactory(this);
 
 
-    public RoyalGuardEntity(World world) {
-        super(ModEntityTypes.ROYAL_GUARD.get(), world);
+    public PowerfulRoyalGuardEntity(World world) {
+        super(ModEntityTypes.POWERFUL_ROYAL_GUARD.get(), world);
     }
 
-    public RoyalGuardEntity(EntityType<? extends AbstractIllagerEntity> p_i50189_1_, World p_i50189_2_) {
+    public PowerfulRoyalGuardEntity(EntityType<? extends AbstractIllagerEntity> p_i50189_1_, World p_i50189_2_) {
         super(p_i50189_1_, p_i50189_2_);
     }
 
 
     protected void defineSynchedData() {
         super.defineSynchedData();
+        this.entityData.define(IS_DIAMOND, false);
+        this.entityData.define(IS_GOLD, false);
         this.entityData.define(MELEEATTACKING, false);
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundNBT compound) {
+        super.readAdditionalSaveData(compound);
+        if (compound.contains("Diamond", 99)) {
+            this.setDiamond(compound.getBoolean("Diamond"));
+        }
+        if (compound.contains("Gold", 99)) {
+            this.setGold(compound.getBoolean("Gold"));
+        }
+    }
+
+    public boolean isDiamond(){
+        return this.entityData.get(IS_DIAMOND);
+    }
+
+    public boolean isGold(){
+        return this.entityData.get(IS_GOLD);
+    }
+
+    public void setDiamond(boolean isDiamond){
+        this.entityData.set(IS_DIAMOND, isDiamond);
+    }
+
+    public void setGold(boolean IsGold){
+        this.entityData.set(IS_GOLD, IsGold);
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundNBT compound) {
+        super.addAdditionalSaveData(compound);
+        if (this.isDiamond()){
+            compound.putBoolean("Diamond", true);
+        }
+        if (this.isGold()){
+            compound.putBoolean("Gold", true);
+        }
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return VindicatorEntity.createAttributes()
-                .add(Attributes.MOVEMENT_SPEED, 0.28D)
+                .add(Attributes.MOVEMENT_SPEED, 0.25D)
                 .add(Attributes.MAX_HEALTH, 68.8D)
-                .add(Attributes.ARMOR, 8.0D)
-                .add(Attributes.ATTACK_DAMAGE, 16.0D)
-                .add(Attributes.KNOCKBACK_RESISTANCE, 1.5D)
-                .add(Attributes.ATTACK_KNOCKBACK, 3.0D);
+                .add(Attributes.ARMOR, 10.0D)
+                .add(Attributes.ATTACK_DAMAGE, 18.0D)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 3.5D)
+                .add(Attributes.ATTACK_KNOCKBACK, 5.0D);
+    }
+
+    private void applyDiamondArmorBoosts() {
+        this.addEffect(new EffectInstance(Effects.HEAL, 10, 6, (false), (false)));
+        this.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(new AttributeModifier("Diamond health boost", 20.0D, AttributeModifier.Operation.ADDITION));
+        this.getAttribute(Attributes.ATTACK_KNOCKBACK).addPermanentModifier(new AttributeModifier("Diamond attack knockback boost", 1.75D, AttributeModifier.Operation.ADDITION));
+        this.getAttribute(Attributes.ARMOR).addPermanentModifier(new AttributeModifier("Diamond armor boost", 10.0D, AttributeModifier.Operation.ADDITION));
+        this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).addPermanentModifier(new AttributeModifier("Diamond knockback resistance boost", 4.0D, AttributeModifier.Operation.ADDITION));
+        this.getAttribute(Attributes.ATTACK_DAMAGE).addPermanentModifier(new AttributeModifier("Diamond attack boost", 6.0D, AttributeModifier.Operation.ADDITION));
+    }
+
+    private void applyGoldArmorBoosts() {
+        this.addEffect(new EffectInstance(Effects.HEAL, 10, 6, (false), (false)));
+        this.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(new AttributeModifier("Gold health boost", 8.9D, AttributeModifier.Operation.ADDITION));
+        this.getAttribute(Attributes.ATTACK_KNOCKBACK).addPermanentModifier(new AttributeModifier("Gold attack knockback boost", 1.0D, AttributeModifier.Operation.ADDITION));
+        this.getAttribute(Attributes.ARMOR).addPermanentModifier(new AttributeModifier("Gold armor boost", 5.0D, AttributeModifier.Operation.ADDITION));
+        this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).addPermanentModifier(new AttributeModifier("Gold knockback resistance boost", 1.5D, AttributeModifier.Operation.ADDITION));
+        this.getAttribute(Attributes.ATTACK_DAMAGE).addPermanentModifier(new AttributeModifier("Gold attack boost", 3.0D, AttributeModifier.Operation.ADDITION));
     }
 
     @Override
@@ -171,7 +235,7 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
             weaponEnchantmentMap.put(Enchantments.SHARPNESS, enchantmentLevel);
             EnchantmentHelper.setEnchantments(weaponEnchantmentMap, mainhandWeapon);
 
-            shieldEnchantmentMap.put(Enchantments.UNBREAKING, (enchantmentLevel)-2);
+            shieldEnchantmentMap.put(Enchantments.UNBREAKING, enchantmentLevel);
             EnchantmentHelper.setEnchantments(shieldEnchantmentMap, offhandWeapon);
 
             armorEnchantmentMap.put(Enchantments.PROJECTILE_PROTECTION, (enchantmentLevel));
@@ -261,6 +325,30 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
     @Nullable
     public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         this.populateDefaultEquipmentSlots(difficultyIn);
+
+        float diamondChance = random.nextFloat();
+        float goldChance = random.nextFloat();
+        if(diamondChance < 0.25F){
+            this.setDiamond(true);
+            for(int i=0;i<5;++i){
+                PowerfulRoyalGuardEntity v = this;
+                BlockPos vvf = v.blockPosition();
+                int o =v.getRandom().nextInt(6);
+                {
+                    RoyalGuardEntity vv = new RoyalGuardEntity(this.level);
+                    vv.moveTo(vvf,0F,0F);
+                    vv.setItemInHand(Hand.OFF_HAND, new ItemStack(Items.SHIELD));
+                    vv.setItemInHand(Hand.MAIN_HAND, new ItemStack(Items.IRON_AXE));
+                    vv.setCanJoinRaid(true);
+                    v.level.addFreshEntity(vv);
+                }
+            }
+            this.applyDiamondArmorBoosts();
+        }else {
+            this.setGold(true);
+            this.applyGoldArmorBoosts();
+        }
+
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 
@@ -286,50 +374,50 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
 
         @Override
         public boolean canUse() {
-            return RoyalGuardEntity.this.getTarget() != null && RoyalGuardEntity.this.getTarget().isAlive();
+            return PowerfulRoyalGuardEntity.this.getTarget() != null && PowerfulRoyalGuardEntity.this.getTarget().isAlive();
         }
 
         @Override
         public void start() {
-            RoyalGuardEntity.this.setAggressive(true);
+            PowerfulRoyalGuardEntity.this.setAggressive(true);
             this.delayCounter = 0;
         }
 
         @Override
         public void tick() {
-            LivingEntity livingentity = RoyalGuardEntity.this.getTarget();
+            LivingEntity livingentity = PowerfulRoyalGuardEntity.this.getTarget();
             if (livingentity == null) {
                 return;
             }
 
-            RoyalGuardEntity.this.lookControl.setLookAt(livingentity, 30.0F, 30.0F);
+            PowerfulRoyalGuardEntity.this.lookControl.setLookAt(livingentity, 30.0F, 30.0F);
 
             if (--this.delayCounter <= 0) {
-                this.delayCounter = 4 + RoyalGuardEntity.this.getRandom().nextInt(7);
-                RoyalGuardEntity.this.getNavigation().moveTo(livingentity, (double) this.moveSpeed);
+                this.delayCounter = 4 + PowerfulRoyalGuardEntity.this.getRandom().nextInt(7);
+                PowerfulRoyalGuardEntity.this.getNavigation().moveTo(livingentity, (double) this.moveSpeed);
             }
 
             this.attackTimer = Math.max(this.attackTimer - 1, 0);
-            this.checkAndPerformAttack(livingentity, RoyalGuardEntity.this.distanceToSqr(livingentity.getX(), livingentity.getBoundingBox().minY, livingentity.getZ()));
+            this.checkAndPerformAttack(livingentity, PowerfulRoyalGuardEntity.this.distanceToSqr(livingentity.getX(), livingentity.getBoundingBox().minY, livingentity.getZ()));
         }
 
         @Override
         protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
-            if ((distToEnemySqr <= this.getAttackReachSqr(enemy) || RoyalGuardEntity.this.getBoundingBox().intersects(enemy.getBoundingBox())) && this.attackTimer <= 0) {
+            if ((distToEnemySqr <= this.getAttackReachSqr(enemy) || PowerfulRoyalGuardEntity.this.getBoundingBox().intersects(enemy.getBoundingBox())) && this.attackTimer <= 0) {
                 this.attackTimer = this.maxAttackTimer;
-                RoyalGuardEntity.this.doHurtTarget(enemy);
+                PowerfulRoyalGuardEntity.this.doHurtTarget(enemy);
             }
         }
 
         @Override
         public void stop() {
-            RoyalGuardEntity.this.getNavigation().stop();
-            if (RoyalGuardEntity.this.getTarget() == null) {
-                RoyalGuardEntity.this.setAggressive(false);
+            PowerfulRoyalGuardEntity.this.getNavigation().stop();
+            if (PowerfulRoyalGuardEntity.this.getTarget() == null) {
+                PowerfulRoyalGuardEntity.this.setAggressive(false);
             }
         }
 
-        public RoyalGuardEntity.AttackGoal setMaxAttackTick(int max) {
+        public PowerfulRoyalGuardEntity.AttackGoal setMaxAttackTick(int max) {
             this.maxAttackTimer = max;
             return this;
         }
@@ -361,7 +449,7 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
 
         @Override
         public boolean canUse() {
-            return RoyalGuardEntity.this.getTarget() != null && attackID == MELEE_ATTACK;
+            return PowerfulRoyalGuardEntity.this.getTarget() != null && attackID == MELEE_ATTACK;
         }
 
         @Override
@@ -380,22 +468,22 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
         public void stop() {
             setAttackID(0);
             setMeleeAttacking(false);
-            RoyalGuardEntity.this.attackTimer = 0;
+            PowerfulRoyalGuardEntity.this.attackTimer = 0;
         }
 
         @Override
         public void tick() {
-            if (RoyalGuardEntity.this.getTarget() != null && RoyalGuardEntity.this.getTarget().isAlive()) {
-                RoyalGuardEntity.this.getLookControl().setLookAt(RoyalGuardEntity.this.getTarget(), 30.0F, 30.0F);
+            if (PowerfulRoyalGuardEntity.this.getTarget() != null && PowerfulRoyalGuardEntity.this.getTarget().isAlive()) {
+                PowerfulRoyalGuardEntity.this.getLookControl().setLookAt(PowerfulRoyalGuardEntity.this.getTarget(), 30.0F, 30.0F);
                 if (attackTimer == 15) {
-                    float attackKnockback = RoyalGuardEntity.this.getAttackKnockback();
-                    LivingEntity attackTarget = RoyalGuardEntity.this.getTarget();
-                    double ratioX = (double) MathHelper.sin(RoyalGuardEntity.this.yRot * ((float) Math.PI / 360F));
-                    double ratioZ = (double) (-MathHelper.cos(RoyalGuardEntity.this.yRot * ((float) Math.PI / 360F)));
+                    float attackKnockback = PowerfulRoyalGuardEntity.this.getAttackKnockback();
+                    LivingEntity attackTarget = PowerfulRoyalGuardEntity.this.getTarget();
+                    double ratioX = (double) MathHelper.sin(PowerfulRoyalGuardEntity.this.yRot * ((float) Math.PI / 360F));
+                    double ratioZ = (double) (-MathHelper.cos(PowerfulRoyalGuardEntity.this.yRot * ((float) Math.PI / 360F)));
                     double knockbackReduction = 0.5D;
-                    attackTarget.hurt(DamageSource.mobAttack(RoyalGuardEntity.this), (float) RoyalGuardEntity.this.getAttributeValue(Attributes.ATTACK_DAMAGE));
+                    attackTarget.hurt(DamageSource.mobAttack(PowerfulRoyalGuardEntity.this), (float) PowerfulRoyalGuardEntity.this.getAttributeValue(Attributes.ATTACK_DAMAGE));
                     this.forceKnockback(attackTarget, attackKnockback * 0.5F, ratioX, ratioZ, knockbackReduction);
-                    RoyalGuardEntity.this.setDeltaMovement(RoyalGuardEntity.this.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
+                    PowerfulRoyalGuardEntity.this.setDeltaMovement(PowerfulRoyalGuardEntity.this.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
                 }
             }
 
@@ -431,8 +519,8 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
 
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new RoyalGuardEntity.MeleeGoal());
-        this.goalSelector.addGoal(5, new RoyalGuardEntity.AttackGoal(this, 1.0D));
+        this.goalSelector.addGoal(0, new PowerfulRoyalGuardEntity.MeleeGoal());
+        this.goalSelector.addGoal(5, new PowerfulRoyalGuardEntity.AttackGoal(this, 1.0D));
         this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 1.0D));
         this.goalSelector.addGoal(7, new LookAtGoal(this, PlayerEntity.class, 6.0F));
         this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
@@ -446,14 +534,21 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
 
     @Override
     protected void playStepSound(BlockPos p_180429_1_, BlockState p_180429_2_) {
-        this.playSound(SoundEvents.ARMOR_EQUIP_IRON, 0.6f, 1);
+        this.playSound(SoundEvents.ARMOR_EQUIP_IRON, 0.8f, 1);
     }
 
     @Override
     protected void hurtCurrentlyUsedShield(float amount) {
         if (this.useItem.isShield(this)) {
             if (amount >= 3.0F) {
-                int i = 1 + MathHelper.floor(amount) * 4;
+                int i = 1 + MathHelper.floor(amount);
+
+                if (this.isDiamond())
+                    i = (int) (1 + MathHelper.floor(amount) * 0.15);
+
+                if (this.isGold())
+                    i = (int) (1 + MathHelper.floor(amount) * 0.4);
+
                 Hand hand = this.getUsedItemHand();
                 this.useItem.hurtAndBreak(i, this, (royalGuardEntity) -> {
                     royalGuardEntity.broadcastBreakEvent(hand);

@@ -1,6 +1,9 @@
 package com.infamous.dungeons_mobs.entities.illagers;
 
 import com.google.common.collect.Maps;
+import com.infamous.dungeons_mobs.capabilities.cloneable.CloneableHelper;
+import com.infamous.dungeons_mobs.capabilities.cloneable.ICloneable;
+import com.infamous.dungeons_mobs.entities.allcustomentity.illagers.PowerfulRoyalGuardEntity;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModItems;
 import net.minecraft.block.BlockState;
@@ -13,10 +16,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
-import net.minecraft.entity.monster.AbstractIllagerEntity;
-import net.minecraft.entity.monster.AbstractRaiderEntity;
-import net.minecraft.entity.monster.PillagerEntity;
-import net.minecraft.entity.monster.VindicatorEntity;
+import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluids;
@@ -28,19 +28,10 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.BlockParticleData;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.pathfinding.WalkNodeProcessor;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
 import net.minecraft.util.*;
-import net.minecraft.util.datafix.fixes.EntityHealth;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.*;
 import net.minecraft.world.raid.Raid;
 import net.minecraft.world.spawner.WorldEntitySpawner;
@@ -49,9 +40,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.lwjgl.system.CallbackI;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -63,34 +52,47 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.Map;
-import java.util.Random;
 
-public class ArmoredVindicatorEntity extends AbstractIllagerEntity implements IAnimatable {
+public class VindicatorRaidCaptainEntity extends AbstractIllagerEntity implements IAnimatable {
     private boolean isJohnny;
     private int attackTimer;
     private int attackID;
     public static final byte MELEE_ATTACK = 1;
-    private static final DataParameter<Boolean> MELEEATTACKING = EntityDataManager.defineId(ArmoredVindicatorEntity.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> IS_DIAMOND = EntityDataManager.defineId(ArmoredVindicatorEntity.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> IS_GOLD = EntityDataManager.defineId(ArmoredVindicatorEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> JUST_SPAWN = EntityDataManager.defineId(VindicatorRaidCaptainEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> MELEEATTACKING = EntityDataManager.defineId(VindicatorRaidCaptainEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> IS_DIAMOND = EntityDataManager.defineId(VindicatorRaidCaptainEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> IS_GOLD = EntityDataManager.defineId(VindicatorRaidCaptainEntity.class, DataSerializers.BOOLEAN);
 
     AnimationFactory factory = new AnimationFactory(this);
 
 
-    public ArmoredVindicatorEntity(World world){
-        super(ModEntityTypes.ARMORED_VINDICATOR.get(), world);
+    public VindicatorRaidCaptainEntity(World world){
+        super(ModEntityTypes.VINDICATOR_RAID_CAPTAIN.get(), world);
     }
 
-    public ArmoredVindicatorEntity(EntityType<? extends AbstractIllagerEntity> p_i50189_1_, World p_i50189_2_) {
+    public VindicatorRaidCaptainEntity(EntityType<? extends AbstractIllagerEntity> p_i50189_1_, World p_i50189_2_) {
         super(p_i50189_1_, p_i50189_2_);
+        setPatrolLeader(true);
     }
 
     protected void defineSynchedData() {
         super.defineSynchedData();
+        this.entityData.define(JUST_SPAWN, true);
         this.entityData.define(IS_DIAMOND, false);
         this.entityData.define(IS_GOLD, false);
         this.entityData.define(MELEEATTACKING, false);
     }
+
+    public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
+        return VindicatorEntity.createAttributes()
+                .add(Attributes.MOVEMENT_SPEED, 0.21D)
+                .add(Attributes.ARMOR, 25.0D)
+                .add(Attributes.MAX_HEALTH, 158.0D)
+                .add(Attributes.ATTACK_DAMAGE, 20.0D)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 3.2D)
+                .add(Attributes.ATTACK_KNOCKBACK, 5.5D);
+    }
+
 
     @Override
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficultyInstance) {
@@ -168,6 +170,14 @@ public class ArmoredVindicatorEntity extends AbstractIllagerEntity implements IA
         return this.entityData.get(IS_GOLD);
     }
 
+    public boolean Isjustspawn(){
+        return this.entityData.get(JUST_SPAWN);
+    }
+
+    public void setSpawned(boolean r){
+        this.entityData.set(JUST_SPAWN, r);
+    }
+
     public void setDiamond(boolean isDiamond){
         this.entityData.set(IS_DIAMOND, isDiamond);
     }
@@ -178,52 +188,49 @@ public class ArmoredVindicatorEntity extends AbstractIllagerEntity implements IA
 
     @Override
     public boolean canBeLeader() {
-        return false;
+        return true;
     }
 
     @Nullable
     @Override
     public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
-
-        float diamondChance = random.nextFloat();
-        float goldChance = random.nextFloat();
-
-        if(diamondChance < 0.17F){
-            this.setDiamond(true);
-        }
-
-        if(goldChance < 0.43F && !this.isDiamond()){
-            this.setGold(true);
-            this.applyGoldArmorBoosts();
-        }
-
-        if (this.isDiamond()){
-            for(int i=0;i<5;++i){
-                ArmoredVindicatorEntity v = this;
-                BlockPos vvf = v.blockPosition();
-                int o =v.getRandom().nextInt(6);
-                if (o==2||o==3){
-                    PillagerEntity vv = new PillagerEntity(EntityType.PILLAGER,this.level);
-                    vv.setItemInHand(Hand.MAIN_HAND,new ItemStack(Items.CROSSBOW));
-                    vv.moveTo(vvf,0F,0F);
-                    vv.setCanJoinRaid(true);
-                    v.level.addFreshEntity(vv);
-                }else {
-                    DungeonsVindicatorEntity vv = new DungeonsVindicatorEntity(this.level);
-                    vv.moveTo(vvf,0F,0F);
-                    vv.populateDefaultEquipmentSlots(difficultyIn);
-                    vv.setCanJoinRaid(true);
-                    v.level.addFreshEntity(vv);
-                }
-            }
-            this.applyDiamondArmorBoosts();
-        }
-        if (this.isGold()) {
-            this.applyGoldArmorBoosts();
-        }
-
         populateDefaultEquipmentSlots(difficultyIn);
-
+        for(int i=0;i<10;++i){
+            VindicatorRaidCaptainEntity v = this;
+            BlockPos vvf = v.blockPosition();
+            int o =v.getRandom().nextInt(6);
+            if (o==4){
+                PowerfulRoyalGuardEntity vv = new PowerfulRoyalGuardEntity(this.level);
+                vv.moveTo(vvf,0F,0F);
+                vv.setCanJoinRaid(true);
+                vv.finalizeSpawn(worldIn,difficultyIn,reason,spawnDataIn,dataTag);
+                v.level.addFreshEntity(vv);
+            }else if (o==0){
+                ArmoredVindicatorEntity vv = new ArmoredVindicatorEntity(this.level);
+                vv.moveTo(vvf,0F,0F);
+                vv.setCanJoinRaid(true);
+                vv.populateDefaultEquipmentSlots(difficultyIn);
+                v.level.addFreshEntity(vv);
+            }else if (o==1){
+                RoyalGuardEntity vv = new RoyalGuardEntity(this.level);
+                vv.moveTo(vvf,0F,0F);
+                vv.populateDefaultEquipmentSlots(difficultyIn);
+                vv.setCanJoinRaid(true);
+                v.level.addFreshEntity(vv);
+            }else if (o==2||o==3){
+                PillagerEntity vv = new PillagerEntity(EntityType.PILLAGER,this.level);
+                vv.setItemInHand(Hand.MAIN_HAND,new ItemStack(Items.CROSSBOW));
+                vv.moveTo(vvf,0F,0F);
+                vv.setCanJoinRaid(true);
+                v.level.addFreshEntity(vv);
+            }else {
+                DungeonsVindicatorEntity vv = new DungeonsVindicatorEntity(this.level);
+                vv.moveTo(vvf,0F,0F);
+                vv.populateDefaultEquipmentSlots(difficultyIn);
+                vv.setCanJoinRaid(true);
+                v.level.addFreshEntity(vv);
+            }
+        }
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 
@@ -231,49 +238,18 @@ public class ArmoredVindicatorEntity extends AbstractIllagerEntity implements IA
     public SoundEvent getCelebrateSound() {
         return SoundEvents.VINDICATOR_CELEBRATE;
     }
-    
-    public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
-        return VindicatorEntity.createAttributes()
-                .add(Attributes.MOVEMENT_SPEED, 0.21D)
-                .add(Attributes.ARMOR)
-                .add(Attributes.MAX_HEALTH, 52.8D)
-                .add(Attributes.ATTACK_DAMAGE, 10.0D)
-                .add(Attributes.KNOCKBACK_RESISTANCE, 0.2D)
-                .add(Attributes.ATTACK_KNOCKBACK, 1.25D);
-    }
-
-    private void applyDiamondArmorBoosts() {
-        this.addEffect(new EffectInstance(Effects.HEAL, 10, 6, (false), (false)));
-        this.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(new AttributeModifier("Diamond health boost", 27.2D, AttributeModifier.Operation.ADDITION));
-        this.getAttribute(Attributes.ATTACK_KNOCKBACK).addPermanentModifier(new AttributeModifier("Diamond attack knockback boost", 1.75D, AttributeModifier.Operation.ADDITION));
-        this.getAttribute(Attributes.ARMOR).addPermanentModifier(new AttributeModifier("Diamond armor boost", 10.0D, AttributeModifier.Operation.ADDITION));
-        this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).addPermanentModifier(new AttributeModifier("Diamond knockback resistance boost", 2.0D, AttributeModifier.Operation.ADDITION));
-        this.getAttribute(Attributes.ATTACK_DAMAGE).addPermanentModifier(new AttributeModifier("Diamond attack boost", 12.0D, AttributeModifier.Operation.ADDITION));
-    }
-
-    private void applyGoldArmorBoosts() {
-        this.addEffect(new EffectInstance(Effects.HEAL, 10, 6, (false), (false)));
-        this.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(new AttributeModifier("Gold health boost", 13.6D, AttributeModifier.Operation.ADDITION));
-        this.getAttribute(Attributes.ATTACK_KNOCKBACK).addPermanentModifier(new AttributeModifier("Gold attack knockback boost", 1.0D, AttributeModifier.Operation.ADDITION));
-        this.getAttribute(Attributes.ARMOR).addPermanentModifier(new AttributeModifier("Gold armor boost", 4.0D, AttributeModifier.Operation.ADDITION));
-        this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).addPermanentModifier(new AttributeModifier("Gold knockback resistance boost", 0.5D, AttributeModifier.Operation.ADDITION));
-        this.getAttribute(Attributes.ATTACK_DAMAGE).addPermanentModifier(new AttributeModifier("Gold attack boost", 6.0D, AttributeModifier.Operation.ADDITION));
-    }
-
 
     @Override
     public void applyRaidBuffs(int waveAmount, boolean b) {
         ItemStack mainhandWeapon = this.getWeaponBasedOnMod();
-        ItemStack helmet = this.isDiamond() ?
-                new ItemStack(ModItems.DIAMOND_VINDICATOR_HELMET.get()) :
-                new ItemStack(ModItems.GOLD_VINDICATOR_HELMET.get());
+        ItemStack helmet = this.isDiamond() ? new ItemStack(ModItems.DIAMOND_VINDICATOR_HELMET.get()) : new ItemStack(ModItems.GOLD_VINDICATOR_HELMET.get());
         Raid raid = this.getCurrentRaid();
-        int enchantmentLevel = 3;
+        int enchantmentLevel = 4;
         if (waveAmount > raid.getNumGroups(Difficulty.NORMAL)) {
             enchantmentLevel = 4;
         }
 
-        boolean applyEnchant = this.random.nextFloat() <= raid.getEnchantOdds();
+        boolean applyEnchant = this.random.nextFloat()-1 <= raid.getEnchantOdds();
         if (applyEnchant) {
             Map<Enchantment, Integer> weaponEnchantmentMap = Maps.newHashMap();
             Map<Enchantment, Integer> armorEnchantmentMap = Maps.newHashMap();
@@ -297,7 +273,7 @@ public class ArmoredVindicatorEntity extends AbstractIllagerEntity implements IA
             ItemStack whirlwind = new ItemStack(WHIRLWIND);
             ItemStack ironAxe = new ItemStack(Items.IRON_AXE);
 
-            mainhandWeapon = this.isDiamond() ? whirlwind : this.isGold() ? doubleAxe : ironAxe;
+            mainhandWeapon = whirlwind;
         }
         else{
             mainhandWeapon = new ItemStack(Items.IRON_AXE);
@@ -319,6 +295,36 @@ public class ArmoredVindicatorEntity extends AbstractIllagerEntity implements IA
 
     private float getAttackKnockback() {
         return (float)this.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
+    }
+
+    public boolean checkSpawnObstruction(IWorldReader worldIn) {
+        BlockPos golemPos = this.blockPosition();
+        BlockPos posBeneathGolem = golemPos.below();
+        BlockState blockstateBeneathGolem = worldIn.getBlockState(posBeneathGolem);
+        if (!blockstateBeneathGolem.entityCanStandOn(worldIn, posBeneathGolem, this)) {
+            return false;
+        } else {
+            for(int i = 1; i < 4; ++i) {
+                BlockPos posAboveGolem = golemPos.above(i);
+                BlockState blockstateAboveGolem = worldIn.getBlockState(posAboveGolem);
+                if (!WorldEntitySpawner
+                        .isValidEmptySpawnBlock(worldIn,
+                                posAboveGolem,
+                                blockstateAboveGolem,
+                                blockstateAboveGolem.getFluidState(),
+                                ModEntityTypes.ARMORED_VINDICATOR.get())) {
+                    return false;
+                }
+            }
+
+            return WorldEntitySpawner
+                    .isValidEmptySpawnBlock(worldIn,
+                            golemPos,
+                            worldIn.getBlockState(golemPos),
+                            Fluids.EMPTY.defaultFluidState(),
+                            ModEntityTypes.ARMORED_VINDICATOR.get())
+                    && worldIn.isUnobstructed(this);
+        }
     }
 
     private void setAttackID(int id) {
@@ -389,46 +395,46 @@ public class ArmoredVindicatorEntity extends AbstractIllagerEntity implements IA
 
         @Override
         public boolean canUse() {
-            return ArmoredVindicatorEntity.this.getTarget() != null && ArmoredVindicatorEntity.this.getTarget().isAlive();
+            return VindicatorRaidCaptainEntity.this.getTarget() != null && VindicatorRaidCaptainEntity.this.getTarget().isAlive();
         }
 
         @Override
         public void start() {
-            ArmoredVindicatorEntity.this.setAggressive(true);
+            VindicatorRaidCaptainEntity.this.setAggressive(true);
             this.delayCounter = 0;
         }
 
         @Override
         public void tick() {
-            LivingEntity livingentity = ArmoredVindicatorEntity.this.getTarget();
+            LivingEntity livingentity = VindicatorRaidCaptainEntity.this.getTarget();
             if (livingentity == null) {
                 return;
             }
 
-            ArmoredVindicatorEntity.this.lookControl.setLookAt(livingentity, 30.0F, 30.0F);
+            VindicatorRaidCaptainEntity.this.lookControl.setLookAt(livingentity, 30.0F, 30.0F);
 
             if (--this.delayCounter <= 0) {
-                this.delayCounter = 4 + ArmoredVindicatorEntity.this.getRandom().nextInt(7);
-                ArmoredVindicatorEntity.this.getNavigation().moveTo(livingentity, (double)this.moveSpeed);
+                this.delayCounter = 4 + VindicatorRaidCaptainEntity.this.getRandom().nextInt(7);
+                VindicatorRaidCaptainEntity.this.getNavigation().moveTo(livingentity, (double)this.moveSpeed);
             }
 
             this.attackTimer = Math.max(this.attackTimer - 1, 0);
-            this.checkAndPerformAttack(livingentity, ArmoredVindicatorEntity.this.distanceToSqr(livingentity.getX(), livingentity.getBoundingBox().minY, livingentity.getZ()));
+            this.checkAndPerformAttack(livingentity, VindicatorRaidCaptainEntity.this.distanceToSqr(livingentity.getX(), livingentity.getBoundingBox().minY, livingentity.getZ()));
         }
 
         @Override
         protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
-            if ((distToEnemySqr <= this.getAttackReachSqr(enemy) || ArmoredVindicatorEntity.this.getBoundingBox().intersects(enemy.getBoundingBox())) && this.attackTimer <= 0) {
+            if ((distToEnemySqr <= this.getAttackReachSqr(enemy) || VindicatorRaidCaptainEntity.this.getBoundingBox().intersects(enemy.getBoundingBox())) && this.attackTimer <= 0) {
                 this.attackTimer = this.maxAttackTimer;
-                ArmoredVindicatorEntity.this.doHurtTarget(enemy);
+                VindicatorRaidCaptainEntity.this.doHurtTarget(enemy);
             }
         }
 
         @Override
         public void stop() {
-            ArmoredVindicatorEntity.this.getNavigation().stop();
-            if (ArmoredVindicatorEntity.this.getTarget() == null) {
-                ArmoredVindicatorEntity.this.setAggressive(false);
+            VindicatorRaidCaptainEntity.this.getNavigation().stop();
+            if (VindicatorRaidCaptainEntity.this.getTarget() == null) {
+                VindicatorRaidCaptainEntity.this.setAggressive(false);
             }
         }
 
@@ -460,14 +466,15 @@ public class ArmoredVindicatorEntity extends AbstractIllagerEntity implements IA
 
         @Override
         public boolean canUse() {
-            return ArmoredVindicatorEntity.this.getTarget() != null && attackID == MELEE_ATTACK;
+            return VindicatorRaidCaptainEntity.this.getTarget() != null && attackID == MELEE_ATTACK;
         }
 
         @Override
         public boolean canContinueToUse() {
             //animation tick
-            return attackTimer < 28;
+            return attackTimer < 27;
         }
+
 
         @Override
         public void start() {
@@ -479,22 +486,22 @@ public class ArmoredVindicatorEntity extends AbstractIllagerEntity implements IA
         public void stop() {
             setAttackID(0);
             setMeleeAttacking(false);
-            ArmoredVindicatorEntity.this.attackTimer = 0;
+            VindicatorRaidCaptainEntity.this.attackTimer = 0;
         }
 
         @Override
         public void tick() {
-            if(ArmoredVindicatorEntity.this.getTarget() != null && ArmoredVindicatorEntity.this.getTarget().isAlive()) {
-                ArmoredVindicatorEntity.this.getLookControl().setLookAt(ArmoredVindicatorEntity.this.getTarget(), 30.0F, 30.0F);
-                if (attackTimer == 15) {
-                    float attackKnockback = ArmoredVindicatorEntity.this.getAttackKnockback();
-                    LivingEntity attackTarget = ArmoredVindicatorEntity.this.getTarget();
-                    double ratioX = (double) MathHelper.sin(ArmoredVindicatorEntity.this.yRot * ((float) Math.PI / 360F));
-                    double ratioZ = (double) (-MathHelper.cos(ArmoredVindicatorEntity.this.yRot * ((float) Math.PI / 360F)));
+            if(VindicatorRaidCaptainEntity.this.getTarget() != null && VindicatorRaidCaptainEntity.this.getTarget().isAlive()) {
+                VindicatorRaidCaptainEntity.this.getLookControl().setLookAt(VindicatorRaidCaptainEntity.this.getTarget(), 30.0F, 30.0F);
+                if (attackTimer >= 15 && attackTimer <= 17) {
+                    float attackKnockback = VindicatorRaidCaptainEntity.this.getAttackKnockback();
+                    LivingEntity attackTarget = VindicatorRaidCaptainEntity.this.getTarget();
+                    double ratioX = (double) MathHelper.sin(VindicatorRaidCaptainEntity.this.yRot * ((float) Math.PI / 300F));
+                    double ratioZ = (double) (-MathHelper.cos(VindicatorRaidCaptainEntity.this.yRot * ((float) Math.PI / 300F)));
                     double knockbackReduction = 0.5D;
-                    attackTarget.hurt(DamageSource.mobAttack(ArmoredVindicatorEntity.this), (float) ArmoredVindicatorEntity.this.getAttributeValue(Attributes.ATTACK_DAMAGE));
+                    attackTarget.hurt(DamageSource.mobAttack(VindicatorRaidCaptainEntity.this), (float) VindicatorRaidCaptainEntity.this.getAttributeValue(Attributes.ATTACK_DAMAGE));
                     this.forceKnockback(attackTarget,attackKnockback * 0.5F, ratioX, ratioZ, knockbackReduction);
-                    ArmoredVindicatorEntity.this.setDeltaMovement(ArmoredVindicatorEntity.this.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
+                    VindicatorRaidCaptainEntity.this.setDeltaMovement(VindicatorRaidCaptainEntity.this.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
                 }
             }
 
@@ -522,10 +529,15 @@ public class ArmoredVindicatorEntity extends AbstractIllagerEntity implements IA
         }
     }
 
+    @Override
+    public void die(DamageSource p_70645_1_) {
+        super.die(p_70645_1_);
+    }
+
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new MeleeGoal());
-        this.goalSelector.addGoal(5, new AttackGoal(this, 1.667D));
+        this.goalSelector.addGoal(6, new AttackGoal(this, 1.35D));
         this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 1.0D));
         this.goalSelector.addGoal(7, new LookAtGoal(this, PlayerEntity.class, 6.0F));
         this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
@@ -538,18 +550,22 @@ public class ArmoredVindicatorEntity extends AbstractIllagerEntity implements IA
     }
 
     class JohnnyAttackGoal extends NearestAttackableTargetGoal<LivingEntity> {
-        public JohnnyAttackGoal(ArmoredVindicatorEntity p_i47345_1_) {
+        public JohnnyAttackGoal(VindicatorRaidCaptainEntity p_i47345_1_) {
             super(p_i47345_1_, LivingEntity.class, 0, true, true, LivingEntity::attackable);
         }
 
         public boolean canUse() {
-            return ((ArmoredVindicatorEntity)this.mob).isJohnny && super.canUse();
+            return ((VindicatorRaidCaptainEntity)this.mob).isJohnny && super.canUse();
         }
 
         public void start() {
             super.start();
             this.mob.setNoActionTime(0);
         }
+    }
+    @Override
+    public boolean removeWhenFarAway(double p_213397_1_) {
+        return false;
     }
 
 }

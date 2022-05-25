@@ -18,8 +18,6 @@ import net.minecraft.entity.monster.AbstractRaiderEntity;
 import net.minecraft.entity.monster.VindicatorEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -32,17 +30,17 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.*;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.IServerWorld;
+import net.minecraft.world.World;
 import net.minecraft.world.raid.Raid;
-import net.minecraft.world.spawner.WorldEntitySpawner;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
-import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.lwjgl.system.CallbackI;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -55,20 +53,20 @@ import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.Map;
 
-public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatable {
+public class TowerGuardEntity extends AbstractIllagerEntity implements IAnimatable {
     private int attackTimer;
     private int attackID;
     public static final byte MELEE_ATTACK = 1;
-    private static final DataParameter<Boolean> MELEEATTACKING = EntityDataManager.defineId(RoyalGuardEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> MELEEATTACKING = EntityDataManager.defineId(TowerGuardEntity.class, DataSerializers.BOOLEAN);
 
     AnimationFactory factory = new AnimationFactory(this);
 
 
-    public RoyalGuardEntity(World world) {
-        super(ModEntityTypes.ROYAL_GUARD.get(), world);
+    public TowerGuardEntity(World world) {
+        super(ModEntityTypes.TOWER_GUARD.get(), world);
     }
 
-    public RoyalGuardEntity(EntityType<? extends AbstractIllagerEntity> p_i50189_1_, World p_i50189_2_) {
+    public TowerGuardEntity(EntityType<? extends AbstractIllagerEntity> p_i50189_1_, World p_i50189_2_) {
         super(p_i50189_1_, p_i50189_2_);
     }
 
@@ -80,12 +78,13 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return VindicatorEntity.createAttributes()
-                .add(Attributes.MOVEMENT_SPEED, 0.28D)
-                .add(Attributes.MAX_HEALTH, 68.8D)
-                .add(Attributes.ARMOR, 8.0D)
-                .add(Attributes.ATTACK_DAMAGE, 16.0D)
-                .add(Attributes.KNOCKBACK_RESISTANCE, 1.5D)
-                .add(Attributes.ATTACK_KNOCKBACK, 3.0D);
+                .add(Attributes.MOVEMENT_SPEED, 0.25D)
+                .add(Attributes.MAX_HEALTH, 72.8D)
+                .add(Attributes.ARMOR, 12.0D)
+                .add(Attributes.ARMOR_TOUGHNESS, 10.0D)
+                .add(Attributes.ATTACK_DAMAGE, 17.0D)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 2.5D)
+                .add(Attributes.ATTACK_KNOCKBACK, 5.0D);
     }
 
     @Override
@@ -240,7 +239,7 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
     @Override
     public void registerControllers(AnimationData data) {
         data.addAnimationController(new AnimationController(this, "controller2", 0, this::predicate2));
-        data.addAnimationController(new AnimationController(this, "controller", 3, this::predicate));
+        data.addAnimationController(new AnimationController(this, "controller", 5, this::predicate));
     }
 
     private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
@@ -286,50 +285,50 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
 
         @Override
         public boolean canUse() {
-            return RoyalGuardEntity.this.getTarget() != null && RoyalGuardEntity.this.getTarget().isAlive();
+            return TowerGuardEntity.this.getTarget() != null && TowerGuardEntity.this.getTarget().isAlive();
         }
 
         @Override
         public void start() {
-            RoyalGuardEntity.this.setAggressive(true);
+            TowerGuardEntity.this.setAggressive(true);
             this.delayCounter = 0;
         }
 
         @Override
         public void tick() {
-            LivingEntity livingentity = RoyalGuardEntity.this.getTarget();
+            LivingEntity livingentity = TowerGuardEntity.this.getTarget();
             if (livingentity == null) {
                 return;
             }
 
-            RoyalGuardEntity.this.lookControl.setLookAt(livingentity, 30.0F, 30.0F);
+            TowerGuardEntity.this.lookControl.setLookAt(livingentity, 30.0F, 30.0F);
 
             if (--this.delayCounter <= 0) {
-                this.delayCounter = 4 + RoyalGuardEntity.this.getRandom().nextInt(7);
-                RoyalGuardEntity.this.getNavigation().moveTo(livingentity, (double) this.moveSpeed);
+                this.delayCounter = 4 + TowerGuardEntity.this.getRandom().nextInt(7);
+                TowerGuardEntity.this.getNavigation().moveTo(livingentity, (double) this.moveSpeed);
             }
 
             this.attackTimer = Math.max(this.attackTimer - 1, 0);
-            this.checkAndPerformAttack(livingentity, RoyalGuardEntity.this.distanceToSqr(livingentity.getX(), livingentity.getBoundingBox().minY, livingentity.getZ()));
+            this.checkAndPerformAttack(livingentity, TowerGuardEntity.this.distanceToSqr(livingentity.getX(), livingentity.getBoundingBox().minY, livingentity.getZ()));
         }
 
         @Override
         protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
-            if ((distToEnemySqr <= this.getAttackReachSqr(enemy) || RoyalGuardEntity.this.getBoundingBox().intersects(enemy.getBoundingBox())) && this.attackTimer <= 0) {
+            if ((distToEnemySqr <= this.getAttackReachSqr(enemy) || TowerGuardEntity.this.getBoundingBox().intersects(enemy.getBoundingBox())) && this.attackTimer <= 0) {
                 this.attackTimer = this.maxAttackTimer;
-                RoyalGuardEntity.this.doHurtTarget(enemy);
+                TowerGuardEntity.this.doHurtTarget(enemy);
             }
         }
 
         @Override
         public void stop() {
-            RoyalGuardEntity.this.getNavigation().stop();
-            if (RoyalGuardEntity.this.getTarget() == null) {
-                RoyalGuardEntity.this.setAggressive(false);
+            TowerGuardEntity.this.getNavigation().stop();
+            if (TowerGuardEntity.this.getTarget() == null) {
+                TowerGuardEntity.this.setAggressive(false);
             }
         }
 
-        public RoyalGuardEntity.AttackGoal setMaxAttackTick(int max) {
+        public TowerGuardEntity.AttackGoal setMaxAttackTick(int max) {
             this.maxAttackTimer = max;
             return this;
         }
@@ -361,7 +360,7 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
 
         @Override
         public boolean canUse() {
-            return RoyalGuardEntity.this.getTarget() != null && attackID == MELEE_ATTACK;
+            return TowerGuardEntity.this.getTarget() != null && attackID == MELEE_ATTACK;
         }
 
         @Override
@@ -380,22 +379,22 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
         public void stop() {
             setAttackID(0);
             setMeleeAttacking(false);
-            RoyalGuardEntity.this.attackTimer = 0;
+            TowerGuardEntity.this.attackTimer = 0;
         }
 
         @Override
         public void tick() {
-            if (RoyalGuardEntity.this.getTarget() != null && RoyalGuardEntity.this.getTarget().isAlive()) {
-                RoyalGuardEntity.this.getLookControl().setLookAt(RoyalGuardEntity.this.getTarget(), 30.0F, 30.0F);
+            if (TowerGuardEntity.this.getTarget() != null && TowerGuardEntity.this.getTarget().isAlive()) {
+                TowerGuardEntity.this.getLookControl().setLookAt(TowerGuardEntity.this.getTarget(), 30.0F, 30.0F);
                 if (attackTimer == 15) {
-                    float attackKnockback = RoyalGuardEntity.this.getAttackKnockback();
-                    LivingEntity attackTarget = RoyalGuardEntity.this.getTarget();
-                    double ratioX = (double) MathHelper.sin(RoyalGuardEntity.this.yRot * ((float) Math.PI / 360F));
-                    double ratioZ = (double) (-MathHelper.cos(RoyalGuardEntity.this.yRot * ((float) Math.PI / 360F)));
+                    float attackKnockback = TowerGuardEntity.this.getAttackKnockback();
+                    LivingEntity attackTarget = TowerGuardEntity.this.getTarget();
+                    double ratioX = (double) MathHelper.sin(TowerGuardEntity.this.yRot * ((float) Math.PI / 360F));
+                    double ratioZ = (double) (-MathHelper.cos(TowerGuardEntity.this.yRot * ((float) Math.PI / 360F)));
                     double knockbackReduction = 0.5D;
-                    attackTarget.hurt(DamageSource.mobAttack(RoyalGuardEntity.this), (float) RoyalGuardEntity.this.getAttributeValue(Attributes.ATTACK_DAMAGE));
+                    attackTarget.hurt(DamageSource.mobAttack(TowerGuardEntity.this), (float) TowerGuardEntity.this.getAttributeValue(Attributes.ATTACK_DAMAGE));
                     this.forceKnockback(attackTarget, attackKnockback * 0.5F, ratioX, ratioZ, knockbackReduction);
-                    RoyalGuardEntity.this.setDeltaMovement(RoyalGuardEntity.this.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
+                    TowerGuardEntity.this.setDeltaMovement(TowerGuardEntity.this.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
                 }
             }
 
@@ -431,8 +430,8 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
 
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new RoyalGuardEntity.MeleeGoal());
-        this.goalSelector.addGoal(5, new RoyalGuardEntity.AttackGoal(this, 1.0D));
+        this.goalSelector.addGoal(0, new TowerGuardEntity.MeleeGoal());
+        this.goalSelector.addGoal(5, new TowerGuardEntity.AttackGoal(this, 1.0D));
         this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 1.0D));
         this.goalSelector.addGoal(7, new LookAtGoal(this, PlayerEntity.class, 6.0F));
         this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
@@ -453,7 +452,7 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
     protected void hurtCurrentlyUsedShield(float amount) {
         if (this.useItem.isShield(this)) {
             if (amount >= 3.0F) {
-                int i = 1 + MathHelper.floor(amount) * 4;
+                int i = (int) (1 + MathHelper.floor(amount) * 0.55);
                 Hand hand = this.getUsedItemHand();
                 this.useItem.hurtAndBreak(i, this, (royalGuardEntity) -> {
                     royalGuardEntity.broadcastBreakEvent(hand);
