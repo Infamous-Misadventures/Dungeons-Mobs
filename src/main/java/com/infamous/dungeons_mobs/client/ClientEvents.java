@@ -10,24 +10,13 @@ import com.infamous.dungeons_mobs.client.renderer.ender.EndersentRenderer;
 import com.infamous.dungeons_mobs.client.renderer.ender.SnarelingRenderer;
 import com.infamous.dungeons_mobs.client.renderer.ender.WatchlingRenderer;
 import com.infamous.dungeons_mobs.client.renderer.golem.SquallGolemRenderer;
-import com.infamous.dungeons_mobs.client.renderer.illager.CustomIllusionerRenderer;
-import com.infamous.dungeons_mobs.client.renderer.illager.CustomPillagerRenderer;
-import com.infamous.dungeons_mobs.client.renderer.illager.CustomVindicatorRenderer;
-import com.infamous.dungeons_mobs.client.renderer.illager.EnchanterRenderer;
-import com.infamous.dungeons_mobs.client.renderer.illager.GeomancerRenderer;
-import com.infamous.dungeons_mobs.client.renderer.illager.IceologerRenderer;
-import com.infamous.dungeons_mobs.client.renderer.illager.IllusionerCloneRenderer;
-import com.infamous.dungeons_mobs.client.renderer.illager.MageCloneRenderer;
-import com.infamous.dungeons_mobs.client.renderer.illager.MageRenderer;
-import com.infamous.dungeons_mobs.client.renderer.illager.MountaineerRenderer;
-import com.infamous.dungeons_mobs.client.renderer.illager.WindcallerRenderer;
+import com.infamous.dungeons_mobs.client.renderer.illager.*;
 import com.infamous.dungeons_mobs.client.renderer.jungle.LeapleafRenderer;
 import com.infamous.dungeons_mobs.client.renderer.jungle.PoisonQuillVineRenderer;
 import com.infamous.dungeons_mobs.client.renderer.jungle.QuickGrowingVineRenderer;
 import com.infamous.dungeons_mobs.client.renderer.jungle.WhispererRenderer;
 import com.infamous.dungeons_mobs.client.renderer.layer.GeoMobEnchantmentGlintLayer;
 import com.infamous.dungeons_mobs.client.renderer.layer.MobEnchantmentGlintLayer;
-import com.infamous.dungeons_mobs.client.renderer.layers.SkeletonEyesLayer;
 import com.infamous.dungeons_mobs.client.renderer.piglin.CustomPiglinRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.BlueNethershroomRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.CobwebProjectileRenderer;
@@ -64,18 +53,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.entity.LivingRenderer;
-import net.minecraft.client.renderer.entity.SkeletonRenderer;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.DyeColor;
-import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
-import net.minecraftforge.client.event.RenderNameplateEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -83,11 +67,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
-
-import java.util.stream.Collectors;
-
-import static com.infamous.dungeons_libraries.capabilities.enchantable.EnchantableHelper.getEnchantableCapabilityLazy;
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientEvents {
@@ -115,14 +94,26 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SKELETON_VANGUARD.get(), SkeletonVanguardRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.NECROMANCER.get(), NecromancerRenderer::new);
 
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_VINDICATOR.get(), CustomVindicatorRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_VINDICATOR.get(),
+                manager -> new ArmoredVindicatorRenderer(manager));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_PILLAGER.get(), CustomPillagerRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ROYAL_GUARD.get(), CustomVindicatorRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.VINDICATOR_CHEF.get(), CustomVindicatorRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.MOUNTAINEER.get(), MountaineerRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_MOUNTAINEER.get(), MountaineerRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ROYAL_GUARD.get(),
+                manager -> new RoyalGuardRenderer(manager));
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.VINDICATOR_CHEF.get(),
+                manager -> new VindicatorChefRenderer(manager));
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_MOUNTAINEER.get(),
+                manager -> new ArmoredMountaineerRenderer(manager));
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.MOUNTAINEER.get(),
+                manager -> new MountaineerRenderer(manager));
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.VINDICATOR.get(),
+                manager -> new DungeonVindicatorRenderer(manager));
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ILLAGER_WARRIOR.get(),
+                manager -> new IllagerWarriorRenderer(manager));
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ILLAGER_WARRIOR_CLONE.get(),
+                manager -> new IllagerWarriorCloneRenderer(manager));
 
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ICEOLOGER.get(), IceologerRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ICEOLOGER.get(),
+                manager -> new IceologerRenderer(manager));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.GEOMANCER.get(),
 	    	    manager -> new GeomancerRenderer(manager));
         
@@ -174,7 +165,8 @@ public class ClientEvents {
 	    	    manager -> new GeomancerBombRenderer(manager));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.REDSTONE_MINE.get(),
                 manager -> new RedstoneMineRenderer(manager));
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ICE_CLOUD.get(), IceCloudRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ICE_CLOUD.get(),
+                manager -> new IceCloudRenderer(manager));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.TORNADO.get(), TornadoRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.COBWEB_TRAP.get(), CobwebTrapRenderer::new);
 
@@ -196,6 +188,17 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.BLASTLING.get(), BlastlingRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WATCHLING.get(), WatchlingRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SNARELING.get(), SnarelingRenderer::new);
+
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.VINDICATOR_RAID_CAPTAIN.get(),
+                manager -> new VindicatorRaidCaptainRenderer(manager));
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.RAMPART_CAPTAIN.get(),
+                manager -> new RampartCaptainRenderer(manager));
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.DUNGEONS_EVOKER.get(),
+                manager -> new DungeonsEvokerRenderer(manager));
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.TOWER_GUARD.get(),
+                manager -> new TowerGuardRenderer(manager));
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.POWERFUL_ROYAL_GUARD.get(),
+                manager -> new PowerfulRoyalGuardRenderer(manager));
     }
 
     @SubscribeEvent
