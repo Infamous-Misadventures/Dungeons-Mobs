@@ -38,6 +38,14 @@
       "minimum_wave": 3
     },
     {
+      "entity_type": "dungeons_mobs:vindicator_raid_captain",
+      "weight": 10,
+      "strength": 1,
+      "rank": "leader",
+      "maximum_rank": "leader",
+      "minimum_wave": 1
+    },
+    {
       "entity_type": "dungeons_mobs:armored_mountaineer",
       "weight": 70,
       "strength": 12,
