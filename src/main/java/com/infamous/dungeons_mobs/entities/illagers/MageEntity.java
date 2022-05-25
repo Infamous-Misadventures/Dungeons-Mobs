@@ -13,7 +13,6 @@ import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.monster.SpellcastingIllagerEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -22,7 +21,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.NBTTextComponent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
@@ -36,7 +34,6 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
-import java.util.UUID;
 
 public class MageEntity extends SpellcastingIllagerEntity implements IAnimatable {
 
@@ -316,7 +313,7 @@ public class MageEntity extends SpellcastingIllagerEntity implements IAnimatable
 	    
 	    public void start() {
 	    super.start();
-	    MageEntity.this.liftInterval = 70;
+	    MageEntity.this.liftInterval = 100;
 	    MageEntity.this.setLiftTicks(40);
 	    MageEntity.this.playSound(SoundEvents.EVOKER_PREPARE_ATTACK, MageEntity.this.getSoundVolume(), MageEntity.this.getVoicePitch());
 	    }
@@ -329,9 +326,9 @@ public class MageEntity extends SpellcastingIllagerEntity implements IAnimatable
 	    	mob.getNavigation().stop();
 	    	
             if (mob.getLiftTicks() > 10) {
-            	if (target.getY() < mob.getY() + 8) {
+            	if (target.getY() < mob.getY() + 3) {
             		target.hurtMarked = true;
-            		target.setDeltaMovement(0, 1.2, 0);
+            		target.setDeltaMovement(0, 0.5, 0);
             	} else {
             		target.fallDistance = 5;
             		target.hurtMarked = true;
@@ -340,7 +337,7 @@ public class MageEntity extends SpellcastingIllagerEntity implements IAnimatable
             } else {
             	if (!target.isOnGround()) {
             	target.hurtMarked = true;
-            	target.setDeltaMovement(0, -2, 0);
+            	target.setDeltaMovement(0, -0.75, 0);
             	}
         		//if (target.getY() == mob.getEyeY()) {
         		//	target.hurt(DamageSource.FALL, 5.0F);
@@ -374,7 +371,7 @@ public class MageEntity extends SpellcastingIllagerEntity implements IAnimatable
 	    
 	    public void start() {
 	    super.start();
-	    MageEntity.this.duplicateInterval = 280;
+	    MageEntity.this.duplicateInterval = 640;
 	    MageEntity.this.setDuplicateTicks(20);
 	    MageEntity.this.playSound(SoundEvents.EVOKER_PREPARE_SUMMON, MageEntity.this.getSoundVolume(), MageEntity.this.getVoicePitch());
 	    }
@@ -388,16 +385,6 @@ public class MageEntity extends SpellcastingIllagerEntity implements IAnimatable
 	    	
           if (mob.getDuplicateTicks() == 1) {
               this.summonIllusionerClones();
-			  if (!(target.getEntity() instanceof PlayerEntity || target.getEntity() instanceof ServerPlayerEntity)) {
-				  Entity copy = target.getType().create(target.level);
-				  CompoundNBT compoundNBT = new CompoundNBT();
-				  compoundNBT = target.saveWithoutId(compoundNBT);
-				  UUID uuid = copy.getUUID();
-				  copy.load(compoundNBT);
-				  copy.setUUID(uuid);
-				  target.level.addFreshEntity(copy);
-				  target.remove();
-			  }
       	      MageEntity.this.playSound(SoundEvents.ILLUSIONER_PREPARE_MIRROR, MageEntity.this.getSoundVolume(), MageEntity.this.getVoicePitch());
               BlockPos blockpos = MageEntity.this.blockPosition().offset(-5 + MageEntity.this.getRandom().nextInt(10), 0, -5 + MageEntity.this.getRandom().nextInt(10));
               MageEntity.this.setPos(blockpos.getX(), blockpos.getY(), blockpos.getZ());
@@ -406,10 +393,10 @@ public class MageEntity extends SpellcastingIllagerEntity implements IAnimatable
 
            private void summonIllusionerClones(){
               int difficultyAsInt = MageEntity.this.level.getDifficulty().getId();
-              int mobsToSummon = difficultyAsInt * 3 + 3; // 6 on easy, 9 on normal, 12 on hard
+              int mobsToSummon = difficultyAsInt * 2 + 1; // 3 on easy, 5 on normal, 7 on hard
               for(int i = 0; i < mobsToSummon; ++i) {
                  BlockPos blockpos = MageEntity.this.blockPosition().offset(-5 + MageEntity.this.getRandom().nextInt(10), 0, -5 + MageEntity.this.getRandom().nextInt(10));
-                 MageCloneEntity illusionerCloneEntity = new MageCloneEntity(MageEntity.this.level, MageEntity.this, 240,MageEntity.this.getTarget());
+                 MageCloneEntity illusionerCloneEntity = new MageCloneEntity(MageEntity.this.level, MageEntity.this, 600);
                  DifficultyInstance difficultyForLocation = MageEntity.this.level.getCurrentDifficultyAt(blockpos);
                  illusionerCloneEntity.moveTo(blockpos, 0.0F, 0.0F);
                  illusionerCloneEntity.finalizeSpawn((IServerWorld) illusionerCloneEntity.level, difficultyForLocation, SpawnReason.MOB_SUMMONED, (ILivingEntityData)null, (CompoundNBT)null);

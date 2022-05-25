@@ -237,7 +237,7 @@ public class IllagerWarriorEntity extends SpellcastingIllagerEntity implements I
 			   
 			   public int isAngry() {
 				      return this.entityData.get(ANGRY);
-				   }
+				   }.
 
 				   public void setAngry(int p_189794_1_) {
 				      this.entityData.set(ANGRY, p_189794_1_);

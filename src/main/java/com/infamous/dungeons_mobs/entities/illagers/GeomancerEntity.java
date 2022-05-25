@@ -151,11 +151,11 @@ public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnima
         }
 
         protected int getCastingTime() {
-            return 26;
+            return 25;
         }
 
         protected int getCastingInterval() {
-            return 85;
+            return 140;
         }
 
         protected void performSpellCasting() {

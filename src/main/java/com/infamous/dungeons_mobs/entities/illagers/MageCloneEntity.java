@@ -72,11 +72,10 @@ public class MageCloneEntity extends SpellcastingIllagerEntity implements IAnima
         super(type, world);
     }
     
-    public MageCloneEntity(World worldIn, LivingEntity caster, int lifeTicks,LivingEntity target) {
+    public MageCloneEntity(World worldIn, LivingEntity caster, int lifeTicks) {
         this(ModEntityTypes.MAGE_CLONE.get(), worldIn);
         this.setCaster(caster);
         this.lifeTicks = lifeTicks;
-        this.setTarget(target);
     }
     
     public void setTarget(@Nullable LivingEntity p_70624_1_) {
@@ -101,11 +100,6 @@ public class MageCloneEntity extends SpellcastingIllagerEntity implements IAnima
     public void setCaster(@Nullable LivingEntity caster) {
         this.caster = caster;
         this.casterUuid = caster == null ? null : caster.getUUID();
-    }
-
-    @Override
-    public boolean canJoinRaid() {
-        return false;
     }
 
     @Nullable

@@ -86,7 +86,6 @@ public class VindicatorRaidCaptainEntity extends AbstractIllagerEntity implement
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return VindicatorEntity.createAttributes()
                 .add(Attributes.MOVEMENT_SPEED, 0.21D)
-                .add(Attributes.ARMOR, 25.0D)
                 .add(Attributes.MAX_HEALTH, 158.0D)
                 .add(Attributes.ATTACK_DAMAGE, 20.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 3.2D)

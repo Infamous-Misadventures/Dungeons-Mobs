@@ -207,8 +207,7 @@ public class DungeonsEvokerEntity extends SpellcastingIllagerEntity implements I
 				.add(Attributes.MOVEMENT_SPEED, 0.3D)
 				.add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
 				.add(Attributes.FOLLOW_RANGE, 36.0D)
-				.add(Attributes.ARMOR, 15.0D)
-				.add(Attributes.MAX_HEALTH, 228.0D);
+				.add(Attributes.MAX_HEALTH, 200.0D);
     }
 
 
