@@ -43,4 +43,21 @@ public abstract class EvokerEntityMixin extends SpellcastingIllagerEntity {
 
         return spawnData;
     }
+
+    @Override
+    public void remove() {
+        if (this.getCurrentRaid() == null){
+            EvokerEntityMixin v = this;
+            CompoundNBT v1 = new CompoundNBT();
+            v1 = v.saveWithoutId(v1);
+            BlockPos vvf = v.blockPosition();
+            DungeonsEvokerEntity vv = new DungeonsEvokerEntity(this.level);
+            vv.moveTo(vvf, 0F, 0F);
+            vv.load(v1);
+            vv.addEffect(new EffectInstance(Effects.HEAL, 10, 6, (false), (false)));
+            v.level.addFreshEntity(vv);
+        }
+
+        super.remove();
+    }
 }
