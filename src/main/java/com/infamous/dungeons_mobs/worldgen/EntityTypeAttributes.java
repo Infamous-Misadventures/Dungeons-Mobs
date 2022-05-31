@@ -9,20 +9,7 @@ import com.infamous.dungeons_mobs.entities.ender.EndersentEntity;
 import com.infamous.dungeons_mobs.entities.ender.SnarelingEntity;
 import com.infamous.dungeons_mobs.entities.ender.WatchlingEntity;
 import com.infamous.dungeons_mobs.entities.golem.SquallGolemEntity;
-import com.infamous.dungeons_mobs.entities.illagers.ArmoredMountaineerEntity;
-import com.infamous.dungeons_mobs.entities.illagers.ArmoredPillagerEntity;
-import com.infamous.dungeons_mobs.entities.illagers.ArmoredVindicatorEntity;
-import com.infamous.dungeons_mobs.entities.illagers.DungeonsIllusionerEntity;
-import com.infamous.dungeons_mobs.entities.illagers.EnchanterEntity;
-import com.infamous.dungeons_mobs.entities.illagers.GeomancerEntity;
-import com.infamous.dungeons_mobs.entities.illagers.IceologerEntity;
-import com.infamous.dungeons_mobs.entities.illagers.IllusionerCloneEntity;
-import com.infamous.dungeons_mobs.entities.illagers.MageCloneEntity;
-import com.infamous.dungeons_mobs.entities.illagers.MageEntity;
-import com.infamous.dungeons_mobs.entities.illagers.MountaineerEntity;
-import com.infamous.dungeons_mobs.entities.illagers.RoyalGuardEntity;
-import com.infamous.dungeons_mobs.entities.illagers.VindicatorChefEntity;
-import com.infamous.dungeons_mobs.entities.illagers.WindcallerEntity;
+import com.infamous.dungeons_mobs.entities.illagers.*;
 import com.infamous.dungeons_mobs.entities.jungle.LeapleafEntity;
 import com.infamous.dungeons_mobs.entities.jungle.PoisonQuillVineEntity;
 import com.infamous.dungeons_mobs.entities.jungle.QuickGrowingVineEntity;
@@ -91,6 +78,7 @@ public class EntityTypeAttributes {
         event.put(ModEntityTypes.ENCHANTER.get(), EnchanterEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.MAGE.get(), MageEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.MAGE_CLONE.get(), MageCloneEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.DUNGEONS_EVOKER.get(), DungeonsEvokerEntity.setCustomAttributes().build());
 
         event.put(ModEntityTypes.ICY_CREEPER.get(), IcyCreeperEntity.setCustomAttributes().build());
 
