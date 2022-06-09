@@ -69,15 +69,15 @@ public class DungeonsEvokerEntity extends SpellcastingIllagerEntity implements I
 
     protected void registerGoals() {
         super.registerGoals();
-		this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, AbstractVillagerEntity.class, 3.0F, 1.4D, 1.35D));
-		this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, PlayerEntity.class, 3.0F, 1.4D, 1.4D));
-		this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, IronGolemEntity.class, 3.0F, 1.4D, 1.35D));
+		this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, AbstractVillagerEntity.class, 3.0F, 1.4D, 1.25D));
+		this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, PlayerEntity.class, 3.0F, 1.4D, 1.2D));
+		this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, IronGolemEntity.class, 3.0F, 1.4D, 1.25D));
 		this.goalSelector.addGoal(0, new SwimGoal(this));
 		/*this.goalSelector.addGoal(1, new DungeonsEvokerEntity.PowerfulAttackGoal());/*/
 		this.goalSelector.addGoal(1, new DungeonsEvokerEntity.SpellAttackGoal());
         this.goalSelector.addGoal(3, new DungeonsEvokerEntity.CastingSpellGoal());
-		this.goalSelector.addGoal(5, new DungeonsEvokerEntity.SummonFangsGoal());
-        this.goalSelector.addGoal(4, new DungeonsEvokerEntity.DuplicateGoal());
+		this.goalSelector.addGoal(2, new DungeonsEvokerEntity.SummonFangsGoal());
+        this.goalSelector.addGoal(3, new DungeonsEvokerEntity.DuplicateGoal());
         this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 1.0D));
         this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
         this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
@@ -200,10 +200,10 @@ public class DungeonsEvokerEntity extends SpellcastingIllagerEntity implements I
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return MonsterEntity.createMonsterAttributes()
-				.add(Attributes.MOVEMENT_SPEED, 0.3D)
+				.add(Attributes.MOVEMENT_SPEED, 0.25D)
 				.add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
-				.add(Attributes.FOLLOW_RANGE, 36.0D)
-				.add(Attributes.MAX_HEALTH, 248.0D);
+				.add(Attributes.FOLLOW_RANGE, 26.0D)
+				.add(Attributes.MAX_HEALTH, 68.0D);
     }
 
 
@@ -312,7 +312,7 @@ public class DungeonsEvokerEntity extends SpellcastingIllagerEntity implements I
 			super.start();
 			DungeonsEvokerEntity.this.SpellAttacking = true;
 			DungeonsEvokerEntity.this.setAngry(24);
-			DungeonsEvokerEntity.this.spellInterval = (int) ((DungeonsEvokerEntity.this.getRandom().nextInt(30) + 25) * (DungeonsEvokerEntity.this.getHealth() / DungeonsEvokerEntity.this.getMaxHealth()));
+			DungeonsEvokerEntity.this.spellInterval = 74;
 			DungeonsEvokerEntity.this.playSound(SoundEvents.EVOKER_PREPARE_ATTACK, DungeonsEvokerEntity.this.getSoundVolume(), DungeonsEvokerEntity.this.getVoicePitch());
 		}
 
@@ -326,113 +326,28 @@ public class DungeonsEvokerEntity extends SpellcastingIllagerEntity implements I
 				LivingEntity livingentity = DungeonsEvokerEntity.this.getTarget();
 				double d0 = Math.min(livingentity.getY(), DungeonsEvokerEntity.this.getY());
 				double d1 = Math.max(livingentity.getY(), DungeonsEvokerEntity.this.getY()) + 1.0D;
-				float f = (float)MathHelper.atan2(livingentity.getZ() - DungeonsEvokerEntity.this.getZ(), livingentity.getX() - DungeonsEvokerEntity.this.getX());
+				float f = (float) MathHelper.atan2(livingentity.getZ() - DungeonsEvokerEntity.this.getZ(), livingentity.getX() - DungeonsEvokerEntity.this.getX());
 				int k;
 
 				if (mob.getTarget() != null)
-				if (DungeonsEvokerEntity.this.distanceToSqr(livingentity) < 24.0D) {
-					float f2;
-
-					for (k = 0; k < 5; ++k) {
-						f2 = f + (float) k * 3.1415927F * 0.4F;
-						this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 1.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 1.5D, d0, d1, f2, (int) (0));
-					}
-
-					for (k = 0; k < 8; ++k) {
-						f2 = f + (float) k * 3.1415927F * 2.0F / 8.0F + 1.2566371F;
-						this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 2.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 2.5D, d0, d1, f2, (int) (5));
-					}
-
-					for (k = 0; k < 11; ++k) {
-						f2 = f + (float) k * 3.1415927F * 3.0F / 11.0F + 2.2566371F;
-						this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 3.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 3.5D, d0, d1, f2, (int) (10));
-					}
-
-					for (k = 0; k < 14; ++k) {
-						f2 = f + (float) k * 3.1415927F * 4.0F / 14.0F + 3.2566371F;
-						this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 4.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 4.5D, d0, d1, f2, (int) (15));
-					}
-
-					for (k = 0; k < 17; ++k) {
-						f2 = f + (float) k * 3.1415927F * 5.0F / 17.0F + 4.2566371F;
-						this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 5.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 5.5D, d0, d1, f2, (int) (20));
-					}
-
-					for (k = 0; k < 20; ++k) {
-						f2 = f + (float) k * 3.1415927F * 6.0F / 20.0F + 5.2566371F;
-						this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 6.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 6.5D, d0, d1, f2, (int) (20));
-					}
-
-					for (k = 0; k < 23; ++k) {
-						f2 = f + (float) k * 3.1415927F * 7.0F / 23.0F + 6.2566371F;
-						this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 7.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 7.5D, d0, d1, f2, (int) (20));
-					}
-				} else {
-					int x = DungeonsEvokerEntity.this.getRandom().nextInt(12);
-					if (x == 1) {
-						for (k = 0; k < Math.min(32,(int) (DungeonsEvokerEntity.this.distanceToSqr(livingentity))); ++k) {
-							double d2 = 1.25D * (double) (k + 1);
-							int j = k;
-							this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2, d0, d1, f, j);
-						}
+					if (DungeonsEvokerEntity.this.distanceToSqr(livingentity) < 60.0D && mob.distanceToSqr(livingentity) > 45) {
 						float f2;
-						for (k = 0; k < 5; ++k) {
-							f2 = f + (float) k * 3.1415927F * 0.4F;
-							this.createSpellEntity(DungeonsEvokerEntity.this.getTarget().getX() + (double) MathHelper.cos(f2) * 1.5D, DungeonsEvokerEntity.this.getTarget().getZ() + (double) MathHelper.sin(f2) * 1.5D, d0, d1, f2, (int) (9));
+
+						for (k = 0; k < 50; ++k) {
+							f2 = f + (float) k * 3.1415927F * 16.0F / 48.0F + 15.2566371F;
+							this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 16.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 16.5D, d0, d1, f2, (int) (36));
 						}
 
-						for (k = 0; k < 8; ++k) {
-							f2 = f + (float) k * 3.1415927F * 2.0F / 8.0F + 1.2566371F;
-							this.createSpellEntity(DungeonsEvokerEntity.this.getTarget().getX() + (double) MathHelper.cos(f2) * 2.5D, DungeonsEvokerEntity.this.getTarget().getZ() + (double) MathHelper.sin(f2) * 2.5D, d0, d1, f2, (int) (12));
-						}
-
-						for (k = 0; k < 11; ++k) {
-							f2 = f + (float) k * 3.1415927F * 3.0F / 11.0F + 2.2566371F;
-							this.createSpellEntity(DungeonsEvokerEntity.this.getTarget().getX() + (double) MathHelper.cos(f2) * 3.5D, DungeonsEvokerEntity.this.getTarget().getZ() + (double) MathHelper.sin(f2) * 3.5D, d0, d1, f2, (int) (15));
-						}
-
-						for (k = 0; k < 14; ++k) {
-							f2 = f + (float) k * 3.1415927F * 4.0F / 14.0F + 3.2566371F;
-							this.createSpellEntity(DungeonsEvokerEntity.this.getTarget().getX() + (double) MathHelper.cos(f2) * 4.5D, DungeonsEvokerEntity.this.getTarget().getZ() + (double) MathHelper.sin(f2) * 4.5D, d0, d1, f2, (int) (18));
-						}
-					}/*else if (x <= 3){
-						x = DungeonsEvokerEntity.this.getRandom().nextInt(4);
-						if (x == 1 ) {
-							for (k = 0; k < 32; ++k) {
-								double e = Math.tan(k * 90) * 3;
+					} else {
+						for (k = 0; k < 50; ++k) {
+							{
 								double d2 = 1.25D * (double) (k + 1);
-								int j = (int) (k / 3.2);
-								this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2, d0, d1, f, j);
-								this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2 + e, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2, d0, d1, f, j);
-								this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2 - e, d0, d1, f, j);
-							}
-						}else if (x == 2) {
-							for (k = 0; k < 32; ++k){
-								double d2 = 1.25D * (double) (k + 1);
-								double e = Math.log(k+1) * 9;
 								int j = (int) (k / 1.2);
-								this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2 + e, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2 , d0, d1, f, j);
-								this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2 , DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2 - e, d0, d1, f, j);
 								this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2, d0, d1, f, j);
 							}
-						}else {
-							for (k = 0; k < 32; ++k) {
-								double e = Math.cos(k * 90) * 9;
-								double d2 = 1.25D * (double) (k + 1);
-								int j = (int) (k / 3.2);
-								this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2 + e, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2, d0, d1, f, j);
-								this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2 - e, d0, d1, f, j);
-							}
-						}
-					}/*/else {
-						for (k = 0; k < 32; ++k){
-							double d2 = 1.25D * (double) (k + 1);
-							int j = (int) (k / 1.2);
-							this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2, d0, d1, f, j);
+
 						}
 					}
-				}
-
 			}
 
 		}
@@ -447,294 +362,7 @@ public class DungeonsEvokerEntity extends SpellcastingIllagerEntity implements I
 		}
 	}
 
-	class PowerfulAttackGoal extends Goal {
-		private void createSpellEntity(double p_190876_1_, double p_190876_3_, double p_190876_5_, double p_190876_7_, float p_190876_9_, int p_190876_10_) {
-			BlockPos blockpos = new BlockPos(p_190876_1_, p_190876_7_, p_190876_3_);
-			boolean flag = false;
-			double d0 = 0.0D;
-
-			do {
-				BlockPos blockpos1 = blockpos.below();
-				BlockState blockstate = DungeonsEvokerEntity.this.level.getBlockState(blockpos1);
-				if (blockstate.isFaceSturdy(DungeonsEvokerEntity.this.level, blockpos1, Direction.UP)) {
-					if (!DungeonsEvokerEntity.this.level.isEmptyBlock(blockpos)) {
-						BlockState blockstate1 = DungeonsEvokerEntity.this.level.getBlockState(blockpos);
-						VoxelShape voxelshape = blockstate1.getCollisionShape(DungeonsEvokerEntity.this.level, blockpos);
-						if (!voxelshape.isEmpty()) {
-							d0 = voxelshape.max(Direction.Axis.Y);
-						}
-					}
-
-					flag = true;
-					break;
-				}
-
-				blockpos = blockpos.below();
-			} while(blockpos.getY() >= MathHelper.floor(p_190876_5_) - 1);
-
-			if (flag) {
-				DungeonsEvokerEntity.this.level.addFreshEntity(new EvokerFangsEntity(DungeonsEvokerEntity.this.level, p_190876_1_, (double)blockpos.getY() + d0, p_190876_3_, p_190876_9_, p_190876_10_, DungeonsEvokerEntity.this));
-			}
-
-		}
-		public PowerfulAttackGoal() {
-			this.setFlags(EnumSet.of(Flag.MOVE, Flag.JUMP, Flag.LOOK));
-		}
-
-		public boolean canUse() {
-			return DungeonsEvokerEntity.this.getTarget() != null && DungeonsEvokerEntity.this.getPowerfulAttack() == 0 && DungeonsEvokerEntity.this.powerfulAttackInterval == 0 && DungeonsEvokerEntity.this.getHealth() <= (DungeonsEvokerEntity.this.getMaxHealth() / 2);
-		}
-
-		public boolean canContinueToUse() {
-			return DungeonsEvokerEntity.this.getTarget() != null && DungeonsEvokerEntity.this.getPowerfulAttack() > 0;
-		}
-
-		public void start() {
-			super.start();
-			DungeonsEvokerEntity.this.setPowerfulAttack(24);
-			DungeonsEvokerEntity.this.powerfulAttackInterval = (int) (160 * (DungeonsEvokerEntity.this.getHealth() / DungeonsEvokerEntity.this.getMaxHealth() + 0.5));
-			DungeonsEvokerEntity.this.playSound(SoundEvents.EVOKER_PREPARE_ATTACK, DungeonsEvokerEntity.this.getSoundVolume(), DungeonsEvokerEntity.this.getVoicePitch());
-		}
-
-		public void tick() {
-			DungeonsEvokerEntity.this.getLookControl().setLookAt(DungeonsEvokerEntity.this.getTarget(), (float) DungeonsEvokerEntity.this.getMaxHeadYRot(), (float) DungeonsEvokerEntity.this.getMaxHeadXRot());
-			DungeonsEvokerEntity mob = DungeonsEvokerEntity.this;
-
-			mob.getNavigation().stop();
-			if (mob.getPowerfulAttack() == 12) {
-
-				LivingEntity livingentity = DungeonsEvokerEntity.this.getTarget();
-				double d0 = Math.min(livingentity.getY(), DungeonsEvokerEntity.this.getY());
-				double d1 = Math.max(livingentity.getY(), DungeonsEvokerEntity.this.getY()) + 1.0D;
-				float f = (float) MathHelper.atan2(livingentity.getZ() - DungeonsEvokerEntity.this.getZ(), livingentity.getX() - DungeonsEvokerEntity.this.getX());
-				int k;
-
-				if (mob.getTarget() != null) {
-
-					if (mob.getTarget() != null)
-						if (DungeonsEvokerEntity.this.distanceToSqr(livingentity) < 30.0D) {
-							float f2;
-
-							for (k = 0; k < 5; ++k) {
-								f2 = f + (float) k * 3.1415927F * 0.4F;
-								this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 1.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 1.5D, d0, d1, f2, (int) (0));
-							}
-
-							for (k = 0; k < 8; ++k) {
-								f2 = f + (float) k * 3.1415927F * 2.0F / 8.0F + 1.2566371F;
-								this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 2.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 2.5D, d0, d1, f2, (int) (4));
-							}
-
-							for (k = 0; k < 11; ++k) {
-								f2 = f + (float) k * 3.1415927F * 3.0F / 11.0F + 2.2566371F;
-								this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 3.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 3.5D, d0, d1, f2, (int) (8));
-							}
-
-							for (k = 0; k < 14; ++k) {
-								f2 = f + (float) k * 3.1415927F * 4.0F / 14.0F + 3.2566371F;
-								this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 4.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 4.5D, d0, d1, f2, (int) (12));
-							}
-
-							for (k = 0; k < 17; ++k) {
-								f2 = f + (float) k * 3.1415927F * 5.0F / 17.0F + 4.2566371F;
-								this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 5.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 5.5D, d0, d1, f2, (int) (16));
-							}
-
-							for (k = 0; k < 20; ++k) {
-								f2 = f + (float) k * 3.1415927F * 6.0F / 20.0F + 5.2566371F;
-								this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 6.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 6.5D, d0, d1, f2, (int) (20));
-							}
-
-							for (k = 0; k < 23; ++k) {
-								f2 = f + (float) k * 3.1415927F * 7.0F / 23.0F + 6.2566371F;
-								this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 7.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 7.5D, d0, d1, f2, (int) (24));
-							}
-
-							for (k = 0; k < 26; ++k) {
-								f2 = f + (float) k * 3.1415927F * 8.0F / 26.0F + 7.2566371F;
-								this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 8.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 8.5D, d0, d1, f2, (int) (28));
-							}
-
-							for (k = 0; k < 29; ++k) {
-								f2 = f + (float) k * 3.1415927F * 9.0F / 29.0F + 8.2566371F;
-								this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 9.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 9.5D, d0, d1, f2, (int) (32));
-							}
-
-							for (k = 0; k < 32; ++k) {
-								f2 = f + (float) k * 3.1415927F * 10.0F / 32.0F + 9.2566371F;
-								this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 10.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 10.5D, d0, d1, f2, (int) (36));
-							}
-
-							for (k = 0; k < 35; ++k) {
-								f2 = f + (float) k * 3.1415927F * 11.0F / 35.0F + 10.2566371F;
-								this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 11.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 11.5D, d0, d1, f2, (int) (36));
-							}
-
-							for (k = 0; k < 38; ++k) {
-								f2 = f + (float) k * 3.1415927F * 12.0F / 38.0F + 11.2566371F;
-								this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 12.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 12.5D, d0, d1, f2, (int) (36));
-							}
-
-							for (k = 0; k < 41; ++k) {
-								f2 = f + (float) k * 3.1415927F * 13.0F / 41.0F + 12.2566371F;
-								this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 13.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 13.5D, d0, d1, f2, (int) (36));
-							}
-
-							for (k = 0; k < 44; ++k) {
-								f2 = f + (float) k * 3.1415927F * 14.0F / 44.0F + 13.2566371F;
-								this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 14.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 14.5D, d0, d1, f2, (int) (36));
-							}
-
-							for (k = 0; k < 47; ++k) {
-								f2 = f + (float) k * 3.1415927F * 15.0F / 47.0F + 14.2566371F;
-								this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 15.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 15.5D, d0, d1, f2, (int) (36));
-							}
-
-							for (k = 0; k < 50; ++k) {
-								f2 = f + (float) k * 3.1415927F * 16.0F / 48.0F + 15.2566371F;
-								this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 16.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 16.5D, d0, d1, f2, (int) (36));
-							}
-
-							for (k = 0; k < 16; ++k) {
-								f = (float) MathHelper.atan2(livingentity.getZ() - mob.getZ(), livingentity.getX() - mob.getX());
-								double d2 = 1.25D * (double) (k + 1);
-								int j = k + 36;
-								this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2, d0, d1, f, j);
-								this.createSpellEntity(DungeonsEvokerEntity.this.getX() - (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() - (double) MathHelper.sin(f) * d2, d0, d1, f, j);
-								this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() - (double) MathHelper.sin(f) * d2, d0, d1, f, j);
-								this.createSpellEntity(DungeonsEvokerEntity.this.getX() - (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2, d0, d1, f, j);
-							}
-						} else {
-							int x = DungeonsEvokerEntity.this.getRandom().nextInt(6);
-							if (x == 1) {
-								for (k = 0; k < 32; ++k) {
-									double d2 = 1.25D * (double) (k + 1);
-									int j = k;
-									this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2, d0, d1, f, j);
-								}
-								float f2;
-								for (k = 0; k < 5; ++k) {
-									f2 = f + (float) k * 3.1415927F * 0.4F;
-									this.createSpellEntity(DungeonsEvokerEntity.this.getTarget().getX() + (double) MathHelper.cos(f2) * 1.5D, DungeonsEvokerEntity.this.getTarget().getZ() + (double) MathHelper.sin(f2) * 1.5D, d0, d1, f2, (int) (10));
-								}
-
-								for (k = 0; k < 8; ++k) {
-									f2 = f + (float) k * 3.1415927F * 2.0F / 8.0F + 1.2566371F;
-									this.createSpellEntity(DungeonsEvokerEntity.this.getTarget().getX() + (double) MathHelper.cos(f2) * 2.5D, DungeonsEvokerEntity.this.getTarget().getZ() + (double) MathHelper.sin(f2) * 2.5D, d0, d1, f2, (int) (14));
-								}
-
-								for (k = 0; k < 11; ++k) {
-									f2 = f + (float) k * 3.1415927F * 3.0F / 11.0F + 2.2566371F;
-									this.createSpellEntity(DungeonsEvokerEntity.this.getTarget().getX() + (double) MathHelper.cos(f2) * 3.5D, DungeonsEvokerEntity.this.getTarget().getZ() + (double) MathHelper.sin(f2) * 3.5D, d0, d1, f2, (int) (18));
-								}
-
-								for (k = 0; k < 14; ++k) {
-									f2 = f + (float) k * 3.1415927F * 4.0F / 14.0F + 3.2566371F;
-									this.createSpellEntity(DungeonsEvokerEntity.this.getTarget().getX() + (double) MathHelper.cos(f2) * 4.5D, DungeonsEvokerEntity.this.getTarget().getZ() + (double) MathHelper.sin(f2) * 4.5D, d0, d1, f2, (int) (22));
-								}
-
-								for (k = 0; k < 17; ++k) {
-									f2 = f + (float) k * 3.1415927F * 5.0F / 17.0F + 4.2566371F;
-									this.createSpellEntity(DungeonsEvokerEntity.this.getTarget().getX() + (double) MathHelper.cos(f2) * 5.5D, DungeonsEvokerEntity.this.getTarget().getZ() + (double) MathHelper.sin(f2) * 5.5D, d0, d1, f2, (int) (26));
-								}
-
-								for (k = 0; k < 20; ++k) {
-									f2 = f + (float) k * 3.1415927F * 6.0F / 20.0F + 5.2566371F;
-									this.createSpellEntity(DungeonsEvokerEntity.this.getTarget().getX() + (double) MathHelper.cos(f2) * 6.5D, DungeonsEvokerEntity.this.getTarget().getZ() + (double) MathHelper.sin(f2) * 6.5D, d0, d1, f2, (int) (30));
-								}
-
-								for (k = 0; k < 23; ++k) {
-									f2 = f + (float) k * 3.1415927F * 7.0F / 23.0F + 6.2566371F;
-									this.createSpellEntity(DungeonsEvokerEntity.this.getTarget().getX() + (double) MathHelper.cos(f2) * 7.5D, DungeonsEvokerEntity.this.getTarget().getZ() + (double) MathHelper.sin(f2) * 7.5D, d0, d1, f2, (int) (34));
-								}
-
-								for (k = 0; k < 26; ++k) {
-									f2 = f + (float) k * 3.1415927F * 8.0F / 26.0F + 7.2566371F;
-									this.createSpellEntity(DungeonsEvokerEntity.this.getTarget().getX() + (double) MathHelper.cos(f2) * 8.5D, DungeonsEvokerEntity.this.getTarget().getZ() + (double) MathHelper.sin(f2) * 8.5D, d0, d1, f2, (int) (38));
-								}
-
-								for (k = 0; k < 29; ++k) {
-									f2 = f + (float) k * 3.1415927F * 8.0F / 29.0F + 8.2566371F;
-									this.createSpellEntity(DungeonsEvokerEntity.this.getTarget().getX() + (double) MathHelper.cos(f2) * 9.5D, DungeonsEvokerEntity.this.getTarget().getZ() + (double) MathHelper.sin(f2) * 9.5D, d0, d1, f2, (int) (38));
-								}
-
-								for (k = 0; k < 32; ++k) {
-									f2 = f + (float) k * 3.1415927F * 8.0F / 32.0F + 9.2566371F;
-									this.createSpellEntity(DungeonsEvokerEntity.this.getTarget().getX() + (double) MathHelper.cos(f2) * 10.5D, DungeonsEvokerEntity.this.getTarget().getZ() + (double) MathHelper.sin(f2) * 10.5D, d0, d1, f2, (int) (38));
-								}
-
-								for (k = 0; k < 16; ++k) {
-									f = (float) MathHelper.atan2(mob.getZ() - mob.getTarget().getZ(), mob.getX() - livingentity.getX());
-									double d2 = 1.25D * (double) (k + 1);
-									int j = k + 38;
-									this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2, d0, d1, f, j);
-									this.createSpellEntity(DungeonsEvokerEntity.this.getX() - (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() - (double) MathHelper.sin(f) * d2, d0, d1, f, j);
-									this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() - (double) MathHelper.sin(f) * d2, d0, d1, f, j);
-									this.createSpellEntity(DungeonsEvokerEntity.this.getX() - (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2, d0, d1, f, j);
-								}
-
-							} else if (x <= 4) {
-								x = DungeonsEvokerEntity.this.getRandom().nextInt(4);
-								if (x == 1) {
-									for (k = 0; k < 32; ++k) {
-										double d2 = 1.25D * (double) (k + 1);
-										int j = (int) (k / 1.2);
-										this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2, d0, d1, f, j);
-										this.createSpellEntity(DungeonsEvokerEntity.this.getX() - (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() - (double) MathHelper.sin(f) * d2, d0, d1, f, j);
-										this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() - (double) MathHelper.sin(f) * d2, d0, d1, f, j);
-										this.createSpellEntity(DungeonsEvokerEntity.this.getX() - (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2, d0, d1, f, j);
-									}
-								} else if (x == 2) {
-									for (k = 0; k < 32; ++k) {
-										double d2 = 1.25D * (double) (k + 1);
-										double e = Math.log(k + 1) * 9;
-										int j = (int) (k / 1.2);
-										this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2 + e, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2, d0, d1, f, j);
-										this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2 - e, d0, d1, f, j);
-										this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2 - e, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2 + e, d0, d1, f, j);
-										this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2 - e, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2, d0, d1, f, j);
-										this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2, d0, d1, f, j);
-									}
-								} else {
-									for (k = 0; k < 32; ++k) {
-										double e = Math.cos(k * 90) * 9;
-										double d2 = 1.25D * (double) (k + 1);
-										int j = (int) (k / 3.2);
-										this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2 + e, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2 + e, d0, d1, f, j);
-										this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2 - e, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2 - e, d0, d1, f, j);
-										this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2 + e, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2, d0, d1, f, j);
-										this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2 - e, d0, d1, f, j);
-									}
-								}
-							} else {
-								for (k = 0; k < 32; ++k) {
-									double d2 = 1.25D * (double) (k + 1);
-									double e = Math.log(k + 1) * 9;
-									int j = (int) (k / 1.2);
-									this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2 + e, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2 + e, d0, d1, f, j);
-									this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2 - e, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2 - e, d0, d1, f, j);
-									this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2 + e, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2 - e, d0, d1, f, j);
-									this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2 - e, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2 + e, d0, d1, f, j);
-									this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2, d0, d1, f, j);
-								}
-							}
-						}
-				}
-			}
-
-		}
-
-		public void stop() {
-			super.stop();
-			DungeonsEvokerEntity.this.setPowerfulAttack(0);
-		}
-		@Override
-		public boolean isInterruptable() {
-			return false;
-		}
-	}
-    
-    class SummonFangsGoal extends Goal {
+	class SummonFangsGoal extends Goal {
 
 
 		@Override
@@ -824,211 +452,22 @@ public class DungeonsEvokerEntity extends SpellcastingIllagerEntity implements I
 				int k;
 
 				if (mob.getTarget() != null)
-					if (DungeonsEvokerEntity.this.distanceToSqr(livingentity) < 30.0D) {
+					if (DungeonsEvokerEntity.this.distanceToSqr(livingentity) < 60.0D && mob.distanceToSqr(livingentity) > 45) {
 						float f2;
-
-						for (k = 0; k < 5; ++k) {
-							f2 = f + (float) k * 3.1415927F * 0.4F;
-							this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 1.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 1.5D, d0, d1, f2, (int) (0));
-						}
-
-						for (k = 0; k < 8; ++k) {
-							f2 = f + (float) k * 3.1415927F * 2.0F / 8.0F + 1.2566371F;
-							this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 2.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 2.5D, d0, d1, f2, (int) (4));
-						}
-
-						for (k = 0; k < 11; ++k) {
-							f2 = f + (float) k * 3.1415927F * 3.0F / 11.0F + 2.2566371F;
-							this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 3.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 3.5D, d0, d1, f2, (int) (8));
-						}
-
-						for (k = 0; k < 14; ++k) {
-							f2 = f + (float) k * 3.1415927F * 4.0F / 14.0F + 3.2566371F;
-							this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 4.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 4.5D, d0, d1, f2, (int) (12));
-						}
-
-						for (k = 0; k < 17; ++k) {
-							f2 = f + (float) k * 3.1415927F * 5.0F / 17.0F + 4.2566371F;
-							this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 5.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 5.5D, d0, d1, f2, (int) (16));
-						}
-
-						for (k = 0; k < 20; ++k) {
-							f2 = f + (float) k * 3.1415927F * 6.0F / 20.0F + 5.2566371F;
-							this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 6.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 6.5D, d0, d1, f2, (int) (20));
-						}
-
-						for (k = 0; k < 23; ++k) {
-							f2 = f + (float) k * 3.1415927F * 7.0F / 23.0F + 6.2566371F;
-							this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 7.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 7.5D, d0, d1, f2, (int) (24));
-						}
-
-						for (k = 0; k < 26; ++k) {
-							f2 = f + (float) k * 3.1415927F * 8.0F / 26.0F + 7.2566371F;
-							this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 8.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 8.5D, d0, d1, f2, (int) (28));
-						}
-
-						for (k = 0; k < 29; ++k) {
-							f2 = f + (float) k * 3.1415927F * 9.0F / 29.0F + 8.2566371F;
-							this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 9.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 9.5D, d0, d1, f2, (int) (32));
-						}
-
-						for (k = 0; k < 32; ++k) {
-							f2 = f + (float) k * 3.1415927F * 10.0F / 32.0F + 9.2566371F;
-							this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 10.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 10.5D, d0, d1, f2, (int) (36));
-						}
-
-						for (k = 0; k < 35; ++k) {
-							f2 = f + (float) k * 3.1415927F * 11.0F / 35.0F + 10.2566371F;
-							this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 11.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 11.5D, d0, d1, f2, (int) (36));
-						}
-
-						for (k = 0; k < 38; ++k) {
-							f2 = f + (float) k * 3.1415927F * 12.0F / 38.0F + 11.2566371F;
-							this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 12.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 12.5D, d0, d1, f2, (int) (36));
-						}
-
-						for (k = 0; k < 41; ++k) {
-							f2 = f + (float) k * 3.1415927F * 13.0F / 41.0F + 12.2566371F;
-							this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 13.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 13.5D, d0, d1, f2, (int) (36));
-						}
-
-						for (k = 0; k < 44; ++k) {
-							f2 = f + (float) k * 3.1415927F * 14.0F / 44.0F + 13.2566371F;
-							this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 14.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 14.5D, d0, d1, f2, (int) (36));
-						}
-
-						for (k = 0; k < 47; ++k) {
-							f2 = f + (float) k * 3.1415927F * 15.0F / 47.0F + 14.2566371F;
-							this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 15.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 15.5D, d0, d1, f2, (int) (36));
-						}
 
 						for (k = 0; k < 50; ++k) {
 							f2 = f + (float) k * 3.1415927F * 16.0F / 48.0F + 15.2566371F;
 							this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 16.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 16.5D, d0, d1, f2, (int) (36));
 						}
 
-						for (k = 0; k < 16; ++k) {
-							f = (float) MathHelper.atan2(livingentity.getZ() - mob.getZ(), livingentity.getX() - mob.getX());
-							double d2 = 1.25D * (double) (k + 1);
-							int j = k + 36;
-							this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2, d0, d1, f, j);
-							this.createSpellEntity(DungeonsEvokerEntity.this.getX() - (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() - (double) MathHelper.sin(f) * d2, d0, d1, f, j);
-							this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() - (double) MathHelper.sin(f) * d2, d0, d1, f, j);
-							this.createSpellEntity(DungeonsEvokerEntity.this.getX() - (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2, d0, d1, f, j);
-						}
 					} else {
-						int x = DungeonsEvokerEntity.this.getRandom().nextInt(6);
-						if (x == 1) {
-							for (k = 0; k < 32; ++k) {
+						for (k = 0; k < 50; ++k) {
+							{
 								double d2 = 1.25D * (double) (k + 1);
-								int j = k;
-								this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2, d0, d1, f, j);
-							}
-							float f2;
-							for (k = 0; k < 5; ++k) {
-								f2 = f + (float) k * 3.1415927F * 0.4F;
-								this.createSpellEntity(DungeonsEvokerEntity.this.getTarget().getX() + (double) MathHelper.cos(f2) * 1.5D, DungeonsEvokerEntity.this.getTarget().getZ() + (double) MathHelper.sin(f2) * 1.5D, d0, d1, f2, (int) (10));
-							}
-
-							for (k = 0; k < 8; ++k) {
-								f2 = f + (float) k * 3.1415927F * 2.0F / 8.0F + 1.2566371F;
-								this.createSpellEntity(DungeonsEvokerEntity.this.getTarget().getX() + (double) MathHelper.cos(f2) * 2.5D, DungeonsEvokerEntity.this.getTarget().getZ() + (double) MathHelper.sin(f2) * 2.5D, d0, d1, f2, (int) (14));
-							}
-
-							for (k = 0; k < 11; ++k) {
-								f2 = f + (float) k * 3.1415927F * 3.0F / 11.0F + 2.2566371F;
-								this.createSpellEntity(DungeonsEvokerEntity.this.getTarget().getX() + (double) MathHelper.cos(f2) * 3.5D, DungeonsEvokerEntity.this.getTarget().getZ() + (double) MathHelper.sin(f2) * 3.5D, d0, d1, f2, (int) (18));
-							}
-
-							for (k = 0; k < 14; ++k) {
-								f2 = f + (float) k * 3.1415927F * 4.0F / 14.0F + 3.2566371F;
-								this.createSpellEntity(DungeonsEvokerEntity.this.getTarget().getX() + (double) MathHelper.cos(f2) * 4.5D, DungeonsEvokerEntity.this.getTarget().getZ() + (double) MathHelper.sin(f2) * 4.5D, d0, d1, f2, (int) (22));
-							}
-
-							for (k = 0; k < 17; ++k) {
-								f2 = f + (float) k * 3.1415927F * 5.0F / 17.0F + 4.2566371F;
-								this.createSpellEntity(DungeonsEvokerEntity.this.getTarget().getX() + (double) MathHelper.cos(f2) * 5.5D, DungeonsEvokerEntity.this.getTarget().getZ() + (double) MathHelper.sin(f2) * 5.5D, d0, d1, f2, (int) (26));
-							}
-
-							for (k = 0; k < 20; ++k) {
-								f2 = f + (float) k * 3.1415927F * 6.0F / 20.0F + 5.2566371F;
-								this.createSpellEntity(DungeonsEvokerEntity.this.getTarget().getX() + (double) MathHelper.cos(f2) * 6.5D, DungeonsEvokerEntity.this.getTarget().getZ() + (double) MathHelper.sin(f2) * 6.5D, d0, d1, f2, (int) (30));
-							}
-
-							for (k = 0; k < 23; ++k) {
-								f2 = f + (float) k * 3.1415927F * 7.0F / 23.0F + 6.2566371F;
-								this.createSpellEntity(DungeonsEvokerEntity.this.getTarget().getX() + (double) MathHelper.cos(f2) * 7.5D, DungeonsEvokerEntity.this.getTarget().getZ() + (double) MathHelper.sin(f2) * 7.5D, d0, d1, f2, (int) (34));
-							}
-
-							for (k = 0; k < 26; ++k) {
-								f2 = f + (float) k * 3.1415927F * 8.0F / 26.0F + 7.2566371F;
-								this.createSpellEntity(DungeonsEvokerEntity.this.getTarget().getX() + (double) MathHelper.cos(f2) * 8.5D, DungeonsEvokerEntity.this.getTarget().getZ() + (double) MathHelper.sin(f2) * 8.5D, d0, d1, f2, (int) (38));
-							}
-
-							for (k = 0; k < 29; ++k) {
-								f2 = f + (float) k * 3.1415927F * 8.0F / 29.0F + 8.2566371F;
-								this.createSpellEntity(DungeonsEvokerEntity.this.getTarget().getX() + (double) MathHelper.cos(f2) * 9.5D, DungeonsEvokerEntity.this.getTarget().getZ() + (double) MathHelper.sin(f2) * 9.5D, d0, d1, f2, (int) (38));
-							}
-
-							for (k = 0; k < 32; ++k) {
-								f2 = f + (float) k * 3.1415927F * 8.0F / 32.0F + 9.2566371F;
-								this.createSpellEntity(DungeonsEvokerEntity.this.getTarget().getX() + (double) MathHelper.cos(f2) * 10.5D, DungeonsEvokerEntity.this.getTarget().getZ() + (double) MathHelper.sin(f2) * 10.5D, d0, d1, f2, (int) (38));
-							}
-
-							for (k = 0; k < 16; ++k) {
-								f = (float) MathHelper.atan2(mob.getZ() - mob.getTarget().getZ(), mob.getX() - livingentity.getX());
-								double d2 = 1.25D * (double) (k + 1);
-								int j = k + 38;
-								this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2, d0, d1, f, j);
-								this.createSpellEntity(DungeonsEvokerEntity.this.getX() - (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() - (double) MathHelper.sin(f) * d2, d0, d1, f, j);
-								this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() - (double) MathHelper.sin(f) * d2, d0, d1, f, j);
-								this.createSpellEntity(DungeonsEvokerEntity.this.getX() - (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2, d0, d1, f, j);
-							}
-
-						}/*else if (x <= 4){
-							x = DungeonsEvokerEntity.this.getRandom().nextInt(4);
-							if (x == 1 ) {
-								for (k = 0; k < 32; ++k) {
-									double d2 = 1.25D * (double) (k + 1);
-									int j = (int) (k / 1.2);
-									this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2, d0, d1, f, j);
-									this.createSpellEntity(DungeonsEvokerEntity.this.getX() - (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() - (double) MathHelper.sin(f) * d2, d0, d1, f, j);
-									this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() - (double) MathHelper.sin(f) * d2, d0, d1, f, j);
-									this.createSpellEntity(DungeonsEvokerEntity.this.getX() - (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2, d0, d1, f, j);
-								}
-							}else if (x == 2) {
-								for (k = 0; k < 32; ++k){
-									double d2 = 1.25D * (double) (k + 1);
-									double e = Math.log(k+1) * 9;
-									int j = (int) (k / 1.2);
-									this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2 + e, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2 , d0, d1, f, j);
-									this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2 , DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2 - e, d0, d1, f, j);
-									this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2 - e, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2 + e , d0, d1, f, j);
-									this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2 - e , DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2 , d0, d1, f, j);
-									this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2, d0, d1, f, j);
-								}
-							}else {
-								for (k = 0; k < 32; ++k) {
-									double e = Math.cos(k * 90) * 9;
-									double d2 = 1.25D * (double) (k + 1);
-									int j = (int) (k / 3.2);
-									this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2 + e, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2 + e, d0, d1, f, j);
-									this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2 - e, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2 - e, d0, d1, f, j);
-									this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2 + e, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2, d0, d1, f, j);
-									this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2 - e, d0, d1, f, j);
-								}
-							}
-						}/*/else {
-							for (k = 0; k < 32; ++k){
-								double d2 = 1.25D * (double) (k + 1);
-								double e = Math.log(k+1) * 9;
 								int j = (int) (k / 1.2);
-								this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2 + e, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2 +e , d0, d1, f, j);
-								this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2 - e , DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2 - e, d0, d1, f, j);
-								this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2 + e, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2 -e , d0, d1, f, j);
-								this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2 - e , DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2 + e, d0, d1, f, j);
 								this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f) * d2, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f) * d2, d0, d1, f, j);
 							}
+
 						}
 					}
 			}
@@ -1100,17 +539,8 @@ public class DungeonsEvokerEntity extends SpellcastingIllagerEntity implements I
 	   }
 	@Nullable
 	@Override
-	public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance p_213386_2_, SpawnReason p_213386_3_, @Nullable ILivingEntityData p_213386_4_, @Nullable CompoundNBT p_213386_5_) {
-		ILivingEntityData spawnData = super.finalizeSpawn(p_213386_1_, p_213386_2_, p_213386_3_, p_213386_4_, p_213386_5_);
-
-		DungeonsEvokerEntity v = this;
-		for (int i=0;i<6;i++) {
-			BlockPos vvf = v.blockPosition();
-			RoyalGuardEntity vv = new RoyalGuardEntity(this.level);
-			vv.moveTo(vvf, 0F, 0F);
-			vv.addEffect(new EffectInstance(Effects.HEAL, 10, 6, (false), (false)));
-			v.level.addFreshEntity(vv);
-		}
+	public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance p_213386_2_, SpawnReason reason, @Nullable ILivingEntityData p_213386_4_, @Nullable CompoundNBT p_213386_5_) {
+		ILivingEntityData spawnData = super.finalizeSpawn(p_213386_1_, p_213386_2_, reason, p_213386_4_, p_213386_5_);
 
 		return spawnData;
 	}
