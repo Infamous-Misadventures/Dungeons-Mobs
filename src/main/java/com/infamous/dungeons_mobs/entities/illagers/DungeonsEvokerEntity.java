@@ -69,14 +69,13 @@ public class DungeonsEvokerEntity extends SpellcastingIllagerEntity implements I
 
     protected void registerGoals() {
         super.registerGoals();
-		this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, AbstractVillagerEntity.class, 3.0F, 1.4D, 1.25D));
-		this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, PlayerEntity.class, 3.0F, 1.4D, 1.2D));
-		this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, IronGolemEntity.class, 3.0F, 1.4D, 1.25D));
-		this.goalSelector.addGoal(0, new SwimGoal(this));
-		/*this.goalSelector.addGoal(1, new DungeonsEvokerEntity.PowerfulAttackGoal());/*/
-		this.goalSelector.addGoal(1, new DungeonsEvokerEntity.SpellAttackGoal());
+	this.goalSelector.addGoal(4, new AvoidEntityGoal<>(this, AbstractVillagerEntity.class, 3.0F, 1.25D, 1.25D));
+	this.goalSelector.addGoal(4, new AvoidEntityGoal<>(this, PlayerEntity.class, 3.0F, 1.2D, 1.2D));
+	this.goalSelector.addGoal(4, new AvoidEntityGoal<>(this, IronGolemEntity.class, 3.0F, 1.25D, 1.25D));
+	this.goalSelector.addGoal(0, new SwimGoal(this));
+	this.goalSelector.addGoal(3, new DungeonsEvokerEntity.SpellAttackGoal());
         this.goalSelector.addGoal(3, new DungeonsEvokerEntity.CastingSpellGoal());
-		this.goalSelector.addGoal(2, new DungeonsEvokerEntity.SummonFangsGoal());
+	this.goalSelector.addGoal(2, new DungeonsEvokerEntity.SummonFangsGoal());
         this.goalSelector.addGoal(3, new DungeonsEvokerEntity.DuplicateGoal());
         this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 1.0D));
         this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
@@ -162,11 +161,11 @@ public class DungeonsEvokerEntity extends SpellcastingIllagerEntity implements I
         this.entityData.define(LIFT_TICKS, 0);
         this.entityData.define(DUPLICATE_TICKS, 0);
         this.entityData.define(ANGRY, 0);
-		this.entityData.define(POWERFUL_ATTACK, 0);
+	this.entityData.define(POWERFUL_ATTACK, 0);
     }
 
-	public int getPowerfulAttack() {
-		return this.entityData.get(POWERFUL_ATTACK);
+    public int getPowerfulAttack() {
+	return this.entityData.get(POWERFUL_ATTACK);
 	}
 
 	public void setPowerfulAttack(int p_189794_1_) {
@@ -203,7 +202,7 @@ public class DungeonsEvokerEntity extends SpellcastingIllagerEntity implements I
 				.add(Attributes.MOVEMENT_SPEED, 0.25D)
 				.add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
 				.add(Attributes.FOLLOW_RANGE, 26.0D)
-				.add(Attributes.MAX_HEALTH, 68.0D);
+				.add(Attributes.MAX_HEALTH, 72.0D);
     }
 
 
@@ -330,16 +329,16 @@ public class DungeonsEvokerEntity extends SpellcastingIllagerEntity implements I
 				int k;
 
 				if (mob.getTarget() != null)
-					if (DungeonsEvokerEntity.this.distanceToSqr(livingentity) < 60.0D && mob.distanceToSqr(livingentity) > 45) {
+					if (DungeonsEvokerEntity.this.distanceToSqr(livingentity) < 60.0D && mob.distanceToSqr(livingentity) > 35.0D) {
 						float f2;
 
-						for (k = 0; k < 50; ++k) {
+						for (k = 0; k < 16; ++k) {
 							f2 = f + (float) k * 3.1415927F * 16.0F / 48.0F + 15.2566371F;
 							this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 16.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 16.5D, d0, d1, f2, (int) (36));
 						}
 
 					} else {
-						for (k = 0; k < 50; ++k) {
+						for (k = 0; k < 24; ++k) {
 							{
 								double d2 = 1.25D * (double) (k + 1);
 								int j = (int) (k / 1.2);
@@ -455,13 +454,13 @@ public class DungeonsEvokerEntity extends SpellcastingIllagerEntity implements I
 					if (DungeonsEvokerEntity.this.distanceToSqr(livingentity) < 60.0D && mob.distanceToSqr(livingentity) > 45) {
 						float f2;
 
-						for (k = 0; k < 50; ++k) {
+						for (k = 0; k < 16; ++k) {
 							f2 = f + (float) k * 3.1415927F * 16.0F / 48.0F + 15.2566371F;
 							this.createSpellEntity(DungeonsEvokerEntity.this.getX() + (double) MathHelper.cos(f2) * 16.5D, DungeonsEvokerEntity.this.getZ() + (double) MathHelper.sin(f2) * 16.5D, d0, d1, f2, (int) (36));
 						}
 
 					} else {
-						for (k = 0; k < 50; ++k) {
+						for (k = 0; k < 24; ++k) {
 							{
 								double d2 = 1.25D * (double) (k + 1);
 								int j = (int) (k / 1.2);
