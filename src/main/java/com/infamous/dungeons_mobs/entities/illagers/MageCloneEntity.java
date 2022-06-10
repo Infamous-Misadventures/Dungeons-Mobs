@@ -72,7 +72,7 @@ public class MageCloneEntity extends SpellcastingIllagerEntity implements IAnima
         super(type, world);
     }
     
-    public MageCloneEntity(World worldIn, LivingEntity caster, int lifeTicks) {
+    public MageCloneEntity(World worldIn, LivingEntity caster, int lifeTicks, LivingEntity target) {
         this(ModEntityTypes.MAGE_CLONE.get(), worldIn);
         this.setCaster(caster);
         this.lifeTicks = lifeTicks;
