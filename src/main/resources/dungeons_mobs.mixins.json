@@ -16,6 +16,7 @@
     "PatrolSpawnerMixin",
     "PiglinAccessor",
     "PiglinEntityMixin",
+    "EvokerEntityMixin",
     "RaidMixin",
     "SpiderEntityMixin",
     "TridentEntityAccessor",
