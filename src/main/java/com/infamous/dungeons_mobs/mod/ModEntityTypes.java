@@ -134,6 +134,14 @@ public class ModEntityTypes {
 
 
     // ILLAGERS
+    public static final RegistryObject<EntityType<DungeonsVindicatorEntity>> VINDICATOR = ENTITY_TYPES.register("vindicator", () ->
+            EntityType.Builder.<DungeonsVindicatorEntity>of(DungeonsVindicatorEntity::new, EntityClassification.MONSTER)
+                    .sized(0.7F, 1.95F)
+                    .clientTrackingRange(8)
+                    .setCustomClientFactory((spawnEntity,world) -> new DungeonsVindicatorEntity(world))
+                    .build(new ResourceLocation(MODID, "vindicator").toString())
+    );
+    
     public static final RegistryObject<EntityType<ArmoredVindicatorEntity>> ARMORED_VINDICATOR = ENTITY_TYPES.register("armored_vindicator", () ->
             EntityType.Builder.<ArmoredVindicatorEntity>of(ArmoredVindicatorEntity::new, EntityClassification.MONSTER)
                     .sized(0.6F * 1.1F, 1.95F * 1.1F)
