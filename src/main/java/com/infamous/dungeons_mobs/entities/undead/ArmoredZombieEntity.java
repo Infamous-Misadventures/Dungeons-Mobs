@@ -23,28 +23,21 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 
-public class ArmoredZombieEntity extends ZombieEntity {
+public class ArmoredZombieEntity extends DungeonsZombieEntity {
     public ArmoredZombieEntity(World worldIn) {
         super(worldIn);
     }
 
-    public ArmoredZombieEntity(EntityType<? extends ZombieEntity> type, World worldIn) {
+    public ArmoredZombieEntity(EntityType<? extends DungeonsZombieEntity> type, World worldIn) {
         super(type, worldIn);
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return ZombieEntity.createAttributes()
-                .add(Attributes.MAX_HEALTH, 30.0D) // normal zombies have 20
-                .add(Attributes.ATTACK_DAMAGE, 4.0D)
+                .add(Attributes.MAX_HEALTH, 48.0D) // normal zombies have 20
+                .add(Attributes.ATTACK_DAMAGE, 9.0D)
+                .add(Attributes.ARMOR, 8.0D)
         ;
-    }
-
-    @Override
-    protected void doUnderWaterConversion() {
-        this.convertToZombieType(ModEntityTypes.ARMORED_DROWNED.get());
-        if (!this.isSilent()) {
-            this.level.levelEvent((PlayerEntity)null, 1040, this.blockPosition(), 0);
-        }
     }
 
     @Override
@@ -82,24 +75,10 @@ public class ArmoredZombieEntity extends ZombieEntity {
     @Override
     public ILivingEntityData finalizeSpawn(IServerWorld world, DifficultyInstance difficultyInstance, SpawnReason spawnReason, @Nullable ILivingEntityData livingEntityDataIn, @Nullable CompoundNBT compoundNBTIn) {
         livingEntityDataIn = super.finalizeSpawn(world, difficultyInstance, spawnReason, livingEntityDataIn, compoundNBTIn);
-        float f = difficultyInstance.getSpecialMultiplier();
-        this.setCanPickUpLoot(this.random.nextFloat() < 0.55F * f);
-        if (livingEntityDataIn == null) {
-            livingEntityDataIn = new ZombieEntity.GroupData(getSpawnAsBabyOdds(world.getRandom()), true);
-        }
 
-        if (livingEntityDataIn instanceof ZombieEntity.GroupData) {
-            //ZombieEntity.GroupData zombieentity$groupdata = (ZombieEntity.GroupData)livingEntityData;
-            // only used for handling baby zombies and their chance to spawn riding chickens
-            this.setCanBreakDoors(this.supportsBreakDoorGoal()
-                    //&& this.rand.nextFloat() < f * 0.1F
-                    // we want these zombies to always be able to break doors
-            );
-            this.populateDefaultEquipmentSlots(difficultyInstance);
-            this.populateDefaultEquipmentEnchantments(difficultyInstance);
-        }
+        this.populateDefaultEquipmentSlots(difficultyInstance);
+        this.populateDefaultEquipmentEnchantments(difficultyInstance);
 
-        this.handleAttributes(f);
         return (ILivingEntityData)livingEntityDataIn;
     }
 }

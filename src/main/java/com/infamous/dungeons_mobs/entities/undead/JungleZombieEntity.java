@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-public class JungleZombieEntity extends ZombieEntity{
+public class JungleZombieEntity extends DungeonsZombieEntity{
 
     public JungleZombieEntity(World worldIn) {
         super(worldIn);
