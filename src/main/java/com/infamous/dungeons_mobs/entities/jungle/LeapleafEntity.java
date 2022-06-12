@@ -1,10 +1,8 @@
 package com.infamous.dungeons_mobs.entities.jungle;
 
+import com.infamous.dungeons_mobs.entities.redstone.RedstoneGolemEntity;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.controller.LookController;
@@ -16,16 +14,35 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import java.util.EnumSet;
 
-public class LeapleafEntity extends MonsterEntity {
+public class LeapleafEntity extends MonsterEntity implements IAnimatable {
+    AnimationFactory factory = new AnimationFactory(this);
+
+    private static final DataParameter<Boolean> IS_MELEE = EntityDataManager.defineId(LeapleafEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Integer> TIMER = EntityDataManager.defineId(LeapleafEntity.class, DataSerializers.INT);
+    private static final DataParameter<Integer> LEAP_COOLDOWN = EntityDataManager.defineId(LeapleafEntity.class, DataSerializers.INT);
+    private static final DataParameter<Integer> ATTACK_ID = EntityDataManager.defineId(LeapleafEntity.class, DataSerializers.INT);
+    private static final DataParameter<Boolean> IS_READYING = EntityDataManager.defineId(LeapleafEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> IS_READY = EntityDataManager.defineId(LeapleafEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> IS_REST = EntityDataManager.defineId(LeapleafEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> IS_STALKING = EntityDataManager.defineId(LeapleafEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> IS_CROUCHING = EntityDataManager.defineId(LeapleafEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> IS_LEAPING = EntityDataManager.defineId(LeapleafEntity.class, DataSerializers.BOOLEAN);
@@ -55,12 +72,48 @@ public class LeapleafEntity extends MonsterEntity {
     }
 
     @Override
+    public void registerControllers(AnimationData data) {
+        data.addAnimationController(new AnimationController(this, "controller", 5, this::predicate));
+    }
+
+    @Override
+    public AnimationFactory getFactory() {
+        return this.factory;
+    }
+
+    private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
+        if (this.isMelee()) {
+            if (this.entityData.get(ATTACK_ID) == 1) {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.leaper.basic_attack", false));
+            }else {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.leaper.heavy_attack_down", false));
+            }
+        } else if (this.entityData.get(IS_READYING)) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.leaper.charge", false));
+        } else if (this.entityData.get(IS_REST)) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.leaper.rest", true));
+        } else if (this.isLeaping()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.leaper.heavy_attack_up", false));
+        } else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.leaper.walk", true));
+        } else {
+            event.getController().animationSpeed = 1;
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.leaper.idle", true));
+        }
+        return PlayState.CONTINUE;
+    }
+
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(1, new WaterAvoidingRandomWalkingGoal(this, 0.6D));
         this.goalSelector.addGoal(2, new LeapleafEntity.StalkGoal());
         this.goalSelector.addGoal(3, new LeapleafEntity.LeapGoal());
-        this.goalSelector.addGoal(4, new LeapleafEntity.AttackGoal());
+        this.goalSelector.addGoal(4, new LeapleafEntity.AttackGoal(this,1.1));
+        this.goalSelector.addGoal(1, new LeapleafEntity.LeapMeleeGoal());
+        this.goalSelector.addGoal(0, new LeapleafEntity.MeleeGoal());
+        this.goalSelector.addGoal(0, new LeapleafEntity.RestGoal());
+        this.goalSelector.addGoal(1, new LeapleafEntity.ChargeGoal());
         this.goalSelector.addGoal(5, new LeapAtTargetGoal(this, 0.4F));
         this.goalSelector.addGoal(6, new LeapleafEntity.WatchGoal(this, PlayerEntity.class, 24.0F));
 
@@ -72,6 +125,13 @@ public class LeapleafEntity extends MonsterEntity {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
+        this.entityData.define(LEAP_COOLDOWN, 0);
+        this.entityData.define(ATTACK_ID, 0);
+        this.entityData.define(TIMER, 0);
+        this.entityData.define(IS_MELEE, false);
+        this.entityData.define(IS_REST, false);
+        this.entityData.define(IS_READY, false);
+        this.entityData.define(IS_READYING, false);
         this.entityData.define(IS_STALKING, false);
         this.entityData.define(IS_CROUCHING, false);
         this.entityData.define(IS_LEAPING, false);
@@ -114,6 +174,14 @@ public class LeapleafEntity extends MonsterEntity {
         return MathHelper.lerp(partialTicks, this.secondaryCrouchAmount, this.primaryCrouchAmount);
     }
 
+    @Override
+    public void aiStep() {
+        if (this.isMelee() || this.isLeaping()) {
+            this.setTimer(this.getTimer() + 1);
+        }
+        super.aiStep();
+    }
+
     public boolean canLeap() {
         return this.primaryCrouchAmount == 3.0F;
     }
@@ -124,6 +192,30 @@ public class LeapleafEntity extends MonsterEntity {
 
     public boolean isStalking() {
         return this.entityData.get(IS_STALKING);
+    }
+
+    public void setIsReadying(boolean isStalking) {
+        this.entityData.set(IS_READY, isStalking);
+    }
+
+    public boolean isReadying() {
+        return this.entityData.get(IS_READY);
+    }
+
+    public void setIsMelee(boolean isStalking) {
+        this.entityData.set(IS_MELEE, isStalking);
+    }
+
+    public boolean isMelee() {
+        return this.entityData.get(IS_MELEE);
+    }
+
+    public int getTimer() {
+        return this.entityData.get(TIMER);
+    }
+
+    public void setTimer(int e45ew) {
+        this.entityData.set(TIMER, e45ew);
     }
 
     public void setCrouching(boolean isCrouching) {
@@ -167,6 +259,14 @@ public class LeapleafEntity extends MonsterEntity {
         protected boolean resetXRotOnTick() {
             return !LeapleafEntity.this.isStalking() && !LeapleafEntity.this.isCrouching() && !LeapleafEntity.this.isLeaping();
         }
+    }
+
+    @Override
+    public boolean doHurtTarget(Entity p_70652_1_) {
+        if (this.getTimer() == 0 && this.level.isClientSide) {
+            this.setIsMelee(true);
+        }
+        return true;
     }
 
     class StalkGoal extends Goal {
@@ -235,134 +335,326 @@ public class LeapleafEntity extends MonsterEntity {
         }
     }
 
-    class LeapGoal extends net.minecraft.entity.ai.goal.JumpGoal {
-        /**
-         * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
-         * method as well.
-         */
-        public boolean canUse() {
-            if (!LeapleafEntity.this.canLeap()) {
-                return false;
-            } else {
-                LivingEntity livingentity = LeapleafEntity.this.getTarget();
-                if (livingentity != null && livingentity.isAlive()) {
-                    if (livingentity.getMotionDirection() != livingentity.getDirection()) {
-                        return false;
-                    } else {
-                        boolean canLeapTowardsTarget = LeapleafEntity.canLeapTowardsTarget(LeapleafEntity.this, livingentity);
-                        if (!canLeapTowardsTarget) {
-                            LeapleafEntity.this.getNavigation().createPath(livingentity, 0);
-                            LeapleafEntity.this.setCrouching(false);
-                            LeapleafEntity.this.setStalking(false);
-                        }
+    class LeapMeleeGoal extends Goal {
 
-                        return canLeapTowardsTarget;
-                    }
-                } else {
-                    return false;
+        public LeapMeleeGoal() {
+            this.setFlags(EnumSet.of(Goal.Flag.LOOK, Goal.Flag.MOVE));
+        }
+
+        @Override
+        public boolean canUse() {
+            return LeapleafEntity.this.getTarget() != null &&
+                    LeapleafEntity.this.entityData.get(ATTACK_ID) == 2;
+        }
+
+        @Override
+        public void start() {
+            LeapleafEntity.this.entityData.set(ATTACK_ID,2);
+            LeapleafEntity.this.setTimer(0);
+            LeapleafEntity.this.setIsMelee(true);
+        }
+
+        @Override
+        public void stop() {
+            LeapleafEntity.this.entityData.set(ATTACK_ID,0);
+            LeapleafEntity.this.setTimer(0);
+            LeapleafEntity.this.entityData.set(ATTACK_ID,0);
+            LeapleafEntity.this.setIsMelee(false);
+            LeapleafEntity.this.entityData.set(IS_REST,true);
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return LeapleafEntity.this.getTimer() <= 15;
+        }
+
+        @Override
+        public void tick() {
+            if(LeapleafEntity.this.getTarget() != null && LeapleafEntity.this.getTarget().isAlive()) {
+                LeapleafEntity.this.getLookControl().setLookAt(LeapleafEntity.this.getTarget(), 30.0F, 30.0F);
+                if (LeapleafEntity.this.getTimer() == 2 && LeapleafEntity.this.distanceToSqr(LeapleafEntity.this.getTarget()) <= 25.6D) {
+                    float attackKnockback = (float) LeapleafEntity.this.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
+                    LivingEntity attackTarget = LeapleafEntity.this.getTarget();
+                    double ratioX = (double) MathHelper.sin(LeapleafEntity.this.yRot * ((float) Math.PI / 180F));
+                    double ratioZ = (double) (-MathHelper.cos(LeapleafEntity.this.yRot * ((float) Math.PI / 180F)));
+                    double knockbackReduction = 0.5D;
+                    attackTarget.hurt(DamageSource.mobAttack(LeapleafEntity.this), (float) (LeapleafEntity.this.getAttributeValue(Attributes.ATTACK_DAMAGE) * 1.5F));
+                    this.forceKnockback(attackTarget,attackKnockback * 1.25F, ratioX, ratioZ, knockbackReduction);
+                    LeapleafEntity.this.setDeltaMovement(LeapleafEntity.this.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
                 }
             }
         }
 
-        /**
-         * Returns whether an in-progress EntityAIBase should continue executing
-         */
-        public boolean canContinueToUse() {
-            LivingEntity livingentity = LeapleafEntity.this.getTarget();
-            if (livingentity != null && livingentity.isAlive()) {
-                double d0 = LeapleafEntity.this.getDeltaMovement().y;
-                return (!(d0 * d0 < (double)0.05F) || !(Math.abs(LeapleafEntity.this.xRot) < 15.0F) || !LeapleafEntity.this.onGround);
-            } else {
-                return false;
-            }
-        }
-
-        public boolean isInterruptable() {
-            return false;
-        }
-
-        /**
-         * Execute a one shot task or start executing a continuous task
-         */
-        public void start() {
-            LeapleafEntity.this.setJumping(true);
-            LeapleafEntity.this.setLeaping(true);
-            LeapleafEntity.this.setStalking(false);
-            LivingEntity attackTarget = LeapleafEntity.this.getTarget();
-            if (attackTarget != null) {
-                LeapleafEntity.this.getLookControl().setLookAt(attackTarget, 60.0F, 30.0F);
-                Vector3d vector3d = (new Vector3d(attackTarget.getX() - LeapleafEntity.this.getX(), attackTarget.getY() - LeapleafEntity.this.getY(), attackTarget.getZ() - LeapleafEntity.this.getZ())).normalize();
-                LeapleafEntity.this.setDeltaMovement(LeapleafEntity.this.getDeltaMovement().add(vector3d.x * 0.8D, 0.9D, vector3d.z * 0.8D));
-                LeapleafEntity.this.getNavigation().stop();
-            }
-        }
-
-        /**
-         * Reset the task's internal state. Called when this task is interrupted by another one
-         */
-        public void stop() {
-            LeapleafEntity.this.setCrouching(false);
-            LeapleafEntity.this.primaryCrouchAmount = 0.0F;
-            LeapleafEntity.this.secondaryCrouchAmount = 0.0F;
-            LeapleafEntity.this.setStalking(false);
-            LeapleafEntity.this.setLeaping(false);
-        }
-
-        /**
-         * Keep ticking a continuous task that has already been started
-         */
-        public void tick() {
-            LivingEntity attackTarget = LeapleafEntity.this.getTarget();
-            if (attackTarget != null) {
-                LeapleafEntity.this.getLookControl().setLookAt(attackTarget, 60.0F, 30.0F);
-            }
-
-            /*
-            Vector3d vector3d = LeapleafEntity.this.getMotion();
-            if (vector3d.y * vector3d.y < (double)0.03F && LeapleafEntity.this.rotationPitch != 0.0F) {
-                LeapleafEntity.this.rotationPitch = MathHelper.rotLerp(LeapleafEntity.this.rotationPitch, 0.0F, 0.2F);
-            } else {
-                double d0 = Math.sqrt(Entity.horizontalMag(vector3d));
-                double d1 = Math.signum(-vector3d.y) * Math.acos(d0 / vector3d.length()) * (double)(180F / (float)Math.PI);
-                LeapleafEntity.this.rotationPitch = (float)d1;
-            }
-             */
-
-            if (attackTarget != null && LeapleafEntity.this.distanceToSqr(attackTarget) <= 4.0F) {
-                LeapleafEntity.this.doHurtTarget(attackTarget);
+        private void forceKnockback(LivingEntity attackTarget, float strength, double ratioX, double ratioZ, double knockbackResistanceReduction) {
+            LivingKnockBackEvent event = ForgeHooks.onLivingKnockBack(attackTarget, strength, ratioX, ratioZ);
+            if(event.isCanceled()) return;
+            strength = event.getStrength();
+            ratioX = event.getRatioX();
+            ratioZ = event.getRatioZ();
+            strength = (float)((double)strength * (1.0D - attackTarget.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE) * knockbackResistanceReduction));
+            if (!(strength <= 0.0F)) {
+                attackTarget.hasImpulse = true;
+                Vector3d vector3d = attackTarget.getDeltaMovement();
+                Vector3d vector3d1 = (new Vector3d(ratioX, 0.0D, ratioZ)).normalize().scale((double)strength);
+                attackTarget.setDeltaMovement(vector3d.x / 2.0D - vector3d1.x, attackTarget.isOnGround() ? Math.min(0.4D, vector3d.y / 2.0D + (double)strength) : vector3d.y, vector3d.z / 2.0D - vector3d1.z);
             }
         }
     }
 
-    class AttackGoal extends MeleeAttackGoal{
+    class MeleeGoal extends Goal {
 
-        public AttackGoal() {
-            super(LeapleafEntity.this, 1.2F, false);
+        public MeleeGoal() {
+            this.setFlags(EnumSet.of(Goal.Flag.LOOK, Goal.Flag.MOVE));
+        }
+
+
+        @Override
+        public boolean canUse() {
+            return LeapleafEntity.this.getTarget() != null &&
+                    LeapleafEntity.this.entityData.get(ATTACK_ID) == 1;
         }
 
         @Override
-        protected double getAttackReachSqr(LivingEntity attackTarget) {
-            float adjustedAttackerWidth = LeapleafEntity.this.getBbWidth() - 0.8F;
-            float attackerWidthSquaredTimes4 = adjustedAttackerWidth * 2.0F * adjustedAttackerWidth * 2.0F;
-            return (double)(attackerWidthSquaredTimes4 + attackTarget.getBbWidth());
-        }
-
-
-
-        /**
-         * Execute a one shot task or start executing a continuous task
-         */
         public void start() {
-            LeapleafEntity.this.setStalking(false);
-            super.start();
+            LeapleafEntity.this.entityData.set(ATTACK_ID,1);
+            LeapleafEntity.this.setTimer(0);
+            LeapleafEntity.this.setIsMelee(true);
         }
 
-        /**
-         * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
-         * method as well.
-         */
+        @Override
+        public void stop() {
+            LeapleafEntity.this.entityData.set(ATTACK_ID,0);
+            LeapleafEntity.this.setTimer(0);
+            LeapleafEntity.this.setIsMelee(false);
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return LeapleafEntity.this.getTimer() <= 24;
+        }
+
+        @Override
+        public void tick() {
+            if(LeapleafEntity.this.getTarget() != null && LeapleafEntity.this.getTarget().isAlive()) {
+                LeapleafEntity.this.getLookControl().setLookAt(LeapleafEntity.this.getTarget(), 30.0F, 30.0F);
+                if (LeapleafEntity.this.getTimer() == 15 && LeapleafEntity.this.distanceToSqr(LeapleafEntity.this.getTarget()) <= 18.6D) {
+                    float attackKnockback = (float) LeapleafEntity.this.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
+                    LivingEntity attackTarget = LeapleafEntity.this.getTarget();
+                    double ratioX = (double) MathHelper.sin(LeapleafEntity.this.yRot * ((float) Math.PI / 180F));
+                    double ratioZ = (double) (-MathHelper.cos(LeapleafEntity.this.yRot * ((float) Math.PI / 180F)));
+                    double knockbackReduction = 0.5D;
+                    attackTarget.hurt(DamageSource.mobAttack(LeapleafEntity.this), (float) LeapleafEntity.this.getAttributeValue(Attributes.ATTACK_DAMAGE));
+                    this.forceKnockback(attackTarget,attackKnockback * 0.5F, ratioX, ratioZ, knockbackReduction);
+                    LeapleafEntity.this.setDeltaMovement(LeapleafEntity.this.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
+                }
+            }
+        }
+
+        private void forceKnockback(LivingEntity attackTarget, float strength, double ratioX, double ratioZ, double knockbackResistanceReduction) {
+            LivingKnockBackEvent event = ForgeHooks.onLivingKnockBack(attackTarget, strength, ratioX, ratioZ);
+            if(event.isCanceled()) return;
+            strength = event.getStrength();
+            ratioX = event.getRatioX();
+            ratioZ = event.getRatioZ();
+            strength = (float)((double)strength * (1.0D - attackTarget.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE) * knockbackResistanceReduction));
+            if (!(strength <= 0.0F)) {
+                attackTarget.hasImpulse = true;
+                Vector3d vector3d = attackTarget.getDeltaMovement();
+                Vector3d vector3d1 = (new Vector3d(ratioX, 0.0D, ratioZ)).normalize().scale((double)strength);
+                attackTarget.setDeltaMovement(vector3d.x / 2.0D - vector3d1.x, attackTarget.isOnGround() ? Math.min(0.4D, vector3d.y / 2.0D + (double)strength) : vector3d.y, vector3d.z / 2.0D - vector3d1.z);
+            }
+        }
+    }
+
+    class ChargeGoal extends Goal {
+
+        public ChargeGoal() {
+            this.setFlags(EnumSet.of(Goal.Flag.LOOK, Goal.Flag.MOVE));
+        }
+
+
+        @Override
         public boolean canUse() {
-            return !LeapleafEntity.this.isSleeping() && !LeapleafEntity.this.isCrouching() && super.canUse();
+            return !LeapleafEntity.this.entityData.get(IS_READY) &&
+                    LeapleafEntity.this.getTarget() != null;
+        }
+
+        @Override
+        public void start() {
+            LeapleafEntity.this.setTimer(0);
+            LeapleafEntity.this.entityData.set(IS_READYING,true);
+        }
+
+        @Override
+        public void stop() {
+            LeapleafEntity.this.setTimer(0);
+            LeapleafEntity.this.entityData.set(IS_READYING,false);
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return LeapleafEntity.this.getTimer() <= 20;
+        }
+
+        @Override
+        public void tick() {
+            if (LeapleafEntity.this.getTimer() == 20) {
+                LeapleafEntity.this.entityData.set(IS_READY,true);
+            }
+            LeapleafEntity.this.setTimer(LeapleafEntity.this.getTimer() + 1);
+        }
+    }
+
+    class RestGoal extends Goal {
+
+        public RestGoal() {
+            this.setFlags(EnumSet.of(Goal.Flag.LOOK, Goal.Flag.MOVE));
+        }
+
+
+        @Override
+        public boolean canUse() {
+            return LeapleafEntity.this.entityData.get(IS_REST);
+        }
+
+        @Override
+        public void start() {
+            LeapleafEntity.this.setTimer(0);
+            LeapleafEntity.this.entityData.set(IS_REST,true);
+        }
+
+        @Override
+        public void stop() {
+            LeapleafEntity.this.setTimer(0);
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return LeapleafEntity.this.getTimer() <= 120;
+        }
+
+        @Override
+        public void tick() {
+            if (LeapleafEntity.this.getTimer() == 20) {
+                LeapleafEntity.this.entityData.set(IS_REST,false);
+                LeapleafEntity.this.entityData.set(LEAP_COOLDOWN,210);
+            }
+            LeapleafEntity.this.setTimer(LeapleafEntity.this.getTimer() + 1);
+        }
+
+    }
+
+    //net.minecraft.entity.ai.goal.JumpGoal
+    class LeapGoal extends Goal {
+        @Override
+        public boolean canUse() {
+            return LeapleafEntity.this.entityData.get(LEAP_COOLDOWN) <= 0 &&
+                    LeapleafEntity.this.isReadying() &&
+                    !LeapleafEntity.this.isMelee()&&
+                    !LeapleafEntity.this.entityData.get(IS_REST);
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return LeapleafEntity.this.getTimer() <= 8 || (LeapleafEntity.this.getTarget() != null && !(LeapleafEntity.this.getY() <= LeapleafEntity.this.getTarget().getY() + 1));
+        }
+
+        @Override
+        public void tick() {
+            LeapleafEntity v = LeapleafEntity.this;
+            LivingEntity c = LeapleafEntity.this.getTarget();
+            if (c != null && c.isAlive()) {
+                LeapleafEntity.this.getLookControl().setLookAt(c, 60.0F, 30.0F);
+            }
+            if (v.getTimer() == 8 && c != null && c.isAlive()) {
+                Vector3d vector3d = (new Vector3d(c.getX() - LeapleafEntity.this.getX(), c.getY() - LeapleafEntity.this.getY(), c.getZ() - LeapleafEntity.this.getZ())).normalize();
+                LeapleafEntity.this.setDeltaMovement(LeapleafEntity.this.getDeltaMovement().add(vector3d.x * 0.8D, 0.9D, vector3d.z * 0.8D));
+            }
+        }
+
+        @Override
+        public void start() {
+            LeapleafEntity.this.setTimer(0);
+            LeapleafEntity.this.setJumping(true);
+            LeapleafEntity.this.setLeaping(true);
+            LeapleafEntity.this.setStalking(false);
+        }
+
+        @Override
+        public void stop() {
+            if (LeapleafEntity.this.getTarget() != null) {
+                LeapleafEntity.this.entityData.set(ATTACK_ID,2);
+                LeapleafEntity.this.doHurtTarget(LeapleafEntity.this.getTarget());
+            }
+            LeapleafEntity.this.setJumping(false);
+            LeapleafEntity.this.entityData.set(LEAP_COOLDOWN,210);
+            LeapleafEntity.this.setLeaping(false);
+            LeapleafEntity.this.setStalking(false);
+        }
+
+    }
+
+    class AttackGoal extends MeleeAttackGoal{
+        private int maxAttackTimer = 20;
+        private final double moveSpeed;
+        private int delayCounter;
+        private int attackTimer;
+
+        public AttackGoal(CreatureEntity creatureEntity, double moveSpeed) {
+            super(creatureEntity, moveSpeed, true);
+            this.moveSpeed = moveSpeed;
+        }
+
+        @Override
+        public boolean canUse() {
+            return LeapleafEntity.this.getTarget() != null &&
+                    LeapleafEntity.this.getTarget().isAlive() &&
+                    !LeapleafEntity.this.isLeaping();
+        }
+
+        @Override
+        public void start() {
+            this.delayCounter = 0;
+        }
+
+        @Override
+        public void tick() {
+            LivingEntity livingentity = LeapleafEntity.this.getTarget();
+            if (livingentity == null) {
+                return;
+            }
+
+            LeapleafEntity.this.lookControl.setLookAt(livingentity, 30.0F, 30.0F);
+
+            if (--this.delayCounter <= 0) {
+                this.delayCounter = 4 + LeapleafEntity.this.getRandom().nextInt(3);
+                LeapleafEntity.this.getNavigation().moveTo(livingentity, (double)this.moveSpeed);
+            }
+
+            this.attackTimer = Math.max(this.attackTimer - 1, 0);
+            this.checkAndPerformAttack(livingentity, LeapleafEntity.this.distanceToSqr(livingentity.getX(), livingentity.getBoundingBox().minY, livingentity.getZ()));
+        }
+
+        @Override
+        protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
+            if ((distToEnemySqr <= this.getAttackReachSqr(enemy) || LeapleafEntity.this.getBoundingBox().intersects(enemy.getBoundingBox())) && this.attackTimer <= 0) {
+                this.attackTimer = this.maxAttackTimer;
+                LeapleafEntity.this.entityData.set(ATTACK_ID, 1);
+                LeapleafEntity.this.doHurtTarget(enemy);
+            }
+        }
+
+        @Override
+        public void stop() {
+            LeapleafEntity.this.getNavigation().stop();
+            if (LeapleafEntity.this.getTarget() == null) {
+                LeapleafEntity.this.setAggressive(false);
+            }
+        }
+
+        public LeapleafEntity.AttackGoal setMaxAttackTick(int max) {
+            this.maxAttackTimer = max;
+            return this;
         }
     }
 
