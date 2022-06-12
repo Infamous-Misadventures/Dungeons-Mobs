@@ -60,6 +60,14 @@ public class ModEntityTypes {
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITIES, MODID);
 
     // ZOMBIES
+    public static final RegistryObject<EntityType<DungeonsZombieEntity>> ZOMBIE = ENTITY_TYPES.register("zombie", () ->
+            EntityType.Builder.<DungeonsZombieEntity>of(DungeonsZombieEntity::new, EntityClassification.MONSTER)
+                    .sized(0.7F, 1.95F)
+                    .clientTrackingRange(8)
+                    .setCustomClientFactory((spawnEntity,world) -> new DungeonsZombieEntity(world))
+                    .build(new ResourceLocation(MODID, "zombie").toString())
+    );
+    
     public static final RegistryObject<EntityType<ArmoredZombieEntity>> ARMORED_ZOMBIE = ENTITY_TYPES.register("armored_zombie", () ->
             EntityType.Builder.<ArmoredZombieEntity>of(ArmoredZombieEntity::new, EntityClassification.MONSTER)
                     .sized(0.6F * 1.1F, 1.95F * 1.1F)
@@ -212,14 +220,6 @@ public class ModEntityTypes {
                     .clientTrackingRange(8)
                     .setCustomClientFactory((spawnEntity,world) -> new VindicatorChefEntity(world))
                     .build(new ResourceLocation(MODID, "vindicator_chef").toString())
-    );
-
-    public static final RegistryObject<EntityType<DungeonsEvokerEntity>> DUNGEONS_EVOKER = ENTITY_TYPES.register("evoker", () ->
-            EntityType.Builder.<DungeonsEvokerEntity>of(DungeonsEvokerEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F, 1.95F)
-                    .clientTrackingRange(8)
-                    .setCustomClientFactory((spawnEntity,world) -> new DungeonsEvokerEntity(world))
-                    .build(new ResourceLocation(MODID, "evoker").toString())
     );
 
     public static final RegistryObject<EntityType<DungeonsIllusionerEntity>> ILLUSIONER = ENTITY_TYPES.register("illusioner", () ->
