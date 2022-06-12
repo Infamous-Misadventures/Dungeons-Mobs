@@ -1,4 +1,4 @@
-package com.infamous.dungeons_mobs.entities.illagers.minibosses;
+package com.infamous.dungeons_mobs.entities.illagers;
 
 import com.google.common.collect.Maps;
 import com.infamous.dungeons_mobs.entities.allcustomentity.illagers.PowerfulRoyalGuardEntity;
@@ -83,10 +83,10 @@ public class RampartCaptainEntity extends AbstractIllagerEntity implements IAnim
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return VindicatorEntity.createAttributes()
                 .add(Attributes.MOVEMENT_SPEED, 0.21D)
-                .add(Attributes.MAX_HEALTH, 128.0D)
-                .add(Attributes.ATTACK_DAMAGE, 19.0D)
+                .add(Attributes.MAX_HEALTH, 100.0D)
+                .add(Attributes.ATTACK_DAMAGE, 15.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 3.2D)
-                .add(Attributes.ATTACK_KNOCKBACK, 5.5D);
+                .add(Attributes.ATTACK_KNOCKBACK, 1.5D);
     }
 
 
