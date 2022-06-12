@@ -123,7 +123,8 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.MOUNTAINEER.get(), MountaineerRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_MOUNTAINEER.get(), MountaineerRenderer::new);
 
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ICEOLOGER.get(), IceologerRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ICEOLOGER.get(),
+                manager -> new IceologerRenderer(manager));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.GEOMANCER.get(),
 	    	    manager -> new GeomancerRenderer(manager));
         
@@ -179,7 +180,8 @@ public class ClientEvents {
 	    	    manager -> new GeomancerBombRenderer(manager));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.REDSTONE_MINE.get(),
                 manager -> new RedstoneMineRenderer(manager));
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ICE_CLOUD.get(), IceCloudRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ICE_CLOUD.get(),
+                manager -> new IceCloudRenderer(manager));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.TORNADO.get(), TornadoRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.COBWEB_TRAP.get(), CobwebTrapRenderer::new);
 
