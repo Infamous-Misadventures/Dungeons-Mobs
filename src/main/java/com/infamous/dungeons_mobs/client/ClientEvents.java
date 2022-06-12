@@ -116,10 +116,16 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SKELETON_VANGUARD.get(), SkeletonVanguardRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.NECROMANCER.get(), NecromancerRenderer::new);
 
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_VINDICATOR.get(), CustomVindicatorRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_VINDICATOR.get(),
+                manager -> new ArmoredVindicatorRenderer(manager));
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.VINDICATOR.get(),
+                manager -> new DungeonVindicatorRenderer(manager));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_PILLAGER.get(), CustomPillagerRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ROYAL_GUARD.get(), CustomVindicatorRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.VINDICATOR_CHEF.get(), CustomVindicatorRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.VINDICATOR_CHEF.get(),
+                manager -> new VindicatorChefRenderer(manager));
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.VINDICATOR_RAID_CAPTAIN.get(),
+                manager -> new VindicatorRaidCaptainRenderer(manager));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.MOUNTAINEER.get(), MountaineerRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_MOUNTAINEER.get(), MountaineerRenderer::new);
 
@@ -135,9 +141,6 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ILLUSIONER.get(), CustomIllusionerRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ILLUSIONER_CLONE.get(), IllusionerCloneRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WINDCALLER.get(), WindcallerRenderer::new);
-	    
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.DUNGEONS_EVOKER.get(),
-                manager -> new DungeonsEvokerRenderer(manager));
 	    
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ENCHANTER.get(),
 	    	    manager -> new EnchanterRenderer(manager));
