@@ -1,46 +1,43 @@
 package com.infamous.dungeons_mobs.client.renderer.summonables;
 
+import com.infamous.dungeons_mobs.DungeonsMobs;
+import com.infamous.dungeons_mobs.client.models.redstone.RedstoneMineModel;
+import com.infamous.dungeons_mobs.client.models.summonables.GeomancerConstructModel;
 import com.infamous.dungeons_mobs.client.models.summonables.IceCloudModel;
+import com.infamous.dungeons_mobs.client.renderer.illager.IceologerRenderer;
+import com.infamous.dungeons_mobs.client.renderer.layer.GeoEyeLayer;
+import com.infamous.dungeons_mobs.entities.illagers.IceologerEntity;
+import com.infamous.dungeons_mobs.entities.redstone.RedstoneMineEntity;
+import com.infamous.dungeons_mobs.entities.summonables.GeomancerBombEntity;
 import com.infamous.dungeons_mobs.entities.summonables.IceCloudEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
+import software.bernie.geckolib3.renderers.geo.GeoProjectilesRenderer;
 
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
+public class IceCloudRenderer extends GeoProjectilesRenderer<IceCloudEntity> {
+	public IceCloudRenderer(EntityRendererManager renderManager) {
+		super(renderManager, new IceCloudModel());
+		//  this.addLayer(new GeoEyeLayer<>(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/enchanter/enchanter_eyes.png")));
+		//this.addLayer(new GeoHeldItemLayer<>(this, 0.0, 0.0, 0.5));
+	}
 
-@OnlyIn(Dist.CLIENT)
-public class IceCloudRenderer<T extends IceCloudEntity> extends EntityRenderer<T> {
-   private static final ResourceLocation ICE_CLOUD_TEXTURE = new ResourceLocation(MODID, "textures/entity/ice_cloud.png");
+	@Override
+	public void render(IceCloudEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+		if(entityIn.fallTime < 0){
+			return;
+		}
+		super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
+	}
 
-   protected final IceCloudModel<T> iceCloudModel = new IceCloudModel<T>();
-
-   public IceCloudRenderer(EntityRendererManager renderManagerIn) {
-      super(renderManagerIn);
-   }
-
-   @Override
-   public void render(T entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
-      matrixStackIn.pushPose();
-      matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(180));
-      matrixStackIn.translate(0.0D, -1.5D, 0.0D);
-      ResourceLocation resourceLocation = this.getTextureLocation(entityIn);
-      RenderType renderType = this.iceCloudModel.renderType(resourceLocation);
-      IVertexBuilder ivertexbuilder = bufferIn.getBuffer(renderType);
-      this.iceCloudModel.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-      matrixStackIn.popPose();
-      super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
-   }
-
-   @Override
-   public ResourceLocation getTextureLocation(T entity) {
-      return ICE_CLOUD_TEXTURE;
-   }
+	@Override
+	public RenderType getRenderType(IceCloudEntity animatable, float partialTicks, MatrixStack stack,
+									IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn,
+									ResourceLocation textureLocation) {
+		return RenderType.entityTranslucent(getTextureLocation(animatable));
+	}
 }
