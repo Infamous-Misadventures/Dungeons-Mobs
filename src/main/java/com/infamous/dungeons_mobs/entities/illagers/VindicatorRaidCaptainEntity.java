@@ -1,4 +1,4 @@
-package com.infamous.dungeons_mobs.entities.illagers.minibosses;
+package com.infamous.dungeons_mobs.entities.illagers;
 
 import com.google.common.collect.Maps;
 import com.infamous.dungeons_mobs.entities.illagers.ArmoredVindicatorEntity;
@@ -77,7 +77,7 @@ public class VindicatorRaidCaptainEntity extends AbstractIllagerEntity implement
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(JUST_SPAWN, true);
-        this.entityData.define(IS_DIAMOND, false);
+        this.entityData.define(IS_DIAMOND, true);
         this.entityData.define(IS_GOLD, false);
         this.entityData.define(MELEEATTACKING, false);
     }
@@ -85,10 +85,10 @@ public class VindicatorRaidCaptainEntity extends AbstractIllagerEntity implement
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return VindicatorEntity.createAttributes()
                 .add(Attributes.MOVEMENT_SPEED, 0.21D)
-                .add(Attributes.MAX_HEALTH, 138.0D)
-                .add(Attributes.ATTACK_DAMAGE, 19.0D)
+                .add(Attributes.MAX_HEALTH, 100.0D)
+                .add(Attributes.ATTACK_DAMAGE, 15.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 3.2D)
-                .add(Attributes.ATTACK_KNOCKBACK, 6.5D);
+                .add(Attributes.ATTACK_KNOCKBACK, 3.5D);
     }
 
     @Override
@@ -192,38 +192,6 @@ public class VindicatorRaidCaptainEntity extends AbstractIllagerEntity implement
     @Override
     public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         populateDefaultEquipmentSlots(difficultyIn);
-        /*
-        for(int i=0;i<10;++i){
-            VindicatorRaidCaptainEntity v = this;
-            BlockPos vvf = v.blockPosition();
-            int o =v.getRandom().nextInt(6);
-            if (o==0){
-                ArmoredVindicatorEntity vv = new ArmoredVindicatorEntity(this.level);
-                vv.moveTo(vvf,0F,0F);
-                vv.setCanJoinRaid(true);
-                vv.finalizeSpawn(worldIn,difficultyIn,reason,spawnDataIn,dataTag);
-                v.level.addFreshEntity(vv);
-            }else if (o==1){
-                RoyalGuardEntity vv = new RoyalGuardEntity(this.level);
-                vv.moveTo(vvf,0F,0F);
-                vv.finalizeSpawn(worldIn,difficultyIn,reason,spawnDataIn,dataTag);
-                vv.setCanJoinRaid(true);
-                v.level.addFreshEntity(vv);
-            }else if (o==2||o==3){
-                PillagerEntity vv = new PillagerEntity(EntityType.PILLAGER,this.level);
-                vv.setItemInHand(Hand.MAIN_HAND,new ItemStack(Items.CROSSBOW));
-                vv.moveTo(vvf,0F,0F);
-                vv.setCanJoinRaid(true);
-                v.level.addFreshEntity(vv);
-            }else {
-                DungeonsVindicatorEntity vv = new DungeonsVindicatorEntity(this.level);
-                vv.moveTo(vvf,0F,0F);
-                vv.finalizeSpawn(worldIn,difficultyIn,reason,spawnDataIn,dataTag);
-                vv.setCanJoinRaid(true);
-                v.level.addFreshEntity(vv);
-            }
-        }
-        */
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 
@@ -235,7 +203,7 @@ public class VindicatorRaidCaptainEntity extends AbstractIllagerEntity implement
     @Override
     public void applyRaidBuffs(int waveAmount, boolean b) {
         ItemStack mainhandWeapon = this.getWeaponBasedOnMod();
-        ItemStack helmet = this.isDiamond() ? new ItemStack(ModItems.DIAMOND_VINDICATOR_HELMET.get()) : new ItemStack(ModItems.GOLD_VINDICATOR_HELMET.get());
+        ItemStack helmet = new ItemStack(ModItems.DIAMOND_VINDICATOR_HELMET.get());
         Raid raid = this.getCurrentRaid();
         int enchantmentLevel = 4;
         if (waveAmount > raid.getNumGroups(Difficulty.NORMAL)) {
@@ -246,7 +214,7 @@ public class VindicatorRaidCaptainEntity extends AbstractIllagerEntity implement
         if (applyEnchant) {
             Map<Enchantment, Integer> weaponEnchantmentMap = Maps.newHashMap();
             Map<Enchantment, Integer> armorEnchantmentMap = Maps.newHashMap();
-            weaponEnchantmentMap.put(Enchantments.SHARPNESS, enchantmentLevel);
+            weaponEnchantmentMap.put(Enchantments.SHARPNESS, enchantmentLevel+1);
             armorEnchantmentMap.put(Enchantments.ALL_DAMAGE_PROTECTION, enchantmentLevel);
             EnchantmentHelper.setEnchantments(weaponEnchantmentMap, mainhandWeapon);
             EnchantmentHelper.setEnchantments(armorEnchantmentMap, helmet);
