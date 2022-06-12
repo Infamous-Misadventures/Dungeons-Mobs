@@ -103,8 +103,12 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void onClientSetup(final FMLClientSetupEvent event){
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_ZOMBIE.get(), CustomZombieRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.JUNGLE_ZOMBIE.get(), CustomZombieRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ZOMBIE.get(),
+                manager -> new DungeonZombieRenderer(manager));
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_ZOMBIE.get(),
+                manager -> new DungeonZombieRenderer(manager));
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.JUNGLE_ZOMBIE.get(),
+                manager -> new DungeonZombieRenderer(manager));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.FROZEN_ZOMBIE.get(), CustomZombieRenderer::new);
 
         // To match Husk proportions found in MCD
@@ -135,9 +139,6 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ILLUSIONER.get(), CustomIllusionerRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ILLUSIONER_CLONE.get(), IllusionerCloneRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WINDCALLER.get(), WindcallerRenderer::new);
-	    
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.DUNGEONS_EVOKER.get(),
-                manager -> new DungeonsEvokerRenderer(manager));
 	    
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ENCHANTER.get(),
 	    	    manager -> new EnchanterRenderer(manager));
