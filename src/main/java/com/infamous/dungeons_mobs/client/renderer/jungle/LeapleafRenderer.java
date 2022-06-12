@@ -1,10 +1,6 @@
-package com.infamous.dungeons_mobs.client.renderer.illager;
+package com.infamous.dungeons_mobs.client.renderer.jungle;
 
-import com.infamous.dungeons_mobs.client.models.illager.ArmoredMountaineerModel;
-import com.infamous.dungeons_mobs.client.models.illager.ArmoredVindicatorModel;
 import com.infamous.dungeons_mobs.client.models.jungle.LeapleafModel;
-import com.infamous.dungeons_mobs.entities.illagers.ArmoredMountaineerEntity;
-import com.infamous.dungeons_mobs.entities.illagers.ArmoredVindicatorEntity;
 import com.infamous.dungeons_mobs.entities.jungle.LeapleafEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;

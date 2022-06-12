@@ -1,7 +1,5 @@
 package com.infamous.dungeons_mobs.mod;
 
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
-
 import com.infamous.dungeons_mobs.entities.creepers.IcyCreeperEntity;
 import com.infamous.dungeons_mobs.entities.ender.BlastlingEntity;
 import com.infamous.dungeons_mobs.entities.ender.EndersentEntity;
@@ -17,13 +15,7 @@ import com.infamous.dungeons_mobs.entities.piglin.ArmoredPiglinEntity;
 import com.infamous.dungeons_mobs.entities.piglin.FungusThrowerEntity;
 import com.infamous.dungeons_mobs.entities.piglin.ZombifiedArmoredPiglinEntity;
 import com.infamous.dungeons_mobs.entities.piglin.ZombifiedFungusThrowerEntity;
-import com.infamous.dungeons_mobs.entities.projectiles.BlueNethershroomEntity;
-import com.infamous.dungeons_mobs.entities.projectiles.CobwebProjectileEntity;
-import com.infamous.dungeons_mobs.entities.projectiles.CobwebTrapEntity;
-import com.infamous.dungeons_mobs.entities.projectiles.LaserOrbEntity;
-import com.infamous.dungeons_mobs.entities.projectiles.SlimeballEntity;
-import com.infamous.dungeons_mobs.entities.projectiles.TridentFumeEntity;
-import com.infamous.dungeons_mobs.entities.projectiles.WraithFireballEntity;
+import com.infamous.dungeons_mobs.entities.projectiles.*;
 import com.infamous.dungeons_mobs.entities.redstone.RedstoneCubeEntity;
 import com.infamous.dungeons_mobs.entities.redstone.RedstoneGolemEntity;
 import com.infamous.dungeons_mobs.entities.redstone.RedstoneMineEntity;
@@ -32,29 +24,17 @@ import com.infamous.dungeons_mobs.entities.summonables.GeomancerBombEntity;
 import com.infamous.dungeons_mobs.entities.summonables.GeomancerWallEntity;
 import com.infamous.dungeons_mobs.entities.summonables.IceCloudEntity;
 import com.infamous.dungeons_mobs.entities.summonables.TornadoEntity;
-import com.infamous.dungeons_mobs.entities.undead.ArmoredSkeletonEntity;
-import com.infamous.dungeons_mobs.entities.undead.ArmoredZombieEntity;
-import com.infamous.dungeons_mobs.entities.undead.FrozenZombieEntity;
-import com.infamous.dungeons_mobs.entities.undead.JungleZombieEntity;
-import com.infamous.dungeons_mobs.entities.undead.MossySkeletonEntity;
-import com.infamous.dungeons_mobs.entities.undead.NecromancerEntity;
-import com.infamous.dungeons_mobs.entities.undead.SkeletonVanguardEntity;
-import com.infamous.dungeons_mobs.entities.undead.WraithEntity;
+import com.infamous.dungeons_mobs.entities.undead.*;
 import com.infamous.dungeons_mobs.entities.undead.horseman.SkeletonHorsemanEntity;
-import com.infamous.dungeons_mobs.entities.water.ArmoredDrownedEntity;
-import com.infamous.dungeons_mobs.entities.water.ArmoredSunkenSkeletonEntity;
-import com.infamous.dungeons_mobs.entities.water.DrownedNecromancerEntity;
-import com.infamous.dungeons_mobs.entities.water.PoisonAnemoneEntity;
-import com.infamous.dungeons_mobs.entities.water.QuickGrowingAnemoneEntity;
-import com.infamous.dungeons_mobs.entities.water.SunkenSkeletonEntity;
-import com.infamous.dungeons_mobs.entities.water.WavewhispererEntity;
-
+import com.infamous.dungeons_mobs.entities.water.*;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
 public class ModEntityTypes {
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITIES, MODID);
@@ -212,14 +192,6 @@ public class ModEntityTypes {
                     .clientTrackingRange(8)
                     .setCustomClientFactory((spawnEntity,world) -> new VindicatorChefEntity(world))
                     .build(new ResourceLocation(MODID, "vindicator_chef").toString())
-    );
-
-    public static final RegistryObject<EntityType<DungeonsEvokerEntity>> DUNGEONS_EVOKER = ENTITY_TYPES.register("evoker", () ->
-            EntityType.Builder.<DungeonsEvokerEntity>of(DungeonsEvokerEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F, 1.95F)
-                    .clientTrackingRange(8)
-                    .setCustomClientFactory((spawnEntity,world) -> new DungeonsEvokerEntity(world))
-                    .build(new ResourceLocation(MODID, "evoker").toString())
     );
 
     public static final RegistryObject<EntityType<DungeonsIllusionerEntity>> ILLUSIONER = ENTITY_TYPES.register("illusioner", () ->
