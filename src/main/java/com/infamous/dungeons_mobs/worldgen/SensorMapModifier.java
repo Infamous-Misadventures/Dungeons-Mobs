@@ -32,6 +32,7 @@ public class SensorMapModifier {
         villagerHostiles.put(ModEntityTypes.MOUNTAINEER.get(), 10.0F);
         villagerHostiles.put(ModEntityTypes.ARMORED_MOUNTAINEER.get(), 10.0F);
 
+        villagerHostiles.put(ModEntityTypes.ZOMBIE.get(), 8.0F);
         villagerHostiles.put(ModEntityTypes.ARMORED_ZOMBIE.get(), 8.0F);
         villagerHostiles.put(ModEntityTypes.FROZEN_ZOMBIE.get(), 8.0F);
         villagerHostiles.put(ModEntityTypes.JUNGLE_ZOMBIE.get(), 8.0F);
