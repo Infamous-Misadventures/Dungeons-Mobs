@@ -2,8 +2,6 @@ package com.infamous.dungeons_mobs.entities.illagers;
 
 import com.google.common.collect.Maps;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
-import com.infamous.dungeons_mobs.mod.ModItems;
-import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -13,15 +11,13 @@ import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
-import net.minecraft.entity.monster.AbstractIllagerEntity;
-import net.minecraft.entity.monster.AbstractRaiderEntity;
-import net.minecraft.entity.monster.VindicatorEntity;
-import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -30,20 +26,13 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.raid.Raid;
-
-import java.util.EnumSet;
-import java.util.Map;
-
-import net.minecraft.entity.monster.AbstractIllagerEntity.ArmPose;
-import net.minecraft.world.spawner.WorldEntitySpawner;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeHooks;
@@ -56,23 +45,30 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class VindicatorChefEntity extends AbstractIllagerEntity implements IAnimatable {
+import javax.annotation.Nullable;
+import java.util.EnumSet;
+import java.util.Map;
+
+public class DungeonsVindicatorEntity extends AbstractIllagerEntity implements IAnimatable {
     private boolean isJohnny;
     private int attackTimer;
+    private int T;
     private int attackID;
     public static final byte MELEE_ATTACK = 1;
-    private static final DataParameter<Boolean> MELEEATTACKING = EntityDataManager.defineId(VindicatorChefEntity.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> IS_DIAMOND = EntityDataManager.defineId(VindicatorChefEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> MELEEATTACKING = EntityDataManager.defineId(DungeonsVindicatorEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> IS_DIAMOND = EntityDataManager.defineId(DungeonsVindicatorEntity.class, DataSerializers.BOOLEAN);
 
     AnimationFactory factory = new AnimationFactory(this);
 
-    public VindicatorChefEntity(World worldIn){
-        super(ModEntityTypes.VINDICATOR_CHEF.get(), worldIn);
+
+    public DungeonsVindicatorEntity(World world) {
+        super(ModEntityTypes.VINDICATOR.get(), world);
     }
 
-    public VindicatorChefEntity(EntityType<? extends VindicatorChefEntity> entityType, World world) {
-        super(entityType, world);
+    public DungeonsVindicatorEntity(EntityType<? extends AbstractIllagerEntity> p_i50189_1_, World p_i50189_2_) {
+        super(p_i50189_1_, p_i50189_2_);
     }
+
 
     protected void defineSynchedData() {
         super.defineSynchedData();
@@ -83,14 +79,14 @@ public class VindicatorChefEntity extends AbstractIllagerEntity implements IAnim
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return VindicatorEntity.createAttributes()
                 .add(Attributes.MOVEMENT_SPEED, 0.21D)
-                .add(Attributes.MAX_HEALTH, 28.8D)
+                .add(Attributes.MAX_HEALTH, 30.0D)
                 .add(Attributes.ATTACK_DAMAGE, 8.0D);
     }
 
     @Override
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficultyInstance) {
         if(this.getCurrentRaid() == null){
-            this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModItems.MOUNTAINEER_AXE.get()));
+            this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_AXE));
         }
     }
 
@@ -116,7 +112,7 @@ public class VindicatorChefEntity extends AbstractIllagerEntity implements IAnim
 
     @Override
     public void applyRaidBuffs(int waveAmount, boolean b) {
-        ItemStack mainhandWeapon = new ItemStack(ModItems.MOUNTAINEER_AXE.get());
+        ItemStack mainhandWeapon = new ItemStack(Items.IRON_AXE);
         Raid raid = this.getCurrentRaid();
         int enchantmentLevel = (int) (2 + (waveAmount / 2.5));
 
@@ -173,35 +169,7 @@ public class VindicatorChefEntity extends AbstractIllagerEntity implements IAnim
         return (float) this.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
     }
 
-    public boolean checkSpawnObstruction(IWorldReader worldIn) {
-        BlockPos golemPos = this.blockPosition();
-        BlockPos posBeneathGolem = golemPos.below();
-        BlockState blockstateBeneathGolem = worldIn.getBlockState(posBeneathGolem);
-        if (!blockstateBeneathGolem.entityCanStandOn(worldIn, posBeneathGolem, this)) {
-            return false;
-        } else {
-            for (int i = 1; i < 4; ++i) {
-                BlockPos posAboveGolem = golemPos.above(i);
-                BlockState blockstateAboveGolem = worldIn.getBlockState(posAboveGolem);
-                if (!WorldEntitySpawner
-                        .isValidEmptySpawnBlock(worldIn,
-                                posAboveGolem,
-                                blockstateAboveGolem,
-                                blockstateAboveGolem.getFluidState(),
-                                ModEntityTypes.MOUNTAINEER.get())) {
-                    return false;
-                }
-            }
 
-            return WorldEntitySpawner
-                    .isValidEmptySpawnBlock(worldIn,
-                            golemPos,
-                            worldIn.getBlockState(golemPos),
-                            Fluids.EMPTY.defaultFluidState(),
-                            ModEntityTypes.MOUNTAINEER.get())
-                    && worldIn.isUnobstructed(this);
-        }
-    }
 
     private void setAttackID(int id) {
         this.attackID = id;
@@ -243,14 +211,18 @@ public class VindicatorChefEntity extends AbstractIllagerEntity implements IAnim
 
     private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
         if (isMeleeAttacking()) {
+            event.getController().animationSpeed = 1;
             event.getController().setAnimation(new AnimationBuilder().addAnimation("vindicator_attack", false));
         } else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
             if (!this.isAggressive()) {
+                event.getController().animationSpeed = 1;
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("vindicator_walk", true));
             } else {
+                event.getController().animationSpeed = 1.25;
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("vindicator.run", true));
             }
         } else {
+            event.getController().animationSpeed = 1;
             if (!(this.getYHeadRot() <= 10 && this.getYHeadRot() >= -10) && !this.getLookControl().isHasWanted())
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("vindicator_idel", true));
             else
@@ -272,50 +244,50 @@ public class VindicatorChefEntity extends AbstractIllagerEntity implements IAnim
 
         @Override
         public boolean canUse() {
-            return VindicatorChefEntity.this.getTarget() != null && VindicatorChefEntity.this.getTarget().isAlive();
+            return DungeonsVindicatorEntity.this.getTarget() != null && DungeonsVindicatorEntity.this.getTarget().isAlive();
         }
 
         @Override
         public void start() {
-            VindicatorChefEntity.this.setAggressive(true);
+            DungeonsVindicatorEntity.this.setAggressive(true);
             this.delayCounter = 0;
         }
 
         @Override
         public void tick() {
-            LivingEntity livingentity = VindicatorChefEntity.this.getTarget();
+            LivingEntity livingentity = DungeonsVindicatorEntity.this.getTarget();
             if (livingentity == null) {
                 return;
             }
 
-            VindicatorChefEntity.this.lookControl.setLookAt(livingentity, 30.0F, 30.0F);
+            DungeonsVindicatorEntity.this.lookControl.setLookAt(livingentity, 30.0F, 30.0F);
 
             if (--this.delayCounter <= 0) {
-                this.delayCounter = 4 + VindicatorChefEntity.this.getRandom().nextInt(7);
-                VindicatorChefEntity.this.getNavigation().moveTo(livingentity, (double) this.moveSpeed);
+                this.delayCounter = 4 + DungeonsVindicatorEntity.this.getRandom().nextInt(7);
+                DungeonsVindicatorEntity.this.getNavigation().moveTo(livingentity, (double) this.moveSpeed);
             }
 
             this.attackTimer = Math.max(this.attackTimer - 1, 0);
-            this.checkAndPerformAttack(livingentity, VindicatorChefEntity.this.distanceToSqr(livingentity.getX(), livingentity.getBoundingBox().minY, livingentity.getZ()));
+            this.checkAndPerformAttack(livingentity, DungeonsVindicatorEntity.this.distanceToSqr(livingentity.getX(), livingentity.getBoundingBox().minY, livingentity.getZ()));
         }
 
         @Override
         protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
-            if ((distToEnemySqr <= this.getAttackReachSqr(enemy) || VindicatorChefEntity.this.getBoundingBox().intersects(enemy.getBoundingBox())) && this.attackTimer <= 0) {
+            if ((distToEnemySqr <= this.getAttackReachSqr(enemy) || DungeonsVindicatorEntity.this.getBoundingBox().intersects(enemy.getBoundingBox())) && this.attackTimer <= 0) {
                 this.attackTimer = this.maxAttackTimer;
-                VindicatorChefEntity.this.doHurtTarget(enemy);
+                DungeonsVindicatorEntity.this.doHurtTarget(enemy);
             }
         }
 
         @Override
         public void stop() {
-            VindicatorChefEntity.this.getNavigation().stop();
-            if (VindicatorChefEntity.this.getTarget() == null) {
-                VindicatorChefEntity.this.setAggressive(false);
+            DungeonsVindicatorEntity.this.getNavigation().stop();
+            if (DungeonsVindicatorEntity.this.getTarget() == null) {
+                DungeonsVindicatorEntity.this.setAggressive(false);
             }
         }
 
-        public VindicatorChefEntity.AttackGoal setMaxAttackTick(int max) {
+        public DungeonsVindicatorEntity.AttackGoal setMaxAttackTick(int max) {
             this.maxAttackTimer = max;
             return this;
         }
@@ -343,7 +315,7 @@ public class VindicatorChefEntity extends AbstractIllagerEntity implements IAnim
 
         @Override
         public boolean canUse() {
-            return VindicatorChefEntity.this.getTarget() != null && attackID == MELEE_ATTACK;
+            return DungeonsVindicatorEntity.this.getTarget() != null && attackID == MELEE_ATTACK;
         }
 
         @Override
@@ -362,22 +334,25 @@ public class VindicatorChefEntity extends AbstractIllagerEntity implements IAnim
         public void stop() {
             setAttackID(0);
             setMeleeAttacking(false);
-            VindicatorChefEntity.this.attackTimer = 0;
+            DungeonsVindicatorEntity.this.attackTimer = 0;
+            if (DungeonsVindicatorEntity.this.getTarget() == null) {
+                DungeonsVindicatorEntity.this.setAggressive(false);
+            }
         }
 
         @Override
         public void tick() {
-            if (VindicatorChefEntity.this.getTarget() != null && VindicatorChefEntity.this.getTarget().isAlive()) {
-                VindicatorChefEntity.this.getLookControl().setLookAt(VindicatorChefEntity.this.getTarget(), 30.0F, 30.0F);
-                if (attackTimer == 15) {
-                    float attackKnockback = VindicatorChefEntity.this.getAttackKnockback();
-                    LivingEntity attackTarget = VindicatorChefEntity.this.getTarget();
-                    double ratioX = (double) MathHelper.sin(VindicatorChefEntity.this.yRot * ((float) Math.PI / 360F));
-                    double ratioZ = (double) (-MathHelper.cos(VindicatorChefEntity.this.yRot * ((float) Math.PI / 360F)));
+            if (DungeonsVindicatorEntity.this.getTarget() != null && DungeonsVindicatorEntity.this.getTarget().isAlive()) {
+                DungeonsVindicatorEntity.this.getLookControl().setLookAt(DungeonsVindicatorEntity.this.getTarget(), 30.0F, 30.0F);
+                if (attackTimer == 15 && DungeonsVindicatorEntity.this.distanceToSqr(DungeonsVindicatorEntity.this.getTarget()) <= 6.0D) {
+                    float attackKnockback = DungeonsVindicatorEntity.this.getAttackKnockback();
+                    LivingEntity attackTarget = DungeonsVindicatorEntity.this.getTarget();
+                    double ratioX = (double) MathHelper.sin(DungeonsVindicatorEntity.this.yRot * ((float) Math.PI / 360F));
+                    double ratioZ = (double) (-MathHelper.cos(DungeonsVindicatorEntity.this.yRot * ((float) Math.PI / 360F)));
                     double knockbackReduction = 0.5D;
-                    attackTarget.hurt(DamageSource.mobAttack(VindicatorChefEntity.this), (float) VindicatorChefEntity.this.getAttributeValue(Attributes.ATTACK_DAMAGE));
+                    attackTarget.hurt(DamageSource.mobAttack(DungeonsVindicatorEntity.this), (float) DungeonsVindicatorEntity.this.getAttributeValue(Attributes.ATTACK_DAMAGE));
                     this.forceKnockback(attackTarget, attackKnockback * 0.5F, ratioX, ratioZ, knockbackReduction);
-                    VindicatorChefEntity.this.setDeltaMovement(VindicatorChefEntity.this.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
+                    DungeonsVindicatorEntity.this.setDeltaMovement(DungeonsVindicatorEntity.this.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
                 }
             }
 
@@ -404,17 +379,37 @@ public class VindicatorChefEntity extends AbstractIllagerEntity implements IAnim
         if (this.attackID != 0) {
             ++this.attackTimer;
         }
+        if (this.T != 200 && this.getYHeadRot() == 0) {
+            ++this.T;
+        }else {
+            this.T = 0;
+        }
+    }
+
+    @Nullable
+    @Override
+    public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance p_213386_2_, SpawnReason p_213386_3_, @Nullable ILivingEntityData p_213386_4_, @Nullable CompoundNBT p_213386_5_) {
+        this.populateDefaultEquipmentSlots(p_213386_2_);
+        return super.finalizeSpawn(p_213386_1_, p_213386_2_, p_213386_3_, p_213386_4_, p_213386_5_);
+    }
+
+    @Override
+    public boolean canJoinPatrol() {
+        return true;
     }
 
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new VindicatorChefEntity.MeleeGoal());
-        this.goalSelector.addGoal(5, new VindicatorChefEntity.AttackGoal(this, 1.667D));
-        this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 1.0D));
+        this.goalSelector.addGoal(7, new PatrollerEntity.PatrolGoal<>(this,1.42,1.3));
+        this.targetSelector.addGoal(2, new AbstractRaiderEntity.FindTargetGoal(this, 10F));
+        this.goalSelector.addGoal(0, new DungeonsVindicatorEntity.MeleeGoal());
+        this.goalSelector.addGoal(5, new DungeonsVindicatorEntity.AttackGoal(this, 1.667D));
+        this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 1.3D));
         this.goalSelector.addGoal(7, new LookAtGoal(this, PlayerEntity.class, 6.0F));
         this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
         this.goalSelector.addGoal(0, new SwimGoal(this));
 
+        this.targetSelector.addGoal(2, (new DungeonsVindicatorEntity.JohnnyAttackGoal(this)));
         this.targetSelector.addGoal(2, (new HurtByTargetGoal(this, AbstractRaiderEntity.class)).setAlertOthers());
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, true));
@@ -422,12 +417,12 @@ public class VindicatorChefEntity extends AbstractIllagerEntity implements IAnim
     }
 
     class JohnnyAttackGoal extends NearestAttackableTargetGoal<LivingEntity> {
-        public JohnnyAttackGoal(VindicatorChefEntity p_i47345_1_) {
+        public JohnnyAttackGoal(DungeonsVindicatorEntity p_i47345_1_) {
             super(p_i47345_1_, LivingEntity.class, 0, true, true, LivingEntity::attackable);
         }
 
         public boolean canUse() {
-            return ((VindicatorChefEntity) this.mob).isJohnny && super.canUse();
+            return ((DungeonsVindicatorEntity) this.mob).isJohnny && super.canUse();
         }
 
         public void start() {
