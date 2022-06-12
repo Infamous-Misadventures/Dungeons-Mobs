@@ -53,6 +53,7 @@ public class EntityTypeAttributes {
 
     @SubscribeEvent
     public static void initEntityTypeAttributes(EntityAttributeCreationEvent event) {
+        event.put(ModEntityTypes.ZOMBIE.get(), DungeonsZombieEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.ARMORED_ZOMBIE.get(), ArmoredZombieEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.JUNGLE_ZOMBIE.get(), JungleZombieEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.FROZEN_ZOMBIE.get(), FrozenZombieEntity.setCustomAttributes().build());
