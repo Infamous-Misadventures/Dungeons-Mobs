@@ -136,9 +136,6 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ILLUSIONER_CLONE.get(), IllusionerCloneRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WINDCALLER.get(), WindcallerRenderer::new);
 	    
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.DUNGEONS_EVOKER.get(),
-                manager -> new DungeonsEvokerRenderer(manager));
-	    
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ENCHANTER.get(),
 	    	    manager -> new EnchanterRenderer(manager));
 
@@ -154,7 +151,8 @@ public class ClientEvents {
                 manager -> new RedstoneGolemRenderer(manager));
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WHISPERER.get(), WhispererRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.LEAPLEAF.get(), LeapleafRenderer::new);
+	RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.LEAPLEAF.get(),
+                manager -> new LeapleafRenderer(manager));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.POISON_QUILL_VINE.get(), PoisonQuillVineRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.QUICK_GROWING_VINE.get(), QuickGrowingVineRenderer::new);
 
