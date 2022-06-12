@@ -15,6 +15,7 @@ import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.monster.AbstractIllagerEntity;
 import net.minecraft.entity.monster.AbstractRaiderEntity;
+import net.minecraft.entity.monster.PatrollerEntity;
 import net.minecraft.entity.monster.VindicatorEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -85,9 +86,9 @@ public class MountaineerEntity extends AbstractIllagerEntity implements IAnimata
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return VindicatorEntity.createAttributes()
-                .add(Attributes.MOVEMENT_SPEED, 0.18D)
+                .add(Attributes.MOVEMENT_SPEED, 0.16D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.35D)
-                .add(Attributes.MAX_HEALTH, 28.8D)
+                .add(Attributes.MAX_HEALTH, 30.0D)
                 .add(Attributes.ATTACK_DAMAGE, 8.0D);
     }
 
@@ -122,17 +123,42 @@ public class MountaineerEntity extends AbstractIllagerEntity implements IAnimata
     public void applyRaidBuffs(int waveAmount, boolean b) {
         ItemStack mainhandWeapon = new ItemStack(ModItems.MOUNTAINEER_AXE.get());
         Raid raid = this.getCurrentRaid();
-        int enchantmentLevel = 1;
-        if (waveAmount > raid.getNumGroups(Difficulty.NORMAL)) {
-            enchantmentLevel = 2;
-        }
+        int enchantmentLevel = (int) (2 + (waveAmount / 2.5));
 
+        this.addEffect(new EffectInstance(Effects.HEAL, 10, 6, (false), (false)));
         boolean applyEnchant = this.random.nextFloat() <= raid.getEnchantOdds();
         if (applyEnchant) {
+            float e = this.getRandom().nextFloat();
+
             Map<Enchantment, Integer> enchantmentIntegerMap = Maps.newHashMap();
-            enchantmentIntegerMap.put(Enchantments.SHARPNESS, Integer.valueOf(enchantmentLevel));
+            enchantmentIntegerMap.put(Enchantments.SHARPNESS, enchantmentLevel);
+
+            if (e <= 0.05) {
+                enchantmentIntegerMap.put(Enchantments.VANISHING_CURSE, 1);
+            }
+
+            if (e <= 0.65) {
+                enchantmentIntegerMap.put(Enchantments.KNOCKBACK, (int) (enchantmentLevel / 2.5));
+            }
+
+            if (e <= 0.35) {
+                enchantmentIntegerMap.put(Enchantments.FIRE_ASPECT, (int) (enchantmentLevel / 2.5));
+            }
+
             EnchantmentHelper.setEnchantments(enchantmentIntegerMap, mainhandWeapon);
         }
+
+        if (waveAmount > raid.getNumGroups(Difficulty.EASY) && !(waveAmount > raid.getNumGroups(Difficulty.NORMAL)) && applyEnchant) {
+            this.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(new AttributeModifier("health boost", 5.0D, AttributeModifier.Operation.ADDITION));
+            this.getAttribute(Attributes.ATTACK_DAMAGE).addPermanentModifier(new AttributeModifier("attack boost", 1.0D, AttributeModifier.Operation.ADDITION));
+        }
+
+        if (waveAmount > raid.getNumGroups(Difficulty.NORMAL) && applyEnchant) {
+            this.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(new AttributeModifier("health boost", 10.0D, AttributeModifier.Operation.ADDITION));
+            this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).addPermanentModifier(new AttributeModifier("knockback resistance boost", 0.5D, AttributeModifier.Operation.ADDITION));
+            this.getAttribute(Attributes.ATTACK_DAMAGE).addPermanentModifier(new AttributeModifier("attack boost", 2.0D, AttributeModifier.Operation.ADDITION));
+        }
+
 
         this.setItemSlot(EquipmentSlotType.MAINHAND, mainhandWeapon);
     }
@@ -241,7 +267,10 @@ public class MountaineerEntity extends AbstractIllagerEntity implements IAnimata
             }
         } else {
             event.getController().animationSpeed = 1;
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("vindicator_idel", true));
+            if (!(this.getYHeadRot() <= 10 && this.getYHeadRot() >= -10) && !this.getLookControl().isHasWanted())
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("vindicator_idel", true));
+            else
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("vindicator_idel_look_around", true));
         }
         return PlayState.CONTINUE;
     }
@@ -350,6 +379,9 @@ public class MountaineerEntity extends AbstractIllagerEntity implements IAnimata
             setAttackID(0);
             setMeleeAttacking(false);
             MountaineerEntity.this.attackTimer = 0;
+            if (MountaineerEntity.this.getTarget() == null) {
+                MountaineerEntity.this.setAggressive(false);
+            }
         }
 
         @Override
@@ -386,15 +418,24 @@ public class MountaineerEntity extends AbstractIllagerEntity implements IAnimata
         }
     }
 
+    private int T;
+
     public void aiStep() {
         super.aiStep();
         if (this.attackID != 0) {
             ++this.attackTimer;
         }
+        if (this.T != 200 && this.getYHeadRot() == 0) {
+            ++this.T;
+        }else {
+            this.T = 0;
+        }
     }
 
     protected void registerGoals() {
         super.registerGoals();
+        this.goalSelector.addGoal(7, new PatrollerEntity.PatrolGoal<>(this,1.42,1.3));
+        this.targetSelector.addGoal(2, new AbstractRaiderEntity.FindTargetGoal(this, 10F));
         this.goalSelector.addGoal(0, new MountaineerEntity.MeleeGoal());
         this.goalSelector.addGoal(5, new MountaineerEntity.AttackGoal(this, 1.667D));
         this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 1.3D));
