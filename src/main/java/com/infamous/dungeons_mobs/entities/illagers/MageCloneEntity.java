@@ -72,10 +72,11 @@ public class MageCloneEntity extends SpellcastingIllagerEntity implements IAnima
         super(type, world);
     }
     
-    public MageCloneEntity(World worldIn, LivingEntity caster, int lifeTicks, LivingEntity target) {
+    public MageCloneEntity(World worldIn, LivingEntity caster, int lifeTicks,LivingEntity target) {
         this(ModEntityTypes.MAGE_CLONE.get(), worldIn);
         this.setCaster(caster);
         this.lifeTicks = lifeTicks;
+        this.setTarget(target);
     }
     
     public void setTarget(@Nullable LivingEntity p_70624_1_) {
@@ -100,6 +101,11 @@ public class MageCloneEntity extends SpellcastingIllagerEntity implements IAnima
     public void setCaster(@Nullable LivingEntity caster) {
         this.caster = caster;
         this.casterUuid = caster == null ? null : caster.getUUID();
+    }
+
+    @Override
+    public boolean canJoinRaid() {
+        return false;
     }
 
     @Nullable
@@ -340,6 +346,9 @@ public class MageCloneEntity extends SpellcastingIllagerEntity implements IAnima
     }
     
     class LiftMobGoal extends Goal {
+
+        private double d;
+
         private final EntityPredicate cloneTargeting = (new EntityPredicate()).range(20.0D).allowUnseeable().ignoreInvisibilityTesting().allowInvulnerable().allowSameTeam();
         
 	      public LiftMobGoal() {
@@ -356,7 +365,8 @@ public class MageCloneEntity extends SpellcastingIllagerEntity implements IAnima
 	    
 	    public void start() {
 	    super.start();
-	    MageCloneEntity.this.spellInterval = 100;
+            this.d = MageCloneEntity.this.getTarget().getY() + 3D;
+	    MageCloneEntity.this.spellInterval = 320;
 	    MageCloneEntity.this.setLiftTicks(40);
 	    MageCloneEntity.this.playSound(SoundEvents.EVOKER_PREPARE_ATTACK, MageCloneEntity.this.getSoundVolume(), MageCloneEntity.this.getVoicePitch());
 	    }
@@ -374,7 +384,7 @@ public class MageCloneEntity extends SpellcastingIllagerEntity implements IAnima
 	    	mob.getNavigation().stop();
 	    	
             if (mob.getLiftTicks() > 10) {
-            	if (target.getY() < mob.getY() + 3) {
+            	if (target.getY() < this.d) {
             		target.hurtMarked = true;
             		target.setDeltaMovement(0, 0.5, 0);
             	} else {
@@ -385,7 +395,7 @@ public class MageCloneEntity extends SpellcastingIllagerEntity implements IAnima
             } else {
             	if (!target.isOnGround()) {
             	target.hurtMarked = true;
-            	target.setDeltaMovement(0, -0.75, 0);
+            	target.setDeltaMovement(0, -0.85, 0);
             	}
         		//if (target.getY() == mob.getEyeY()) {
         		//	target.hurt(DamageSource.FALL, 5.0F);
