@@ -214,12 +214,12 @@ public class ModEntityTypes {
                     .build(new ResourceLocation(MODID, "vindicator_chef").toString())
     );
 
-    public static final RegistryObject<EntityType<DungeonsEvokerEntity>> DUNGEONS_EVOKER = ENTITY_TYPES.register("evoker", () ->
-            EntityType.Builder.<DungeonsEvokerEntity>of(DungeonsEvokerEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F, 1.95F)
+    public static final RegistryObject<EntityType<VindicatorRaidCaptainEntity>> VINDICATOR_RAID_CAPTAIN = ENTITY_TYPES.register("vindicator_raid_captain", () ->
+            EntityType.Builder.<VindicatorRaidCaptainEntity>of(VindicatorRaidCaptainEntity::new, EntityClassification.MONSTER)
+                    .sized(0.7F, 1.95F)
                     .clientTrackingRange(8)
-                    .setCustomClientFactory((spawnEntity,world) -> new DungeonsEvokerEntity(world))
-                    .build(new ResourceLocation(MODID, "evoker").toString())
+                    .setCustomClientFactory((spawnEntity,world) -> new VindicatorRaidCaptainEntity(world))
+                    .build(new ResourceLocation(MODID, "vindicator_raid_captain").toString())
     );
 
     public static final RegistryObject<EntityType<DungeonsIllusionerEntity>> ILLUSIONER = ENTITY_TYPES.register("illusioner", () ->
