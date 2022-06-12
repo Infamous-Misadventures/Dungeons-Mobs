@@ -63,6 +63,8 @@ public class EntityTypeAttributes {
         event.put(ModEntityTypes.SKELETON_HORSEMAN.get(), SkeletonHorsemanEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.NECROMANCER.get(), NecromancerEntity.setCustomAttributes().build());
 
+        event.put(ModEntityTypes.VINDICATOR_RAID_CAPTAIN.get(), VindicatorRaidCaptainEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.VINDICATOR.get(), DungeonsVindicatorEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.ARMORED_VINDICATOR.get(), ArmoredVindicatorEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.ARMORED_PILLAGER.get(), ArmoredPillagerEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.ROYAL_GUARD.get(), RoyalGuardEntity.setCustomAttributes().build());
