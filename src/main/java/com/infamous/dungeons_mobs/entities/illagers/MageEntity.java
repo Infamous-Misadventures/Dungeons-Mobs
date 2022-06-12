@@ -10,9 +10,11 @@ import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.monster.AbstractRaiderEntity;
 import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.entity.monster.PatrollerEntity;
 import net.minecraft.entity.monster.SpellcastingIllagerEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -21,6 +23,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.NBTTextComponent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
@@ -34,6 +37,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
+import java.util.UUID;
 
 public class MageEntity extends SpellcastingIllagerEntity implements IAnimatable {
 
@@ -61,6 +65,8 @@ public class MageEntity extends SpellcastingIllagerEntity implements IAnimatable
 
     protected void registerGoals() {
         super.registerGoals();
+		this.goalSelector.addGoal(7, new PatrollerEntity.PatrolGoal<>(this,1.42,1.3));
+		this.targetSelector.addGoal(2, new AbstractRaiderEntity.FindTargetGoal(this, 10F));
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(1, new MageEntity.CastingSpellGoal());
         this.goalSelector.addGoal(2, new MageEntity.DuplicateGoal());
@@ -239,8 +245,69 @@ public class MageEntity extends SpellcastingIllagerEntity implements IAnimatable
         }
     }
     
+    /*class DuplicateSpellGoal extends SpellcastingIllagerEntity.UseSpellGoal {
+        private DuplicateSpellGoal() {
+        }
+
+        public boolean canUse() {
+           if (!super.canUse()) {
+              return false;
+           } else {
+              return !MageEntity.this.hasEffect(Effects.INVISIBILITY);
+           }
+        }
+        
+        @Override
+        public void start() {
+        	super.start();
+        	MageEntity.this.setDuplicateTicks(20);
+        }
+
+        protected int getCastingTime() {
+           return 20;
+        }
+
+        protected int getCastingInterval() {
+           return 1200;
+        }
+
+        protected void performSpellCasting() {
+           BlockPos blockpos = MageEntity.this.blockPosition().offset(-5 + MageEntity.this.getRandom().nextInt(10), 1, -5 + MageEntity.this.getRandom().nextInt(10));
+           MageEntity.this.moveTo(blockpos.getX(), blockpos.getY(), blockpos.getZ());
+           this.summonIllusionerClones();
+        }
+
+        private void summonIllusionerClones(){
+           int difficultyAsInt = MageEntity.this.level.getDifficulty().getId();
+           int mobsToSummon = difficultyAsInt * 2 + 1; // 3 on easy, 5 on normal, 7 on hard
+           for(int i = 0; i < mobsToSummon; ++i) {
+              BlockPos blockpos = MageEntity.this.blockPosition().offset(-5 + MageEntity.this.getRandom().nextInt(10), 1, -5 + MageEntity.this.getRandom().nextInt(10));
+              MageCloneEntity illusionerCloneEntity = new MageCloneEntity(MageEntity.this.level, MageEntity.this, 600);
+              DifficultyInstance difficultyForLocation = MageEntity.this.level.getCurrentDifficultyAt(blockpos);
+              illusionerCloneEntity.moveTo(blockpos, 0.0F, 0.0F);
+              illusionerCloneEntity.finalizeSpawn((IServerWorld) illusionerCloneEntity.level, difficultyForLocation, SpawnReason.MOB_SUMMONED, (ILivingEntityData)null, (CompoundNBT)null);
+              MageEntity.this.level.addFreshEntity(illusionerCloneEntity);
+              ICloneable cloneable = CloneableHelper.getCloneableCapability(MageEntity.this);
+              if(cloneable != null){
+                 cloneable.addClone(illusionerCloneEntity.getUUID());
+              }
+           }
+        }
+
+        @Nullable
+        protected SoundEvent getSpellPrepareSound() {
+           return SoundEvents.ILLUSIONER_PREPARE_MIRROR;
+        }
+
+        protected SpellcastingIllagerEntity.SpellType getSpell() {
+           return SpellcastingIllagerEntity.SpellType.DISAPPEAR;
+        }
+     }*/
+    
     class LiftMobGoal extends Goal {
-	public int FindTargetY;
+
+		private double d;
+
 	      public LiftMobGoal() {
 	         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP, Goal.Flag.LOOK));
 	      }
@@ -255,7 +322,8 @@ public class MageEntity extends SpellcastingIllagerEntity implements IAnimatable
 	    
 	    public void start() {
 	    super.start();
-	    MageEntity.this.liftInterval = 100;
+		this.d = MageEntity.this.getTarget().getY() + 3D;
+	    MageEntity.this.liftInterval = 70;
 	    MageEntity.this.setLiftTicks(40);
 	    MageEntity.this.playSound(SoundEvents.EVOKER_PREPARE_ATTACK, MageEntity.this.getSoundVolume(), MageEntity.this.getVoicePitch());
 	    }
@@ -266,35 +334,34 @@ public class MageEntity extends SpellcastingIllagerEntity implements IAnimatable
 	    	MageEntity mob = MageEntity.this;
 	    	
 	    	mob.getNavigation().stop();
-	    	
-            if (mob.getLiftTicks() > 10) {
-		    this.FindTargetY = MageEntity.this.getTarget().getY();
-		    
-		    if (mob.getLiftTick()　＜　30)
-            	if (target.getY() < this.FinTargetY + 3) {
-            		target.hurtMarked = true;
-            		target.setDeltaMovement(0, 0.5, 0);
-            	} else {
-            		target.fallDistance = 6;
-            		target.hurtMarked = true;
-            		target.setDeltaMovement(0, 0.1, 0);
-            	}
-            } else {
-            	if (!target.isOnGround()) {
-            	target.hurtMarked = true;
-            	target.setDeltaMovement(0, -0.85, 0);
-            	}
-        		//if (target.getY() == mob.getEyeY()) {
-        		//	target.hurt(DamageSource.FALL, 5.0F);
-        		//}
-                }
+
+			mob.getNavigation().stop();
+
+			if (mob.getLiftTicks() > 10) {
+				if (target.getY() < this.d) {
+					target.hurtMarked = true;
+					target.setDeltaMovement(0, 0.5, 0);
+				} else {
+					target.fallDistance = 5;
+					target.hurtMarked = true;
+					target.setDeltaMovement(0, 0.15, 0);
+				}
+			} else {
+				if (!target.isOnGround()) {
+					target.hurtMarked = true;
+					target.setDeltaMovement(0, -0.85, 0);
+				}
+				//if (target.getY() == mob.getEyeY()) {
+				//	target.hurt(DamageSource.FALL, 5.0F);
+				//}
+			}
 	    }
 	    
 	    public void stop() {
 	    super.stop();
 	    MageEntity.this.setLiftTicks(0);
 	    }
-    }
+	   }
     
     class DuplicateGoal extends Goal {
 	      public DuplicateGoal() {
@@ -316,7 +383,7 @@ public class MageEntity extends SpellcastingIllagerEntity implements IAnimatable
 	    
 	    public void start() {
 	    super.start();
-	    MageEntity.this.duplicateInterval = 750;
+	    MageEntity.this.duplicateInterval = 500;
 	    MageEntity.this.setDuplicateTicks(20);
 	    MageEntity.this.playSound(SoundEvents.EVOKER_PREPARE_SUMMON, MageEntity.this.getSoundVolume(), MageEntity.this.getVoicePitch());
 	    }
@@ -330,18 +397,28 @@ public class MageEntity extends SpellcastingIllagerEntity implements IAnimatable
 	    	
           if (mob.getDuplicateTicks() == 1) {
               this.summonIllusionerClones();
+			  if (!(target.getEntity() instanceof PlayerEntity || target.getEntity() instanceof ServerPlayerEntity)) {
+				  Entity copy = target.getType().create(target.level);
+				  CompoundNBT compoundNBT = new CompoundNBT();
+				  compoundNBT = target.saveWithoutId(compoundNBT);
+				  UUID uuid = copy.getUUID();
+				  copy.load(compoundNBT);
+				  copy.setUUID(uuid);
+				  target.level.addFreshEntity(copy);
+				  target.remove();
+			  }
       	      MageEntity.this.playSound(SoundEvents.ILLUSIONER_PREPARE_MIRROR, MageEntity.this.getSoundVolume(), MageEntity.this.getVoicePitch());
               BlockPos blockpos = MageEntity.this.blockPosition().offset(-5 + MageEntity.this.getRandom().nextInt(10), 0, -5 + MageEntity.this.getRandom().nextInt(10));
               MageEntity.this.setPos(blockpos.getX(), blockpos.getY(), blockpos.getZ());
-          }
-	}
+           }
+	    }
 
            private void summonIllusionerClones(){
               int difficultyAsInt = MageEntity.this.level.getDifficulty().getId();
-              int mobsToSummon = difficultyAsInt * 2 + 2; // 4 on easy, 6 on normal, 8 on hard
+              int mobsToSummon = difficultyAsInt * 3 + 3; // 6 on easy, 9 on normal, 12 on hard
               for(int i = 0; i < mobsToSummon; ++i) {
                  BlockPos blockpos = MageEntity.this.blockPosition().offset(-5 + MageEntity.this.getRandom().nextInt(10), 0, -5 + MageEntity.this.getRandom().nextInt(10));
-                 MageCloneEntity illusionerCloneEntity = new MageCloneEntity(MageEntity.this.level, MageEntity.this, 600, MageEntity.this.getTarget());
+                 MageCloneEntity illusionerCloneEntity = new MageCloneEntity(MageEntity.this.level, MageEntity.this, 240,MageEntity.this.getTarget());
                  DifficultyInstance difficultyForLocation = MageEntity.this.level.getCurrentDifficultyAt(blockpos);
                  illusionerCloneEntity.moveTo(blockpos, 0.0F, 0.0F);
                  illusionerCloneEntity.finalizeSpawn((IServerWorld) illusionerCloneEntity.level, difficultyForLocation, SpawnReason.MOB_SUMMONED, (ILivingEntityData)null, (CompoundNBT)null);
@@ -356,9 +433,69 @@ public class MageEntity extends SpellcastingIllagerEntity implements IAnimatable
 	    public void stop() {
 	    super.stop();
 	    MageEntity.this.setDuplicateTicks(0);
-	 }
-    }
+	    }
+	   }
     
+
+    /*class LiftMobGoal extends SpellcastingIllagerEntity.UseSpellGoal {
+        private LiftMobGoal() {
+        }
+
+        protected int getCastingTime() {
+            return 50;
+        }
+
+        protected int getCastingInterval() {
+            return 200;
+        }
+        
+        @Override
+        public void start() {
+        	super.start();
+        	MageEntity.this.setLiftTicks(40);
+        }
+        
+        
+        
+        @Override
+        public void tick() {
+        	super.tick();
+            LivingEntity attackTarget = MageEntity.this.getTarget();
+            MageEntity mage = MageEntity.this;
+            System.out.print("\r\n" + "ticking LiftMobGoal");
+            if (mage.getLiftTicks() > 20) {
+            	if (attackTarget.getY() < mage.getY() + 3) {
+            		attackTarget.hurtMarked = true;
+            		attackTarget.setDeltaMovement(0, 0.5, 0);
+            	} else {
+            		attackTarget.hurtMarked = true;
+            		attackTarget.fallDistance = 10;
+            		attackTarget.setDeltaMovement(0, 0.1, 0);
+            	}
+            } else {
+        		attackTarget.hurtMarked = true;
+        		attackTarget.setDeltaMovement(0, -1.0, 0);
+        		//if (attackTarget.getY() == mage.getEyeY()) {
+        		//	attackTarget.hurt(DamageSource.FALL, 5.0F);
+        		//}
+            }
+        }
+
+        protected void performSpellCasting() {
+            LivingEntity attackTarget = MageEntity.this.getTarget();
+            //summonIceCloud(attackTarget);
+            //summonIceBlocks(attackTarget);
+        }
+
+
+        protected SoundEvent getSpellPrepareSound() {
+            return SoundEvents.EVOKER_PREPARE_ATTACK;
+        }
+
+        protected SpellcastingIllagerEntity.SpellType getSpell() {
+            return SpellcastingIllagerEntity.SpellType.SUMMON_VEX;
+        }
+    }*/
 
     @Override
     public ArmPose getArmPose() {
