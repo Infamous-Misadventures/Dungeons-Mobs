@@ -213,13 +213,13 @@ public class ModEntityTypes {
                     .setCustomClientFactory((spawnEntity,world) -> new VindicatorChefEntity(world))
                     .build(new ResourceLocation(MODID, "vindicator_chef").toString())
     );
-
-    public static final RegistryObject<EntityType<DungeonsEvokerEntity>> DUNGEONS_EVOKER = ENTITY_TYPES.register("evoker", () ->
-            EntityType.Builder.<DungeonsEvokerEntity>of(DungeonsEvokerEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F, 1.95F)
+    
+    public static final RegistryObject<EntityType<RampartCaptainEntity>> RAMPART_CAPTAIN = ENTITY_TYPES.register("rampart_captain", () ->
+            EntityType.Builder.<RampartCaptainEntity>of(RampartCaptainEntity::new, EntityClassification.MONSTER)
+                    .sized(0.7F, 1.95F)
                     .clientTrackingRange(8)
-                    .setCustomClientFactory((spawnEntity,world) -> new DungeonsEvokerEntity(world))
-                    .build(new ResourceLocation(MODID, "evoker").toString())
+                    .setCustomClientFactory((spawnEntity,world) -> new RampartCaptainEntity(world))
+                    .build(new ResourceLocation(MODID, "rampart_captain").toString())
     );
 
     public static final RegistryObject<EntityType<DungeonsIllusionerEntity>> ILLUSIONER = ENTITY_TYPES.register("illusioner", () ->
