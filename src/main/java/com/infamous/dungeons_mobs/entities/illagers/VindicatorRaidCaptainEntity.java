@@ -31,6 +31,7 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.*;
 import net.minecraft.world.raid.Raid;
 import net.minecraft.world.spawner.WorldEntitySpawner;
@@ -64,6 +65,13 @@ public class VindicatorRaidCaptainEntity extends AbstractIllagerEntity implement
 
     AnimationFactory factory = new AnimationFactory(this);
 
+    @Override
+    public void setCustomName(@Nullable ITextComponent p_200203_1_) {
+        super.setCustomName(p_200203_1_);
+        if (!this.isJohnny && p_200203_1_ != null && p_200203_1_.getString().equals("Johnny")) {
+            this.isJohnny = true;
+        }
+    }
 
     public VindicatorRaidCaptainEntity(World world){
         super(ModEntityTypes.VINDICATOR_RAID_CAPTAIN.get(), world);
@@ -86,7 +94,7 @@ public class VindicatorRaidCaptainEntity extends AbstractIllagerEntity implement
         return VindicatorEntity.createAttributes()
                 .add(Attributes.MOVEMENT_SPEED, 0.21D)
                 .add(Attributes.MAX_HEALTH, 100.0D)
-                .add(Attributes.ATTACK_DAMAGE, 15.0D)
+                .add(Attributes.ATTACK_DAMAGE, 18.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 3.2D)
                 .add(Attributes.ATTACK_KNOCKBACK, 3.5D);
     }
@@ -192,6 +200,38 @@ public class VindicatorRaidCaptainEntity extends AbstractIllagerEntity implement
     @Override
     public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         populateDefaultEquipmentSlots(difficultyIn);
+        /*
+        for(int i=0;i<10;++i){
+            VindicatorRaidCaptainEntity v = this;
+            BlockPos vvf = v.blockPosition();
+            int o =v.getRandom().nextInt(6);
+            if (o==0){
+                ArmoredVindicatorEntity vv = new ArmoredVindicatorEntity(this.level);
+                vv.moveTo(vvf,0F,0F);
+                vv.setCanJoinRaid(true);
+                vv.finalizeSpawn(worldIn,difficultyIn,reason,spawnDataIn,dataTag);
+                v.level.addFreshEntity(vv);
+            }else if (o==1){
+                RoyalGuardEntity vv = new RoyalGuardEntity(this.level);
+                vv.moveTo(vvf,0F,0F);
+                vv.finalizeSpawn(worldIn,difficultyIn,reason,spawnDataIn,dataTag);
+                vv.setCanJoinRaid(true);
+                v.level.addFreshEntity(vv);
+            }else if (o==2||o==3){
+                PillagerEntity vv = new PillagerEntity(EntityType.PILLAGER,this.level);
+                vv.setItemInHand(Hand.MAIN_HAND,new ItemStack(Items.CROSSBOW));
+                vv.moveTo(vvf,0F,0F);
+                vv.setCanJoinRaid(true);
+                v.level.addFreshEntity(vv);
+            }else {
+                DungeonsVindicatorEntity vv = new DungeonsVindicatorEntity(this.level);
+                vv.moveTo(vvf,0F,0F);
+                vv.finalizeSpawn(worldIn,difficultyIn,reason,spawnDataIn,dataTag);
+                vv.setCanJoinRaid(true);
+                v.level.addFreshEntity(vv);
+            }
+        }
+        */
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 
@@ -203,7 +243,7 @@ public class VindicatorRaidCaptainEntity extends AbstractIllagerEntity implement
     @Override
     public void applyRaidBuffs(int waveAmount, boolean b) {
         ItemStack mainhandWeapon = this.getWeaponBasedOnMod();
-        ItemStack helmet = new ItemStack(ModItems.DIAMOND_VINDICATOR_HELMET.get());
+        ItemStack helmet = this.isDiamond() ? new ItemStack(ModItems.DIAMOND_VINDICATOR_HELMET.get()) : new ItemStack(ModItems.GOLD_VINDICATOR_HELMET.get());
         Raid raid = this.getCurrentRaid();
         int enchantmentLevel = 4;
         if (waveAmount > raid.getNumGroups(Difficulty.NORMAL)) {
@@ -214,7 +254,7 @@ public class VindicatorRaidCaptainEntity extends AbstractIllagerEntity implement
         if (applyEnchant) {
             Map<Enchantment, Integer> weaponEnchantmentMap = Maps.newHashMap();
             Map<Enchantment, Integer> armorEnchantmentMap = Maps.newHashMap();
-            weaponEnchantmentMap.put(Enchantments.SHARPNESS, enchantmentLevel+1);
+            weaponEnchantmentMap.put(Enchantments.SHARPNESS, enchantmentLevel);
             armorEnchantmentMap.put(Enchantments.ALL_DAMAGE_PROTECTION, enchantmentLevel);
             EnchantmentHelper.setEnchantments(weaponEnchantmentMap, mainhandWeapon);
             EnchantmentHelper.setEnchantments(armorEnchantmentMap, helmet);
@@ -258,36 +298,6 @@ public class VindicatorRaidCaptainEntity extends AbstractIllagerEntity implement
         return (float)this.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
     }
 
-    public boolean checkSpawnObstruction(IWorldReader worldIn) {
-        BlockPos golemPos = this.blockPosition();
-        BlockPos posBeneathGolem = golemPos.below();
-        BlockState blockstateBeneathGolem = worldIn.getBlockState(posBeneathGolem);
-        if (!blockstateBeneathGolem.entityCanStandOn(worldIn, posBeneathGolem, this)) {
-            return false;
-        } else {
-            for(int i = 1; i < 4; ++i) {
-                BlockPos posAboveGolem = golemPos.above(i);
-                BlockState blockstateAboveGolem = worldIn.getBlockState(posAboveGolem);
-                if (!WorldEntitySpawner
-                        .isValidEmptySpawnBlock(worldIn,
-                                posAboveGolem,
-                                blockstateAboveGolem,
-                                blockstateAboveGolem.getFluidState(),
-                                ModEntityTypes.ARMORED_VINDICATOR.get())) {
-                    return false;
-                }
-            }
-
-            return WorldEntitySpawner
-                    .isValidEmptySpawnBlock(worldIn,
-                            golemPos,
-                            worldIn.getBlockState(golemPos),
-                            Fluids.EMPTY.defaultFluidState(),
-                            ModEntityTypes.ARMORED_VINDICATOR.get())
-                    && worldIn.isUnobstructed(this);
-        }
-    }
-
     private void setAttackID(int id) {
         this.attackID = id;
         this.attackTimer = 0;
@@ -329,7 +339,7 @@ public class VindicatorRaidCaptainEntity extends AbstractIllagerEntity implement
     private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
         if (isMeleeAttacking()) {
             event.getController().animationSpeed = 1;
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("vindicator_attack", false));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("vindicator_attack_run", false));
         } else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
             if (!this.isAggressive()) {
                 event.getController().animationSpeed = 1;
@@ -426,48 +436,52 @@ public class VindicatorRaidCaptainEntity extends AbstractIllagerEntity implement
     }
 
     class MeleeGoal extends Goal {
+        public VindicatorRaidCaptainEntity v = VindicatorRaidCaptainEntity.this;
         public MeleeGoal() {
             this.setFlags(EnumSet.of(Flag.LOOK, Flag.MOVE));
         }
 
         @Override
         public boolean canUse() {
-            return VindicatorRaidCaptainEntity.this.getTarget() != null && attackID == MELEE_ATTACK;
+            return v.getTarget() != null && attackID == MELEE_ATTACK;
         }
 
         @Override
         public boolean canContinueToUse() {
             //animation tick
-            return attackTimer < 27;
+            return v.attackTimer < 21 && (v.getTarget() != null && v.getTarget().isAlive());
         }
-
 
         @Override
         public void start() {
-            setAttackID(MELEE_ATTACK);
-            setMeleeAttacking(true);
+            v.setAttackID(MELEE_ATTACK);
+            v.setMeleeAttacking(true);
         }
 
         @Override
         public void stop() {
-            setAttackID(0);
-            setMeleeAttacking(false);
-            VindicatorRaidCaptainEntity.this.attackTimer = 0;
+            v.setAttackID(0);
+            v.setMeleeAttacking(false);
+            v.attackTimer = 0;
+            if (v.getTarget() == null) {
+                v.setAggressive(false);
+            }
         }
 
         @Override
         public void tick() {
-            if(VindicatorRaidCaptainEntity.this.getTarget() != null && VindicatorRaidCaptainEntity.this.getTarget().isAlive()) {
-                VindicatorRaidCaptainEntity.this.getLookControl().setLookAt(VindicatorRaidCaptainEntity.this.getTarget(), 30.0F, 30.0F);
-                if (attackTimer >= 15 && attackTimer <= 17) {
-                    float attackKnockback = VindicatorRaidCaptainEntity.this.getAttackKnockback();
-                    LivingEntity attackTarget = VindicatorRaidCaptainEntity.this.getTarget();
-                    double ratioX = (double) MathHelper.sin(VindicatorRaidCaptainEntity.this.yRot * ((float) Math.PI / 300F));
-                    double ratioZ = (double) (-MathHelper.cos(VindicatorRaidCaptainEntity.this.yRot * ((float) Math.PI / 300F)));
+            if (v.getTarget() != null && v.getTarget().isAlive()) {
+                v.getNavigation().moveTo(v.getTarget(), 2.3);
+                v.getLookControl().setLookAt(v.getTarget(), 30.0F, 30.0F);
+                if (v.attackTimer == 15 && v.distanceToSqr(v.getTarget()) <= 6.0D) {
+                    float attackKnockback = v.getAttackKnockback();
+                    LivingEntity attackTarget = v.getTarget();
+                    double ratioX = (double) MathHelper.sin(v.yRot * ((float) Math.PI / 360F));
+                    double ratioZ = (double) (-MathHelper.cos(v.yRot * ((float) Math.PI / 360F)));
                     double knockbackReduction = 0.5D;
-                    attackTarget.hurt(DamageSource.mobAttack(VindicatorRaidCaptainEntity.this), (float) VindicatorRaidCaptainEntity.this.getAttributeValue(Attributes.ATTACK_DAMAGE));
-                    this.forceKnockback(attackTarget,attackKnockback * 0.5F, ratioX, ratioZ, knockbackReduction);
-                    VindicatorRaidCaptainEntity.this.setDeltaMovement(VindicatorRaidCaptainEntity.this.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
+                    attackTarget.hurt(DamageSource.mobAttack(v), (float) v.getAttributeValue(Attributes.ATTACK_DAMAGE));
+                    this.forceKnockback(attackTarget, attackKnockback * 0.5F, ratioX, ratioZ, knockbackReduction);
+                    v.setDeltaMovement(v.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
                 }
             }
 
@@ -511,6 +525,7 @@ public class VindicatorRaidCaptainEntity extends AbstractIllagerEntity implement
         this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
         this.goalSelector.addGoal(0, new SwimGoal(this));
 
+        this.targetSelector.addGoal(2, new JohnnyAttackGoal(this));
         this.targetSelector.addGoal(2, (new HurtByTargetGoal(this, AbstractRaiderEntity.class)).setAlertOthers());
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, true));
