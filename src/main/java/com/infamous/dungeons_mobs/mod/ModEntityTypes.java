@@ -285,7 +285,7 @@ public class ModEntityTypes {
 
     public static final RegistryObject<EntityType<LeapleafEntity>> LEAPLEAF = ENTITY_TYPES.register("leapleaf", () ->
             EntityType.Builder.<LeapleafEntity>of(LeapleafEntity::new, EntityClassification.MONSTER)
-                    .sized(2.62F * 1.25F, 1.81F * 1.25F) // 42 px wide, 29px tall
+                    .sized(2.62F, 2.81F) 
                     .clientTrackingRange(10)
                     .setCustomClientFactory((spawnEntity,world) -> new LeapleafEntity(world))
                     .build(new ResourceLocation(MODID, "leapleaf").toString())
