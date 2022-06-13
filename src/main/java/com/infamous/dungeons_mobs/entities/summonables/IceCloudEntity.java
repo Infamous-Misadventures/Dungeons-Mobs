@@ -6,6 +6,7 @@ import net.minecraft.block.*;
 import net.minecraft.entity.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
+import net.minecraft.particles.BlockParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
@@ -205,30 +206,13 @@ public class IceCloudEntity extends Entity implements IAnimatable {
     public boolean causeFallDamage(float distance, float damageMultiplier) {
         int distanceFallen = MathHelper.ceil(distance - 1.0F);
         if (distanceFallen > 0) {
-            List<Entity> list1 = Lists.newArrayList(this.level.getEntities(this, this.getBoundingBox().inflate(5, 2, 5)));
-            List<Entity> list2 = Lists.newArrayList(this.level.getEntities(this, this.getBoundingBox().inflate(10, 3, 10)));
             List<Entity> list = Lists.newArrayList(this.level.getEntities(this, this.getBoundingBox().inflate(2, 0.5, 2)));
             for(Entity entity : list) {
                 if(entity instanceof LivingEntity){
                     LivingEntity livingEntity = (LivingEntity)entity;
                     damage(livingEntity, distanceFallen * 2);
                 }
-            }/*
-            for(Entity entity : list1) {
-                if(entity instanceof LivingEntity){
-                    LivingEntity livingEntity = (LivingEntity)entity;
-                    damage(livingEntity, (int) (distanceFallen * 0.75));
-                    livingEntity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 200, 5));
-                }
             }
-            for(Entity entity : list2) {
-                if(entity instanceof LivingEntity){
-                    LivingEntity livingEntity = (LivingEntity)entity;
-                    damage(livingEntity, (int) (distanceFallen * 0.5));
-                    livingEntity.addEffect(new EffectInstance(Effects.DIG_SLOWDOWN, 200, 5));
-                }
-            }
-            */
         }
         return false;
     }
