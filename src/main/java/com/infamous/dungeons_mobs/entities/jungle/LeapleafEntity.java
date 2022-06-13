@@ -61,13 +61,17 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
         this.xpReward = 20;
     }
 
+    @Override
+    public boolean causeFallDamage(float p_225503_1_, float p_225503_2_) {
+        return false;
+    }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MonsterEntity.createMonsterAttributes()
                 .add(Attributes.MAX_HEALTH, 100.0D) // 1x Golem Health
-                .add(Attributes.MOVEMENT_SPEED, 0.25D)
+                .add(Attributes.MOVEMENT_SPEED, 0.22D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
-                .add(Attributes.ATTACK_DAMAGE, 15.0D) // 1x Golem Attack
+                .add(Attributes.ATTACK_DAMAGE, 18.0D) // 1x Golem Attack
                 .add(Attributes.ATTACK_KNOCKBACK, 1.5D); // 1x Ravager knockback
     }
 
@@ -108,12 +112,12 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(1, new WaterAvoidingRandomWalkingGoal(this, 0.6D));
         this.goalSelector.addGoal(2, new LeapleafEntity.StalkGoal());
-        this.goalSelector.addGoal(3, new LeapleafEntity.LeapGoal());
+        this.goalSelector.addGoal(2, new LeapleafEntity.LeapGoal());
         this.goalSelector.addGoal(4, new LeapleafEntity.AttackGoal(this,1.1));
-        this.goalSelector.addGoal(1, new LeapleafEntity.LeapMeleeGoal());
-        this.goalSelector.addGoal(0, new LeapleafEntity.MeleeGoal());
+        this.goalSelector.addGoal(0, new LeapleafEntity.LeapMeleeGoal());
+        this.goalSelector.addGoal(1, new LeapleafEntity.MeleeGoal());
         this.goalSelector.addGoal(0, new LeapleafEntity.RestGoal());
-        this.goalSelector.addGoal(1, new LeapleafEntity.ChargeGoal());
+        this.goalSelector.addGoal(3, new LeapleafEntity.ChargeGoal());
         this.goalSelector.addGoal(5, new LeapAtTargetGoal(this, 0.4F));
         this.goalSelector.addGoal(6, new LeapleafEntity.WatchGoal(this, PlayerEntity.class, 24.0F));
 
@@ -476,7 +480,8 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
         @Override
         public boolean canUse() {
             return !LeapleafEntity.this.entityData.get(IS_READY) &&
-                    LeapleafEntity.this.getTarget() != null;
+                    LeapleafEntity.this.getTarget() != null &&
+                    LeapleafEntity.this.entityData.get(LEAP_COOLDOWN) <= 0;
         }
 
         @Override
@@ -525,6 +530,7 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
 
         @Override
         public void stop() {
+            LeapleafEntity.this.entityData.set(IS_REST,false);
             LeapleafEntity.this.setTimer(0);
         }
 
@@ -539,6 +545,7 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
                 LeapleafEntity.this.entityData.set(IS_REST,false);
                 LeapleafEntity.this.entityData.set(LEAP_COOLDOWN,210);
             }
+            LeapleafEntity.this.entityData.set(IS_REST,true);
             LeapleafEntity.this.setTimer(LeapleafEntity.this.getTimer() + 1);
         }
 
@@ -546,6 +553,9 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
 
     //net.minecraft.entity.ai.goal.JumpGoal
     class LeapGoal extends Goal {
+
+        public boolean i;
+
         @Override
         public boolean canUse() {
             return LeapleafEntity.this.entityData.get(LEAP_COOLDOWN) <= 0 &&
@@ -556,7 +566,9 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
 
         @Override
         public boolean canContinueToUse() {
-            return LeapleafEntity.this.getTimer() <= 8 || (LeapleafEntity.this.getTarget() != null && !(LeapleafEntity.this.getY() <= LeapleafEntity.this.getTarget().getY() + 1));
+            return LeapleafEntity.this.getTimer() <= 9 ||
+                    (LeapleafEntity.this.getTarget() != null &&
+                            !(LeapleafEntity.this.getY() <= LeapleafEntity.this.getTarget().getY() + 1));
         }
 
         @Override
@@ -567,13 +579,19 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
                 LeapleafEntity.this.getLookControl().setLookAt(c, 60.0F, 30.0F);
             }
             if (v.getTimer() == 8 && c != null && c.isAlive()) {
+                this.i = true;
                 Vector3d vector3d = (new Vector3d(c.getX() - LeapleafEntity.this.getX(), c.getY() - LeapleafEntity.this.getY(), c.getZ() - LeapleafEntity.this.getZ())).normalize();
                 LeapleafEntity.this.setDeltaMovement(LeapleafEntity.this.getDeltaMovement().add(vector3d.x * 0.8D, 0.9D, vector3d.z * 0.8D));
+            }
+            if (this.i && c != null && c.isAlive()) {
+                Vector3d vector3d = (new Vector3d(c.getX() - LeapleafEntity.this.getX(), c.getY() - LeapleafEntity.this.getY(), c.getZ() - LeapleafEntity.this.getZ())).normalize();
+                LeapleafEntity.this.setDeltaMovement(LeapleafEntity.this.getDeltaMovement().add(vector3d.x * 0.21D, 0D, vector3d.z * 0.21D));
             }
         }
 
         @Override
         public void start() {
+            this.i = false;
             LeapleafEntity.this.setTimer(0);
             LeapleafEntity.this.setJumping(true);
             LeapleafEntity.this.setLeaping(true);
@@ -586,10 +604,12 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
                 LeapleafEntity.this.entityData.set(ATTACK_ID,2);
                 LeapleafEntity.this.doHurtTarget(LeapleafEntity.this.getTarget());
             }
+            this.i = false;
             LeapleafEntity.this.setJumping(false);
             LeapleafEntity.this.entityData.set(LEAP_COOLDOWN,210);
             LeapleafEntity.this.setLeaping(false);
             LeapleafEntity.this.setStalking(false);
+            LeapleafEntity.this.setIsReadying(false);
         }
 
     }
