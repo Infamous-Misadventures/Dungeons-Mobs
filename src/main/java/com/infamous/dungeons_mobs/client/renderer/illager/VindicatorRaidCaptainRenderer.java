@@ -1,7 +1,7 @@
 package com.infamous.dungeons_mobs.client.renderer.illager;
 
 import com.infamous.dungeons_mobs.client.models.illager.VindicatorRaidCaptainModel;
-import com.infamous.dungeons_mobs.entities.illagers.minibosses.VindicatorRaidCaptainEntity;
+import com.infamous.dungeons_mobs.entities.illagers.VindicatorRaidCaptainEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
