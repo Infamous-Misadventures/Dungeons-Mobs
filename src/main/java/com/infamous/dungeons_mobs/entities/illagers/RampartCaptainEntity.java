@@ -1,10 +1,8 @@
-package com.infamous.dungeons_mobs.entities.illagers;
+package com.infamous.dungeons_mobs.entities.illagers.minibosses;
 
 import com.google.common.collect.Maps;
 import com.infamous.dungeons_mobs.entities.allcustomentity.illagers.PowerfulRoyalGuardEntity;
-import com.infamous.dungeons_mobs.entities.illagers.ArmoredMountaineerEntity;
-import com.infamous.dungeons_mobs.entities.illagers.MountaineerEntity;
-import com.infamous.dungeons_mobs.entities.illagers.RoyalGuardEntity;
+import com.infamous.dungeons_mobs.entities.illagers.*;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModItems;
 import net.minecraft.block.BlockState;
@@ -31,6 +29,7 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.*;
 import net.minecraft.world.raid.Raid;
 import net.minecraft.world.spawner.WorldEntitySpawner;
@@ -62,6 +61,13 @@ public class RampartCaptainEntity extends AbstractIllagerEntity implements IAnim
 
     AnimationFactory factory = new AnimationFactory(this);
 
+    @Override
+    public void setCustomName(@Nullable ITextComponent p_200203_1_) {
+        super.setCustomName(p_200203_1_);
+        if (!this.isJohnny && p_200203_1_ != null && p_200203_1_.getString().equals("Johnny")) {
+            this.isJohnny = true;
+        }
+    }
 
     public RampartCaptainEntity(World world){
         super(ModEntityTypes.RAMPART_CAPTAIN.get(), world);
@@ -75,7 +81,7 @@ public class RampartCaptainEntity extends AbstractIllagerEntity implements IAnim
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(JUST_SPAWN, true);
-        this.entityData.define(IS_DIAMOND, false);
+        this.entityData.define(IS_DIAMOND, true);
         this.entityData.define(IS_GOLD, false);
         this.entityData.define(MELEEATTACKING, false);
     }
@@ -84,9 +90,9 @@ public class RampartCaptainEntity extends AbstractIllagerEntity implements IAnim
         return VindicatorEntity.createAttributes()
                 .add(Attributes.MOVEMENT_SPEED, 0.21D)
                 .add(Attributes.MAX_HEALTH, 100.0D)
-                .add(Attributes.ATTACK_DAMAGE, 15.0D)
+                .add(Attributes.ATTACK_DAMAGE, 18.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 3.2D)
-                .add(Attributes.ATTACK_KNOCKBACK, 1.5D);
+                .add(Attributes.ATTACK_KNOCKBACK, 3.5D);
     }
 
 
@@ -217,36 +223,6 @@ public class RampartCaptainEntity extends AbstractIllagerEntity implements IAnim
         return (float)this.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
     }
 
-    public boolean checkSpawnObstruction(IWorldReader worldIn) {
-        BlockPos golemPos = this.blockPosition();
-        BlockPos posBeneathGolem = golemPos.below();
-        BlockState blockstateBeneathGolem = worldIn.getBlockState(posBeneathGolem);
-        if (!blockstateBeneathGolem.entityCanStandOn(worldIn, posBeneathGolem, this)) {
-            return false;
-        } else {
-            for(int i = 1; i < 4; ++i) {
-                BlockPos posAboveGolem = golemPos.above(i);
-                BlockState blockstateAboveGolem = worldIn.getBlockState(posAboveGolem);
-                if (!WorldEntitySpawner
-                        .isValidEmptySpawnBlock(worldIn,
-                                posAboveGolem,
-                                blockstateAboveGolem,
-                                blockstateAboveGolem.getFluidState(),
-                                ModEntityTypes.ARMORED_VINDICATOR.get())) {
-                    return false;
-                }
-            }
-
-            return WorldEntitySpawner
-                    .isValidEmptySpawnBlock(worldIn,
-                            golemPos,
-                            worldIn.getBlockState(golemPos),
-                            Fluids.EMPTY.defaultFluidState(),
-                            ModEntityTypes.ARMORED_VINDICATOR.get())
-                    && worldIn.isUnobstructed(this);
-        }
-    }
-
     private void setAttackID(int id) {
         this.attackID = id;
         this.attackTimer = 0;
@@ -288,7 +264,7 @@ public class RampartCaptainEntity extends AbstractIllagerEntity implements IAnim
     private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
         if (isMeleeAttacking()) {
             event.getController().animationSpeed = 1;
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("vindicator_attack", false));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("vindicator_attack_run", false));
         } else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
             if (!this.isAggressive()) {
                 event.getController().animationSpeed = 1;
@@ -385,48 +361,53 @@ public class RampartCaptainEntity extends AbstractIllagerEntity implements IAnim
     }
 
     class MeleeGoal extends Goal {
+        public RampartCaptainEntity v = RampartCaptainEntity.this;
+
         public MeleeGoal() {
             this.setFlags(EnumSet.of(Flag.LOOK, Flag.MOVE));
         }
 
         @Override
         public boolean canUse() {
-            return RampartCaptainEntity.this.getTarget() != null && attackID == MELEE_ATTACK;
+            return v.getTarget() != null && attackID == MELEE_ATTACK;
         }
 
         @Override
         public boolean canContinueToUse() {
             //animation tick
-            return attackTimer < 27;
+            return v.attackTimer < 21 && (v.getTarget() != null && v.getTarget().isAlive());
         }
-
 
         @Override
         public void start() {
-            setAttackID(MELEE_ATTACK);
-            setMeleeAttacking(true);
+            v.setAttackID(MELEE_ATTACK);
+            v.setMeleeAttacking(true);
         }
 
         @Override
         public void stop() {
-            setAttackID(0);
-            setMeleeAttacking(false);
-            RampartCaptainEntity.this.attackTimer = 0;
+            v.setAttackID(0);
+            v.setMeleeAttacking(false);
+            v.attackTimer = 0;
+            if (v.getTarget() == null) {
+                v.setAggressive(false);
+            }
         }
 
         @Override
         public void tick() {
-            if(RampartCaptainEntity.this.getTarget() != null && RampartCaptainEntity.this.getTarget().isAlive()) {
-                RampartCaptainEntity.this.getLookControl().setLookAt(RampartCaptainEntity.this.getTarget(), 30.0F, 30.0F);
-                if (attackTimer == 15) {
-                    float attackKnockback = RampartCaptainEntity.this.getAttackKnockback();
-                    LivingEntity attackTarget = RampartCaptainEntity.this.getTarget();
-                    double ratioX = (double) MathHelper.sin(RampartCaptainEntity.this.yRot * ((float) Math.PI / 300F));
-                    double ratioZ = (double) (-MathHelper.cos(RampartCaptainEntity.this.yRot * ((float) Math.PI / 300F)));
+            if (v.getTarget() != null && v.getTarget().isAlive()) {
+                v.getNavigation().moveTo(v.getTarget(), 2.3);
+                v.getLookControl().setLookAt(v.getTarget(), 30.0F, 30.0F);
+                if (v.attackTimer == 15 && v.distanceToSqr(v.getTarget()) <= 6.0D) {
+                    float attackKnockback = v.getAttackKnockback();
+                    LivingEntity attackTarget = v.getTarget();
+                    double ratioX = (double) MathHelper.sin(v.yRot * ((float) Math.PI / 360F));
+                    double ratioZ = (double) (-MathHelper.cos(v.yRot * ((float) Math.PI / 360F)));
                     double knockbackReduction = 0.5D;
-                    attackTarget.hurt(DamageSource.mobAttack(RampartCaptainEntity.this), (float) RampartCaptainEntity.this.getAttributeValue(Attributes.ATTACK_DAMAGE));
-                    this.forceKnockback(attackTarget,attackKnockback * 0.5F, ratioX, ratioZ, knockbackReduction);
-                    RampartCaptainEntity.this.setDeltaMovement(RampartCaptainEntity.this.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
+                    attackTarget.hurt(DamageSource.mobAttack(v), (float) v.getAttributeValue(Attributes.ATTACK_DAMAGE));
+                    this.forceKnockback(attackTarget, attackKnockback * 0.5F, ratioX, ratioZ, knockbackReduction);
+                    v.setDeltaMovement(v.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
                 }
             }
 
@@ -470,6 +451,7 @@ public class RampartCaptainEntity extends AbstractIllagerEntity implements IAnim
         this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
         this.goalSelector.addGoal(0, new SwimGoal(this));
 
+        this.targetSelector.addGoal(5, new RampartCaptainEntity.JohnnyAttackGoal(this));
         this.targetSelector.addGoal(2, (new HurtByTargetGoal(this, AbstractRaiderEntity.class)).setAlertOthers());
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, true));

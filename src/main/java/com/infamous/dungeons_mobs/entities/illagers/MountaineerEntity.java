@@ -37,6 +37,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.*;
 import net.minecraft.world.raid.Raid;
 import net.minecraft.world.spawner.WorldEntitySpawner;
@@ -68,6 +69,13 @@ public class MountaineerEntity extends AbstractIllagerEntity implements IAnimata
 
     AnimationFactory factory = new AnimationFactory(this);
 
+    @Override
+    public void setCustomName(@Nullable ITextComponent p_200203_1_) {
+        super.setCustomName(p_200203_1_);
+        if (!this.isJohnny && p_200203_1_ != null && p_200203_1_.getString().equals("Johnny")) {
+            this.isJohnny = true;
+        }
+    }
 
     public MountaineerEntity(World world) {
         super(ModEntityTypes.MOUNTAINEER.get(), world);
@@ -179,36 +187,6 @@ public class MountaineerEntity extends AbstractIllagerEntity implements IAnimata
         return (float) this.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
     }
 
-    public boolean checkSpawnObstruction(IWorldReader worldIn) {
-        BlockPos golemPos = this.blockPosition();
-        BlockPos posBeneathGolem = golemPos.below();
-        BlockState blockstateBeneathGolem = worldIn.getBlockState(posBeneathGolem);
-        if (!blockstateBeneathGolem.entityCanStandOn(worldIn, posBeneathGolem, this)) {
-            return false;
-        } else {
-            for (int i = 1; i < 4; ++i) {
-                BlockPos posAboveGolem = golemPos.above(i);
-                BlockState blockstateAboveGolem = worldIn.getBlockState(posAboveGolem);
-                if (!WorldEntitySpawner
-                        .isValidEmptySpawnBlock(worldIn,
-                                posAboveGolem,
-                                blockstateAboveGolem,
-                                blockstateAboveGolem.getFluidState(),
-                                ModEntityTypes.MOUNTAINEER.get())) {
-                    return false;
-                }
-            }
-
-            return WorldEntitySpawner
-                    .isValidEmptySpawnBlock(worldIn,
-                            golemPos,
-                            worldIn.getBlockState(golemPos),
-                            Fluids.EMPTY.defaultFluidState(),
-                            ModEntityTypes.MOUNTAINEER.get())
-                    && worldIn.isUnobstructed(this);
-        }
-    }
-
     private void setAttackID(int id) {
         this.attackID = id;
         this.attackTimer = 0;
@@ -256,7 +234,7 @@ public class MountaineerEntity extends AbstractIllagerEntity implements IAnimata
     private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
         if (isMeleeAttacking()) {
             event.getController().animationSpeed = 1;
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("vindicator_attack", false));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("vindicator_attack_run", false));
         } else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
             if (!this.isAggressive()) {
                 event.getController().animationSpeed = 1;
@@ -351,7 +329,6 @@ public class MountaineerEntity extends AbstractIllagerEntity implements IAnimata
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return SoundEvents.VINDICATOR_HURT;
     }
-
     class MeleeGoal extends Goal {
         public MeleeGoal() {
             this.setFlags(EnumSet.of(Flag.LOOK, Flag.MOVE));
@@ -359,44 +336,50 @@ public class MountaineerEntity extends AbstractIllagerEntity implements IAnimata
 
         @Override
         public boolean canUse() {
-            return MountaineerEntity.this.getTarget() != null && attackID == MELEE_ATTACK;
+            MountaineerEntity v = MountaineerEntity.this;
+            return v.getTarget() != null && attackID == MELEE_ATTACK;
         }
 
         @Override
         public boolean canContinueToUse() {
+            MountaineerEntity v = MountaineerEntity.this;
             //animation tick
-            return attackTimer < 28;
+            return v.attackTimer < 21 && (v.getTarget() != null && v.getTarget().isAlive());
         }
 
         @Override
         public void start() {
-            setAttackID(MELEE_ATTACK);
-            setMeleeAttacking(true);
+            MountaineerEntity v = MountaineerEntity.this;
+            v.setAttackID(MELEE_ATTACK);
+            v.setMeleeAttacking(true);
         }
 
         @Override
         public void stop() {
-            setAttackID(0);
-            setMeleeAttacking(false);
-            MountaineerEntity.this.attackTimer = 0;
-            if (MountaineerEntity.this.getTarget() == null) {
-                MountaineerEntity.this.setAggressive(false);
+            MountaineerEntity v = MountaineerEntity.this;
+            v.setAttackID(0);
+            v.setMeleeAttacking(false);
+            v.attackTimer = 0;
+            if (v.getTarget() == null) {
+                v.setAggressive(false);
             }
         }
 
         @Override
         public void tick() {
-            if (MountaineerEntity.this.getTarget() != null && MountaineerEntity.this.getTarget().isAlive()) {
-                MountaineerEntity.this.getLookControl().setLookAt(MountaineerEntity.this.getTarget(), 30.0F, 30.0F);
-                if (attackTimer == 15 && MountaineerEntity.this.distanceToSqr(MountaineerEntity.this.getTarget()) <= 6.0D) {
-                    float attackKnockback = MountaineerEntity.this.getAttackKnockback();
-                    LivingEntity attackTarget = MountaineerEntity.this.getTarget();
-                    double ratioX = (double) MathHelper.sin(MountaineerEntity.this.yRot * ((float) Math.PI / 360F));
-                    double ratioZ = (double) (-MathHelper.cos(MountaineerEntity.this.yRot * ((float) Math.PI / 360F)));
+            MountaineerEntity v = MountaineerEntity.this;
+            if (v.getTarget() != null && v.getTarget().isAlive()) {
+                v.getNavigation().moveTo(v.getTarget(), 2.3);
+                v.getLookControl().setLookAt(v.getTarget(), 30.0F, 30.0F);
+                if (v.attackTimer == 15 && v.distanceToSqr(v.getTarget()) <= 6.0D) {
+                    float attackKnockback = v.getAttackKnockback();
+                    LivingEntity attackTarget = v.getTarget();
+                    double ratioX = (double) MathHelper.sin(v.yRot * ((float) Math.PI / 360F));
+                    double ratioZ = (double) (-MathHelper.cos(v.yRot * ((float) Math.PI / 360F)));
                     double knockbackReduction = 0.5D;
-                    attackTarget.hurt(DamageSource.mobAttack(MountaineerEntity.this), (float) MountaineerEntity.this.getAttributeValue(Attributes.ATTACK_DAMAGE));
+                    attackTarget.hurt(DamageSource.mobAttack(v), (float) v.getAttributeValue(Attributes.ATTACK_DAMAGE));
                     this.forceKnockback(attackTarget, attackKnockback * 0.5F, ratioX, ratioZ, knockbackReduction);
-                    MountaineerEntity.this.setDeltaMovement(MountaineerEntity.this.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
+                    v.setDeltaMovement(v.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
                 }
             }
 
@@ -404,16 +387,16 @@ public class MountaineerEntity extends AbstractIllagerEntity implements IAnimata
 
         private void forceKnockback(LivingEntity attackTarget, float strength, double ratioX, double ratioZ, double knockbackResistanceReduction) {
             LivingKnockBackEvent event = ForgeHooks.onLivingKnockBack(attackTarget, strength, ratioX, ratioZ);
-            if (event.isCanceled()) return;
+            if(event.isCanceled()) return;
             strength = event.getStrength();
             ratioX = event.getRatioX();
             ratioZ = event.getRatioZ();
-            strength = (float) ((double) strength * (1.0D - attackTarget.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE) * knockbackResistanceReduction));
+            strength = (float)((double)strength * (1.0D - attackTarget.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE) * knockbackResistanceReduction));
             if (!(strength <= 0.0F)) {
                 attackTarget.hasImpulse = true;
                 Vector3d vector3d = attackTarget.getDeltaMovement();
-                Vector3d vector3d1 = (new Vector3d(ratioX, 0.0D, ratioZ)).normalize().scale((double) strength);
-                attackTarget.setDeltaMovement(vector3d.x / 2.0D - vector3d1.x, attackTarget.isOnGround() ? Math.min(0.4D, vector3d.y / 2.0D + (double) strength) : vector3d.y, vector3d.z / 2.0D - vector3d1.z);
+                Vector3d vector3d1 = (new Vector3d(ratioX, 0.0D, ratioZ)).normalize().scale((double)strength);
+                attackTarget.setDeltaMovement(vector3d.x / 2.0D - vector3d1.x, attackTarget.isOnGround() ? Math.min(0.4D, vector3d.y / 2.0D + (double)strength) : vector3d.y, vector3d.z / 2.0D - vector3d1.z);
             }
         }
     }
@@ -442,6 +425,7 @@ public class MountaineerEntity extends AbstractIllagerEntity implements IAnimata
         this.goalSelector.addGoal(7, new LookAtGoal(this, PlayerEntity.class, 6.0F));
         this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
         this.goalSelector.addGoal(0, new SwimGoal(this));
+        this.targetSelector.addGoal(5, (new MountaineerEntity.JohnnyAttackGoal(this)));
 
         this.targetSelector.addGoal(2, (new HurtByTargetGoal(this, AbstractRaiderEntity.class)).setAlertOthers());
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));

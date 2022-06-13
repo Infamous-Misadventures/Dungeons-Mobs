@@ -31,11 +31,13 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.*;
 import net.minecraft.world.raid.Raid;
 import net.minecraft.world.spawner.WorldEntitySpawner;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.minecraftforge.fml.ModList;
@@ -49,6 +51,7 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
+import javax.xml.soap.Text;
 import java.util.EnumSet;
 import java.util.Map;
 
@@ -329,11 +332,7 @@ public class ArmoredMountaineerEntity extends AbstractIllagerEntity implements I
     private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
         if (isMeleeAttacking()) {
             event.getController().animationSpeed = 1;
-            if (event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F){
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("vindicator_attack", false));
-            }else {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("vindicator_attack_run", false));
-            }
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("vindicator_attack_run", false));
         } else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
             if (!this.isAggressive()) {
                 event.getController().animationSpeed = 1;
@@ -436,45 +435,50 @@ public class ArmoredMountaineerEntity extends AbstractIllagerEntity implements I
 
         @Override
         public boolean canUse() {
-            return ArmoredMountaineerEntity.this.getTarget() != null && attackID == MELEE_ATTACK;
+            ArmoredMountaineerEntity v = ArmoredMountaineerEntity.this;
+            return v.getTarget() != null && attackID == MELEE_ATTACK;
         }
 
         @Override
         public boolean canContinueToUse() {
+            ArmoredMountaineerEntity v = ArmoredMountaineerEntity.this;
             //animation tick
-            return ArmoredMountaineerEntity.this.attackTimer < 21 && (ArmoredMountaineerEntity.this.getTarget() != null && ArmoredMountaineerEntity.this.getTarget().isAlive());
+            return v.attackTimer < 21 && (v.getTarget() != null && v.getTarget().isAlive());
         }
 
         @Override
         public void start() {
-            setAttackID(MELEE_ATTACK);
-            setMeleeAttacking(true);
+            ArmoredMountaineerEntity v = ArmoredMountaineerEntity.this;
+            v.setAttackID(MELEE_ATTACK);
+            v.setMeleeAttacking(true);
         }
 
         @Override
         public void stop() {
-            setAttackID(0);
-            setMeleeAttacking(false);
-            ArmoredMountaineerEntity.this.attackTimer = 0;
+            ArmoredMountaineerEntity v = ArmoredMountaineerEntity.this;
+            v.setAttackID(0);
+            v.setMeleeAttacking(false);
+            v.attackTimer = 0;
             if (ArmoredMountaineerEntity.this.getTarget() == null) {
-                ArmoredMountaineerEntity.this.setAggressive(false);
+                v.setAggressive(false);
             }
         }
 
         @Override
         public void tick() {
-            if (ArmoredMountaineerEntity.this.getTarget() != null && ArmoredMountaineerEntity.this.getTarget().isAlive()) {
-                ArmoredMountaineerEntity.this.getNavigation().moveTo(ArmoredMountaineerEntity.this.getTarget(), 2.3);
-                ArmoredMountaineerEntity.this.getLookControl().setLookAt(ArmoredMountaineerEntity.this.getTarget(), 30.0F, 30.0F);
-                if (attackTimer == 15 && ArmoredMountaineerEntity.this.distanceToSqr(ArmoredMountaineerEntity.this.getTarget()) <= 6.0D) {
-                    float attackKnockback = ArmoredMountaineerEntity.this.getAttackKnockback();
-                    LivingEntity attackTarget = ArmoredMountaineerEntity.this.getTarget();
-                    double ratioX = (double) MathHelper.sin(ArmoredMountaineerEntity.this.yRot * ((float) Math.PI / 360F));
-                    double ratioZ = (double) (-MathHelper.cos(ArmoredMountaineerEntity.this.yRot * ((float) Math.PI / 360F)));
+            ArmoredMountaineerEntity v = ArmoredMountaineerEntity.this;
+            if (v.getTarget() != null && v.getTarget().isAlive()) {
+                v.getNavigation().moveTo(v.getTarget(), 2.3);
+                v.getLookControl().setLookAt(v.getTarget(), 30.0F, 30.0F);
+                if (v.attackTimer == 15 && v.distanceToSqr(v.getTarget()) <= 6.0D) {
+                    float attackKnockback = v.getAttackKnockback();
+                    LivingEntity attackTarget = v.getTarget();
+                    double ratioX = (double) MathHelper.sin(v.yRot * ((float) Math.PI / 360F));
+                    double ratioZ = (double) (-MathHelper.cos(v.yRot * ((float) Math.PI / 360F)));
                     double knockbackReduction = 0.5D;
-                    attackTarget.hurt(DamageSource.mobAttack(ArmoredMountaineerEntity.this), (float) ArmoredMountaineerEntity.this.getAttributeValue(Attributes.ATTACK_DAMAGE));
+                    attackTarget.hurt(DamageSource.mobAttack(v), (float) v.getAttributeValue(Attributes.ATTACK_DAMAGE));
                     this.forceKnockback(attackTarget, attackKnockback * 0.5F, ratioX, ratioZ, knockbackReduction);
-                    ArmoredMountaineerEntity.this.setDeltaMovement(ArmoredMountaineerEntity.this.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
+                    v.setDeltaMovement(v.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
                 }
             }
 
@@ -482,16 +486,16 @@ public class ArmoredMountaineerEntity extends AbstractIllagerEntity implements I
 
         private void forceKnockback(LivingEntity attackTarget, float strength, double ratioX, double ratioZ, double knockbackResistanceReduction) {
             LivingKnockBackEvent event = ForgeHooks.onLivingKnockBack(attackTarget, strength, ratioX, ratioZ);
-            if (event.isCanceled()) return;
+            if(event.isCanceled()) return;
             strength = event.getStrength();
             ratioX = event.getRatioX();
             ratioZ = event.getRatioZ();
-            strength = (float) ((double) strength * (1.0D - attackTarget.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE) * knockbackResistanceReduction));
+            strength = (float)((double)strength * (1.0D - attackTarget.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE) * knockbackResistanceReduction));
             if (!(strength <= 0.0F)) {
                 attackTarget.hasImpulse = true;
                 Vector3d vector3d = attackTarget.getDeltaMovement();
-                Vector3d vector3d1 = (new Vector3d(ratioX, 0.0D, ratioZ)).normalize().scale((double) strength);
-                attackTarget.setDeltaMovement(vector3d.x / 2.0D - vector3d1.x, attackTarget.isOnGround() ? Math.min(0.4D, vector3d.y / 2.0D + (double) strength) : vector3d.y, vector3d.z / 2.0D - vector3d1.z);
+                Vector3d vector3d1 = (new Vector3d(ratioX, 0.0D, ratioZ)).normalize().scale((double)strength);
+                attackTarget.setDeltaMovement(vector3d.x / 2.0D - vector3d1.x, attackTarget.isOnGround() ? Math.min(0.4D, vector3d.y / 2.0D + (double)strength) : vector3d.y, vector3d.z / 2.0D - vector3d1.z);
             }
         }
     }
@@ -508,6 +512,14 @@ public class ArmoredMountaineerEntity extends AbstractIllagerEntity implements I
         }
     }
 
+    @Override
+    public void setCustomName(@Nullable ITextComponent p_200203_1_) {
+        super.setCustomName(p_200203_1_);
+        if (!this.isJohnny && p_200203_1_ != null && p_200203_1_.getString().equals("Johnny")) {
+            this.isJohnny = true;
+        }
+    }
+
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(7, new PatrollerEntity.PatrolGoal<>(this,1.42,1.3));
@@ -521,6 +533,7 @@ public class ArmoredMountaineerEntity extends AbstractIllagerEntity implements I
         this.goalSelector.addGoal(0, new SwimGoal(this));
 
         this.targetSelector.addGoal(2, (new HurtByTargetGoal(this, AbstractRaiderEntity.class)).setAlertOthers());
+        this.targetSelector.addGoal(5, (new JohnnyAttackGoal(this)));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, true));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
