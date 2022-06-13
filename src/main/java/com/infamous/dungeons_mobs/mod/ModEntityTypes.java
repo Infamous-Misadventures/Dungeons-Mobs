@@ -144,7 +144,7 @@ public class ModEntityTypes {
     
     public static final RegistryObject<EntityType<ArmoredVindicatorEntity>> ARMORED_VINDICATOR = ENTITY_TYPES.register("armored_vindicator", () ->
             EntityType.Builder.<ArmoredVindicatorEntity>of(ArmoredVindicatorEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F * 1.1F, 1.95F * 1.1F)
+                    .sized(0.7F * 1.1F, 1.95F * 1.1F)
                     .clientTrackingRange(8)
                     .setCustomClientFactory((spawnEntity,world) -> new ArmoredVindicatorEntity(world))
                     .build(new ResourceLocation(MODID, "armored_vindicator").toString())
@@ -216,7 +216,7 @@ public class ModEntityTypes {
     
     public static final RegistryObject<EntityType<VindicatorChefEntity>> VINDICATOR_CHEF = ENTITY_TYPES.register("vindicator_chef", () ->
             EntityType.Builder.<VindicatorChefEntity>of(VindicatorChefEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F, 1.95F)
+                    .sized(0.7F, 1.95F)
                     .clientTrackingRange(8)
                     .setCustomClientFactory((spawnEntity,world) -> new VindicatorChefEntity(world))
                     .build(new ResourceLocation(MODID, "vindicator_chef").toString())
@@ -224,7 +224,7 @@ public class ModEntityTypes {
 
     public static final RegistryObject<EntityType<VindicatorRaidCaptainEntity>> VINDICATOR_RAID_CAPTAIN = ENTITY_TYPES.register("vindicator_raid_captain", () ->
             EntityType.Builder.<VindicatorRaidCaptainEntity>of(VindicatorRaidCaptainEntity::new, EntityClassification.MONSTER)
-                    .sized(0.7F, 1.95F)
+                    .sized(0.7F * 1.1F, 1.95F * 1.1F)
                     .clientTrackingRange(8)
                     .setCustomClientFactory((spawnEntity,world) -> new VindicatorRaidCaptainEntity(world))
                     .build(new ResourceLocation(MODID, "vindicator_raid_captain").toString())
