@@ -244,7 +244,6 @@ public class IceCloudEntity extends Entity implements IAnimatable {
                 if (caster.isAlliedTo(targetEntity)) {
                     return;
                 }
-                targetEntity.setDeltaMovement(targetEntity.getDeltaMovement().add(this.level.getRandom().nextInt(4)-this.level.getRandom().nextInt(8),2,this.level.getRandom().nextInt(4)-this.level.getRandom().nextInt(8)));
                 targetEntity.hurt(summonedFallingBlockDamageSource, damageAmount);
                 targetEntity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 200, 5));
                 targetEntity.addEffect(new EffectInstance(Effects.DIG_SLOWDOWN, 200, 5));
