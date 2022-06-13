@@ -21,7 +21,6 @@ import com.infamous.dungeons_mobs.client.renderer.illager.MageCloneRenderer;
 import com.infamous.dungeons_mobs.client.renderer.illager.MageRenderer;
 import com.infamous.dungeons_mobs.client.renderer.illager.MountaineerRenderer;
 import com.infamous.dungeons_mobs.client.renderer.illager.WindcallerRenderer;
-import com.infamous.dungeons_mobs.client.renderer.illager.DungeonsEvokerRenderer;
 import com.infamous.dungeons_mobs.client.renderer.jungle.LeapleafRenderer;
 import com.infamous.dungeons_mobs.client.renderer.jungle.PoisonQuillVineRenderer;
 import com.infamous.dungeons_mobs.client.renderer.jungle.QuickGrowingVineRenderer;
