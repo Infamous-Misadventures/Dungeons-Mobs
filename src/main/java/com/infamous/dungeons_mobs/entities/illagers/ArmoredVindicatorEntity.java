@@ -29,6 +29,7 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.*;
 import net.minecraft.world.raid.Raid;
 import net.minecraftforge.api.distmarker.Dist;
@@ -139,9 +140,15 @@ public class ArmoredVindicatorEntity extends AbstractIllagerEntity implements IA
         super.readAdditionalSaveData(compound);
         if (compound.contains("Diamond", 99)) {
             this.setDiamond(compound.getBoolean("Diamond"));
+            if (this.isDiamond()) {
+                this.applyDiamondArmorBoosts();
+            }
         }
         if (compound.contains("Gold", 99)) {
             this.setGold(compound.getBoolean("Gold"));
+            if (this.isGold()) {
+                this.applyGoldArmorBoosts();
+            }
         }
         if (compound.contains("Johnny", 99)) {
             this.isJohnny = compound.getBoolean("Johnny");
@@ -424,11 +431,7 @@ public class ArmoredVindicatorEntity extends AbstractIllagerEntity implements IA
     private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
         if (isMeleeAttacking()) {
             event.getController().animationSpeed = 1;
-            if (event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F){
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("vindicator_attack", false));
-            }else {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("vindicator_attack_run", false));
-            }
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("vindicator_attack_run", false));
         } else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
             if (!this.isAggressive()) {
                 event.getController().animationSpeed = 1;
@@ -445,6 +448,14 @@ public class ArmoredVindicatorEntity extends AbstractIllagerEntity implements IA
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("vindicator_idel_look_around", true));
         }
         return PlayState.CONTINUE;
+    }
+
+    @Override
+    public void setCustomName(@Nullable ITextComponent p_200203_1_) {
+        super.setCustomName(p_200203_1_);
+        if (!this.isJohnny && p_200203_1_ != null && p_200203_1_.getString().equals("Johnny")) {
+            this.isJohnny = true;
+        }
     }
 
     class AttackGoal extends MeleeAttackGoal {
@@ -542,14 +553,14 @@ public class ArmoredVindicatorEntity extends AbstractIllagerEntity implements IA
 
         @Override
         public void start() {
-            setAttackID(MELEE_ATTACK);
-            setMeleeAttacking(true);
+            ArmoredVindicatorEntity.this.setAttackID(MELEE_ATTACK);
+            ArmoredVindicatorEntity.this.setMeleeAttacking(true);
         }
 
         @Override
         public void stop() {
-            setAttackID(0);
-            setMeleeAttacking(false);
+            ArmoredVindicatorEntity.this.setAttackID(0);
+            ArmoredVindicatorEntity.this.setMeleeAttacking(false);
             ArmoredVindicatorEntity.this.attackTimer = 0;
             if (ArmoredVindicatorEntity.this.getTarget() == null) {
                 ArmoredVindicatorEntity.this.setAggressive(false);
@@ -561,7 +572,7 @@ public class ArmoredVindicatorEntity extends AbstractIllagerEntity implements IA
             if (ArmoredVindicatorEntity.this.getTarget() != null && ArmoredVindicatorEntity.this.getTarget().isAlive()) {
                 ArmoredVindicatorEntity.this.getNavigation().moveTo(ArmoredVindicatorEntity.this.getTarget(), 2.3);
                 ArmoredVindicatorEntity.this.getLookControl().setLookAt(ArmoredVindicatorEntity.this.getTarget(), 30.0F, 30.0F);
-                if (attackTimer == 15 && ArmoredVindicatorEntity.this.distanceToSqr(ArmoredVindicatorEntity.this.getTarget()) <= 6.0D) {
+                if (ArmoredVindicatorEntity.this.attackTimer == 15 && ArmoredVindicatorEntity.this.distanceToSqr(ArmoredVindicatorEntity.this.getTarget()) <= 6.0D) {
                     float attackKnockback = ArmoredVindicatorEntity.this.getAttackKnockback();
                     LivingEntity attackTarget = ArmoredVindicatorEntity.this.getTarget();
                     double ratioX = (double) MathHelper.sin(ArmoredVindicatorEntity.this.yRot * ((float) Math.PI / 360F));
@@ -620,6 +631,7 @@ public class ArmoredVindicatorEntity extends AbstractIllagerEntity implements IA
         this.goalSelector.addGoal(7, new LookAtGoal(this, PlayerEntity.class, 6.0F));
         this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
         this.goalSelector.addGoal(0, new SwimGoal(this));
+        this.targetSelector.addGoal(5, (new ArmoredVindicatorEntity.JohnnyAttackGoal(this)));
 
         this.targetSelector.addGoal(2, (new HurtByTargetGoal(this, AbstractRaiderEntity.class)).setAlertOthers());
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
@@ -640,84 +652,6 @@ public class ArmoredVindicatorEntity extends AbstractIllagerEntity implements IA
             super.start();
             this.mob.setNoActionTime(0);
 
-        }
-    }
-    class RunMeleeGoal extends Goal {
-        public RunMeleeGoal() {
-            this.setFlags(EnumSet.of(Flag.LOOK, Flag.MOVE));
-        }
-
-        @Override
-        public boolean canUse() {
-            return ArmoredVindicatorEntity.this.getTarget() != null &&
-                    (ArmoredVindicatorEntity.this.c == 0)&&
-                    (ArmoredVindicatorEntity.this.attackID != MELEE_ATTACK)&&
-                    (ArmoredVindicatorEntity.this.distanceToSqr(ArmoredVindicatorEntity.this.getTarget()) <= 20);
-        }
-
-        @Override
-        public boolean canContinueToUse() {
-            //animation tick
-            return ArmoredVindicatorEntity.this.Timer < 21 && ArmoredVindicatorEntity.this.getTarget() != null && ArmoredVindicatorEntity.this.getTarget().isAlive();
-        }
-
-        @Override
-        public void start() {
-            ArmoredVindicatorEntity.this.Timer = 0;
-            ArmoredVindicatorEntity.this.setAttackID(MELEE_ATTACK);
-            ArmoredVindicatorEntity.this.setMeleeAttacking(true);
-            ArmoredVindicatorEntity.this.ru = true;
-        }
-
-        @Override
-        public void stop() {
-            ArmoredVindicatorEntity.this.setAttackID(0);
-            ArmoredVindicatorEntity.this.setMeleeAttacking(false);
-            ArmoredVindicatorEntity.this.Timer = 0;
-            ArmoredVindicatorEntity.this.ru = false;
-        }
-
-        @Override
-        public void tick() {
-
-            if (ArmoredVindicatorEntity.this.getTarget() != null && ArmoredVindicatorEntity.this.getTarget().isAlive()) {
-                ArmoredVindicatorEntity.this.getNavigation().moveTo(ArmoredVindicatorEntity.this.getTarget(), 2.3);
-            }
-
-            if(ArmoredVindicatorEntity.this.getTarget() != null && ArmoredVindicatorEntity.this.getTarget().isAlive()) {
-                ArmoredVindicatorEntity.this.getLookControl().setLookAt(ArmoredVindicatorEntity.this.getTarget(), 30.0F, 30.0F);
-                if (ArmoredVindicatorEntity.this.Timer == 15 && ArmoredVindicatorEntity.this.distanceToSqr(ArmoredVindicatorEntity.this.getTarget()) <= 8.0D) {
-                    float attackKnockback = ArmoredVindicatorEntity.this.getAttackKnockback();
-                    LivingEntity attackTarget = ArmoredVindicatorEntity.this.getTarget();
-                    double ratioX = (double) MathHelper.sin(ArmoredVindicatorEntity.this.yRot * ((float) Math.PI / 360F));
-                    double ratioZ = (double) (-MathHelper.cos(ArmoredVindicatorEntity.this.yRot * ((float) Math.PI / 360F)));
-                    double knockbackReduction = 0.5D;
-                    attackTarget.hurt(DamageSource.mobAttack(ArmoredVindicatorEntity.this), (float) ArmoredVindicatorEntity.this.getAttributeValue(Attributes.ATTACK_DAMAGE));
-                    this.forceKnockback(attackTarget,attackKnockback * 0.5F, ratioX, ratioZ, knockbackReduction);
-                    ArmoredVindicatorEntity.this.setDeltaMovement(ArmoredVindicatorEntity.this.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
-                }
-            }
-
-            ArmoredVindicatorEntity.this.Timer++;
-
-            if (ArmoredVindicatorEntity.this.Timer > 20) {
-                ArmoredVindicatorEntity.this.c = 120;
-            }
-        }
-
-        private void forceKnockback(LivingEntity attackTarget, float strength, double ratioX, double ratioZ, double knockbackResistanceReduction) {
-            LivingKnockBackEvent event = ForgeHooks.onLivingKnockBack(attackTarget, strength, ratioX, ratioZ);
-            if(event.isCanceled()) return;
-            strength = event.getStrength();
-            ratioX = event.getRatioX();
-            ratioZ = event.getRatioZ();
-            strength = (float)((double)strength * (1.0D - attackTarget.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE) * knockbackResistanceReduction));
-            if (!(strength <= 0.0F)) {
-                attackTarget.hasImpulse = true;
-                Vector3d vector3d = attackTarget.getDeltaMovement();
-                Vector3d vector3d1 = (new Vector3d(ratioX, 0.0D, ratioZ)).normalize().scale((double)strength);
-                attackTarget.setDeltaMovement(vector3d.x / 2.0D - vector3d1.x, attackTarget.isOnGround() ? Math.min(0.4D, vector3d.y / 2.0D + (double)strength) : vector3d.y, vector3d.z / 2.0D - vector3d1.z);
-            }
         }
     }
 

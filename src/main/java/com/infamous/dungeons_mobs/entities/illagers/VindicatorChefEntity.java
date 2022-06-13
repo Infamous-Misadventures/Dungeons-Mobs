@@ -33,6 +33,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IWorldReader;
@@ -56,6 +57,8 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import javax.annotation.Nullable;
+
 public class VindicatorChefEntity extends AbstractIllagerEntity implements IAnimatable {
     private boolean isJohnny;
     private int attackTimer;
@@ -65,6 +68,14 @@ public class VindicatorChefEntity extends AbstractIllagerEntity implements IAnim
     private static final DataParameter<Boolean> IS_DIAMOND = EntityDataManager.defineId(VindicatorChefEntity.class, DataSerializers.BOOLEAN);
 
     AnimationFactory factory = new AnimationFactory(this);
+
+    @Override
+    public void setCustomName(@Nullable ITextComponent p_200203_1_) {
+        super.setCustomName(p_200203_1_);
+        if (!this.isJohnny && p_200203_1_ != null && p_200203_1_.getString().equals("Johnny")) {
+            this.isJohnny = true;
+        }
+    }
 
     public VindicatorChefEntity(World worldIn){
         super(ModEntityTypes.VINDICATOR_CHEF.get(), worldIn);
@@ -335,7 +346,6 @@ public class VindicatorChefEntity extends AbstractIllagerEntity implements IAnim
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return SoundEvents.VINDICATOR_HURT;
     }
-
     class MeleeGoal extends Goal {
         public MeleeGoal() {
             this.setFlags(EnumSet.of(Flag.LOOK, Flag.MOVE));
@@ -343,41 +353,50 @@ public class VindicatorChefEntity extends AbstractIllagerEntity implements IAnim
 
         @Override
         public boolean canUse() {
-            return VindicatorChefEntity.this.getTarget() != null && attackID == MELEE_ATTACK;
+            VindicatorChefEntity v = VindicatorChefEntity.this;
+            return v.getTarget() != null && attackID == MELEE_ATTACK;
         }
 
         @Override
         public boolean canContinueToUse() {
+            VindicatorChefEntity v = VindicatorChefEntity.this;
             //animation tick
-            return attackTimer < 28;
+            return v.attackTimer < 21 && (v.getTarget() != null && v.getTarget().isAlive());
         }
 
         @Override
         public void start() {
-            setAttackID(MELEE_ATTACK);
-            setMeleeAttacking(true);
+            VindicatorChefEntity v = VindicatorChefEntity.this;
+            v.setAttackID(MELEE_ATTACK);
+            v.setMeleeAttacking(true);
         }
 
         @Override
         public void stop() {
-            setAttackID(0);
-            setMeleeAttacking(false);
-            VindicatorChefEntity.this.attackTimer = 0;
+            VindicatorChefEntity v = VindicatorChefEntity.this;
+            v.setAttackID(0);
+            v.setMeleeAttacking(false);
+            v.attackTimer = 0;
+            if (v.getTarget() == null) {
+                v.setAggressive(false);
+            }
         }
 
         @Override
         public void tick() {
-            if (VindicatorChefEntity.this.getTarget() != null && VindicatorChefEntity.this.getTarget().isAlive()) {
-                VindicatorChefEntity.this.getLookControl().setLookAt(VindicatorChefEntity.this.getTarget(), 30.0F, 30.0F);
-                if (attackTimer == 15) {
-                    float attackKnockback = VindicatorChefEntity.this.getAttackKnockback();
-                    LivingEntity attackTarget = VindicatorChefEntity.this.getTarget();
-                    double ratioX = (double) MathHelper.sin(VindicatorChefEntity.this.yRot * ((float) Math.PI / 360F));
-                    double ratioZ = (double) (-MathHelper.cos(VindicatorChefEntity.this.yRot * ((float) Math.PI / 360F)));
+            VindicatorChefEntity v = VindicatorChefEntity.this;
+            if (v.getTarget() != null && v.getTarget().isAlive()) {
+                v.getNavigation().moveTo(v.getTarget(), 2.3);
+                v.getLookControl().setLookAt(v.getTarget(), 30.0F, 30.0F);
+                if (v.attackTimer == 15 && v.distanceToSqr(v.getTarget()) <= 6.0D) {
+                    float attackKnockback = v.getAttackKnockback();
+                    LivingEntity attackTarget = v.getTarget();
+                    double ratioX = (double) MathHelper.sin(v.yRot * ((float) Math.PI / 360F));
+                    double ratioZ = (double) (-MathHelper.cos(v.yRot * ((float) Math.PI / 360F)));
                     double knockbackReduction = 0.5D;
-                    attackTarget.hurt(DamageSource.mobAttack(VindicatorChefEntity.this), (float) VindicatorChefEntity.this.getAttributeValue(Attributes.ATTACK_DAMAGE));
+                    attackTarget.hurt(DamageSource.mobAttack(v), (float) v.getAttributeValue(Attributes.ATTACK_DAMAGE));
                     this.forceKnockback(attackTarget, attackKnockback * 0.5F, ratioX, ratioZ, knockbackReduction);
-                    VindicatorChefEntity.this.setDeltaMovement(VindicatorChefEntity.this.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
+                    v.setDeltaMovement(v.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
                 }
             }
 
@@ -385,16 +404,16 @@ public class VindicatorChefEntity extends AbstractIllagerEntity implements IAnim
 
         private void forceKnockback(LivingEntity attackTarget, float strength, double ratioX, double ratioZ, double knockbackResistanceReduction) {
             LivingKnockBackEvent event = ForgeHooks.onLivingKnockBack(attackTarget, strength, ratioX, ratioZ);
-            if (event.isCanceled()) return;
+            if(event.isCanceled()) return;
             strength = event.getStrength();
             ratioX = event.getRatioX();
             ratioZ = event.getRatioZ();
-            strength = (float) ((double) strength * (1.0D - attackTarget.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE) * knockbackResistanceReduction));
+            strength = (float)((double)strength * (1.0D - attackTarget.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE) * knockbackResistanceReduction));
             if (!(strength <= 0.0F)) {
                 attackTarget.hasImpulse = true;
                 Vector3d vector3d = attackTarget.getDeltaMovement();
-                Vector3d vector3d1 = (new Vector3d(ratioX, 0.0D, ratioZ)).normalize().scale((double) strength);
-                attackTarget.setDeltaMovement(vector3d.x / 2.0D - vector3d1.x, attackTarget.isOnGround() ? Math.min(0.4D, vector3d.y / 2.0D + (double) strength) : vector3d.y, vector3d.z / 2.0D - vector3d1.z);
+                Vector3d vector3d1 = (new Vector3d(ratioX, 0.0D, ratioZ)).normalize().scale((double)strength);
+                attackTarget.setDeltaMovement(vector3d.x / 2.0D - vector3d1.x, attackTarget.isOnGround() ? Math.min(0.4D, vector3d.y / 2.0D + (double)strength) : vector3d.y, vector3d.z / 2.0D - vector3d1.z);
             }
         }
     }
@@ -414,6 +433,7 @@ public class VindicatorChefEntity extends AbstractIllagerEntity implements IAnim
         this.goalSelector.addGoal(7, new LookAtGoal(this, PlayerEntity.class, 6.0F));
         this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
         this.goalSelector.addGoal(0, new SwimGoal(this));
+        this.targetSelector.addGoal(5, (new VindicatorChefEntity.JohnnyAttackGoal(this)));
 
         this.targetSelector.addGoal(2, (new HurtByTargetGoal(this, AbstractRaiderEntity.class)).setAlertOthers());
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));

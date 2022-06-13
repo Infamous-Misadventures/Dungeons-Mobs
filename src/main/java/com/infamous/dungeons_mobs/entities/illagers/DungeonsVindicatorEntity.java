@@ -28,6 +28,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
@@ -60,6 +61,13 @@ public class DungeonsVindicatorEntity extends AbstractIllagerEntity implements I
 
     AnimationFactory factory = new AnimationFactory(this);
 
+    @Override
+    public void setCustomName(@Nullable ITextComponent p_200203_1_) {
+        super.setCustomName(p_200203_1_);
+        if (!this.isJohnny && p_200203_1_ != null && p_200203_1_.getString().equals("Johnny")) {
+            this.isJohnny = true;
+        }
+    }
 
     public DungeonsVindicatorEntity(World world) {
         super(ModEntityTypes.VINDICATOR.get(), world);
@@ -212,7 +220,7 @@ public class DungeonsVindicatorEntity extends AbstractIllagerEntity implements I
     private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
         if (isMeleeAttacking()) {
             event.getController().animationSpeed = 1;
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("vindicator_attack", false));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("vindicator_attack_run", false));
         } else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
             if (!this.isAggressive()) {
                 event.getController().animationSpeed = 1;
@@ -309,50 +317,52 @@ public class DungeonsVindicatorEntity extends AbstractIllagerEntity implements I
     }
 
     class MeleeGoal extends Goal {
+        public DungeonsVindicatorEntity v = DungeonsVindicatorEntity.this;
         public MeleeGoal() {
             this.setFlags(EnumSet.of(Flag.LOOK, Flag.MOVE));
         }
 
         @Override
         public boolean canUse() {
-            return DungeonsVindicatorEntity.this.getTarget() != null && attackID == MELEE_ATTACK;
+            return v.getTarget() != null && attackID == MELEE_ATTACK;
         }
 
         @Override
         public boolean canContinueToUse() {
             //animation tick
-            return attackTimer < 28;
+            return v.attackTimer < 21 && (v.getTarget() != null && v.getTarget().isAlive());
         }
 
         @Override
         public void start() {
-            setAttackID(MELEE_ATTACK);
-            setMeleeAttacking(true);
+            v.setAttackID(MELEE_ATTACK);
+            v.setMeleeAttacking(true);
         }
 
         @Override
         public void stop() {
-            setAttackID(0);
-            setMeleeAttacking(false);
-            DungeonsVindicatorEntity.this.attackTimer = 0;
-            if (DungeonsVindicatorEntity.this.getTarget() == null) {
-                DungeonsVindicatorEntity.this.setAggressive(false);
+            v.setAttackID(0);
+            v.setMeleeAttacking(false);
+            v.attackTimer = 0;
+            if (v.getTarget() == null) {
+                v.setAggressive(false);
             }
         }
 
         @Override
         public void tick() {
-            if (DungeonsVindicatorEntity.this.getTarget() != null && DungeonsVindicatorEntity.this.getTarget().isAlive()) {
-                DungeonsVindicatorEntity.this.getLookControl().setLookAt(DungeonsVindicatorEntity.this.getTarget(), 30.0F, 30.0F);
-                if (attackTimer == 15 && DungeonsVindicatorEntity.this.distanceToSqr(DungeonsVindicatorEntity.this.getTarget()) <= 6.0D) {
-                    float attackKnockback = DungeonsVindicatorEntity.this.getAttackKnockback();
-                    LivingEntity attackTarget = DungeonsVindicatorEntity.this.getTarget();
-                    double ratioX = (double) MathHelper.sin(DungeonsVindicatorEntity.this.yRot * ((float) Math.PI / 360F));
-                    double ratioZ = (double) (-MathHelper.cos(DungeonsVindicatorEntity.this.yRot * ((float) Math.PI / 360F)));
+            if (v.getTarget() != null && v.getTarget().isAlive()) {
+                v.getNavigation().moveTo(v.getTarget(), 2.3);
+                v.getLookControl().setLookAt(v.getTarget(), 30.0F, 30.0F);
+                if (v.attackTimer == 15 && v.distanceToSqr(v.getTarget()) <= 6.0D) {
+                    float attackKnockback = v.getAttackKnockback();
+                    LivingEntity attackTarget = v.getTarget();
+                    double ratioX = (double) MathHelper.sin(v.yRot * ((float) Math.PI / 360F));
+                    double ratioZ = (double) (-MathHelper.cos(v.yRot * ((float) Math.PI / 360F)));
                     double knockbackReduction = 0.5D;
-                    attackTarget.hurt(DamageSource.mobAttack(DungeonsVindicatorEntity.this), (float) DungeonsVindicatorEntity.this.getAttributeValue(Attributes.ATTACK_DAMAGE));
+                    attackTarget.hurt(DamageSource.mobAttack(v), (float) v.getAttributeValue(Attributes.ATTACK_DAMAGE));
                     this.forceKnockback(attackTarget, attackKnockback * 0.5F, ratioX, ratioZ, knockbackReduction);
-                    DungeonsVindicatorEntity.this.setDeltaMovement(DungeonsVindicatorEntity.this.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
+                    v.setDeltaMovement(v.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
                 }
             }
 
@@ -360,16 +370,16 @@ public class DungeonsVindicatorEntity extends AbstractIllagerEntity implements I
 
         private void forceKnockback(LivingEntity attackTarget, float strength, double ratioX, double ratioZ, double knockbackResistanceReduction) {
             LivingKnockBackEvent event = ForgeHooks.onLivingKnockBack(attackTarget, strength, ratioX, ratioZ);
-            if (event.isCanceled()) return;
+            if(event.isCanceled()) return;
             strength = event.getStrength();
             ratioX = event.getRatioX();
             ratioZ = event.getRatioZ();
-            strength = (float) ((double) strength * (1.0D - attackTarget.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE) * knockbackResistanceReduction));
+            strength = (float)((double)strength * (1.0D - attackTarget.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE) * knockbackResistanceReduction));
             if (!(strength <= 0.0F)) {
                 attackTarget.hasImpulse = true;
                 Vector3d vector3d = attackTarget.getDeltaMovement();
-                Vector3d vector3d1 = (new Vector3d(ratioX, 0.0D, ratioZ)).normalize().scale((double) strength);
-                attackTarget.setDeltaMovement(vector3d.x / 2.0D - vector3d1.x, attackTarget.isOnGround() ? Math.min(0.4D, vector3d.y / 2.0D + (double) strength) : vector3d.y, vector3d.z / 2.0D - vector3d1.z);
+                Vector3d vector3d1 = (new Vector3d(ratioX, 0.0D, ratioZ)).normalize().scale((double)strength);
+                attackTarget.setDeltaMovement(vector3d.x / 2.0D - vector3d1.x, attackTarget.isOnGround() ? Math.min(0.4D, vector3d.y / 2.0D + (double)strength) : vector3d.y, vector3d.z / 2.0D - vector3d1.z);
             }
         }
     }
@@ -408,6 +418,7 @@ public class DungeonsVindicatorEntity extends AbstractIllagerEntity implements I
         this.goalSelector.addGoal(7, new LookAtGoal(this, PlayerEntity.class, 6.0F));
         this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
         this.goalSelector.addGoal(0, new SwimGoal(this));
+        this.targetSelector.addGoal(5, (new DungeonsVindicatorEntity.JohnnyAttackGoal(this)));
 
         this.targetSelector.addGoal(2, (new DungeonsVindicatorEntity.JohnnyAttackGoal(this)));
         this.targetSelector.addGoal(2, (new HurtByTargetGoal(this, AbstractRaiderEntity.class)).setAlertOthers());
