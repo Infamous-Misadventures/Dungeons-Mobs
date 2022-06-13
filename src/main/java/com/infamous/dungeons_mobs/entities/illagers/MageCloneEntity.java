@@ -366,7 +366,7 @@ public class MageCloneEntity extends SpellcastingIllagerEntity implements IAnima
 	    public void start() {
 	    super.start();
             this.d = MageCloneEntity.this.getTarget().getY() + 3D;
-	    MageCloneEntity.this.spellInterval = 320;
+	    MageCloneEntity.this.spellInterval = 880;
 	    MageCloneEntity.this.setLiftTicks(40);
 	    MageCloneEntity.this.playSound(SoundEvents.EVOKER_PREPARE_ATTACK, MageCloneEntity.this.getSoundVolume(), MageCloneEntity.this.getVoicePitch());
 	    }
