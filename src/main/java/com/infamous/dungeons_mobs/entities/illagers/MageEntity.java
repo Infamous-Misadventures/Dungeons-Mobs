@@ -421,6 +421,7 @@ public class MageEntity extends SpellcastingIllagerEntity implements IAnimatable
                  MageCloneEntity illusionerCloneEntity = new MageCloneEntity(MageEntity.this.level, MageEntity.this, 240,MageEntity.this.getTarget());
                  DifficultyInstance difficultyForLocation = MageEntity.this.level.getCurrentDifficultyAt(blockpos);
                  illusionerCloneEntity.moveTo(blockpos, 0.0F, 0.0F);
+				 illusionerCloneEntity.spellInterval = MageEntity.this.getRandom().nextInt(100);
                  illusionerCloneEntity.finalizeSpawn((IServerWorld) illusionerCloneEntity.level, difficultyForLocation, SpawnReason.MOB_SUMMONED, (ILivingEntityData)null, (CompoundNBT)null);
                  MageEntity.this.level.addFreshEntity(illusionerCloneEntity);
                  ICloneable cloneable = CloneableHelper.getCloneableCapability(MageEntity.this);
