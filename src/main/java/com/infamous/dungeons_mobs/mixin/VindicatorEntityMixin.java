@@ -1,7 +1,6 @@
 package com.infamous.dungeons_mobs.mixin;
 
 import com.infamous.dungeons_mobs.entities.illagers.DungeonsVindicatorEntity;
-import com.infamous.dungeons_mobs.entities.illagers.minibosses.DungeonsEvokerEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.SpawnReason;
