@@ -13,20 +13,20 @@
 			"bones": [
 				{
 					"name": "mine",
-					"pivot": [0, -1, 0]
+					"pivot": [0, -2, 0]
 				},
 				{
 					"name": "RedstoneMine",
 					"parent": "mine",
-					"pivot": [0, 1.5, -0.4],
+					"pivot": [0, 0.5, -0.4],
 					"cubes": [
-						{"origin": [-11, 1, -12.4], "size": [23, 6, 24], "uv": [1, 0]}
+						{"origin": [-11, 0, -12.4], "size": [23, 6, 24], "uv": [1, 0]}
 					]
 				},
 				{
 					"name": "ring",
 					"parent": "mine",
-					"pivot": [0, -8, -0.5],
+					"pivot": [0, -9, -0.5],
 					"cubes": [
 						{"origin": [-26, -4, -26], "size": [52, 8, 51], "uv": [-51, 42]}
 					]
