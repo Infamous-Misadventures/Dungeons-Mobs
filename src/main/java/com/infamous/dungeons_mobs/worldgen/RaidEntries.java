@@ -18,6 +18,9 @@ public class RaidEntries {
          */
 
         // WARRIOR
+        
+        Raid.WaveMember.create("vindicator_raid_captain", ModEntityTypes.VINDICATOR_RAID_CAPTAIN.get(), new int[]{0, 0, 0, 1, 0, 1, 1, 1});
+        
         if(DungeonsMobsConfig.COMMON.ENABLE_MOUNTAINEERS_IN_RAIDS.get()){
             Raid.WaveMember.create("mountaineer", ModEntityTypes.MOUNTAINEER.get(), new int[]{0, 0, 2, 0, 1, 4, 2, 5});
         }
