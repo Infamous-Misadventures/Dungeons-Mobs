@@ -105,12 +105,24 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SKELETON_VANGUARD.get(), SkeletonVanguardRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.NECROMANCER.get(), NecromancerRenderer::new);
 
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_VINDICATOR.get(), CustomVindicatorRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_VINDICATOR.get(),
+                manager -> new ArmoredVindicatorRenderer(manager));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_PILLAGER.get(), CustomPillagerRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ROYAL_GUARD.get(), CustomVindicatorRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.VINDICATOR_CHEF.get(), CustomVindicatorRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.MOUNTAINEER.get(), CustomVindicatorRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_MOUNTAINEER.get(), CustomVindicatorRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.VINDICATOR_CHEF.get(),
+                manager -> new VindicatorChefRenderer(manager));
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_MOUNTAINEER.get(),
+                manager -> new ArmoredMountaineerRenderer(manager));
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.MOUNTAINEER.get(),
+                manager -> new MountaineerRenderer(manager));
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.VINDICATOR.get(),
+                manager -> new DungeonVindicatorRenderer(manager));
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_MOUNTAINEER.get(),
+                manager -> new ArmoredMountaineerRenderer(manager));
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.VINDICATOR_RAID_CAPTAIN.get(),
+                manager -> new VindicatorRaidCaptainRenderer(manager));
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.RAMPART_CAPTAIN.get(),
+                manager -> new RampartCaptainRenderer(manager));
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ICEOLOGER.get(), IceologerRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.GEOMANCER.get(),
