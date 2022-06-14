@@ -114,12 +114,36 @@ public class ModEntityTypes {
 
 
     // ILLAGERS
+    public static final RegistryObject<EntityType<RampartCaptainEntity>> RAMPART_CAPTAIN = ENTITY_TYPES.register("rampart_captain", () ->
+            EntityType.Builder.<RampartCaptainEntity>of(RampartCaptainEntity::new, EntityClassification.MONSTER)
+                    .sized(0.7F, 1.95F)
+                    .clientTrackingRange(8)
+                    .setCustomClientFactory((spawnEntity,world) -> new RampartCaptainEntity(world))
+                    .build(new ResourceLocation(MODID, "rampart_captain").toString())
+    );
+    
+    public static final RegistryObject<EntityType<DungeonsVindicatorEntity>> VINDICATOR = ENTITY_TYPES.register("vindicator", () ->
+            EntityType.Builder.<DungeonsVindicatorEntity>of(DungeonsVindicatorEntity::new, EntityClassification.MONSTER)
+                    .sized(0.7F, 1.95F)
+                    .clientTrackingRange(8)
+                    .setCustomClientFactory((spawnEntity,world) -> new DungeonsVindicatorEntity(world))
+                    .build(new ResourceLocation(MODID, "vindicator").toString())
+    );
+
     public static final RegistryObject<EntityType<ArmoredVindicatorEntity>> ARMORED_VINDICATOR = ENTITY_TYPES.register("armored_vindicator", () ->
             EntityType.Builder.<ArmoredVindicatorEntity>of(ArmoredVindicatorEntity::new, EntityClassification.MONSTER)
                     .sized(0.6F * 1.1F, 1.95F * 1.1F)
                     .clientTrackingRange(8)
                     .setCustomClientFactory((spawnEntity,world) -> new ArmoredVindicatorEntity(world))
                     .build(new ResourceLocation(MODID, "armored_vindicator").toString())
+    );
+
+    public static final RegistryObject<EntityType<VindicatorRaidCaptainEntity>> VINDICATOR_RAID_CAPTAIN = ENTITY_TYPES.register("vindicator_raid_captain", () ->
+            EntityType.Builder.<VindicatorRaidCaptainEntity>of(VindicatorRaidCaptainEntity::new, EntityClassification.MONSTER)
+                    .sized(0.7F, 1.95F)
+                    .clientTrackingRange(8)
+                    .setCustomClientFactory((spawnEntity,world) -> new VindicatorRaidCaptainEntity(world))
+                    .build(new ResourceLocation(MODID, "vindicator_raid_captain").toString())
     );
 
     public static final RegistryObject<EntityType<ArmoredPillagerEntity>> ARMORED_PILLAGER = ENTITY_TYPES.register("armored_pillager", () ->
