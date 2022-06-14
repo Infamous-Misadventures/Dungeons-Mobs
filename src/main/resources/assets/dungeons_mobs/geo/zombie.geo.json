@@ -1,0 +1,83 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.unknown",
+				"texture_width": 64,
+				"texture_height": 64,
+				"visible_bounds_width": 4,
+				"visible_bounds_height": 4.5,
+				"visible_bounds_offset": [0, 1.75, 0]
+			},
+			"bones": [
+				{
+					"name": "zombie",
+					"pivot": [0, 0, 0]
+				},
+				{
+					"name": "body",
+					"parent": "zombie",
+					"pivot": [-1, 11, 0],
+					"rotation": [17.5, 0, 0],
+					"cubes": [
+						{"origin": [-0.5, 11, 1], "size": [1, 12, 1], "uv": [40, 32]}
+					]
+				},
+				{
+					"name": "cloak",
+					"parent": "body",
+					"pivot": [0, 22, 1],
+					"cubes": [
+						{"origin": [-5, 11, -1.95], "size": [8, 12, 4], "inflate": -0.01, "uv": [16, 16]}
+					]
+				},
+				{
+					"name": "rightArm",
+					"parent": "body",
+					"pivot": [-4, 22, 0],
+					"rotation": [-25, 0, 0],
+					"cubes": [
+						{"origin": [-9, 11.09369, -1.57738], "size": [4, 12, 4], "uv": [40, 16]}
+					]
+				},
+				{
+					"name": "leftArm",
+					"parent": "body",
+					"pivot": [4, 21, 0],
+					"cubes": [
+						{"origin": [3, 11, -2], "size": [4, 12, 4], "pivot": [0, 21, 0], "rotation": [-20, 0, 0], "uv": [40, 16]}
+					]
+				},
+				{
+					"name": "head",
+					"parent": "body",
+					"pivot": [0, 23, 0],
+					"rotation": [12.5, 0, 0],
+					"cubes": [
+						{"origin": [-5, 23, -4], "size": [8, 8, 8], "uv": [0, 0]},
+						{"origin": [-5, 23, -4], "size": [8, 8, 8], "inflate": 0.1, "uv": [32, 0]}
+					]
+				},
+				{
+					"name": "leftLeg",
+					"parent": "zombie",
+					"pivot": [-4, 11, 0],
+					"rotation": [-5.00474, 2.49048, 4.78197],
+					"cubes": [
+						{"origin": [-5, 0, -2], "size": [4, 12, 4], "uv": [0, 16]}
+					]
+				},
+				{
+					"name": "rightLeg",
+					"parent": "zombie",
+					"pivot": [1, 11, 0],
+					"rotation": [2.59775, -27.38656, -5.63304],
+					"cubes": [
+						{"origin": [0, 0, -2], "size": [4, 12, 4], "uv": [0, 16]}
+					]
+				}
+			]
+		}
+	]
+}
