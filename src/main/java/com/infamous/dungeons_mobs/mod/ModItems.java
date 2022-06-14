@@ -60,6 +60,15 @@ public class ModItems {
 
 
     // ILLAGERS
+    public static final RegistryObject<ModSpawnEggItem> VINDICATOR_RAID_CAPTAIN_SPAWN_EGG = ITEMS.register("vindicator_raid_captain_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityTypes.VINDICATOR_RAID_CAPTAIN,
+                    9804699, 2580065,
+                    new Item.Properties().tab(DUNGEONS_MOBS)));
+
+    public static final RegistryObject<ModSpawnEggItem> RAMPART_CAPTAIN_SPAWN_EGG = ITEMS.register("rampart_captain_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityTypes.RAMPART_CAPTAIN,
+                    9804699, 2580065,
+                    new Item.Properties().tab(DUNGEONS_MOBS)));
     public static final RegistryObject<ModSpawnEggItem> ARMORED_VINDICATOR_SPAWN_EGG = ITEMS.register("armored_vindicator_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityTypes.ARMORED_VINDICATOR,
                     9804699, 2580065,
