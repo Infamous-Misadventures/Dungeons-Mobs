@@ -1,7 +1,6 @@
-package com.infamous.dungeons_mobs.entities.illagers.minibosses;
+package com.infamous.dungeons_mobs.entities.illagers;
 
 import com.google.common.collect.Maps;
-import com.infamous.dungeons_mobs.entities.allcustomentity.illagers.PowerfulRoyalGuardEntity;
 import com.infamous.dungeons_mobs.entities.illagers.*;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModItems;
