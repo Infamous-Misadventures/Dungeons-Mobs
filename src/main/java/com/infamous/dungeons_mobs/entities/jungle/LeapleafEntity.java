@@ -111,13 +111,13 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(1, new WaterAvoidingRandomWalkingGoal(this, 0.6D));
-        this.goalSelector.addGoal(2, new LeapleafEntity.StalkGoal());
-        this.goalSelector.addGoal(2, new LeapleafEntity.LeapGoal());
-        this.goalSelector.addGoal(4, new LeapleafEntity.AttackGoal(this,1.1));
+        this.goalSelector.addGoal(3, new LeapleafEntity.StalkGoal());
+        this.goalSelector.addGoal(1, new LeapleafEntity.LeapGoal());
+        this.goalSelector.addGoal(2, new LeapleafEntity.AttackGoal(this,1.1));
         this.goalSelector.addGoal(0, new LeapleafEntity.LeapMeleeGoal());
-        this.goalSelector.addGoal(1, new LeapleafEntity.MeleeGoal());
+        this.goalSelector.addGoal(0, new LeapleafEntity.MeleeGoal());
         this.goalSelector.addGoal(0, new LeapleafEntity.RestGoal());
-        this.goalSelector.addGoal(3, new LeapleafEntity.ChargeGoal());
+        this.goalSelector.addGoal(1, new LeapleafEntity.ChargeGoal());
         this.goalSelector.addGoal(5, new LeapAtTargetGoal(this, 0.4F));
         this.goalSelector.addGoal(6, new LeapleafEntity.WatchGoal(this, PlayerEntity.class, 24.0F));
 
@@ -143,6 +143,9 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
 
     @Override
     public void tick() {
+        if (this.entityData.get(LEAP_COOLDOWN) > 0 && !this.entityData.get(IS_REST)) {
+            this.entityData.set(LEAP_COOLDOWN, this.entityData.get(LEAP_COOLDOWN) - 1);
+        }
         super.tick();
         this.tickCrouch();
     }
@@ -536,14 +539,14 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
 
         @Override
         public boolean canContinueToUse() {
-            return LeapleafEntity.this.getTimer() <= 120;
+            return LeapleafEntity.this.getTimer() <= 100;
         }
 
         @Override
         public void tick() {
             if (LeapleafEntity.this.getTimer() == 20) {
                 LeapleafEntity.this.entityData.set(IS_REST,false);
-                LeapleafEntity.this.entityData.set(LEAP_COOLDOWN,210);
+                LeapleafEntity.this.entityData.set(LEAP_COOLDOWN,180);
             }
             LeapleafEntity.this.entityData.set(IS_REST,true);
             LeapleafEntity.this.setTimer(LeapleafEntity.this.getTimer() + 1);
@@ -566,9 +569,9 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
 
         @Override
         public boolean canContinueToUse() {
-            return LeapleafEntity.this.getTimer() <= 9 ||
+            return LeapleafEntity.this.getTimer() <= 15 ||
                     (LeapleafEntity.this.getTarget() != null &&
-                            !(LeapleafEntity.this.getY() <= LeapleafEntity.this.getTarget().getY() + (LeapleafEntity.this.getTarget().getBbHeight() * 1.8)));
+                            !(LeapleafEntity.this.getY() <= LeapleafEntity.this.getTarget().getY() + (LeapleafEntity.this.getTarget().getBbHeight() * 1.25)));
         }
 
         @Override
@@ -580,7 +583,7 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
             }
             if (v.getTimer() == 8 && c != null && c.isAlive()) {
                 this.i = true;
-                Vector3d vector3d = (new Vector3d(c.getX() - LeapleafEntity.this.getX(), c.getY() - LeapleafEntity.this.getY(), c.getZ() - LeapleafEntity.this.getZ())).normalize();
+                Vector3d vector3d = (new Vector3d(c.getX() - LeapleafEntity.this.getX(), c.getY() - LeapleafEntity.this.getY() + (c.getBbHeight() / 0.5), c.getZ() - LeapleafEntity.this.getZ())).normalize();
                 LeapleafEntity.this.setDeltaMovement(LeapleafEntity.this.getDeltaMovement().add(vector3d.x * 0.8D, 0.9D, vector3d.z * 0.8D));
             }
             if (this.i && c != null && c.isAlive()) {
@@ -606,7 +609,7 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
             }
             this.i = false;
             LeapleafEntity.this.setJumping(false);
-            LeapleafEntity.this.entityData.set(LEAP_COOLDOWN,210);
+            LeapleafEntity.this.entityData.set(LEAP_COOLDOWN,180);
             LeapleafEntity.this.setLeaping(false);
             LeapleafEntity.this.setStalking(false);
             LeapleafEntity.this.setIsReadying(false);
