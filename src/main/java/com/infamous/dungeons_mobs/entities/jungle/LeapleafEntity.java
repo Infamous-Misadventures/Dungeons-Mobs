@@ -71,7 +71,7 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
                 .add(Attributes.MAX_HEALTH, 100.0D) // 1x Golem Health
                 .add(Attributes.MOVEMENT_SPEED, 0.22D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
-                .add(Attributes.ATTACK_DAMAGE, 18.0D) // 1x Golem Attack
+                .add(Attributes.ATTACK_DAMAGE, 17.5D) // >= Golem Attack
                 .add(Attributes.ATTACK_KNOCKBACK, 1.5D); // 1x Ravager knockback
     }
 
@@ -568,7 +568,7 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
         public boolean canContinueToUse() {
             return LeapleafEntity.this.getTimer() <= 9 ||
                     (LeapleafEntity.this.getTarget() != null &&
-                            !(LeapleafEntity.this.getY() <= LeapleafEntity.this.getTarget().getY() + 1));
+                            !(LeapleafEntity.this.getY() <= LeapleafEntity.this.getTarget().getY() + (LeapleafEntity.this.getTarget().getBbHeight() * 1.8)));
         }
 
         @Override
