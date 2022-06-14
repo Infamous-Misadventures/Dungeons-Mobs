@@ -17,6 +17,11 @@
   "entity.dungeons_mobs.necromancer": "Necromancer",
   "item.dungeons_mobs.necromancer_spawn_egg": "Necromancer Spawn Egg",
 
+  "entity.dungeons_mobs.vindicator": "Vindicator",
+  "entity.dungeons_mobs.rampart_captain": "Rampart captain",
+  "item.dungeons_mobs.rampart_captain_spawn_egg": "Rampart captain Spawn Egg",
+  "entity.dungeons_mobs.vindicator_raid_captain": "Vindicator raid captain",
+  "item.dungeons_mobs.vindicator_raid_captain_spawn_egg": "Vindicator raid captain Spawn Egg",
   "entity.dungeons_mobs.armored_vindicator": "Armored Vindicator",
   "item.dungeons_mobs.armored_vindicator_spawn_egg": "Armored Vindicator Spawn Egg",
   "entity.dungeons_mobs.vindicator_chef": "Vindicator Chef",
