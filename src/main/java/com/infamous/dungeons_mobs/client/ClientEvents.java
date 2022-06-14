@@ -10,17 +10,7 @@ import com.infamous.dungeons_mobs.client.renderer.ender.EndersentRenderer;
 import com.infamous.dungeons_mobs.client.renderer.ender.SnarelingRenderer;
 import com.infamous.dungeons_mobs.client.renderer.ender.WatchlingRenderer;
 import com.infamous.dungeons_mobs.client.renderer.golem.SquallGolemRenderer;
-import com.infamous.dungeons_mobs.client.renderer.illager.CustomIllusionerRenderer;
-import com.infamous.dungeons_mobs.client.renderer.illager.CustomPillagerRenderer;
-import com.infamous.dungeons_mobs.client.renderer.illager.CustomVindicatorRenderer;
-import com.infamous.dungeons_mobs.client.renderer.illager.EnchanterRenderer;
-import com.infamous.dungeons_mobs.client.renderer.illager.GeomancerRenderer;
-import com.infamous.dungeons_mobs.client.renderer.illager.IceologerRenderer;
-import com.infamous.dungeons_mobs.client.renderer.illager.IllusionerCloneRenderer;
-import com.infamous.dungeons_mobs.client.renderer.illager.MageCloneRenderer;
-import com.infamous.dungeons_mobs.client.renderer.illager.MageRenderer;
-import com.infamous.dungeons_mobs.client.renderer.illager.MountaineerRenderer;
-import com.infamous.dungeons_mobs.client.renderer.illager.WindcallerRenderer;
+import com.infamous.dungeons_mobs.client.renderer.illager.*;
 import com.infamous.dungeons_mobs.client.renderer.jungle.LeapleafRenderer;
 import com.infamous.dungeons_mobs.client.renderer.jungle.PoisonQuillVineRenderer;
 import com.infamous.dungeons_mobs.client.renderer.jungle.QuickGrowingVineRenderer;
@@ -119,8 +109,8 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_PILLAGER.get(), CustomPillagerRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ROYAL_GUARD.get(), CustomVindicatorRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.VINDICATOR_CHEF.get(), CustomVindicatorRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.MOUNTAINEER.get(), MountaineerRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_MOUNTAINEER.get(), MountaineerRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.MOUNTAINEER.get(), CustomVindicatorRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_MOUNTAINEER.get(), CustomVindicatorRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ICEOLOGER.get(), IceologerRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.GEOMANCER.get(),
@@ -134,6 +124,7 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ILLUSIONER.get(), CustomIllusionerRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ILLUSIONER_CLONE.get(), IllusionerCloneRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WINDCALLER.get(), WindcallerRenderer::new);
+	    
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ENCHANTER.get(),
 	    	    manager -> new EnchanterRenderer(manager));
 
@@ -149,7 +140,8 @@ public class ClientEvents {
                 manager -> new RedstoneGolemRenderer(manager));
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WHISPERER.get(), WhispererRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.LEAPLEAF.get(), LeapleafRenderer::new);
+	RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.LEAPLEAF.get(),
+                manager -> new LeapleafRenderer(manager));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.POISON_QUILL_VINE.get(), PoisonQuillVineRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.QUICK_GROWING_VINE.get(), QuickGrowingVineRenderer::new);
 
