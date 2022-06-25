@@ -1,4 +1,4 @@
-package com.infamous.dungeons_mobs.entities.illagers.minibosses;
+package com.infamous.dungeons_mobs.entities.illagers;
 
 import com.infamous.dungeons_mobs.entities.illagers.RoyalGuardEntity;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
