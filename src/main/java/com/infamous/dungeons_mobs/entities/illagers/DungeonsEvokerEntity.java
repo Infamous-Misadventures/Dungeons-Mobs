@@ -1,6 +1,5 @@
 package com.infamous.dungeons_mobs.entities.illagers;
 
-import com.infamous.dungeons_mobs.entities.illagers.RoyalGuardEntity;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
