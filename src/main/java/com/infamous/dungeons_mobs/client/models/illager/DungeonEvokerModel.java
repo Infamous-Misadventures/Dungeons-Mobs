@@ -1,8 +1,7 @@
 package com.infamous.dungeons_mobs.client.models.illager;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
-import com.infamous.dungeons_mobs.entities.illagers.DungeonsVindicatorEntity;
-import com.infamous.dungeons_mobs.entities.illagers.minibosses.DungeonsEvokerEntity;
+import com.infamous.dungeons_mobs.entities.illagers.DungeonsEvokerEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.IAnimatable;
