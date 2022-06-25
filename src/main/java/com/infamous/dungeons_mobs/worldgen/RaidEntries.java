@@ -38,6 +38,10 @@ public class RaidEntries {
         }
         
         // SPELLCASTER
+        if(DungeonsMobsConfig.COMMON.ENABLE_DUNGEONS_EVOKER_IN_RAIDS.get()){
+            Raid.WaveMember.create("evoker", ModEntityTypes.DUNGEONS_EVOKER.get(), new int[] {0, 0, 0, 1, 0, 0, 0, 1});
+        }
+        
         if(DungeonsMobsConfig.COMMON.ENABLE_GEOMANCERS_IN_RAIDS.get()){
             Raid.WaveMember.create("geomancer", ModEntityTypes.GEOMANCER.get(), new int[] {0, 0, 0, 0, 0, 1, 1, 2});
         }
