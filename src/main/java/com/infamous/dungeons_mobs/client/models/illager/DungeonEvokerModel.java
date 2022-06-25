@@ -24,7 +24,7 @@ public class DungeonEvokerModel extends AnimatedGeoModel {
 
 		@Override
 		public ResourceLocation getTextureLocation(Object entity) {
-			return new ResourceLocation(DungeonsMobs.MODID, "textures/geo_entity/illager/evoker.png");
+			return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/evoker.png");
 		}
 
 	@Override
