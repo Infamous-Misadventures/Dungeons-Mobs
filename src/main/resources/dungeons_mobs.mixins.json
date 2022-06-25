@@ -17,6 +17,7 @@
     "PiglinAccessor",
     "PiglinEntityMixin",
     "RaidMixin",
+    "EvokerEntityMixin",
     "SpiderEntityMixin",
     "TridentEntityAccessor",
     "TridentEntityMixin",
