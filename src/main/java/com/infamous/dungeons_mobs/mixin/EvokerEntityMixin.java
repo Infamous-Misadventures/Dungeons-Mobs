@@ -27,8 +27,7 @@ public abstract class EvokerEntityMixin extends SpellcastingIllagerEntity {
     }
 
     public void s(){
-        if (this.getCurrentRaid() != null) {
-
+        if (this.getCurrentRaid() != null && DungeonsMobsConfig.COMMON.ENABLE_DUNGEONS_EVOKER_IN_RAIDS.get()) {
                 EvokerEntityMixin v = this;
                 CompoundNBT v1 = new CompoundNBT();
                 v1 = v.saveWithoutId(v1);
