@@ -122,6 +122,14 @@ public class ModEntityTypes {
                     .build(new ResourceLocation(MODID, "armored_vindicator").toString())
     );
 
+    public static final RegistryObject<EntityType<DungeonsEvokerEntity>> DUNGEONS_EVOKER = ENTITY_TYPES.register("evoker", () ->
+            EntityType.Builder.<DungeonsEvokerEntity>of(DungeonsEvokerEntity::new, EntityClassification.MONSTER)
+                    .sized(0.6F, 1.95F)
+                    .clientTrackingRange(8)
+                    .setCustomClientFactory((spawnEntity,world) -> new DungeonsEvokerEntity(world))
+                    .build(new ResourceLocation(MODID, "evoker").toString())
+    );
+
     public static final RegistryObject<EntityType<ArmoredPillagerEntity>> ARMORED_PILLAGER = ENTITY_TYPES.register("armored_pillager", () ->
             EntityType.Builder.<ArmoredPillagerEntity>of(ArmoredPillagerEntity::new, EntityClassification.MONSTER)
                     .sized(0.6F * 1.1F, 1.95F * 1.1F)
