@@ -140,7 +140,7 @@ public class DungeonsEvokerEntity extends SpellcastingIllagerEntity implements I
     
 	@Override
 	public void registerControllers(AnimationData data) {
-		data.addAnimationController(new AnimationController(this, "f", 42, this::fre));
+		data.addAnimationController(new AnimationController(this, "f", 12, this::fre));
 		data.addAnimationController(new AnimationController(this, "controller", 3, this::predicate));
 	}
 
