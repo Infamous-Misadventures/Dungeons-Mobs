@@ -380,7 +380,7 @@ public class DungeonsEvokerEntity extends SpellcastingIllagerEntity implements I
 			super.start();
 			DungeonsEvokerEntity.this.SpellAttacking = true;
 			DungeonsEvokerEntity.this.setAngry(42);
-			DungeonsEvokerEntity.this.spellInterval = 72 - DungeonsEvokerEntity.this.getRandom().nextInt(31);
+			DungeonsEvokerEntity.this.spellInterval = 72 - DungeonsEvokerEntity.this.getRandom().nextInt(50);
 			DungeonsEvokerEntity.this.playSound(SoundEvents.EVOKER_PREPARE_ATTACK, DungeonsEvokerEntity.this.getSoundVolume(), DungeonsEvokerEntity.this.getVoicePitch());
 		}
 
@@ -484,8 +484,8 @@ public class DungeonsEvokerEntity extends SpellcastingIllagerEntity implements I
 	    public void start() {
 	    super.start();
 		DungeonsEvokerEntity.this.SpellAttacking = false;
-	    DungeonsEvokerEntity.this.liftInterval = 800;
-		DungeonsEvokerEntity.this.duplicateInterval = 400;
+	    DungeonsEvokerEntity.this.liftInterval = 200;
+		DungeonsEvokerEntity.this.duplicateInterval = 200;
 	    DungeonsEvokerEntity.this.setLiftTicks(66);
 	    DungeonsEvokerEntity.this.playSound(SoundEvents.EVOKER_PREPARE_SUMMON, DungeonsEvokerEntity.this.getSoundVolume(), DungeonsEvokerEntity.this.getVoicePitch());
 	    }
@@ -570,8 +570,8 @@ public class DungeonsEvokerEntity extends SpellcastingIllagerEntity implements I
 	    public void start() {
 	    super.start();
 		DungeonsEvokerEntity.this.SpellAttacking = false;
-	    DungeonsEvokerEntity.this.duplicateInterval = 800;
-		DungeonsEvokerEntity.this.liftInterval = 400;
+	    DungeonsEvokerEntity.this.duplicateInterval = 200;
+		DungeonsEvokerEntity.this.liftInterval = 200;
 	    DungeonsEvokerEntity.this.setDuplicateTicks(44);
 	    DungeonsEvokerEntity.this.playSound(SoundEvents.EVOKER_PREPARE_SUMMON, DungeonsEvokerEntity.this.getSoundVolume(), DungeonsEvokerEntity.this.getVoicePitch());
 	    }
