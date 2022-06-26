@@ -75,7 +75,7 @@ public class DungeonsEvokerRenderer extends GeoEntityRenderer<DungeonsEvokerEnti
 	@Override
 	public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
 		bufferIn = rtb.getBuffer(RenderType.entityTranslucent(
-				new ResourceLocation(DungeonsMobs.MODID, "textures/geo_entity/illager/evoker.png")));
+				new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/evoker.png")));
 
 		if (bone.getName().equals("armourHead")) { // rArmRuff is the name of the bone you to set the item to attach too. Please see Note
 			bufferIn = rtb.getBuffer(RenderType.entityTranslucent(whTexture));
