@@ -484,7 +484,7 @@ public class DungeonsEvokerEntity extends SpellcastingIllagerEntity implements I
 	    public void start() {
 	    super.start();
 		DungeonsEvokerEntity.this.SpellAttacking = false;
-	    DungeonsEvokerEntity.this.liftInterval = 200;
+	    DungeonsEvokerEntity.this.liftInterval = 199;
 		DungeonsEvokerEntity.this.duplicateInterval = 200;
 	    DungeonsEvokerEntity.this.setLiftTicks(66);
 	    DungeonsEvokerEntity.this.playSound(SoundEvents.EVOKER_PREPARE_SUMMON, DungeonsEvokerEntity.this.getSoundVolume(), DungeonsEvokerEntity.this.getVoicePitch());
@@ -570,7 +570,7 @@ public class DungeonsEvokerEntity extends SpellcastingIllagerEntity implements I
 	    public void start() {
 	    super.start();
 		DungeonsEvokerEntity.this.SpellAttacking = false;
-	    DungeonsEvokerEntity.this.duplicateInterval = 200;
+	    DungeonsEvokerEntity.this.duplicateInterval = 199;
 		DungeonsEvokerEntity.this.liftInterval = 200;
 	    DungeonsEvokerEntity.this.setDuplicateTicks(44);
 	    DungeonsEvokerEntity.this.playSound(SoundEvents.EVOKER_PREPARE_SUMMON, DungeonsEvokerEntity.this.getSoundVolume(), DungeonsEvokerEntity.this.getVoicePitch());
