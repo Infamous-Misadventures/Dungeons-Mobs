@@ -36,9 +36,18 @@ public class MageModel extends AnimatedGeoModel {
 			LivingEntity entityIn = (LivingEntity) entity;
 			
 			IBone head = this.getAnimationProcessor().getBone("head");
+		IBone rightEye = this.getAnimationProcessor().getBone("righteye");
+		IBone leftEye = this.getAnimationProcessor().getBone("lefteye");
+		IBone eyeBrow = this.getAnimationProcessor().getBone("head3");
 
 			EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
 			if (extraData.headPitch != 0 || extraData.netHeadYaw != 0) {
+				rightEye.setPositionX((float) Math.max(Math.min((extraData.netHeadYaw / 80) + Math.sin(leftEye.getPositionX() * Math.PI / 180F), 1), 0.1));
+				leftEye.setPositionX((float) Math.min(Math.max((extraData.netHeadYaw / 80) + Math.sin(rightEye.getPositionX() * Math.PI / 180F), -1), -0.1));
+
+				rightEye.setPositionY(Math.max(Math.min(extraData.headPitch / 80, 0.15F), -0.2F));
+				leftEye.setPositionY(Math.max(Math.min(extraData.headPitch / 80, 0.15F), -0.2F));
+				eyeBrow.setPositionY(Math.max(Math.min(extraData.headPitch / 80, 0.15F), -0.2F));
 				head.setRotationX(head.getRotationX() + (extraData.headPitch * ((float) Math.PI / 180F)));
 				head.setRotationY(head.getRotationY() + (extraData.netHeadYaw * ((float) Math.PI / 180F)));
 			}
