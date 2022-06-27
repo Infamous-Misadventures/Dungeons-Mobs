@@ -132,6 +132,7 @@ public class RedstoneGolemEntity extends AbstractRaiderEntity implements IAnimat
 
     public void aiStep() {
         super.aiStep();
+        this.setDeltaMovement(this.getDeltaMovement().add(0,-5,0));
         if (this.attackID != 0) {
             ++this.attackTimer;
         }
@@ -501,7 +502,7 @@ public class RedstoneGolemEntity extends AbstractRaiderEntity implements IAnimat
 
         @Override
         public boolean canContinueToUse() {
-            return attackTimer < 140;
+            return attackTimer < 103;
         }
 
         @Override
@@ -514,14 +515,15 @@ public class RedstoneGolemEntity extends AbstractRaiderEntity implements IAnimat
 
         @Override
         public void tick() {
+            RedstoneGolemEntity.this.setDeltaMovement(RedstoneGolemEntity.this.getDeltaMovement().multiply(0,0,0));
             RedstoneGolemEntity.this.getNavigation().stop();
             if(attackTimer == 12){
                 BlockPos centerPos = RedstoneGolemEntity.this.blockPosition();
-                for (int i = 0; i < 14; i++) {
+                for (int i = 0; i < 16; i++) {
                     double randomNearbyX = centerPos.getX() + (RedstoneGolemEntity.this.random.nextGaussian() * 10.0D);
                     //double randomNearbyY = RedstoneGolemEntity.this.getPosY() + (double)(RedstoneGolemEntity.this.rand.nextInt(4) - 2);
                     double randomNearbyZ = centerPos.getZ() + (RedstoneGolemEntity.this.random.nextGaussian() * 10.0D);
-                    int j =  RedstoneMineEntity.LIFE_TIME + 4 * i;
+                    int j =  RedstoneMineEntity.LIFE_TIME + 3.5 * i;
                     BlockPos randomBlockPos = new BlockPos(randomNearbyX, centerPos.getY(), randomNearbyZ);
                     RedstoneGolemEntity.this.createSpellEntity(randomBlockPos.getX(), randomBlockPos.getZ(), randomBlockPos.getY(), randomBlockPos.getY() + 1, j);
 
