@@ -39,7 +39,7 @@ public class RaidEntries {
         
         // SPELLCASTER
         if(DungeonsMobsConfig.COMMON.ENABLE_DUNGEONS_EVOKER_IN_RAIDS.get()){
-            Raid.WaveMember.create("evoker", ModEntityTypes.DUNGEONS_EVOKER.get(), new int[] {0, 0, 0, 1, 0, 0, 0, 1});
+            Raid.WaveMember.create("evoker", ModEntityTypes.DUNGEONS_EVOKER.get(), new int[] {0, 0, 0, 1, 0, 0, 1, 0});
         }
         
         if(DungeonsMobsConfig.COMMON.ENABLE_GEOMANCERS_IN_RAIDS.get()){
@@ -73,7 +73,7 @@ public class RaidEntries {
         
         // BOSS
         if(DungeonsMobsConfig.COMMON.ENABLE_REDSTONE_GOLEMS_IN_RAIDS.get()){            
-            Raid.WaveMember.create("redstone_golem", ModEntityTypes.REDSTONE_GOLEM.get(), new int[]{0, 0, 0, 0, 0, 0, 0, 1});
+            Raid.WaveMember.create("redstone_golem", ModEntityTypes.REDSTONE_GOLEM.get(), new int[]{0, 0, 0, 0, 0, 0, 1, 1});
         }
     }
 }
