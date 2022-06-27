@@ -413,41 +413,57 @@ public class RedstoneGolemEntity extends AbstractRaiderEntity implements IAnimat
     }
 
     class MeleeGoal extends Goal {
+
+        public RedstoneGolemEntity v = RedstoneGolemEntity.this;
+
         public MeleeGoal() {
-            this.setFlags(EnumSet.of(Goal.Flag.LOOK, Goal.Flag.MOVE));
+            this.setFlags(EnumSet.of(Flag.LOOK, Flag.MOVE));
         }
 
         @Override
         public boolean canUse() {
-            return RedstoneGolemEntity.this.getTarget() != null && attackID == MELEE_ATTACK;
+            return v.getTarget() != null && v.attackID == MELEE_ATTACK;
         }
 
         @Override
         public boolean canContinueToUse() {
             //animation tick
-            return attackTimer < 15;
+            return v.attackTimer < 15 && (v.getTarget() != null && v.getTarget().isAlive());
         }
 
         @Override
         public void start() {
-            setAttackID(MELEE_ATTACK);
-            setMeleeAttacking(true);
+            v.setAttackID(MELEE_ATTACK);
+            v.setMeleeAttacking(true);
+        }
+
+        @Override
+        public void stop() {
+            v.setAttackID(0);
+            v.setMeleeAttacking(false);
+            v.attackTimer = 0;
+            if (v.getTarget() == null) {
+                v.setAggressive(false);
+            }
         }
 
         @Override
         public void tick() {
-           if(RedstoneGolemEntity.this.getTarget() != null && RedstoneGolemEntity.this.getTarget().isAlive()) {
-               RedstoneGolemEntity.this.getLookControl().setLookAt(RedstoneGolemEntity.this.getTarget(), 30.0F, 30.0F);
-               if (attackTimer == 9) {
-                   float attackKnockback = RedstoneGolemEntity.this.getAttackKnockback();
-                   LivingEntity attackTarget = RedstoneGolemEntity.this.getTarget();
-                   double ratioX = (double) MathHelper.sin(RedstoneGolemEntity.this.yRot * ((float) Math.PI / 180F));
-                   double ratioZ = (double) (-MathHelper.cos(RedstoneGolemEntity.this.yRot * ((float) Math.PI / 180F)));
-                   double knockbackReduction = 0.5D;
-                   attackTarget.hurt(DamageSource.mobAttack(RedstoneGolemEntity.this), (float) RedstoneGolemEntity.this.getAttributeValue(Attributes.ATTACK_DAMAGE));
-                   this.forceKnockback(attackTarget,attackKnockback * 0.5F, ratioX, ratioZ, knockbackReduction);
-                   RedstoneGolemEntity.this.setDeltaMovement(RedstoneGolemEntity.this.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
-               }
+            if (v.getTarget() != null && v.getTarget().isAlive()) {
+                v.getLookControl().setLookAt(v.getTarget(), 30.0F, 30.0F);
+                if (v.attackTimer == 10 && v.distanceToSqr(v.getTarget()) <= 28.0D + v.getTarget().getBbWidth()) {
+                    float attackKnockback = v.getAttackKnockback();
+                    LivingEntity attackTarget = v.getTarget();
+                    double ratioX = (double) MathHelper.sin(v.yRot * ((float) Math.PI / 180F));
+                    double ratioZ = (double) (-MathHelper.cos(v.yRot * ((float) Math.PI / 180F)));
+                    double knockbackReduction = 0.5D;
+                    attackTarget.hurt(DamageSource.mobAttack(v), (float) v.getAttributeValue(Attributes.ATTACK_DAMAGE));
+                    this.forceKnockback(attackTarget, attackKnockback * 0.8F, ratioX, ratioZ, knockbackReduction);
+                    v.setDeltaMovement(v.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
+                }
+                if (v.attackTimer == 10) {
+                    v.mineAttackCooldown = v.mineAttackCooldown - 10 ;
+                }
             }
 
         }
@@ -466,14 +482,6 @@ public class RedstoneGolemEntity extends AbstractRaiderEntity implements IAnimat
                 attackTarget.setDeltaMovement(vector3d.x / 2.0D - vector3d1.x, attackTarget.isOnGround() ? Math.min(0.4D, vector3d.y / 2.0D + (double)strength) : vector3d.y, vector3d.z / 2.0D - vector3d1.z);
             }
         }
-
-
-        @Override
-        public void stop() {
-            setMeleeAttacking(false);
-            setAttackID(0);
-        }
-
     }
 
 
