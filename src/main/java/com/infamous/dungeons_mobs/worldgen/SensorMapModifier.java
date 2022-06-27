@@ -19,9 +19,13 @@ public class SensorMapModifier {
         villagerHostiles.put(ModEntityTypes.ARMORED_PILLAGER.get(), 15.0F);
 
         villagerHostiles.put(ModEntityTypes.ICEOLOGER.get(), 12.0F);
+        villagerHostiles.put(ModEntityTypes.ILLUSIONER.get(), 12.0F);
         villagerHostiles.put(ModEntityTypes.ILLUSIONER_CLONE.get(), 12.0F);
         villagerHostiles.put(ModEntityTypes.WINDCALLER.get(), 12.0F);
         villagerHostiles.put(ModEntityTypes.GEOMANCER.get(), 12.0F);
+        villagerHostiles.put(ModEntityTypes.DUNGEONS_EVOKER.get(), 12.0F);
+        villagerHostiles.put(ModEntityTypes.MAGE.get(), 12.0F);
+        villagerHostiles.put(ModEntityTypes.MAGE_CLONEE.get(), 12.0F);
 
         villagerHostiles.put(ModEntityTypes.REDSTONE_GOLEM.get(), 12.0F);
         villagerHostiles.put(ModEntityTypes.SQUALL_GOLEM.get(), 12.0F);
