@@ -380,7 +380,7 @@ public class DungeonsEvokerEntity extends SpellcastingIllagerEntity implements I
 			super.start();
 			DungeonsEvokerEntity.this.SpellAttacking = true;
 			DungeonsEvokerEntity.this.setAngry(42);
-			DungeonsEvokerEntity.this.spellInterval = 72 - DungeonsEvokerEntity.this.getRandom().nextInt(50);
+			DungeonsEvokerEntity.this.spellInterval = 72 - DungeonsEvokerEntity.this.getRandom().nextInt(40);
 			DungeonsEvokerEntity.this.playSound(SoundEvents.EVOKER_PREPARE_ATTACK, DungeonsEvokerEntity.this.getSoundVolume(), DungeonsEvokerEntity.this.getVoicePitch());
 		}
 
@@ -484,8 +484,8 @@ public class DungeonsEvokerEntity extends SpellcastingIllagerEntity implements I
 	    public void start() {
 	    super.start();
 		DungeonsEvokerEntity.this.SpellAttacking = false;
-	    DungeonsEvokerEntity.this.liftInterval = 240;
-		DungeonsEvokerEntity.this.duplicateInterval = 240;
+	    DungeonsEvokerEntity.this.liftInterval = 180;
+		DungeonsEvokerEntity.this.duplicateInterval = 180;
 	    DungeonsEvokerEntity.this.setLiftTicks(66);
 	    DungeonsEvokerEntity.this.playSound(SoundEvents.EVOKER_PREPARE_SUMMON, DungeonsEvokerEntity.this.getSoundVolume(), DungeonsEvokerEntity.this.getVoicePitch());
 	    }
@@ -507,7 +507,7 @@ public class DungeonsEvokerEntity extends SpellcastingIllagerEntity implements I
 					vexentity.finalizeSpawn(serverworld, DungeonsEvokerEntity.this.level.getCurrentDifficultyAt(blockpos), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
 					vexentity.setOwner(DungeonsEvokerEntity.this);
 					vexentity.setBoundOrigin(blockpos);
-					vexentity.setLimitedLife(20 * (30 + DungeonsEvokerEntity.this.random.nextInt(90)));
+				       vexentity.setLimitedLife(180 + DungeonsEvokerEntity.this.random.nextInt(60));
 					serverworld.addFreshEntityWithPassengers(vexentity);
 				}
 			}
@@ -570,8 +570,8 @@ public class DungeonsEvokerEntity extends SpellcastingIllagerEntity implements I
 	    public void start() {
 	    super.start();
 		DungeonsEvokerEntity.this.SpellAttacking = false;
-	    DungeonsEvokerEntity.this.duplicateInterval = 240;
-		DungeonsEvokerEntity.this.liftInterval = 240;
+	    DungeonsEvokerEntity.this.duplicateInterval = 180;
+		DungeonsEvokerEntity.this.liftInterval = 180;
 	    DungeonsEvokerEntity.this.setDuplicateTicks(44);
 	    DungeonsEvokerEntity.this.playSound(SoundEvents.EVOKER_PREPARE_SUMMON, DungeonsEvokerEntity.this.getSoundVolume(), DungeonsEvokerEntity.this.getVoicePitch());
 	    }
@@ -594,13 +594,13 @@ public class DungeonsEvokerEntity extends SpellcastingIllagerEntity implements I
               int difficultyAsInt = DungeonsEvokerEntity.this.level.getDifficulty().getId();
               int mobsToSummon = difficultyAsInt + 1; // 2 on easy, 3 on normal, 4 on hard
               for(int i = 0; i < mobsToSummon; ++i) {
-				  BlockPos blockpos = DungeonsEvokerEntity.this.blockPosition().offset(-2 + DungeonsEvokerEntity.this.random.nextInt(5), 1, -2 + DungeonsEvokerEntity.this.random.nextInt(5));
+				  BlockPos blockpos = DungeonsEvokerEntity.this.blockPosition().offset(-2 + DungeonsEvokerEntity.this.random.nextInt(7), 1, -2 + DungeonsEvokerEntity.this.random.nextInt(7));
 				  VexEntity vexentity = (VexEntity)EntityType.VEX.create(DungeonsEvokerEntity.this.level);
 				  vexentity.moveTo(blockpos, 0.0F, 0.0F);
 				  vexentity.finalizeSpawn(serverworld, DungeonsEvokerEntity.this.level.getCurrentDifficultyAt(blockpos), SpawnReason.MOB_SUMMONED, (ILivingEntityData)null, (CompoundNBT)null);
 				  vexentity.setOwner(DungeonsEvokerEntity.this);
 				  vexentity.setBoundOrigin(blockpos);
-				  vexentity.setLimitedLife(20 * (30 + DungeonsEvokerEntity.this.random.nextInt(90)));
+				  vexentity.setLimitedLife(180 + DungeonsEvokerEntity.this.random.nextInt(60));
 				  serverworld.addFreshEntityWithPassengers(vexentity);
               }
            }
