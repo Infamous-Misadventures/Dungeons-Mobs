@@ -1,33 +1,14 @@
 package com.infamous.dungeons_mobs.entities.illagers;
 
-import java.util.EnumSet;
-import java.util.UUID;
-
-import javax.annotation.Nullable;
-
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
-
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityPredicate;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.AvoidEntityGoal;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.HurtByTargetGoal;
-import net.minecraft.entity.ai.goal.LookAtGoal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.ai.goal.RandomWalkingGoal;
-import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.monster.AbstractRaiderEntity;
-import net.minecraft.entity.monster.EvokerEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.monster.SpellcastingIllagerEntity;
-import net.minecraft.entity.monster.VexEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -51,6 +32,10 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import javax.annotation.Nullable;
+import java.util.EnumSet;
+import java.util.UUID;
+
 public class MageCloneEntity extends SpellcastingIllagerEntity implements IAnimatable {
 
 	public static final DataParameter<Integer> LIFT_TICKS = EntityDataManager.defineId(MageCloneEntity.class, DataSerializers.INT);
@@ -72,7 +57,7 @@ public class MageCloneEntity extends SpellcastingIllagerEntity implements IAnima
         super(type, world);
     }
     
-    public MageCloneEntity(World worldIn, LivingEntity caster, int lifeTicks) {
+    public MageCloneEntity(World worldIn, LivingEntity caster, int lifeTicks,LivingEntity target) {
         this(ModEntityTypes.MAGE_CLONE.get(), worldIn);
         this.setCaster(caster);
         this.lifeTicks = lifeTicks;
@@ -100,6 +85,11 @@ public class MageCloneEntity extends SpellcastingIllagerEntity implements IAnima
     public void setCaster(@Nullable LivingEntity caster) {
         this.caster = caster;
         this.casterUuid = caster == null ? null : caster.getUUID();
+    }
+
+    @Override
+    public boolean canJoinRaid() {
+        return false;
     }
 
     @Nullable
@@ -340,6 +330,9 @@ public class MageCloneEntity extends SpellcastingIllagerEntity implements IAnima
     }
     
     class LiftMobGoal extends Goal {
+
+        private double d;
+
         private final EntityPredicate cloneTargeting = (new EntityPredicate()).range(20.0D).allowUnseeable().ignoreInvisibilityTesting().allowInvulnerable().allowSameTeam();
         
 	      public LiftMobGoal() {
@@ -356,7 +349,8 @@ public class MageCloneEntity extends SpellcastingIllagerEntity implements IAnima
 	    
 	    public void start() {
 	    super.start();
-	    MageCloneEntity.this.spellInterval = 100;
+            this.d = MageCloneEntity.this.getTarget().getY() + 3D;
+	    MageCloneEntity.this.spellInterval = 320;
 	    MageCloneEntity.this.setLiftTicks(40);
 	    MageCloneEntity.this.playSound(SoundEvents.EVOKER_PREPARE_ATTACK, MageCloneEntity.this.getSoundVolume(), MageCloneEntity.this.getVoicePitch());
 	    }
@@ -367,14 +361,14 @@ public class MageCloneEntity extends SpellcastingIllagerEntity implements IAnima
 	    	
 	    	for (MageCloneEntity nearbyClone : MageCloneEntity.this.level.getNearbyEntities(MageCloneEntity.class, this.cloneTargeting, MageCloneEntity.this, MageCloneEntity.this.getBoundingBox().inflate(20.0D))) {
 	    		if (nearbyClone != mob) {
-	    		nearbyClone.spellInterval = 40 + MageCloneEntity.this.random.nextInt(60);
+                    nearbyClone.spellInterval = 40 + MageCloneEntity.this.random.nextInt(60);
 	    		}
 	    	}
 	    	
 	    	mob.getNavigation().stop();
 	    	
             if (mob.getLiftTicks() > 10) {
-            	if (target.getY() < mob.getY() + 3) {
+            	if (target.getY() < this.d) {
             		target.hurtMarked = true;
             		target.setDeltaMovement(0, 0.5, 0);
             	} else {
@@ -385,8 +379,10 @@ public class MageCloneEntity extends SpellcastingIllagerEntity implements IAnima
             } else {
             	if (!target.isOnGround()) {
             	target.hurtMarked = true;
-            	target.setDeltaMovement(0, -0.75, 0);
-            	}
+            	target.setDeltaMovement(0, -0.85, 0);
+            	}else {
+                    MageCloneEntity.this.getTarget().hurt(DamageSource.mobAttack(mob),1);
+                }
         		//if (target.getY() == mob.getEyeY()) {
         		//	target.hurt(DamageSource.FALL, 5.0F);
         		//}
@@ -397,7 +393,7 @@ public class MageCloneEntity extends SpellcastingIllagerEntity implements IAnima
 	    super.stop();
 	    MageCloneEntity.this.setLiftTicks(0);
 	    }
-	   }
+    }
     
 
     /*class LiftMobGoal extends SpellcastingIllagerEntity.UseSpellGoal {
