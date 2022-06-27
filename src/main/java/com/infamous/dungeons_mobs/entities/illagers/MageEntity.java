@@ -371,7 +371,7 @@ public class MageEntity extends SpellcastingIllagerEntity implements IAnimatable
 	    
 	    public void start() {
 	    super.start();
-	    MageEntity.this.duplicateInterval = 1200;
+	    MageEntity.this.duplicateInterval = 750;
 	    MageEntity.this.setDuplicateTicks(20);
 	    MageEntity.this.playSound(SoundEvents.EVOKER_PREPARE_SUMMON, MageEntity.this.getSoundVolume(), MageEntity.this.getVoicePitch());
 	    }
@@ -396,7 +396,7 @@ public class MageEntity extends SpellcastingIllagerEntity implements IAnimatable
               int mobsToSummon = difficultyAsInt * 2 + 1; // 3 on easy, 5 on normal, 7 on hard
               for(int i = 0; i < mobsToSummon; ++i) {
                  BlockPos blockpos = MageEntity.this.blockPosition().offset(-5 + MageEntity.this.getRandom().nextInt(10), 0, -5 + MageEntity.this.getRandom().nextInt(10));
-                 MageCloneEntity illusionerCloneEntity = new MageCloneEntity(MageEntity.this.level, MageEntity.this, 240,MageEntity.this.getTarget());
+                 MageCloneEntity illusionerCloneEntity = new MageCloneEntity(MageEntity.this.level, MageEntity.this, 500 + MageEntity.this.getRandom().nextInt(10),MageEntity.this.getTarget());
                  DifficultyInstance difficultyForLocation = MageEntity.this.level.getCurrentDifficultyAt(blockpos);
                  illusionerCloneEntity.moveTo(blockpos, 0.0F, 0.0F);
 				  illusionerCloneEntity.finalizeSpawn((IServerWorld) illusionerCloneEntity.level, difficultyForLocation, SpawnReason.MOB_SUMMONED, (ILivingEntityData)null, (CompoundNBT)null);
