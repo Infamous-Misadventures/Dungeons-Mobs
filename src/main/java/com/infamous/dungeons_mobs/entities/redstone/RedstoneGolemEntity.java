@@ -94,6 +94,11 @@ public class RedstoneGolemEntity extends AbstractRaiderEntity implements IAnimat
     public void setMeleeAttacking(boolean attacking) {
         this.entityData.set(MELEEATTACKING, attacking);
     }
+    
+    @Override
+    public boolean causeFallDamage(float p_225503_1_, float p_225503_2_) {
+        return false;
+    }
 
     @Override
     public void registerControllers(AnimationData data) {
