@@ -78,6 +78,7 @@ public class EntityTypeAttributes {
         event.put(ModEntityTypes.ENCHANTER.get(), EnchanterEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.MAGE.get(), MageEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.MAGE_CLONE.get(), MageCloneEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.DUNGEONS_EVOKER.get(), DungeonsEvokerEntity.setCustomAttributes().build());
 
         event.put(ModEntityTypes.ICY_CREEPER.get(), IcyCreeperEntity.setCustomAttributes().build());
 
