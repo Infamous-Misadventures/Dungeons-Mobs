@@ -396,10 +396,18 @@ public class MageEntity extends SpellcastingIllagerEntity implements IAnimatable
               int mobsToSummon = difficultyAsInt * 2 + 1; // 3 on easy, 5 on normal, 7 on hard
               for(int i = 0; i < mobsToSummon; ++i) {
                  BlockPos blockpos = MageEntity.this.blockPosition().offset(-5 + MageEntity.this.getRandom().nextInt(10), 0, -5 + MageEntity.this.getRandom().nextInt(10));
-                 MageCloneEntity illusionerCloneEntity = new MageCloneEntity(MageEntity.this.level, MageEntity.this, 600);
+                 MageCloneEntity illusionerCloneEntity = new MageCloneEntity(MageEntity.this.level, MageEntity.this, 240,MageEntity.this.getTarget());
                  DifficultyInstance difficultyForLocation = MageEntity.this.level.getCurrentDifficultyAt(blockpos);
                  illusionerCloneEntity.moveTo(blockpos, 0.0F, 0.0F);
-                 illusionerCloneEntity.finalizeSpawn((IServerWorld) illusionerCloneEntity.level, difficultyForLocation, SpawnReason.MOB_SUMMONED, (ILivingEntityData)null, (CompoundNBT)null);
+				  illusionerCloneEntity.finalizeSpawn((IServerWorld) illusionerCloneEntity.level, difficultyForLocation, SpawnReason.MOB_SUMMONED, (ILivingEntityData)null, (CompoundNBT)null);
+				 illusionerCloneEntity.setHealth(MageEntity.this.getHealth());
+				 illusionerCloneEntity.setTarget(MageEntity.this.getTarget());
+				  illusionerCloneEntity.setItemSlot(EquipmentSlotType.MAINHAND,MageEntity.this.getItemBySlot(EquipmentSlotType.MAINHAND));
+				  illusionerCloneEntity.setItemSlot(EquipmentSlotType.OFFHAND,MageEntity.this.getItemBySlot(EquipmentSlotType.OFFHAND));
+				 illusionerCloneEntity.setItemSlot(EquipmentSlotType.HEAD,MageEntity.this.getItemBySlot(EquipmentSlotType.HEAD));
+				  illusionerCloneEntity.setItemSlot(EquipmentSlotType.CHEST,MageEntity.this.getItemBySlot(EquipmentSlotType.CHEST));
+				  illusionerCloneEntity.setItemSlot(EquipmentSlotType.LEGS,MageEntity.this.getItemBySlot(EquipmentSlotType.LEGS));
+				  illusionerCloneEntity.setItemSlot(EquipmentSlotType.FEET,MageEntity.this.getItemBySlot(EquipmentSlotType.FEET));
                  MageEntity.this.level.addFreshEntity(illusionerCloneEntity);
                  ICloneable cloneable = CloneableHelper.getCloneableCapability(MageEntity.this);
                  if(cloneable != null){
