@@ -171,5 +171,13 @@ public abstract class ConstructEntity extends CreatureEntity {
         else{
             this.handleExistence();
         }
+
+        List<Entity> list = Lists.newArrayList(this.level.getEntities(this, this.getBoundingBox().inflate(1.25, 1.25, 1.25)));
+        for(Entity entity : list) {
+            if(entity instanceof AbstractArrowEntity){
+                AbstractArrowEntity livingEntity = (AbstractArrowEntity)entity;
+                livingEntity.remove();
+            }
+        }
     }
 }
