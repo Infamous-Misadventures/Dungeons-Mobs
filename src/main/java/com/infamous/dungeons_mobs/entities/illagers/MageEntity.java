@@ -299,6 +299,9 @@ public class MageEntity extends SpellcastingIllagerEntity implements IAnimatable
      }*/
     
     class LiftMobGoal extends Goal {
+
+		private double d;
+
 	      public LiftMobGoal() {
 	         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP, Goal.Flag.LOOK));
 	      }
@@ -308,11 +311,12 @@ public class MageEntity extends SpellcastingIllagerEntity implements IAnimatable
 	      }
 	      
 	      public boolean canContinueToUse() {
-	    	  	return MageEntity.this.hurtTime <= 0 && MageEntity.this.getTarget() != null && MageEntity.this.getLiftTicks() > 0;
+	    	  	return MageEntity.this.getTarget() != null && MageEntity.this.getLiftTicks() > 0;
 	      }
 	    
 	    public void start() {
 	    super.start();
+		this.d = MageEntity.this.getTarget().getY() + 3D;
 	    MageEntity.this.liftInterval = 100;
 	    MageEntity.this.setLiftTicks(40);
 	    MageEntity.this.playSound(SoundEvents.EVOKER_PREPARE_ATTACK, MageEntity.this.getSoundVolume(), MageEntity.this.getVoicePitch());
@@ -324,32 +328,34 @@ public class MageEntity extends SpellcastingIllagerEntity implements IAnimatable
 	    	MageEntity mob = MageEntity.this;
 	    	
 	    	mob.getNavigation().stop();
-	    	
-            if (mob.getLiftTicks() > 10) {
-            	if (target.getY() < mob.getY() + 3) {
-            		target.hurtMarked = true;
-            		target.setDeltaMovement(0, 0.5, 0);
-            	} else {
-            		target.fallDistance = 5;
-            		target.hurtMarked = true;
-            		target.setDeltaMovement(0, 0.1, 0);
-            	}
-            } else {
-            	if (!target.isOnGround()) {
-            	target.hurtMarked = true;
-            	target.setDeltaMovement(0, -0.75, 0);
-            	}
-        		//if (target.getY() == mob.getEyeY()) {
-        		//	target.hurt(DamageSource.FALL, 5.0F);
-        		//}
-            }
+
+			mob.getNavigation().stop();
+
+			if (mob.getLiftTicks() > 10) {
+				if (target.getY() < this.d) {
+					target.hurtMarked = true;
+					target.setDeltaMovement(0, 0.5, 0);
+				} else {
+					target.fallDistance = 5;
+					target.hurtMarked = true;
+					target.setDeltaMovement(0, 0.15, 0);
+				}
+			} else {
+				if (!target.isOnGround()) {
+					target.hurtMarked = true;
+					target.setDeltaMovement(0, -0.85, 0);
+				}
+				//if (target.getY() == mob.getEyeY()) {
+				//	target.hurt(DamageSource.FALL, 5.0F);
+				//}
+			}
 	    }
 	    
 	    public void stop() {
 	    super.stop();
 	    MageEntity.this.setLiftTicks(0);
 	    }
-	   }
+	}
     
     class DuplicateGoal extends Goal {
 	      public DuplicateGoal() {
