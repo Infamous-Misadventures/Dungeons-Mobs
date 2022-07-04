@@ -75,11 +75,11 @@ public class DungeonsEvokerEntity extends SpellcastingIllagerEntity implements I
     }
 
     protected void registerGoals() {
-		this.goalSelector.addGoal(5, new RkGoal(this, 1.11));
+		this.goalSelector.addGoal(4, new RkGoal(this, 1.0));
 
-		this.goalSelector.addGoal(5, new AvoidEntityGoal<>(this, AbstractVillagerEntity.class, 3.0F, 1.4D, 1.25D));
-		this.goalSelector.addGoal(5, new AvoidEntityGoal<>(this, PlayerEntity.class, 3.0F, 1.4D, 1.2D));
-		this.goalSelector.addGoal(5, new AvoidEntityGoal<>(this, IronGolemEntity.class, 3.0F, 1.4D, 1.25D));
+		//this.goalSelector.addGoal(5, new AvoidEntityGoal<>(this, AbstractVillagerEntity.class, 3.0F, 1.4D, 1.25D));
+		//this.goalSelector.addGoal(5, new AvoidEntityGoal<>(this, PlayerEntity.class, 3.0F, 1.4D, 1.2D));
+		//this.goalSelector.addGoal(5, new AvoidEntityGoal<>(this, IronGolemEntity.class, 3.0F, 1.4D, 1.25D));
 		this.goalSelector.addGoal(0, new SwimGoal(this));
 		/*this.goalSelector.addGoal(1, new DungeonsEvokerEntity.PowerfulAttackGoal());/*/
 		this.goalSelector.addGoal(1, new DungeonsEvokerEntity.SpellAttackGoal());
@@ -483,11 +483,11 @@ public class DungeonsEvokerEntity extends SpellcastingIllagerEntity implements I
 			}
 			v.setAggressive(true);
 			if (--this.delayCounter <= 0) {
-				this.delayCounter = 5 + v.getRandom().nextInt(5);
+				this.delayCounter = 8 + v.getRandom().nextInt(5);
 				v.getNavigation().moveTo(
-						livingentity.getX() + (livingentity.getRandom().nextInt(5) + 6) * livingentity.getRandom().nextInt(2) == 1 ? 1 : -1,
+						livingentity.getX() + (livingentity.getRandom().nextInt(3) + 3) * livingentity.getRandom().nextInt(2) == 1 ? 1.14 : -1.14,
 						livingentity.getY(),
-						livingentity.getZ() + (livingentity.getRandom().nextInt(5) + 6) * livingentity.getRandom().nextInt(2) == 1 ? 1 : -1,
+						livingentity.getZ() + (livingentity.getRandom().nextInt(3) + 3) * livingentity.getRandom().nextInt(2) == 1 ? 1.14 : -1.14,
 						(double) this.moveSpeed
 				);
 			}
