@@ -8,20 +8,18 @@
     "dungeons_mobs:mountaineer",
     "dungeons_mobs:armored_mountaineer",
     "dungeons_mobs:royal_guard",
-    "dungeons_mobs:powerful_royal_guard",
     "dungeons_mobs:tower_guard",
     "dungeons_mobs:vindicator_chef",
     "dungeons_mobs:iceologer",
     "dungeons_mobs:windcaller",
     "dungeons_mobs:illusioner",
-    "dungeons_mobs:illager_warrior",
+    "dungeons_mobs:e_illusioner",
     "dungeons_mobs:squall_golem",
     "dungeons_mobs:vindicator",
     "dungeons_mobs:mage",
     "dungeons_mobs:evoker",
     "dungeons_mobs:vindicator_raid_captain",
     "dungeons_mobs:rampart_captain",
-    "dungeons_mobs:axe_warrior",
     "dungeons_mobs:enchanter"
   ]
 }

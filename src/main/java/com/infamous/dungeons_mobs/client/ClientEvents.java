@@ -7,8 +7,8 @@ import com.infamous.dungeons_mobs.client.renderer.ender.BlastlingRenderer;
 import com.infamous.dungeons_mobs.client.renderer.ender.EndersentRenderer;
 import com.infamous.dungeons_mobs.client.renderer.ender.SnarelingRenderer;
 import com.infamous.dungeons_mobs.client.renderer.ender.WatchlingRenderer;
+import com.infamous.dungeons_mobs.client.renderer.golem.SquallGolemRenderer;
 import com.infamous.dungeons_mobs.client.renderer.illager.*;
-import com.infamous.dungeons_mobs.client.renderer.illager.golem.SquallGolemRenderer;
 import com.infamous.dungeons_mobs.client.renderer.jungle.LeapleafRenderer;
 import com.infamous.dungeons_mobs.client.renderer.jungle.PoisonQuillVineRenderer;
 import com.infamous.dungeons_mobs.client.renderer.jungle.QuickGrowingVineRenderer;
@@ -93,10 +93,6 @@ public class ClientEvents {
                 manager -> new MountaineerRenderer(manager));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.VINDICATOR.get(),
                 manager -> new DungeonVindicatorRenderer(manager));
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ILLAGER_WARRIOR.get(),
-                manager -> new IllagerWarriorRenderer(manager));
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ILLAGER_WARRIOR_CLONE.get(),
-                manager -> new IllagerWarriorCloneRenderer(manager));
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ICEOLOGER.get(),
                 manager -> new IceologerRenderer(manager));
@@ -193,10 +189,6 @@ public class ClientEvents {
                 manager -> new DungeonsEvokerRenderer(manager));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.TOWER_GUARD.get(),
                 manager -> new TowerGuardRenderer(manager));
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.POWERFUL_ROYAL_GUARD.get(),
-                manager -> new PowerfulRoyalGuardRenderer(manager));
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.AXE_WARRIOR.get(),
-                manager -> new AxeWarriorRenderer(manager));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.VEX.get(),
                 manager -> new DungeonsVexRenderer(manager));
     }
