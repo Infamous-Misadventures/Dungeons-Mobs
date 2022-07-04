@@ -1,8 +1,10 @@
 package com.infamous.dungeons_mobs.entities.illagers;
 
 import com.google.common.collect.Maps;
+import com.infamous.dungeons_mobs.entities.illagers.minibosses.DungeonsIllusionerEntity;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModItems;
+import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -309,6 +311,7 @@ public class DungeonsVindicatorEntity extends AbstractIllagerEntity implements I
         public void start() {
             DungeonsVindicatorEntity.this.setAggressive(true);
             this.delayCounter = 0;
+            this.attackTimer = 0;
         }
 
         @Override
@@ -339,10 +342,10 @@ public class DungeonsVindicatorEntity extends AbstractIllagerEntity implements I
                     );
                     this.delayCounter = 5 + DungeonsVindicatorEntity.this.getRandom().nextInt(5);
                     DungeonsVindicatorEntity.this.getNavigation().moveTo(
-                            livingentity.getX() + (livingentity.getRandom().nextInt(5) + 6) * livingentity.getRandom().nextInt(2) == 1 ? 1 : -1,
+                            livingentity.getX() + (livingentity.getRandom().nextInt(3) + 3) * livingentity.getRandom().nextInt(2) == 1 ? 1.14 : -1.14,
                             livingentity.getY(),
-                            livingentity.getZ() + (livingentity.getRandom().nextInt(5) + 6) * livingentity.getRandom().nextInt(2) == 1 ? 1 : -1,
-                            (double) this.moveSpeed / 1.667 * 1.4267
+                            livingentity.getZ() + (livingentity.getRandom().nextInt(3) + 3) * livingentity.getRandom().nextInt(2) == 1 ? 1.14 : -1.14,
+                            (double) this.moveSpeed / 1.667 * 1.394525
                     );
                 }
                 this.attackTimer = (int) Math.max(this.attackTimer - 1, 0);
@@ -360,6 +363,7 @@ public class DungeonsVindicatorEntity extends AbstractIllagerEntity implements I
 
         @Override
         public void stop() {
+            this.attackTimer = 0;
             DungeonsVindicatorEntity.this.getNavigation().stop();
             if (DungeonsVindicatorEntity.this.getTarget() == null) {
                 DungeonsVindicatorEntity.this.setAggressive(false);
@@ -410,6 +414,7 @@ public class DungeonsVindicatorEntity extends AbstractIllagerEntity implements I
         public void start() {
             v.setAttackID(MELEE_ATTACK);
             v.setMeleeAttacking(true);
+            v.playSound(ModSoundEvents.VINDICATOR_ATTACK.get(), v.getSoundVolume(), v.getVoicePitch());
         }
 
         @Override
@@ -428,15 +433,18 @@ public class DungeonsVindicatorEntity extends AbstractIllagerEntity implements I
             if (v.getTarget() != null && v.getTarget().isAlive()) {
                 v.getNavigation().moveTo(v.getTarget(), 2.3);
                 v.getLookControl().setLookAt(v.getTarget(), 30.0F, 30.0F);
+                v.setDeltaMovement(v.getDeltaMovement().multiply(1D, 0.35D, 1D));
                 if (v.attackTimer == 15 && v.distanceToSqr(v.getTarget()) <= 6.0D+ v.getTarget().getBbWidth()) {
                     float attackKnockback = v.getAttackKnockback();
                     LivingEntity attackTarget = v.getTarget();
                     double ratioX = (double) MathHelper.sin(v.yRot * ((float) Math.PI / 360F));
                     double ratioZ = (double) (-MathHelper.cos(v.yRot * ((float) Math.PI / 360F)));
                     double knockbackReduction = 0.5D;
-                    attackTarget.hurt(DamageSource.mobAttack(v), ((float)
+                    v.playSound(SoundEvents.PLAYER_ATTACK_SWEEP, v.getSoundVolume(), v.getVoicePitch());
+                    attackTarget.hurt(DamageSource.mobAttack(v), ((float)(
                             v.getAttributeValue(Attributes.ATTACK_DAMAGE) +
-                            EnchantmentHelper.getDamageBonus(v.getMainHandItem(), ((LivingEntity)attackTarget).getMobType())) * (1 + (v.getRandom().nextFloat() / 2)));
+                            EnchantmentHelper.getDamageBonus(v.getMainHandItem(), ((LivingEntity)attackTarget).getMobType()))) * (1 + (v.getRandom().nextFloat() / 2))
+                    );
                     attackTarget.setSecondsOnFire(EnchantmentHelper.getFireAspect(v) * 5);
                     this.forceKnockback(attackTarget, attackKnockback * 0.5F, ratioX, ratioZ, knockbackReduction);
                     v.setDeltaMovement(v.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
