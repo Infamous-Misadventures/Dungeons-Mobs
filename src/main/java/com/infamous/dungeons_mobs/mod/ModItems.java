@@ -88,11 +88,6 @@ public class ModItems {
                     9804699, 2580065,
                     new Item.Properties().tab(DUNGEONS_MOBS)));
 
-    public static final RegistryObject<ModSpawnEggItem> POWERFUL_ROYAL_GUARD_SPAWN_EGG = ITEMS.register("powerful_royal_guard_spawn_egg",
-            () -> new ModSpawnEggItem(ModEntityTypes.POWERFUL_ROYAL_GUARD,
-                    9804699, 2580065,
-                    new Item.Properties().tab(DUNGEONS_MOBS)));
-
     public static final RegistryObject<ModSpawnEggItem> TOWER_GUARD_SPAWN_EGG = ITEMS.register("tower_guard_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityTypes.TOWER_GUARD,
                     9804699, 2580065,
@@ -100,11 +95,6 @@ public class ModItems {
 
     public static final RegistryObject<ModSpawnEggItem> EVOKER_SPAWN_EGG = ITEMS.register("evoker_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityTypes.DUNGEONS_EVOKER,
-                    9804699, 1973274,
-                    new Item.Properties().tab(DUNGEONS_MOBS)));
-
-    public static final RegistryObject<ModSpawnEggItem> ILLAGER_WARRIOR_SPAWN_EGG = ITEMS.register("illager_warrior_spawn_egg",
-            () -> new ModSpawnEggItem(ModEntityTypes.ILLAGER_WARRIOR,
                     9804699, 1973274,
                     new Item.Properties().tab(DUNGEONS_MOBS)));
 
