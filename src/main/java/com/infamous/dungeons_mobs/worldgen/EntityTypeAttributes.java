@@ -1,9 +1,6 @@
 package com.infamous.dungeons_mobs.worldgen;
 
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
-import com.infamous.dungeons_mobs.entities.allcustomentity.illagers.PowerfulRoyalGuardEntity;
-import com.infamous.dungeons_mobs.entities.allcustomentity.illagers.bosses.AxeWarriorEntity;
-import com.infamous.dungeons_mobs.entities.allcustomentity.illagers.bosses.IllagerWarriorEntity;
 import com.infamous.dungeons_mobs.entities.creepers.IcyCreeperEntity;
 import com.infamous.dungeons_mobs.entities.ender.BlastlingEntity;
 import com.infamous.dungeons_mobs.entities.ender.EndersentEntity;
@@ -111,15 +108,11 @@ public class EntityTypeAttributes {
         event.put(ModEntityTypes.WATCHLING.get(), WatchlingEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.SNARELING.get(), SnarelingEntity.setCustomAttributes().build());
 
-        event.put(ModEntityTypes.AXE_WARRIOR.get(), AxeWarriorEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.VINDICATOR.get(), DungeonsVindicatorEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.TOWER_GUARD.get(), TowerGuardEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.DUNGEONS_EVOKER.get(), DungeonsEvokerEntity.setCustomAttributes().build());
-        event.put(ModEntityTypes.ILLAGER_WARRIOR.get(), IllagerWarriorEntity.setCustomAttributes().build());
-        event.put(ModEntityTypes.ILLAGER_WARRIOR_CLONE.get(), IllagerWarriorEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.VINDICATOR_RAID_CAPTAIN.get(), VindicatorRaidCaptainEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.RAMPART_CAPTAIN.get(), RampartCaptainEntity.setCustomAttributes().build());
-        event.put(ModEntityTypes.POWERFUL_ROYAL_GUARD.get(), PowerfulRoyalGuardEntity.setCustomAttributes().build());
     }
 
     @SubscribeEvent
