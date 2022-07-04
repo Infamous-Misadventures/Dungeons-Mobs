@@ -1,7 +1,6 @@
 package com.infamous.dungeons_mobs.config;
 
 import com.google.common.collect.Lists;
-import cpw.mods.modlauncher.LaunchPluginHandler;
 import net.minecraftforge.common.ForgeConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -147,12 +146,14 @@ public class DungeonsMobsConfig {
         public final ForgeConfigSpec.ConfigValue<Integer> POISON_ANEMONE_MAX_GROUP_SIZE;
 
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_BIOME_SPECIFIC_RAIDERS;
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_VINDICATOR_RAID_CAPTAIN_IN_RAIDS;
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_RAMPART_CAPTAIN_IN_RAIDS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_MOUNTAINEERS_IN_RAIDS;
-        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_DUNGEONS_EVOKER_IN_RAIDS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_VINDICATOR_CHEFS_IN_RAIDS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_VINDICATORS_IN_RAIDS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_MOUNTAINEERS_IN_RAIDS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ROYAL_GUARDS_IN_RAIDS;
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_TOWER_GUARD_IN_RAIDS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_GEOMANCERS_IN_RAIDS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ILLUSIONERS_IN_RAIDS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_MAGES_IN_RAIDS;
@@ -160,10 +161,19 @@ public class DungeonsMobsConfig {
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_WINDCALLERS_IN_RAIDS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_PILLAGERS_IN_RAIDS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_SQUALL_GOLEMS_IN_RAIDS;
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_MORE_VINDICATOR_IN_RAIDS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_REDSTONE_GOLEMS_IN_RAIDS;
 
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_STRONGER_HUSKS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_RANGED_SPIDERS;
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_STMOB;
+        /*
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_HEAVY_ARMORED_GUARD_IN_RAIDS;
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ILLAGER_WARRIOR_IN_RAIDS;
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_EMERALD_ARMORED_VINDICATOR_IN_RAIDS;
+
+         */
+
 
         public Common(ForgeConfigSpec.Builder builder){
             // MOB CONFIGURATION
@@ -796,16 +806,18 @@ public class DungeonsMobsConfig {
                             "!END"
                             ),
                             (itemRaw) -> itemRaw instanceof String);
-
+            ENABLE_VINDICATOR_RAID_CAPTAIN_IN_RAIDS = builder
+                    .comment("Enable the addition of Vindicator Raid Captain to raids. [true / false]")
+                    .define("enableVindicatorRaidCaptainInRaids", true);
+            ENABLE_RAMPART_CAPTAIN_IN_RAIDS = builder
+                    .comment("Enable the addition of Rampart Captain to raids. [true / false]")
+                    .define("enableRampartCaptainInRaids", false);
             ENABLE_MOUNTAINEERS_IN_RAIDS = builder
                     .comment("Enable the addition of Mountaineers to raids. [true / false]")
                     .define("enableMountaineersInRaids", false);
             ENABLE_VINDICATOR_CHEFS_IN_RAIDS = builder
                     .comment("Enable the addition of Vindicator Chefs to raids. [true / false]")
                     .define("enableVindicatorChefsInRaids", false);
-            ENABLE_DUNGEONS_EVOKER_IN_RAIDS = builder
-                    .comment("Enable the addition of Evoker to raids. [true / false]")
-                    .define("enableEvokersInRaids", true);
             ENABLE_ARMORED_VINDICATORS_IN_RAIDS = builder
                     .comment("Enable the addition of Armored Vindicators to raids. [true / false]")
                     .define("enableArmoredVindicatorsInRaids", true);
@@ -815,15 +827,21 @@ public class DungeonsMobsConfig {
             ENABLE_ROYAL_GUARDS_IN_RAIDS = builder
                     .comment("Enable the addition of Royal Guards to raids. [true / false]")
                     .define("enableRoyalGuardsInRaids", false);
+            ENABLE_TOWER_GUARD_IN_RAIDS = builder
+                    .comment("Enable the addition of Tower Guard to raids. [true / false]")
+                    .define("enableTowerGuardInRaids", false);
             ENABLE_GEOMANCERS_IN_RAIDS = builder
                     .comment("Enable the addition of Geomancers to raids. [true / false]")
                     .define("enableGeomancersInRaids", true);
             ENABLE_ILLUSIONERS_IN_RAIDS = builder
                     .comment("Enable the addition of Illusioners to raids. [true / false]")
                     .define("enableIllusionersInRaids", false);
+            ENABLE_MORE_VINDICATOR_IN_RAIDS = builder
+                    .comment("Enable the addition of Vanilla Illusioner to raid. [true / false]")
+                    .define("enableIllusionerInRaids", false);
             ENABLE_MAGES_IN_RAIDS = builder
                     .comment("Enable the addition of Mages to raids. [true / false]")
-                    .define("enableMagesInRaids", false);
+                    .define("enableMagesInRaids", true);
             ENABLE_ICEOLOGERS_IN_RAIDS = builder
                     .comment("Enable the addition of Iceologers to raids. [true / false]")
                     .define("enableIceologersInRaids", false);
@@ -835,11 +853,31 @@ public class DungeonsMobsConfig {
                     .define("enableArmoredPillagersInRaids", true);
             ENABLE_SQUALL_GOLEMS_IN_RAIDS = builder
                     .comment("Enable the addition of Squall Golems to raids. [true / false]")
-                    .define("enableSquallGolemsInRaids", true);
+                    .define("enableSquallGolemsInRaids", false);
             ENABLE_REDSTONE_GOLEMS_IN_RAIDS = builder
                     .comment("Enable the addition of Redstone Golems to raids. [true / false]")
                     .define("enableRedstoneGolemsInRaids", true);
             builder.pop();
+            /*
+            ENABLE_EMERALD_ARMORED_VINDICATOR_IN_RAIDS = builder
+                    .comment("Enable the addition of Emerald Armored Vindicator to raids. [true / false]")
+                    .define("enableEmeraldArmoredVindicatorInRaids", true);
+            builder.pop();
+            ENABLE_ILLAGER_WARRIOR_IN_RAIDS = builder
+                    .comment("Enable the addition of Illager Warrior to raids. [true / false]")
+                    .define("enableIllagerWarriorInRaids", false);
+            builder.pop();
+            ENABLE_HEAVY_ARMORED_GUARD_IN_RAIDS = builder
+                    .comment("Enable the addition of Heavy Armored Guard to raids. [true / false]")
+                    .define("enableHeavyArmoredGuardInRaids", false);
+            builder.pop();
+            builder.pop();
+            builder.pop();
+            ENABLE_MORE_VINDICATOR_IN_RAIDS = builder
+                    .comment("Enable more addition of Vindicator to raids. [true / false]")
+                    .define("enableMoreVindicatorInRaids", false);
+            builder.pop();
+            */
 
             builder.comment("Vanilla Mob Configuration").push("vanilla_mob_configuration");
             ENABLE_STRONGER_HUSKS = builder
@@ -848,6 +886,9 @@ public class DungeonsMobsConfig {
             ENABLE_RANGED_SPIDERS = builder
                     .comment("Enables Spiders and Cave Spiders shooting webs as a ranged attack like they do in Minecraft Dungeons. [true / false]")
                     .define("enableRangedSpiders", true);
+            ENABLE_STMOB = builder
+                    .comment("Let Mob Stronger.[true / false]")
+                    .define("enablePowerfulMob", true);
             builder.pop();
 
         }

@@ -1,23 +1,17 @@
 package com.infamous.dungeons_mobs.mobenchants;
 
 import com.infamous.dungeons_libraries.mobenchantments.MobEnchantment;
-import com.infamous.dungeons_libraries.utils.AreaOfEffectHelper;
 import com.infamous.dungeons_mobs.DungeonsMobs;
-import com.infamous.dungeons_mobs.capabilities.properties.IMobProps;
-import com.infamous.dungeons_mobs.capabilities.properties.MobPropsHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import static com.infamous.dungeons_libraries.mobenchantments.MobEnchantmentHelper.executeIfPresent;
-import static com.infamous.dungeons_libraries.utils.AreaOfEffectHelper.*;
-import static com.infamous.dungeons_mobs.DungeonsMobs.PROXY;
-import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.*;
+import static com.infamous.dungeons_libraries.utils.AreaOfEffectHelper.applyToNearbyEntities;
+import static com.infamous.dungeons_libraries.utils.AreaOfEffectHelper.getCanHealPredicate;
+import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.RADIANCE;
 
 @Mod.EventBusSubscriber(modid = DungeonsMobs.MODID)
 public class RadianceMobEnchantment extends MobEnchantment {

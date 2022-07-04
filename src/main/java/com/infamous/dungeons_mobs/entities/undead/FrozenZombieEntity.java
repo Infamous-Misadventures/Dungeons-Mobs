@@ -1,11 +1,14 @@
 package com.infamous.dungeons_mobs.entities.undead;
 
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
-import com.infamous.dungeons_mobs.goals.switchcombat.ThrowAndMeleeAttackGoal;
 import com.infamous.dungeons_mobs.goals.switchcombat.SwitchCombatItemGoal;
+import com.infamous.dungeons_mobs.goals.switchcombat.ThrowAndMeleeAttackGoal;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.ai.goal.HurtByTargetGoal;
+import net.minecraft.entity.ai.goal.MoveThroughVillageGoal;
+import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
+import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.monster.ZombifiedPiglinEntity;
@@ -21,7 +24,10 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.*;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.IServerWorld;
+import net.minecraft.world.World;
 
 import java.util.Random;
 

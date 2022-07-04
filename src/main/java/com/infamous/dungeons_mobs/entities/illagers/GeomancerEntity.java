@@ -3,7 +3,6 @@ package com.infamous.dungeons_mobs.entities.illagers;
 import com.infamous.dungeons_mobs.entities.summonables.ConstructEntity;
 import com.infamous.dungeons_mobs.goals.AvoidBaseEntityGoal;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
-import com.infamous.dungeons_mobs.mod.ModItems;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 import com.infamous.dungeons_mobs.utils.GeomancyHelper;
 import net.minecraft.entity.*;
@@ -11,19 +10,22 @@ import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
-import net.minecraft.entity.monster.*;
+import net.minecraft.entity.monster.AbstractRaiderEntity;
+import net.minecraft.entity.monster.EvokerEntity;
+import net.minecraft.entity.monster.PatrollerEntity;
+import net.minecraft.entity.monster.SpellcastingIllagerEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.*;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.Direction;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.Util;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -34,8 +36,6 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
-
-import net.minecraft.entity.monster.AbstractIllagerEntity.ArmPose;
 
 public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnimatable {
 	
@@ -62,6 +62,9 @@ public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnima
 
     protected void registerGoals() {
         super.registerGoals();
+        this.goalSelector.addGoal(7, new PatrollerEntity.PatrolGoal<>(this,1.42,1.3));
+        this.targetSelector.addGoal(2, new AbstractRaiderEntity.FindTargetGoal(this, 10F));
+        this.goalSelector.addGoal(6, new AbstractRaiderEntity.FindTargetGoal(this, 10F));
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(1, new SpellcastingIllagerEntity.CastingASpellGoal());
         this.goalSelector.addGoal(2, new AvoidEntityGoal<>(this, PlayerEntity.class, 8.0F, 1.0D, 1.0D));
@@ -125,7 +128,6 @@ public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnima
 
     @Override
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
-        this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModItems.GEOMANCER_STAFF.get()));
     }
 
     @Nullable
@@ -151,11 +153,11 @@ public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnima
         }
 
         protected int getCastingTime() {
-            return 25;
+            return 26;
         }
 
         protected int getCastingInterval() {
-            return 140;
+            return 125;
         }
 
         protected void performSpellCasting() {
@@ -208,7 +210,6 @@ public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnima
 
     @Override
     public void applyRaidBuffs(int p_213660_1_, boolean p_213660_2_) {
-
     }
 
     @Override

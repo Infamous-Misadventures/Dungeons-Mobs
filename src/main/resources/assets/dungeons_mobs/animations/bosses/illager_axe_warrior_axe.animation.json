@@ -1,0 +1,19 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.unknown.new": {
+			"loop": true,
+			"bones": {
+				"axe2": {
+					"rotation": ["Math.cos(query.anim_time * 150 +25) * 2", "(query.anim_time*3.25) * 40 * query.anim_time", "Math.cos(query.anim_time * 30 +25) * 2"]
+				},
+				"axe3": {
+					"rotation": ["Math.cos(query.anim_time * 150 +25) * 2", "(query.anim_time*3) * 40 * query.anim_time", "Math.cos(query.anim_time * 30 +25) * 2"]
+				},
+				"axe5": {
+					"rotation": ["Math.cos(query.anim_time * 150 +25) * 2", "(query.anim_time*2.75) * 40 * query.anim_time", "Math.cos(query.anim_time * 30 +25) * 2"]
+				}
+			}
+		}
+	}
+}

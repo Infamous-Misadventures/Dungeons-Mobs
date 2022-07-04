@@ -2,7 +2,7 @@ package com.infamous.dungeons_mobs.client.renderer.illager;
 
 import com.infamous.dungeons_mobs.client.models.armor.IllagerArmorModel;
 import com.infamous.dungeons_mobs.client.models.illager.IllagerBipedModel;
-import com.infamous.dungeons_mobs.entities.illagers.DungeonsIllusionerEntity;
+import com.infamous.dungeons_mobs.entities.illagers.minibosses.DungeonsIllusionerEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;

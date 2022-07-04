@@ -41,19 +41,18 @@ public class WhispererEntity extends MonsterEntity implements IMagicUser {
     @Override
     protected void registerGoals() {
         this.addMovementBehaviors();
-        this.goalSelector.addGoal(1, new UsingMagicGoal<>(this));
-        this.goalSelector.addGoal(2, new WhispererEntity.SummonVinesGoal());
-        this.goalSelector.addGoal(3, new WhispererEntity.AttackGoal());
-        this.goalSelector.addGoal(4, new AvoidEntityGoal<>(this, VineEntity.class, 8.0F, 0.6D, 1.0D));
-        this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
-        this.goalSelector.addGoal(7, new LookAtGoal(this, MobEntity.class, 8.0F));
-
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, WhispererEntity.class)).setAlertOthers());
         this.targetSelector.addGoal(2, (new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true)).setUnseenMemoryTicks(300));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, false));
     }
 
     protected void addMovementBehaviors() {
+        this.goalSelector.addGoal(1, new UsingMagicGoal<>(this));
+        this.goalSelector.addGoal(2, new WhispererEntity.SummonVinesGoal());
+        this.goalSelector.addGoal(3, new WhispererEntity.AttackGoal());
+        this.goalSelector.addGoal(4, new AvoidEntityGoal<>(this, VineEntity.class, 8.0F, 0.6D, 1.0D));
+        this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
+        this.goalSelector.addGoal(7, new LookAtGoal(this, MobEntity.class, 8.0F));
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(5, new RandomWalkingGoal(this, 0.6D));
     }
@@ -75,7 +74,7 @@ public class WhispererEntity extends MonsterEntity implements IMagicUser {
         @Override
         public boolean canUse() {
             LivingEntity targetEntity = WhispererEntity.this.getTarget();
-            if (targetEntity != null && WhispererEntity.this.distanceToSqr(targetEntity) < 16.0D) {
+            if (targetEntity != null && WhispererEntity.this.distanceToSqr(targetEntity) < 30.0D) {
                 return super.canUse();
             }
             return false;
@@ -90,7 +89,7 @@ public class WhispererEntity extends MonsterEntity implements IMagicUser {
         @Override
         public boolean canUse() {
             LivingEntity targetEntity = WhispererEntity.this.getTarget();
-            if (targetEntity != null && WhispererEntity.this.distanceToSqr(targetEntity) >= 16.0D) {
+            if (targetEntity != null && WhispererEntity.this.distanceToSqr(targetEntity) >= 30.0D) {
                 return super.canUse();
             }
             return false;

@@ -19,7 +19,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -145,11 +144,11 @@ public class BiomeSpawnEntries {
                     DungeonsMobsConfig.COMMON.QUICK_GROWING_VINE_MIN_GROUP_SIZE.get(),
                     DungeonsMobsConfig.COMMON.QUICK_GROWING_VINE_MAX_GROUP_SIZE.get());
 
-            List<String> poisonQuillVineBiomeTypes = (List<String>) DungeonsMobsConfig.COMMON.POISON_QUILL_VINE_BIOME_TYPES.get();
+            /*List<String> poisonQuillVineBiomeTypes = (List<String>) DungeonsMobsConfig.COMMON.POISON_QUILL_VINE_BIOME_TYPES.get();
             tryAddMonsterSpawnToBiome(biomeRegistryKey, mobSpawnInfoBuilder, poisonQuillVineBiomeTypes, ModEntityTypes.POISON_QUILL_VINE.get(),
                     DungeonsMobsConfig.COMMON.POISON_QUILL_VINE_SPAWN_WEIGHT.get(),
                     DungeonsMobsConfig.COMMON.POISON_QUILL_VINE_MIN_GROUP_SIZE.get(),
-                    DungeonsMobsConfig.COMMON.POISON_QUILL_VINE_MAX_GROUP_SIZE.get());
+                    DungeonsMobsConfig.COMMON.POISON_QUILL_VINE_MAX_GROUP_SIZE.get());*/
 
         List<String> fungusThrowerBiomeTypes = (List<String>) DungeonsMobsConfig.COMMON.FUNGUS_THROWER_BIOME_TYPES.get();
         tryAddMonsterSpawnToBiome(biomeRegistryKey, mobSpawnInfoBuilder, fungusThrowerBiomeTypes, ModEntityTypes.FUNGUS_THROWER.get(),

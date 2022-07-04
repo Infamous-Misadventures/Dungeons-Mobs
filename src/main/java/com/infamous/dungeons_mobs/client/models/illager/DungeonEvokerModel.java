@@ -1,7 +1,7 @@
 package com.infamous.dungeons_mobs.client.models.illager;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
-import com.infamous.dungeons_mobs.entities.illagers.DungeonsEvokerEntity;
+import com.infamous.dungeons_mobs.entities.illagers.minibosses.DungeonsEvokerEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -24,7 +24,7 @@ public class DungeonEvokerModel extends AnimatedGeoModel {
 
 		@Override
 		public ResourceLocation getTextureLocation(Object entity) {
-			return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/evoker.png");
+			return new ResourceLocation(DungeonsMobs.MODID, "textures/geo_entity/illager/evoker.png");
 		}
 
 	@Override

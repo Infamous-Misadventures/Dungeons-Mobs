@@ -1,7 +1,6 @@
 package com.infamous.dungeons_mobs.client.renderer.water;
 
 import com.infamous.dungeons_mobs.client.renderer.jungle.WhispererRenderer;
-import com.infamous.dungeons_mobs.entities.jungle.WhispererEntity;
 import com.infamous.dungeons_mobs.entities.water.WavewhispererEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.entity.EntityRendererManager;

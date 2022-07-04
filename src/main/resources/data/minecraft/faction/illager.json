@@ -1,0 +1,113 @@
+{
+  "name": "minecraft:illager",
+  "replace": false,
+  "banner": {"id":"minecraft:white_banner","Count":1,"tag":{"HideFlags":32,"BlockEntityTag":{"Patterns":[{"Pattern":"mr","Color":9},{"Pattern":"bs","Color":8},{"Pattern":"cs","Color":7},{"Pattern":"bo","Color":8},{"Pattern":"ms","Color":15},{"Pattern":"hh","Color":8},{"Pattern":"mc","Color":8},{"Pattern":"bo","Color":15}]},"display":{"Name":{"color":"gold","translate":"block.minecraft.ominous_banner"}}}},
+  "relations": {
+  }, 
+  "entities": [
+    {
+      "entity_type": "dungeons_mobs:armored_pillager",
+      "weight": 80,
+      "strength": 10,
+      "rank": "soldier",
+      "maximum_rank": "general",
+      "minimum_wave": 3,
+      "boosts": {
+        "rarity_overrides": [
+          {
+            "boost": "faction_craft:mount/faction_ravager",
+            "rarity": "common"
+          }
+        ]
+      }
+    },
+    {
+      "entity_type": "dungeons_mobs:mountaineer",
+      "weight": 80,
+      "strength": 8,
+      "rank": "soldier",
+      "maximum_rank": "leader",
+      "minimum_wave": 2
+    },
+    {
+      "entity_type": "dungeons_mobs:armored_vindicator",
+      "weight": 70,
+      "strength": 12,
+      "rank": "soldier",
+      "maximum_rank": "leader",
+      "minimum_wave": 3
+    },
+    {
+      "entity_type": "dungeons_mobs:vindicator_raid_captain",
+      "weight": 10,
+      "strength": 1,
+      "rank": "leader",
+      "maximum_rank": "leader",
+      "minimum_wave": 1
+    },
+    {
+      "entity_type": "dungeons_mobs:armored_mountaineer",
+      "weight": 70,
+      "strength": 12,
+      "rank": "soldier",
+      "maximum_rank": "leader",
+      "minimum_wave": 3
+    },
+    {
+      "entity_type": "dungeons_mobs:iceologer",
+      "weight": 50,
+      "strength": 10,
+      "rank": "soldier",
+      "maximum_rank": "leader",
+      "minimum_wave": 3,
+      "boosts": {
+        "rarity_overrides": [
+          {
+            "boost": "faction_craft:mount/faction_ravager",
+            "rarity": "common"
+          }
+        ]
+      }
+    },
+    {
+      "entity_type": "dungeons_mobs:geomancer",
+      "weight": 50,
+      "strength": 10,
+      "rank": "soldier",
+      "maximum_rank": "leader",
+      "minimum_wave": 3,
+      "boosts": {
+        "rarity_overrides": [
+          {
+            "boost": "faction_craft:mount/faction_ravager",
+            "rarity": "common"
+          }
+        ]
+      }
+    },
+    {
+      "entity_type": "dungeons_mobs:windcaller",
+      "weight": 50,
+      "strength": 10,
+      "rank": "soldier",
+      "maximum_rank": "leader",
+      "minimum_wave": 3
+    },
+    {
+      "entity_type": "dungeons_mobs:royal_guard",
+      "weight": 50,
+      "strength": 15,
+      "rank": "soldier",
+      "maximum_rank": "leader",
+      "minimum_wave": 4
+    },
+    {
+      "entity_type": "dungeons_mobs:redstone_golem",
+      "weight": 30,
+      "strength": 20,
+      "rank": "support",
+      "maximum_rank": "support",
+      "minimum_wave": 4
+    }
+  ]
+}

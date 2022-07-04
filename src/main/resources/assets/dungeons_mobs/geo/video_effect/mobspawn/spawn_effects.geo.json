@@ -1,0 +1,29 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.redstone_mine",
+				"texture_width": 100,
+				"texture_height": 64,
+				"visible_bounds_width": 4,
+				"visible_bounds_height": 1.5,
+				"visible_bounds_offset": [0, 0.25, 0]
+			},
+			"bones": [
+				{
+					"name": "RedstoneMine",
+					"pivot": [0, 0, 0]
+				},
+				{
+					"name": "ring",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [-14, 0, -13], "size": [27, 0, 31], "uv": [-31, 1]},
+						{"origin": [-14, -1, -13], "size": [27, 0, 31], "inflate": 1, "uv": [-31, 33]}
+					]
+				}
+			]
+		}
+	]
+}

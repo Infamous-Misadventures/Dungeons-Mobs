@@ -3,7 +3,6 @@ package com.infamous.dungeons_mobs.goals;
 import com.infamous.dungeons_mobs.interfaces.IWebShooter;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.goal.RangedAttackGoal;
 
 public class RangedWebAttackGoal<T extends MobEntity & IWebShooter> extends SimpleRangedAttackGoal<T> {
     private final T webShooter;

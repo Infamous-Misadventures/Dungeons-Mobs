@@ -1,16 +1,13 @@
 package com.infamous.dungeons_mobs.entities.summonables;
 
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
-import net.minecraft.entity.*;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.monster.HuskEntity;
 import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.monster.ZombieEntity;
-import net.minecraft.network.IPacket;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -60,7 +57,7 @@ public class GeomancerBombEntity extends ConstructEntity implements IAnimatable 
    
 	private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
 		if (this.getLifeTicks() > 75) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("geomancer_pillar_appear", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("geomancer_pillar_appear", false));
 		} else {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("geomancer_pillar_idle", true));
 		}

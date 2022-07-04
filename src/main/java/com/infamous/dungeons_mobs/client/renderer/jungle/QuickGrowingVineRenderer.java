@@ -1,6 +1,5 @@
 package com.infamous.dungeons_mobs.client.renderer.jungle;
 
-import com.infamous.dungeons_mobs.client.models.jungle.QuickGrowingVineModel;
 import com.infamous.dungeons_mobs.client.models.jungle.QuickGrowingVineModel1;
 import com.infamous.dungeons_mobs.entities.jungle.QuickGrowingVineEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;

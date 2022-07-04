@@ -1,8 +1,6 @@
 package com.infamous.dungeons_mobs.client.renderer.undead;
 
-import com.infamous.dungeons_mobs.entities.undead.ArmoredZombieEntity;
 import com.infamous.dungeons_mobs.entities.undead.FrozenZombieEntity;
-import com.infamous.dungeons_mobs.entities.undead.JungleZombieEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.ZombieRenderer;
@@ -24,10 +22,6 @@ public class CustomZombieRenderer extends ZombieRenderer {
 
     @Override
     protected void scale(ZombieEntity zombieEntity, MatrixStack matrixStack, float v) {
-        if(zombieEntity instanceof ArmoredZombieEntity){
-            float scaleFactor = 1.1F;
-            matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
-        }
         if(zombieEntity instanceof HuskEntity){
             float scaleFactor = 1.2F;
             matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
@@ -36,10 +30,7 @@ public class CustomZombieRenderer extends ZombieRenderer {
     }
 
     public ResourceLocation getTextureLocation(ZombieEntity zombieEntity) {
-        if(zombieEntity instanceof JungleZombieEntity){
-            return JUNGLE_ZOMBIE_TEXUTRE;
-        }
-        else if(zombieEntity instanceof FrozenZombieEntity){
+        if(zombieEntity instanceof FrozenZombieEntity){
             return FROZEN_ZOMBIE_TEXTURE;
         }
         else if(zombieEntity instanceof HuskEntity){

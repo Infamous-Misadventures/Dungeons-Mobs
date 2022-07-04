@@ -4,7 +4,6 @@ package com.infamous.dungeons_mobs.client.models.redstone;// Made with Blockbenc
 
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
-import com.infamous.dungeons_mobs.entities.summonables.ConstructEntity;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;

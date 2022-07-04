@@ -1,6 +1,6 @@
 package com.infamous.dungeons_mobs.entities.jungle;
 
-import com.infamous.dungeons_mobs.entities.redstone.RedstoneGolemEntity;
+import com.google.common.collect.Lists;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -32,6 +32,7 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import java.util.EnumSet;
+import java.util.List;
 
 public class LeapleafEntity extends MonsterEntity implements IAnimatable {
     AnimationFactory factory = new AnimationFactory(this);
@@ -61,8 +62,19 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
         this.xpReward = 20;
     }
 
+
     @Override
     public boolean causeFallDamage(float p_225503_1_, float p_225503_2_) {
+        int distanceFallen = MathHelper.ceil(p_225503_2_ - 1.0F);
+        if (distanceFallen > 0) {
+            List<Entity> list = Lists.newArrayList(this.level.getEntities(this, this.getBoundingBox().inflate(1.5, 0.5, 1.5)));
+            for(Entity entity : list) {
+                if(entity instanceof LivingEntity){
+                    LivingEntity livingEntity = (LivingEntity)entity;
+                    livingEntity.hurt(DamageSource.mobAttack(this),distanceFallen);
+                }
+            }
+        }
         return false;
     }
 
@@ -71,7 +83,7 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
                 .add(Attributes.MAX_HEALTH, 100.0D) // 1x Golem Health
                 .add(Attributes.MOVEMENT_SPEED, 0.22D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
-                .add(Attributes.ATTACK_DAMAGE, 17.5D) // >= Golem Attack
+                .add(Attributes.ATTACK_DAMAGE, 21.5D) // >= Golem Attack
                 .add(Attributes.ATTACK_KNOCKBACK, 1.5D); // 1x Ravager knockback
     }
 
@@ -110,16 +122,15 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new SwimGoal(this));
-        this.goalSelector.addGoal(1, new WaterAvoidingRandomWalkingGoal(this, 0.6D));
-        this.goalSelector.addGoal(3, new LeapleafEntity.StalkGoal());
+        this.goalSelector.addGoal(1, new WaterAvoidingRandomWalkingGoal(this, 0.76D));
         this.goalSelector.addGoal(1, new LeapleafEntity.LeapGoal());
         this.goalSelector.addGoal(2, new LeapleafEntity.AttackGoal(this,1.1));
         this.goalSelector.addGoal(0, new LeapleafEntity.LeapMeleeGoal());
         this.goalSelector.addGoal(0, new LeapleafEntity.MeleeGoal());
         this.goalSelector.addGoal(0, new LeapleafEntity.RestGoal());
         this.goalSelector.addGoal(1, new LeapleafEntity.ChargeGoal());
-        this.goalSelector.addGoal(5, new LeapAtTargetGoal(this, 0.4F));
-        this.goalSelector.addGoal(6, new LeapleafEntity.WatchGoal(this, PlayerEntity.class, 24.0F));
+        //this.goalSelector.addGoal(5, new LeapAtTargetGoal(this, 0.4F));
+        this.goalSelector.addGoal(8, new LeapleafEntity.WatchGoal(this, PlayerEntity.class, 24.0F));
 
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, LeapleafEntity.class)).setAlertOthers());
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
@@ -444,7 +455,7 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
         public void tick() {
             if(LeapleafEntity.this.getTarget() != null && LeapleafEntity.this.getTarget().isAlive()) {
                 LeapleafEntity.this.getLookControl().setLookAt(LeapleafEntity.this.getTarget(), 30.0F, 30.0F);
-                if (LeapleafEntity.this.getTimer() == 15 && LeapleafEntity.this.distanceToSqr(LeapleafEntity.this.getTarget()) <= 18.6D) {
+                if (LeapleafEntity.this.getTimer() == 15 && LeapleafEntity.this.distanceToSqr(LeapleafEntity.this.getTarget()) <= 18.6D + LeapleafEntity.this.getBbWidth()) {
                     float attackKnockback = (float) LeapleafEntity.this.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
                     LivingEntity attackTarget = LeapleafEntity.this.getTarget();
                     double ratioX = (double) MathHelper.sin(LeapleafEntity.this.yRot * ((float) Math.PI / 180F));

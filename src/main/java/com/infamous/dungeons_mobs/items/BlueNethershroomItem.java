@@ -2,8 +2,6 @@ package com.infamous.dungeons_mobs.items;
 
 import com.infamous.dungeons_mobs.entities.projectiles.BlueNethershroomEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.PotionEntity;
-import net.minecraft.entity.projectile.SnowballEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ShootableItem;
@@ -12,8 +10,6 @@ import net.minecraft.potion.Potions;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
 
 import java.util.function.Predicate;

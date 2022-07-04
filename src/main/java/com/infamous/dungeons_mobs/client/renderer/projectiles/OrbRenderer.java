@@ -1,7 +1,6 @@
 package com.infamous.dungeons_mobs.client.renderer.projectiles;
 
 import com.infamous.dungeons_mobs.client.models.projectile.OrbModel;
-import com.infamous.dungeons_mobs.client.models.summonables.IceCloudModel;
 import com.infamous.dungeons_mobs.entities.projectiles.AbstractOrbEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.LaserOrbEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.TridentFumeEntity;

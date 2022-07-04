@@ -4,7 +4,6 @@ import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 
 public class QuickGrowingVineEntity extends VineEntity {

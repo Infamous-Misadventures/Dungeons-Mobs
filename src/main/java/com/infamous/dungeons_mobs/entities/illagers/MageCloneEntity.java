@@ -50,7 +50,7 @@ public class MageCloneEntity extends SpellcastingIllagerEntity implements IAnima
 	AnimationFactory factory = new AnimationFactory(this);
 	
     public MageCloneEntity(World world){
-        super(ModEntityTypes.MAGE.get(), world);
+        super(ModEntityTypes.MAGE_CLONE.get(), world);
     }
 
     public MageCloneEntity(EntityType<? extends SpellcastingIllagerEntity> type, World world) {

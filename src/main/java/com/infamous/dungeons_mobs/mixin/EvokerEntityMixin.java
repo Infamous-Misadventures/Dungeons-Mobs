@@ -1,11 +1,14 @@
 package com.infamous.dungeons_mobs.mixin;
 
-import com.infamous.dungeons_mobs.entities.illagers.DungeonsEvokerEntity;
+import com.infamous.dungeons_mobs.entities.illagers.minibosses.DungeonsEvokerEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.monster.EvokerEntity;
 import net.minecraft.entity.monster.SpellcastingIllagerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
@@ -15,6 +18,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.fml.ModList;
 import org.spongepowered.asm.mixin.Mixin;
 
 import javax.annotation.Nullable;
@@ -27,7 +31,8 @@ public abstract class EvokerEntityMixin extends SpellcastingIllagerEntity {
     }
 
     public void s(){
-        if (this.getCurrentRaid() != null && DungeonsMobsConfig.COMMON.ENABLE_DUNGEONS_EVOKER_IN_RAIDS.get()) {
+        if (this.getCurrentRaid() != null) {
+
                 EvokerEntityMixin v = this;
                 CompoundNBT v1 = new CompoundNBT();
                 v1 = v.saveWithoutId(v1);
@@ -37,10 +42,18 @@ public abstract class EvokerEntityMixin extends SpellcastingIllagerEntity {
                 DungeonsEvokerEntity vv = new DungeonsEvokerEntity(this.level);
                 vv.moveTo(vvf, 0F, 0F);
                 vv.load(v1);
+                vv.setCurrentRaid(v.getCurrentRaid());
                 vv.addEffect(new EffectInstance(Effects.HEAL, 10, 6, (false), (false)));
                 v.level.addFreshEntity(vv);
 
-                v.remove();
+            if(!ModList.get().isLoaded("illagersweararmor")) {
+                vv.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Items.DIAMOND_HELMET));
+                vv.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(Items.DIAMOND_CHESTPLATE));
+                vv.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(Items.DIAMOND_LEGGINGS));
+                vv.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.DIAMOND_BOOTS));
+            }
+
+                v.moveTo(0,0,0);
             }
     }
 
@@ -48,6 +61,21 @@ public abstract class EvokerEntityMixin extends SpellcastingIllagerEntity {
     @Override
     public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance p_213386_2_, SpawnReason p_213386_3_, @Nullable ILivingEntityData p_213386_4_, @Nullable CompoundNBT p_213386_5_) {
         this.s();
+        if (p_213386_3_ != SpawnReason.STRUCTURE && this.getCurrentRaid() == null) {
+            EvokerEntityMixin v = this;
+            CompoundNBT v1 = new CompoundNBT();
+            v1 = v.saveWithoutId(v1);
+            BlockPos vvf = v.blockPosition();
+            Biome b = this.level.getBiome(blockPosition());
+            ResourceLocation bb = b.getRegistryName();
+            DungeonsEvokerEntity vv = new DungeonsEvokerEntity(this.level);
+            vv.moveTo(vvf, 0F, 0F);
+            vv.load(v1);
+            vv.setUUID(v.getUUID());
+            vv.addEffect(new EffectInstance(Effects.HEAL, 10, 6, (false), (false)));
+            v.level.addFreshEntity(vv);
+            v.remove();
+        }
         return super.finalizeSpawn(p_213386_1_, p_213386_2_, p_213386_3_, p_213386_4_, p_213386_5_);
     }
 

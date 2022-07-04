@@ -6,13 +6,10 @@ package com.infamous.dungeons_mobs.client.models.summonables;// Made with Blockb
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.entities.summonables.ConstructEntity;
 import com.infamous.dungeons_mobs.entities.summonables.GeomancerBombEntity;
-
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
-import software.bernie.geckolib3.model.provider.data.EntityModelData;
 
 public class GeomancerConstructModel extends AnimatedGeoModel {
 	   

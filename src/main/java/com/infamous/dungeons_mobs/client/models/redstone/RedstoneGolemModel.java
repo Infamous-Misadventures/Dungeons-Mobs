@@ -3,21 +3,9 @@ package com.infamous.dungeons_mobs.client.models.redstone;// Made with Blockbenc
 // Paste this class into your mod and generate all required imports
 
 
-import com.google.common.collect.ImmutableList;
 import com.infamous.dungeons_mobs.DungeonsMobs;
-import com.infamous.dungeons_mobs.entities.illagers.GeomancerEntity;
 import com.infamous.dungeons_mobs.entities.redstone.RedstoneGolemEntity;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.entity.model.SegmentedModel;
-import net.minecraft.client.renderer.model.ModelHelper;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.util.Hand;
-import net.minecraft.util.HandSide;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;

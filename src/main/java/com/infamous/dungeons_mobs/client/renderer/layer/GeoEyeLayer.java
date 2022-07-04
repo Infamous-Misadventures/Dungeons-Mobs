@@ -3,7 +3,6 @@ package com.infamous.dungeons_mobs.client.renderer.layer;
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.entities.summonables.GeomancerBombEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
-
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;

@@ -27,6 +27,7 @@ public abstract class MansionTemplateMixin extends TemplateStructurePiece {
     @Final
     private String templateName;
 
+
     public MansionTemplateMixin(IStructurePieceType structurePieceTypeIn, int componentTypeIn) {
         super(structurePieceTypeIn, componentTypeIn);
     }
@@ -49,5 +50,7 @@ public abstract class MansionTemplateMixin extends TemplateStructurePiece {
                 }
             }
         }
+
+
     }
 }

@@ -11,12 +11,11 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.IServerWorld;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import java.util.Random;
 
-public class JungleZombieEntity extends ZombieEntity{
+public class JungleZombieEntity extends DungeonsZombieEntity{
 
     public JungleZombieEntity(World worldIn) {
         super(worldIn);

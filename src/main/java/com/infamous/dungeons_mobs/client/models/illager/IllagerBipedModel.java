@@ -2,7 +2,6 @@ package com.infamous.dungeons_mobs.client.models.illager;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
-import net.minecraft.util.Hand;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.model.ModelHelper;
 import net.minecraft.client.renderer.model.ModelRenderer;
@@ -12,11 +11,9 @@ import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ShootableItem;
 import net.minecraft.item.UseAction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.math.MathHelper;
-
-// Borrowed from tallestred / seymourimadeit's IllagersWearArmor mod
-import net.minecraft.client.renderer.entity.model.BipedModel.ArmPose;
 
 public class IllagerBipedModel<T extends AbstractIllagerEntity> extends BipedModel<T> {
     public ModelRenderer arms;

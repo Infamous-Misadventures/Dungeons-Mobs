@@ -4,7 +4,7 @@ package com.infamous.dungeons_mobs.client.models.illager;
 // Paste this class into your mod and generate all required imports
 
 
-import com.infamous.dungeons_mobs.entities.illagers.ArchIllagerEntity;
+import com.infamous.dungeons_mobs.entities.illagers.bosses.ArchIllagerEntity;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 

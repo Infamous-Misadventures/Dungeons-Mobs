@@ -2,7 +2,6 @@ package com.infamous.dungeons_mobs.goals;
 
 import com.infamous.dungeons_mobs.interfaces.IAquaticMob;
 import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.MoveToBlockGoal;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;

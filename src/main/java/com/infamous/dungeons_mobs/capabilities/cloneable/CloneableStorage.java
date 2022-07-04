@@ -1,6 +1,5 @@
 package com.infamous.dungeons_mobs.capabilities.cloneable;
 
-import com.infamous.dungeons_mobs.capabilities.cloneable.ICloneable;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;

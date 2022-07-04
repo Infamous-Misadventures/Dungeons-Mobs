@@ -10,9 +10,11 @@ import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.monster.AbstractRaiderEntity;
 import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.entity.monster.PatrollerEntity;
 import net.minecraft.entity.monster.SpellcastingIllagerEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -61,6 +63,8 @@ public class MageEntity extends SpellcastingIllagerEntity implements IAnimatable
 
     protected void registerGoals() {
         super.registerGoals();
+		this.goalSelector.addGoal(7, new PatrollerEntity.PatrolGoal<>(this,1.42,1.3));
+		this.targetSelector.addGoal(2, new AbstractRaiderEntity.FindTargetGoal(this, 10F));
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(1, new MageEntity.CastingSpellGoal());
         this.goalSelector.addGoal(2, new MageEntity.DuplicateGoal());
@@ -196,7 +200,6 @@ public class MageEntity extends SpellcastingIllagerEntity implements IAnimatable
 
     @Override
     public void applyRaidBuffs(int p_213660_1_, boolean p_213660_2_) {
-
     }
 
     @Override
@@ -317,7 +320,7 @@ public class MageEntity extends SpellcastingIllagerEntity implements IAnimatable
 	    public void start() {
 	    super.start();
 		this.d = MageEntity.this.getTarget().getY() + 3D;
-	    MageEntity.this.liftInterval = 100;
+	    MageEntity.this.liftInterval = 70;
 	    MageEntity.this.setLiftTicks(40);
 	    MageEntity.this.playSound(SoundEvents.EVOKER_PREPARE_ATTACK, MageEntity.this.getSoundVolume(), MageEntity.this.getVoicePitch());
 	    }
@@ -367,7 +370,7 @@ public class MageEntity extends SpellcastingIllagerEntity implements IAnimatable
 	      }
 	      
 	      public boolean canContinueToUse() {
-	    	  	return MageEntity.this.hurtTime <= 0 && MageEntity.this.getTarget() != null && MageEntity.this.getDuplicateTicks() > 0;
+	    	  	return MageEntity.this.getTarget() != null && MageEntity.this.getDuplicateTicks() > 0;
 	      }
 	      
 	      @Override
@@ -377,7 +380,8 @@ public class MageEntity extends SpellcastingIllagerEntity implements IAnimatable
 	    
 	    public void start() {
 	    super.start();
-	    MageEntity.this.duplicateInterval = 750;
+		MageEntity.this.setInvulnerable(true);
+	    MageEntity.this.duplicateInterval = 500;
 	    MageEntity.this.setDuplicateTicks(20);
 	    MageEntity.this.playSound(SoundEvents.EVOKER_PREPARE_SUMMON, MageEntity.this.getSoundVolume(), MageEntity.this.getVoicePitch());
 	    }
@@ -390,43 +394,73 @@ public class MageEntity extends SpellcastingIllagerEntity implements IAnimatable
 	    	mob.getNavigation().stop();
 	    	
           if (mob.getDuplicateTicks() == 1) {
-              this.summonIllusionerClones();
+			  this.summonIllusionerClones();
       	      MageEntity.this.playSound(SoundEvents.ILLUSIONER_PREPARE_MIRROR, MageEntity.this.getSoundVolume(), MageEntity.this.getVoicePitch());
               BlockPos blockpos = MageEntity.this.blockPosition().offset(-5 + MageEntity.this.getRandom().nextInt(10), 0, -5 + MageEntity.this.getRandom().nextInt(10));
-              MageEntity.this.setPos(blockpos.getX(), blockpos.getY(), blockpos.getZ());
+			  int o = 0;
+			  do {
+				  if (mob.level.isEmptyBlock(blockpos) && !mob.level.isEmptyBlock(blockpos.offset(0,-1,0))) {
+					  mob.moveTo(blockpos,0,0);
+					  break;
+				  }else if (!mob.level.isEmptyBlock(blockpos)) {
+					  o++;
+					  blockpos = blockpos.offset(0, 1, 0);
+				  }else {
+					  o++;
+					  blockpos = blockpos.offset(0, -1, 0);
+				  }
+			  }while (o < 20);
            }
 	    }
 
            private void summonIllusionerClones(){
-              int difficultyAsInt = MageEntity.this.level.getDifficulty().getId();
-              int mobsToSummon = difficultyAsInt * 2 + 1; // 3 on easy, 5 on normal, 7 on hard
+			  LivingEntity target = MageEntity.this.getTarget();
+			   MageEntity mob = MageEntity.this;
+
+			   int difficultyAsInt = MageEntity.this.level.getDifficulty().getId();
+              int mobsToSummon = difficultyAsInt * 2 + 2; // 4 on easy, 6 on normal, 8 on hard
               for(int i = 0; i < mobsToSummon; ++i) {
-                 BlockPos blockpos = MageEntity.this.blockPosition().offset(-5 + MageEntity.this.getRandom().nextInt(10), 0, -5 + MageEntity.this.getRandom().nextInt(10));
-                 MageCloneEntity illusionerCloneEntity = new MageCloneEntity(MageEntity.this.level, MageEntity.this, 500 + MageEntity.this.getRandom().nextInt(10),MageEntity.this.getTarget());
-                 DifficultyInstance difficultyForLocation = MageEntity.this.level.getCurrentDifficultyAt(blockpos);
-                 illusionerCloneEntity.moveTo(blockpos, 0.0F, 0.0F);
-				  illusionerCloneEntity.finalizeSpawn((IServerWorld) illusionerCloneEntity.level, difficultyForLocation, SpawnReason.MOB_SUMMONED, (ILivingEntityData)null, (CompoundNBT)null);
-				 illusionerCloneEntity.setHealth(MageEntity.this.getHealth());
-				 illusionerCloneEntity.setTarget(MageEntity.this.getTarget());
-				  illusionerCloneEntity.setItemSlot(EquipmentSlotType.MAINHAND,MageEntity.this.getItemBySlot(EquipmentSlotType.MAINHAND));
-				  illusionerCloneEntity.setItemSlot(EquipmentSlotType.OFFHAND,MageEntity.this.getItemBySlot(EquipmentSlotType.OFFHAND));
-				 illusionerCloneEntity.setItemSlot(EquipmentSlotType.HEAD,MageEntity.this.getItemBySlot(EquipmentSlotType.HEAD));
-				  illusionerCloneEntity.setItemSlot(EquipmentSlotType.CHEST,MageEntity.this.getItemBySlot(EquipmentSlotType.CHEST));
-				  illusionerCloneEntity.setItemSlot(EquipmentSlotType.LEGS,MageEntity.this.getItemBySlot(EquipmentSlotType.LEGS));
-				  illusionerCloneEntity.setItemSlot(EquipmentSlotType.FEET,MageEntity.this.getItemBySlot(EquipmentSlotType.FEET));
-                 MageEntity.this.level.addFreshEntity(illusionerCloneEntity);
-                 ICloneable cloneable = CloneableHelper.getCloneableCapability(MageEntity.this);
-                 if(cloneable != null){
-                    cloneable.addClone(illusionerCloneEntity.getUUID());
-                 }
+				  BlockPos blockpos = mob.getTarget().blockPosition().offset(-7.5 + mob.getRandom().nextInt(15) * (target.getBbWidth() / 2 +1), 0, -7.5 + mob.getRandom().nextInt(15) * (target.getBbWidth() / 2 +1));
+				  MageCloneEntity illusionerCloneEntity = new MageCloneEntity(MageEntity.this.level, MageEntity.this, 60000, MageEntity.this.getTarget());
+				  DifficultyInstance difficultyForLocation = MageEntity.this.level.getCurrentDifficultyAt(blockpos);
+				  int ou = 0;
+				  do {
+					  if (illusionerCloneEntity.level.isEmptyBlock(blockpos) && !illusionerCloneEntity.level.isEmptyBlock(blockpos.offset(0,-1,0))) {
+						  illusionerCloneEntity.moveTo(blockpos, 0.0F, 0.0F);
+						  illusionerCloneEntity.finalizeSpawn((IServerWorld) illusionerCloneEntity.level, difficultyForLocation, SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
+						  illusionerCloneEntity.setHealth(MageEntity.this.getHealth());
+						  illusionerCloneEntity.setTarget(MageEntity.this.getTarget());
+						  illusionerCloneEntity.setItemSlot(EquipmentSlotType.MAINHAND, MageEntity.this.getItemBySlot(EquipmentSlotType.MAINHAND));
+						  illusionerCloneEntity.setItemSlot(EquipmentSlotType.OFFHAND, MageEntity.this.getItemBySlot(EquipmentSlotType.OFFHAND));
+						  illusionerCloneEntity.setItemSlot(EquipmentSlotType.HEAD, MageEntity.this.getItemBySlot(EquipmentSlotType.HEAD));
+						  illusionerCloneEntity.setItemSlot(EquipmentSlotType.CHEST, MageEntity.this.getItemBySlot(EquipmentSlotType.CHEST));
+						  illusionerCloneEntity.setItemSlot(EquipmentSlotType.LEGS, MageEntity.this.getItemBySlot(EquipmentSlotType.LEGS));
+						  illusionerCloneEntity.setItemSlot(EquipmentSlotType.FEET, MageEntity.this.getItemBySlot(EquipmentSlotType.FEET));
+						  MageEntity.this.level.addFreshEntity(illusionerCloneEntity);
+						  ICloneable cloneable = CloneableHelper.getCloneableCapability(MageEntity.this);
+						  if (cloneable != null) {
+							  cloneable.addClone(illusionerCloneEntity.getUUID());
+						  }
+						  break;
+					  }else {
+						  if (!illusionerCloneEntity.level.isEmptyBlock(blockpos)) {
+							  ou++;
+							  blockpos = blockpos.offset(0, 1, 0);
+						  } else {
+							  ou++;
+							  blockpos = blockpos.offset(0, -1, 0);
+						  }
+					  }
+				  }while (ou < 20);
               }
            }
 	    
 	    public void stop() {
 	    super.stop();
-	    MageEntity.this.setDuplicateTicks(0);
+			MageEntity.this.setInvulnerable(false);
+			MageEntity.this.setDuplicateTicks(0);
 	    }
-	   }
+	}
     
 
     /*class LiftMobGoal extends SpellcastingIllagerEntity.UseSpellGoal {

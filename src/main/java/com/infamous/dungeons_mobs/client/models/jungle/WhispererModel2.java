@@ -3,8 +3,6 @@ package com.infamous.dungeons_mobs.client.models.jungle;// Made with Blockbench 
 // Paste this class into your mod and generate all required imports
 
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 import com.infamous.dungeons_mobs.entities.jungle.WhispererEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.entity.model.BipedModel;

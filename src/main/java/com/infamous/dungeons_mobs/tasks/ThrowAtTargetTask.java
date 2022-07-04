@@ -1,7 +1,6 @@
 package com.infamous.dungeons_mobs.tasks;
 
 import com.google.common.collect.ImmutableMap;
-import com.infamous.dungeons_mobs.entities.piglin.ai.FungusThrowerAi;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.brain.BrainUtil;
@@ -13,7 +12,6 @@ import net.minecraft.util.math.EntityPosWrapper;
 import net.minecraft.world.server.ServerWorld;
 
 import java.util.function.BiConsumer;
-import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 public class ThrowAtTargetTask<E extends MobEntity> extends Task<E> {

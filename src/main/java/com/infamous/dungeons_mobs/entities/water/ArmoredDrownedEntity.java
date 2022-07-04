@@ -1,12 +1,10 @@
 package com.infamous.dungeons_mobs.entities.water;
 
 import com.infamous.dungeons_mobs.DungeonsGearCompat;
-import com.infamous.dungeons_mobs.entities.jungle.WhispererEntity;
 import com.infamous.dungeons_mobs.interfaces.IArmoredMob;
 import com.infamous.dungeons_mobs.mod.ModItems;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;

@@ -1,7 +1,6 @@
 package com.infamous.dungeons_mobs.client.models.jungle;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
-import com.infamous.dungeons_mobs.entities.illagers.ArmoredMountaineerEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.IAnimatable;

@@ -4,8 +4,6 @@ import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.passive.horse.AbstractHorseEntity;
@@ -17,7 +15,6 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 

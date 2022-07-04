@@ -112,7 +112,7 @@ public class GeomancyHelper {
             if (constructEntity != null) {
                 constructEntity.setCaster(casterEntity);
                 constructEntity.setPos(targetPos.getX(), targetPos.getY() + yShift, targetPos.getZ());
-                constructEntity.setLifeTicks(100 + casterEntity.getRandom().nextInt(10));
+                constructEntity.setLifeTicks(100 + casterEntity.getRandom().nextInt(5));
                 constructEntity.directionToFace = pillarFacing;
                 casterEntity.level.addFreshEntity(constructEntity);
             }
@@ -149,7 +149,7 @@ public class GeomancyHelper {
             if (constructEntity != null) {
                 constructEntity.setCaster(casterEntity);
                 constructEntity.setPos(targetPos.getX(), targetPos.getY() + yShift, targetPos.getZ());
-                constructEntity.setLifeTicks(100 + casterEntity.getRandom().nextInt(10));
+                constructEntity.setLifeTicks(100 + casterEntity.getRandom().nextInt(5));
                 constructEntity.directionToFace = pillarFacing;
                 casterEntity.level.addFreshEntity(constructEntity);
             }
@@ -213,7 +213,7 @@ public class GeomancyHelper {
             if (constructEntity != null) {
                 constructEntity.setCaster(casterEntity);
                 constructEntity.setPos(targetPos.getX(), targetPos.getY() + yShift, targetPos.getZ());
-                constructEntity.setLifeTicks(100 + casterEntity.getRandom().nextInt(10));
+                constructEntity.setLifeTicks(100 + casterEntity.getRandom().nextInt(6));
                 constructEntity.directionToFace = pillarFacing;
                 constructEntity.playSound(ModSoundEvents.GEOMANCER_BOMB_SPAWN.get(), 2.0F, 1.0F);
                 casterEntity.level.addFreshEntity(constructEntity);
@@ -251,7 +251,7 @@ public class GeomancyHelper {
             if (constructEntity != null) {
                 constructEntity.setCaster(casterEntity);
                 constructEntity.setPos(targetPos.getX(), targetPos.getY() + yShift, targetPos.getZ());
-                constructEntity.setLifeTicks(100 + casterEntity.getRandom().nextInt(10));
+                constructEntity.setLifeTicks(100 + casterEntity.getRandom().nextInt(5));
                 constructEntity.directionToFace = pillarFacing;
                 constructEntity.playSound(ModSoundEvents.GEOMANCER_BOMB_SPAWN.get(), 2.0F, 1.0F);
                 casterEntity.level.addFreshEntity(constructEntity);

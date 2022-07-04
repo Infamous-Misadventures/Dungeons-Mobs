@@ -1,17 +1,8 @@
 package com.infamous.dungeons_mobs.blocks;
 
-import static com.infamous.dungeons_libraries.capabilities.enchantable.EnchantableHelper.getEnchantableCapabilityLazy;
-
-import java.util.Random;
-
 import com.infamous.dungeons_mobs.mod.ModBlocks;
 import com.infamous.dungeons_mobs.mod.ModMobEnchantments;
-
-import net.minecraft.block.AbstractFireBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.SoulFireBlock;
+import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
@@ -24,6 +15,10 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+
+import java.util.Random;
+
+import static com.infamous.dungeons_libraries.capabilities.enchantable.EnchantableHelper.getEnchantableCapabilityLazy;
 
 public class CorruptedPyreBlock extends AbstractFireBlock {
     public static final IntegerProperty AGE = BlockStateProperties.AGE_5;
