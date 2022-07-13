@@ -20,19 +20,27 @@ public class SensorMapModifier {
 
         villagerHostiles.put(ModEntityTypes.ICEOLOGER.get(), 12.0F);
         villagerHostiles.put(ModEntityTypes.ILLUSIONER_CLONE.get(), 12.0F);
+        villagerHostiles.put(ModEntityTypes.ILLUSIONER.get(), 12.0F);
+        villagerHostiles.put(ModEntityTypes.DUNGEONS_ILLUSIONER.get(), 12.0F);
+        villagerHostiles.put(ModEntityTypes.ILLUSIONER_CLONE_C.get(), 12.0F);
         villagerHostiles.put(ModEntityTypes.WINDCALLER.get(), 12.0F);
         villagerHostiles.put(ModEntityTypes.GEOMANCER.get(), 12.0F);
 
         villagerHostiles.put(ModEntityTypes.REDSTONE_GOLEM.get(), 12.0F);
         villagerHostiles.put(ModEntityTypes.SQUALL_GOLEM.get(), 12.0F);
+        villagerHostiles.put(ModEntityTypes.DUNGEONS_EVOKER.get(), 12.0F);
 
         villagerHostiles.put(ModEntityTypes.VINDICATOR_CHEF.get(), 10.0F);
         villagerHostiles.put(ModEntityTypes.ARMORED_VINDICATOR.get(), 10.0F);
         villagerHostiles.put(ModEntityTypes.ROYAL_GUARD.get(), 10.0F);
         villagerHostiles.put(ModEntityTypes.MOUNTAINEER.get(), 10.0F);
+        villagerHostiles.put(ModEntityTypes.VINDICATOR.get(), 10.0F);
+        villagerHostiles.put(ModEntityTypes.VINDICATOR_RAID_CAPTAIN.get(), 10.0F);
+        villagerHostiles.put(ModEntityTypes.RAMPART_CAPTAIN.get(), 10.0F);
         villagerHostiles.put(ModEntityTypes.ARMORED_MOUNTAINEER.get(), 10.0F);
 
         villagerHostiles.put(ModEntityTypes.ARMORED_ZOMBIE.get(), 8.0F);
+        villagerHostiles.put(ModEntityTypes.ZOMBIE.get(), 8.0F);
         villagerHostiles.put(ModEntityTypes.FROZEN_ZOMBIE.get(), 8.0F);
         villagerHostiles.put(ModEntityTypes.JUNGLE_ZOMBIE.get(), 8.0F);
 

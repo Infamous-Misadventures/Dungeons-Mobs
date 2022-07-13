@@ -1,7 +1,7 @@
 package com.infamous.dungeons_mobs.goals.magic;
 
-import com.infamous.dungeons_mobs.interfaces.IMagicUser;
 import com.infamous.dungeons_mobs.entities.magic.MagicType;
+import com.infamous.dungeons_mobs.interfaces.IMagicUser;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.Goal;

@@ -1,7 +1,5 @@
 package com.infamous.dungeons_mobs.capabilities.cloneable;
 
-import com.infamous.dungeons_mobs.capabilities.cloneable.ICloneable;
-
 import java.util.UUID;
 
 public class Cloneable implements ICloneable {

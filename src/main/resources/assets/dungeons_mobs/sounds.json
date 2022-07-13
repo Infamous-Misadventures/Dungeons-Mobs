@@ -400,5 +400,41 @@
 				"stream": true
 			}
 		]
+	},
+	"entity.vindicator.attack": {
+		"category": "entity",
+		"subtitle": "Vindicator Attack",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/vindicator/idel1",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/vindicator/idel2",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/vindicator/idel3",
+				"stream": true
+			}
+		]
+	},
+	"entity.pillager.death": {
+		"category": "entity",
+		"subtitle": "Pillager Death",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/pillager/death1",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/pillager/death2",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/pillager/death3",
+				"stream": true
+			}
+		]
 	}
 }

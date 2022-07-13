@@ -1,23 +1,18 @@
 package com.infamous.dungeons_mobs.entities.redstone;
 
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
-import com.infamous.dungeons_mobs.utils.GeomancyHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.controller.LookController;
-import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.monster.AbstractRaiderEntity;
-import net.minecraft.entity.monster.EvokerEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.EvokerFangsEntity;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -68,8 +63,13 @@ public class RedstoneGolemEntity extends AbstractRaiderEntity implements IAnimat
     public RedstoneGolemEntity(EntityType<? extends RedstoneGolemEntity> type, World worldIn) {
         super(type, worldIn);
         this.maxUpStep = 1.25F;
-        this.xpReward = 40;
-        this.mineAttackCooldown = 10 * 20;
+        this.xpReward = 50;
+        this.mineAttackCooldown = 20 * 20;
+    }
+
+    @Override
+    public boolean isPushable() {
+        return false;
     }
 
     @Override
@@ -102,12 +102,20 @@ public class RedstoneGolemEntity extends AbstractRaiderEntity implements IAnimat
 
     private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
         if (this.isSummoningMines()) {
+            event.getController().animationSpeed = 1;
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.redstone_golem.summon", false));
         } else if (isMeleeAttacking()) {
+            event.getController().animationSpeed = 1;
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.redstone_golem.attack", false));
         } else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
+            if (this.isAggressive()) {
+                event.getController().animationSpeed = 1;
+            }else {
+                event.getController().animationSpeed = 0.75;
+            }
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.redstone_golem.walk", true));
         } else {
+            event.getController().animationSpeed = 1;
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.redstone_golem.general", true));
         }
         return PlayState.CONTINUE;
@@ -118,7 +126,7 @@ public class RedstoneGolemEntity extends AbstractRaiderEntity implements IAnimat
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new RedstoneGolemEntity.MeleeGoal());
-        this.goalSelector.addGoal(5, new RedstoneGolemEntity.AttackGoal(this, 1.0));
+        this.goalSelector.addGoal(5, new RedstoneGolemEntity.AttackGoal(this, 1.185));
         this.goalSelector.addGoal(4, new RedstoneGolemEntity.SummonRedstoneMinesGoal());
         this.goalSelector.addGoal(6, new WaterAvoidingRandomWalkingGoal(this, 0.6D));
         this.goalSelector.addGoal(7, new LookAtGoal(this, PlayerEntity.class, 6.0F));
@@ -135,9 +143,10 @@ public class RedstoneGolemEntity extends AbstractRaiderEntity implements IAnimat
         if (this.attackID != 0) {
             ++this.attackTimer;
         }
-        if (!this.level.isClientSide && this.mineAttackCooldown > 0) {
+        if (!this.level.isClientSide && this.mineAttackCooldown > 30 && this.getTarget() != null && this.getTarget().isAlive()) {
             --this.mineAttackCooldown;
         }
+        this.setDeltaMovement(this.getDeltaMovement().add(0,-2,0));
         this.handleLeafCollision();
         this.handleSteppingOnBlocks();
     }
@@ -184,11 +193,12 @@ public class RedstoneGolemEntity extends AbstractRaiderEntity implements IAnimat
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MonsterEntity.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 200.0D) // 2x Golem Health
-                .add(Attributes.MOVEMENT_SPEED, 0.25D)
-                .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
-                .add(Attributes.ATTACK_DAMAGE, 16.0D) // >= Golem Attack
-                .add(Attributes.ATTACK_KNOCKBACK, 3.0D); // 2x Ravager knockback
+                .add(Attributes.FOLLOW_RANGE, 32.0D)
+                .add(Attributes.MAX_HEALTH, 200.0D)
+                .add(Attributes.MOVEMENT_SPEED, 0.27D)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 5.0D)
+                .add(Attributes.ATTACK_DAMAGE, 17.0D)
+                .add(Attributes.ATTACK_KNOCKBACK, 5.5D);
     }
 
     private float getAttackDamage() {
@@ -218,11 +228,17 @@ public class RedstoneGolemEntity extends AbstractRaiderEntity implements IAnimat
      */
     public boolean hurt(DamageSource source, float amount) {
         boolean flag = super.hurt(source, amount);
-        if (flag) {
+        if (flag && source != DamageSource.LAVA && source != DamageSource.DROWN && source != DamageSource.FALL && source != DamageSource.ON_FIRE && source != DamageSource.IN_FIRE && source != DamageSource.HOT_FLOOR) {
             this.playSound(SoundEvents.IRON_GOLEM_DAMAGE, 1.0F, 1.0F);
         }
 
-        return flag;
+        this.setDeltaMovement(this.getDeltaMovement().multiply(0,0,0));
+
+        if (source != DamageSource.LAVA && source != DamageSource.DROWN && source != DamageSource.FALL && source != DamageSource.ON_FIRE && source != DamageSource.IN_FIRE && source != DamageSource.HOT_FLOOR) {
+            return flag;
+        }else {
+            return false;
+        }
     }
 
     public boolean checkSpawnObstruction(IWorldReader worldIn) {
@@ -382,7 +398,7 @@ public class RedstoneGolemEntity extends AbstractRaiderEntity implements IAnimat
             RedstoneGolemEntity.this.lookControl.setLookAt(livingentity, 30.0F, 30.0F);
 
             if (--this.delayCounter <= 0) {
-                this.delayCounter = 4 + RedstoneGolemEntity.this.getRandom().nextInt(7);
+                this.delayCounter = 4 + RedstoneGolemEntity.this.getRandom().nextInt(3);
                 RedstoneGolemEntity.this.getNavigation().moveTo(livingentity, (double)this.moveSpeed);
             }
 
@@ -413,41 +429,57 @@ public class RedstoneGolemEntity extends AbstractRaiderEntity implements IAnimat
     }
 
     class MeleeGoal extends Goal {
+
+        public RedstoneGolemEntity v = RedstoneGolemEntity.this;
+
         public MeleeGoal() {
-            this.setFlags(EnumSet.of(Goal.Flag.LOOK, Goal.Flag.MOVE));
+            this.setFlags(EnumSet.of(Flag.LOOK, Flag.MOVE));
         }
 
         @Override
         public boolean canUse() {
-            return RedstoneGolemEntity.this.getTarget() != null && attackID == MELEE_ATTACK;
+            return v.getTarget() != null && v.attackID == MELEE_ATTACK;
         }
 
         @Override
         public boolean canContinueToUse() {
             //animation tick
-            return attackTimer < 15;
+            return v.attackTimer < 15 && (v.getTarget() != null && v.getTarget().isAlive());
         }
 
         @Override
         public void start() {
-            setAttackID(MELEE_ATTACK);
-            setMeleeAttacking(true);
+            v.setAttackID(MELEE_ATTACK);
+            v.setMeleeAttacking(true);
+        }
+
+        @Override
+        public void stop() {
+            v.setAttackID(0);
+            v.setMeleeAttacking(false);
+            v.attackTimer = 0;
+            if (v.getTarget() == null) {
+                v.setAggressive(false);
+            }
         }
 
         @Override
         public void tick() {
-           if(RedstoneGolemEntity.this.getTarget() != null && RedstoneGolemEntity.this.getTarget().isAlive()) {
-               RedstoneGolemEntity.this.getLookControl().setLookAt(RedstoneGolemEntity.this.getTarget(), 30.0F, 30.0F);
-               if (attackTimer == 9) {
-                   float attackKnockback = RedstoneGolemEntity.this.getAttackKnockback();
-                   LivingEntity attackTarget = RedstoneGolemEntity.this.getTarget();
-                   double ratioX = (double) MathHelper.sin(RedstoneGolemEntity.this.yRot * ((float) Math.PI / 180F));
-                   double ratioZ = (double) (-MathHelper.cos(RedstoneGolemEntity.this.yRot * ((float) Math.PI / 180F)));
-                   double knockbackReduction = 0.5D;
-                   attackTarget.hurt(DamageSource.mobAttack(RedstoneGolemEntity.this), (float) RedstoneGolemEntity.this.getAttributeValue(Attributes.ATTACK_DAMAGE));
-                   this.forceKnockback(attackTarget,attackKnockback * 0.5F, ratioX, ratioZ, knockbackReduction);
-                   RedstoneGolemEntity.this.setDeltaMovement(RedstoneGolemEntity.this.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
-               }
+            if (v.getTarget() != null && v.getTarget().isAlive()) {
+                v.getLookControl().setLookAt(v.getTarget(), 30.0F, 30.0F);
+                if (v.attackTimer == 10 && v.distanceToSqr(v.getTarget()) <= 28.0D + v.getTarget().getBbWidth()) {
+                    float attackKnockback = v.getAttackKnockback();
+                    LivingEntity attackTarget = v.getTarget();
+                    double ratioX = (double) MathHelper.sin(v.yRot * ((float) Math.PI / 180F));
+                    double ratioZ = (double) (-MathHelper.cos(v.yRot * ((float) Math.PI / 180F)));
+                    double knockbackReduction = 0.5D;
+                    attackTarget.hurt(DamageSource.mobAttack(v), (float) v.getAttributeValue(Attributes.ATTACK_DAMAGE));
+                    this.forceKnockback(attackTarget, attackKnockback * 0.8F, ratioX, ratioZ, knockbackReduction);
+                    v.setDeltaMovement(v.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
+                }
+                if (v.attackTimer == 10) {
+                    v.mineAttackCooldown = v.mineAttackCooldown - 10 ;
+                }
             }
 
         }
@@ -466,24 +498,17 @@ public class RedstoneGolemEntity extends AbstractRaiderEntity implements IAnimat
                 attackTarget.setDeltaMovement(vector3d.x / 2.0D - vector3d1.x, attackTarget.isOnGround() ? Math.min(0.4D, vector3d.y / 2.0D + (double)strength) : vector3d.y, vector3d.z / 2.0D - vector3d1.z);
             }
         }
-
-
-        @Override
-        public void stop() {
-            setMeleeAttacking(false);
-            setAttackID(0);
-        }
-
     }
 
 
     // MINES
 
     class SummonRedstoneMinesGoal extends Goal{
-        static final int MINE_ATTACK_COOLDOWN = 10 * 20;
+        static final int MINE_ATTACK_COOLDOWN = 15 * 20;
 
 
-        SummonRedstoneMinesGoal(){
+        public SummonRedstoneMinesGoal() {
+            this.setFlags(EnumSet.of(Flag.LOOK, Flag.MOVE));
         }
 
         @Override
@@ -493,7 +518,7 @@ public class RedstoneGolemEntity extends AbstractRaiderEntity implements IAnimat
 
         @Override
         public boolean canContinueToUse() {
-            return attackTimer < 140;
+            return attackTimer < 105;
         }
 
         @Override
@@ -506,17 +531,36 @@ public class RedstoneGolemEntity extends AbstractRaiderEntity implements IAnimat
 
         @Override
         public void tick() {
+            RedstoneGolemEntity.this.setDeltaMovement(RedstoneGolemEntity.this.getDeltaMovement().multiply(0,0,0));
             RedstoneGolemEntity.this.getNavigation().stop();
             if(attackTimer == 12){
                 BlockPos centerPos = RedstoneGolemEntity.this.blockPosition();
-                for (int i = 0; i < 14; i++) {
+                for (int i = 0; i < 16; i++) {
                     double randomNearbyX = centerPos.getX() + (RedstoneGolemEntity.this.random.nextGaussian() * 10.0D);
                     //double randomNearbyY = RedstoneGolemEntity.this.getPosY() + (double)(RedstoneGolemEntity.this.rand.nextInt(4) - 2);
                     double randomNearbyZ = centerPos.getZ() + (RedstoneGolemEntity.this.random.nextGaussian() * 10.0D);
-                    int j =  RedstoneMineEntity.LIFE_TIME + 4 * i;
+                    int k = (int) (4 * i);
+                    int j = RedstoneMineEntity.LIFE_TIME + k;
                     BlockPos randomBlockPos = new BlockPos(randomNearbyX, centerPos.getY(), randomNearbyZ);
                     RedstoneGolemEntity.this.createSpellEntity(randomBlockPos.getX(), randomBlockPos.getZ(), randomBlockPos.getY(), randomBlockPos.getY() + 1, j);
-
+                }
+                for (int i = 0; i < 8; i++) {
+                    double randomNearbyX = centerPos.getX() + (RedstoneGolemEntity.this.random.nextGaussian() * 10.0D);
+                    //double randomNearbyY = RedstoneGolemEntity.this.getPosY() + (double)(RedstoneGolemEntity.this.rand.nextInt(4) - 2);
+                    double randomNearbyZ = centerPos.getZ() + (RedstoneGolemEntity.this.random.nextGaussian() * 10.0D);
+                    int k = (int) (8 * i);
+                    int j = RedstoneMineEntity.LIFE_TIME + k;
+                    BlockPos randomBlockPos = new BlockPos(randomNearbyX, centerPos.getY(), randomNearbyZ);
+                    RedstoneGolemEntity.this.createSpellEntity(randomBlockPos.getX(), randomBlockPos.getZ(), randomBlockPos.getY(), randomBlockPos.getY() + 1, j);
+                }
+                for (int i = 0; i < 5; i++) {
+                    double randomNearbyX = centerPos.getX() + (RedstoneGolemEntity.this.random.nextGaussian() * 10.0D);
+                    //double randomNearbyY = RedstoneGolemEntity.this.getPosY() + (double)(RedstoneGolemEntity.this.rand.nextInt(4) - 2);
+                    double randomNearbyZ = centerPos.getZ() + (RedstoneGolemEntity.this.random.nextGaussian() * 10.0D);
+                    int k = (int) (12 * i);
+                    int j = RedstoneMineEntity.LIFE_TIME + k;
+                    BlockPos randomBlockPos = new BlockPos(randomNearbyX, centerPos.getY(), randomNearbyZ);
+                    RedstoneGolemEntity.this.createSpellEntity(randomBlockPos.getX(), randomBlockPos.getZ(), randomBlockPos.getY(), randomBlockPos.getY() + 1, j);
                 }
             }
         }

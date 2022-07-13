@@ -1,8 +1,8 @@
 package com.infamous.dungeons_mobs.client.renderer.illager;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
-import com.infamous.dungeons_mobs.client.models.illager.IllagerBipedModel;
 import com.infamous.dungeons_mobs.client.models.armor.IllagerArmorModel;
+import com.infamous.dungeons_mobs.client.models.illager.IllagerBipedModel;
 import com.infamous.dungeons_mobs.entities.illagers.IllusionerCloneEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;

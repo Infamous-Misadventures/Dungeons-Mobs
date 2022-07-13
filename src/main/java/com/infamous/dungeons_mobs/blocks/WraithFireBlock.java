@@ -2,7 +2,6 @@ package com.infamous.dungeons_mobs.blocks;
 
 import com.infamous.dungeons_mobs.entities.undead.WraithEntity;
 import com.infamous.dungeons_mobs.mod.ModBlocks;
-import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.state.IntegerProperty;
@@ -18,8 +17,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
 import java.util.Random;
-
-import net.minecraft.block.AbstractBlock.Properties;
 
 public class WraithFireBlock extends AbstractFireBlock {
     public static final IntegerProperty AGE = BlockStateProperties.AGE_15;

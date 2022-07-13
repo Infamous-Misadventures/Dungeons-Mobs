@@ -14,6 +14,7 @@ import net.minecraft.world.Difficulty;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import software.bernie.geckolib3.core.IAnimatable;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -21,6 +22,7 @@ import java.util.UUID;
 
 @SuppressWarnings({"EntityConstructor", "WeakerAccess"})
 public abstract class VineEntity extends MobEntity implements IMob {
+    public static final DataParameter<Boolean> DI = EntityDataManager.defineId(VineEntity.class, DataSerializers.BOOLEAN);
     public static final DataParameter<Integer> LIFE_TICKS = EntityDataManager.defineId(VineEntity.class, DataSerializers.INT);
 
     private LivingEntity caster;
@@ -45,6 +47,7 @@ public abstract class VineEntity extends MobEntity implements IMob {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(LIFE_TICKS, 0);
+        this.entityData.define(DI, false);
     }
 
     @Override
@@ -127,7 +130,10 @@ public abstract class VineEntity extends MobEntity implements IMob {
         super.tick();
         if(this.isPerishable && !this.level.isClientSide()) {
             this.setLifeTicks(getLifeTicks() - 1);
-            if (this.getLifeTicks() <= 0) {
+            if (this.getLifeTicks() <= 0 && !this.entityData.get(DI)) {
+                this.entityData.set(DI, true);
+                this.setLifeTicks(8);
+            }else if (this.getLifeTicks() <= 0) {
                 this.remove();
             }
         }

@@ -1,16 +1,11 @@
 package com.infamous.dungeons_mobs.client.renderer.illager;
 
-import java.util.Map;
-
-import javax.annotation.Nullable;
-
 import com.google.common.collect.Maps;
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.client.models.illager.MageModel;
 import com.infamous.dungeons_mobs.entities.illagers.MageEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
@@ -23,6 +18,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
+
+import javax.annotation.Nullable;
+import java.util.Map;
 
 public class MageRenderer extends GeoEntityRenderer<MageEntity> {
 	
@@ -77,7 +75,7 @@ public class MageRenderer extends GeoEntityRenderer<MageEntity> {
 	
 	@Override
 	public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-		bufferIn = rtb.getBuffer(RenderType.entityTranslucent(thisMage.isAngry() ? new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/mage_angry.png") : new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/mage.png")));
+		bufferIn = rtb.getBuffer(RenderType.entityTranslucent(thisMage.isAngry() ? new ResourceLocation(DungeonsMobs.MODID, "textures/geo_entity/illager/mage_angry.png") : new ResourceLocation(DungeonsMobs.MODID, "textures/geo_entity/illager/mage.png")));
 		
 	    if (bone.getName().equals("armourLeftArm")) { // rArmRuff is the name of the bone you to set the item to attach too. Please see Note
 	        bufferIn = rtb.getBuffer(RenderType.entityTranslucent(whTexture));    

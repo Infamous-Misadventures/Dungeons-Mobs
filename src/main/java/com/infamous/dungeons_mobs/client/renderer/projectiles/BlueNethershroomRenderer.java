@@ -1,7 +1,6 @@
 package com.infamous.dungeons_mobs.client.renderer.projectiles;
 
 import com.infamous.dungeons_mobs.entities.projectiles.BlueNethershroomEntity;
-import com.infamous.dungeons_mobs.entities.projectiles.CobwebProjectileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.SpriteRenderer;

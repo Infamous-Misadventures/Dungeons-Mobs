@@ -90,6 +90,8 @@ public class PoisonQuillVineEntity extends VineEntity implements IRangedAttackMo
         if (!this.isSilent()) {
             this.level.playSound((PlayerEntity) null, this.getX(), this.getY(), this.getZ(), SoundEvents.LLAMA_SPIT, this.getSoundSource(), 1.0F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
         }
+        abstractarrowentity.setInvisible(true);
+
         setAttackTicks(18);
 
         this.level.addFreshEntity(abstractarrowentity);
@@ -116,7 +118,9 @@ public class PoisonQuillVineEntity extends VineEntity implements IRangedAttackMo
     }
 
     private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
-        if (this.getLifeTicks() > MAX_LIFE_TIME - 36) {
+        if (this.entityData.get(DI)) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.poison_quill_vine.die", false));
+        } else if (this.getLifeTicks() > MAX_LIFE_TIME - 36) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.poison_quill_vine.burst", false));
         } else if (this.getAttackTicks() > 0) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.poison_quill_vine.firing", false));

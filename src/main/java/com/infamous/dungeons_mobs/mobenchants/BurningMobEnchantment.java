@@ -1,8 +1,6 @@
 package com.infamous.dungeons_mobs.mobenchants;
 
 import com.infamous.dungeons_libraries.mobenchantments.MobEnchantment;
-import com.infamous.dungeons_libraries.utils.AreaOfEffectHelper;
-import com.infamous.dungeons_libraries.utils.CapabilityHelper;
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.capabilities.properties.IMobProps;
 import com.infamous.dungeons_mobs.capabilities.properties.MobPropsHelper;

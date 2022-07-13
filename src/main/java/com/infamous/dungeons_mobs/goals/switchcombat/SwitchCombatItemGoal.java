@@ -4,8 +4,10 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.*;
-import net.minecraft.util.Hand;
+import net.minecraft.item.EggItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ShootableItem;
+import net.minecraft.item.SnowballItem;
 
 public class SwitchCombatItemGoal extends Goal
     {

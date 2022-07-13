@@ -1,7 +1,6 @@
 package com.infamous.dungeons_mobs.items;
 
 import com.infamous.dungeons_mobs.client.models.armor.ChefHatModel;
-import com.infamous.dungeons_mobs.client.models.armor.SkeletonVanguardHelmetModel;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -15,8 +14,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
-
-import net.minecraft.item.Item.Properties;
 
 public class ChefHatItem extends ArmorItem {
     public ChefHatItem(IArmorMaterial armorMaterial, EquipmentSlotType slotType, Properties group) {

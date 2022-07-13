@@ -1,8 +1,5 @@
 package com.infamous.dungeons_mobs.goals;
 
-import java.util.EnumSet;
-import java.util.List;
-import java.util.function.Predicate;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -15,6 +12,9 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.vector.Vector3d;
 
 import javax.annotation.Nullable;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.function.Predicate;
 
 public class AvoidBaseEntityGoal<T extends Entity> extends Goal {
    private final CreatureEntity hostCreature;

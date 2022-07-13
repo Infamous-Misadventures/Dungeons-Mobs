@@ -2,6 +2,7 @@ package com.infamous.dungeons_mobs.mixin;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
+import net.minecraft.entity.monster.AbstractIllagerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -27,12 +28,14 @@ public abstract class MansionTemplateMixin extends TemplateStructurePiece {
     @Final
     private String templateName;
 
+
     public MansionTemplateMixin(IStructurePieceType structurePieceTypeIn, int componentTypeIn) {
         super(structurePieceTypeIn, componentTypeIn);
     }
 
     @Inject(at = @At("HEAD"), method = "handleDataMarker", cancellable = true)
     private void handleDataMarker(String function, BlockPos pos, IServerWorld worldIn, Random rand, MutableBoundingBox sbb, CallbackInfo callbackInfo) {
+
         if (!function.startsWith("Chest") && !function.equals("Warrior") && !function.equals("Mage")) {
             ResourceLocation entityResourceLocation = new ResourceLocation(function);
             EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(entityResourceLocation);
@@ -49,5 +52,7 @@ public abstract class MansionTemplateMixin extends TemplateStructurePiece {
                 }
             }
         }
+
+
     }
 }

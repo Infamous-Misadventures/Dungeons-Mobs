@@ -5,14 +5,11 @@ import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.item.EggItem;
-import net.minecraft.item.ShootableItem;
 import net.minecraft.item.SnowballItem;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 
 import java.util.EnumSet;
-
-import net.minecraft.entity.ai.goal.Goal.Flag;
 
 public class ThrowAndMeleeAttackGoal<T extends CreatureEntity & IRangedAttackMob> extends MeleeAttackGoal
 {

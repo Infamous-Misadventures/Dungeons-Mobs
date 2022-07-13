@@ -1,8 +1,6 @@
 package com.infamous.dungeons_mobs.interfaces;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-
-import net.minecraft.client.renderer.entity.model.IHasArm;
 import net.minecraft.util.HandSide;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;

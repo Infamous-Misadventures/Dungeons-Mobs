@@ -163,6 +163,7 @@ public class GeomancyHelper {
             VineEntity vineEntity = entityType.create(casterEntity.level);
             if (vineEntity != null) {
                 vineEntity.setCaster(casterEntity);
+                vineEntity.setLifeTicks(300);
                 vineEntity.setPos(targetPos.getX(), targetPos.getY(), targetPos.getZ());
                 casterEntity.level.addFreshEntity(vineEntity);
             }
@@ -176,7 +177,7 @@ public class GeomancyHelper {
             VineEntity vineEntity = entityType.create(casterEntity.level);
             if (vineEntity != null) {
                 vineEntity.setCaster(casterEntity);
-                vineEntity.setLifeTicks(100);
+                vineEntity.setLifeTicks(100 + casterEntity.getRandom().nextInt(10));
                 vineEntity.setPos(targetPos.getX(), targetPos.getY(), targetPos.getZ());
                 casterEntity.level.addFreshEntity(vineEntity);
             }
@@ -213,7 +214,7 @@ public class GeomancyHelper {
             if (constructEntity != null) {
                 constructEntity.setCaster(casterEntity);
                 constructEntity.setPos(targetPos.getX(), targetPos.getY() + yShift, targetPos.getZ());
-                constructEntity.setLifeTicks(100 + casterEntity.getRandom().nextInt(10));
+                constructEntity.setLifeTicks(100 + casterEntity.getRandom().nextInt(12));
                 constructEntity.directionToFace = pillarFacing;
                 constructEntity.playSound(ModSoundEvents.GEOMANCER_BOMB_SPAWN.get(), 2.0F, 1.0F);
                 casterEntity.level.addFreshEntity(constructEntity);

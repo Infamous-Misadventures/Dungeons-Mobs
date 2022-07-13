@@ -1,9 +1,5 @@
 package com.infamous.dungeons_mobs.goals;
 
-import java.util.EnumSet;
-import java.util.Iterator;
-import java.util.List;
-import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -13,6 +9,10 @@ import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.GameRules;
+
+import java.util.EnumSet;
+import java.util.Iterator;
+import java.util.List;
 
 public class MobHurtByTargetGoal extends TargetGoal {
    private static final EntityPredicate HURT_BY_TARGETING = (new EntityPredicate()).allowUnseeable().ignoreInvisibilityTesting();

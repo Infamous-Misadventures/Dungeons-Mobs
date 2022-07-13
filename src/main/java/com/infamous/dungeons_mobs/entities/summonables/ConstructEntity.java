@@ -1,20 +1,24 @@
 package com.infamous.dungeons_mobs.entities.summonables;
 
+import com.google.common.collect.Lists;
 import net.minecraft.entity.*;
+import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Direction;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.UUID;
 
-@SuppressWarnings("EntityConstructor")
+//@SuppressWarnings("EntityConstructor")
 public abstract class ConstructEntity extends CreatureEntity {
 	public static final DataParameter<Integer> LIFE_TICKS = EntityDataManager.defineId(ConstructEntity.class, DataSerializers.INT);
     private LivingEntity caster;
@@ -75,9 +79,9 @@ public abstract class ConstructEntity extends CreatureEntity {
         return false;
      }
 
-    public boolean hurt(DamageSource p_70097_1_, float p_70097_2_) {
-    	return false;
-    }
+    //public boolean hurt(DamageSource p_70097_1_, float p_70097_2_) {
+    //	return false;
+    //}
 
     public void faceDirection(Direction directionToFace){
 
@@ -111,9 +115,6 @@ public abstract class ConstructEntity extends CreatureEntity {
     /**
      * Returns true if it's possible to attack this entity with an item.
      */
-    public boolean isAttackable() {
-        return false;
-    }
 
     @Override
     public void readAdditionalSaveData(CompoundNBT compound) {
@@ -171,5 +172,24 @@ public abstract class ConstructEntity extends CreatureEntity {
         else{
             this.handleExistence();
         }
+
+        List<Entity> list = Lists.newArrayList(this.level.getEntities(this, this.getBoundingBox().inflate(1.5, 1.5, 1.5)));
+        for(Entity entity : list) {
+            if(entity instanceof AbstractArrowEntity){
+                AbstractArrowEntity livingEntity = (AbstractArrowEntity)entity;
+                livingEntity.remove();
+            }
+        }
+    }
+
+    @Override
+    public boolean hurt(DamageSource p_70097_1_, float p_70097_2_) {
+        return false;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
+        return null;
     }
 }

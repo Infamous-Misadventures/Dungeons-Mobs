@@ -1,6 +1,5 @@
 package com.infamous.dungeons_mobs.client.renderer.slime;
 
-import com.infamous.dungeons_mobs.entities.slime.ConjuredSlimeEntity;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.SlimeRenderer;
 import net.minecraft.entity.monster.SlimeEntity;

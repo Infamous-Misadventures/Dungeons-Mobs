@@ -1,4 +1,4 @@
-package com.infamous.dungeons_mobs.client.particle;
+package com.infamous.dungeons_mobs.mod;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import net.minecraft.particles.BasicParticleType;

@@ -19,7 +19,7 @@ public class LeapleafRenderer extends GeoEntityRenderer<LeapleafEntity> {
 
    protected void applyRotations(LeapleafEntity entityLiving, MatrixStack matrixStackIn, float ageInTicks,
                                  float rotationYaw, float partialTicks) {
-      float scaleFactor = 0.9375F;
+      float scaleFactor = 1.0f;
       matrixStackIn.scale(scaleFactor, scaleFactor, scaleFactor);
       super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
    }

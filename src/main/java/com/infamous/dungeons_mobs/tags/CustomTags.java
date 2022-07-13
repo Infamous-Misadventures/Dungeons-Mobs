@@ -16,4 +16,8 @@ public class CustomTags {
     {
         return EntityTypeTags.createOptional(new ResourceLocation(DungeonsMobs.MODID, name));
     }
+
+    public static void register(){
+        // Noop, just here to load the class.
+    }
 }

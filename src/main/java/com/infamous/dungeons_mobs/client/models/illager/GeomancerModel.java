@@ -2,7 +2,6 @@ package com.infamous.dungeons_mobs.client.models.illager;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.entities.illagers.GeomancerEntity;
-
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
@@ -19,13 +18,13 @@ public class GeomancerModel extends AnimatedGeoModel {
 
 		@Override
 		public ResourceLocation getModelLocation(Object entity) {
-			return new ResourceLocation(DungeonsMobs.MODID, "geo/geomancer.geo.json");
+			return new ResourceLocation(DungeonsMobs.MODID, "geo/illager_geo.geo.json");
 		}
 
 		@Override
 		public ResourceLocation getTextureLocation(Object entity) {
 			//ChorusGormandizerEntity entityIn = (ChorusGormandizerEntity) entity;
-			return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/geomancer.png");
+			return new ResourceLocation(DungeonsMobs.MODID, "textures/geo_entity/illager/geomancer.png");
 		}
 
 		@Override
@@ -35,8 +34,16 @@ public class GeomancerModel extends AnimatedGeoModel {
 			GeomancerEntity entityIn = (GeomancerEntity) entity;
 			
 			IBone head = this.getAnimationProcessor().getBone("head");
+			IBone rightEye = this.getAnimationProcessor().getBone("righteye");
+			IBone eyeBrow = this.getAnimationProcessor().getBone("head3");
+			IBone leftEye = this.getAnimationProcessor().getBone("lefteye");
 
 			EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
+			rightEye.setPositionX((float) Math.max(Math.min((extraData.netHeadYaw / 80)+Math.sin(leftEye.getPositionX() * Math.PI / 180F),1),0.1));
+			leftEye.setPositionX((float) Math.min(Math.max((extraData.netHeadYaw / 80)+Math.sin(rightEye.getPositionX() * Math.PI / 180F),-1),-0.1));
+			rightEye.setPositionY(Math.max(Math.min(extraData.headPitch / 80,0.15F),-0.2F));
+			leftEye.setPositionY(Math.max(Math.min(extraData.headPitch / 80,0.15F),-0.2F));
+			eyeBrow.setPositionY(Math.max(Math.min(extraData.headPitch / 80, 0.15F), -0.2F));
 			if (extraData.headPitch != 0 || extraData.netHeadYaw != 0) {
 				head.setRotationX(head.getRotationX() + (extraData.headPitch * ((float) Math.PI / 180F)));
 				head.setRotationY(head.getRotationY() + (extraData.netHeadYaw * ((float) Math.PI / 180F)));

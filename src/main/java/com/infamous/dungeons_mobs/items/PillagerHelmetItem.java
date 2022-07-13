@@ -15,8 +15,6 @@ import javax.annotation.Nullable;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
-import net.minecraft.item.Item.Properties;
-
 public class PillagerHelmetItem extends ArmorItem {
     private final boolean isDiamond;
 

@@ -1,7 +1,9 @@
 package com.infamous.dungeons_mobs.entities.jungle;
 
-import com.infamous.dungeons_mobs.entities.redstone.RedstoneGolemEntity;
+import com.google.common.collect.Lists;
+import com.infamous.dungeons_mobs.entities.golem.SquallGolemEntity;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -14,6 +16,8 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.BlockParticleData;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -32,6 +36,7 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import java.util.EnumSet;
+import java.util.List;
 
 public class LeapleafEntity extends MonsterEntity implements IAnimatable {
     AnimationFactory factory = new AnimationFactory(this);
@@ -61,6 +66,33 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
         this.xpReward = 20;
     }
 
+    private void Attackparticle(int paticle,float circle, float vec, float math) {
+        if (this.level.isClientSide) {
+            for (int i1 = 0; i1 < paticle; i1++) {
+                double DeltaMovementX = getRandom().nextGaussian() * 0.07D;
+                double DeltaMovementY = getRandom().nextGaussian() * 0.07D;
+                double DeltaMovementZ = getRandom().nextGaussian() * 0.07D;
+                float angle = (0.01745329251F * this.yBodyRot) + i1;
+                float f = MathHelper.cos(this.yRot * ((float)Math.PI / 180F)) ;
+                float f1 = MathHelper.sin(this.yRot * ((float)Math.PI / 180F)) ;
+                double extraX = circle * MathHelper.sin((float) (Math.PI + angle));
+                double extraY = 0.3F;
+                double extraZ = circle * MathHelper.cos(angle);
+                double theta = (yBodyRot) * (Math.PI / 180);
+                theta += Math.PI / 2;
+                double vecX = Math.cos(theta);
+                double vecZ = Math.sin(theta);
+                int hitX = MathHelper.floor(getX() + vec * vecX+ extraX);
+                int hitY = MathHelper.floor(getY());
+                int hitZ = MathHelper.floor(getZ() + vec * vecZ + extraZ);
+                BlockPos hit = new BlockPos(hitX, hitY, hitZ);
+                BlockState block = level.getBlockState(hit.below());
+                this.level.addParticle(new BlockParticleData(ParticleTypes.BLOCK, block), getX() + vec * vecX + extraX + f * math, this.getY() + extraY, getZ() + vec * vecZ + extraZ + f1 * math, DeltaMovementX, DeltaMovementY, DeltaMovementZ);
+
+            }
+        }
+    }
+
     @Override
     public boolean causeFallDamage(float p_225503_1_, float p_225503_2_) {
         return false;
@@ -68,11 +100,11 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MonsterEntity.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 100.0D) // 1x Golem Health
-                .add(Attributes.MOVEMENT_SPEED, 0.22D)
+                .add(Attributes.MAX_HEALTH, 135.0D) // >= Golem Health
+                .add(Attributes.MOVEMENT_SPEED, 0.23D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
-                .add(Attributes.ATTACK_DAMAGE, 17.5D) // >= Golem Attack
-                .add(Attributes.ATTACK_KNOCKBACK, 1.5D); // 1x Ravager knockback
+                .add(Attributes.ATTACK_DAMAGE, 18.5D) // >= Golem Attack
+                .add(Attributes.ATTACK_KNOCKBACK, 2.25D); // 1x Ravager knockback
     }
 
     @Override
@@ -110,16 +142,14 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new SwimGoal(this));
-        this.goalSelector.addGoal(1, new WaterAvoidingRandomWalkingGoal(this, 0.6D));
-        this.goalSelector.addGoal(3, new LeapleafEntity.StalkGoal());
+        this.goalSelector.addGoal(1, new WaterAvoidingRandomWalkingGoal(this, 0.76D));
         this.goalSelector.addGoal(1, new LeapleafEntity.LeapGoal());
-        this.goalSelector.addGoal(2, new LeapleafEntity.AttackGoal(this,1.1));
+        this.goalSelector.addGoal(1, new LeapleafEntity.AttackGoal(this,1.1));
         this.goalSelector.addGoal(0, new LeapleafEntity.LeapMeleeGoal());
         this.goalSelector.addGoal(0, new LeapleafEntity.MeleeGoal());
         this.goalSelector.addGoal(0, new LeapleafEntity.RestGoal());
         this.goalSelector.addGoal(1, new LeapleafEntity.ChargeGoal());
-        this.goalSelector.addGoal(5, new LeapAtTargetGoal(this, 0.4F));
-        this.goalSelector.addGoal(6, new LeapleafEntity.WatchGoal(this, PlayerEntity.class, 24.0F));
+        //this.goalSelector.addGoal(5, new LeapAtTargetGoal(this, 0.4F));
 
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, LeapleafEntity.class)).setAlertOthers());
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
@@ -380,14 +410,36 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
             if(LeapleafEntity.this.getTarget() != null && LeapleafEntity.this.getTarget().isAlive()) {
                 LeapleafEntity.this.getLookControl().setLookAt(LeapleafEntity.this.getTarget(), 30.0F, 30.0F);
                 if (LeapleafEntity.this.getTimer() == 2 && LeapleafEntity.this.distanceToSqr(LeapleafEntity.this.getTarget()) <= 25.6D) {
-                    float attackKnockback = (float) LeapleafEntity.this.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
-                    LivingEntity attackTarget = LeapleafEntity.this.getTarget();
-                    double ratioX = (double) MathHelper.sin(LeapleafEntity.this.yRot * ((float) Math.PI / 180F));
-                    double ratioZ = (double) (-MathHelper.cos(LeapleafEntity.this.yRot * ((float) Math.PI / 180F)));
-                    double knockbackReduction = 0.5D;
-                    attackTarget.hurt(DamageSource.mobAttack(LeapleafEntity.this), (float) (LeapleafEntity.this.getAttributeValue(Attributes.ATTACK_DAMAGE) * 1.5F));
-                    this.forceKnockback(attackTarget,attackKnockback * 1.25F, ratioX, ratioZ, knockbackReduction);
-                    LeapleafEntity.this.setDeltaMovement(LeapleafEntity.this.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
+                    LeapleafEntity.this.Attackparticle(240,3.0f,0.0f,0.0f);
+                    AreaAttack(30,5,5,5,180,1.35f + (LeapleafEntity.this.getRandom().nextFloat() / 2f));
+                }
+            }
+        }
+        private void AreaAttack(float range,float X,float Y, float Z,float arc ,float damage) {
+            for (LivingEntity entityHit : level.getEntitiesOfClass(LivingEntity.class, getBoundingBox().inflate(X, Y, Z))) {
+                float entityHitAngle = (float) ((Math.atan2(entityHit.getZ() - LeapleafEntity.this.getZ(), entityHit.getX() - LeapleafEntity.this.getX()) * (180 / Math.PI) - 90) % 360);
+                float entityAttackingAngle = LeapleafEntity.this.yBodyRot % 360;
+                if (entityHitAngle < 0) {
+                    entityHitAngle += 360;
+                }
+                if (entityAttackingAngle < 0) {
+                    entityAttackingAngle += 360;
+                }
+                float entityRelativeAngle = entityHitAngle - entityAttackingAngle;
+                float entityHitDistance = (float) Math.sqrt((entityHit.getZ() - LeapleafEntity.this.getZ()) * (entityHit.getZ() - LeapleafEntity.this.getZ()) + (entityHit.getX() - LeapleafEntity.this.getX()) * (entityHit.getX() - LeapleafEntity.this.getX()));
+                if (entityHitDistance <= range && (entityRelativeAngle <= arc / 2 && entityRelativeAngle >= -arc / 2) || (entityRelativeAngle >= 360 - arc / 2 || entityRelativeAngle <= -360 + arc / 2)) {
+                    if (!isAlliedTo(entityHit)) {
+                        entityHit.hurt(DamageSource.mobAttack(LeapleafEntity.this), (float) LeapleafEntity.this.getAttributeValue(Attributes.ATTACK_DAMAGE) * damage);
+
+                        LeapleafEntity v = LeapleafEntity.this;
+                        float attackKnockback = (float) v.getAttributeValue(Attributes.ATTACK_KNOCKBACK) * 2.2F;
+                        double ratioX = (double) MathHelper.sin(v.yRot * ((float) Math.PI / 180F));
+                        double ratioZ = (double) (-MathHelper.cos(v.yRot * ((float) Math.PI / 180F)));
+                        double knockbackReduction = 0.5D;
+                        entityHit.hurt(DamageSource.mobAttack(v), (float) (damage));
+                        this.forceKnockback(entityHit, attackKnockback * 0.8F, ratioX, ratioZ, knockbackReduction);
+                        entityHit.setDeltaMovement(entityHit.getDeltaMovement().add(0,0.43333333,0));
+                    }
                 }
             }
         }
@@ -444,15 +496,38 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
         public void tick() {
             if(LeapleafEntity.this.getTarget() != null && LeapleafEntity.this.getTarget().isAlive()) {
                 LeapleafEntity.this.getLookControl().setLookAt(LeapleafEntity.this.getTarget(), 30.0F, 30.0F);
-                if (LeapleafEntity.this.getTimer() == 15 && LeapleafEntity.this.distanceToSqr(LeapleafEntity.this.getTarget()) <= 18.6D) {
-                    float attackKnockback = (float) LeapleafEntity.this.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
-                    LivingEntity attackTarget = LeapleafEntity.this.getTarget();
-                    double ratioX = (double) MathHelper.sin(LeapleafEntity.this.yRot * ((float) Math.PI / 180F));
-                    double ratioZ = (double) (-MathHelper.cos(LeapleafEntity.this.yRot * ((float) Math.PI / 180F)));
-                    double knockbackReduction = 0.5D;
-                    attackTarget.hurt(DamageSource.mobAttack(LeapleafEntity.this), (float) LeapleafEntity.this.getAttributeValue(Attributes.ATTACK_DAMAGE));
-                    this.forceKnockback(attackTarget,attackKnockback * 0.5F, ratioX, ratioZ, knockbackReduction);
-                    LeapleafEntity.this.setDeltaMovement(LeapleafEntity.this.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
+                if (LeapleafEntity.this.getTimer() == 17 && LeapleafEntity.this.distanceToSqr(LeapleafEntity.this.getTarget()) <= 18.6D + LeapleafEntity.this.getBbWidth()) {
+                    LeapleafEntity.this.Attackparticle(40,0.5f,2.4f,0.5f);
+                    AreaAttack(5,5,5,5,60,1 + (LeapleafEntity.this.getRandom().nextFloat() / 3f));
+                }
+            }
+        }
+
+        private void AreaAttack(float range,float X,float Y, float Z,float arc ,float damage) {
+            for (LivingEntity entityHit : level.getEntitiesOfClass(LivingEntity.class, getBoundingBox().inflate(X, Y, Z))) {
+                float entityHitAngle = (float) ((Math.atan2(entityHit.getZ() - LeapleafEntity.this.getZ(), entityHit.getX() - LeapleafEntity.this.getX()) * (180 / Math.PI) - 90) % 360);
+                float entityAttackingAngle = LeapleafEntity.this.yBodyRot % 360;
+                if (entityHitAngle < 0) {
+                    entityHitAngle += 360;
+                }
+                if (entityAttackingAngle < 0) {
+                    entityAttackingAngle += 360;
+                }
+                float entityRelativeAngle = entityHitAngle - entityAttackingAngle;
+                float entityHitDistance = (float) Math.sqrt((entityHit.getZ() - LeapleafEntity.this.getZ()) * (entityHit.getZ() - LeapleafEntity.this.getZ()) + (entityHit.getX() - LeapleafEntity.this.getX()) * (entityHit.getX() - LeapleafEntity.this.getX()));
+                if (entityHitDistance <= range && (entityRelativeAngle <= arc / 2 && entityRelativeAngle >= -arc / 2) || (entityRelativeAngle >= 360 - arc / 2 || entityRelativeAngle <= -360 + arc / 2)) {
+                    if (!isAlliedTo(entityHit)) {
+                        entityHit.hurt(DamageSource.mobAttack(LeapleafEntity.this), (float) LeapleafEntity.this.getAttributeValue(Attributes.ATTACK_DAMAGE) * damage);
+
+                        LeapleafEntity v = LeapleafEntity.this;
+                        float attackKnockback = (float) v.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
+                        double ratioX = (double) MathHelper.sin(v.yRot * ((float) Math.PI / 180F));
+                        double ratioZ = (double) (-MathHelper.cos(v.yRot * ((float) Math.PI / 180F)));
+                        double knockbackReduction = 0.5D;
+                        entityHit.hurt(DamageSource.mobAttack(v), (float) (damage));
+                        this.forceKnockback(entityHit, attackKnockback * 0.8F, ratioX, ratioZ, knockbackReduction);
+                        entityHit.setDeltaMovement(entityHit.getDeltaMovement().add(0,0.3333333,0));
+                    }
                 }
             }
         }
@@ -559,6 +634,15 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
 
         public boolean i;
 
+        public LeapGoal() {
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP, Goal.Flag.LOOK));
+        }
+
+        @Override
+        public boolean isInterruptable() {
+            return false;
+        }
+
         @Override
         public boolean canUse() {
             return LeapleafEntity.this.entityData.get(LEAP_COOLDOWN) <= 0 &&
@@ -584,11 +668,11 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
             if (v.getTimer() == 8 && c != null && c.isAlive()) {
                 this.i = true;
                 Vector3d vector3d = (new Vector3d(c.getX() - LeapleafEntity.this.getX(), c.getY() - LeapleafEntity.this.getY() + (c.getBbHeight() / 0.5), c.getZ() - LeapleafEntity.this.getZ())).normalize();
-                LeapleafEntity.this.setDeltaMovement(LeapleafEntity.this.getDeltaMovement().add(vector3d.x * 0.8D, 0.9D, vector3d.z * 0.8D));
+                LeapleafEntity.this.setDeltaMovement(LeapleafEntity.this.getDeltaMovement().add(vector3d.x * 0.98D, 0.69D, vector3d.z * 0.98D));
             }
             if (this.i && c != null && c.isAlive()) {
                 Vector3d vector3d = (new Vector3d(c.getX() - LeapleafEntity.this.getX(), c.getY() - LeapleafEntity.this.getY(), c.getZ() - LeapleafEntity.this.getZ())).normalize();
-                LeapleafEntity.this.setDeltaMovement(LeapleafEntity.this.getDeltaMovement().add(vector3d.x * 0.21D, 0D, vector3d.z * 0.21D));
+                LeapleafEntity.this.setDeltaMovement(LeapleafEntity.this.getDeltaMovement().add(vector3d.x * 0.11D, 0D, vector3d.z * 0.11D));
             }
         }
 
@@ -618,7 +702,7 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
     }
 
     class AttackGoal extends MeleeAttackGoal{
-        private int maxAttackTimer = 20;
+        private int maxAttackTimer = 10;
         private final double moveSpeed;
         private int delayCounter;
         private int attackTimer;

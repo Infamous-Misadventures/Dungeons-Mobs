@@ -7,7 +7,6 @@ import com.infamous.dungeons_mobs.client.renderer.layer.GeoHeldItemLayer;
 import com.infamous.dungeons_mobs.entities.undead.WraithEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;

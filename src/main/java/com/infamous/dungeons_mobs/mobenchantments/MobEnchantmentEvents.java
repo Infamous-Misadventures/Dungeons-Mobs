@@ -1,30 +1,24 @@
 package com.infamous.dungeons_mobs.mobenchantments;
 
-import com.infamous.dungeons_libraries.capabilities.enchantable.EnchantableHelper;
 import com.infamous.dungeons_libraries.capabilities.enchantable.IEnchantable;
 import com.infamous.dungeons_libraries.mobenchantments.MobEnchantment;
 import com.infamous.dungeons_libraries.network.MobEnchantmentMessage;
 import com.infamous.dungeons_mobs.capabilities.ancient.AncientHelper;
 import com.infamous.dungeons_mobs.capabilities.ancient.IAncient;
-import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.data.AncientDataHelper;
 import com.infamous.dungeons_mobs.data.MobAncientData;
 import com.infamous.dungeons_mobs.data.UniqueAncientData;
 import com.infamous.dungeons_mobs.mobenchants.MobEnchantmentSelector;
 import com.infamous.dungeons_mobs.network.NetworkHandler;
 import com.infamous.dungeons_mobs.network.message.AncientMessage;
-import net.minecraft.entity.*;
-import net.minecraft.entity.item.ArmorStandEntity;
-import net.minecraft.entity.item.BoatEntity;
-import net.minecraft.entity.item.minecart.MinecartEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.monster.ZombieEntity;
-import net.minecraft.entity.passive.AmbientEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -43,22 +37,22 @@ import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 public class MobEnchantmentEvents {
 
     private static List<SpawnReason> blockedSpawnReasons = Arrays.asList(SpawnReason.MOB_SUMMONED, SpawnReason.CONVERSION);
-
-//    @SubscribeEvent
-//    public static void enchantOnEntitySpawn(LivingSpawnEvent.SpecialSpawn event) {
-//        Entity entity = event.getEntity();
-//        if (!entity.level.isClientSide &&
-//                EnchantableHelper.isEnchantableEntity(entity) &&
-//                isSpawnEnchantableEntity(entity) &&
-//                DungeonsMobsConfig.ENCHANTS.ENABLE_ENCHANTS_ON_SPAWN.get() && !blockedSpawnReasons.contains(event.getSpawnReason())) {
-//            getEnchantableCapabilityLazy(entity).ifPresent(cap -> {
-//                if(!cap.isSpawned()) {
-//                    addEnchantmentOnSpawn(entity, cap);
-////                    addEnchantmentOnSpawnDEVELOPMENT(entity, cap);
-//                }
-//            });
-//        }
-//    }
+/*
+    @SubscribeEvent
+    public static void enchantOnEntitySpawn(LivingSpawnEvent.SpecialSpawn event) {
+        Entity entity = event.getEntity();
+        if (!entity.level.isClientSide &&
+                EnchantableHelper.isEnchantableEntity(entity) &&
+                isSpawnEnchantableEntity(entity) &&
+                DungeonsMobsConfig.ENCHANTS.ENABLE_ENCHANTS_ON_SPAWN.get() && !blockedSpawnReasons.contains(event.getSpawnReason())) {
+            getEnchantableCapabilityLazy(entity).ifPresent(cap -> {
+               if(!cap.isSpawned()) {
+                    addEnchantmentOnSpawn(entity, cap);
+                    addEnchantmentOnSpawnDEVELOPMENT(entity, cap);
+                }
+            });
+        }
+    }
     private static boolean isSpawnEnchantableEntity(Entity entity) {
         return !(entity instanceof PlayerEntity) &&
                 !(entity instanceof ArmorStandEntity) &&
@@ -81,6 +75,8 @@ public class MobEnchantmentEvents {
         }
     }
 
+ */
+
     private static void makeEnchanted(Entity entity, IEnchantable cap, Random random, int totalNumberOfEnchants) {
         for (int i = 0; i < totalNumberOfEnchants; i++) {
             MobEnchantment randomMobEnchantment = MobEnchantmentSelector.getRandomMobEnchantment(entity, random);
@@ -97,9 +93,9 @@ public class MobEnchantmentEvents {
         if(entity instanceof LivingEntity) {
             MobAncientData mobAncientData = AncientDataHelper.getMobAncientData(entity.getType().getRegistryName());
             if(mobAncientData.getUniques().size() > 0){
-                generateUniqueAncient(entity, cap, random, totalNumberOfEnchants, mobAncientData);
+                //generateUniqueAncient(entity, cap, random, totalNumberOfEnchants, mobAncientData);
             }else {
-                generateRandomAncient(entity, cap, random, totalNumberOfEnchants, mobAncientData);
+                //generateRandomAncient(entity, cap, random, totalNumberOfEnchants, mobAncientData);
             }
         }
     }

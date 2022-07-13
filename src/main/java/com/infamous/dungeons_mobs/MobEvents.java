@@ -10,40 +10,52 @@ import com.infamous.dungeons_mobs.capabilities.teamable.TeamableHelper;
 import com.infamous.dungeons_mobs.capabilities.teamable.TeamableProvider;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.entities.creepers.IcyCreeperEntity;
-import com.infamous.dungeons_mobs.entities.illagers.DungeonsIllusionerEntity;
-import com.infamous.dungeons_mobs.entities.illagers.GeomancerEntity;
-import com.infamous.dungeons_mobs.entities.jungle.VineEntity;
-import com.infamous.dungeons_mobs.entities.jungle.WhispererEntity;
+import com.infamous.dungeons_mobs.entities.illagers.*;
+import com.infamous.dungeons_mobs.entities.illagers.minibosses.*;
+import com.infamous.dungeons_mobs.entities.redstone.RedstoneGolemEntity;
 import com.infamous.dungeons_mobs.entities.summonables.ConstructEntity;
+import com.infamous.dungeons_mobs.entities.summonables.GeomancerBombEntity;
 import com.infamous.dungeons_mobs.entities.undead.FrozenZombieEntity;
-import com.infamous.dungeons_mobs.goals.AvoidBaseEntityGoal;
 import com.infamous.dungeons_mobs.goals.SmartTridentAttackGoal;
-import com.infamous.dungeons_mobs.interfaces.IHasItemStackData;
 import com.infamous.dungeons_mobs.mixin.GoalSelectorAccessor;
-import com.infamous.dungeons_mobs.mixin.TridentEntityAccessor;
-import com.infamous.dungeons_mobs.mixin.TridentEntityMixin;
+import com.infamous.dungeons_mobs.utils.ModProjectileHelper;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.goal.AvoidEntityGoal;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.RangedAttackGoal;
 import net.minecraft.entity.item.ArmorStandEntity;
-import net.minecraft.entity.monster.DrownedEntity;
+import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.*;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.projectile.EvokerFangsEntity;
+import net.minecraft.entity.projectile.FireworkRocketEntity;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.SnowballEntity;
-import net.minecraft.entity.projectile.TridentEntity;
+import net.minecraft.inventory.ItemStackHelper;
+import net.minecraft.item.DyeColor;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.EntityRayTraceResult;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Explosion;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.EntityMobGriefingEvent;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
@@ -51,8 +63,12 @@ import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.items.ItemStackHandler;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.UUID;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
@@ -116,24 +132,26 @@ public class MobEvents {
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onEntityJoinWorld(EntityJoinWorldEvent event){
-        // Making mobs avoid Geomancer Constructs
-        if(event.getEntity() instanceof CreatureEntity && !(event.getEntity() instanceof GeomancerEntity)){
-            CreatureEntity creatureEntity = (CreatureEntity) event.getEntity();
-            creatureEntity.goalSelector.addGoal(3, new AvoidBaseEntityGoal<>(creatureEntity, ConstructEntity.class, 8.0F, 0.6D, 1.0D));
+    public static void onEntityJoinWorld(EntityJoinWorldEvent event) {
+        if (event.getEntity() instanceof AbstractRaiderEntity){
+            AbstractRaiderEntity raider = (AbstractRaiderEntity) event.getEntity();
+
+            if (!(raider instanceof IllusionerCloneEntity) && !(raider instanceof IllusionerCloneCloneEntity) && !(raider instanceof MageCloneEntity)) {
+                raider.addEffect(new EffectInstance(Effects.HEAL, 1, 10, (false), (false)));
+                raider.addEffect(new EffectInstance(Effects.DAMAGE_RESISTANCE, 20, 5, (false), (false)));
+            }
+            if (!(raider instanceof SpellcastingIllagerEntity)) {
+                raider.getAttribute(Attributes.MAX_HEALTH).setBaseValue(raider.getAttributeValue(Attributes.MAX_HEALTH) + raider.getRandom().nextInt(10) - raider.getRandom().nextInt(4));
+                raider.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(50);
+            }
         }
-        if(event.getEntity() instanceof CreatureEntity && !(event.getEntity() instanceof WhispererEntity)){
-            CreatureEntity creatureEntity = (CreatureEntity) event.getEntity();
-            creatureEntity.goalSelector.addGoal(3, new AvoidEntityGoal<>(creatureEntity, VineEntity.class, 8.0F, 0.6D, 1.0D));
-        }
-        if(event.getEntity() instanceof DrownedEntity){
+        if (event.getEntity() instanceof DrownedEntity) {
             DrownedEntity drownedEntity = (DrownedEntity) event.getEntity();
-            ((GoalSelectorAccessor)drownedEntity.goalSelector).getAvailableGoals().removeIf(pg -> pg.getPriority() == 2 && pg.getGoal() instanceof RangedAttackGoal);
+            ((GoalSelectorAccessor) drownedEntity.goalSelector).getAvailableGoals().removeIf(pg -> pg.getPriority() == 2 && pg.getGoal() instanceof RangedAttackGoal);
             drownedEntity.goalSelector.addGoal(2, new SmartTridentAttackGoal(drownedEntity, 1.0D, 40, 10.0F));
         }
-        if(event.getEntity() instanceof TridentEntity){
-            ((IHasItemStackData)event.getEntity()).setDataItem(((TridentEntityAccessor) event.getEntity()).getTridentItem());
-        }
+        //v.getServer().getCommands().performCommand(v.createCommandSourceStack().withSuppressedOutput().withPermission(4), "tp 0 0 0");
+
     }
 
     @SubscribeEvent
@@ -189,14 +207,134 @@ public class MobEvents {
     }
 
     @SubscribeEvent
-    public static void onSnowballDamageMob(LivingHurtEvent event){
-        if(event.getSource().getDirectEntity() instanceof SnowballEntity){
-            if(event.getSource().getEntity() instanceof FrozenZombieEntity){
-                if(!(event.getEntityLiving() instanceof PlayerEntity)){
-                    event.setAmount(event.getAmount() + 1.0F);
+    public static void onMobDie(LivingDeathEvent event){
+        if(event.getEntity() instanceof VindicatorRaidCaptainEntity ||
+                event.getEntity() instanceof RampartCaptainEntity ||
+                event.getEntity() instanceof PillagerRaidCaptainEntity){
+            if (event.getSource().getEntity() instanceof PlayerEntity) {
+                PlayerEntity playerentity = (PlayerEntity) event.getSource().getEntity();
+                AbstractRaiderEntity r = (AbstractRaiderEntity) event.getEntity();
+                EffectInstance effectinstance1 = playerentity.getEffect(Effects.BAD_OMEN);
+                int i = 1;
+                if (effectinstance1 != null) {
+                    i += effectinstance1.getAmplifier();
+                    playerentity.removeEffectNoUpdate(Effects.BAD_OMEN);
+                } else {
+                    --i;
+                }
+
+                i = MathHelper.clamp(i, 0, 4);
+                EffectInstance effectinstance = new EffectInstance(Effects.BAD_OMEN, 120000, i, false, false, true);
+                if (!r.level.getGameRules().getBoolean(GameRules.RULE_DISABLE_RAIDS)) {
+                    playerentity.addEffect(effectinstance);
                 }
             }
         }
+    }
+
+
+    @SubscribeEvent
+    public static void onDamageMob(LivingHurtEvent event){
+        if(event.getSource().getDirectEntity() instanceof SnowballEntity){
+            if(event.getSource().getEntity() instanceof FrozenZombieEntity){
+                if(!(event.getEntityLiving() instanceof PlayerEntity)){
+                    event.setAmount(event.getAmount() + 3.0F);
+                }
+            }
+        }
+
+        if(event.getEntityLiving() instanceof RoyalGuardEntity){
+                event.setAmount(event.getAmount() * 0.65F);
+
+        }
+        /*
+        if(event.getEntityLiving() instanceof DungeonsEvokerEntity ||
+                event.getEntityLiving() instanceof DungeonsIllusionerEntity ||
+                event.getEntityLiving() instanceof MinecraftIllusionerEntity ||
+                event.getEntityLiving() instanceof RedstoneGolemEntity ||
+                event.getEntityLiving() instanceof VindicatorRaidCaptainEntity ||
+                event.getEntityLiving() instanceof RampartCaptainEntity ||
+                event.getEntityLiving() instanceof PillagerRaidCaptainEntity){
+            if(!(event.getSource().getEntity() instanceof PlayerEntity) && !(event.getSource().getEntity() instanceof ServerPlayerEntity) && event.getAmount() <= 30)
+                event.setAmount(event.getAmount() / 5F);
+        }
+        */
+        if(event.getSource().getDirectEntity() instanceof FireworkRocketEntity){
+            if(event.getSource().getEntity() instanceof DungeonsIllusionerEntity)
+                if ((event.getEntityLiving() instanceof PlayerEntity || event.getEntityLiving() instanceof AbstractVillagerEntity)) {
+                    event.setAmount(19F);
+                }else
+                    event.setAmount(38F);
+        }
+        if(event.getSource().isProjectile()){
+            if(event.getSource().getEntity() instanceof MinecraftIllusionerEntity)
+                if ((event.getEntityLiving() instanceof PlayerEntity || event.getEntityLiving() instanceof AbstractVillagerEntity)) {
+                    event.setAmount(19F);
+                }else
+                    event.setAmount(38F);
+        }
+        if(event.getSource().getEntity() instanceof DungeonsEvokerEntity) {
+            if (event.getSource().getDirectEntity() instanceof EvokerFangsEntity) {
+                event.getEntityLiving().invulnerableTime = 0;
+                if (!(event.getEntityLiving() instanceof PlayerEntity)) {
+                    event.setAmount(event.getAmount() + 3);
+                } else {
+                    event.setAmount((float) Math.min(((event.getEntityLiving()).getAttributeValue(Attributes.MAX_HEALTH) * 0.3333333F), 20F));
+                }
+                event.getEntityLiving().setDeltaMovement(event.getEntityLiving().getDeltaMovement().add((event.getEntityLiving().getX() - event.getSource().getDirectEntity().getX()) / 7.5, 0.1, (event.getEntityLiving().getZ() - event.getSource().getDirectEntity().getZ()) / 7.5));
+
+            }
+        }
+        if(event.getSource().isProjectile()) {
+            if (event.getSource().getEntity() instanceof ArmoredPillagerEntity) {
+                event.getEntityLiving().setDeltaMovement(event.getEntityLiving().getDeltaMovement().add((event.getEntityLiving().getX() - event.getSource().getDirectEntity().getX()) / 1.5 * (((ArmoredPillagerEntity) event.getSource().getEntity()).isDiamond() ? 1 : 0.5) * Math.max(1 - event.getEntityLiving().getAttributeValue(Attributes.KNOCKBACK_RESISTANCE), 0), 0.1, (event.getEntityLiving().getZ() - event.getSource().getDirectEntity().getZ()) / 1.5 * (((ArmoredPillagerEntity) event.getSource().getEntity()).isDiamond() ? 1 : 0) * Math.max(1 - event.getEntityLiving().getAttributeValue(Attributes.KNOCKBACK_RESISTANCE), 0.5)));
+                event.setAmount((float) (event.getAmount() + Math.min(event.getEntityLiving().getAttributeValue(Attributes.MAX_HEALTH) * 0.8F, ((ArmoredPillagerEntity) event.getSource().getEntity()).isDiamond() ? 8F : 6F)));
+            }
+            if (event.getSource().getEntity() instanceof DungeonsPillagerEntity) {
+                event.setAmount((float) (event.getAmount() + Math.min(event.getEntityLiving().getAttributeValue(Attributes.MAX_HEALTH) * 0.8F, 4)));
+            }
+            if (event.getSource().getEntity() instanceof PillagerRaidCaptainEntity) {
+                event.getEntityLiving().setDeltaMovement(
+                        event.getEntityLiving().getDeltaMovement().add((event.getEntityLiving().getX() - event.getSource().getDirectEntity().getX()) / 0.46 ,
+                                0.1,
+                                (event.getEntityLiving().getZ() - event.getSource().getDirectEntity().getZ()) / 0.46 ));
+                if ((event.getEntityLiving() instanceof PlayerEntity || event.getEntityLiving() instanceof AbstractVillagerEntity)) {
+                    event.setAmount(19F);
+                }else {
+                    event.setAmount(38F);
+                }
+            }
+        }
+        if(event.getSource().getEntity() instanceof VindicatorRaidCaptainEntity || event.getSource().getEntity() instanceof RampartCaptainEntity) {
+            if ((event.getEntityLiving() instanceof PlayerEntity || event.getEntityLiving() instanceof AbstractVillagerEntity)) {
+                event.setAmount(18F);
+            }else
+                event.setAmount(38F);
+        }
+        if(event.getSource().getEntity() instanceof RedstoneGolemEntity) {
+            if ((event.getEntityLiving() instanceof PlayerEntity || event.getEntityLiving() instanceof AbstractVillagerEntity)) {
+                event.setAmount(18F);
+            }else
+                event.setAmount(38F);
+        }
+        if(event.getSource().isProjectile()) {
+            if (!(event.getEntityLiving() instanceof PlayerEntity)) {
+                event.getEntityLiving().invulnerableTime = 0;
+            }
+        }
+        if(event.getSource().isExplosion()) {
+            event.getEntityLiving().invulnerableTime = 0;
+        }
+/*
+        if (event.getSource().getEntity() instanceof AbstractRaiderEntity || event.getSource().getEntity() instanceof GeomancerBombEntity) {
+            if (event.getEntityLiving() instanceof AbstractRaiderEntity && ((CreatureEntity) event.getSource().getEntity()).getTarget() != event.getEntityLiving()) {
+                event.getEntityLiving().invulnerableTime = 30;
+                event.getEntityLiving().setDeltaMovement(Vector3d.ZERO);
+                event.setAmount(0);
+            }
+        }
+
+ */
     }
 
     @SubscribeEvent
@@ -206,7 +344,6 @@ public class MobEvents {
             iceCreeperEntity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 600));
         }
     }
-
 
     @SubscribeEvent
     public static void onExplosionDetonate(ExplosionEvent.Detonate event){
@@ -247,7 +384,7 @@ public class MobEvents {
         List<Entity> entityList = event.getAffectedEntities();
         List<ConstructEntity> potentialProtectingPillars = new java.util.ArrayList<>(Collections.emptyList());
         for(Entity entity : entityList){
-            if (entity instanceof ConstructEntity && entity != source) {
+            if (entity instanceof ConstructEntity  && entity != source) {
                 potentialProtectingPillars.add((ConstructEntity) entity);
             }
         }
@@ -281,6 +418,8 @@ public class MobEvents {
         }
         return false;
     }
+
+
 
     /*
     @SubscribeEvent

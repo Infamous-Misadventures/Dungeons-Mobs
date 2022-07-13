@@ -1381,7 +1381,7 @@
 		},
 		"animation.leaper.heavy_attack_up": {
 			"loop": "hold_on_last_frame",
-			"animation_length": 3,
+			"animation_length": 100,
 			"bones": {
 				"leg1": {
 					"rotation": {

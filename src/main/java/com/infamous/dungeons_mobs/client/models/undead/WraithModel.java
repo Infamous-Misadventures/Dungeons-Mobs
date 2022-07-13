@@ -4,8 +4,6 @@ import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.entities.undead.WraithEntity;
 import com.infamous.dungeons_mobs.interfaces.IHasGeoArm;
 import com.mojang.blaze3d.matrix.MatrixStack;
-
-import net.minecraft.client.renderer.model.Model;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;

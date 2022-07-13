@@ -1,8 +1,8 @@
 package com.infamous.dungeons_mobs.client.renderer.illager;
 
-import com.infamous.dungeons_mobs.entities.illagers.ArmoredPillagerEntity;
 import com.infamous.dungeons_mobs.client.models.armor.IllagerArmorModel;
 import com.infamous.dungeons_mobs.client.models.illager.IllagerBipedModel;
+import com.infamous.dungeons_mobs.entities.illagers.ArmoredPillagerEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
@@ -29,11 +29,7 @@ public class CustomPillagerRenderer extends MobRenderer<PillagerEntity, IllagerB
 
     @Override
     protected void scale(PillagerEntity pillagerEntity, MatrixStack matrixStack, float v) {
-        if(pillagerEntity instanceof ArmoredPillagerEntity){
-            float scaleFactor = 1.1F;
-            matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
-        }
-        else{
+        {
             float scaleFactor = 0.9375F;
             matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
         }
@@ -42,14 +38,7 @@ public class CustomPillagerRenderer extends MobRenderer<PillagerEntity, IllagerB
 
     @Override
     public ResourceLocation getTextureLocation(PillagerEntity entity) {
-        if(entity instanceof ArmoredPillagerEntity){
-            ArmoredPillagerEntity armoredPillagerEntity = (ArmoredPillagerEntity)entity;
-            if(armoredPillagerEntity.isDiamond()){
-                return DIAMOND_ARMORED_PILLAGER_TEXTURE;
-            }
-            else return GOLD_ARMORED_PILLAGER_TEXTURE;
-        }
-        else{
+        {
             return PILLAGER_TEXTURE;
         }
     }
