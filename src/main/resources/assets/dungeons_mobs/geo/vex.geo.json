@@ -1,0 +1,115 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.GuardModel",
+				"texture_width": 64,
+				"texture_height": 64,
+				"visible_bounds_width": 4,
+				"visible_bounds_height": 3.5,
+				"visible_bounds_offset": [0, 1.25, 0]
+			},
+			"bones": [
+				{
+					"name": "vvex",
+					"pivot": [0, 0, 0]
+				},
+				{
+					"name": "vex",
+					"parent": "vvex",
+					"pivot": [0, 0, 0]
+				},
+				{
+					"name": "legs",
+					"parent": "vex",
+					"pivot": [0, 12, 0]
+				},
+				{
+					"name": "rightLeg",
+					"parent": "legs",
+					"pivot": [2, 12, 0],
+					"cubes": [
+						{"origin": [0, 0, -2], "size": [4, 12, 4], "uv": [36, 0]}
+					]
+				},
+				{
+					"name": "leftLeg",
+					"parent": "legs",
+					"pivot": [-2, 12, 0],
+					"cubes": [
+						{"origin": [-4, 0, -2], "size": [4, 12, 4], "uv": [32, 0]}
+					]
+				},
+				{
+					"name": "body",
+					"parent": "vex",
+					"pivot": [0, 12, 0],
+					"cubes": [
+						{"origin": [-4, 12, -2], "size": [8, 12, 4], "uv": [16, 16]}
+					]
+				},
+				{
+					"name": "head",
+					"parent": "body",
+					"pivot": [0, 24, 0],
+					"cubes": [
+						{"origin": [-4, 24, -4], "size": [8, 8, 8], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "wing",
+					"parent": "body",
+					"pivot": [1.5, 4.5, 0]
+				},
+				{
+					"name": "right",
+					"parent": "wing",
+					"pivot": [0.5, 19.5, 2],
+					"cubes": [
+						{"origin": [-2.47777, 8.32755, 2.15], "size": [20, 12, 0], "pivot": [-0.47777, 18.32755, 2.15], "rotation": [0, 0, -50], "uv": [1, 33]}
+					]
+				},
+				{
+					"name": "left",
+					"parent": "wing",
+					"pivot": [0, 18.5, 2],
+					"cubes": [
+						{"origin": [-3.47777, 8.32755, 2.15], "size": [20, 12, 0], "pivot": [0.02223, 19.32755, 2.15], "rotation": [-180, 0, -125], "uv": [1, 33]}
+					]
+				},
+				{
+					"name": "arms",
+					"parent": "body",
+					"pivot": [0, 4, 0]
+				},
+				{
+					"name": "rightarm",
+					"parent": "arms",
+					"pivot": [-4, 22, 0],
+					"cubes": [
+						{"origin": [-8, 12, -2], "size": [4, 12, 4], "uv": [40, 16]}
+					]
+				},
+				{
+					"name": "sword",
+					"parent": "rightarm",
+					"pivot": [-5, 13, 0]
+				},
+				{
+					"name": "rightItems",
+					"parent": "sword",
+					"pivot": [-5, 13, 0]
+				},
+				{
+					"name": "leftarm",
+					"parent": "arms",
+					"pivot": [4, 22, 0],
+					"cubes": [
+						{"origin": [4, 12, -2], "size": [4, 12, 4], "uv": [40, 16]}
+					]
+				}
+			]
+		}
+	]
+}

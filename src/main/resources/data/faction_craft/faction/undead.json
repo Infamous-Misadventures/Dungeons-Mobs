@@ -1,0 +1,118 @@
+{
+  "name": "faction_craft:undead",
+  "replace": false,
+  "banner": {"id":"minecraft:white_banner","Count":1,"tag":{"HideFlags":32,"BlockEntityTag":{"Patterns":[{"Color":15,"Pattern":"sc"},{"Color":15,"Pattern":"cr"},{"Color":15,"Pattern":"tts"},{"Color":15,"Pattern":"gru"},{"Color":8,"Pattern":"sku"}]},"display":{"Name":{"color":"gold","translate":"block.faction_raid.undead_banner"}}}},
+  "relations": {
+  },
+  "entities": [
+    {
+      "entity_type": "dungeons_mobs:frozen_zombie",
+      "weight": 50,
+      "strength": 6,
+      "rank": "soldier",
+      "maximum_rank": "leader",
+      "minimum_wave": 3,
+      "boosts": {
+        "mandatory": ["minecraft:special/leather_daylight_protection"]
+      }
+    },
+    {
+      "entity_type": "dungeons_mobs:mossy_skeleton",
+      "weight": 50,
+      "strength": 7,
+      "rank": "soldier",
+      "maximum_rank": "leader",
+      "minimum_wave": 3,
+      "boosts": {
+        "mandatory": ["minecraft:special/leather_daylight_protection"],
+        "rarity_overrides": [
+          {
+            "boost": "minecraft:mount/skeleton_horse",
+            "rarity": "common"
+          }
+        ]
+      }
+    },
+    {
+      "entity_type": "dungeons_mobs:skeleton_horseman",
+      "weight": 30,
+      "strength": 10,
+      "rank": "soldier",
+      "maximum_rank": "leader",
+      "minimum_wave": 3,
+      "boosts": {
+        "mandatory": ["minecraft:mount/skeleton_horse"]
+      }
+    },
+    {
+      "entity_type": "dungeons_mobs:armored_zombie",
+      "weight": 70,
+      "strength": 10,
+      "rank": "soldier",
+      "maximum_rank": "leader",
+      "minimum_wave": 3,
+      "boosts": {
+        "rarity_overrides": [
+          {
+            "boost": "minecraft:mount/zombie_horse",
+            "rarity": "common"
+          }
+        ]
+      }
+    },
+    {
+      "entity_type": "dungeons_mobs:armored_skeleton",
+      "weight": 80,
+      "strength": 10,
+      "rank": "soldier",
+      "maximum_rank": "leader",
+      "minimum_wave": 3,
+      "boosts": {
+        "rarity_overrides": [
+          {
+            "boost": "minecraft:mount/skeleton_horse",
+            "rarity": "common"
+          }
+        ]
+      }
+    },
+    {
+      "entity_type": "dungeons_mobs:wraith",
+      "weight": 50,
+      "strength": 9,
+      "rank": "soldier",
+      "maximum_rank": "leader",
+      "minimum_wave": 4,
+      "boosts": {
+        "mandatory": ["minecraft:special/leather_daylight_protection"]
+      }
+    },
+    {
+      "entity_type": "dungeons_mobs:skeleton_vanguard",
+      "weight": 70,
+      "strength": 12,
+      "rank": "soldier",
+      "maximum_rank": "leader",
+      "minimum_wave": 4,
+      "boosts": {
+        "rarity_overrides": [
+          {
+            "boost": "minecraft:mount/skeleton_horse",
+            "rarity": "common"
+          }
+        ]
+      }
+    },
+    {
+      "entity_type": "dungeons_mobs:necromancer",
+      "weight": 50,
+      "strength": 15,
+      "rank": "captain",
+      "maximum_rank": "leader",
+      "minimum_wave": 4,
+      "boosts": {
+        "whitelist": []
+      }
+    }
+  ]
+}
