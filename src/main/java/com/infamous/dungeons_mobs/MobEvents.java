@@ -243,10 +243,6 @@ public class MobEvents {
             }
         }
 
-        if(event.getEntityLiving() instanceof RoyalGuardEntity){
-                event.setAmount(event.getAmount() * 0.65F);
-
-        }
         /*
         if(event.getEntityLiving() instanceof DungeonsEvokerEntity ||
                 event.getEntityLiving() instanceof DungeonsIllusionerEntity ||

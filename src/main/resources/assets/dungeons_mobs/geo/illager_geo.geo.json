@@ -525,21 +525,6 @@
 					]
 				},
 				{
-					"name": "royalguard",
-					"parent": "body",
-					"pivot": [0, 12, 0]
-				},
-				{
-					"name": "chest",
-					"parent": "royalguard",
-					"pivot": [-2.75, 21, -4],
-					"cubes": [
-						{"origin": [-5.25, 19, -4.5], "size": [5, 4, 3], "inflate": 0.25, "pivot": [-2.75, 21, -4], "rotation": [-17.5, 0, 0], "uv": [193, 40]},
-						{"origin": [0.25, 19, -4.5], "size": [5, 4, 3], "inflate": 0.25, "pivot": [2.75, 21, -4], "rotation": [-17.5, 0, 0], "uv": [209, 40]},
-						{"origin": [-5, 11.25, -3], "size": [10, 12, 6], "inflate": 0.65, "uv": [190, 16]}
-					]
-				},
-				{
 					"name": "chef",
 					"parent": "body",
 					"pivot": [0, 12, 0],
@@ -1367,6 +1352,20 @@
 						{"origin": [-6.5, 4, -10.25], "size": [1, 25, 1], "uv": [128, 9]},
 						{"origin": [-6.5, 10, -9.25], "size": [1, 1, 1], "uv": [129, 27]},
 						{"origin": [-6.5, 27, -11.25], "size": [1, 1, 1], "uv": [127, 10]}
+					]
+				},
+				{
+					"name": "royalguard",
+					"pivot": [0, 12, 0]
+				},
+				{
+					"name": "chest",
+					"parent": "royalguard",
+					"pivot": [-2.75, 20, -4],
+					"cubes": [
+						{"origin": [-5.75, 18, -4.5], "size": [5, 4, 3], "inflate": 0.75, "pivot": [-2.75, 20, -4], "rotation": [-17.5, 0, 0], "uv": [193, 40]},
+						{"origin": [0.75, 18, -4.5], "size": [5, 4, 3], "inflate": 0.75, "pivot": [2.75, 20, -4], "rotation": [-17.5, 0, 0], "uv": [209, 40]},
+						{"origin": [-5, 11, -3], "size": [10, 12, 6], "inflate": 1.15, "uv": [190, 16]}
 					]
 				}
 			]

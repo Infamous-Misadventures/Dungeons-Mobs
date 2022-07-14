@@ -386,28 +386,47 @@ public class DungeonsPillagerEntity extends AbstractIllagerEntity implements IAn
 		fireworkrocketentity.shoot(
 				xDifference ,
 				yDifference + horizontalDifference * (double) 0.2F,
-				zDifference, 1.6F, (float) (26 + this.level.getDifficulty().getId() * 5));
+				zDifference, 1.6F, (float) (16 - this.level.getDifficulty().getId() * 5));
 		fireworkrocketentity.setShotFromCrossbow(true);
 		this.playSound(SoundEvents.CROSSBOW_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
 		this.level.addFreshEntity(fireworkrocketentity);
-		for(int k = 0; k < j; ++k) {
-			if (target.getY(target.getBbHeight()) > this.getY()) {
+		{
+			{
 				fireworkrocketentity = ProjectileHelper.getMobArrow(this, new ItemStack(Items.ARROW), distanceFactor);
 				fireworkrocketentity.shoot(
 						xDifference,
 						yDifference + horizontalDifference * (double) 0.2F,
-						zDifference, 1.6F, (float) (26 + this.level.getDifficulty().getId() * 5));
-				fireworkrocketentity.xRot = fireworkrocketentity.xRot + k == 2 ? 15 : -15;
+						zDifference, 1.6F, (float) -20);
 				fireworkrocketentity.setShotFromCrossbow(true);
 				this.playSound(SoundEvents.CROSSBOW_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
 				this.level.addFreshEntity(fireworkrocketentity);
-			}else {
+			}
+			{
 				fireworkrocketentity = ProjectileHelper.getMobArrow(this, new ItemStack(Items.ARROW), distanceFactor);
 				fireworkrocketentity.shoot(
 						xDifference,
 						yDifference + horizontalDifference * (double) 0.2F,
-						zDifference, 1.6F, (float) (26 + this.level.getDifficulty().getId() * 5));
-				fireworkrocketentity.yRot = fireworkrocketentity.yRot + k == 2 ? 15 : -15;
+						zDifference, 1.6F, (float) 20);
+				fireworkrocketentity.setShotFromCrossbow(true);
+				this.playSound(SoundEvents.CROSSBOW_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+				this.level.addFreshEntity(fireworkrocketentity);
+			}
+			{
+				fireworkrocketentity = ProjectileHelper.getMobArrow(this, new ItemStack(Items.ARROW), distanceFactor);
+				fireworkrocketentity.shoot(
+						xDifference,
+						yDifference + horizontalDifference * (double) 0.2F,
+						zDifference, 1.6F, (float) 40);
+				fireworkrocketentity.setShotFromCrossbow(true);
+				this.playSound(SoundEvents.CROSSBOW_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+				this.level.addFreshEntity(fireworkrocketentity);
+			}
+			{
+				fireworkrocketentity = ProjectileHelper.getMobArrow(this, new ItemStack(Items.ARROW), distanceFactor);
+				fireworkrocketentity.shoot(
+						xDifference,
+						yDifference + horizontalDifference * (double) 0.2F,
+						zDifference, 1.6F, (float) -40);
 				fireworkrocketentity.setShotFromCrossbow(true);
 				this.playSound(SoundEvents.CROSSBOW_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
 				this.level.addFreshEntity(fireworkrocketentity);

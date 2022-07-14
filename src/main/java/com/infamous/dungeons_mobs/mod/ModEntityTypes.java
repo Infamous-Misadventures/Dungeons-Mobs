@@ -1,9 +1,5 @@
 package com.infamous.dungeons_mobs.mod;
 
-import com.infamous.dungeons_mobs.entities.allcustomentity.illagers.IllagerWarriorCloneEntity;
-import com.infamous.dungeons_mobs.entities.allcustomentity.illagers.PowerfulRoyalGuardEntity;
-import com.infamous.dungeons_mobs.entities.allcustomentity.illagers.bosses.AxeWarriorEntity;
-import com.infamous.dungeons_mobs.entities.allcustomentity.illagers.bosses.IllagerWarriorEntity;
 import com.infamous.dungeons_mobs.entities.creepers.IcyCreeperEntity;
 import com.infamous.dungeons_mobs.entities.ender.BlastlingEntity;
 import com.infamous.dungeons_mobs.entities.ender.EndersentEntity;
@@ -165,14 +161,6 @@ public class ModEntityTypes {
                     .build(new ResourceLocation(MODID, "royal_guard").toString())
     );
 
-    public static final RegistryObject<EntityType<PowerfulRoyalGuardEntity>> POWERFUL_ROYAL_GUARD = ENTITY_TYPES.register("powerful_royal_guard", () ->
-            EntityType.Builder.<PowerfulRoyalGuardEntity>of(PowerfulRoyalGuardEntity::new, EntityClassification.MONSTER)
-                    .sized(1.1F, 1.95F * 1.1F)
-                    .clientTrackingRange(8)
-                    .setCustomClientFactory((spawnEntity,world) -> new PowerfulRoyalGuardEntity(world))
-                    .build(new ResourceLocation(MODID, "powerful_royal_guard").toString())
-    );
-
     public static final RegistryObject<EntityType<TowerGuardEntity>> TOWER_GUARD = ENTITY_TYPES.register("tower_guard", () ->
             EntityType.Builder.<TowerGuardEntity>of(TowerGuardEntity::new, EntityClassification.MONSTER)
                     .sized(1.0F, 1.95F * 1.1F)
@@ -246,14 +234,6 @@ public class ModEntityTypes {
                     .build(new ResourceLocation(MODID, "evoker").toString())
     );
 
-    public static final RegistryObject<EntityType<IllagerWarriorEntity>> ILLAGER_WARRIOR = ENTITY_TYPES.register("illager_warrior", () ->
-            EntityType.Builder.<IllagerWarriorEntity>of(IllagerWarriorEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F, 1.95F)
-                    .clientTrackingRange(8)
-                    .setCustomClientFactory((spawnEntity,world) -> new IllagerWarriorEntity(world))
-                    .build(new ResourceLocation(MODID, "illager_warrior").toString())
-    );
-
     public static final RegistryObject<EntityType<DungeonsIllusionerEntity>> ILLUSIONER = ENTITY_TYPES.register("illusioner", () ->
             EntityType.Builder.<DungeonsIllusionerEntity>of(DungeonsIllusionerEntity::new, EntityClassification.MONSTER)
                     .sized(0.6F, 1.95F)
@@ -306,14 +286,6 @@ public class ModEntityTypes {
                     .clientTrackingRange(8)
                     .setCustomClientFactory((spawnEntity,world) -> new DungeonsPillagerEntity(world))
                     .build(new ResourceLocation(MODID, "pillager").toString())
-    );
-
-    public static final RegistryObject<EntityType<AxeWarriorEntity>> AXE_WARRIOR = ENTITY_TYPES.register("axe_warrior", () ->
-            EntityType.Builder.<AxeWarriorEntity>of(AxeWarriorEntity::new, EntityClassification.MONSTER)
-                    .sized(0.7F, 1.98F)
-                    .clientTrackingRange(8)
-                    .setCustomClientFactory((spawnEntity,world) -> new AxeWarriorEntity(world))
-                    .build(new ResourceLocation(MODID, "axe_warrior").toString())
     );
 
     public static final RegistryObject<EntityType<ArmoredMountaineerEntity>> ARMORED_MOUNTAINEER = ENTITY_TYPES.register("armored_mountaineer", () ->
@@ -658,14 +630,6 @@ public class ModEntityTypes {
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(MODID, "snareling").toString())
     );
-
-    public static final RegistryObject<EntityType<IllagerWarriorCloneEntity>> ILLAGER_WARRIOR_CLONE = ENTITY_TYPES.register("illager_warrior_clone", () ->
-            EntityType.Builder.<IllagerWarriorCloneEntity>of(IllagerWarriorCloneEntity::new, EntityClassification.MISC)
-                    .sized(0.6F, 1.9F)
-                    .clientTrackingRange(8)
-                    .build(new ResourceLocation(MODID, "illager_warrior_clone").toString())
-    );
-
     public static final RegistryObject<EntityType<DungeonsVexEntity>> VEX = ENTITY_TYPES.register("vex", () ->
             EntityType.Builder.<DungeonsVexEntity>of(DungeonsVexEntity::new, EntityClassification.MONSTER)
                     .sized(0.4F, 0.8F)

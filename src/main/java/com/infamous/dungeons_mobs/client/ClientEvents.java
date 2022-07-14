@@ -96,10 +96,6 @@ public class ClientEvents {
                 manager -> new MountaineerRenderer(manager));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.VINDICATOR.get(),
                 manager -> new DungeonVindicatorRenderer(manager));
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ILLAGER_WARRIOR.get(),
-                manager -> new IllagerWarriorRenderer(manager));
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ILLAGER_WARRIOR_CLONE.get(),
-                manager -> new IllagerWarriorCloneRenderer(manager));
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ICEOLOGER.get(),
                 manager -> new IceologerRenderer(manager));
@@ -197,10 +193,6 @@ public class ClientEvents {
                 manager -> new DungeonsEvokerRenderer(manager));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.TOWER_GUARD.get(),
                 manager -> new TowerGuardRenderer(manager));
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.POWERFUL_ROYAL_GUARD.get(),
-                manager -> new PowerfulRoyalGuardRenderer(manager));
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.AXE_WARRIOR.get(),
-                manager -> new AxeWarriorRenderer(manager));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.VEX.get(),
                 manager -> new DungeonsVexRenderer(manager));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.PILLAGER.get(),
