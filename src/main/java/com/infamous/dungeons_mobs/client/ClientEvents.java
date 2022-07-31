@@ -83,7 +83,7 @@ import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 public class ClientEvents {
 
     @SubscribeEvent
-    public static void onClientSetup(final ModelRegistryEvent event){
+    public static void onClientSetup(final ModelRegistryEvent event) {
         ModelLoader.addSpecialModel(CustomISTER.getTridentMRL(DyeColor.YELLOW, false));
         ModelLoader.addSpecialModel(CustomISTER.getTridentMRL(DyeColor.PURPLE, false));
         ModelLoader.addSpecialModel(CustomISTER.getTridentMRL(DyeColor.YELLOW, true));
@@ -91,7 +91,7 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    public static void onClientSetup(final FMLClientSetupEvent event){
+    public static void onClientSetup(final FMLClientSetupEvent event) {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_ZOMBIE.get(), CustomZombieRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.JUNGLE_ZOMBIE.get(), CustomZombieRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.FROZEN_ZOMBIE.get(), CustomZombieRenderer::new);
@@ -113,35 +113,28 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_MOUNTAINEER.get(), CustomVindicatorRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ICEOLOGER.get(), IceologerRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.GEOMANCER.get(),
-	    	    manager -> new GeomancerRenderer(manager));
-        
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.MAGE.get(),
-	    	    manager -> new MageRenderer(manager));
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.MAGE_CLONE.get(),
-	    	    manager -> new MageCloneRenderer(manager));
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.GEOMANCER.get(), GeomancerRenderer::new);
+
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.MAGE.get(), MageRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.MAGE_CLONE.get(), MageCloneRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ILLUSIONER.get(), CustomIllusionerRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ILLUSIONER_CLONE.get(), IllusionerCloneRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WINDCALLER.get(), WindcallerRenderer::new);
-	    
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ENCHANTER.get(),
-	    	    manager -> new EnchanterRenderer(manager));
+
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ENCHANTER.get(), EnchanterRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ICY_CREEPER.get(), CustomCreeperRenderer::new);
 
-	    RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WRAITH.get(),
-	    	    manager -> new WraithRenderer(manager));
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WRAITH.get(), WraithRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.CONJURED_SLIME.get(), ConjuredSlimeRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.REDSTONE_CUBE.get(), RedstoneCubeRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.REDSTONE_GOLEM.get(),
-                manager -> new RedstoneGolemRenderer(manager));
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.REDSTONE_GOLEM.get(), RedstoneGolemRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WHISPERER.get(), WhispererRenderer::new);
-	RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.LEAPLEAF.get(),
-                manager -> new LeapleafRenderer(manager));
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.LEAPLEAF.get(), LeapleafRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.POISON_QUILL_VINE.get(), PoisonQuillVineRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.QUICK_GROWING_VINE.get(), QuickGrowingVineRenderer::new);
 
@@ -159,13 +152,10 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.COBWEB_PROJECTILE.get(), CobwebProjectileRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.BLUE_NETHERSHROOM.get(), BlueNethershroomRenderer::new);
 
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.GEOMANCER_WALL.get(),
-	    	    manager -> new GeomancerWallRenderer(manager));
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.GEOMANCER_WALL.get(), GeomancerWallRenderer::new);
 
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.GEOMANCER_BOMB.get(),
-	    	    manager -> new GeomancerBombRenderer(manager));
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.REDSTONE_MINE.get(),
-                manager -> new RedstoneMineRenderer(manager));
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.GEOMANCER_BOMB.get(), GeomancerBombRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.REDSTONE_MINE.get(), RedstoneMineRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ICE_CLOUD.get(), IceCloudRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.TORNADO.get(), TornadoRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.COBWEB_TRAP.get(), CobwebTrapRenderer::new);
@@ -191,15 +181,15 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    public static void onClientSetupComplete(final FMLLoadCompleteEvent event){
+    public static void onClientSetupComplete(final FMLLoadCompleteEvent event) {
         Minecraft.getInstance().getEntityRenderDispatcher().renderers.values().forEach(r -> {
             if (r instanceof LivingRenderer) {
-                ((LivingRenderer)r).addLayer(new MobEnchantmentGlintLayer((LivingRenderer)r));
+                ((LivingRenderer) r).addLayer(new MobEnchantmentGlintLayer((LivingRenderer) r));
             } else if (r instanceof GeoEntityRenderer) {
-                ((GeoEntityRenderer)r).addLayer(new GeoMobEnchantmentGlintLayer((GeoEntityRenderer)r));
+                ((GeoEntityRenderer) r).addLayer(new GeoMobEnchantmentGlintLayer((GeoEntityRenderer) r));
             }
-            if(r instanceof SkeletonRenderer){
-                ((SkeletonRenderer)r).addLayer(new SkeletonEyesLayer<>((SkeletonRenderer)r));
+            if (r instanceof SkeletonRenderer) {
+                ((SkeletonRenderer) r).addLayer(new SkeletonEyesLayer<>((SkeletonRenderer) r));
             }
         });
 
@@ -212,13 +202,13 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    public static void onRegisterEntities(final RegistryEvent.Register<EntityType<?>> event){
+    public static void onRegisterEntities(final RegistryEvent.Register<EntityType<?>> event) {
         ModSpawnEggItem.initSpawnEggs();
         WraithFireChargeItem.initSoulFireCharge();
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void onParticleFactory(ParticleFactoryRegisterEvent event){
+    public static void onParticleFactory(ParticleFactoryRegisterEvent event) {
         Minecraft.getInstance().particleEngine.register(ModParticleTypes.SNOWFLAKE.get(), SnowflakeParticle.Factory::new);
     }
 
