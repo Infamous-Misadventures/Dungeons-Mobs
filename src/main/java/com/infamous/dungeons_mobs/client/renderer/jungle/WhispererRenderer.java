@@ -1,36 +1,38 @@
 package com.infamous.dungeons_mobs.client.renderer.jungle;
 
-import com.infamous.dungeons_mobs.client.models.jungle.WhispererModel2;
+import com.infamous.dungeons_mobs.client.models.jungle.WhispererModel;
 import com.infamous.dungeons_mobs.entities.jungle.WhispererEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.entity.BipedRenderer;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.layers.BipedArmorLayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
+import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 @OnlyIn(Dist.CLIENT)
-public class WhispererRenderer<T extends WhispererEntity> extends BipedRenderer<T, WhispererModel2<T>> {
-    private static final ResourceLocation WHISPERER_TEXTURE = new ResourceLocation(MODID, "textures/entity/jungle/whisperer.png");
+public class WhispererRenderer extends GeoEntityRenderer<WhispererEntity> {
 
-    public WhispererRenderer(EntityRendererManager renderManagerIn) {
-        super(renderManagerIn, new WhispererModel2<>(), 0.5F);
+    public WhispererRenderer(EntityRendererManager renderManager) {
+        super(renderManager, new WhispererModel());
+        //this.addLayer(new GeoEyeLayer<>(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/enchanter/enchanter_eyes.png")));
+        //this.addLayer(new GeoHeldItemLayer<>(this, 0.0, 0.0, 0.5));
+    }
+
+    protected void applyRotations(WhispererEntity entityLiving, MatrixStack matrixStackIn, float ageInTicks,
+                                  float rotationYaw, float partialTicks) {
+        float scaleFactor = 0.9375F;
+        matrixStackIn.scale(scaleFactor, scaleFactor, scaleFactor);
+        super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
     }
 
     @Override
-    protected void scale(T whispererEntity, MatrixStack matrixStack, float v) {
-        float scaleFactor = 1.2F;
-        matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
-        super.scale(whispererEntity, matrixStack, v);
+    public RenderType getRenderType(WhispererEntity animatable, float partialTicks, MatrixStack stack,
+                                    IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn,
+                                    ResourceLocation textureLocation) {
+        return RenderType.entityTranslucent(getTextureLocation(animatable));
     }
 
-    /**
-     * Returns the location of an entity's texture.
-     */
-    public ResourceLocation getTextureLocation(T whispererEntity) {
-        return WHISPERER_TEXTURE;
-    }
 }

@@ -116,7 +116,9 @@ public class PoisonQuillVineEntity extends VineEntity implements IRangedAttackMo
     }
 
     private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
-        if (this.getLifeTicks() > MAX_LIFE_TIME - 36) {
+        if (this.entityData.get(DYING)) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.poison_quill_vine.die", false));
+        } else if (this.getLifeTicks() > MAX_LIFE_TIME - 36) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.poison_quill_vine.burst", false));
         } else if (this.getAttackTicks() > 0) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.poison_quill_vine.firing", false));
