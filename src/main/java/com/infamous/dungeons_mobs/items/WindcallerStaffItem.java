@@ -17,23 +17,23 @@ public class WindcallerStaffItem extends AbstractStaffItem{
 
     @Override
     protected void activateStaff(PlayerEntity playerIn, Entity target, ItemStack itemStack, Hand hand) {
-        World world = playerIn.getCommandSenderWorld();
-        TornadoEntity tornadoEntity = new TornadoEntity(world, playerIn, target);
-        tornadoEntity.addEffect(new EffectInstance(Effects.LEVITATION, 100,1));
-        tornadoEntity.setDuration(100);
-        world.addFreshEntity(tornadoEntity);
-        playerIn.getCooldowns().addCooldown(itemStack.getItem(), 400);
-        itemStack.hurtAndBreak(1, playerIn, playerEntity -> playerEntity.broadcastBreakEvent(hand));
+//        World world = playerIn.getCommandSenderWorld();
+//        TornadoEntity tornadoEntity = new TornadoEntity(world, playerIn, target);
+//        tornadoEntity.addEffect(new EffectInstance(Effects.LEVITATION, 100,1));
+//        tornadoEntity.setDuration(100);
+//        world.addFreshEntity(tornadoEntity);
+//        playerIn.getCooldowns().addCooldown(itemStack.getItem(), 400);
+//        itemStack.hurtAndBreak(1, playerIn, playerEntity -> playerEntity.broadcastBreakEvent(hand));
     }
 
     @Override
     protected void activateStaff(PlayerEntity playerIn, BlockPos targetPos, ItemStack itemStack, Hand hand) {
-        World world = playerIn.getCommandSenderWorld();
-        TornadoEntity tornadoEntity = new TornadoEntity(world, playerIn, targetPos.getX(), targetPos.getY(), targetPos.getZ());
-        tornadoEntity.addEffect(new EffectInstance(Effects.LEVITATION, 100,1));
-        tornadoEntity.setDuration(100);
-        world.addFreshEntity(tornadoEntity);
-        playerIn.getCooldowns().addCooldown(itemStack.getItem(), 400);
-        itemStack.hurtAndBreak(1, playerIn, playerEntity -> playerEntity.broadcastBreakEvent(hand));
+//        World world = playerIn.getCommandSenderWorld();
+//        TornadoEntity tornadoEntity = new TornadoEntity(world, playerIn, targetPos.getX(), targetPos.getY(), targetPos.getZ());
+//        tornadoEntity.addEffect(new EffectInstance(Effects.LEVITATION, 100,1));
+//        tornadoEntity.setDuration(100);
+//        world.addFreshEntity(tornadoEntity);
+//        playerIn.getCooldowns().addCooldown(itemStack.getItem(), 400);
+//        itemStack.hurtAndBreak(1, playerIn, playerEntity -> playerEntity.broadcastBreakEvent(hand));
     }
 }

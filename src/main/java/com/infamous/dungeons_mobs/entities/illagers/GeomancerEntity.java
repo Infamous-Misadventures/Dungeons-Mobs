@@ -62,6 +62,8 @@ public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnima
 
     protected void registerGoals() {
         super.registerGoals();
+        this.goalSelector.addGoal(7, new PatrollerEntity.PatrolGoal<>(this,1.42,1.3));
+        this.goalSelector.addGoal(6, new AbstractRaiderEntity.FindTargetGoal(this, 10F));
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(1, new SpellcastingIllagerEntity.CastingASpellGoal());
         this.goalSelector.addGoal(2, new AvoidEntityGoal<>(this, PlayerEntity.class, 8.0F, 1.0D, 1.0D));
@@ -72,6 +74,7 @@ public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnima
         this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
         this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, AbstractRaiderEntity.class)).setAlertOthers());
+        this.targetSelector.addGoal(2, new AbstractRaiderEntity.FindTargetGoal(this, 10F));
         this.targetSelector.addGoal(2, (new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true)).setUnseenMemoryTicks(300));
         this.targetSelector.addGoal(3, (new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, false)).setUnseenMemoryTicks(300));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, false));
@@ -151,11 +154,11 @@ public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnima
         }
 
         protected int getCastingTime() {
-            return 25;
+            return 26;
         }
 
         protected int getCastingInterval() {
-            return 140;
+            return 125;
         }
 
         protected void performSpellCasting() {
