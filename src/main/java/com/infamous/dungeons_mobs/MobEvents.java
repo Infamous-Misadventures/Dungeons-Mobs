@@ -118,14 +118,14 @@ public class MobEvents {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onEntityJoinWorld(EntityJoinWorldEvent event){
         // Making mobs avoid Geomancer Constructs
-        if(event.getEntity() instanceof CreatureEntity && !(event.getEntity() instanceof GeomancerEntity)){
-            CreatureEntity creatureEntity = (CreatureEntity) event.getEntity();
-            creatureEntity.goalSelector.addGoal(3, new AvoidBaseEntityGoal<>(creatureEntity, ConstructEntity.class, 8.0F, 0.6D, 1.0D));
-        }
-        if(event.getEntity() instanceof CreatureEntity && !(event.getEntity() instanceof WhispererEntity)){
-            CreatureEntity creatureEntity = (CreatureEntity) event.getEntity();
-            creatureEntity.goalSelector.addGoal(3, new AvoidEntityGoal<>(creatureEntity, VineEntity.class, 8.0F, 0.6D, 1.0D));
-        }
+//        if(event.getEntity() instanceof CreatureEntity && !(event.getEntity() instanceof GeomancerEntity)){
+//            CreatureEntity creatureEntity = (CreatureEntity) event.getEntity();
+//            creatureEntity.goalSelector.addGoal(3, new AvoidBaseEntityGoal<>(creatureEntity, ConstructEntity.class, 8.0F, 0.6D, 1.0D));
+//        }
+//        if(event.getEntity() instanceof CreatureEntity && !(event.getEntity() instanceof WhispererEntity)){
+//            CreatureEntity creatureEntity = (CreatureEntity) event.getEntity();
+//            creatureEntity.goalSelector.addGoal(3, new AvoidEntityGoal<>(creatureEntity, VineEntity.class, 8.0F, 0.6D, 1.0D));
+//        }
         if(event.getEntity() instanceof DrownedEntity){
             DrownedEntity drownedEntity = (DrownedEntity) event.getEntity();
             ((GoalSelectorAccessor)drownedEntity.goalSelector).getAvailableGoals().removeIf(pg -> pg.getPriority() == 2 && pg.getGoal() instanceof RangedAttackGoal);
