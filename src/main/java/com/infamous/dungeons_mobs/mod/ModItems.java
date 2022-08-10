@@ -233,8 +233,6 @@ public class ModItems {
                     new Item.Properties().tab(DUNGEONS_MOBS)));
 
     // END MOBS
-
-
     public static final RegistryObject<ModSpawnEggItem> ENDERSENT_SPAWN_EGG = ITEMS.register("endersent_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityTypes.ENDERSENT,
                     1447446, 0,
@@ -289,6 +287,18 @@ public class ModItems {
             () -> new PiglinHelmetItem(ArmorMaterial.GOLD, EquipmentSlotType.HEAD, new Item.Properties().tab(DUNGEONS_MOBS)));
     public static final RegistryObject<Item> CRACKED_GOLD_PIGLIN_HELMET = ITEMS.register("cracked_gold_piglin_helmet",
             () -> new PiglinHelmetItem(ArmorMaterial.GOLD, EquipmentSlotType.HEAD, new Item.Properties().tab(DUNGEONS_MOBS)));
+
+    public static final RegistryObject<Item> ICEOLOGER_HOOD = ITEMS.register("iceologer_hood",
+        () -> new IceologerClothesItem(CosmeticArmorMaterial.INSTANCE, EquipmentSlotType.HEAD, new Item.Properties().tab(DUNGEONS_MOBS)));
+
+    public static final RegistryObject<Item> ICEOLOGER_ROBES = ITEMS.register("iceologer_robes",
+        () -> new IceologerClothesItem(CosmeticArmorMaterial.INSTANCE, EquipmentSlotType.CHEST, new Item.Properties().tab(DUNGEONS_MOBS)));
+
+    public static final RegistryObject<Item> ICEOLOGER_PANTS = ITEMS.register("iceologer_pants",
+        () -> new IceologerClothesItem(CosmeticArmorMaterial.INSTANCE, EquipmentSlotType.LEGS, new Item.Properties().tab(DUNGEONS_MOBS)));
+
+    public static final RegistryObject<Item> ICEOLOGER_SHOES = ITEMS.register("iceologer_shoes",
+            () -> new IceologerClothesItem(CosmeticArmorMaterial.INSTANCE, EquipmentSlotType.FEET, new Item.Properties().tab(DUNGEONS_MOBS)));
 
     // SOUL FIRE CHARGE
     public static final RegistryObject<WraithFireChargeItem> WRAITH_FIRE_CHARGE = ITEMS.register("wraith_fire_charge",

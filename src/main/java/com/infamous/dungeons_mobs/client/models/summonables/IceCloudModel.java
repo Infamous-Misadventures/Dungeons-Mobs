@@ -3,41 +3,24 @@ package com.infamous.dungeons_mobs.client.models.summonables;// Made with Blockb
 // Paste this class into your mod and generate all required imports
 
 
-import com.infamous.dungeons_mobs.entities.summonables.IceCloudEntity;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.entity.Entity;
+import com.infamous.dungeons_mobs.DungeonsMobs;
+import net.minecraft.util.ResourceLocation;
+import software.bernie.geckolib3.model.AnimatedGeoModel;
 
-public class IceCloudModel<T extends IceCloudEntity> extends EntityModel<Entity> {
-	private final ModelRenderer icecloud;
+public class IceCloudModel extends AnimatedGeoModel {
 
-	public IceCloudModel() {
-		texWidth = 64;
-		texHeight = 64;
-
-		icecloud = new ModelRenderer(this);
-		icecloud.setPos(0.0F, 24.0F, 0.0F);
-		icecloud.texOffs(0, 0).addBox(0.0F, -16.0F + 1.0F, -16.0F, 16.0F, 16.0F, 16.0F, 0.0F, false);
-		icecloud.texOffs(0, 0).addBox(-16.0F, -16.0F, -16.0F, 16.0F, 16.0F, 16.0F, 0.0F, false);
-		icecloud.texOffs(0, 0).addBox(-16.0F, -16.0F - 2.0F, 0.0F, 16.0F, 16.0F, 16.0F, 0.0F, false);
-		icecloud.texOffs(0, 0).addBox(0.0F, -16.0F - 1.0F, 0.0F, 16.0F, 16.0F, 16.0F, 0.0F, false);
+	@Override
+	public ResourceLocation getAnimationFileLocation(Object entity) {
+		return new ResourceLocation(DungeonsMobs.MODID, "animations/ice_cloud.animation.json");
 	}
 
 	@Override
-	public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
-		//previously the render function, render code was moved to a method below
+	public ResourceLocation getModelLocation(Object entity) {
+		return new ResourceLocation(DungeonsMobs.MODID, "geo/ice_cloud.geo.json");
 	}
 
 	@Override
-	public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
-		icecloud.render(matrixStack, buffer, packedLight, packedOverlay);
-	}
-
-	public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
-		modelRenderer.xRot = x;
-		modelRenderer.yRot = y;
-		modelRenderer.zRot = z;
+	public ResourceLocation getTextureLocation(Object entity) {
+		return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/ice_cloud.png");
 	}
 }

@@ -2,7 +2,8 @@ package com.infamous.dungeons_mobs.entities.summonables;
 
 import com.google.common.collect.Lists;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
-import net.minecraft.block.*;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
@@ -11,20 +12,44 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.IndirectEntityDamageSource;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
 
-public class IceCloudEntity extends Entity {
-    private int floatTicks = 60;
+public class IceCloudEntity extends Entity implements IAnimatable {
+
+    AnimationFactory factory = new AnimationFactory(this);
+    @Override
+    public AnimationFactory getFactory() {
+        return factory;
+    }
+
+    @Override
+    public void registerControllers(AnimationData data) {
+        data.addAnimationController(new AnimationController(this, "controller", 5, this::predicate));
+    }
+
+    private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("m",true));
+        return PlayState.CONTINUE;
+    }
+    private int floatTicks = 180;
     public int fallTime = 0;
     private float fallHurtAmount = 3.0F;
     private LivingEntity caster;
@@ -45,9 +70,9 @@ public class IceCloudEntity extends Entity {
         this(ModEntityTypes.ICE_CLOUD.get(), worldIn);
         this.setCaster(casterIn);
         this.setTarget(targetIn);
-        this.setPos(casterIn.getX(),
-                casterIn.getY(1.0D) + this.heightAboveTarget + heightAdjustment,
-                casterIn.getZ());
+        this.moveTo(targetIn.getX(),
+                targetIn.getY() + targetIn.getBbHeight() + 0.5,
+                targetIn.getZ());
 
         this.blocksBuilding = true;
         this.setDeltaMovement(Vector3d.ZERO);
@@ -64,15 +89,25 @@ public class IceCloudEntity extends Entity {
     private void tryToFloatAboveTarget(LivingEntity targetIn) {
         List<IceCloudEntity> nearbyIceClouds = this.level.getEntities(
                 ModEntityTypes.ICE_CLOUD.get(),
-                this.getBoundingBox().inflate(0.2, 0, 0.2),
+                this.getBoundingBox().inflate(1, 0.5, 1),
                 (nearbyEntity) -> nearbyEntity != this);
 
-        if(nearbyIceClouds.isEmpty()){
-            this.setPos(targetIn.getX(),
-                    targetIn.getY(1.0D) + this.heightAboveTarget + heightAdjustment,
-                    targetIn.getZ());
+        if(nearbyIceClouds.isEmpty()) {
+            //this.moveTo(this.getX() + Math.max(Math.min(targetIn.getX()-this.getX(),0.21),-0.21),this.getY() + Math.max(Math.min(targetIn.getY(1.0D) - this.getY() + (targetIn.getBbHeight() / 2),0.21),-0.21),this.getZ() + Math.max(Math.min(targetIn.getZ()-this.getZ(),0.21),-0.21);
+            this.setDeltaMovement(getDeltaMovement().add(
+                    1 * Math.max(Math.min((targetIn.getX() - this.getX()) / 40, 0.15), -0.15) / 5,
+                    0,
+                    1 * Math.max(Math.min((targetIn.getZ() - this.getZ()) / 40, 0.15), -0.15) / 5
+            ));
+            this.setDeltaMovement(getDeltaMovement().add(
+                    0,
+                    1 * Math.max(Math.min((targetIn.getY() + targetIn.getBbHeight() + 0.5 - this.getY() ) / 40, 0.1), -0.05),
+                    0
+            ));
         }
     }
+
+
 
     public void setCaster(@Nullable LivingEntity caster) {
         this.caster = caster;
@@ -110,8 +145,26 @@ public class IceCloudEntity extends Entity {
 
     @Override
     public void tick() {
+        BlockPos e = this.blockPosition();
+        BlockState o = this.level.getBlockState(e);
+        if (!o.is(Blocks.MOVING_PISTON) && this.isOnGround() && this.isInWall()) {
+            List<Entity> list = Lists.newArrayList(this.level.getEntities(this, this.getBoundingBox().inflate(2, 1.25, 2)));
+            for(Entity entity : list) {
+                if (entity instanceof LivingEntity) {
+                    LivingEntity livingEntity = (LivingEntity) entity;
+                    damage(livingEntity,  12);
+                }
+            }
+            this.spawnIceExplosionCloud();
+            this.remove();
+        }
+
+        this.move(MoverType.SELF, this.getDeltaMovement());
+        this.setDeltaMovement(this.getDeltaMovement().multiply(0.8D, 0.8D, 0.8D));
+        this.setDeltaMovement(this.getDeltaMovement().scale(0.98D));
         if(this.floatTicks > 0){
             this.floatTicks--;
+            this.move(MoverType.SELF, this.getDeltaMovement());
             if(this.target != null && !this.level.isClientSide){
                 this.tryToFloatAboveTarget(this.target);
             }
@@ -126,14 +179,17 @@ public class IceCloudEntity extends Entity {
             this.fallTime++;
 
             if (!this.isNoGravity()) {
-                this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.04D * 2.0D, 0.0D));
+                this.setDeltaMovement(this.getDeltaMovement().add(
+                        0.0D,
+                        -1.0D,
+                        0.0D));
             }
 
             this.move(MoverType.SELF, this.getDeltaMovement());
             if (!this.level.isClientSide) {
                 BlockPos iceCloudPosition = this.blockPosition();
 
-                if (!this.onGround) {
+                if (!this.onGround ) {
                     if (!this.level.isClientSide
                             && (this.fallTime > 100
                             && (iceCloudPosition.getY() < 1
@@ -141,13 +197,17 @@ public class IceCloudEntity extends Entity {
                             || this.fallTime > 600)) {
                         this.remove();
                     }
-                } else {
+                } else{
                     BlockState blockstate = this.level.getBlockState(iceCloudPosition);
-                    this.setDeltaMovement(this.getDeltaMovement().multiply(0.7D, -0.5D, 0.7D));
+                    this.setDeltaMovement(this.getDeltaMovement().multiply(0.7D, -3.65D, 0.7D));
                     if (!blockstate.is(Blocks.MOVING_PISTON)) {
                         this.spawnIceExplosionCloud();
                         this.remove();
                     }
+                    //if (this.getBoundingBox().intersects(target.getBoundingBox())) {
+                    //     this.spawnIceExplosionCloud();
+                    //    this.remove();
+                    //}
                 }
             }
 
@@ -166,16 +226,31 @@ public class IceCloudEntity extends Entity {
 
     @Override
     public boolean causeFallDamage(float distance, float damageMultiplier) {
-    int distanceFallen = MathHelper.ceil(distance - 1.0F);
-    if (distanceFallen > 0) {
-        List<Entity> list = Lists.newArrayList(this.level.getEntities(this, this.getBoundingBox()));
-        for(Entity entity : list) {
-            if(entity instanceof LivingEntity){
-                LivingEntity livingEntity = (LivingEntity)entity;
-                damage(livingEntity, distanceFallen);
+        int distanceFallen = MathHelper.ceil(distance - 1.0F);
+        if (distanceFallen > 0) {
+            List<Entity> list = Lists.newArrayList(this.level.getEntities(this, this.getBoundingBox().inflate(2, 0.5, 2)));
+            for(Entity entity : list) {
+                if(entity instanceof LivingEntity){
+                    LivingEntity livingEntity = (LivingEntity)entity;
+                    damage(livingEntity, distanceFallen * 2);
+                }
+            }/*
+            for(Entity entity : list1) {
+                if(entity instanceof LivingEntity){
+                    LivingEntity livingEntity = (LivingEntity)entity;
+                    damage(livingEntity, (int) (distanceFallen * 0.75));
+                    livingEntity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 200, 5));
+                }
             }
+            for(Entity entity : list2) {
+                if(entity instanceof LivingEntity){
+                    LivingEntity livingEntity = (LivingEntity)entity;
+                    damage(livingEntity, (int) (distanceFallen * 0.5));
+                    livingEntity.addEffect(new EffectInstance(Effects.DIG_SLOWDOWN, 200, 5));
+                }
+            }
+            */
         }
-    }
         return false;
     }
 
@@ -191,8 +266,9 @@ public class IceCloudEntity extends Entity {
                     return;
                 }
                 targetEntity.hurt(summonedFallingBlockDamageSource, damageAmount);
-                // simulate stun
-                targetEntity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100, 4));
+                targetEntity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 180, 5));
+                targetEntity.addEffect(new EffectInstance(Effects.DIG_SLOWDOWN, 180, 5));
+                targetEntity.addEffect(new EffectInstance(Effects.WEAKNESS, 180, 5));
             }
 
         }

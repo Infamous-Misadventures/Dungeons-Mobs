@@ -19,12 +19,14 @@ import com.infamous.dungeons_mobs.capabilities.teamable.Teamable;
 import com.infamous.dungeons_mobs.capabilities.teamable.TeamableStorage;
 import com.infamous.dungeons_mobs.client.ModItemModelProperties;
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
+import com.infamous.dungeons_mobs.client.renderer.armor.IceologerClothesRenderer;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.data.AncientDataHelper;
 import com.infamous.dungeons_mobs.data.MobAncientData;
 import com.infamous.dungeons_mobs.data.MobEnchantmentAncientData;
 import com.infamous.dungeons_mobs.data.util.MergeableCodecDataManager;
 import com.infamous.dungeons_mobs.items.GroupDungeonsMobs;
+import com.infamous.dungeons_mobs.items.IceologerClothesItem;
 import com.infamous.dungeons_mobs.mod.*;
 import com.infamous.dungeons_mobs.network.NetworkHandler;
 import com.infamous.dungeons_mobs.network.datasync.ModDataSerializers;
@@ -51,6 +53,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.bernie.geckolib3.GeckoLib;
+import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod("dungeons_mobs")
@@ -114,6 +117,7 @@ public class DungeonsMobs
     private void doClientStuff(final FMLClientSetupEvent event) {
         // ITEM MODEL PROPERTIES
         MinecraftForge.EVENT_BUS.register(new ModItemModelProperties());
+        GeoArmorRenderer.registerArmorRenderer(IceologerClothesItem.class, IceologerClothesRenderer::new);
 
     }
 

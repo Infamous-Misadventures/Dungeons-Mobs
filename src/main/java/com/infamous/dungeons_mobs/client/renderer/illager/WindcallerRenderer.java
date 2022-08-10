@@ -1,6 +1,5 @@
 package com.infamous.dungeons_mobs.client.renderer.illager;
 
-import com.google.common.collect.Maps;
 import com.infamous.dungeons_mobs.client.models.illager.WindcallerModel;
 import com.infamous.dungeons_mobs.entities.illagers.WindcallerEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -20,8 +19,6 @@ import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.renderers.geo.ExtendedGeoEntityRenderer;
 
 import javax.annotation.Nullable;
-import java.util.Map;
-
 public class WindcallerRenderer extends ExtendedGeoEntityRenderer<WindcallerEntity> {
     public WindcallerRenderer(EntityRendererManager renderManager) {
         super(renderManager, new WindcallerModel());
@@ -40,33 +37,6 @@ public class WindcallerRenderer extends ExtendedGeoEntityRenderer<WindcallerEnti
                                     IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn,
                                     ResourceLocation textureLocation) {
         return RenderType.entityTranslucent(getTextureLocation(animatable));
-    }
-
-    private static final Map<String, ResourceLocation> ARMOR_LOCATION_CACHE = Maps.newHashMap();
-//    public WindcallerEntity thisMage;
-
-    @Override
-    public void render(WindcallerEntity entity, float entityYaw, float partialTicks, MatrixStack stack,
-                       IRenderTypeBuffer bufferIn, int packedLightIn) {
-//        thisMage = entity;
-
-//        if (this.getArmorResource(entity, entity.getItemBySlot(EquipmentSlotType.CHEST), EquipmentSlotType.CHEST, null) != null) {
-//            Minecraft.getInstance().textureManager.bind(this.getArmorResource(entity, entity.getItemBySlot(EquipmentSlotType.CHEST), EquipmentSlotType.CHEST, null));
-//        }
-//
-//        if (this.getArmorResource(entity, entity.getItemBySlot(EquipmentSlotType.HEAD), EquipmentSlotType.HEAD, null) != null) {
-//            Minecraft.getInstance().textureManager.bind(this.getArmorResource(entity, entity.getItemBySlot(EquipmentSlotType.HEAD), EquipmentSlotType.HEAD, null));
-//        }
-//
-//        if (this.getArmorResource(entity, entity.getItemBySlot(EquipmentSlotType.LEGS), EquipmentSlotType.LEGS, null) != null) {
-//            Minecraft.getInstance().textureManager.bind(this.getArmorResource(entity, entity.getItemBySlot(EquipmentSlotType.LEGS), EquipmentSlotType.LEGS, null));
-//        }
-//
-//        if (this.getArmorResource(entity, entity.getItemBySlot(EquipmentSlotType.FEET), EquipmentSlotType.FEET, null) != null) {
-//            Minecraft.getInstance().textureManager.bind(this.getArmorResource(entity, entity.getItemBySlot(EquipmentSlotType.FEET), EquipmentSlotType.FEET, null));
-//        }
-
-        super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
     }
 
     @Override

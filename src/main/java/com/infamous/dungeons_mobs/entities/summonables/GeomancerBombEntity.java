@@ -60,7 +60,7 @@ public class GeomancerBombEntity extends ConstructEntity implements IAnimatable 
    
 	private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
 		if (this.getLifeTicks() > 75) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("geomancer_pillar_appear", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("geomancer_pillar_appear", false));
 		} else {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("geomancer_pillar_idle", true));
 		}

@@ -29,7 +29,7 @@
 					]
 				},
 				{
-					"name": "innerArmourLeftLeg",
+					"name": "innerArmorLeftLeg",
 					"parent": "leftLeg",
 					"pivot": [2, 13.5, 0],
 					"mirror": true,
@@ -38,7 +38,7 @@
 					]
 				},
 				{
-					"name": "armourLeftLeg",
+					"name": "armorLeftLeg",
 					"parent": "leftLeg",
 					"pivot": [2, 13.5, 0],
 					"mirror": true,
@@ -59,7 +59,7 @@
 					]
 				},
 				{
-					"name": "innerArmourRightLeg",
+					"name": "innerArmorRightLeg",
 					"parent": "rightLeg",
 					"pivot": [-2, 13.5, 0],
 					"cubes": [
@@ -67,7 +67,7 @@
 					]
 				},
 				{
-					"name": "armourRightLeg",
+					"name": "armorRightLeg",
 					"parent": "rightLeg",
 					"pivot": [-2, 13.5, 0],
 					"cubes": [
@@ -84,7 +84,7 @@
 					]
 				},
 				{
-					"name": "armourBody",
+					"name": "armorBody",
 					"parent": "body",
 					"pivot": [0, 15, 0],
 					"cubes": [
@@ -92,7 +92,7 @@
 					]
 				},
 				{
-					"name": "innerArmourBody",
+					"name": "innerArmorBody",
 					"parent": "body",
 					"pivot": [0, 15, 0],
 					"cubes": [
@@ -126,7 +126,7 @@
 					]
 				},
 				{
-					"name": "armourHead",
+					"name": "armorHead",
 					"parent": "head",
 					"pivot": [0, 28, -1],
 					"cubes": [
@@ -165,7 +165,7 @@
 					]
 				},
 				{
-					"name": "armourLeftArm",
+					"name": "armorLeftArm",
 					"parent": "leftArm",
 					"pivot": [4, 24, 0],
 					"mirror": true,
@@ -201,7 +201,7 @@
 					]
 				},
 				{
-					"name": "armourRightArm",
+					"name": "armorRightArm",
 					"parent": "rightArm",
 					"pivot": [-4, 24, 0],
 					"cubes": [
