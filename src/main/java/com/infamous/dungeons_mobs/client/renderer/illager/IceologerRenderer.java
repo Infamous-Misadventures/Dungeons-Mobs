@@ -24,6 +24,7 @@ public class IceologerRenderer extends ExtendedGeoEntityRenderer<IceologerEntity
         super(renderManager, new IceologerModel());
     }
 
+    @Override
     protected void applyRotations(IceologerEntity entityLiving, MatrixStack matrixStackIn, float ageInTicks,
                                   float rotationYaw, float partialTicks) {
         float scaleFactor = 0.9375F;
@@ -37,6 +38,14 @@ public class IceologerRenderer extends ExtendedGeoEntityRenderer<IceologerEntity
                                     IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn,
                                     ResourceLocation textureLocation) {
         return RenderType.entityTranslucent(getTextureLocation(animatable));
+    }
+
+    @Override
+    public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+        if(this.isArmorBone(bone) && !bone.cubesAreHidden()) {
+            bone.setCubesHidden(true);
+        }
+        super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
     }
 
     @Override
