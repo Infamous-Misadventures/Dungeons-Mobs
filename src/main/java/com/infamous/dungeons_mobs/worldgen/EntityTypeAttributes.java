@@ -21,6 +21,7 @@ import com.infamous.dungeons_mobs.entities.redstone.RedstoneGolemEntity;
 import com.infamous.dungeons_mobs.entities.slime.ConjuredSlimeEntity;
 import com.infamous.dungeons_mobs.entities.summonables.GeomancerBombEntity;
 import com.infamous.dungeons_mobs.entities.summonables.GeomancerWallEntity;
+import com.infamous.dungeons_mobs.entities.summonables.Tornado2Entity;
 import com.infamous.dungeons_mobs.entities.undead.ArmoredSkeletonEntity;
 import com.infamous.dungeons_mobs.entities.undead.ArmoredZombieEntity;
 import com.infamous.dungeons_mobs.entities.undead.FrozenZombieEntity;
@@ -72,7 +73,7 @@ public class EntityTypeAttributes {
 
         event.put(ModEntityTypes.ICEOLOGER.get(), IceologerEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.GEOMANCER.get(), GeomancerEntity.setCustomAttributes().build());
-        event.put(ModEntityTypes.ILLUSIONER.get(), DungeonsIllusionerEntity.createAttributes().build());
+        event.put(ModEntityTypes.ILLUSIONER.get(), DungeonsIllusionerEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.ILLUSIONER_CLONE.get(), IllusionerCloneEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.WINDCALLER.get(), WindcallerEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.ENCHANTER.get(), EnchanterEntity.setCustomAttributes().build());
@@ -82,6 +83,7 @@ public class EntityTypeAttributes {
         event.put(ModEntityTypes.ICY_CREEPER.get(), IcyCreeperEntity.setCustomAttributes().build());
 
         event.put(ModEntityTypes.WRAITH.get(), WraithEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.TORNADO_MELEE.get(), Tornado2Entity.setCustomAttributes().build());
 
         event.put(ModEntityTypes.CONJURED_SLIME.get(), ConjuredSlimeEntity.setCustomAttributes().build());
 

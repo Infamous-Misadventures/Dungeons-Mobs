@@ -11,19 +11,13 @@ import com.infamous.dungeons_mobs.capabilities.teamable.TeamableProvider;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.entities.creepers.IcyCreeperEntity;
 import com.infamous.dungeons_mobs.entities.illagers.DungeonsIllusionerEntity;
-import com.infamous.dungeons_mobs.entities.illagers.GeomancerEntity;
-import com.infamous.dungeons_mobs.entities.jungle.VineEntity;
-import com.infamous.dungeons_mobs.entities.jungle.WhispererEntity;
 import com.infamous.dungeons_mobs.entities.summonables.ConstructEntity;
 import com.infamous.dungeons_mobs.entities.undead.FrozenZombieEntity;
-import com.infamous.dungeons_mobs.goals.AvoidBaseEntityGoal;
 import com.infamous.dungeons_mobs.goals.SmartTridentAttackGoal;
 import com.infamous.dungeons_mobs.interfaces.IHasItemStackData;
 import com.infamous.dungeons_mobs.mixin.GoalSelectorAccessor;
 import com.infamous.dungeons_mobs.mixin.TridentEntityAccessor;
-import com.infamous.dungeons_mobs.mixin.TridentEntityMixin;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.entity.ai.goal.RangedAttackGoal;
 import net.minecraft.entity.item.ArmorStandEntity;
 import net.minecraft.entity.monster.DrownedEntity;
@@ -52,7 +46,10 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.UUID;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 

@@ -20,10 +20,7 @@ import com.infamous.dungeons_mobs.entities.redstone.RedstoneCubeEntity;
 import com.infamous.dungeons_mobs.entities.redstone.RedstoneGolemEntity;
 import com.infamous.dungeons_mobs.entities.redstone.RedstoneMineEntity;
 import com.infamous.dungeons_mobs.entities.slime.ConjuredSlimeEntity;
-import com.infamous.dungeons_mobs.entities.summonables.GeomancerBombEntity;
-import com.infamous.dungeons_mobs.entities.summonables.GeomancerWallEntity;
-import com.infamous.dungeons_mobs.entities.summonables.IceCloudEntity;
-import com.infamous.dungeons_mobs.entities.summonables.TornadoEntity;
+import com.infamous.dungeons_mobs.entities.summonables.*;
 import com.infamous.dungeons_mobs.entities.undead.*;
 import com.infamous.dungeons_mobs.entities.undead.horseman.SkeletonHorsemanEntity;
 import com.infamous.dungeons_mobs.entities.water.*;
@@ -416,6 +413,15 @@ public class ModEntityTypes {
                     .setCustomClientFactory((spawnEntity,world) -> new TornadoEntity(world))
                     .build(new ResourceLocation(MODID, "tornado").toString())
     );
+    public static final RegistryObject<EntityType<Tornado2Entity>> TORNADO_MELEE = ENTITY_TYPES.register("melee_tornado", () ->
+            EntityType.Builder.<Tornado2Entity>of(Tornado2Entity::new, EntityClassification.MISC)
+                    .fireImmune()
+                    .sized(0.5F, 6.0F)
+                    .clientTrackingRange(10)
+                    .updateInterval(Integer.MAX_VALUE)
+                    .setCustomClientFactory((spawnEntity,world) -> new Tornado2Entity(world))
+                    .build(new ResourceLocation(MODID, "melee_tornado").toString())
+    );
 
     // PIGLIN
 
@@ -512,6 +518,16 @@ public class ModEntityTypes {
                     .updateInterval(10)
                     //.setCustomClientFactory((spawnEntity,world) -> new LaserOrbEntity(world, spawnEntity.getPosX(), spawnEntity.getPosY(), spawnEntity.getPosZ(), spawnEntity.getVelX(), spawnEntity.getVelY(), spawnEntity.getVelZ()))
                     .build(new ResourceLocation(MODID, "laser_orb").toString())
+    );
+
+    public static final RegistryObject<EntityType<NecromancerOrbEntity>> N_LASER_ORB = ENTITY_TYPES.register("n_laser_orb", () ->
+            EntityType.Builder.<NecromancerOrbEntity>of(NecromancerOrbEntity::new, EntityClassification.MISC)
+                    .fireImmune()
+                    .sized(.5F, .5F)
+                    .clientTrackingRange(10)
+                    .updateInterval(Integer.MAX_VALUE)
+                    .setCustomClientFactory((spawnEntity,world) -> new NecromancerOrbEntity(world))
+                    .build(new ResourceLocation(MODID, "n_laser_orb").toString())
     );
 
     public static final RegistryObject<EntityType<TridentFumeEntity>> TRIDENT_FUME = ENTITY_TYPES.register("trident_fume", () ->

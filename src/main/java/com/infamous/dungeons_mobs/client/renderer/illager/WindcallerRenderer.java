@@ -1,6 +1,5 @@
 package com.infamous.dungeons_mobs.client.renderer.illager;
 
-import com.google.common.collect.Maps;
 import com.infamous.dungeons_mobs.client.models.illager.WindcallerModel;
 import com.infamous.dungeons_mobs.entities.illagers.WindcallerEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -15,12 +14,12 @@ import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import software.bernie.example.client.DefaultBipedBoneIdents;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.renderers.geo.ExtendedGeoEntityRenderer;
 
 import javax.annotation.Nullable;
-import java.util.Map;
 
 public class WindcallerRenderer extends ExtendedGeoEntityRenderer<WindcallerEntity> {
     public WindcallerRenderer(EntityRendererManager renderManager) {
@@ -42,63 +41,41 @@ public class WindcallerRenderer extends ExtendedGeoEntityRenderer<WindcallerEnti
         return RenderType.entityTranslucent(getTextureLocation(animatable));
     }
 
-    private static final Map<String, ResourceLocation> ARMOR_LOCATION_CACHE = Maps.newHashMap();
-//    public WindcallerEntity thisMage;
 
+    @Nullable
     @Override
-    public void render(WindcallerEntity entity, float entityYaw, float partialTicks, MatrixStack stack,
-                       IRenderTypeBuffer bufferIn, int packedLightIn) {
-//        thisMage = entity;
-
-//        if (this.getArmorResource(entity, entity.getItemBySlot(EquipmentSlotType.CHEST), EquipmentSlotType.CHEST, null) != null) {
-//            Minecraft.getInstance().textureManager.bind(this.getArmorResource(entity, entity.getItemBySlot(EquipmentSlotType.CHEST), EquipmentSlotType.CHEST, null));
-//        }
-//
-//        if (this.getArmorResource(entity, entity.getItemBySlot(EquipmentSlotType.HEAD), EquipmentSlotType.HEAD, null) != null) {
-//            Minecraft.getInstance().textureManager.bind(this.getArmorResource(entity, entity.getItemBySlot(EquipmentSlotType.HEAD), EquipmentSlotType.HEAD, null));
-//        }
-//
-//        if (this.getArmorResource(entity, entity.getItemBySlot(EquipmentSlotType.LEGS), EquipmentSlotType.LEGS, null) != null) {
-//            Minecraft.getInstance().textureManager.bind(this.getArmorResource(entity, entity.getItemBySlot(EquipmentSlotType.LEGS), EquipmentSlotType.LEGS, null));
-//        }
-//
-//        if (this.getArmorResource(entity, entity.getItemBySlot(EquipmentSlotType.FEET), EquipmentSlotType.FEET, null) != null) {
-//            Minecraft.getInstance().textureManager.bind(this.getArmorResource(entity, entity.getItemBySlot(EquipmentSlotType.FEET), EquipmentSlotType.FEET, null));
-//        }
-
-        super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
+    protected ResourceLocation getTextureForBone(String s, WindcallerEntity Entity) {
+        return null;
     }
 
+    @Nullable
     @Override
+    protected ItemStack getHeldItemForBone(String s, WindcallerEntity Entity) {
+        switch (s) {
+            case "leftHand":
+                return Entity.isLeftHanded() ? mainHand : offHand;
+            case "rightHand":
+                return Entity.isLeftHanded() ? offHand : mainHand;
+            case DefaultBipedBoneIdents.POTION_BONE_IDENT:
+                break;
+        }
+        return null;
+    }
+
     protected boolean isArmorBone(GeoBone bone) {
         return bone.getName().startsWith("armor");
     }
 
     @Nullable
     @Override
-    protected ResourceLocation getTextureForBone(String s, WindcallerEntity windcallerEntity) {
+    protected BlockState getHeldBlockForBone(String s, WindcallerEntity currentEntity) {
         return null;
     }
 
-    @Nullable
-    @Override
-    protected ItemStack getHeldItemForBone(String s, WindcallerEntity windcallerEntity) {
-        return null;
-    }
+
 
     @Override
-    protected ItemCameraTransforms.TransformType getCameraTransformForItemAtBone(ItemStack itemStack, String s) {
-        return null;
-    }
-
-    @Nullable
-    @Override
-    protected BlockState getHeldBlockForBone(String s, WindcallerEntity windcallerEntity) {
-        return null;
-    }
-
-    @Override
-    protected void preRenderItem(MatrixStack matrixStack, ItemStack itemStack, String s, WindcallerEntity windcallerEntity, IBone iBone) {
+    protected void preRenderItem(MatrixStack stack, ItemStack item, String s, WindcallerEntity windcallerEntity, IBone iBone) {
 
     }
 
@@ -115,6 +92,18 @@ public class WindcallerRenderer extends ExtendedGeoEntityRenderer<WindcallerEnti
     @Override
     protected void postRenderBlock(MatrixStack matrixStack, BlockState blockState, String s, WindcallerEntity windcallerEntity) {
 
+    }
+
+    @Override
+    protected ItemCameraTransforms.TransformType getCameraTransformForItemAtBone(ItemStack itemStack, String s) {
+        switch (s) {
+            case "leftHand":
+                return ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND;
+            case "rightHand":
+                return ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND;
+            default:
+                return ItemCameraTransforms.TransformType.NONE;
+        }
     }
 
     @Nullable
@@ -135,11 +124,14 @@ public class WindcallerRenderer extends ExtendedGeoEntityRenderer<WindcallerEnti
             case "armorRightArm":
             case "armorLeftArm":
                 return chestplate;
-            case "armorHead":
+            case "armorHead2":
                 return helmet;
             default:
                 return null;
         }
+    }
+    public Integer getUniqueID(WindcallerEntity animatable) {
+        return animatable.getId();
     }
 
     @Override
@@ -161,7 +153,7 @@ public class WindcallerRenderer extends ExtendedGeoEntityRenderer<WindcallerEnti
                 return currentEntity.isLeftHanded() ? EquipmentSlotType.MAINHAND : EquipmentSlotType.OFFHAND;
             case "armorBody":
                 return EquipmentSlotType.CHEST;
-            case "armorHead":
+            case "armorHead2":
                 return EquipmentSlotType.HEAD;
             default:
                 return null;
@@ -187,7 +179,8 @@ public class WindcallerRenderer extends ExtendedGeoEntityRenderer<WindcallerEnti
                 return armorModel.leftArm;
             case "armorBody":
                 return armorModel.body;
-            case "armorHead":
+            case "armorHead2":
+            case "GeoArmorHead2":
                 return armorModel.head;
             default:
                 return null;

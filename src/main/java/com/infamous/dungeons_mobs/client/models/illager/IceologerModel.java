@@ -1,9 +1,9 @@
 package com.infamous.dungeons_mobs.client.models.illager;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
-import com.infamous.dungeons_mobs.entities.illagers.WindcallerEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
@@ -12,11 +12,11 @@ import software.bernie.geckolib3.item.GeoArmorItem;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
 
-public class WindcallerModel extends AnimatedGeoModel {
+public class IceologerModel extends AnimatedGeoModel {
 
 	@Override
 	public ResourceLocation getAnimationFileLocation(Object entity) {
-		return new ResourceLocation(DungeonsMobs.MODID, "animations/windcaller.animation.json");
+		return new ResourceLocation(DungeonsMobs.MODID, "animations/iceologer.animation.json");
 	}
 
 	@Override
@@ -26,14 +26,13 @@ public class WindcallerModel extends AnimatedGeoModel {
 
 	@Override
 	public ResourceLocation getTextureLocation(Object entity) {
-		return new ResourceLocation(DungeonsMobs.MODID, "textures/geo_entity/illager/windcaller.png");
+		return new ResourceLocation(DungeonsMobs.MODID, "textures/geo_entity/illager/iceologer.png");
 	}
 
 	@Override
 	public void setLivingAnimations(IAnimatable entity, Integer uniqueID, AnimationEvent customPredicate) {
 		super.setLivingAnimations(entity, uniqueID, customPredicate);
-
-		WindcallerEntity entityIn = (WindcallerEntity) entity;
+		LivingEntity entityIn = (LivingEntity) entity;
 		IBone leftEye = this.getAnimationProcessor().getBone("lefteye");
 		IBone rightEye = this.getAnimationProcessor().getBone("righteye");
 		IBone eyeBrow = this.getAnimationProcessor().getBone("head3");
@@ -41,24 +40,20 @@ public class WindcallerModel extends AnimatedGeoModel {
 
 		EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
 
-		IBone s1 = this.getAnimationProcessor().getBone("armourHead");
-		IBone b1 = this.getAnimationProcessor().getBone("staff");
+		IBone s1 = this.getAnimationProcessor().getBone("armourHead2");
 		IBone s2 = this.getAnimationProcessor().getBone("h");
-		s2.setHidden(false);
-		b1.setRotationX(b1.getRotationX() - 90);
 		s1.setHidden(true);
-		IBone s3 = this.getAnimationProcessor().getBone("armourHead2");
+		s2.setHidden(true);
+		IBone s3 = this.getAnimationProcessor().getBone("armourHead");
 		boolean g3 =(entityIn.getItemBySlot(EquipmentSlotType.HEAD).getItem() instanceof GeoArmorItem);
 
-		s3.setHidden(false);
 		rightEye.setPositionX((float) Math.max(Math.min((extraData.netHeadYaw / 80)+Math.sin(leftEye.getPositionX() * Math.PI / 180F),1),0.1));
 		leftEye.setPositionX((float) Math.min(Math.max((extraData.netHeadYaw / 80)+Math.sin(rightEye.getPositionX() * Math.PI / 180F),-1),-0.1));
 
 		rightEye.setPositionY(Math.max(Math.min(extraData.headPitch / 80, 1F), -0.0F));
 		leftEye.setPositionY(Math.max(Math.min(extraData.headPitch / 80, 1F), -0.0F));
 		eyeBrow.setPositionY(Math.max(Math.min(extraData.headPitch / 80, 1F), -0.F));
-		entityIn.h=extraData.headPitch;
-		entityIn.d=extraData.netHeadYaw;
+		s3.setHidden(false);
 		if (extraData.headPitch != 0 || extraData.netHeadYaw != 0) {
 			head.setRotationX(head.getRotationX() + (extraData.headPitch * ((float) Math.PI / 180F)));
 			head.setRotationY(head.getRotationY() + (extraData.netHeadYaw * ((float) Math.PI / 180F)));
@@ -99,3 +94,4 @@ public class WindcallerModel extends AnimatedGeoModel {
 
 		}*/
 }
+

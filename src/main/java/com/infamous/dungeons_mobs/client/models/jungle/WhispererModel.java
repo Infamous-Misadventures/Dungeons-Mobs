@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.client.models.jungle;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
+import com.infamous.dungeons_mobs.entities.water.WavewhispererEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -23,7 +24,9 @@ public class WhispererModel extends AnimatedGeoModel {
 
 	@Override
 	public ResourceLocation getTextureLocation(Object entity) {
-		return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/jungle/whisperer.png");
+		return entity instanceof WavewhispererEntity ?
+				new ResourceLocation(DungeonsMobs.MODID, "textures/entity/ocean/wavewhisperer.png"):
+				new ResourceLocation(DungeonsMobs.MODID, "textures/entity/jungle/whisperer.png");
 	}
 
 	@Override

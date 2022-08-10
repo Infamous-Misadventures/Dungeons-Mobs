@@ -2,14 +2,16 @@ package com.infamous.dungeons_mobs.entities.undead;
 
 import com.infamous.dungeons_mobs.capabilities.teamable.TeamableHelper;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
+import com.infamous.dungeons_mobs.entities.illagers.ArmoredPillagerEntity;
+import com.infamous.dungeons_mobs.entities.magic.MagicType;
 import com.infamous.dungeons_mobs.entities.projectiles.LaserOrbEntity;
+import com.infamous.dungeons_mobs.entities.projectiles.NecromancerOrbEntity;
 import com.infamous.dungeons_mobs.goals.SimpleRangedAttackGoal;
 import com.infamous.dungeons_mobs.goals.magic.UseMagicGoal;
 import com.infamous.dungeons_mobs.goals.magic.UsingMagicGoal;
+import com.infamous.dungeons_mobs.interfaces.IMagicUser;
 import com.infamous.dungeons_mobs.items.NecromancerStaffItem;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
-import com.infamous.dungeons_mobs.interfaces.IMagicUser;
-import com.infamous.dungeons_mobs.entities.magic.MagicType;
 import com.infamous.dungeons_mobs.mod.ModItems;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
@@ -32,7 +34,10 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.*;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
@@ -40,20 +45,32 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistries;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
 import java.time.LocalDate;
 import java.time.temporal.ChronoField;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class NecromancerEntity extends AbstractSkeletonEntity implements IMagicUser {
+public class NecromancerEntity extends AbstractSkeletonEntity implements IMagicUser, IAnimatable {
 
     // Required to make use of IMagicUser
-    private static final DataParameter<Byte> MAGIC = EntityDataManager.defineId(WraithEntity.class, DataSerializers.BYTE);
+    private static final DataParameter<Byte> MAGIC = EntityDataManager.defineId(NecromancerEntity.class, DataSerializers.BYTE);
+    private static final DataParameter<Boolean> IS_SUMMONING = EntityDataManager.defineId(NecromancerEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> IS_ATTACKING = EntityDataManager.defineId(NecromancerEntity.class, DataSerializers.BOOLEAN);
     public static final Predicate<Item> STAFF_PREDICATE = item -> item instanceof NecromancerStaffItem;
     private int magicUseTicks;
+    public int cd;
+    public int acd;
     private MagicType activeMagic = MagicType.NONE;
 
     public NecromancerEntity(World worldIn) {
@@ -67,12 +84,24 @@ public class NecromancerEntity extends AbstractSkeletonEntity implements IMagicU
         return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.25D).add(Attributes.MAX_HEALTH, 90.0D);
     }
 
+    @Override
+    public void baseTick() {
+        super.baseTick();
+        if (this.cd > 0) {
+            this.cd --;
+        }
+        if (this.acd > 0) {
+            this.acd --;
+        }
+    }
+
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new UsingNecromancy());
+        this.goalSelector.addGoal(3, new ShotOrb());
         this.goalSelector.addGoal(2, new RestrictSunGoal(this));
         this.goalSelector.addGoal(3, new FleeSunGoal(this, 1.0D));
         this.goalSelector.addGoal(4, new NecromancerEntity.UseNecromancy());
-        this.goalSelector.addGoal(5, new SimpleRangedAttackGoal<>(this, STAFF_PREDICATE, NecromancerEntity::performRangedAttack, 1.25D, 20, 20.0F));
+        //this.goalSelector.addGoal(5, new SimpleRangedAttackGoal<>(this, STAFF_PREDICATE, NecromancerEntity::performRangedAttack, 1.25D, 20, 20.0F));
         //this.goalSelector.addGoal(5, new MagicAttackGoal<>(this, 1.0D, 6.0F));
         this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, WolfEntity.class, 6.0F, 1.0D, 1.2D));
         this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, PlayerEntity.class, 6.0F, 1.0D, 1.2D));
@@ -90,6 +119,38 @@ public class NecromancerEntity extends AbstractSkeletonEntity implements IMagicU
         return false; // TODO: Not the best solution to prevent Necromancers burning in daylight, but since this method is only used in AbstractSkeletonEntity#livingTick, it's fine for now
     }
 
+    @Override
+    public void registerControllers(AnimationData data) {
+        data.addAnimationController(new AnimationController(this, "controller", 5, this::predicate));
+        data.addAnimationController(new AnimationController(this, "orb", 1, this::orb));
+    }
+
+    private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event){
+        event.getController().animationSpeed = 1;
+        if (this.entityData.get(IS_ATTACKING)) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.necromancer.shoot", false));
+        } else if (this.entityData.get(IS_SUMMONING)) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.necromancer.attack", false));
+        } else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.necromancer.walk", true));
+        }else {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.necromancer.idle", true));
+        }
+        return PlayState.CONTINUE;
+    }
+    private <P extends IAnimatable> PlayState orb(AnimationEvent<P> event){
+        event.getController().animationSpeed = 1;
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.necromancer.orb", true));
+        return PlayState.CONTINUE;
+    }
+
+    AnimationFactory factory = new AnimationFactory(this);
+
+    @Override
+    public AnimationFactory getFactory() {
+        return factory;
+    }
+
     class UsingNecromancy extends UsingMagicGoal<NecromancerEntity>{
 
         UsingNecromancy() {
@@ -97,39 +158,60 @@ public class NecromancerEntity extends AbstractSkeletonEntity implements IMagicU
         }
     }
 
-    class UseNecromancy extends UseMagicGoal<NecromancerEntity>{
+    class UseNecromancy extends Goal{
         private final EntityPredicate entityPredicate = (new EntityPredicate()).range(16.0D).allowUnseeable().ignoreInvisibilityTesting().allowInvulnerable().allowSameTeam();
 
+        public int timer;
+
+        public NecromancerEntity v = NecromancerEntity.this;
 
         UseNecromancy() {
-            super(NecromancerEntity.this);
+            this.setFlags(EnumSet.of(Flag.LOOK, Flag.MOVE));
         }
 
+        @Override
         public boolean canUse() {
-            if (!super.canUse()) {
-                return false;
-            } else {
-                int i = NecromancerEntity.this.level.getNearbyEntities(ZombieEntity.class, this.entityPredicate, NecromancerEntity.this, NecromancerEntity.this.getBoundingBox().inflate(16.0D)).size();
-                return NecromancerEntity.this.random.nextInt(16) + 1 > i;
-            }
+            return v.getTarget() != null && v.cd <= 0;
         }
 
         @Override
         public boolean canContinueToUse() {
-            LivingEntity targetEntity = NecromancerEntity.this.getTarget();
-            if(targetEntity == null) return false;
-            boolean canTargetBeSeen = NecromancerEntity.this.canSee(targetEntity);
-            if (canTargetBeSeen && targetEntity.isAlive()){
-                return super.canContinueToUse();
-            } else {
-                return false;
-            }
+            return this.timer < 35;
         }
 
         @Override
+        public void start() {
+            super.start();
+            this.timer = 0;
+            v.entityData.set(IS_SUMMONING, true);
+        }
+
+        @Override
+        public void stop() {
+            v.cd = 168;
+            v.entityData.set(IS_SUMMONING, false);
+        }
+
+        @Override
+        public boolean isInterruptable() {
+            return false;
+        }
+
+        @Override
+        public void tick() {
+            super.tick();
+            this.timer++;
+            v.getNavigation().stop();
+            if (v.getTarget() != null) {
+                v.getLookControl().setLookAt(v.getTarget(),30,30);
+            }
+            if (this.timer == 16) {
+                useMagic();
+            }
+        }
+
         protected void useMagic() {
-            LivingEntity targetEntity = NecromancerEntity.this.getTarget();
-            if (targetEntity != null) {
+            {
                 summonUndead();
             }
         }
@@ -137,8 +219,7 @@ public class NecromancerEntity extends AbstractSkeletonEntity implements IMagicU
         private void summonUndead(){
 
             int difficultyAsInt = NecromancerEntity.this.level.getDifficulty().getId();
-            int mobsToSummon = difficultyAsInt * 2;
-            for(int i = 0; i < mobsToSummon; ++i) {
+            for(int i = 0; i < difficultyAsInt; ++i) {
                 BlockPos blockpos = NecromancerEntity.this.blockPosition().offset(-2 + NecromancerEntity.this.random.nextInt(5), 1, -2 + NecromancerEntity.this.random.nextInt(5));
                 boolean summonedMobFromConfig = summonMobFromConfig(blockpos);
                 if(!summonedMobFromConfig){
@@ -169,6 +250,7 @@ public class NecromancerEntity extends AbstractSkeletonEntity implements IMagicU
             }
             mobEntity.finalizeSpawn((IServerWorld) NecromancerEntity.this.level, difficultyForLocation, SpawnReason.MOB_SUMMONED, (ILivingEntityData)null, (CompoundNBT)null);
             TeamableHelper.makeTeammates(mobEntity, NecromancerEntity.this);
+            mobEntity.setTarget(v.getTarget());
             return NecromancerEntity.this.level.addFreshEntity(mobEntity);
         }
 
@@ -183,29 +265,9 @@ public class NecromancerEntity extends AbstractSkeletonEntity implements IMagicU
                 }
                 zombieEntity.finalizeSpawn((IServerWorld) NecromancerEntity.this.level, difficultyForLocation, SpawnReason.MOB_SUMMONED, (ILivingEntityData)null, (CompoundNBT)null);
                 TeamableHelper.makeTeammates(zombieEntity, NecromancerEntity.this);
+                zombieEntity.setTarget(v.getTarget());
                 NecromancerEntity.this.level.addFreshEntity(zombieEntity);
             }
-        }
-
-        @Override
-        protected int getMagicUseTime() {
-            return 100;
-        }
-
-        @Override
-        protected int getMagicUseInterval() {
-            return 340;
-        }
-
-        @Nullable
-        @Override
-        protected SoundEvent getMagicPrepareSound() {
-            return SoundEvents.WITHER_SPAWN;
-        }
-
-        @Override
-        protected MagicType getMagicType() {
-            return MagicType.SUMMON_UNDEAD;
         }
     }
 
@@ -227,19 +289,7 @@ public class NecromancerEntity extends AbstractSkeletonEntity implements IMagicU
         // NO-OP
     }
 
-    private static void performRangedAttack(LivingEntity shooter, LivingEntity target) {
-        shooter.swing(ProjectileHelper.getWeaponHoldingHand(shooter, STAFF_PREDICATE));
-        double scale = 1.0D;
-        Vector3d viewVector = shooter.getViewVector(1.0F);
-        double xAccel = target.getX() - (shooter.getX() + viewVector.x * scale);
-        double yAccel = target.getY(0.5D) - (0.5D + shooter.getY(0.5D));
-        double zAccel = target.getZ() - (shooter.getZ() + viewVector.z * scale);
-        float euclidDist = MathHelper.sqrt(xAccel * xAccel + yAccel * yAccel + zAccel * zAccel);
-
-        LaserOrbEntity laserOrb = new LaserOrbEntity(shooter.level, shooter, 0, 0, 0);
-        laserOrb.setPos(shooter.getX() + viewVector.x * scale, shooter.getY(0.5D) + 0.5D, laserOrb.getZ() + viewVector.z * scale);
-        laserOrb.shoot(xAccel, yAccel, zAccel, euclidDist, 0.0F);
-        shooter.level.addFreshEntity(laserOrb);
+    private void performRangedAttack(LivingEntity shooter, LivingEntity target) {
     }
 
     @Nullable
@@ -284,6 +334,8 @@ public class NecromancerEntity extends AbstractSkeletonEntity implements IMagicU
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(MAGIC, (byte)0);
+        this.entityData.define(IS_ATTACKING, false);
+        this.entityData.define(IS_SUMMONING, false);
     }
 
     @Override
@@ -350,4 +402,264 @@ public class NecromancerEntity extends AbstractSkeletonEntity implements IMagicU
     public SoundEvent getMagicSound() {
         return SoundEvents.EVOKER_CAST_SPELL;
     }
+
+    class ShotOrb extends Goal{
+
+        public int timer;
+
+        public NecromancerEntity v = NecromancerEntity.this;
+
+        ShotOrb() {
+            this.setFlags(EnumSet.of(Flag.LOOK, Flag.MOVE));
+        }
+
+        @Override
+        public boolean canUse() {
+            return v.getTarget() != null && v.acd <= 0;
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return this.timer < 25;
+        }
+
+        @Override
+        public void start() {
+            super.start();
+            this.timer = 0;
+            v.entityData.set(IS_ATTACKING, true);
+        }
+
+        @Override
+        public void stop() {
+            v.acd = 5;
+            v.entityData.set(IS_ATTACKING, false);
+        }
+
+        @Override
+        public void tick() {
+            this.timer++;
+
+            v.getNavigation().stop();
+            if (v.getTarget() != null) {
+                v.getLookControl().setLookAt(v.getTarget(),30,30);
+            }
+            if (this.timer == 14) {
+                useMagic();
+            }
+        }
+
+        protected void useMagic() {
+            LivingEntity target = v.getTarget();
+            if (target != null) {
+                NecromancerOrbEntity vv = new NecromancerOrbEntity(v.level,v,v.getTarget());
+                double d2 = 1.25D;
+                float f = (float) MathHelper.atan2(v.getTarget().getZ() - v.getZ(), v.getTarget().getX() - v.getX());
+                double x = v.getX() + Math.cos(f) * d2;
+                double z = v.getZ() + Math.sin(f) * d2;
+                BlockPos blockpos = new BlockPos(x, v.getY(1.22), z);
+                vv.setYBodyRot(v.getYHeadRot());
+                vv.moveTo(blockpos,0,0);
+                v.level.addFreshEntity(vv);
+            }
+        }
+
+        @Override
+        public boolean isInterruptable() {
+            return false;
+        }
+    }
+
+    /*
+        private void summonUndead(){
+
+            int difficultyAsInt = DrownedNecromancerEntity.this.level.getDifficulty().getId();
+            int mobsToSummon = difficultyAsInt * 2;
+            for(int i = 0; i < mobsToSummon; ++i) {
+                BlockPos blockpos = DrownedNecromancerEntity.this.blockPosition().offset(-2 + DrownedNecromancerEntity.this.random.nextInt(5), 1, -2 + DrownedNecromancerEntity.this.random.nextInt(5));
+                boolean summonedMobFromConfig = summonMobFromConfig(blockpos);
+                if(!summonedMobFromConfig){
+                    summonedDrowned(blockpos);
+                }
+            }
+        }
+
+        private boolean summonMobFromConfig(BlockPos blockpos) {
+            List<String> necromancerMobSummons = (List<String>) DungeonsMobsConfig.COMMON.DROWNED_NECROMANCER_MOB_SUMMONS.get();
+            if(necromancerMobSummons.isEmpty()) return false;
+            Collections.shuffle(necromancerMobSummons);
+
+            int randomIndex = DrownedNecromancerEntity.this.getRandom().nextInt(necromancerMobSummons.size());
+            String randomMobID = necromancerMobSummons.get(randomIndex);
+            EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(randomMobID));
+            if(entityType == null) return false;
+
+            Entity entity = entityType.create(DrownedNecromancerEntity.this.level);
+            if(!(entity instanceof MobEntity)) return false;
+
+            MobEntity mobEntity = (MobEntity)entity;
+            DifficultyInstance difficultyForLocation = DrownedNecromancerEntity.this.level.getCurrentDifficultyAt(blockpos);
+            mobEntity.moveTo(blockpos, 0.0F, 0.0F);
+            ModifiableAttributeInstance spawnReinforcementsAttribute = mobEntity.getAttribute(Attributes.SPAWN_REINFORCEMENTS_CHANCE);
+            if(spawnReinforcementsAttribute != null){
+                spawnReinforcementsAttribute.setBaseValue(0);
+            }
+            mobEntity.finalizeSpawn((IServerWorld) DrownedNecromancerEntity.this.level, difficultyForLocation, SpawnReason.MOB_SUMMONED, (ILivingEntityData)null, (CompoundNBT)null);
+            TeamableHelper.makeTeammates(mobEntity, DrownedNecromancerEntity.this);
+            return DrownedNecromancerEntity.this.level.addFreshEntity(mobEntity);
+        }
+
+        private void summonedDrowned(BlockPos blockpos){
+            DrownedEntity drownedEntity = EntityType.DROWNED.create(DrownedNecromancerEntity.this.level);
+            if (drownedEntity != null) {
+                DifficultyInstance difficultyForLocation = DrownedNecromancerEntity.this.level.getCurrentDifficultyAt(blockpos);
+                drownedEntity.moveTo(blockpos, 0.0F, 0.0F);
+                ModifiableAttributeInstance spawnReinforcementsAttribute = drownedEntity.getAttribute(Attributes.SPAWN_REINFORCEMENTS_CHANCE);
+                if(spawnReinforcementsAttribute != null){
+                    spawnReinforcementsAttribute.setBaseValue(0);
+                }
+                drownedEntity.finalizeSpawn((IServerWorld) DrownedNecromancerEntity.this.level, difficultyForLocation, SpawnReason.MOB_SUMMONED, (ILivingEntityData)null, (CompoundNBT)null);
+                TeamableHelper.makeTeammates(drownedEntity, DrownedNecromancerEntity.this);
+                DrownedNecromancerEntity.this.level.addFreshEntity(drownedEntity);
+            }
+        }
+
+        @Override
+        protected int getMagicUseTime() {
+            return 100;
+        }
+
+        @Override
+        protected int getMagicUseInterval() {
+            return 340;
+        }
+
+        @Nullable
+        @Override
+        protected SoundEvent getMagicPrepareSound() {
+            return SoundEvents.WITHER_SPAWN;
+        }
+
+        @Override
+        protected MagicType getMagicType() {
+            return MagicType.SUMMON_UNDEAD;
+        }
+    }
+
+    class UseNeptunesWrath extends UseMagicGoal<DrownedNecromancerEntity> {
+
+        UseNeptunesWrath() {
+            super(DrownedNecromancerEntity.this);
+        }
+
+        @Override
+        public boolean canUse() {
+            LivingEntity targetEntity = DrownedNecromancerEntity.this.getTarget();
+            if(targetEntity == null) return false;
+            boolean canTargetBeSeen = DrownedNecromancerEntity.this.canSee(targetEntity);
+            if (canTargetBeSeen && targetEntity.isAlive() && DrownedNecromancerEntity.this.distanceTo(targetEntity) < 16.0D) {
+                return super.canUse();
+            } else {
+                return false;
+            }
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            LivingEntity targetEntity = DrownedNecromancerEntity.this.getTarget();
+            if(targetEntity == null) return false;
+            boolean canTargetBeSeen = DrownedNecromancerEntity.this.canSee(targetEntity);
+            if (canTargetBeSeen && targetEntity.isAlive()){
+                return super.canContinueToUse();
+            } else {
+                return false;
+            }
+        }
+
+        @Override
+        protected void useMagic() {
+            LivingEntity targetEntity = DrownedNecromancerEntity.this.getTarget();
+            if (targetEntity != null) {
+                this.summonLightning(targetEntity);
+            }
+        }
+
+        private void summonLightning(LivingEntity targetEntity) {
+            float atan2 = (float)MathHelper.atan2(targetEntity.getZ() - DrownedNecromancerEntity.this.getZ(), targetEntity.getX() - DrownedNecromancerEntity.this.getX());
+            double minY = Math.min(targetEntity.getY(), DrownedNecromancerEntity.this.getY());
+            double maxY = Math.max(targetEntity.getY(), DrownedNecromancerEntity.this.getY()) + 1.0D;
+
+            // We summon 6  lightning bolts around the summoner
+            for(int boltCounter = 0; boltCounter < 5; ++boltCounter) {
+                float randomShift = atan2 + (float)boltCounter * (float)Math.PI * 0.4F;
+                this.createSpellEntity(DrownedNecromancerEntity.this.getX() + (double) MathHelper.cos(randomShift) * 1.5D, DrownedNecromancerEntity.this.getZ() + (double)MathHelper.sin(randomShift) * 1.5D, minY, maxY);
+            }
+        }
+
+        private void createSpellEntity(double x, double z, double minY, double maxY) {
+            BlockPos blockpos = new BlockPos(x, maxY, z);
+            boolean doSummon = false;
+            double yShift = 0.0D;
+
+            World level = DrownedNecromancerEntity.this.level;
+            do {
+                BlockPos below = blockpos.below();
+                BlockState stateAtBelowPos = level.getBlockState(below);
+                if (stateAtBelowPos.isFaceSturdy(level, below, Direction.UP)) {
+                    if (!level.isEmptyBlock(blockpos)) {
+                        BlockState stateAtPos = level.getBlockState(blockpos);
+                        VoxelShape shapeAtPos = stateAtPos.getCollisionShape(level, blockpos);
+                        if (!shapeAtPos.isEmpty()) {
+                            yShift = shapeAtPos.max(Direction.Axis.Y);
+                        }
+                    }
+
+                    doSummon = true;
+                    break;
+                }
+
+                blockpos = blockpos.below();
+            } while(blockpos.getY() >= MathHelper.floor(minY) - 1);
+
+            if (doSummon) {
+                LightningBoltEntity lightningboltentity = EntityType.LIGHTNING_BOLT.create(level);
+                if (lightningboltentity != null) {
+                    Vector3d targetPosVec = new Vector3d(x, (double)blockpos.getY() + yShift, z);
+                    lightningboltentity.moveTo(targetPosVec);
+                    lightningboltentity.setCause(null); // Not ideal, but the method only takes in a ServerPlayerEntity
+                    level.addFreshEntity(lightningboltentity);
+                }
+            }
+
+        }
+
+        @Override
+        protected int getMagicUseTime() {
+            return 100;
+        }
+
+        @Override
+        protected int getMagicUseInterval() {
+            return 340;
+        }
+
+        @Nullable
+        @Override
+        protected SoundEvent getMagicPrepareSound() {
+            return SoundEvents.LIGHTNING_BOLT_THUNDER;
+        }
+
+        @Override
+        protected MagicType getMagicType() {
+            return MagicType.SUMMON_LIGHTNING;
+        }
+    }
+
+    @Override
+    public boolean hurt(DamageSource damageSource, float amount) {
+        if(damageSource == DamageSource.LIGHTNING_BOLT && this.getMagicType() == MagicType.SUMMON_LIGHTNING){
+            return false;
+        }
+        return super.hurt(damageSource, amount);
+    }*/
 }
