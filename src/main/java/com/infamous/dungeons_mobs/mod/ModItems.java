@@ -16,12 +16,6 @@ import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
 
-    // ZOMBIES
-    public static final RegistryObject<ModSpawnEggItem> ARMORED_ZOMBIE_SPAWN_EGG = ITEMS.register("armored_zombie_spawn_egg",
-            () -> new ModSpawnEggItem(ModEntityTypes.ARMORED_ZOMBIE,
-                    44975, 7969893,
-                    new Item.Properties().tab(DUNGEONS_MOBS)));
-
     public static final RegistryObject<ModSpawnEggItem> JUNGLE_ZOMBIE_SPAWN_EGG = ITEMS.register("jungle_zombie_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityTypes.JUNGLE_ZOMBIE,
                     44975, 7969893,
@@ -33,11 +27,6 @@ public class ModItems {
                     new Item.Properties().tab(DUNGEONS_MOBS)));
 
     // SKELETONS
-    public static final RegistryObject<ModSpawnEggItem> ARMORED_SKELETON_SPAWN_EGG = ITEMS.register("armored_skeleton_spawn_egg",
-            () -> new ModSpawnEggItem(ModEntityTypes.ARMORED_SKELETON,
-                    12698049, 4802889,
-                    new Item.Properties().tab(DUNGEONS_MOBS)));
-
     public static final RegistryObject<ModSpawnEggItem> MOSSY_SKELETON_SPAWN_EGG = ITEMS.register("mossy_skeleton_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityTypes.MOSSY_SKELETON,
                     12698049, 4802889,
@@ -176,16 +165,6 @@ public class ModItems {
                     new Item.Properties().tab(DUNGEONS_MOBS)));
 
     // PIGLIN
-    public static final RegistryObject<ModSpawnEggItem> ARMORED_PIGLIN_SPAWN_EGG = ITEMS.register("armored_piglin_spawn_egg",
-            () -> new ModSpawnEggItem(ModEntityTypes.ARMORED_PIGLIN,
-                    5843472, 16380836,
-                    new Item.Properties().tab(DUNGEONS_MOBS)));
-
-    public static final RegistryObject<ModSpawnEggItem> ARMORED_ZOMBIFIED_PIGLIN_SPAWN_EGG = ITEMS.register("zombified_armored_piglin_spawn_egg",
-            () -> new ModSpawnEggItem(ModEntityTypes.ZOMBIFIED_ARMORED_PIGLIN,
-                    15373203, 5009705,
-                    new Item.Properties().tab(DUNGEONS_MOBS)));
-
     public static final RegistryObject<ModSpawnEggItem> FUNGUS_THROWER_SPAWN_EGG = ITEMS.register("fungus_thrower_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityTypes.FUNGUS_THROWER,
                     5843472, 16380836,

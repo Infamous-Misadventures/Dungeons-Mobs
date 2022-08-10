@@ -1,7 +1,5 @@
 package com.infamous.dungeons_mobs.worldgen;
 
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
-
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.entities.creepers.IcyCreeperEntity;
 import com.infamous.dungeons_mobs.entities.ender.BlastlingEntity;
@@ -14,31 +12,15 @@ import com.infamous.dungeons_mobs.entities.jungle.LeapleafEntity;
 import com.infamous.dungeons_mobs.entities.jungle.PoisonQuillVineEntity;
 import com.infamous.dungeons_mobs.entities.jungle.QuickGrowingVineEntity;
 import com.infamous.dungeons_mobs.entities.jungle.WhispererEntity;
-import com.infamous.dungeons_mobs.entities.piglin.ArmoredPiglinEntity;
-import com.infamous.dungeons_mobs.entities.piglin.ZombifiedArmoredPiglinEntity;
 import com.infamous.dungeons_mobs.entities.redstone.RedstoneCubeEntity;
 import com.infamous.dungeons_mobs.entities.redstone.RedstoneGolemEntity;
 import com.infamous.dungeons_mobs.entities.slime.ConjuredSlimeEntity;
 import com.infamous.dungeons_mobs.entities.summonables.GeomancerBombEntity;
 import com.infamous.dungeons_mobs.entities.summonables.GeomancerWallEntity;
-import com.infamous.dungeons_mobs.entities.undead.ArmoredSkeletonEntity;
-import com.infamous.dungeons_mobs.entities.undead.ArmoredZombieEntity;
-import com.infamous.dungeons_mobs.entities.undead.FrozenZombieEntity;
-import com.infamous.dungeons_mobs.entities.undead.JungleZombieEntity;
-import com.infamous.dungeons_mobs.entities.undead.MossySkeletonEntity;
-import com.infamous.dungeons_mobs.entities.undead.NecromancerEntity;
-import com.infamous.dungeons_mobs.entities.undead.SkeletonVanguardEntity;
-import com.infamous.dungeons_mobs.entities.undead.WraithEntity;
+import com.infamous.dungeons_mobs.entities.undead.*;
 import com.infamous.dungeons_mobs.entities.undead.horseman.SkeletonHorsemanEntity;
-import com.infamous.dungeons_mobs.entities.water.ArmoredDrownedEntity;
-import com.infamous.dungeons_mobs.entities.water.ArmoredSunkenSkeletonEntity;
-import com.infamous.dungeons_mobs.entities.water.DrownedNecromancerEntity;
-import com.infamous.dungeons_mobs.entities.water.PoisonAnemoneEntity;
-import com.infamous.dungeons_mobs.entities.water.QuickGrowingAnemoneEntity;
-import com.infamous.dungeons_mobs.entities.water.SunkenSkeletonEntity;
-import com.infamous.dungeons_mobs.entities.water.WavewhispererEntity;
+import com.infamous.dungeons_mobs.entities.water.*;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
-
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.monster.ZombifiedPiglinEntity;
@@ -48,16 +30,16 @@ import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
+
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class EntityTypeAttributes {
 
     @SubscribeEvent
     public static void initEntityTypeAttributes(EntityAttributeCreationEvent event) {
-        event.put(ModEntityTypes.ARMORED_ZOMBIE.get(), ArmoredZombieEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.JUNGLE_ZOMBIE.get(), JungleZombieEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.FROZEN_ZOMBIE.get(), FrozenZombieEntity.setCustomAttributes().build());
 
-        event.put(ModEntityTypes.ARMORED_SKELETON.get(), ArmoredSkeletonEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.MOSSY_SKELETON.get(), MossySkeletonEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.SKELETON_VANGUARD.get(), SkeletonVanguardEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.SKELETON_HORSEMAN.get(), SkeletonHorsemanEntity.setCustomAttributes().build());
@@ -98,9 +80,7 @@ public class EntityTypeAttributes {
         event.put(ModEntityTypes.GEOMANCER_WALL.get(), GeomancerWallEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.GEOMANCER_BOMB.get(), GeomancerBombEntity.setCustomAttributes().build());
         
-        event.put(ModEntityTypes.ARMORED_PIGLIN.get(), ArmoredPiglinEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.FUNGUS_THROWER.get(), PiglinEntity.createAttributes().build());
-        event.put(ModEntityTypes.ZOMBIFIED_ARMORED_PIGLIN.get(), ZombifiedArmoredPiglinEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.ZOMBIFIED_FUNGUS_THROWER.get(), ZombifiedPiglinEntity.createAttributes().build());
 
         event.put(ModEntityTypes.ARMORED_DROWNED.get(), ArmoredDrownedEntity.setCustomAttributes().build());

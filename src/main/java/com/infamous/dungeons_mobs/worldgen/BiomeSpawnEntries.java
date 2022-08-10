@@ -203,12 +203,6 @@ public class BiomeSpawnEntries {
     }
 
     private static void replaceMonsterSpawnsWithVariants(MobSpawnInfoBuilder mobSpawnInfoBuilder, Biome.Category foundCategory) {
-        if(DungeonsMobsConfig.COMMON.ENABLE_ARMORED_ZOMBIE_REPLACES_ZOMBIE.get()){
-            handleVariantReplacement(mobSpawnInfoBuilder, EntityType.ZOMBIE, ModEntityTypes.ARMORED_ZOMBIE.get(), 0.9);
-        }
-        if(DungeonsMobsConfig.COMMON.ENABLE_ARMORED_SKELETON_REPLACES_SKELETON.get()){
-            handleVariantReplacement(mobSpawnInfoBuilder, EntityType.SKELETON, ModEntityTypes.ARMORED_SKELETON.get(), 0.9);
-        }
         if(DungeonsMobsConfig.COMMON.ENABLE_ARMORED_MOUNTAINEER_REPLACES_MOUNTAINEER.get()){
             handleVariantReplacement(mobSpawnInfoBuilder, ModEntityTypes.MOUNTAINEER.get(), ModEntityTypes.ARMORED_MOUNTAINEER.get(), 0.9);
         }
@@ -217,12 +211,6 @@ public class BiomeSpawnEntries {
         }
         if(DungeonsMobsConfig.COMMON.ENABLE_ARMORED_PILLAGER_REPLACES_PILLAGER.get()){
             handleVariantReplacement(mobSpawnInfoBuilder, EntityType.PILLAGER, ModEntityTypes.ARMORED_PILLAGER.get(), 0.9);
-        }
-        if(DungeonsMobsConfig.COMMON.ENABLE_ARMORED_PIGLIN_REPLACES_PIGLIN.get()){
-            handleVariantReplacement(mobSpawnInfoBuilder, EntityType.PIGLIN, ModEntityTypes.ARMORED_PIGLIN.get(), 0.9);
-        }
-        if(DungeonsMobsConfig.COMMON.ENABLE_ZOMBIFIED_ARMORED_PIGLIN_REPLACES_ZOMBIFIED_PIGLIN.get()){
-            handleVariantReplacement(mobSpawnInfoBuilder, EntityType.ZOMBIFIED_PIGLIN, ModEntityTypes.ZOMBIFIED_ARMORED_PIGLIN.get(), 0.9);
         }
         if(DungeonsMobsConfig.COMMON.ENABLE_JUNGLE_ZOMBIE_REPLACES_ZOMBIE.get()){
             handleVariantReplacementWithCategoryCheck(mobSpawnInfoBuilder, foundCategory, Biome.Category.JUNGLE, EntityType.ZOMBIE, ModEntityTypes.JUNGLE_ZOMBIE.get(), 0.8);

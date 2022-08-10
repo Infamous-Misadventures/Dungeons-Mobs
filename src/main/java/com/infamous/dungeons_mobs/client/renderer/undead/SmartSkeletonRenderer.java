@@ -1,17 +1,13 @@
 package com.infamous.dungeons_mobs.client.renderer.undead;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
-import com.infamous.dungeons_mobs.client.models.undead.SkeletonVanguardModel;
 import com.infamous.dungeons_mobs.client.models.undead.SmartSkeletonModel;
-import com.infamous.dungeons_mobs.entities.undead.ArmoredSkeletonEntity;
 import com.infamous.dungeons_mobs.entities.water.SunkenSkeletonEntity;
 import com.infamous.dungeons_mobs.interfaces.IArmoredMob;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.entity.BipedRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.SkeletonRenderer;
 import net.minecraft.client.renderer.entity.layers.BipedArmorLayer;
-import net.minecraft.client.renderer.entity.model.SkeletonModel;
 import net.minecraft.entity.monster.AbstractSkeletonEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;

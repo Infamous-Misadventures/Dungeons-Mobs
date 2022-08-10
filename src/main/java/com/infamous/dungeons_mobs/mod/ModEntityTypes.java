@@ -11,9 +11,7 @@ import com.infamous.dungeons_mobs.entities.jungle.LeapleafEntity;
 import com.infamous.dungeons_mobs.entities.jungle.PoisonQuillVineEntity;
 import com.infamous.dungeons_mobs.entities.jungle.QuickGrowingVineEntity;
 import com.infamous.dungeons_mobs.entities.jungle.WhispererEntity;
-import com.infamous.dungeons_mobs.entities.piglin.ArmoredPiglinEntity;
 import com.infamous.dungeons_mobs.entities.piglin.FungusThrowerEntity;
-import com.infamous.dungeons_mobs.entities.piglin.ZombifiedArmoredPiglinEntity;
 import com.infamous.dungeons_mobs.entities.piglin.ZombifiedFungusThrowerEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.*;
 import com.infamous.dungeons_mobs.entities.redstone.RedstoneCubeEntity;
@@ -40,15 +38,6 @@ public class ModEntityTypes {
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITIES, MODID);
 
     // ZOMBIES
-    public static final RegistryObject<EntityType<ArmoredZombieEntity>> ARMORED_ZOMBIE = ENTITY_TYPES.register("armored_zombie", () ->
-            EntityType.Builder.<ArmoredZombieEntity>of(ArmoredZombieEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F * 1.1F, 1.95F * 1.1F)
-                    .clientTrackingRange(8)
-                    .setCustomClientFactory((spawnEntity,world) -> new ArmoredZombieEntity(world))
-                    .build(new ResourceLocation(MODID, "armored_zombie").toString())
-    );
-
-
     public static final RegistryObject<EntityType<JungleZombieEntity>> JUNGLE_ZOMBIE = ENTITY_TYPES.register("jungle_zombie", () ->
             EntityType.Builder.<JungleZombieEntity>of(JungleZombieEntity::new, EntityClassification.MONSTER)
                     .sized(0.6F, 1.95F)
@@ -67,15 +56,6 @@ public class ModEntityTypes {
     );
 
     // SKELETONS
-    public static final RegistryObject<EntityType<ArmoredSkeletonEntity>> ARMORED_SKELETON = ENTITY_TYPES.register("armored_skeleton", () ->
-            EntityType.Builder.<ArmoredSkeletonEntity>of(ArmoredSkeletonEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F * 1.1F, 1.99F * 1.1F)
-                    .clientTrackingRange(8)
-                    .setCustomClientFactory((spawnEntity,world) -> new ArmoredSkeletonEntity(world))
-                    .build(new ResourceLocation(MODID, "armored_skeleton").toString())
-    );
-
-
     public static final RegistryObject<EntityType<MossySkeletonEntity>> MOSSY_SKELETON = ENTITY_TYPES.register("mossy_skeleton", () ->
             EntityType.Builder.<MossySkeletonEntity>of(MossySkeletonEntity::new, EntityClassification.MONSTER)
                     .sized(0.6F, 1.99F)
@@ -418,22 +398,6 @@ public class ModEntityTypes {
     );
 
     // PIGLIN
-
-    public static final RegistryObject<EntityType<ArmoredPiglinEntity>> ARMORED_PIGLIN = ENTITY_TYPES.register("armored_piglin", () ->
-            EntityType.Builder.<ArmoredPiglinEntity>of(ArmoredPiglinEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F * 1.1F, 1.95F * 1.1F)
-                    .clientTrackingRange(8)
-                    .build(new ResourceLocation(MODID, "armored_piglin").toString())
-    );
-
-    public static final RegistryObject<EntityType<ZombifiedArmoredPiglinEntity>> ZOMBIFIED_ARMORED_PIGLIN = ENTITY_TYPES.register("zombified_armored_piglin", () ->
-            EntityType.Builder.<ZombifiedArmoredPiglinEntity>of(ZombifiedArmoredPiglinEntity::new, EntityClassification.MONSTER)
-                   .fireImmune()
-                    .sized(0.6F * 1.1F, 1.95F * 1.1F)
-                    .clientTrackingRange(8)
-                    .build(new ResourceLocation(MODID, "zombified_armored_piglin").toString())
-    );
-
     public static final RegistryObject<EntityType<FungusThrowerEntity>> FUNGUS_THROWER = ENTITY_TYPES.register("fungus_thrower", () ->
             EntityType.Builder.<FungusThrowerEntity>of(FungusThrowerEntity::new, EntityClassification.MONSTER)
                     .sized(0.6F, 1.95F)

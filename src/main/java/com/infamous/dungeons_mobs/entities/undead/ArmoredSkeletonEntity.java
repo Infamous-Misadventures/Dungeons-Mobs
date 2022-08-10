@@ -1,7 +1,6 @@
 package com.infamous.dungeons_mobs.entities.undead;
 
 import com.infamous.dungeons_mobs.DungeonsGearCompat;
-import com.infamous.dungeons_mobs.entities.water.ArmoredDrownedEntity;
 import com.infamous.dungeons_mobs.interfaces.IArmoredMob;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
@@ -11,7 +10,6 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.world.*;
 import com.infamous.dungeons_mobs.utils.ModProjectileHelper;
 import com.infamous.dungeons_mobs.goals.ModdedRangedBowAttackGoal;
-import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -26,7 +24,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
@@ -54,11 +51,6 @@ public class ArmoredSkeletonEntity extends SkeletonEntity implements IArmoredMob
     };
 
     private final boolean isConstructed;
-
-    public ArmoredSkeletonEntity(World worldIn) {
-        super(ModEntityTypes.ARMORED_SKELETON.get(), worldIn);
-        this.isConstructed = true;
-    }
 
     public ArmoredSkeletonEntity(EntityType<? extends ArmoredSkeletonEntity> p_i50194_1_, World p_i50194_2_) {
         super(p_i50194_1_, p_i50194_2_);

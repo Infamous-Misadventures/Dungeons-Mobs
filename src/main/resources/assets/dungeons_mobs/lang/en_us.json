@@ -1,13 +1,9 @@
 {
-  "entity.dungeons_mobs.armored_zombie": "Armored Zombie",
-  "item.dungeons_mobs.armored_zombie_spawn_egg": "Armored Zombie Spawn Egg",
   "entity.dungeons_mobs.jungle_zombie": "Jungle Zombie",
   "item.dungeons_mobs.jungle_zombie_spawn_egg": "Jungle Zombie Spawn Egg",
   "entity.dungeons_mobs.frozen_zombie": "Frozen Zombie",
   "item.dungeons_mobs.frozen_zombie_spawn_egg": "Frozen Zombie Spawn Egg",
 
-  "entity.dungeons_mobs.armored_skeleton": "Armored Skeleton",
-  "item.dungeons_mobs.armored_skeleton_spawn_egg": "Armored Skeleton Spawn Egg",
   "entity.dungeons_mobs.mossy_skeleton": "Mossy Skeleton",
   "item.dungeons_mobs.mossy_skeleton_spawn_egg": "Mossy Skeleton Spawn Egg",
   "entity.dungeons_mobs.skeleton_vanguard": "Skeleton Vanguard",

@@ -67,14 +67,6 @@ public class EntitySpawnPlacements {
     }
 
     public static void initSpawnPlacements(){
-        EntitySpawnPlacementRegistry.register(ModEntityTypes.ARMORED_ZOMBIE.get(),
-                EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
-                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                MonsterEntity::checkMonsterSpawnRules);
-        EntitySpawnPlacementRegistry.register(ModEntityTypes.ARMORED_SKELETON.get(),
-                EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
-                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                MonsterEntity::checkMonsterSpawnRules);
         EntitySpawnPlacementRegistry.register(ModEntityTypes.WRAITH.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
@@ -191,18 +183,10 @@ public class EntitySpawnPlacements {
                 VineEntity::canVineSpawnInLight);
 
 
-        EntitySpawnPlacementRegistry.register(ModEntityTypes.ARMORED_PIGLIN.get(),
-                EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
-                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                EntitySpawnPlacements::checkPiglinSpawnRules);
         EntitySpawnPlacementRegistry.register(ModEntityTypes.FUNGUS_THROWER.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                 EntitySpawnPlacements::checkPiglinSpawnRules);
-        EntitySpawnPlacementRegistry.register(ModEntityTypes.ZOMBIFIED_ARMORED_PIGLIN.get(),
-                EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
-                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                EntitySpawnPlacements::checkZombifiedPiglinSpawnRules);
 
         EntitySpawnPlacementRegistry.register(ModEntityTypes.ZOMBIFIED_FUNGUS_THROWER.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,

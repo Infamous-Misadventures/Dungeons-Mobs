@@ -15,8 +15,6 @@ public class DungeonsMobsConfig {
         public static ForgeConfigSpec.ConfigValue<List<? extends String>> NECROMANCER_MOB_SUMMONS;
         public static ForgeConfigSpec.ConfigValue<List<? extends String>> DROWNED_NECROMANCER_MOB_SUMMONS;
 
-        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_ZOMBIE_REPLACES_ZOMBIE;
-        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_SKELETON_REPLACES_SKELETON;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_MOUNTAINEER_REPLACES_MOUNTAINEER;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_VINDICATOR_REPLACES_VINDICATOR;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_PILLAGER_REPLACES_PILLAGER;
@@ -24,8 +22,6 @@ public class DungeonsMobsConfig {
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ICY_CREEPER_REPLACES_CREEPER;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_JUNGLE_ZOMBIE_REPLACES_ZOMBIE;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_MOSSY_SKELETON_REPLACES_SKELETON;
-        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_PIGLIN_REPLACES_PIGLIN;
-        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ZOMBIFIED_ARMORED_PIGLIN_REPLACES_ZOMBIFIED_PIGLIN;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_DROWNED_REPLACES_DROWNED;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_SUNKEN_SKELETON_REPLACES_SUNKEN_SKELETON;
 
@@ -183,7 +179,6 @@ public class DungeonsMobsConfig {
                     .defineList("necromancerMobSummons", Lists.newArrayList(
                             "minecraft:zombie",
                             "minecraft:skeleton",
-                            "dungeons_mobs:armored_zombie",
                             "dungeons_mobs:armored_skeleton",
                             "dungeons_mobs:wraith"
                             ),
@@ -219,14 +214,6 @@ public class DungeonsMobsConfig {
                     .comment("Enable Mossy Skeletons  80% of Skeleton spawns in JUNGLE biomes. \n" +
                             "If you prefer to not have them do this, disable this feature. [true / false]")
                     .define("enableMossySkeletonReplacesSkeleton", true);
-            ENABLE_ARMORED_ZOMBIE_REPLACES_ZOMBIE = builder
-                    .comment("Enable Armored Zombies replacing 10% of Zombie spawns in the biomes they can spawn in. \n" +
-                            "If you prefer to not have them do this, disable this feature. [true / false]")
-                    .define("enableArmoredZombieReplacesZombie", true);
-            ENABLE_ARMORED_SKELETON_REPLACES_SKELETON = builder
-                    .comment("Enable Armored Skeletons replacing 10% of Skeleton spawns in the biomes they can spawn in. \n" +
-                            "If you prefer to not have them do this, disable this feature. [true / false]")
-                    .define("enableArmoredSkeletonReplacesSkeleton", true);
             ENABLE_ARMORED_MOUNTAINEER_REPLACES_MOUNTAINEER = builder
                     .comment("Enable Armored Mountaineers replacing 10% of Mountaineer spawns in the biomes they can spawn in. \n" +
                             "If you prefer to not have them do this, disable this feature. [true / false]")
@@ -239,14 +226,6 @@ public class DungeonsMobsConfig {
                     .comment("Enable Armored Pillagers replacing 10% of Pillager spawns in the biomes they can spawn in. \n" +
                             "If you prefer to not have them do this, disable this feature. [true / false]")
                     .define("enableArmoredPillagerReplacesPillager", true);
-            ENABLE_ARMORED_PIGLIN_REPLACES_PIGLIN = builder
-                    .comment("Enable Armored Piglins replacing 10% of Piglins spawns in the biomes they can spawn in. \n" +
-                            "If you prefer to not have them do this, disable this feature. [true / false]")
-                    .define("enableArmoredPiglinReplacesPiglin", true);
-            ENABLE_ZOMBIFIED_ARMORED_PIGLIN_REPLACES_ZOMBIFIED_PIGLIN = builder
-                    .comment("Enable Zombified Armored Piglins replacing 10% of Zombified Piglin spawns in the biomes they can spawn in. \n" +
-                            "If you prefer to not have them do this, disable this feature. [true / false]")
-                    .define("enabledArmoredZombifiedPiglinReplacesZombifiedPiglin", true);
 
             ENABLE_ARMORED_DROWNED_REPLACES_DROWNED = builder
                     .comment("Enable Armored Drowned replacing 10% of Drowned spawns in the biomes they can spawn in. \n" +
