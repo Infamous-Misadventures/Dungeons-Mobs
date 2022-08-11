@@ -44,7 +44,6 @@ import com.infamous.dungeons_mobs.client.renderer.water.DrownedNecromancerRender
 import com.infamous.dungeons_mobs.client.renderer.water.PoisonAnemoneRenderer;
 import com.infamous.dungeons_mobs.client.renderer.water.QuickGrowingAnemoneRenderer;
 import com.infamous.dungeons_mobs.client.renderer.water.WavewhispererRenderer;
-import com.infamous.dungeons_mobs.items.ModSpawnEggItem;
 import com.infamous.dungeons_mobs.items.WraithFireChargeItem;
 import com.infamous.dungeons_mobs.items.shield.CustomISTER;
 import com.infamous.dungeons_mobs.mod.ModBlocks;
@@ -190,7 +189,6 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void onRegisterEntities(final RegistryEvent.Register<EntityType<?>> event) {
-        ModSpawnEggItem.initSpawnEggs();
         WraithFireChargeItem.initSoulFireCharge();
     }
 
