@@ -63,6 +63,12 @@ public class ModItems {
     public static final RegistryObject<Item> ICEOLOGER_SHOES = ITEMS.register("iceologer_shoes",
             () -> new IceologerClothesItem(CosmeticArmorMaterial.INSTANCE, EquipmentSlotType.FEET, new Item.Properties().tab(DUNGEONS_MOBS)));
 
+    public static final RegistryObject<Item> GEOMANCER_BEADS = ITEMS.register("geomancer_beads",
+            () -> new GeomancerClothesItem(CosmeticArmorMaterial.INSTANCE, EquipmentSlotType.HEAD, new Item.Properties().tab(DUNGEONS_MOBS)));
+
+    public static final RegistryObject<Item> GEOMANCER_ROBES = ITEMS.register("geomancer_robes",
+            () -> new GeomancerClothesItem(CosmeticArmorMaterial.INSTANCE, EquipmentSlotType.CHEST, new Item.Properties().tab(DUNGEONS_MOBS)));
+
     // SOUL FIRE CHARGE
     public static final RegistryObject<WraithFireChargeItem> WRAITH_FIRE_CHARGE = ITEMS.register("wraith_fire_charge",
             () -> new WraithFireChargeItem(new Item.Properties().tab(DUNGEONS_MOBS)));

@@ -179,7 +179,6 @@ public class DungeonsMobsConfig {
                     .defineList("necromancerMobSummons", Lists.newArrayList(
                             "minecraft:zombie",
                             "minecraft:skeleton",
-                            "dungeons_mobs:armored_skeleton",
                             "dungeons_mobs:wraith"
                             ),
                             (itemRaw) -> itemRaw instanceof String);

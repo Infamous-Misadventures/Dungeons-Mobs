@@ -129,11 +129,14 @@ public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnima
     @Override
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
         this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModItems.GEOMANCER_STAFF.get()));
+        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.GEOMANCER_BEADS.get()));
+        this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.GEOMANCER_ROBES.get()));
     }
 
     @Nullable
     public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         this.populateDefaultEquipmentSlots(difficultyIn);
+        this.populateDefaultEquipmentEnchantments(difficultyIn);
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 

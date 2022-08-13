@@ -19,12 +19,10 @@ import com.infamous.dungeons_mobs.capabilities.teamable.Teamable;
 import com.infamous.dungeons_mobs.capabilities.teamable.TeamableStorage;
 import com.infamous.dungeons_mobs.client.ModItemModelProperties;
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
-import com.infamous.dungeons_mobs.client.renderer.armor.IceologerClothesRenderer;
+import com.infamous.dungeons_mobs.client.renderer.armor.GeomancerClothesArmorRenderer;
+import com.infamous.dungeons_mobs.client.renderer.armor.IceologerClothesArmorRenderer;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
-import com.infamous.dungeons_mobs.data.AncientDataHelper;
-import com.infamous.dungeons_mobs.data.MobAncientData;
-import com.infamous.dungeons_mobs.data.MobEnchantmentAncientData;
-import com.infamous.dungeons_mobs.data.util.MergeableCodecDataManager;
+import com.infamous.dungeons_mobs.items.GeomancerClothesItem;
 import com.infamous.dungeons_mobs.items.GroupDungeonsMobs;
 import com.infamous.dungeons_mobs.items.IceologerClothesItem;
 import com.infamous.dungeons_mobs.mod.*;
@@ -40,7 +38,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemGroup;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -118,7 +115,8 @@ public class DungeonsMobs
     private void doClientStuff(final FMLClientSetupEvent event) {
         // ITEM MODEL PROPERTIES
         MinecraftForge.EVENT_BUS.register(new ModItemModelProperties());
-        GeoArmorRenderer.registerArmorRenderer(IceologerClothesItem.class, IceologerClothesRenderer::new);
+        GeoArmorRenderer.registerArmorRenderer(IceologerClothesItem.class, IceologerClothesArmorRenderer::new);
+        GeoArmorRenderer.registerArmorRenderer(GeomancerClothesItem.class, GeomancerClothesArmorRenderer::new);
 
     }
 
