@@ -29,6 +29,7 @@ public class ModdedCapeModel<T extends LivingEntity> extends BipedModel<T> {
      * Sets this entity's model rotation angles
      */
     public void setupAnim(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        1+1;
         if (entityIn.getItemBySlot(EquipmentSlotType.CHEST).isEmpty()) {
             if (entityIn.isCrouching()) {
                 this.bipedCape.z = 1.4F;
