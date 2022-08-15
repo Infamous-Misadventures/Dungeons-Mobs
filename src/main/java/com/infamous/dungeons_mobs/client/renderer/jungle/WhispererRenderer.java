@@ -16,7 +16,7 @@ import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 public class WhispererRenderer extends GeoEntityRenderer<WhispererEntity> {
 
     public WhispererRenderer(EntityRendererManager renderManager) {
-        super(renderManager, new WhispererModel());
+        super(renderManager, new WhispererModel<>());
         //this.addLayer(new GeoEyeLayer<>(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/enchanter/enchanter_eyes.png")));
         //this.addLayer(new GeoHeldItemLayer<>(this, 0.0, 0.0, 0.5));
     }

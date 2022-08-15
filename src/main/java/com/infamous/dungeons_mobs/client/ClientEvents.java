@@ -106,7 +106,7 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.MAGE.get(), MageRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.MAGE_CLONE.get(), MageCloneRenderer::new);
 
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ILLUSIONER.get(), CustomIllusionerRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ILLUSIONER.get(), DungeonsIllusionerRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ILLUSIONER_CLONE.get(), IllusionerCloneRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WINDCALLER.get(), WindcallerRenderer::new);
 

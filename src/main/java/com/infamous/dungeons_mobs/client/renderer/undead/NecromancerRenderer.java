@@ -3,39 +3,35 @@ package com.infamous.dungeons_mobs.client.renderer.undead;
 import com.infamous.dungeons_mobs.client.models.undead.NecromancerModel;
 import com.infamous.dungeons_mobs.entities.undead.NecromancerEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.entity.BipedRenderer;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.layers.BipedArmorLayer;
-import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
+public class NecromancerRenderer extends GeoEntityRenderer<NecromancerEntity> {
 
-@OnlyIn(Dist.CLIENT)
-public class NecromancerRenderer extends BipedRenderer<NecromancerEntity, NecromancerModel<NecromancerEntity>> {
-    private static final ResourceLocation NECROMANCER_TEXTURE = new ResourceLocation(MODID, "textures/entity/skeleton/necromancer.png");
+    public NecromancerRenderer(EntityRendererManager renderManager) {
+        super(renderManager, new NecromancerModel());
+        //this.addLayer(new GeoEyeLayer<>(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/enchanter/enchanter_eyes.png")));
+        //this.addLayer(new GeoHeldItemLayer<>(this, 0.0, 0.0, 0.5));
 
-    public NecromancerRenderer(EntityRendererManager renderManagerIn) {
-        super(renderManagerIn, new NecromancerModel<>(), 0.5F);
-        this.addLayer(new BipedArmorLayer<>(this, new BipedModel<>(0.5F), new BipedModel<>(1.0F)));
-        //this.entityModel.bipedHeadwear.showModel = false;
-        //this.addLayer(new NecromancerEyesLayer<>(this));
-        //this.addLayer(new WraithClothingLayer<>(this));
+    }
+
+    protected void applyRotations(NecromancerEntity entityLiving, MatrixStack matrixStackIn, float ageInTicks,
+                                  float rotationYaw, float partialTicks) {
+        float scaleFactor = 1.2F;
+        matrixStackIn.scale(scaleFactor, scaleFactor, scaleFactor);
+        super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
+
     }
 
     @Override
-    protected void scale(NecromancerEntity necromancerEntity, MatrixStack matrixStack, float v) {
-        float scaleFactor = 1.2F;
-        matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
-        super.scale(necromancerEntity, matrixStack, v);
+    public RenderType getRenderType(NecromancerEntity animatable, float partialTicks, MatrixStack stack,
+                                    IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn,
+                                    ResourceLocation textureLocation) {
+        return RenderType.entityTranslucent(getTextureLocation(animatable));
     }
 
-    /**
-     * Returns the location of an entity's texture.
-     */
-    public ResourceLocation getTextureLocation(NecromancerEntity entity) {
-        return NECROMANCER_TEXTURE;
-    }
 }

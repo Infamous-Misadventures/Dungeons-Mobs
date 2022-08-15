@@ -133,15 +133,6 @@
 					]
 				},
 				{
-					"name": "bipedCape",
-					"parent": "bipedBody",
-					"pivot": [0, 24, 3],
-					"rotation": [7.5, 0, 0],
-					"cubes": [
-						{"origin": [-5, 8, 3], "size": [10, 16, 1], "uv": [0, 0]}
-					]
-				},
-				{
 					"name": "bipedPotionSlot",
 					"parent": "bipedBody",
 					"pivot": [4, 13, 0],

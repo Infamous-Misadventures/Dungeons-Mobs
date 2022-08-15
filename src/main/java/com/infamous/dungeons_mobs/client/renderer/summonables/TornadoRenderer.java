@@ -19,9 +19,6 @@ public class TornadoRenderer extends GeoProjectilesRenderer<TornadoEntity> {
 
    @Override
    public void render(TornadoEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
-      if(entityIn.fallTime < 0){
-         return;
-      }
       super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
    }
 

@@ -42,15 +42,16 @@ public class IceCloudEntity extends Entity implements IAnimatable {
 
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController(this, "controller", 5, this::predicate));
+        data.addAnimationController(new AnimationController(this, "controller", 0, this::predicate));
     }
 
     private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
         event.getController().setAnimation(new AnimationBuilder().addAnimation("m",true));
         return PlayState.CONTINUE;
     }
-    private int floatTicks = 180;
+    private int floatTicks = 120;
     public int fallTime = 0;
+    public int livingTime = 0;
     private float fallHurtAmount = 3.0F;
     private LivingEntity caster;
     private UUID casterUuid;
@@ -147,6 +148,12 @@ public class IceCloudEntity extends Entity implements IAnimatable {
     public void tick() {
         BlockPos e = this.blockPosition();
         BlockState o = this.level.getBlockState(e);
+        if (this.livingTime <= 20) {
+            this.livingTime++;
+            return;
+        }
+
+
         if (!o.is(Blocks.MOVING_PISTON) && this.isOnGround() && this.isInWall()) {
             List<Entity> list = Lists.newArrayList(this.level.getEntities(this, this.getBoundingBox().inflate(2, 1.25, 2)));
             for(Entity entity : list) {
@@ -181,7 +188,7 @@ public class IceCloudEntity extends Entity implements IAnimatable {
             if (!this.isNoGravity()) {
                 this.setDeltaMovement(this.getDeltaMovement().add(
                         0.0D,
-                        -1.0D,
+                        -0.6D,
                         0.0D));
             }
 

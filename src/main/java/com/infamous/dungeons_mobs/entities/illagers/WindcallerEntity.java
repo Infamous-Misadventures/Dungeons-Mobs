@@ -1,8 +1,11 @@
 package com.infamous.dungeons_mobs.entities.illagers;
 
 import com.google.common.collect.Lists;
+import com.infamous.dungeons_mobs.entities.summonables.Tornado2Entity;
 import com.infamous.dungeons_mobs.entities.summonables.TornadoEntity;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
+import com.infamous.dungeons_mobs.mod.ModItems;
+import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -13,13 +16,18 @@ import net.minecraft.entity.monster.EvokerEntity;
 import net.minecraft.entity.monster.SpellcastingIllagerEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.IParticleData;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.DifficultyInstance;
@@ -40,7 +48,9 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class WindcallerEntity extends SpellcastingIllagerEntity implements IAnimatable {
-
+    protected float getSoundVolume() {
+        return 3.0F;
+    }
     public static final DataParameter<Integer> TIMER = EntityDataManager.defineId(WindcallerEntity.class, DataSerializers.INT);
     public static final DataParameter<Boolean> CAN_MELEE = EntityDataManager.defineId(WindcallerEntity.class, DataSerializers.BOOLEAN);
     public static final DataParameter<Boolean> IS_MELEE = EntityDataManager.defineId(WindcallerEntity.class, DataSerializers.BOOLEAN);
@@ -66,6 +76,34 @@ public class WindcallerEntity extends SpellcastingIllagerEntity implements IAnim
         data.addAnimationController(new AnimationController(this, "controller", 5, this::predicate));
     }
 
+    public float h;
+    public float d;
+
+    public void spawnIceExplosionCloud(){
+        float radius = (float) ((this.getBbWidth() * 2) / Math.PI);
+        if (this.level.isClientSide) {
+            IParticleData iparticledata = ParticleTypes.CAMPFIRE_SIGNAL_SMOKE;
+            if (true) {
+                if (this.random.nextBoolean()) {
+                    for (int i = 0; i < 2; ++i) {
+                        float randWithin2Pi = this.random.nextFloat() * ((float)Math.PI * 2F);
+                        float adjustedSqrtFloat = MathHelper.sqrt(this.random.nextFloat()) * radius;
+                        float adjustedCosine = MathHelper.cos(randWithin2Pi) * adjustedSqrtFloat;
+                        float adjustedSine = MathHelper.sin(randWithin2Pi) * adjustedSqrtFloat;
+                        this.level.addAlwaysVisibleParticle(iparticledata, true,
+                                this.getX() + (double) adjustedCosine,
+                                this.getY(0.1),
+                                this.getZ() + (double) adjustedSine,
+                                0.0D,
+                                -0.01D,
+                                0.0D);
+                    }
+                }
+            }
+        }
+    }
+
+
     private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
         if (this.entityData.get(IS_LEFT)) {
             event.getController().animationSpeed = 1;
@@ -80,7 +118,8 @@ public class WindcallerEntity extends SpellcastingIllagerEntity implements IAnim
             event.getController().animationSpeed = 1;
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.windcaller.idle", true));
         }
-        return PlayState.CONTINUE;
+        return this.level.isClientSide || this.deathTime > 0 ? PlayState.CONTINUE :
+                PlayState.STOP;
     }
 
     @Override
@@ -125,6 +164,7 @@ public class WindcallerEntity extends SpellcastingIllagerEntity implements IAnim
 
     @Override
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
+        this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModItems.WINDCALLER_STAFF.get()));
     }
 
     @Nullable
@@ -152,17 +192,17 @@ public class WindcallerEntity extends SpellcastingIllagerEntity implements IAnim
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.EVOKER_AMBIENT;
+        return ModSoundEvents.WINDCALLER_IDLE.get();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.EVOKER_DEATH;
+        return ModSoundEvents.WINDCALLER_DEATH.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return SoundEvents.EVOKER_HURT;
+        return ModSoundEvents.WINDCALLER_HURT.get();
     }
 
     @Override
@@ -172,7 +212,7 @@ public class WindcallerEntity extends SpellcastingIllagerEntity implements IAnim
 
     @Override
     public SoundEvent getCelebrateSound() {
-        return SoundEvents.EVOKER_CELEBRATE;
+        return ModSoundEvents.WINDCALLER_IDLE.get();
     }
 
     @Override
@@ -180,7 +220,7 @@ public class WindcallerEntity extends SpellcastingIllagerEntity implements IAnim
         return false;
     }
 
-    public void targetInRange(Entity p_70652_1_) {
+    public void ik(Entity p_70652_1_) {
         if (p_70652_1_ != null && this.distanceTo(p_70652_1_) < 16.0D) {
             this.entityData.set(CAN_MELEE, true);
         }else
@@ -190,8 +230,9 @@ public class WindcallerEntity extends SpellcastingIllagerEntity implements IAnim
     @Override
     public void aiStep() {
         super.aiStep();
+        spawnIceExplosionCloud();
         if (this.getTarget() != null)
-            this.targetInRange(this.getTarget());
+            this.ik(this.getTarget());
 
         if (this.entityData.get(LIFT_CD) > 0) {
             this.entityData.set(LIFT_CD, this.entityData.get(LIFT_CD) - 1);
@@ -221,7 +262,7 @@ public class WindcallerEntity extends SpellcastingIllagerEntity implements IAnim
 
     class LiftGoal extends Goal {
 
-        public WindcallerEntity windcallerEntity = WindcallerEntity.this;
+        public WindcallerEntity v = WindcallerEntity.this;
 
         public LiftGoal() {
             this.setFlags(EnumSet.of(Flag.LOOK, Flag.MOVE));
@@ -229,44 +270,47 @@ public class WindcallerEntity extends SpellcastingIllagerEntity implements IAnim
 
         @Override
         public boolean canUse() {
-            return windcallerEntity.getTarget() != null &&
-                    windcallerEntity.entityData.get(LIFT_CD) <= 0;
+            return v.getTarget() != null &&
+                    v.entityData.get(LIFT_CD) <= 0;
         }
 
         @Override
         public boolean canContinueToUse() {
             //animation tick
-            return windcallerEntity.entityData.get(TIMER) < 43;
+            return v.entityData.get(TIMER) < 43;
         }
 
         @Override
         public void start() {
-            windcallerEntity.entityData.set(TIMER, 0);
+            v.entityData.set(TIMER, 0);
         }
 
         @Override
         public void stop() {
-            windcallerEntity.entityData.set(LIFT_CD, 185);
-            windcallerEntity.entityData.set(TIMER, 0);
-            windcallerEntity.entityData.set(IS_LEFT,false);
-            windcallerEntity.entityData.set(IS_MELEE,false);
-            if (windcallerEntity.getTarget() == null) {
-                windcallerEntity.setAggressive(false);
+            v.entityData.set(LIFT_CD, 185);
+            v.entityData.set(TIMER, 0);
+            v.entityData.set(IS_LEFT,false);
+            v.entityData.set(IS_MELEE,false);
+            if (v.getTarget() == null) {
+                v.setAggressive(false);
             }
         }
 
         @Override
         public void tick() {
-            windcallerEntity.entityData.set(TIMER, windcallerEntity.entityData.get(TIMER) +1);
-            windcallerEntity.getNavigation().stop();
+            v.entityData.set(TIMER, v.entityData.get(TIMER) +1);
+            v.getNavigation().stop();
 
-            if (windcallerEntity.getTarget() != null && windcallerEntity.getTarget().isAlive() && windcallerEntity.distanceToSqr(windcallerEntity.getTarget()) > 30 + windcallerEntity.getTarget().getBbWidth()) {
-                windcallerEntity.getLookControl().setLookAt(windcallerEntity.getTarget(), 30.0F, 30.0F);
-                if (windcallerEntity.entityData.get(TIMER) == 18 ) {
+            if (v.getTarget() != null && v.getTarget().isAlive() && v.distanceToSqr(v.getTarget()) > 30 + v.getTarget().getBbWidth()) {
+                v.getLookControl().setLookAt(v.getTarget(), 30.0F, 30.0F);
+                if (v.entityData.get(TIMER) == 14) {
+                    v.playSound(ModSoundEvents.WINDCALLER_LIFT_ATTACK.get(), 3.5f, 1);
+                }
+                if (v.entityData.get(TIMER) == 18 ) {
                     TornadoEntity tornadoEntity = new TornadoEntity(WindcallerEntity.this.level, WindcallerEntity.this, WindcallerEntity.this.getTarget(), 12);
                     WindcallerEntity.this.level.addFreshEntity(tornadoEntity);
                 }
-                windcallerEntity.entityData.set(IS_LEFT,true);
+                v.entityData.set(IS_LEFT,true);
             }
 
         }
@@ -329,56 +373,33 @@ public class WindcallerEntity extends SpellcastingIllagerEntity implements IAnim
         public void tick() {
             v.entityData.set(TIMER, v.entityData.get(TIMER) + 1);
             if (v.getTarget() != null && v.getTarget().isAlive()) {
-                if (v.distanceToSqr(v.getTarget()) <= 30 + v.getTarget().getBbWidth()) {
-                    float attackKnockback = 5;
-                    if (v.entityData.get(TIMER) >= 18 && v.entityData.get(TIMER) <= 21) {
-                        v.entityData.set(MELEE_CD,65);
-                        LivingEntity attackTarget = v.getTarget();
-                        double ratioX = (double) MathHelper.sin(v.yRot * ((float) Math.PI / 180F));
-                        double ratioZ = (double) (-MathHelper.cos(v.yRot * ((float) Math.PI / 180F)));
-                        double knockbackReduction = 0.5D;
-                        this.forceKnockback(attackTarget, attackKnockback, ratioX, ratioZ, knockbackReduction);
-                        v.setDeltaMovement(v.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
-                    }
-                    if (v.entityData.get(TIMER) < 18 ) {
-                        v.getLookControl().setLookAt(v.getTarget(),30,30);
-                    }else {
-                        if ( v.entityData.get(TIMER) <= 21) {
-                            attackKnockback = 5.01F;
-                            List<Entity> list = Lists.newArrayList(WindcallerEntity.this.level.getEntities(v, v.getBoundingBox().inflate(3, 0.5, 3)));
-                            for (Entity entity : list) {
-                                if (entity instanceof LivingEntity) {
-                                    LivingEntity attackTarget = v.getTarget();
-                                    double ratioX = (double) MathHelper.sin(v.yRot * ((float) Math.PI / 180F));
-                                    double ratioZ = (double) (-MathHelper.cos(v.yRot * ((float) Math.PI / 180F)));
-                                    double knockbackReduction = 0.5D;
-                                    this.forceKnockback(attackTarget, attackKnockback, ratioX, ratioZ, knockbackReduction);
-                                    v.setDeltaMovement(v.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
-                                }
-                            }
-                        }
-                    }
-                    v.entityData.set(IS_MELEE, true);
+                v.getLookControl().setLookAt(v.getTarget(),5,5);
+                if (v.entityData.get(TIMER) == 14) {
+                    v.playSound(ModSoundEvents.WINDCALLER_BLAST_ATTACK.get(), 3.5f, 1);
+                }
+                if (v.entityData.get(TIMER) == 17) {
+                    Tornado2Entity vv = new Tornado2Entity(v.level);
+                    double d2 = 1.25D;
+                    float f = (float) MathHelper.atan2(v.getTarget().getZ() - v.getZ(), v.getTarget().getX() - v.getX());
+                    double x = v.getX() + Math.cos(f) * d2;
+                    double z = v.getZ() + Math.sin(f) * d2;
+                    BlockPos blockpos = new BlockPos(x, v.getY(1.0), z);
+                    vv.moveTo(v.blockPosition(),0,0);
+                    vv.setCaster(v);
+                    vv.setTargetr(v.getTarget());
+                    vv.xRot = -v.xRot;
+                    //this.yHeadRot = -v.yRot;
+                    vv.yBodyRot = -v.yHeadRot;
+                    vv.yRot = -v.yHeadRot;
+                    vv.yRotO = vv.yRot;
+                    vv.xRotO = vv.xRot;
+
+                    v.level.addFreshEntity(vv);
                 }
             }
 
         }
 
-        private void forceKnockback(LivingEntity attackTarget, float strength, double ratioX, double ratioZ, double knockbackResistanceReduction) {
-            LivingKnockBackEvent event = ForgeHooks.onLivingKnockBack(attackTarget, strength, ratioX, ratioZ);
-            if (event.isCanceled()) return;
-            strength = event.getStrength();
-            ratioX = event.getRatioX();
-            ratioZ = event.getRatioZ();
-            strength = (float) ((double) strength * (1.0D - attackTarget.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE) * knockbackResistanceReduction));
-            if (!(strength <= 0.0F)) {
-                attackTarget.hasImpulse = true;
-                Vector3d vector3d = attackTarget.getDeltaMovement();
-                Vector3d vector3d1 = (new Vector3d(ratioX, 0.0D, ratioZ)).normalize().scale((double) strength);
-                attackTarget.setDeltaMovement(vector3d.x / 2.0D - vector3d1.x, attackTarget.isOnGround() ? Math.min(0.4D, vector3d.y / 2.0D + (double) strength) : vector3d.y, vector3d.z / 2.0D - vector3d1.z);
-            }
-        }
     }
-
 
 }

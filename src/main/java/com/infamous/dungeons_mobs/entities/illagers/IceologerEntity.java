@@ -36,16 +36,10 @@ import java.util.EnumSet;
 
 public class IceologerEntity extends SpellcastingIllagerEntity implements IAnimatable {
 
-    public static final DataParameter<Integer> LIFT_TICKS = EntityDataManager.defineId(IceologerEntity.class, DataSerializers.INT);
-    public static final DataParameter<Integer> DUPLICATE_TICKS = EntityDataManager.defineId(IceologerEntity.class, DataSerializers.INT);
-    public static final DataParameter<Integer> ANGRY = EntityDataManager.defineId(IceologerEntity.class, DataSerializers.INT);
-    public static final DataParameter<Integer> POWERFUL_ATTACK = EntityDataManager.defineId(IceologerEntity.class, DataSerializers.INT);
+    public static final DataParameter<Integer> SUMMON_TICK = EntityDataManager.defineId(IceologerEntity.class, DataSerializers.INT);
 
     public boolean SpellAttacking;
-    public int liftInterval = 0;
-    public int duplicateInterval = 0;
-    public int powerfulAttackInterval = 0;
-    public int spellInterval = 0;
+    public int summonCloudCooldown = 0;
     public int timer = 0;
 
     AnimationFactory factory = new AnimationFactory(this);
@@ -70,7 +64,7 @@ public class IceologerEntity extends SpellcastingIllagerEntity implements IAnima
         this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, IronGolemEntity.class, 3.0F, 1.3D, 1.15D));
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(1, new IceologerEntity.CastingSpellGoal());
-        this.goalSelector.addGoal(5, new IceologerEntity.SummonFangsGoal());
+        this.goalSelector.addGoal(5, new IceologerEntity.SummonCloudGoal());
         this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 1.0D));
         this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
         this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
@@ -87,20 +81,8 @@ public class IceologerEntity extends SpellcastingIllagerEntity implements IAnima
             this.getLookControl().setLookAt(this.getTarget(), (float)this.getMaxHeadYRot(), (float)this.getMaxHeadXRot());
         }
 
-        if (this.liftInterval > 0) {
-            this.liftInterval --;
-        }
-
-        if (this.spellInterval > 0) {
-            this.spellInterval --;
-        }
-
-        if (this.powerfulAttackInterval > 0) {
-            this.powerfulAttackInterval --;
-        }
-
-        if (this.duplicateInterval > 0) {
-            this.duplicateInterval --;
+        if (this.summonCloudCooldown > 0) {
+            this.summonCloudCooldown --;
         }
 
         if (this.timer > 0) {
@@ -111,17 +93,29 @@ public class IceologerEntity extends SpellcastingIllagerEntity implements IAnima
             this.setLiftTicks(this.getLiftTicks() - 1);
         }
 
-        if (this.getDuplicateTicks() > 0) {
-            this.setDuplicateTicks(this.getDuplicateTicks() - 1);
-        }
+    }
 
-        if (this.isAngry() > 0) {
-            this.setAngry(this.isAngry() - 1);
-        }
+    @Override
+    public void registerControllers(AnimationData data) {
+        data.addAnimationController(new AnimationController(this, "controller", 3, this::predicate));
+    }
 
-        if (this.getPowerfulAttack() > 0) {
-            this.setPowerfulAttack(this.getPowerfulAttack() - 1);
+
+    private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
+        if (this.getLiftTicks() > 0) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.iceologer.summon", false));
+        } else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.iceologer.walk", true));
+        } else {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.iceologer.idle", true));
         }
+        return this.level.isClientSide || this.deathTime > 0 ? PlayState.CONTINUE :
+                PlayState.STOP;
+    }
+
+    @Override
+    public AnimationFactory getFactory() {
+        return factory;
     }
 
     @Override
@@ -142,72 +136,19 @@ public class IceologerEntity extends SpellcastingIllagerEntity implements IAnima
         return iLivingEntityData;
     }
 
-    @Override
-    public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController(this, "controller", 3, this::predicate));
-    }
-
-
-    private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
-        if (this.getDuplicateTicks() > 0) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.iceologer.summon", false));
-        } else if (this.getLiftTicks() > 0) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.iceologer.summon", false));
-        }else if (this.isAngry() > 0 || this.getPowerfulAttack() > 0) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.iceologer.summon", false));
-        } else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.iceologer.walk", true));
-        } else {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.iceologer.idle", true));
-        }
-        return PlayState.CONTINUE;
-    }
-
-    @Override
-    public AnimationFactory getFactory() {
-        return factory;
-    }
-
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(LIFT_TICKS, 0);
-        this.entityData.define(DUPLICATE_TICKS, 0);
-        this.entityData.define(ANGRY, 0);
-        this.entityData.define(POWERFUL_ATTACK, 0);
+        this.entityData.define(SUMMON_TICK, 0);
     }
 
-    public int getPowerfulAttack() {
-        return this.entityData.get(POWERFUL_ATTACK);
-    }
-
-    public void setPowerfulAttack(int p_189794_1_) {
-        this.entityData.set(POWERFUL_ATTACK, p_189794_1_);
-    }
 
     public int getLiftTicks() {
-        return this.entityData.get(LIFT_TICKS);
+        return this.entityData.get(SUMMON_TICK);
     }
 
     public void setLiftTicks(int p_189794_1_) {
-        this.entityData.set(LIFT_TICKS, p_189794_1_);
+        this.entityData.set(SUMMON_TICK, p_189794_1_);
     }
-
-    public int getDuplicateTicks() {
-        return this.entityData.get(DUPLICATE_TICKS);
-    }
-
-    public void setDuplicateTicks(int p_189794_1_) {
-        this.entityData.set(DUPLICATE_TICKS, p_189794_1_);
-    }
-
-    public int isAngry() {
-        return this.entityData.get(ANGRY);
-    }
-
-    public void setAngry(int p_189794_1_) {
-        this.entityData.set(ANGRY, p_189794_1_);
-    }
-
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return MageEntity.setCustomAttributes();
@@ -270,7 +211,7 @@ public class IceologerEntity extends SpellcastingIllagerEntity implements IAnima
         }
     }
 
-    class SummonFangsGoal extends Goal {
+    class SummonCloudGoal extends Goal {
 
 
         @Override
@@ -278,35 +219,35 @@ public class IceologerEntity extends SpellcastingIllagerEntity implements IAnima
             return false;
         }
 
-        public SummonFangsGoal() {
+        public SummonCloudGoal() {
             this.setFlags(EnumSet.of(Flag.MOVE, Flag.JUMP, Flag.LOOK));
         }
 
         public boolean canUse() {
-            return IceologerEntity.this.getTarget() != null && IceologerEntity.this.getLiftTicks() == 0 && IceologerEntity.this.liftInterval == 0 && IceologerEntity.this.random.nextInt(20) == 0;
+            return IceologerEntity.this.getTarget() != null && IceologerEntity.this.getLiftTicks() == 0 && IceologerEntity.this.summonCloudCooldown == 0 && IceologerEntity.this.random.nextInt(20) == 0;
         }
 
         public boolean canContinueToUse() {
             return IceologerEntity.this.getTarget() != null && IceologerEntity.this.getLiftTicks() > 0;
         }
 
+
+
         public void start() {
             super.start();
             IceologerEntity.this.SpellAttacking = false;
-            IceologerEntity.this.liftInterval = 300;
+            IceologerEntity.this.summonCloudCooldown = 280 - IceologerEntity.this.getRandom().nextInt(80);
             IceologerEntity.this.setLiftTicks(44);
+            IceologerEntity mob = IceologerEntity.this;
+
             IceologerEntity.this.playSound(SoundEvents.EVOKER_PREPARE_SUMMON, IceologerEntity.this.getSoundVolume(), IceologerEntity.this.getVoicePitch());
+            IceCloudEntity v = new IceCloudEntity(level, IceologerEntity.this, IceologerEntity.this.getTarget());
+            v.moveTo(mob.getTarget().getX(), mob.getTarget().getY(mob.getBbHeight()), mob.getTarget().getZ());
+            mob.level.addFreshEntity(v);
         }
 
         public void tick() {
             IceologerEntity.this.getLookControl().setLookAt(IceologerEntity.this.getTarget(), (float) IceologerEntity.this.getMaxHeadYRot(), (float) IceologerEntity.this.getMaxHeadXRot());
-            IceologerEntity mob = IceologerEntity.this;
-
-            if (mob.getLiftTicks()==20){
-                IceCloudEntity v = new IceCloudEntity(level, IceologerEntity.this, IceologerEntity.this.getTarget());
-                v.moveTo(mob.getX(),mob.getY(),mob.getZ());
-                mob.level.addFreshEntity(v);
-            }
 
         }
 
@@ -324,5 +265,4 @@ public class IceologerEntity extends SpellcastingIllagerEntity implements IAnima
         }
         return illagerArmPose;
     }
-
 }
