@@ -27,11 +27,7 @@ public class GeoNecromancerOrbModel extends AnimatedGeoModel {
 
 	@Override
 	public ResourceLocation getTextureLocation(Object entity) {
-		//ChorusGormandizerEntity entityIn = (ChorusGormandizerEntity) entity;
-		return new ResourceLocation(DungeonsMobs.MODID,
-				((NecromancerOrbEntity)entity).getCaster() instanceof ArchIllagerEntity ?
-						"textures/geo_entity/arch_illager_proyectile.png" :
-						"textures/geo_entity/necromancer_proyectile.png");
+		return new ResourceLocation(DungeonsMobs.MODID,"textures/geo_entity/necromancer_proyectile.png");
 	}
 
 	@Override
