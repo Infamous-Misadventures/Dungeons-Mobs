@@ -18,8 +18,6 @@ import software.bernie.geckolib3.renderers.geo.GeoProjectilesRenderer;
 
 public class GeoNecromancerOrbRenderer extends GeoProjectilesRenderer<NecromancerOrbEntity> {
 
-    public IRenderTypeBuffer rtb;
-    public NecromancerOrbEntity thisMage;
     public GeoNecromancerOrbRenderer(EntityRendererManager renderManager) {
         super(renderManager, new GeoNecromancerOrbModel());
     }
@@ -38,20 +36,5 @@ public class GeoNecromancerOrbRenderer extends GeoProjectilesRenderer<Necromance
                                     ResourceLocation textureLocation) {
         this.rtb = renderTypeBuffer;
         return RenderType.entityTranslucent(getTextureLocation(animatable));
-    }
-
-    @Override
-    public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-
-        bufferIn = rtb.getBuffer(RenderType.entityTranslucent(new ResourceLocation(
-                                DungeonsMobs.MODID,
-                                thisMage.getCaster() instanceof ArchIllagerEntity ?
-                                        "textures/geo_entity/arch_illager_proyectile.png" :
-                                        "textures/geo_entity/necromancer_proyectile.png"
-                        )
-                )
-        );
-
-        super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
     }
 }
