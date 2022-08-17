@@ -1,10 +1,10 @@
 package com.infamous.dungeons_mobs.entities.redstone;
 
-import com.infamous.dungeons_mobs.entities.summonables.ConstructEntity;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.monster.AbstractRaiderEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
 import java.util.UUID;
 
 public class RedstoneMineEntity extends Entity implements IAnimatable {
-    public static final DataParameter<Integer> LIFE_TICKS = EntityDataManager.defineId(ConstructEntity.class, DataSerializers.INT);
+    public static final DataParameter<Integer> LIFE_TICKS = EntityDataManager.defineId(RedstoneMineEntity.class, DataSerializers.INT);
 
     private LivingEntity caster;
     private UUID casterUuid;
@@ -53,13 +53,11 @@ public class RedstoneMineEntity extends Entity implements IAnimatable {
     private AnimationFactory factory = new AnimationFactory(this);
 
     private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
-        if (this.getLifeTicks() == 6) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.redstone_mine.deactive", true));
-        }
-        if (this.getLifeTicks() == LIFE_TIME) {
+        if (this.getLifeTicks() <= 6) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.redstone_mine.deactivate", true));
+        }else if (this.getLifeTicks() >= LIFE_TIME - 2) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.redstone_mine.activate", true));
-        }
-        if (this.getLifeTicks() < LIFE_TIME - 3 && this.getLifeTicks() > 4){
+        }else {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.redstone_mine.idle", true));
         }
         return PlayState.CONTINUE;
@@ -114,7 +112,7 @@ public class RedstoneMineEntity extends Entity implements IAnimatable {
 
             if (livingentity.isAlive() && !livingentity.isInvulnerable()) {
                 if (Caster != null) {
-                    if (!Caster.isAlliedTo(livingentity) || livingentity != Caster) {
+                    if (!Caster.isAlliedTo(livingentity) || livingentity != Caster && !(livingentity instanceof AbstractRaiderEntity)) {
                         this.level.explode(Caster, this.getX(), this.getY(0.0625D), this.getZ(), this.explosionRadius, Explosion.Mode.NONE);
                         this.remove();
                     }
