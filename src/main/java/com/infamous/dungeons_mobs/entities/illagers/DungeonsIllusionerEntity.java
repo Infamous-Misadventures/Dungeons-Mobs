@@ -49,8 +49,8 @@ public class DungeonsIllusionerEntity extends SpellcastingIllagerEntity implemen
    public static final DataParameter<Integer> SUMMON_CLONE_TICK = EntityDataManager.defineId(DungeonsIllusionerEntity.class, DataSerializers.INT);
    public static final DataParameter<Boolean> SHOT_OR_SUMMON_BOOLEAN = EntityDataManager.defineId(DungeonsIllusionerEntity.class, DataSerializers.BOOLEAN);
 
-   public int liftInterval = 0;
-   public int duplicateInterval = 0;
+   private int liftInterval = 0;
+   private int duplicateInterval = 0;
 
    AnimationFactory factory = new AnimationFactory(this);
 
