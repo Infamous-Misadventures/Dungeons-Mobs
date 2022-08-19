@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.entities.redstone;
 
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
+import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 import com.infamous.dungeons_mobs.utils.GeomancyHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -219,7 +220,7 @@ public class RedstoneGolemEntity extends AbstractRaiderEntity implements IAnimat
     public boolean hurt(DamageSource source, float amount) {
         boolean flag = super.hurt(source, amount);
         if (flag) {
-            this.playSound(SoundEvents.IRON_GOLEM_DAMAGE, 1.0F, 1.0F);
+            this.playSound(ModSoundEvents.REDSTONE_GOLEM_HURT.get(), 1.0F, 1.0F);
         }
 
         return flag;
@@ -289,12 +290,12 @@ public class RedstoneGolemEntity extends AbstractRaiderEntity implements IAnimat
 
     @Nullable
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return SoundEvents.IRON_GOLEM_HURT;
+        return ModSoundEvents.REDSTONE_GOLEM_HURT.get();
     }
 
     @Nullable
     protected SoundEvent getDeathSound() {
-        return SoundEvents.IRON_GOLEM_DEATH;
+        return ModSoundEvents.REDSTONE_GOLEM_DEATH.get();
     }
 
     // NAVIGATION
@@ -438,6 +439,9 @@ public class RedstoneGolemEntity extends AbstractRaiderEntity implements IAnimat
         public void tick() {
            if(RedstoneGolemEntity.this.getTarget() != null && RedstoneGolemEntity.this.getTarget().isAlive()) {
                RedstoneGolemEntity.this.getLookControl().setLookAt(RedstoneGolemEntity.this.getTarget(), 30.0F, 30.0F);
+               if(attackTimer == 8) {
+                   RedstoneGolemEntity.this.playSound(ModSoundEvents.REDSTONE_GOLEM_ATTACK.get(),1,1);
+               }
                if (attackTimer == 9) {
                    float attackKnockback = RedstoneGolemEntity.this.getAttackKnockback();
                    LivingEntity attackTarget = RedstoneGolemEntity.this.getTarget();
@@ -501,7 +505,7 @@ public class RedstoneGolemEntity extends AbstractRaiderEntity implements IAnimat
             RedstoneGolemEntity.this.setSummoningMines(true);
             // Play the summoning sound
             setAttackID(MINE_ATTACK);
-            RedstoneGolemEntity.this.playSound(SoundEvents.EVOKER_CAST_SPELL, 1.0F, 1.0F);
+            RedstoneGolemEntity.this.playSound(ModSoundEvents.REDSTONE_GOLEM_SUMMON_MINE.get(),1.5F,1);
         }
 
         @Override

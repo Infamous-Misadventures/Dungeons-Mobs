@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.entities.golem;
 
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
+import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
@@ -73,11 +74,11 @@ public class SquallGolemEntity extends AbstractRaiderEntity implements IAnimatab
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MonsterEntity.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 125.0D)
+                .add(Attributes.MAX_HEALTH, 125.0D) // >= Golem Health
                 .add(Attributes.MOVEMENT_SPEED, 0.24D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
-                .add(Attributes.ATTACK_DAMAGE, 21.0D)
-                .add(Attributes.ATTACK_KNOCKBACK, 1.5D);
+                .add(Attributes.ATTACK_DAMAGE, 20.0D) // 1x Golem Attack
+                .add(Attributes.ATTACK_KNOCKBACK, 1.5D); // 1x Ravager knockback
     }
 
     @Override
@@ -115,7 +116,7 @@ public class SquallGolemEntity extends AbstractRaiderEntity implements IAnimatab
             return PlayState.CONTINUE;
 
         } else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
-            event.getController().animationSpeed = 1.35;
+            event.getController().animationSpeed = 1.25;
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.squall_golem.walk", true));
             return PlayState.CONTINUE;
 
@@ -196,7 +197,7 @@ public class SquallGolemEntity extends AbstractRaiderEntity implements IAnimatab
             if (this.attackTimer == 30) {
                 Attackparticle(40,0.5f,2.6f,0.5f);
                 Attackparticle(40,0.5f,2.4f,-1f);
-                this.playSound(SoundEvents.GENERIC_EXPLODE, 1.5f, 1F + this.getRandom().nextFloat() * 0.1F);
+                //this.playSound(SoundEvents.GENERIC_EXPLODE, 1.5f, 1F + this.getRandom().nextFloat() * 0.1F);
             }
         }
         LivingEntity target = this.getTarget();
@@ -295,12 +296,20 @@ public class SquallGolemEntity extends AbstractRaiderEntity implements IAnimatab
     }
 
 
-    @Override
     protected int decreaseAirSupply(int air) {
         return air;
     }
 
+    @Nullable
     @Override
+    protected SoundEvent getAmbientSound() {
+        if (this.entityData.get(ACTIVATE) && this.noActionTime > 5) {
+            return ModSoundEvents.SQUALL_GOLEM_IDLE.get();
+        }else {
+            return null;
+        }
+    }
+
     public boolean doHurtTarget(Entity entityIn) {
         if (!this.level.isClientSide && this.attackID == 0) {
             this.attackID = STOMP_ATTACK;
@@ -315,15 +324,18 @@ public class SquallGolemEntity extends AbstractRaiderEntity implements IAnimatab
     public boolean hurt(DamageSource source, float amount) {
         boolean flag = false;
         if (!this.getActivate()) {
-            this.playSound(SoundEvents.IRON_GOLEM_HURT, 1.0F, 0.4F);
-            flag = super.hurt(source,0);
+            this.playSound(SoundEvents.ZOMBIE_ATTACK_IRON_DOOR, 1.0F, 0.4F);
+            if (source.getEntity() instanceof LivingEntity && source.getEntity().isInvulnerable()) {
+                this.setTarget((LivingEntity) source.getEntity());
+            }
+            flag = false;
         }else {
             flag = super.hurt(source, amount);
         }
         return flag;
     }
 
-    public boolean checkSpawnwObstruction(IWorldReader worldIn) {
+    public boolean checkSpawnObstruction(IWorldReader worldIn) {
         BlockPos golemPos = this.blockPosition();
         BlockPos posBeneathGolem = golemPos.below();
         BlockState blockstateBeneathGolem = worldIn.getBlockState(posBeneathGolem);
@@ -382,17 +394,22 @@ public class SquallGolemEntity extends AbstractRaiderEntity implements IAnimatab
     }
 
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
-        this.playSound(SoundEvents.IRON_GOLEM_STEP, 1.0F, 1.0F);
+        this.playSound(ModSoundEvents.SQUALL_GOLEM_WALK.get(), 1.12F, 1.0F);
     }
 
     @Nullable
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return SoundEvents.IRON_GOLEM_HURT;
+        return ModSoundEvents.SQUALL_GOLEM_HURT.get();
+    }
+
+    @Override
+    protected float getSoundVolume() {
+        return 2.5F;
     }
 
     @Nullable
     protected SoundEvent getDeathSound() {
-        return SoundEvents.IRON_GOLEM_DEATH;
+        return ModSoundEvents.SQUALL_GOLEM_DEATH.get();
     }
 
     // NAVIGATION
@@ -429,7 +446,7 @@ public class SquallGolemEntity extends AbstractRaiderEntity implements IAnimatab
 
     @Override
     public SoundEvent getCelebrateSound() {
-        return SoundEvents.IRON_GOLEM_REPAIR;
+        return null;
     }
 
     public boolean canBeLeader() {
@@ -480,6 +497,7 @@ public class SquallGolemEntity extends AbstractRaiderEntity implements IAnimatab
         @Override
         public void start() {
             setAttackID(GOLEM_ACTIVATE);
+            SquallGolemEntity.this.playSound(ModSoundEvents.SQUALL_GOLEM_OPEN.get(), 1.0F, 1F);
         }
 
         @Override
@@ -511,6 +529,7 @@ public class SquallGolemEntity extends AbstractRaiderEntity implements IAnimatab
         @Override
         public void start() {
             setAttackID(GOLEM_DEACTIVATE);
+            SquallGolemEntity.this.playSound(ModSoundEvents.SQUALL_GOLEM_OFF.get(), 1.0F, 1F);
         }
 
         @Override
@@ -558,6 +577,9 @@ public class SquallGolemEntity extends AbstractRaiderEntity implements IAnimatab
                 SquallGolemEntity.this.yRot = SquallGolemEntity.this.yRotO;
 
             }
+            if (SquallGolemEntity.this.attackTimer == 12){
+                SquallGolemEntity.this.playSound(ModSoundEvents.SQUALL_GOLEM_ATTACK.get(), 2.0F, 1F);
+            }
             if (SquallGolemEntity.this.attackTimer == 30){
                 AreaAttack(5,5,5,5,60,1.15F + (SquallGolemEntity.this.getRandom().nextFloat() / 3F));
             }
@@ -583,7 +605,7 @@ public class SquallGolemEntity extends AbstractRaiderEntity implements IAnimatab
                         float attackKnockback = (float) SquallGolemEntity.this.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
                         double ratioX = (double) MathHelper.sin(v.yRot * ((float) Math.PI / 180F));
                         double ratioZ = (double) (-MathHelper.cos(v.yRot * ((float) Math.PI / 180F)));
-                        double knockbackReduction = 0.5D;
+                        double knockbackReduction = 0.35D;
                         entityHit.hurt(DamageSource.mobAttack(v), damage);
                         this.forceKnockback(entityHit, attackKnockback * 0.8F, ratioX, ratioZ, knockbackReduction);
                         entityHit.setDeltaMovement(entityHit.getDeltaMovement().add(0,0.3333333,0));
