@@ -22,25 +22,25 @@ import software.bernie.geckolib3.model.provider.data.EntityModelData;
  * Created using Tabula 8.0.0
  */
 @OnlyIn(Dist.CLIENT)
-public class NecromancerModel extends AnimatedGeoModel {
+public class NecromancerModel extends AnimatedGeoModel<NecromancerEntity> {
 
     @Override
-    public ResourceLocation getAnimationFileLocation(Object entity) {
+    public ResourceLocation getAnimationFileLocation(NecromancerEntity entity) {
         return new ResourceLocation(DungeonsMobs.MODID, "animations/necromancer.animation.json");
     }
 
     @Override
-    public ResourceLocation getModelLocation(Object entity) {
+    public ResourceLocation getModelLocation(NecromancerEntity entity) {
         return new ResourceLocation(DungeonsMobs.MODID, "geo/necromancer.geo.json");
     }
 
     @Override
-    public ResourceLocation getTextureLocation(Object entity) {
-        return new ResourceLocation(DungeonsMobs.MODID, "textures/skeleton/necromancer.png");
+    public ResourceLocation getTextureLocation(NecromancerEntity entity) {
+        return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/skeleton/necromancer.png");
     }
 
     @Override
-    public void setLivingAnimations(IAnimatable entity, Integer uniqueID, AnimationEvent customPredicate) {
+    public void setLivingAnimations(NecromancerEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
 
         LivingEntity entityIn = (LivingEntity) entity;

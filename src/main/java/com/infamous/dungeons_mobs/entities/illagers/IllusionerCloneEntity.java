@@ -135,7 +135,7 @@ public class IllusionerCloneEntity extends SpellcastingIllagerEntity implements 
         super.aiStep();
         if(!this.level.isClientSide){
             this.lifeTicks--;
-            if(this.lifeTicks <= 0 || this.getCaster() == null || !this.getCaster().isAlive()  || ((DungeonsIllusionerEntity)this.getCaster()).duplicateInterval <= 15 ){
+            if(this.lifeTicks <= 0 || this.getCaster() == null || !this.getCaster().isAlive()  || ((DungeonsIllusionerEntity)this.getCaster()).getDuplicateInterval() <= 15 ){
                 this.remove();
             }
         }

@@ -184,6 +184,13 @@ public class DungeonsIllusionerEntity extends SpellcastingIllagerEntity implemen
       this.entityData.set(SHOT_OR_SUMMON_BOOLEAN, p_189794_1_);
    }
 
+   public int getDuplicateInterval() {
+      return duplicateInterval;
+   }
+
+   public void setDuplicateInterval(int duplicateInterval) {
+      this.duplicateInterval = duplicateInterval;
+   }
 
    public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
       return MonsterEntity.createMonsterAttributes()

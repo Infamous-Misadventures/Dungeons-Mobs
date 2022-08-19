@@ -19,11 +19,7 @@ import com.infamous.dungeons_mobs.client.renderer.layer.GeoMobEnchantmentGlintLa
 import com.infamous.dungeons_mobs.client.renderer.layer.MobEnchantmentGlintLayer;
 import com.infamous.dungeons_mobs.client.renderer.layers.SkeletonEyesLayer;
 import com.infamous.dungeons_mobs.client.renderer.piglin.CustomPiglinRenderer;
-import com.infamous.dungeons_mobs.client.renderer.projectiles.BlueNethershroomRenderer;
-import com.infamous.dungeons_mobs.client.renderer.projectiles.CobwebProjectileRenderer;
-import com.infamous.dungeons_mobs.client.renderer.projectiles.CustomFireballRenderer;
-import com.infamous.dungeons_mobs.client.renderer.projectiles.OrbRenderer;
-import com.infamous.dungeons_mobs.client.renderer.projectiles.SlimeballRenderer;
+import com.infamous.dungeons_mobs.client.renderer.projectiles.*;
 import com.infamous.dungeons_mobs.client.renderer.redstone.RedstoneCubeRenderer;
 import com.infamous.dungeons_mobs.client.renderer.redstone.RedstoneGolemRenderer;
 import com.infamous.dungeons_mobs.client.renderer.redstone.RedstoneMineRenderer;
@@ -158,6 +154,7 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_SUNKEN_SKELETON.get(), SmartSkeletonRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.LASER_ORB.get(), OrbRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.N_LASER_ORB.get(), NecromancerOrbRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.TRIDENT_FUME.get(), OrbRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ENDERSENT.get(), EndersentRenderer::new);
