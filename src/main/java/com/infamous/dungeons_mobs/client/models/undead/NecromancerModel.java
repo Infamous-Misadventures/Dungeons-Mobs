@@ -43,8 +43,6 @@ public class NecromancerModel extends AnimatedGeoModel<NecromancerEntity> {
     public void setLivingAnimations(NecromancerEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
 
-        LivingEntity entityIn = (LivingEntity) entity;
-
         IBone head = this.getAnimationProcessor().getBone("head");
 
         EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
