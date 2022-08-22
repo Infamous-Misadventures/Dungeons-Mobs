@@ -1,8 +1,8 @@
 package com.infamous.dungeons_mobs.entities.summonables;
 
 import com.google.common.collect.Lists;
+import com.infamous.dungeons_mobs.entities.illagers.MageEntity;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
-import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -136,12 +136,10 @@ public class TornadoEntity extends Entity implements IAnimatable {
                 for(Entity entity : list) {
                     if(entity instanceof LivingEntity){
                         LivingEntity livingEntity = (LivingEntity)entity;
-                        damage(livingEntity);
+                        livingEntity.push(0, 0.75, 0);
+                        //damage(livingEntity);
                     }
                 }
-            }
-            if (this.fallTime == 4) {
-                this.playSound(ModSoundEvents.L_WIND.get(), 1.5f,1);
             }
 
             if (this.fallTime >= 40) {
@@ -155,17 +153,16 @@ public class TornadoEntity extends Entity implements IAnimatable {
     private void damage(LivingEntity targetEntity) {
         LivingEntity caster = this.getCaster();
         DamageSource summonedFallingBlockDamageSource = new IndirectEntityDamageSource("Tornado", this, caster);
-        float damageAmount = (float)MathHelper.floor((float) 9);
+        float damageAmount = (float)MathHelper.floor((float) 8);
         if (targetEntity.isAlive() && !targetEntity.isInvulnerable() && targetEntity != caster) {
             if (caster == null) {
-                targetEntity.setDeltaMovement(0,0.8,0);
-                targetEntity.hurt(summonedFallingBlockDamageSource.setMagic(), damageAmount);
+                targetEntity.hurt(summonedFallingBlockDamageSource, damageAmount);
             } else {
                 if (caster.isAlliedTo(targetEntity)) {
                     return;
                 }
-                targetEntity.setDeltaMovement(0,0.8,0);
-                targetEntity.hurt(summonedFallingBlockDamageSource.setMagic(), damageAmount);
+                targetEntity.setDeltaMovement(targetEntity.getDeltaMovement().add(0,Math.max(targetEntity.getAttributeValue(Attributes.ATTACK_KNOCKBACK)/4.75, 0.12),0));
+                targetEntity.hurt(summonedFallingBlockDamageSource, damageAmount);
             }
 
         }
