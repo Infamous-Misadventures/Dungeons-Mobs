@@ -1,13 +1,9 @@
 {
-    "entity.dungeons_mobs.armored_zombie": "武装僵尸",
-    "item.dungeons_mobs.armored_zombie_spawn_egg": "武装僵尸刷怪蛋",
     "entity.dungeons_mobs.jungle_zombie": "丛林僵尸",
     "item.dungeons_mobs.jungle_zombie_spawn_egg": "丛林僵尸刷怪蛋",
     "entity.dungeons_mobs.frozen_zombie": "霜冻僵尸",
     "item.dungeons_mobs.frozen_zombie_spawn_egg": "霜冻僵尸刷怪蛋",
   
-    "entity.dungeons_mobs.armored_skeleton": "武装骷髅",
-    "item.dungeons_mobs.armored_skeleton_spawn_egg": "武装骷髅刷怪蛋",
     "entity.dungeons_mobs.mossy_skeleton": "青苔骷髅",
     "item.dungeons_mobs.mossy_skeleton_spawn_egg": "青苔骷髅刷怪蛋",
     "entity.dungeons_mobs.skeleton_vanguard": "骷髅先锋",
