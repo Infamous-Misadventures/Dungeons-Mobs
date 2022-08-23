@@ -161,6 +161,9 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.BLASTLING.get(), BlastlingRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WATCHLING.get(), WatchlingRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SNARELING.get(), SnarelingRenderer::new);
+        
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.BLASTLING_BULLET.get(), BlastlingBulletRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SNARELING_GLOB.get(), SnarelingGlobRenderer::new);
     }
 
     @SubscribeEvent

@@ -54,7 +54,7 @@ public class ModEntityTypes {
                         .clientTrackingRange(8)
                         .setCustomClientFactory((spawnEntity, world) -> new JungleZombieEntity(world))
             .build(new ResourceLocation(MODID, "jungle_zombie").toString()),
-            44975, 7969893);
+            0x4f7d33, 0x00afa8);
 
 
     public static final RegistryObject<EntityType<FrozenZombieEntity>> FROZEN_ZOMBIE = registerEntity("frozen_zombie", () ->
@@ -63,7 +63,7 @@ public class ModEntityTypes {
                     .clientTrackingRange(8)
                     .setCustomClientFactory((spawnEntity,world) -> new FrozenZombieEntity(world))
                     .build(new ResourceLocation(MODID, "frozen_zombie").toString()),
-            44975, 7969893
+            0x639694, 0xbae1ec
     );
 
     // SKELETONS
@@ -73,7 +73,7 @@ public class ModEntityTypes {
                     .clientTrackingRange(8)
                     .setCustomClientFactory((spawnEntity,world) -> new MossySkeletonEntity(world))
                     .build(new ResourceLocation(MODID, "mossy_skeleton").toString()),
-            12698049, 4802889
+            0xd6d7c6, 0x4a5d18
     );
 
 
@@ -83,7 +83,7 @@ public class ModEntityTypes {
                     .clientTrackingRange(8)
                     .setCustomClientFactory((spawnEntity,world) -> new SkeletonVanguardEntity(world))
                     .build(new ResourceLocation(MODID, "skeleton_vanguard").toString()),
-            12698049, 4802889
+            0x493615, 0xe8b42f
     );
 
 
@@ -93,7 +93,7 @@ public class ModEntityTypes {
                     .clientTrackingRange(8)
                     .setCustomClientFactory((spawnEntity,world) -> new SkeletonHorsemanEntity(world))
                     .build(new ResourceLocation(MODID, "skeleton_horseman").toString()),
-            12698049, 4802889
+            12698049, 0xb0babe
     );
 
 
@@ -103,7 +103,7 @@ public class ModEntityTypes {
                     .clientTrackingRange(8)
                     .setCustomClientFactory((spawnEntity,world) -> new NecromancerEntity(world))
                     .build(new ResourceLocation(MODID, "necromancer").toString()),
-            12698049, 4802889
+            0x3f243d, 0x0b9cbb
     );
 
 
@@ -133,7 +133,7 @@ public class ModEntityTypes {
                     .clientTrackingRange(8)
                     .setCustomClientFactory((spawnEntity,world) -> new RoyalGuardEntity(world))
                     .build(new ResourceLocation(MODID, "royal_guard").toString()),
-            9804699, 2580065
+            0x676767, 0x014675
     );
 
     public static final RegistryObject<EntityType<IceologerEntity>> ICEOLOGER = registerEntity("iceologer", () ->
@@ -142,7 +142,7 @@ public class ModEntityTypes {
                     .clientTrackingRange(8)
                     .setCustomClientFactory((spawnEntity,world) -> new IceologerEntity(world))
                     .build(new ResourceLocation(MODID, "iceologer").toString()),
-            9804699, 2580065
+            0x173873, 0xb6c6ca
     );
     
     public static final RegistryObject<EntityType<MageEntity>> MAGE = registerEntity("mage", () ->
@@ -177,7 +177,7 @@ public class ModEntityTypes {
                     .clientTrackingRange(8)
                     .setCustomClientFactory((spawnEntity,world) -> new WindcallerEntity(world))
                     .build(new ResourceLocation(MODID, "windcaller").toString()),
-            9804699, 1973274
+            0x348179, 0xdc6c46
     );
     
     public static final RegistryObject<EntityType<EnchanterEntity>> ENCHANTER = registerEntity("enchanter", () ->
@@ -195,7 +195,7 @@ public class ModEntityTypes {
                     .clientTrackingRange(8)
                     .setCustomClientFactory((spawnEntity,world) -> new VindicatorChefEntity(world))
                     .build(new ResourceLocation(MODID, "vindicator_chef").toString()),
-            9804699, 2580065
+            9804699, 0xe0dfdb
     );
 
     public static final RegistryObject<EntityType<DungeonsIllusionerEntity>> ILLUSIONER = registerEntity("illusioner", () ->
@@ -203,7 +203,7 @@ public class ModEntityTypes {
                     .sized(0.6F, 1.95F)
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(MODID, "illusioner").toString()),
-            9804699, 1973274
+            0x603e5c, 0x945c45
     );
 
     public static final RegistryObject<EntityType<IllusionerCloneEntity>> ILLUSIONER_CLONE = registerEntityWithoutEgg("illusioner_clone", () ->
@@ -220,7 +220,7 @@ public class ModEntityTypes {
                     .clientTrackingRange(8)
                     .setCustomClientFactory((spawnEntity,world) -> new MountaineerEntity(world))
                     .build(new ResourceLocation(MODID, "mountaineer").toString()),
-            9804699, 2580065
+            0x715039, 0xe6e4d4
     );
 
     public static final RegistryObject<EntityType<ArmoredMountaineerEntity>> ARMORED_MOUNTAINEER = registerEntity("armored_mountaineer", () ->
@@ -229,7 +229,7 @@ public class ModEntityTypes {
                     .clientTrackingRange(8)
                     .setCustomClientFactory((spawnEntity,world) -> new ArmoredMountaineerEntity(world))
                     .build(new ResourceLocation(MODID, "armored_mountaineer").toString()),
-            9804699, 2580065
+                    0x715039, 0xe6e4d4
     );
 
     // CREEPER
@@ -240,7 +240,7 @@ public class ModEntityTypes {
                     .clientTrackingRange(8)
                     .setCustomClientFactory((spawnEntity,world) -> new IcyCreeperEntity(world))
                     .build(new ResourceLocation(MODID, "icy_creeper").toString()),
-            894731, 0
+                    894731, 0xc9edf2
     );
 
     // WRAITH
@@ -262,7 +262,7 @@ public class ModEntityTypes {
                             .clientTrackingRange(10)
                             .setCustomClientFactory((spawnEntity,world) -> new ConjuredSlimeEntity(world))
                             .build(new ResourceLocation(MODID, "conjured_slime").toString()),
-            5349438, 8306542
+            0xb153c9, 0xdebae7
     );
 
     // REDSTONE
@@ -273,7 +273,7 @@ public class ModEntityTypes {
                     .clientTrackingRange(10)
                     .setCustomClientFactory((spawnEntity,world) -> new RedstoneCubeEntity(world))
                     .build(new ResourceLocation(MODID, "redstone_cube").toString()),
-            10489616, 12040119
+            0xd12b13, 0x9a948e
     );
 
     public static final RegistryObject<EntityType<RedstoneGolemEntity>> REDSTONE_GOLEM = registerEntity("redstone_golem", () ->
@@ -282,7 +282,7 @@ public class ModEntityTypes {
                     .clientTrackingRange(10)
                     .setCustomClientFactory((spawnEntity,world) -> new RedstoneGolemEntity(world))
                     .build(new ResourceLocation(MODID, "redstone_golem").toString()),
-            12040119, 10489616
+            0xaeaaa6, 0xe3260c
     );
 
     // JUNGLE
@@ -293,7 +293,7 @@ public class ModEntityTypes {
                     .clientTrackingRange(10)
                     .setCustomClientFactory((spawnEntity,world) -> new WhispererEntity(world))
                     .build(new ResourceLocation(MODID, "whisperer").toString()),
-            894731, 0
+            0x80a242, 0xe20703
     );
 
     public static final RegistryObject<EntityType<LeapleafEntity>> LEAPLEAF = registerEntity("leapleaf", () ->
@@ -302,7 +302,7 @@ public class ModEntityTypes {
                     .clientTrackingRange(10)
                     .setCustomClientFactory((spawnEntity,world) -> new LeapleafEntity(world))
                     .build(new ResourceLocation(MODID, "leapleaf").toString()),
-            894731, 0
+            0x818a1a, 0x8a54ef
     );
 
     public static final RegistryObject<EntityType<QuickGrowingVineEntity>> QUICK_GROWING_VINE = registerEntity("quick_growing_vine", () ->
@@ -312,7 +312,7 @@ public class ModEntityTypes {
                     .clientTrackingRange(10)
                     .setCustomClientFactory((spawnEntity,world) -> new QuickGrowingVineEntity(world))
                     .build(new ResourceLocation(MODID, "quick_growing_vine").toString()),
-            894731, 0
+            0x90ad49, 0xfbc883
     );
 
     public static final RegistryObject<EntityType<PoisonQuillVineEntity>> POISON_QUILL_VINE = registerEntity("poison_quill_vine", () ->
@@ -322,7 +322,7 @@ public class ModEntityTypes {
                     .clientTrackingRange(10)
                     .setCustomClientFactory((spawnEntity,world) -> new PoisonQuillVineEntity(world))
                     .build(new ResourceLocation(MODID, "poison_quill_vine").toString()),
-            894731, 0
+            0x90ad49, 0x632cbb
     );
 
     // GOLEM
@@ -332,7 +332,7 @@ public class ModEntityTypes {
                     .clientTrackingRange(10)
                     .setCustomClientFactory((spawnEntity,world) -> new SquallGolemEntity(world))
                     .build(new ResourceLocation(MODID, "squall_golem").toString()),
-            13552826, 7632531
+            0x828f8f, 0xffd426
     );
 
 
@@ -343,7 +343,7 @@ public class ModEntityTypes {
                     .sized(0.6F, 1.95F)
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(MODID, "fungus_thrower").toString()),
-            5843472, 16380836
+                    10051392, 0x336baf
     );
 
     public static final RegistryObject<EntityType<ZombifiedFungusThrowerEntity>> ZOMBIFIED_FUNGUS_THROWER = registerEntity("zombified_fungus_thrower", () ->
@@ -352,7 +352,7 @@ public class ModEntityTypes {
                     .sized(0.6F, 1.95F)
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(MODID, "zombified_fungus_thrower").toString()),
-            15373203, 5009705
+            15373203, 0x336baf
     );
 
     // WATER
@@ -361,7 +361,7 @@ public class ModEntityTypes {
                     .sized(0.6F, 2.99F)
                     .clientTrackingRange(10)
                     .build(new ResourceLocation(MODID, "wavewhisperer").toString()),
-            894731, 0
+                    0x48a867, 0x69ebff
     );
 
     public static final RegistryObject<EntityType<QuickGrowingAnemoneEntity>> QUICK_GROWING_ANEMONE = registerEntity("quick_growing_anemone", () ->
@@ -370,7 +370,7 @@ public class ModEntityTypes {
                     .sized(1.0F, 2.5F)
                     .clientTrackingRange(10)
                     .build(new ResourceLocation(MODID, "quick_growing_anemone").toString()),
-            894731, 0
+                    0x2b9477, 0x0d8f99
     );
 
     public static final RegistryObject<EntityType<PoisonAnemoneEntity>> POISON_ANEMONE = registerEntity("poison_anemone", () ->
@@ -379,7 +379,7 @@ public class ModEntityTypes {
                     .sized(1.0F, 2.5F)
                     .clientTrackingRange(10)
                     .build(new ResourceLocation(MODID, "poison_anemone").toString()),
-            894731, 0
+                    0x2b9477, 0xc436cd
     );
 
     public static final RegistryObject<EntityType<ArmoredDrownedEntity>> ARMORED_DROWNED = registerEntity("armored_drowned", () ->
@@ -387,7 +387,7 @@ public class ModEntityTypes {
                     .sized(0.6F * 1.1F, 1.95F * 1.1F)
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(MODID, "armored_drowned").toString()),
-            44975, 7969893
+                    9433559, 7969893
     );
 
 
@@ -396,31 +396,30 @@ public class ModEntityTypes {
                     .sized(0.6F * 1.2F, 1.95F * 1.2F)
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(MODID, "drowned_necromancer").toString()),
-            44975, 7969893
+                    9433559, 0x274d72
     );
-
+    
+    public static final RegistryObject<EntityType<SunkenSkeletonEntity>> SUNKEN_SKELETON = registerEntity("sunken_skeleton", () ->
+    EntityType.Builder.<SunkenSkeletonEntity>of(SunkenSkeletonEntity::new, EntityClassification.MONSTER)
+            .sized(0.6F, 1.99F)
+            .clientTrackingRange(8)
+            .build(new ResourceLocation(MODID, "sunken_skeleton").toString()),
+    0x87a964, 0xc06fe5
+    	    );
+    
     public static final RegistryObject<EntityType<ArmoredSunkenSkeletonEntity>> ARMORED_SUNKEN_SKELETON = registerEntity("armored_sunken_skeleton", () ->
             EntityType.Builder.<ArmoredSunkenSkeletonEntity>of(ArmoredSunkenSkeletonEntity::new, EntityClassification.MONSTER)
                     .sized(0.6F * 1.1F, 1.99F * 1.1F)
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(MODID, "armored_sunken_skeleton").toString()),
-            12698049, 4802889
-    );
-
-
-    public static final RegistryObject<EntityType<SunkenSkeletonEntity>> SUNKEN_SKELETON = registerEntity("sunken_skeleton", () ->
-            EntityType.Builder.<SunkenSkeletonEntity>of(SunkenSkeletonEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F, 1.99F)
-                    .clientTrackingRange(8)
-                    .build(new ResourceLocation(MODID, "sunken_skeleton").toString()),
-            12698049, 4802889
+                    0x87a964, 0xc06fe5
     );
 
     // ENDER MOBS
 
     public static final RegistryObject<EntityType<EndersentEntity>> ENDERSENT = registerEntity("endersent", () ->
             EntityType.Builder.<EndersentEntity>of(EndersentEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F * 1.5F, 2.9F * 1.5F)
+                    .sized(0.8F, 5.6F)
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(MODID, "endersent").toString()),
             1447446, 0
@@ -428,26 +427,26 @@ public class ModEntityTypes {
 
     public static final RegistryObject<EntityType<BlastlingEntity>> BLASTLING = registerEntity("blastling", () ->
             EntityType.Builder.<BlastlingEntity>of(BlastlingEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F, 2.9F)
+                    .sized(0.6F, 2.4F)
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(MODID, "blastling").toString()),
-            1447446, 0
+                    0x03030a, 0x8900b0
     );
 
     public static final RegistryObject<EntityType<WatchlingEntity>> WATCHLING = registerEntity("watchling", () ->
             EntityType.Builder.<WatchlingEntity>of(WatchlingEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F * 0.9375F, 2.9F * 0.9375F)
+                    .sized(0.6F, 2.4F)
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(MODID, "watchling").toString()),
-            1447446, 0
+                    0x110e13, 0xff84f7
     );
 
     public static final RegistryObject<EntityType<SnarelingEntity>> SNARELING = registerEntity("snareling", () ->
             EntityType.Builder.<SnarelingEntity>of(SnarelingEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F, 2.9F)
+                    .sized(0.6F, 2.4F)
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(MODID, "snareling").toString()),
-            1447446, 0
+                    0x161616, 0xdbe64e
     );
 
     // Projectiles
@@ -582,6 +581,24 @@ public class ModEntityTypes {
                     //.setCustomClientFactory((spawnEntity,world) -> new TridentFumeEntity(world, spawnEntity.getPosX(), spawnEntity.getPosY(), spawnEntity.getPosZ(), spawnEntity.getVelX(), spawnEntity.getVelY(), spawnEntity.getVelZ()))
                     .build(new ResourceLocation(MODID, "trident_fume").toString())
     );
+
+    public static final RegistryObject<EntityType<BlastlingBulletEntity>> BLASTLING_BULLET = registerEntityWithoutEgg("blastling_bullet", () ->
+    EntityType.Builder.<BlastlingBulletEntity>of(BlastlingBulletEntity::new, EntityClassification.MISC)
+            .sized(0.3F, 0.3F)
+            .clientTrackingRange(4)
+            .updateInterval(2)
+            //.setCustomClientFactory((spawnEntity,world) -> new LaserOrbEntity(world, spawnEntity.getPosX(), spawnEntity.getPosY(), spawnEntity.getPosZ(), spawnEntity.getVelX(), spawnEntity.getVelY(), spawnEntity.getVelZ()))
+            .build(new ResourceLocation(MODID, "blastling_bullet").toString())
+);
+    
+    public static final RegistryObject<EntityType<SnarelingGlobEntity>> SNARELING_GLOB = registerEntityWithoutEgg("snareling_glob", () ->
+    EntityType.Builder.<SnarelingGlobEntity>of(SnarelingGlobEntity::new, EntityClassification.MISC)
+            .sized(0.6F, 0.6F)
+            .clientTrackingRange(4)
+            .updateInterval(2)
+            //.setCustomClientFactory((spawnEntity,world) -> new LaserOrbEntity(world, spawnEntity.getPosX(), spawnEntity.getPosY(), spawnEntity.getPosZ(), spawnEntity.getVelX(), spawnEntity.getVelY(), spawnEntity.getVelZ()))
+            .build(new ResourceLocation(MODID, "snareling_glob").toString())
+);
 
 
     private static <T extends MobEntity> RegistryObject<EntityType<T>> registerEntity(String key, Supplier<EntityType<T>> sup, int primaryColor, int secondaryColor) {
