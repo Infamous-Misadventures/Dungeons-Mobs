@@ -83,6 +83,7 @@ public class DungeonsMobs
 
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
     	ModSoundEvents.SOUNDS.register(modEventBus);
+    	ModEffects.EFFECTS.register(modEventBus);
         ModEntityTypes.ENTITY_TYPES.register(modEventBus);
         ModEntityTypes.SPAWN_EGGS.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
