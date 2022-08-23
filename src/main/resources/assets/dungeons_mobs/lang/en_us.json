@@ -37,6 +37,18 @@
   "entity.dungeons_mobs.mage_clone": "Mage",
   "item.dungeons_mobs.mage_spawn_egg": "Mage Spawn Egg",
 
+   	"entity.enderlinginvaders.snareling" : "Snareling",
+	"entity.enderlinginvaders.watchling" : "Watchling",
+	"entity.enderlinginvaders.blastling" : "Blastling",
+	"entity.enderlinginvaders.endersent" : "Endersent",
+	"entity.enderlinginvaders.snareling_glob" : "Snareling Glob",
+	"entity.enderlinginvaders.blastling_bullet" : "Blastling Bullet",
+	
+	"effect.enderlinginvaders.ensnared" : "Ensnared",
+	
+		"death.blastling": "%1$s was blasted",	
+	"death.attack.blastling": "%1$s was blasted by %2$s",
+
   "entity.dungeons_mobs.illusioner": "Illusioner",
   "entity.dungeons_mobs.illusioner_clone": "Illusioner",
   "item.dungeons_mobs.illusioner_spawn_egg": "Illusioner Spawn Egg",
@@ -102,8 +114,8 @@
   "item.dungeons_mobs.wavewhisperer_spawn_egg": "Wavewhisperer Spawn Egg",
   "entity.dungeons_mobs.poison_anemone": "Poison Anemone",
   "item.dungeons_mobs.poison_anemone_spawn_egg": "Poison Anemone Spawn Egg",
-  "entity.dungeons_mobs.quick_growing_anemone": "Quick-Growing Anemone",
-  "item.dungeons_mobs.quick_growing_anemone_spawn_egg": "Quick-Growing Anemone Spawn Egg",
+  "entity.dungeons_mobs.quick_growing_anemone": "Quick-Growing Kelp",
+  "item.dungeons_mobs.quick_growing_anemone_spawn_egg": "Quick-Growing Kelp Spawn Egg",
 
   "entity.dungeons_mobs.endersent": "Endersent",
   "item.dungeons_mobs.endersent_spawn_egg": "Endersent Spawn Egg",
@@ -118,7 +130,7 @@
   "block.dungeons_mobs.corrupted_pyre": "Corrupted Pyre",
   "item.dungeons_mobs.wraith_fire_charge": "Wraith Fire Charge",
   "item.dungeons_mobs.blue_nethershroom": "Blue Nethershroom",
-  "item.dungeons_mobs.spatula": "Spatula",
+  "item.dungeons_mobs.spatula": "Wooden Ladle",
   "item.dungeons_mobs.mountaineer_axe": "Mountaineer Axe",
   "item.dungeons_mobs.gold_mountaineer_axe": "Gold Mountaineer Axe",
   "item.dungeons_mobs.diamond_mountaineer_axe": "Diamond Mountaineer Axe",
