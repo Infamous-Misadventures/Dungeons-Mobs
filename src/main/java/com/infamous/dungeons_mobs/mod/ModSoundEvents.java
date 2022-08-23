@@ -60,4 +60,34 @@ public class ModSoundEvents {
 	public static final RegistryObject<SoundEvent> WINDCALLER_BLAST_ATTACK = SOUNDS.register("entity.windcaller.pre_blast_attack", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.windcaller.pre_blast_attack")));
 	public static final RegistryObject<SoundEvent> B_WIND = SOUNDS.register("entity.windcaller.blast_attack", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.windcaller.blast_attack")));
 	public static final RegistryObject<SoundEvent> L_WIND = SOUNDS.register("entity.windcaller.lift_attack", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.windcaller.lift_attack")));
+	
+	public static final RegistryObject<SoundEvent> SNARELING_STEP = SOUNDS.register("entity.snareling.step", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.snareling.step")));
+	public static final RegistryObject<SoundEvent> SNARELING_IDLE = SOUNDS.register("entity.snareling.idle", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.snareling.idle")));
+	public static final RegistryObject<SoundEvent> SNARELING_HURT = SOUNDS.register("entity.snareling.hurt", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.snareling.hurt")));
+	public static final RegistryObject<SoundEvent> SNARELING_DEATH = SOUNDS.register("entity.snareling.death", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.snareling.death")));
+	public static final RegistryObject<SoundEvent> SNARELING_ATTACK = SOUNDS.register("entity.snareling.attack", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.snareling.attack")));
+	public static final RegistryObject<SoundEvent> SNARELING_PREPARE_SHOOT = SOUNDS.register("entity.snareling.prepare_shoot", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.snareling.prepare_shoot")));
+	public static final RegistryObject<SoundEvent> SNARELING_SHOOT = SOUNDS.register("entity.snareling.shoot", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.snareling.shoot")));
+	public static final RegistryObject<SoundEvent> SNARELING_GLOB_LAND = SOUNDS.register("entity.snareling.glob_land", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.snareling.glob_land")));
+	
+	public static final RegistryObject<SoundEvent> BLASTLING_IDLE = SOUNDS.register("entity.blastling.idle", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.blastling.idle")));
+	public static final RegistryObject<SoundEvent> BLASTLING_HURT = SOUNDS.register("entity.blastling.hurt", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.blastling.hurt")));
+	public static final RegistryObject<SoundEvent> BLASTLING_DEATH = SOUNDS.register("entity.blastling.death", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.blastling.death")));
+	public static final RegistryObject<SoundEvent> BLASTLING_STEP = SOUNDS.register("entity.blastling.step", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.blastling.step")));
+	public static final RegistryObject<SoundEvent> BLASTLING_SHOOT = SOUNDS.register("entity.blastling.shoot", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.blastling.shoot")));
+	public static final RegistryObject<SoundEvent> BLASTLING_BULLET_LAND = SOUNDS.register("entity.blastling.bullet_land", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.blastling.bullet_land")));
+	
+	public static final RegistryObject<SoundEvent> WATCHLING_IDLE = SOUNDS.register("entity.watchling.idle", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.watchling.idle")));
+	public static final RegistryObject<SoundEvent> WATCHLING_HURT = SOUNDS.register("entity.watchling.hurt", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.watchling.hurt")));
+	public static final RegistryObject<SoundEvent> WATCHLING_DEATH = SOUNDS.register("entity.watchling.death", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.watchling.death")));
+	public static final RegistryObject<SoundEvent> WATCHLING_STEP = SOUNDS.register("entity.watchling.step", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.watchling.step")));
+	public static final RegistryObject<SoundEvent> WATCHLING_ATTACK = SOUNDS.register("entity.watchling.attack", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.watchling.attack")));
+	
+	public static final RegistryObject<SoundEvent> ENDERSENT_STEP = SOUNDS.register("entity.endersent.step", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.endersent.step")));
+	public static final RegistryObject<SoundEvent> ENDERSENT_IDLE = SOUNDS.register("entity.endersent.idle", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.endersent.idle")));
+	public static final RegistryObject<SoundEvent> ENDERSENT_HURT = SOUNDS.register("entity.endersent.hurt", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.endersent.hurt")));
+	public static final RegistryObject<SoundEvent> ENDERSENT_DEATH = SOUNDS.register("entity.endersent.death", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.endersent.death")));
+	public static final RegistryObject<SoundEvent> ENDERSENT_ATTACK = SOUNDS.register("entity.endersent.attack", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.endersent.attack")));
+	public static final RegistryObject<SoundEvent> ENDERSENT_IDLE_SMASH = SOUNDS.register("entity.endersent.idle_smash", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.endersent.idle_smash")));
+	public static final RegistryObject<SoundEvent> ENDERSENT_TELEPORT = SOUNDS.register("entity.endersent.teleport", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.endersent.teleport")));
 }
