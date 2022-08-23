@@ -53,10 +53,10 @@ public class WavewhispererEntity extends WhispererEntity implements IAquaticMob 
 
     @Override
     protected void addMovementBehaviors() {
-        this.goalSelector.addGoal(1, new GoToWaterGoal(this, 1.0D));
-        this.goalSelector.addGoal(5, new GoToBeachGoal<>(this, 1.0D));
-        this.goalSelector.addGoal(6, new SwimUpGoal<>(this, 1.0D, this.level.getSeaLevel()));
-        this.goalSelector.addGoal(7, new RandomWalkingGoal(this, 1.0D));
+        this.goalSelector.addGoal(1, new GoToWaterGoal(this, 0.7D));
+        this.goalSelector.addGoal(5, new GoToBeachGoal<>(this, 0.7D));
+        this.goalSelector.addGoal(6, new SwimUpGoal<>(this, 0.7D, this.level.getSeaLevel()));
+        this.goalSelector.addGoal(7, new RandomWalkingGoal(this, 0.7D));
     }
 
     @Override
