@@ -700,7 +700,7 @@
 	},
 	"entity.windcaller.blast_attack": {
 		"category": "entity",
-		"subtitle": "Wind",
+		"subtitle": "Wind rages",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/windcaller/blast_wind1",
@@ -718,7 +718,7 @@
 	},
 	"entity.windcaller.pre_blast_attack": {
 		"category": "entity",
-		"subtitle": "Windcaller blast attack",
+		"subtitle": "Windcaller blasts",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/windcaller/blast1",
@@ -736,7 +736,7 @@
 	},
 	"entity.windcaller.lift_attack": {
 		"category": "entity",
-		"subtitle": "Wind",
+		"subtitle": "Wind rages",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/windcaller/lift_wind1",
@@ -754,7 +754,7 @@
 	},
 	"entity.windcaller.pre_lift_attack": {
 		"category": "entity",
-		"subtitle": "Windcaller lift attack",
+		"subtitle": "Windcaller calls",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/windcaller/lift1",
@@ -772,7 +772,7 @@
 	},
 	"entity.windcaller.idle": {
 		"category": "entity",
-		"subtitle": "Windcaller Idle",
+		"subtitle": "Windcaller mumbles",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/windcaller/idle1",
@@ -794,7 +794,7 @@
 	},
 	"entity.windcaller.hurt": {
 		"category": "entity",
-		"subtitle": "Windcaller hurt",
+		"subtitle": "Windcaller hurts",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/windcaller/hurt1",
@@ -816,7 +816,7 @@
 	},
 	"entity.windcaller.death": {
 		"category": "entity",
-		"subtitle": "Royal Guard Attack",
+		"subtitle": "Windcaller dies",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/windcaller/death1",
@@ -832,6 +832,683 @@
 			},
 			{
 				"name": "dungeons_mobs:entities/windcaller/death4",
+				"stream": true
+			}
+		]
+	},
+			"entity.snareling.step": {
+		"category": "entity",
+		"subtitle": "Footsteps",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/snareling/step1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/snareling/step2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/snareling/step3",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/snareling/step4",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/snareling/step5",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/snareling/step6",
+				"stream": true
+			}
+		]
+	},
+	"entity.snareling.idle": {
+		"category": "entity",
+		"subtitle": "Snareling Gurgles",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/snareling/idle1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/snareling/idle2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/snareling/idle3",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/snareling/idle4",
+				"stream": true
+			}
+		]
+	},
+	"entity.snareling.hurt": {
+		"category": "entity",
+		"subtitle": "Snareling Hurts",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/snareling/hurt1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/snareling/hurt2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/snareling/hurt3",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/snareling/hurt4",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/snareling/hurt5",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/snareling/hurt6",
+				"stream": true
+			}
+		]
+	},
+		"entity.snareling.death": {
+		"category": "entity",
+		"subtitle": "Snareling Dies",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/snareling/death1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/snareling/death2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/snareling/death3",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/snareling/death4",
+				"stream": true
+			}
+		]
+	},
+	"entity.snareling.attack": {
+		"category": "entity",
+		"subtitle": "Snareling Attacks",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/snareling/attack1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/snareling/attack2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/snareling/attack3",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/snareling/attack4",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/snareling/attack5",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/snareling/attack6",
+				"stream": true
+			}
+		]
+	},
+	"entity.snareling.prepare_shoot": {
+		"category": "entity",
+		"subtitle": "Snareling Readies Shot",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/snareling/prepare_shoot1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/snareling/prepare_shoot2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/snareling/prepare_shoot3",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/snareling/prepare_shoot4",
+				"stream": true
+			}
+		]
+	},
+	"entity.snareling.shoot": {
+		"category": "entity",
+		"subtitle": "Snareling Shoots",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/snareling/shoot1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/snareling/shoot2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/snareling/shoot3",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/snareling/shoot4",
+				"stream": true
+			}
+		]
+	},
+		"entity.snareling.glob_land": {
+		"category": "entity",
+		"subtitle": "Snareling Glob Makes Impact",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/snareling/glob_land1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/snareling/glob_land2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/snareling/glob_land3",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/snareling/glob_land4",
+				"stream": true
+			}
+		]
+	},
+	
+	
+	
+	
+	
+	
+	"entity.blastling.idle": {
+		"category": "entity",
+		"subtitle": "Blastling Mutters",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/blastling/idle1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/blastling/idle2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/blastling/idle3",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/blastling/idle4",
+				"stream": true
+			}
+		]
+	},
+		"entity.blastling.hurt": {
+		"category": "entity",
+		"subtitle": "Blastling Hurts",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/blastling/hurt1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/blastling/hurt2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/blastling/hurt3",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/blastling/hurt4",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/blastling/hurt5",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/blastling/hurt6",
+				"stream": true
+			}
+		]
+	},
+		"entity.blastling.death": {
+		"category": "entity",
+		"subtitle": "Blastling Dies",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/blastling/death1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/blastling/death2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/blastling/death3",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/blastling/death4",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/blastling/death5",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/blastling/death6",
+				"stream": true
+			}
+		]
+	},
+		"entity.blastling.step": {
+		"category": "entity",
+		"subtitle": "Footsteps",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/blastling/step1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/blastling/step2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/blastling/step3",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/blastling/step4",
+				"stream": true
+			}
+		]
+	},
+		"entity.blastling.shoot": {
+		"category": "entity",
+		"subtitle": "Blastling Shoots",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/blastling/shoot1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/blastling/shoot2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/blastling/shoot3",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/blastling/shoot4",
+				"stream": true
+			}
+		]
+	},
+		"entity.blastling.bullet_land": {
+		"category": "entity",
+		"subtitle": "Blastling Bullet Bursts",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/blastling/bullet_land1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/blastling/bullet_land2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/blastling/bullet_land3",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/blastling/bullet_land4",
+				"stream": true
+			}
+		]
+	},
+	
+	
+	
+	
+	
+	
+	
+	
+		"entity.watchling.idle": {
+		"category": "entity",
+		"subtitle": "Watchling Growls",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/watchling/idle1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/watchling/idle2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/watchling/idle3",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/watchling/idle4",
+				"stream": true
+			}
+		]
+	},
+	"entity.watchling.hurt": {
+		"category": "entity",
+		"subtitle": "Watchling Hurts",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/watchling/hurt1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/watchling/hurt2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/watchling/hurt3",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/watchling/hurt4",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/watchling/hurt5",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/watchling/hurt6",
+				"stream": true
+			}
+		]
+	},
+	"entity.watchling.death": {
+		"category": "entity",
+		"subtitle": "Watchling Dies",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/watchling/death1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/watchling/death2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/watchling/death3",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/watchling/death4",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/watchling/death5",
+				"stream": true
+			}
+		]
+	},
+	"entity.watchling.step": {
+		"category": "entity",
+		"subtitle": "Footsteps",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/watchling/step1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/watchling/step2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/watchling/step3",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/watchling/step4",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/watchling/step5",
+				"stream": true
+			}
+		]
+	},
+	"entity.watchling.attack": {
+		"category": "entity",
+		"subtitle": "Watchling Attacks",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/watchling/attack1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/watchling/attack2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/watchling/attack3",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/watchling/attack4",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/watchling/attack5",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/watchling/attack6",
+				"stream": true
+			}
+		]
+	},
+	
+	
+	
+	
+	
+	
+	
+		"entity.endersent.idle": {
+		"category": "entity",
+		"subtitle": "Endersent Moans",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/endersent/idle1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/endersent/idle2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/endersent/idle3",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/endersent/idle4",
+				"stream": true
+			}
+		]
+	},
+		"entity.endersent.hurt": {
+		"category": "entity",
+		"subtitle": "Endersent Hurts",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/endersent/hurt1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/endersent/hurt2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/endersent/hurt3",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/endersent/hurt4",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/endersent/hurt5",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/endersent/hurt6",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/endersent/hurt7",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/endersent/hurt8",
+				"stream": true
+			}
+		]
+	},
+		"entity.endersent.death": {
+		"category": "entity",
+		"subtitle": "Endersent Is Freed From The Eye",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/endersent/death1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/endersent/death2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/endersent/death3",
+				"stream": true
+			}
+		]
+	},
+		"entity.endersent.step": {
+		"category": "entity",
+		"subtitle": "Endersent Steps",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/endersent/step1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/endersent/step2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/endersent/step3",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/endersent/step4",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/endersent/step5",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/endersent/step6",
+				"stream": true
+			}
+		]
+	},
+		"entity.endersent.idle_smash": {
+		"category": "entity",
+		"subtitle": "Endersent Smashes",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/endersent/idle_smash1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/endersent/idle_smash2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/endersent/idle_smash3",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/endersent/idle_smash4",
+				"stream": true
+			}
+		]
+	},
+		"entity.endersent.attack": {
+		"category": "entity",
+		"subtitle": "Endersent Smashes",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/endersent/attack1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/endersent/attack2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/endersent/attack3",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/endersent/attack4",
+				"stream": true
+			}
+		]
+	},
+		"entity.endersent.teleport": {
+		"category": "entity",
+		"subtitle": "Endersent Teleports",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/endersent/teleport1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/endersent/teleport2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/endersent/teleport3",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/endersent/teleport4",
 				"stream": true
 			}
 		]
