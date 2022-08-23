@@ -1,6 +1,9 @@
 package com.infamous.dungeons_mobs.client.renderer.water;
 
+import com.infamous.dungeons_mobs.client.models.jungle.LeapleafModel;
 import com.infamous.dungeons_mobs.client.models.jungle.WhispererModel;
+import com.infamous.dungeons_mobs.client.renderer.jungle.WhispererRenderer;
+import com.infamous.dungeons_mobs.entities.jungle.WhispererEntity;
 import com.infamous.dungeons_mobs.entities.water.WavewhispererEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
@@ -8,14 +11,25 @@ import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3f;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
-public class WavewhispererRenderer extends GeoEntityRenderer<WavewhispererEntity> {
+import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
+public class WavewhispererRenderer  extends GeoEntityRenderer<WavewhispererEntity> {
+
+    private static final ResourceLocation WAVEWHISPERER_TEXTURE = new ResourceLocation(MODID, "textures/entity/ocean/wavewhisperer.png");
+    
     public WavewhispererRenderer(EntityRendererManager renderManager) {
-        super(renderManager, new WhispererModel<WavewhispererEntity>());
+        super(renderManager, new WhispererModel());
         //this.addLayer(new GeoEyeLayer<>(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/enchanter/enchanter_eyes.png")));
         //this.addLayer(new GeoHeldItemLayer<>(this, 0.0, 0.0, 0.5));
+    }
+    
+    @Override
+    public ResourceLocation getTextureLocation(WavewhispererEntity entity) {
+        return WAVEWHISPERER_TEXTURE;
     }
 
     protected void applyRotations(WavewhispererEntity entityLiving, MatrixStack matrixStackIn, float ageInTicks,
