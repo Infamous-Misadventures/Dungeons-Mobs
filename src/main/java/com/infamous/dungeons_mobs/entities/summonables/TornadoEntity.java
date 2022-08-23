@@ -3,6 +3,7 @@ package com.infamous.dungeons_mobs.entities.summonables;
 import com.google.common.collect.Lists;
 import com.infamous.dungeons_mobs.entities.illagers.MageEntity;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
+import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -140,6 +141,9 @@ public class TornadoEntity extends Entity implements IAnimatable {
                         //damage(livingEntity);
                     }
                 }
+            }
+            if (this.fallTime == 4) {
+                this.playSound(ModSoundEvents.L_WIND.get(), 1.5f,1);
             }
 
             if (this.fallTime >= 40) {
