@@ -1,6 +1,4 @@
-
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.GEO_ORB.get(),
-                manager -> new GeoOrbRenderer(manager));package com.infamous.dungeons_mobs.client;
+package com.infamous.dungeons_mobs.client;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
