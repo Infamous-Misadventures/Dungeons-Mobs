@@ -15,6 +15,14 @@ import com.infamous.dungeons_mobs.entities.piglin.FungusThrowerEntity;
 import com.infamous.dungeons_mobs.entities.piglin.ZombifiedFungusThrowerEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.*;
 import com.infamous.dungeons_mobs.entities.redstone.RedstoneCubeEntity;
+    public static final RegistryObject<EntityType<GeoOrbEntity>> GEO_ORB = ENTITY_TYPES.register("geo_orb", () ->
+            EntityType.Builder.<GeoOrbEntity>of(GeoOrbEntity::new, EntityClassification.MISC)
+                    .fireImmune()
+                    .sized(.5F, .5F)
+                    .clientTrackingRange(10)
+                    .setCustomClientFactory((spawnEntity,world) -> new GeoOrbEntity(world))
+                    .build(new ResourceLocation(MODID, "geo_orb").toString())
+    );
 import com.infamous.dungeons_mobs.entities.redstone.RedstoneGolemEntity;
 import com.infamous.dungeons_mobs.entities.redstone.RedstoneMineEntity;
 import com.infamous.dungeons_mobs.entities.slime.ConjuredSlimeEntity;
@@ -563,16 +571,14 @@ public class ModEntityTypes {
                     .build(new ResourceLocation(MODID, "laser_orb").toString())
     );
 
-    public static final RegistryObject<EntityType<NecromancerOrbEntity>> N_LASER_ORB = ENTITY_TYPES.register("n_laser_orb", () ->
-            EntityType.Builder.<NecromancerOrbEntity>of(NecromancerOrbEntity::new, EntityClassification.MISC)
+    public static final RegistryObject<EntityType<GeoOrbEntity>> GEO_ORB = ENTITY_TYPES.register("geo_orb", () ->
+            EntityType.Builder.<GeoOrbEntity>of(GeoOrbEntity::new, EntityClassification.MISC)
                     .fireImmune()
                     .sized(.5F, .5F)
                     .clientTrackingRange(10)
-                    .updateInterval(Integer.MAX_VALUE)
-                    .setCustomClientFactory((spawnEntity,world) -> new NecromancerOrbEntity(world))
-                    .build(new ResourceLocation(MODID, "n_laser_orb").toString())
+                    .setCustomClientFactory((spawnEntity,world) -> new GeoOrbEntity(world))
+                    .build(new ResourceLocation(MODID, "geo_orb").toString())
     );
-
     public static final RegistryObject<EntityType<TridentFumeEntity>> TRIDENT_FUME = registerEntityWithoutEgg("trident_fume", () ->
             EntityType.Builder.<TridentFumeEntity>of(TridentFumeEntity::new, EntityClassification.MISC)
                     .sized(0.25F, 0.25F)
