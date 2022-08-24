@@ -15,14 +15,6 @@ import com.infamous.dungeons_mobs.entities.piglin.FungusThrowerEntity;
 import com.infamous.dungeons_mobs.entities.piglin.ZombifiedFungusThrowerEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.*;
 import com.infamous.dungeons_mobs.entities.redstone.RedstoneCubeEntity;
-    public static final RegistryObject<EntityType<GeoOrbEntity>> GEO_ORB = ENTITY_TYPES.register("geo_orb", () ->
-            EntityType.Builder.<GeoOrbEntity>of(GeoOrbEntity::new, EntityClassification.MISC)
-                    .fireImmune()
-                    .sized(.5F, .5F)
-                    .clientTrackingRange(10)
-                    .setCustomClientFactory((spawnEntity,world) -> new GeoOrbEntity(world))
-                    .build(new ResourceLocation(MODID, "geo_orb").toString())
-    );
 import com.infamous.dungeons_mobs.entities.redstone.RedstoneGolemEntity;
 import com.infamous.dungeons_mobs.entities.redstone.RedstoneMineEntity;
 import com.infamous.dungeons_mobs.entities.slime.ConjuredSlimeEntity;
