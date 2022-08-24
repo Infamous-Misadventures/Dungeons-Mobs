@@ -156,7 +156,7 @@ public class GeoOrbEntity extends DamagingProjectileEntity implements IAnimatabl
             boolean didHurt = target.hurt(DamageSource.indirectMagic(this, owner), this.damage); // twice as much damage as normal fire
             if (didHurt && owner instanceof LivingEntity) {
                 this.doEnchantDamageEffects((LivingEntity)owner, target);
-                if (!(this.getOwner() instanceof NamelessOneEntity)) {
+                {
                     this.remove();
                 }
             }
