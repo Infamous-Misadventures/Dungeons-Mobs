@@ -51,8 +51,9 @@ public class ModSoundEvents {
 	public static final RegistryObject<SoundEvent> SQUALL_GOLEM_OPEN = SOUNDS.register("entity.squall_golem.on", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.squall_golem.on")));
 	public static final RegistryObject<SoundEvent> SQUALL_GOLEM_OFF = SOUNDS.register("entity.squall_golem.off", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.squall_golem.off")));
 	public static final RegistryObject<SoundEvent> SQUALL_GOLEM_WALK = SOUNDS.register("entity.squall_golem.walk", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.squall_golem.walk")));
-	public static final RegistryObject<SoundEvent> IRON_GOLEM_IDLE = SOUNDS.register("entity.iron_golem.idle", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.iron_golem.idle")));
+	
 	public static final RegistryObject<SoundEvent> ROYAL_GUARD_ATTACK = SOUNDS.register("entity.royal_guard.attack", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.royal_guard.attack")));
+	
 	public static final RegistryObject<SoundEvent> WINDCALLER_IDLE = SOUNDS.register("entity.windcaller.idle", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.windcaller.idle")));
 	public static final RegistryObject<SoundEvent> WINDCALLER_HURT = SOUNDS.register("entity.windcaller.hurt", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.windcaller.hurt")));
 	public static final RegistryObject<SoundEvent> WINDCALLER_DEATH = SOUNDS.register("entity.windcaller.death", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.windcaller.death")));
@@ -69,7 +70,7 @@ public class ModSoundEvents {
 	public static final RegistryObject<SoundEvent> SNARELING_PREPARE_SHOOT = SOUNDS.register("entity.snareling.prepare_shoot", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.snareling.prepare_shoot")));
 	public static final RegistryObject<SoundEvent> SNARELING_SHOOT = SOUNDS.register("entity.snareling.shoot", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.snareling.shoot")));
 	public static final RegistryObject<SoundEvent> SNARELING_GLOB_LAND = SOUNDS.register("entity.snareling.glob_land", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.snareling.glob_land")));
-	
+
 	public static final RegistryObject<SoundEvent> BLASTLING_IDLE = SOUNDS.register("entity.blastling.idle", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.blastling.idle")));
 	public static final RegistryObject<SoundEvent> BLASTLING_HURT = SOUNDS.register("entity.blastling.hurt", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.blastling.hurt")));
 	public static final RegistryObject<SoundEvent> BLASTLING_DEATH = SOUNDS.register("entity.blastling.death", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.blastling.death")));
@@ -90,4 +91,13 @@ public class ModSoundEvents {
 	public static final RegistryObject<SoundEvent> ENDERSENT_ATTACK = SOUNDS.register("entity.endersent.attack", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.endersent.attack")));
 	public static final RegistryObject<SoundEvent> ENDERSENT_IDLE_SMASH = SOUNDS.register("entity.endersent.idle_smash", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.endersent.idle_smash")));
 	public static final RegistryObject<SoundEvent> ENDERSENT_TELEPORT = SOUNDS.register("entity.endersent.teleport", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.endersent.teleport")));
+	
+	public static final RegistryObject<SoundEvent> ICEOLOGER_ATTACK = SOUNDS.register("entity.iceologer.attack", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.iceologer.attack")));
+	public static final RegistryObject<SoundEvent> ICEOLOGER_IDLE = SOUNDS.register("entity.iceologer.idle", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.iceologer.idle")));
+	public static final RegistryObject<SoundEvent> ICEOLOGER_HURT = SOUNDS.register("entity.iceologer.hurt", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.iceologer.hurt")));
+	public static final RegistryObject<SoundEvent> ICEOLOGER_DEATH = SOUNDS.register("entity.iceologer.death", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.iceologer.death")));
+	public static final RegistryObject<SoundEvent> ICE_CHUNK_IDLE_LOOP = SOUNDS.register("entity.ice_chunk.idle_loop", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.ice_chunk.idle_loop")));
+	public static final RegistryObject<SoundEvent> ICE_CHUNK_SUMMONED = SOUNDS.register("entity.ice_chunk.summoned", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.ice_chunk.summoned")));
+	public static final RegistryObject<SoundEvent> ICE_CHUNK_FALL = SOUNDS.register("entity.ice_chunk.fall", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.ice_chunk.fall")));
+	public static final RegistryObject<SoundEvent> ICE_CHUNK_LAND = SOUNDS.register("entity.ice_chunk.land", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.ice_chunk.land")));
 }
