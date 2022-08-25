@@ -1,7 +1,7 @@
 {
 	"entity.wraith.idle": {
 		"category": "entity",
-		"subtitle": "Wraith wails",
+		"subtitle": "subtitles.entity.wraith.idle",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/wraith/idle1",
@@ -31,7 +31,7 @@
 	},
 	"entity.wraith.hurt": {
 		"category": "entity",
-		"subtitle": "Wraith hurts",
+		"subtitle": "subtitles.entity.wraith.hurt",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/wraith/hurt1",
@@ -49,7 +49,7 @@
 	},
 	"entity.wraith.death": {
 		"category": "entity",
-		"subtitle": "Wraith dies",
+		"subtitle": "subtitles.entity.wraith.death",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/wraith/death1",
@@ -63,7 +63,7 @@
 	},
 	"entity.wraith.attack": {
 		"category": "entity",
-		"subtitle": "Wraith attacks",
+		"subtitle": "subtitles.entity.wraith.attack",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/wraith/attack",
@@ -73,7 +73,7 @@
 	},
 	"entity.wraith.fire": {
 		"category": "entity",
-		"subtitle": "Wraith summons fire",
+		"subtitle": "subtitles.entity.wraith.fire",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/wraith/fire",
@@ -83,7 +83,7 @@
 	},
 	"entity.wraith.fly": {
 		"category": "entity",
-		"subtitle": "Wraith flies",
+		"subtitle": "subtitles.entity.wraith.fly",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/wraith/fly1",
@@ -109,7 +109,7 @@
 	},
 	"entity.wraith.teleport": {
 		"category": "entity",
-		"subtitle": "Wraith teleports",
+		"subtitle": "subtitles.entity.wraith.teleport",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/wraith/teleport1",
@@ -127,7 +127,7 @@
 
 	"entity.enchanter.idle": {
 		"category": "entity",
-		"subtitle": "Enchanter Grumbles",
+		"subtitle": "subtitles.entity.enchanter.idle",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/enchanter/idle1",
@@ -145,7 +145,7 @@
 	},
 	"entity.enchanter.hurt": {
 		"category": "entity",
-		"subtitle": "Enchanter Hurts",
+		"subtitle": "subtitles.entity.enchanter.hurt",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/enchanter/hurt1",
@@ -163,7 +163,7 @@
 	},
 	"entity.enchanter.death": {
 		"category": "entity",
-		"subtitle": "Enchanter Dies",
+		"subtitle": "subtitles.entity.enchanter.death",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/enchanter/death1",
@@ -181,7 +181,7 @@
 	},
 	"entity.enchanter.pre_attack": {
 		"category": "entity",
-		"subtitle": "Enchanter Raises Book",
+		"subtitle": "subtitles.entity.enchanter.pre_attack",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/enchanter/pre_attack1",
@@ -199,7 +199,7 @@
 	},
 	"entity.enchanter.attack": {
 		"category": "entity",
-		"subtitle": "Enchanter Attacks",
+		"subtitle": "subtitles.entity.enchanter.attack",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/enchanter/attack1",
@@ -217,7 +217,7 @@
 	},
 	"entity.enchanter.spell": {
 		"category": "entity",
-		"subtitle": "Enchanter Prepares To Enchant",
+		"subtitle": "subtitles.entity.enchanter.spell",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/enchanter/spell1",
@@ -231,7 +231,7 @@
 	},
 	"entity.enchanter.beam": {
 		"category": "entity",
-		"subtitle": "Enchanter Enchants Mob",
+		"subtitle": "subtitles.entity.enchanter.beam",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/enchanter/beam",
@@ -255,7 +255,7 @@
 
 	"entity.geomancer.idle": {
 		"category": "entity",
-		"subtitle": "Geomancer Cackles",
+		"subtitle": "subtitles.entity.geomancer.idle",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/geomancer/idle1",
@@ -285,7 +285,7 @@
 	},
 	"entity.geomancer.hurt": {
 		"category": "entity",
-		"subtitle": "Geomancer Hurts",
+		"subtitle": "subtitles.entity.geomancer.hurt",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/geomancer/hurt1",
@@ -307,7 +307,7 @@
 	},
 	"entity.geomancer.death": {
 		"category": "entity",
-		"subtitle": "Geomancer Dies",
+		"subtitle": "subtitles.entity.geomancer.death",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/geomancer/death1",
@@ -325,7 +325,7 @@
 	},
 	"entity.geomancer.pre_attack": {
 		"category": "entity",
-		"subtitle": "Geomancer Prepares Geomancy",
+		"subtitle": "subtitles.entity.geomancer.pre_attack",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/geomancer/pre_attack1",
@@ -339,7 +339,7 @@
 	},
 	"entity.geomancer.attack": {
 		"category": "entity",
-		"subtitle": "Geomancer Summons Pillars",
+		"subtitle": "subtitles.entity.geomancer.attack",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/geomancer/attack1",
@@ -353,7 +353,7 @@
 	},
 	"entity.geomancer.wall_spawn": {
 		"category": "entity",
-		"subtitle": "Geomancer Wall Emerges",
+		"subtitle": "subtitles.entity.geomancer.wall_spawn",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/geomancer/wall_spawn1",
@@ -371,7 +371,7 @@
 	},
 	"entity.geomancer.wall_despawn": {
 		"category": "entity",
-		"subtitle": "Geomancer Wall Vanishes",
+		"subtitle": "subtitles.entity.geomancer.wall_despawn",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/geomancer/wall_despawn1",
@@ -389,7 +389,7 @@
 	},
 	"entity.geomancer.bomb_spawn": {
 		"category": "entity",
-		"subtitle": "Geomancer Bomb Emerges",
+		"subtitle": "subtitles.entity.geomancer.bomb_spawn",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/geomancer/bomb_spawn1",
@@ -401,46 +401,9 @@
 			}
 		]
 	},
-	"entity.vindicator.attack": {
-		"category": "entity",
-		"subtitle": "Vindicator Attack",
-		"sounds": [
-			{
-				"name": "dungeons_mobs:entities/vindicator/idel1",
-				"stream": true
-			},
-			{
-				"name": "dungeons_mobs:entities/vindicator/idel2",
-				"stream": true
-			},
-			{
-				"name": "dungeons_mobs:entities/vindicator/idel3",
-				"stream": true
-			}
-		]
-	},
-	"entity.pillager.death": {
-		"category": "entity",
-		"subtitle": "Pillager Death",
-		"sounds": [
-			{
-				"name": "dungeons_mobs:entities/pillager/death1",
-				"stream": true
-			},
-			{
-				"name": "dungeons_mobs:entities/pillager/death2",
-				"stream": true
-			},
-			{
-				"name": "dungeons_mobs:entities/pillager/death3",
-				"stream": true
-			}
-		]
-
-	},
 	"entity.redstone_golem.idle": {
 		"category": "entity",
-		"subtitle": "Redstone Golem Idle",
+		"subtitle": "subtitles.entity.redstone_golem.idle",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/redstone_golem/idle1",
@@ -466,7 +429,7 @@
 	},
 	"entity.redstone_golem.death": {
 		"category": "entity",
-		"subtitle": "Redstone Golem Death",
+		"subtitle": "subtitles.entity.redstone_golem.death",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/redstone_golem/death1",
@@ -480,7 +443,7 @@
 	},
 	"entity.redstone_golem.attack": {
 		"category": "entity",
-		"subtitle": "Redstone Golem Attack",
+		"subtitle": "subtitles.entity.redstone_golem.attack",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/redstone_golem/swipe1",
@@ -494,7 +457,7 @@
 	},
 	"entity.redstone_golem.hurt": {
 		"category": "entity",
-		"subtitle": "Redstone Golem hurt",
+		"subtitle": "subtitles.entity.redstone_golem.hurt",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/redstone_golem/hurt1",
@@ -532,7 +495,7 @@
 	},
 	"entity.redstone_golem.summon_mine": {
 		"category": "entity",
-		"subtitle": "Redstone Golem summon mine",
+		"subtitle": "subtitles.entity.redstone_golem.summon_mine",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/redstone_golem/summon",
@@ -542,7 +505,7 @@
 	},
 	"entity.squall_golem.idle": {
 		"category": "entity",
-		"subtitle": "Squall Golem Idle",
+		"subtitle": "subtitles.entity.squall_golem.idle",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/squall_golem/idle1",
@@ -556,7 +519,7 @@
 	},
 	"entity.squall_golem.attack": {
 		"category": "entity",
-		"subtitle": "Squall Golem Attack",
+		"subtitle": "subtitles.entity.squall_golem.attack",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/squall_golem/attack1",
@@ -578,7 +541,7 @@
 	},
 	"entity.squall_golem.hurt": {
 		"category": "entity",
-		"subtitle": "Squall Golem Attack",
+		"subtitle": "subtitles.entity.squall_golem.hurt",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/squall_golem/hurt1",
@@ -600,7 +563,7 @@
 	},
 	"entity.squall_golem.death": {
 		"category": "entity",
-		"subtitle": "Squall Golem Death",
+		"subtitle": "subtitles.entity.squall_golem.death",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/squall_golem/death1",
@@ -614,7 +577,7 @@
 	},
 	"entity.squall_golem.on": {
 		"category": "entity",
-		"subtitle": "Squall Golem Open",
+		"subtitle": "subtitles.entity.squall_golem.activate",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/squall_golem/power_on1",
@@ -628,7 +591,7 @@
 	},
 	"entity.squall_golem.off": {
 		"category": "entity",
-		"subtitle": "Squall Golem Off",
+		"subtitle": "subtitles.entity.squall_golem.deactivate",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/squall_golem/power_off1",
@@ -642,7 +605,7 @@
 	},
 	"entity.squall_golem.walk": {
 		"category": "entity",
-		"subtitle": "Squall Golem Walk",
+		"subtitle": "subtitles.entity.squall_golem.step",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/squall_golem/walk1",
@@ -658,31 +621,9 @@
 			}
 		]
 	},
-	"entity.iron_golem.idle": {
-		"category": "entity",
-		"subtitle": "Iron Golem Idle",
-		"sounds": [
-			{
-				"name": "dungeons_mobs:entities/irongolem/idle1",
-				"stream": true
-			},
-			{
-				"name": "dungeons_mobs:entities/irongolem/idle2",
-				"stream": true
-			},
-			{
-				"name": "dungeons_mobs:entities/irongolem/idle3",
-				"stream": true
-			},
-			{
-				"name": "dungeons_mobs:entities/irongolem/idle4",
-				"stream": true
-			}
-		]
-	},
 	"entity.royal_guard.attack": {
 		"category": "entity",
-		"subtitle": "Royal Guard Attack",
+		"subtitle": "subtitles.entity.royal_guard.attack",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/royal_guard/attack2",
@@ -700,7 +641,7 @@
 	},
 	"entity.windcaller.blast_attack": {
 		"category": "entity",
-		"subtitle": "Wind rages",
+		"subtitle": "subtitles.entity.windcaller.blast_attack",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/windcaller/blast_wind1",
@@ -718,7 +659,7 @@
 	},
 	"entity.windcaller.pre_blast_attack": {
 		"category": "entity",
-		"subtitle": "Windcaller blasts",
+		"subtitle": "subtitles.entity.windcaller.pre_blast_attack",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/windcaller/blast1",
@@ -736,7 +677,7 @@
 	},
 	"entity.windcaller.lift_attack": {
 		"category": "entity",
-		"subtitle": "Wind rages",
+		"subtitle": "subtitles.entity.windcaller.lift_attack",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/windcaller/lift_wind1",
@@ -754,7 +695,7 @@
 	},
 	"entity.windcaller.pre_lift_attack": {
 		"category": "entity",
-		"subtitle": "Windcaller calls",
+		"subtitle": "subtitles.entity.windcaller.pre_lift_attack",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/windcaller/lift1",
@@ -772,7 +713,7 @@
 	},
 	"entity.windcaller.idle": {
 		"category": "entity",
-		"subtitle": "Windcaller mumbles",
+		"subtitle": "subtitles.entity.windcaller.idle",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/windcaller/idle1",
@@ -794,7 +735,7 @@
 	},
 	"entity.windcaller.hurt": {
 		"category": "entity",
-		"subtitle": "Windcaller hurts",
+		"subtitle": "subtitles.entity.windcaller.hurt",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/windcaller/hurt1",
@@ -816,7 +757,7 @@
 	},
 	"entity.windcaller.death": {
 		"category": "entity",
-		"subtitle": "Windcaller dies",
+		"subtitle": "subtitles.entity.windcaller.death",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/windcaller/death1",
@@ -838,7 +779,7 @@
 	},
 			"entity.snareling.step": {
 		"category": "entity",
-		"subtitle": "Footsteps",
+		"subtitle": "subtitles.entity.snareling.step",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/snareling/step1",
@@ -868,7 +809,7 @@
 	},
 	"entity.snareling.idle": {
 		"category": "entity",
-		"subtitle": "Snareling Gurgles",
+		"subtitle": "subtitles.entity.snareling.idle",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/snareling/idle1",
@@ -890,7 +831,7 @@
 	},
 	"entity.snareling.hurt": {
 		"category": "entity",
-		"subtitle": "Snareling Hurts",
+		"subtitle": "subtitles.entity.snareling.hurt",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/snareling/hurt1",
@@ -920,7 +861,7 @@
 	},
 		"entity.snareling.death": {
 		"category": "entity",
-		"subtitle": "Snareling Dies",
+		"subtitle": "subtitles.entity.snareling.death",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/snareling/death1",
@@ -942,7 +883,7 @@
 	},
 	"entity.snareling.attack": {
 		"category": "entity",
-		"subtitle": "Snareling Attacks",
+		"subtitle": "subtitles.entity.snareling.attack",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/snareling/attack1",
@@ -972,7 +913,7 @@
 	},
 	"entity.snareling.prepare_shoot": {
 		"category": "entity",
-		"subtitle": "Snareling Readies Shot",
+		"subtitle": "subtitles.entity.snareling.pre_shoot",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/snareling/prepare_shoot1",
@@ -994,7 +935,7 @@
 	},
 	"entity.snareling.shoot": {
 		"category": "entity",
-		"subtitle": "Snareling Shoots",
+		"subtitle": "subtitles.entity.snareling.shoot",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/snareling/shoot1",
@@ -1016,7 +957,7 @@
 	},
 		"entity.snareling.glob_land": {
 		"category": "entity",
-		"subtitle": "Snareling Glob Makes Impact",
+		"subtitle": "subtitles.entity.snareling.glob_land",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/snareling/glob_land1",
@@ -1044,7 +985,7 @@
 	
 	"entity.blastling.idle": {
 		"category": "entity",
-		"subtitle": "Blastling Mutters",
+		"subtitle": "subtitles.entity.blastling.idle",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/blastling/idle1",
@@ -1066,7 +1007,7 @@
 	},
 		"entity.blastling.hurt": {
 		"category": "entity",
-		"subtitle": "Blastling Hurts",
+		"subtitle": "subtitles.entity.blastling.hurt",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/blastling/hurt1",
@@ -1096,7 +1037,7 @@
 	},
 		"entity.blastling.death": {
 		"category": "entity",
-		"subtitle": "Blastling Dies",
+		"subtitle": "subtitles.entity.blastling.death",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/blastling/death1",
@@ -1126,7 +1067,7 @@
 	},
 		"entity.blastling.step": {
 		"category": "entity",
-		"subtitle": "Footsteps",
+		"subtitle": "subtitles.entity.blastling.step",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/blastling/step1",
@@ -1148,7 +1089,7 @@
 	},
 		"entity.blastling.shoot": {
 		"category": "entity",
-		"subtitle": "Blastling Shoots",
+		"subtitle": "subtitles.entity.blastling.shoot",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/blastling/shoot1",
@@ -1170,7 +1111,7 @@
 	},
 		"entity.blastling.bullet_land": {
 		"category": "entity",
-		"subtitle": "Blastling Bullet Bursts",
+		"subtitle": "subtitles.entity.blastling.bullet_land",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/blastling/bullet_land1",
@@ -1200,7 +1141,7 @@
 	
 		"entity.watchling.idle": {
 		"category": "entity",
-		"subtitle": "Watchling Growls",
+		"subtitle": "subtitles.entity.watchling.idle",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/watchling/idle1",
@@ -1222,7 +1163,7 @@
 	},
 	"entity.watchling.hurt": {
 		"category": "entity",
-		"subtitle": "Watchling Hurts",
+		"subtitle": "subtitles.entity.watchling.hurt",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/watchling/hurt1",
@@ -1252,7 +1193,7 @@
 	},
 	"entity.watchling.death": {
 		"category": "entity",
-		"subtitle": "Watchling Dies",
+		"subtitle": "subtitles.entity.watchling.death",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/watchling/death1",
@@ -1278,7 +1219,7 @@
 	},
 	"entity.watchling.step": {
 		"category": "entity",
-		"subtitle": "Footsteps",
+		"subtitle": "subtitles.entity.watchling.step",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/watchling/step1",
@@ -1304,7 +1245,7 @@
 	},
 	"entity.watchling.attack": {
 		"category": "entity",
-		"subtitle": "Watchling Attacks",
+		"subtitle": "subtitles.entity.watchling.attack",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/watchling/attack1",
@@ -1341,7 +1282,7 @@
 	
 		"entity.endersent.idle": {
 		"category": "entity",
-		"subtitle": "Endersent Moans",
+		"subtitle": "subtitles.entity.endersent.idle",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/endersent/idle1",
@@ -1363,7 +1304,7 @@
 	},
 		"entity.endersent.hurt": {
 		"category": "entity",
-		"subtitle": "Endersent Hurts",
+		"subtitle": "subtitles.entity.endersent.hurt",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/endersent/hurt1",
@@ -1401,7 +1342,7 @@
 	},
 		"entity.endersent.death": {
 		"category": "entity",
-		"subtitle": "Endersent Is Freed From The Eye",
+		"subtitle": "subtitles.entity.endersent.death",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/endersent/death1",
@@ -1419,7 +1360,7 @@
 	},
 		"entity.endersent.step": {
 		"category": "entity",
-		"subtitle": "Endersent Steps",
+		"subtitle": "subtitles.entity.endersent.step",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/endersent/step1",
@@ -1449,7 +1390,7 @@
 	},
 		"entity.endersent.idle_smash": {
 		"category": "entity",
-		"subtitle": "Endersent Smashes",
+		"subtitle": "subtitles.entity.endersent.idle_smash",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/endersent/idle_smash1",
@@ -1471,7 +1412,7 @@
 	},
 		"entity.endersent.attack": {
 		"category": "entity",
-		"subtitle": "Endersent Smashes",
+		"subtitle": "subtitles.entity.endersent.attack",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/endersent/attack1",
@@ -1493,7 +1434,7 @@
 	},
 		"entity.endersent.teleport": {
 		"category": "entity",
-		"subtitle": "Endersent Teleports",
+		"subtitle": "subtitles.entity.endersent.teleport",
 		"sounds": [
 			{
 				"name": "dungeons_mobs:entities/endersent/teleport1",
@@ -1509,6 +1450,125 @@
 			},
 						{
 				"name": "dungeons_mobs:entities/endersent/teleport4",
+				"stream": true
+			}
+		]
+	},
+	
+	
+	
+	
+	
+	
+	
+		"entity.iceologer.idle": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.iceologer.idle",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/iceologer/idle1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/iceologer/idle2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/iceologer/idle3",
+				"stream": true
+			}
+		]
+	},
+			"entity.iceologer.hurt": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.iceologer.hurt",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/iceologer/hurt1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/iceologer/hurt2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/iceologer/hurt3",
+				"stream": true
+			}
+		]
+	},
+			"entity.iceologer.death": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.iceologer.death",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/iceologer/death1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/iceologer/death2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/iceologer/death3",
+				"stream": true
+			}
+		]
+	},
+			"entity.iceologer.attack": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.iceologer.attack",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/iceologer/attack1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/iceologer/attack2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/iceologer/attack3",
+				"stream": true
+			}
+		]
+	},
+			"entity.ice_chunk.idle_loop": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.ice_chunk.idle_loop",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/ice_chunk/idle_loop",
+				"stream": true
+			}
+		]
+	},
+			"entity.ice_chunk.summoned": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.ice_chunk.summoned",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/ice_chunk/summoned",
+				"stream": true
+			}
+		]
+	},
+			"entity.ice_chunk.fall": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.ice_chunk.fall",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/ice_chunk/fall",
+				"stream": true
+			}
+		]
+	},
+			"entity.ice_chunk.land": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.ice_chunk.land",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/ice_chunk/land",
 				"stream": true
 			}
 		]
