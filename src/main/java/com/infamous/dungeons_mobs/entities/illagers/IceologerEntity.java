@@ -1,22 +1,42 @@
 package com.infamous.dungeons_mobs.entities.illagers;
 
+import java.util.EnumSet;
+import java.util.function.Predicate;
+
+import javax.annotation.Nullable;
+
 import com.infamous.dungeons_mobs.entities.summonables.IceCloudEntity;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModItems;
-import net.minecraft.entity.*;
+import com.infamous.dungeons_mobs.mod.ModSoundEvents;
+import com.infamous.dungeons_mobs.tasks.ApproachTargetGoal;
+
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ILivingEntityData;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.goal.AvoidEntityGoal;
+import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.goal.HurtByTargetGoal;
+import net.minecraft.entity.ai.goal.LookAtGoal;
+import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
+import net.minecraft.entity.ai.goal.RandomWalkingGoal;
+import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
+import net.minecraft.entity.monster.AbstractIllagerEntity;
 import net.minecraft.entity.monster.AbstractRaiderEntity;
+import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.monster.SpellcastingIllagerEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
@@ -31,16 +51,11 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-import javax.annotation.Nullable;
-import java.util.EnumSet;
+public class IceologerEntity extends AbstractIllagerEntity implements IAnimatable {
 
-public class IceologerEntity extends SpellcastingIllagerEntity implements IAnimatable {
-
-    public static final DataParameter<Integer> SUMMON_TICK = EntityDataManager.defineId(IceologerEntity.class, DataSerializers.INT);
-
-    public boolean SpellAttacking;
-    public int summonCloudCooldown = 0;
-    public int timer = 0;
+	public int summonAnimationTick;
+	public int summonAnimationLength = 60;
+	public int summonAnimationActionPoint = 40;
 
     AnimationFactory factory = new AnimationFactory(this);
 
@@ -48,7 +63,7 @@ public class IceologerEntity extends SpellcastingIllagerEntity implements IAnima
         super(ModEntityTypes.ICEOLOGER.get(), world);
     }
 
-    public IceologerEntity(EntityType<? extends SpellcastingIllagerEntity> type, World world) {
+    public IceologerEntity(EntityType<? extends IceologerEntity> type, World world) {
         super(type, world);
     }
 
@@ -59,58 +74,59 @@ public class IceologerEntity extends SpellcastingIllagerEntity implements IAnima
 
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, AbstractVillagerEntity.class, 3.0F, 1.2D, 1.15D));
-        this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, PlayerEntity.class, 3.0F, 1.2D, 1.2D));
-        this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, IronGolemEntity.class, 3.0F, 1.3D, 1.15D));
         this.goalSelector.addGoal(0, new SwimGoal(this));
-        this.goalSelector.addGoal(1, new IceologerEntity.CastingSpellGoal());
-        this.goalSelector.addGoal(5, new IceologerEntity.SummonCloudGoal());
+        this.goalSelector.addGoal(1, new IceologerEntity.SummonIceChunkGoal(this));
+        this.goalSelector.addGoal(2, new AvoidEntityGoal<>(this, AbstractVillagerEntity.class, 3.0F, 1.2D, 1.15D));
+        this.goalSelector.addGoal(2, new AvoidEntityGoal<>(this, PlayerEntity.class, 3.0F, 1.2D, 1.2D));
+        this.goalSelector.addGoal(2, new AvoidEntityGoal<>(this, IronGolemEntity.class, 3.0F, 1.3D, 1.15D));
+        this.goalSelector.addGoal(3, new ApproachTargetGoal(this, 10, 1.0D, true));
         this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 1.0D));
         this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
         this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, AbstractRaiderEntity.class)).setAlertOthers());
-        this.targetSelector.addGoal(2, (new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true)).setUnseenMemoryTicks(300));
-        this.targetSelector.addGoal(3, (new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, false)).setUnseenMemoryTicks(300));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, false));
+        this.targetSelector.addGoal(2, (new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true)).setUnseenMemoryTicks(600));
+        this.targetSelector.addGoal(3, (new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, false)).setUnseenMemoryTicks(600));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, false).setUnseenMemoryTicks(600));
     }
+    
+	public void handleEntityEvent(byte p_28844_) {
+		if (p_28844_ == 4) {
+			this.summonAnimationTick = summonAnimationLength;
+		} else {
+			super.handleEntityEvent(p_28844_);
+		}
+	}
 
     public void baseTick() {
         super.baseTick();
-
-        if (this.getTarget() != null) {
-            this.getLookControl().setLookAt(this.getTarget(), (float)this.getMaxHeadYRot(), (float)this.getMaxHeadXRot());
-        }
-
-        if (this.summonCloudCooldown > 0) {
-            this.summonCloudCooldown --;
-        }
-
-        if (this.timer > 0) {
-            this.timer --;
-        }
-
-        if (this.getLiftTicks() > 0) {
-            this.setLiftTicks(this.getLiftTicks() - 1);
-        }
-
+        this.tickDownAnimTimers();
     }
+    
+	public void tickDownAnimTimers() {
+		if (this.summonAnimationTick > 0) {
+			this.summonAnimationTick--;
+		}
+	}
 
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController(this, "controller", 3, this::predicate));
+        data.addAnimationController(new AnimationController(this, "controller", 2, this::predicate));
     }
 
 
     private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
-        if (this.getLiftTicks() > 0) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.iceologer.summon", false));
+        if (this.summonAnimationTick > 0) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("iceologer_summon", true));
         } else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.iceologer.walk", true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("iceologer_walk", true));
         } else {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.iceologer.idle", true));
+        	if (this.isCelebrating()) {
+        		event.getController().setAnimation(new AnimationBuilder().addAnimation("iceologer_celebrate", true));
+        	} else {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("iceologer_idle", true));       		
+        	}
         }
-        return this.level.isClientSide || this.deathTime > 0 ? PlayState.CONTINUE :
-                PlayState.STOP;
+        return PlayState.CONTINUE;
     }
 
     @Override
@@ -136,22 +152,8 @@ public class IceologerEntity extends SpellcastingIllagerEntity implements IAnima
         return iLivingEntityData;
     }
 
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(SUMMON_TICK, 0);
-    }
-
-
-    public int getLiftTicks() {
-        return this.entityData.get(SUMMON_TICK);
-    }
-
-    public void setLiftTicks(int p_189794_1_) {
-        this.entityData.set(SUMMON_TICK, p_189794_1_);
-    }
-
-    public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
-        return MageEntity.setCustomAttributes();
+    public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
+        return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.25D).add(Attributes.FOLLOW_RANGE, 18D).add(Attributes.MAX_HEALTH, 20.0D);
     }
 
     /**
@@ -173,96 +175,85 @@ public class IceologerEntity extends SpellcastingIllagerEntity implements IAnima
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.EVOKER_AMBIENT;
+        return ModSoundEvents.ICEOLOGER_IDLE.get();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.EVOKER_DEATH;
+        return ModSoundEvents.ICEOLOGER_DEATH.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return SoundEvents.EVOKER_HURT;
-    }
-
-    @Override
-    protected SoundEvent getCastingSoundEvent() {
-        return SoundEvents.EVOKER_CAST_SPELL;
+        return ModSoundEvents.ICEOLOGER_HURT.get();
     }
 
     @Override
     public SoundEvent getCelebrateSound() {
-        return SoundEvents.EVOKER_CELEBRATE;
+        return ModSoundEvents.ICEOLOGER_ATTACK.get();
     }
+    
+    class SummonIceChunkGoal extends Goal {
+		public IceologerEntity mob;
+		@Nullable
+		public LivingEntity target;
 
-    class CastingSpellGoal extends CastingASpellGoal {
-        private CastingSpellGoal() {
-        }
+		private final Predicate<Entity> ICE_CHUNK = (p_33346_) -> {
+			return p_33346_ instanceof IceCloudEntity && ((IceCloudEntity)p_33346_).owner != null && ((IceCloudEntity)p_33346_).owner == mob;
+		};
+		
+		public SummonIceChunkGoal(IceologerEntity mob) {
+			this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP, Goal.Flag.LOOK));
+			this.mob = mob;
+			this.target = mob.getTarget();
+		}
 
-        /**
-         * Keep ticking a continuous task that has already been started
-         */
-        public void tick() {
-            if (IceologerEntity.this.getTarget() != null) {
-                IceologerEntity.this.getLookControl().setLookAt(IceologerEntity.this.getTarget(), (float) IceologerEntity.this.getMaxHeadYRot(), (float) IceologerEntity.this.getMaxHeadXRot());
-            }
+		@Override
+		public boolean isInterruptable() {
+			return false;
+		}
 
-        }
-    }
+		public boolean requiresUpdateEveryTick() {
+			return true;
+		}
 
-    class SummonCloudGoal extends Goal {
+		@Override
+		public boolean canUse() {
+			target = mob.getTarget();
+			int nearbyChunks = mob.level.getEntities(mob, mob.getBoundingBox().inflate(100.0D), ICE_CHUNK)
+					.size();
+			
+			return target != null && mob.random.nextInt(20) == 0 && mob.distanceTo(target) <= 12 && nearbyChunks <= 0 && animationsUseable();
+		}
 
+		@Override
+		public boolean canContinueToUse() {
+			return target != null && !animationsUseable();
+		}
 
-        @Override
-        public boolean isInterruptable() {
-            return false;
-        }
+		@Override
+		public void start() {
+			mob.playSound(ModSoundEvents.ICEOLOGER_ATTACK.get(), 1.0F, mob.getVoicePitch());
+			mob.summonAnimationTick = mob.summonAnimationLength;
+			mob.level.broadcastEntityEvent(mob, (byte) 4);
+		}
 
-        public SummonCloudGoal() {
-            this.setFlags(EnumSet.of(Flag.MOVE, Flag.JUMP, Flag.LOOK));
-        }
+		@Override
+		public void tick() {
+			target = mob.getTarget();
 
-        public boolean canUse() {
-            return IceologerEntity.this.getTarget() != null && IceologerEntity.this.getLiftTicks() == 0 && IceologerEntity.this.summonCloudCooldown == 0 && IceologerEntity.this.random.nextInt(20) == 0;
-        }
+			if (target != null) {
+				mob.getLookControl().setLookAt(target.getX(), target.getEyeY(), target.getZ());
+			}
 
-        public boolean canContinueToUse() {
-            return IceologerEntity.this.getTarget() != null && IceologerEntity.this.getLiftTicks() > 0;
-        }
+			if (target != null && mob.summonAnimationTick == mob.summonAnimationActionPoint) {
+	            IceCloudEntity.spawn(mob, target);
+			}
+		}
 
+		public boolean animationsUseable() {
+			return mob.summonAnimationTick <= 0;
+		}
 
-
-        public void start() {
-            super.start();
-            IceologerEntity.this.SpellAttacking = false;
-            IceologerEntity.this.summonCloudCooldown = 280 - IceologerEntity.this.getRandom().nextInt(80);
-            IceologerEntity.this.setLiftTicks(44);
-            IceologerEntity mob = IceologerEntity.this;
-
-            IceologerEntity.this.playSound(SoundEvents.EVOKER_PREPARE_SUMMON, IceologerEntity.this.getSoundVolume(), IceologerEntity.this.getVoicePitch());
-            IceCloudEntity v = new IceCloudEntity(level, IceologerEntity.this, IceologerEntity.this.getTarget());
-            v.moveTo(mob.getTarget().getX(), mob.getTarget().getY(mob.getBbHeight()), mob.getTarget().getZ());
-            mob.level.addFreshEntity(v);
-        }
-
-        public void tick() {
-            IceologerEntity.this.getLookControl().setLookAt(IceologerEntity.this.getTarget(), (float) IceologerEntity.this.getMaxHeadYRot(), (float) IceologerEntity.this.getMaxHeadXRot());
-
-        }
-
-        public void stop() {
-            super.stop();
-            IceologerEntity.this.setLiftTicks(0);
-        }
-    }
-
-    @Override
-    public ArmPose getArmPose() {
-        ArmPose illagerArmPose =  super.getArmPose();
-        if(illagerArmPose == ArmPose.CROSSED){
-            return ArmPose.NEUTRAL;
-        }
-        return illagerArmPose;
-    }
+	}
 }

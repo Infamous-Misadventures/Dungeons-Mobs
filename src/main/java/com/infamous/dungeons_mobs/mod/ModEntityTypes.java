@@ -530,7 +530,7 @@ public class ModEntityTypes {
                     .fireImmune()
                     .sized(2.0F, 1.0F)
                     .clientTrackingRange(6)
-                    .updateInterval(2)
+                    .updateInterval(1)
                     .setCustomClientFactory((spawnEntity,world) -> new IceCloudEntity(world))
                     .build(new ResourceLocation(MODID, "ice_cloud").toString())
     );
