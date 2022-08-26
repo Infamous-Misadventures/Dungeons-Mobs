@@ -15,10 +15,10 @@ import java.util.function.Supplier;
 
 public enum ModArmorMaterial implements IArmorMaterial {
     PURE_NETHERITE("pure_netherite", 15, new int[]{2, 5, 6, 2}, 9, SoundEvents.ARMOR_EQUIP_NETHERITE, 0.0F, 0.0F, () -> {
-        return Ingredient.of(ModItems.ILLUSIONER_HOOD.get());
+        return Ingredient.of(Tags.Items.INGOTS_NETHERITE);
     }),
     UNDEFINED("undefined", 10, new int[]{1, 1, 1, 1}, 9, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, () -> {
-        return Ingredient.of(Tags.Items.INGOTS_NETHERITE);
+        return Ingredient.of(ModItems.ILLUSIONER_HOOD.get());
     });
 
     private static final int[] HEALTH_PER_SLOT = new int[]{13, 15, 16, 11};
