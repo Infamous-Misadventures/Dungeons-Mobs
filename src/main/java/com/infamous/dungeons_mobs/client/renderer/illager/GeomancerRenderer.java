@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.client.renderer.illager;
 
 import com.infamous.dungeons_mobs.client.models.illager.GeomancerModel;
+import com.infamous.dungeons_mobs.entities.illagers.DungeonsIllusionerEntity;
 import com.infamous.dungeons_mobs.entities.illagers.GeomancerEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
@@ -14,8 +15,11 @@ import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ShieldItem;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Quaternion;
+import net.minecraft.util.math.vector.Vector3f;
+import software.bernie.example.client.DefaultBipedBoneIdents;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.geo.render.built.GeoCube;
@@ -64,24 +68,60 @@ public class GeomancerRenderer extends ExtendedGeoEntityRenderer<GeomancerEntity
 
 	@Nullable
 	@Override
-	protected ItemStack getHeldItemForBone(String s, GeomancerEntity windcallerEntity) {
+	protected ItemStack getHeldItemForBone(String s, GeomancerEntity Entity) {
+		switch (s) {
+			case "bipedHandLeft":
+				return Entity.isLeftHanded() ? mainHand : offHand;
+			case "bipedHandRight":
+				return Entity.isLeftHanded() ? offHand : mainHand;
+			case DefaultBipedBoneIdents.POTION_BONE_IDENT:
+				break;
+		}
 		return null;
 	}
 
 	@Override
 	protected ItemCameraTransforms.TransformType getCameraTransformForItemAtBone(ItemStack itemStack, String s) {
-		return null;
+		switch (s) {
+			case "bipedHandLeft":
+				return ItemCameraTransforms.TransformType.THIRD_PERSON_LEFT_HAND;
+			case "bipedHandRight":
+				return ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND;
+			default:
+				return ItemCameraTransforms.TransformType.NONE;
+		}
+	}
+
+	@Override
+	protected void preRenderItem(MatrixStack stack, ItemStack item, String s, GeomancerEntity windcallerEntity, IBone iBone) {
+		if (item == this.mainHand || item == this.offHand) {
+			stack.mulPose(Vector3f.XP.rotationDegrees(-90.0F));
+			boolean shieldFlag = item.getItem() instanceof ShieldItem;
+			if (item == this.mainHand) {
+				if (shieldFlag) {
+					stack.translate(0.0, 0.125, -0.25);
+				} else {
+
+				}
+			} else {
+				if (shieldFlag) {
+					stack.translate(0, 0.125, 0.25);
+					stack.mulPose(Vector3f.YP.rotationDegrees(180));
+				} else {
+
+				}
+
+			}
+			// stack.mulPose(Vector3f.YP.rotationDegrees(180));
+
+			// stack.scale(0.75F, 0.75F, 0.75F);
+		}
 	}
 
 	@Nullable
 	@Override
 	protected BlockState getHeldBlockForBone(String s, GeomancerEntity windcallerEntity) {
 		return null;
-	}
-
-	@Override
-	protected void preRenderItem(MatrixStack matrixStack, ItemStack itemStack, String s, GeomancerEntity windcallerEntity, IBone iBone) {
-
 	}
 
 	@Override
