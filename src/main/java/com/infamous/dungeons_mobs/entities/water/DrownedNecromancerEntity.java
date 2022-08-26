@@ -361,6 +361,20 @@ public class DrownedNecromancerEntity extends AbstractSkeletonEntity implements 
     }
 
     private void performRangedAttack(LivingEntity shooter, LivingEntity target) {
+        shooter.swing(ProjectileHelper.getWeaponHoldingHand(shooter, STAFF_PREDICATE));
+        GeoOrbEntity laserOrb = new GeoOrbEntity(shooter.level, shooter, 0, 0, 0, 8f);
+        float f = (float) MathHelper.atan2(target.getZ() - this.getZ(), target.getX() - this.getX());
+        Vector3d viewVector = shooter.getViewVector(1.0F);
+        //float euclidDist = MathHelper.sqrt(xAccel * xAccel + yAccel * yAccel + zAccel * zAccel) * 0.1f;
+
+        double x = this.getX() + Math.cos(f) * 1.2 + (shooter.getRandom().nextDouble() / 2 * (shooter.getRandom().nextBoolean() ? -1 : 1));
+        double z = this.getZ() + Math.sin(f) * 1.2 + (shooter.getRandom().nextDouble() / 2 * (shooter.getRandom().nextBoolean() ? -1 : 1));
+        laserOrb.setPos(x, shooter.getY(0.5D) + 0.5D, z);
+        double xAccel = target.getX() - laserOrb.getX();
+        double yAccel = target.getY() - shooter.getY();
+        double zAccel = target.getZ() - laserOrb.getZ();
+        laserOrb.shoot(xAccel, yAccel, zAccel, 0.2f, 0.0F);
+        shooter.level.addFreshEntity(laserOrb);
     }
 
     // SOUND METHODS
@@ -507,17 +521,7 @@ public class DrownedNecromancerEntity extends AbstractSkeletonEntity implements 
         protected void useMagic() {
             LivingEntity target = v.getTarget();
             if (target != null) {
-                {
-                    NecromancerOrbEntity vv = new NecromancerOrbEntity(v.level, v, v.getTarget());
-                    double d2 = 1.25D;
-                    float f = (float) MathHelper.atan2(v.getTarget().getZ() - v.getZ(), v.getTarget().getX() - v.getX());
-                    double x = v.getX() + Math.cos(f) * d2;
-                    double z = v.getZ() + Math.sin(f) * d2;
-                    BlockPos blockpos = new BlockPos(x + ((v.getRandom().nextDouble() / 2) * (v.getRandom().nextBoolean() ? -1 : 1)), v.getY(1.22- ((v.getRandom().nextDouble() / 2) * (v.getRandom().nextBoolean() ? -1 : 1))), z+ ((v.getRandom().nextDouble() / 2) * (v.getRandom().nextBoolean() ? -1 : 1)));
-                    vv.setYBodyRot(v.getYHeadRot());
-                    vv.moveTo(blockpos, 0, 0);
-                    v.level.addFreshEntity(vv);
-                }
+                v.performRangedAttack(v ,target);
             }
         }
 
