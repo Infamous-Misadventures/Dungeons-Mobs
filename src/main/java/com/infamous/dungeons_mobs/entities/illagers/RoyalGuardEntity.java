@@ -18,6 +18,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.LivingEntity;
@@ -66,7 +67,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatable {
+public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatable, IShieldUser {
 
 	private static final UUID SPEED_MODIFIER_BLOCKING_UUID = UUID.fromString("05cd371b-0ff4-4ded-8630-b380232ed7b1");
 	private static final AttributeModifier SPEED_MODIFIER_BLOCKING = new AttributeModifier(SPEED_MODIFIER_BLOCKING_UUID,
@@ -74,16 +75,20 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
 
 	AnimationFactory factory = new AnimationFactory(this);
 
+    private int shieldCooldownTime;
+    
 	public int attackAnimationTick;
 	public int attackAnimationLength = 27;
 	public int attackAnimationActionPoint = 15;
 
 	public RoyalGuardEntity(World world) {
 		super(ModEntityTypes.ROYAL_GUARD.get(), world);
+		this.shieldCooldownTime = 0;
 	}
 
 	public RoyalGuardEntity(EntityType<? extends RoyalGuardEntity> p_i50189_1_, World p_i50189_2_) {
 		super(p_i50189_1_, p_i50189_2_);
+		this.shieldCooldownTime = 0;
 	}
 
 	@Override
@@ -266,7 +271,35 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
 	}
 
 	// SHIELD STUFF
+	
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        if(this.shieldCooldownTime > 0){
+            this.shieldCooldownTime--;
+        }
+        else if(this.shieldCooldownTime < 0){
+            this.shieldCooldownTime = 0;
+        }
+    }
+    
 
+    @Override
+    public int getShieldCooldownTime() {
+        return this.shieldCooldownTime;
+    }
+
+    @Override
+    public void setShieldCooldownTime(int shieldCooldownTime) {
+        this.shieldCooldownTime = shieldCooldownTime;
+    }
+    
+    @Override
+    public boolean isShieldDisabled() {
+        return this.shieldCooldownTime > 0;
+    }
+
+    @Override
 	public void disableShield(boolean guaranteeDisable) {
 		float f = 0.25F + (float) EnchantmentHelper.getBlockEfficiency(this) * 0.05F;
 		if (guaranteeDisable) {
@@ -274,6 +307,7 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
 		}
 		if (this.random.nextFloat() < f) {
 			this.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.8F + this.level.random.nextFloat() * 0.4F);
+            this.shieldCooldownTime = 100;
 			this.stopUsingItem();
 			this.level.broadcastEntityEvent(this, (byte) 30);
 		}
@@ -376,8 +410,16 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
 		
 		@Override
 		public void stop() {
-			if (target != null && shouldBlockForTarget(target) && mob.getOffhandItem().getItem().isShield(mob.getOffhandItem(), mob) && mob.random.nextBoolean()) {
+			if (target != null && !isShieldDisabled(mob) && shouldBlockForTarget(target) && mob.getOffhandItem().getItem().isShield(mob.getOffhandItem(), mob) && mob.random.nextBoolean()) {
 				mob.startUsingItem(Hand.OFF_HAND);
+			}
+		}
+		
+		public boolean isShieldDisabled(CreatureEntity shieldUser) {
+			if (shieldUser instanceof IShieldUser && ((IShieldUser)shieldUser).isShieldDisabled()) {
+				return true;
+			} else {
+				return false;
 			}
 		}
 		

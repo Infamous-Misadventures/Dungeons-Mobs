@@ -2,6 +2,8 @@ package com.infamous.dungeons_mobs.goals;
 
 import javax.annotation.Nullable;
 
+import com.infamous.dungeons_mobs.interfaces.IShieldUser;
+
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
@@ -47,16 +49,24 @@ public class UseShieldGoal extends Goal {
 			return true;
 		}
 	}
+	
+	public boolean isShieldDisabled(CreatureEntity shieldUser) {
+		if (shieldUser instanceof IShieldUser && ((IShieldUser)shieldUser).isShieldDisabled()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 	@Override
 	public boolean canUse() {
 		target = mob.getTarget();
-		return target != null && shouldBlockForTarget(target) && ((mob.getRandom().nextInt(this.blockChance) == 0 && mob.distanceTo(target) <= blockDistance && mob.canSee(target) && mob.getOffhandItem().getItem().isShield(mob.getOffhandItem(), mob)) || mob.isBlocking());
+		return target != null && !isShieldDisabled(mob) && shouldBlockForTarget(target) && ((mob.getRandom().nextInt(this.blockChance) == 0 && mob.distanceTo(target) <= blockDistance && mob.canSee(target) && mob.getOffhandItem().getItem().isShield(mob.getOffhandItem(), mob)) || mob.isBlocking());
 	}
 
 	@Override
 	public boolean canContinueToUse() {
-		return target != null && mob.invulnerableTime <= 0 && mob.getOffhandItem().getItem().isShield(mob.getOffhandItem(), mob);
+		return target != null && mob.invulnerableTime <= 0 && !isShieldDisabled(mob) && mob.getOffhandItem().getItem().isShield(mob.getOffhandItem(), mob);
 	}
 
 	@Override
