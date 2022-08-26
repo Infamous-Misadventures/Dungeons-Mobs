@@ -19,6 +19,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MoverType;
+import net.minecraft.entity.monster.IllusionerEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
@@ -64,7 +65,7 @@ public class IceCloudEntity extends Entity implements IAnimatable {
 	public int fallAnimationLength = 17;
 	
 	public int landAnimationTick;
-	public int landAnimationLength = 22;
+	public int landAnimationLength = 20;
 	
 	public int lifeTime;
 	public boolean falling;
@@ -141,16 +142,16 @@ public class IceCloudEntity extends Entity implements IAnimatable {
 	
 	public void moveToTarget() {
 		if (this.target != null && this.distanceToIgnoringY(target) > 1) {
-			this.setDeltaMovement(0.0D, 0.0D, 0.0D);
-	
 			double x = this.target.getX() - this.getX();
-			double y = this.target.getY() + this.target.getBbHeight() + 3 - this.getY();
+			double y = this.target.getY() + this.target.getBbHeight() + 1.2 - this.getY();
 			double z = this.target.getZ() - this.getZ();
 			double d = Math.sqrt(x * x + y * y + z * z);
 			this.setDeltaMovement(this.getDeltaMovement()
-					.add(x / d * 0.20000000298023224D, y / d * 0.20000000298023224D, z / d * 0.20000000298023224D)
-					.scale(1.0D));
-			this.move(MoverType.SELF, this.getDeltaMovement());
+					.add(
+							x / d * 0.20000000298023224D,
+							y / d * 0.20000000298023224D,
+							z / d * 0.20000000298023224D
+					).scale(0.6D));
 		}
 	}
 	
@@ -230,7 +231,7 @@ public class IceCloudEntity extends Entity implements IAnimatable {
         		this.level.broadcastEntityEvent(this, (byte) 6);
         	}			
         	
-	        if ((this.target != null && this.lifeTime > 100 && this.fallAnimationTick <= 0 && this.falling == false) || this.target == null) {
+	        if ((this.target != null && this.lifeTime > 100 && this.fallAnimationTick <= 0 && !this.falling) || (this.target == null && this.fallAnimationTick <= 0 && !this.falling)) {
 	        	this.playSound(ModSoundEvents.ICE_CHUNK_FALL.get(), 1.0F, this.getRandomPitch());
 	        	this.fallAnimationTick = this.fallAnimationLength;
 	        	this.level.broadcastEntityEvent(this, (byte) 2);
@@ -241,13 +242,15 @@ public class IceCloudEntity extends Entity implements IAnimatable {
 	        	this.level.broadcastEntityEvent(this, (byte) 4);	        	
 	        }        
 	        
-	        if (this.landAnimationTick == 1 || this.lifeTime > 150) {
+	        if (this.landAnimationTick == 1 || this.lifeTime > 165) {
 	        	this.remove();
 	        }	        
         }  
         
     	if (this.hasFormed && this.landAnimationTick <= 0 && !this.falling && this.fallAnimationTick <= 0) {
-    		this.moveToTarget();
+			this.moveToTarget();
+			this.setDeltaMovement(this.getDeltaMovement().multiply(.8,.8,.8));
+			this.move(MoverType.SELF, this.getDeltaMovement());
     	}
     	
         if (this.falling && this.landAnimationTick <= 0) {
@@ -271,19 +274,33 @@ public class IceCloudEntity extends Entity implements IAnimatable {
                 	this.landAnimationTick = landAnimationLength;
                 	this.level.broadcastEntityEvent(this, (byte) 3);	
 	        	this.land();
-	        	this.moveTo(this.getX(), this.getY() - 1, this.getZ());
+	        	this.moveTo(this.getX(), this.getY(-1), this.getZ());
 	        	this.playSound(ModSoundEvents.ICE_CHUNK_LAND.get(), 1.5F, this.getRandomPitch());
         	}
         }
         if (raytraceresult$type == RayTraceResult.Type.ENTITY) {
            this.onHitEntity((EntityRayTraceResult)p_70227_1_);
-        } else if (raytraceresult$type == RayTraceResult.Type.BLOCK) {
+        } else if (raytraceresult$type == RayTraceResult.Type.BLOCK || this.onGround) {
            this.onHitBlock((BlockRayTraceResult)p_70227_1_);
         }
 
      }
 
-     protected void onHitEntity(EntityRayTraceResult p_213868_1_) {
+	@Override
+	public boolean causeFallDamage(float p_225503_1_, float p_225503_2_) {
+		if (!this.level.isClientSide) {
+			if (this.landAnimationTick <= 0) {
+				this.landAnimationTick = landAnimationLength;
+				this.level.broadcastEntityEvent(this, (byte) 3);
+				this.land();
+				this.moveTo(this.getX(), this.getY(1), this.getZ());
+				this.playSound(ModSoundEvents.ICE_CHUNK_LAND.get(), 1.5F, this.getRandomPitch());
+			}
+		}
+		return super.causeFallDamage(p_225503_1_, p_225503_2_);
+	}
+
+	protected void onHitEntity(EntityRayTraceResult p_213868_1_) {
      }
 
      protected void onHitBlock(BlockRayTraceResult p_230299_1_) {
@@ -292,7 +309,9 @@ public class IceCloudEntity extends Entity implements IAnimatable {
      private void land() {
          if (this.isAlive()) {
             for(LivingEntity entity : this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(2.5D), ALIVE)) {
-               entity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 60, 2));
+				entity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 120, 3));
+				entity.addEffect(new EffectInstance(Effects.WEAKNESS, 120, 3));
+				entity.addEffect(new EffectInstance(Effects.BLINDNESS, 120, 0));
                entity.hurt(ModDamageSources.iceChunk(this, this.owner), 15.0F);             
                this.strongKnockback(entity);
             }         
@@ -332,9 +351,11 @@ public class IceCloudEntity extends Entity implements IAnimatable {
 
 
     private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
+		event.getController().setAnimationSpeed(1);
         if (this.formAnimationTick > 0) {
         	event.getController().setAnimation(new AnimationBuilder().addAnimation("ice_chunk_form", true));
         } else if (this.landAnimationTick > 0) {
+			event.getController().setAnimationSpeed(1.32);
         	event.getController().setAnimation(new AnimationBuilder().addAnimation("ice_chunk_land", true));
         } else if (this.fallAnimationTick > 0) {
         	event.getController().setAnimation(new AnimationBuilder().addAnimation("ice_chunk_fall", true));
