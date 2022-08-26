@@ -4,6 +4,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.Hand;
 
@@ -38,11 +39,19 @@ public class UseShieldGoal extends Goal {
 	public boolean requiresUpdateEveryTick() {
 		return true;
 	}
+	
+	public boolean shouldBlockForTarget(LivingEntity target) {
+		if (target instanceof MobEntity && ((MobEntity)target).getTarget() != null && ((MobEntity)target).getTarget() != mob) {
+			return false;
+		} else {
+			return true;
+		}
+	}
 
 	@Override
 	public boolean canUse() {
 		target = mob.getTarget();
-		return target != null && mob.getRandom().nextInt(this.blockChance) == 0 && mob.distanceTo(target) <= blockDistance && mob.canSee(target) && mob.getOffhandItem().getItem().isShield(mob.getOffhandItem(), mob);
+		return target != null && shouldBlockForTarget(target) && ((mob.getRandom().nextInt(this.blockChance) == 0 && mob.distanceTo(target) <= blockDistance && mob.canSee(target) && mob.getOffhandItem().getItem().isShield(mob.getOffhandItem(), mob)) || mob.isBlocking());
 	}
 
 	@Override

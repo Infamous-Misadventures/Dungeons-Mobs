@@ -373,10 +373,25 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
 				RoyalGuardEntity.disableShield(target, 60);
 			}
 		}
+		
+		@Override
+		public void stop() {
+			if (target != null && shouldBlockForTarget(target) && mob.getOffhandItem().getItem().isShield(mob.getOffhandItem(), mob) && mob.random.nextBoolean()) {
+				mob.startUsingItem(Hand.OFF_HAND);
+			}
+		}
+		
+		public boolean shouldBlockForTarget(LivingEntity target) {
+			if (target instanceof MobEntity && ((MobEntity)target).getTarget() != mob) {
+				return false;
+			} else {
+				return true;
+			}
+		}
 
 		public boolean animationsUseable() {
 			return mob.attackAnimationTick <= 0;
-		}
+		}	
 
 	}
 
