@@ -1,1 +1,102 @@
-{"format_version":"1.8.0","animations":{"geomancer_pillar_appear":{"loop":"hold_on_last_frame","animation_length":1.25,"bones":{"wall":{"position":{"0.0":{"vector":[0,"-51 + 51",0]},"0.75":{"vector":[0,"-31.5 + 51",0],"easing":"easeInOutQuart"},"1.25":{"vector":[0,51,0],"easing":"easeInOutCubic"}}}}},"geomancer_pillar_disappear":{"loop":"hold_on_last_frame","animation_length":2,"bones":{"wall":{"position":{"0.0":{"vector":[0,51,0]},"0.75":{"vector":[0,"-26 + 51",0],"easing":"easeInOutQuart"},"1.25":{"vector":[0,"-40 + 51",0],"easing":"easeInOutQuart"},"2.0":{"vector":[0,"-52 + 51",0],"easing":"easeInOutQuad"}}}}},"geomancer_pillar_idle":{"loop":true,"bones":{"wall":{"position":{"vector":[0,51,0]}}}}},"geckolib_format_version":2}
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"geomancer_pillar_appear": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 2,
+			"bones": {
+				"wall": {
+					"position": {
+						"0.1667": {
+							"vector": [0, "-51 + 51", 0]
+						},
+						"0.6667": {
+							"vector": [0, 51, 0],
+							"easing": "easeOutExpo"
+						}
+					},
+					"scale": {
+						"0.1667": {
+							"vector": [1, 0, 1]
+						},
+						"0.25": {
+							"vector": [1, 1, 1]
+						}
+					}
+				}
+			}
+		},
+		"geomancer_pillar_disappear": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 2,
+			"bones": {
+				"wall": {
+					"position": {
+						"0.0": {
+							"vector": [0, 51, 0]
+						},
+						"0.75": {
+							"vector": [0, "-26 + 51", 0],
+							"easing": "easeInOutQuart"
+						},
+						"1.25": {
+							"vector": [0, "-40 + 51", 0],
+							"easing": "easeInOutQuart"
+						},
+						"2.0": {
+							"vector": [0, "-52 + 51", 0],
+							"easing": "easeInOutQuad"
+						}
+					}
+				}
+			}
+		},
+		"geomancer_pillar_idle": {
+			"loop": true,
+			"animation_length": 3,
+			"bones": {
+				"wall": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.8333": {
+							"vector": [0, 0, 0]
+						},
+						"2.0": {
+							"vector": [4, 0, 2.5],
+							"easing": "easeInOutSine"
+						},
+						"2.1667": {
+							"vector": [3, 0, 2],
+							"easing": "easeInOutSine"
+						},
+						"2.3333": {
+							"vector": [-4, 0, -2.5],
+							"easing": "easeInOutSine"
+						},
+						"2.5": {
+							"vector": [3, 0, 2],
+							"easing": "easeInOutSine"
+						},
+						"2.6667": {
+							"vector": [-2, 0, -1.5],
+							"easing": "easeInOutSine"
+						},
+						"2.8333": {
+							"vector": [1, 0, 1],
+							"easing": "easeInOutSine"
+						},
+						"3.0": {
+							"vector": [0, 0, 0]
+						}
+					},
+					"position": {
+						"vector": [0, 51, 0]
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}
