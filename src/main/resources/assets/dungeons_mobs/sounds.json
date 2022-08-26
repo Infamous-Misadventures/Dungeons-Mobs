@@ -639,6 +639,36 @@
 			}
 		]
 	},
+		"entity.royal_guard.step": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.royal_guard.step",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/royal_guard/step1",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/royal_guard/step2",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/royal_guard/step3",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/royal_guard/step4",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/royal_guard/step5",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/royal_guard/step6",
+				"stream": true
+			}
+		]
+	},
 	"entity.windcaller.blast_attack": {
 		"category": "entity",
 		"subtitle": "subtitles.entity.windcaller.blast_attack",

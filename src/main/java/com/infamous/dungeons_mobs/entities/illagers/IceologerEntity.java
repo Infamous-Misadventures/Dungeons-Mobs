@@ -6,10 +6,10 @@ import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 import com.infamous.dungeons_mobs.entities.summonables.IceCloudEntity;
+import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModItems;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
-import com.infamous.dungeons_mobs.tasks.ApproachTargetGoal;
 
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
@@ -75,11 +75,11 @@ public class IceologerEntity extends AbstractIllagerEntity implements IAnimatabl
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new SwimGoal(this));
-        this.goalSelector.addGoal(1, new IceologerEntity.SummonIceChunkGoal(this));
-        this.goalSelector.addGoal(2, new AvoidEntityGoal<>(this, AbstractVillagerEntity.class, 3.0F, 1.2D, 1.15D));
-        this.goalSelector.addGoal(2, new AvoidEntityGoal<>(this, PlayerEntity.class, 3.0F, 1.2D, 1.2D));
-        this.goalSelector.addGoal(2, new AvoidEntityGoal<>(this, IronGolemEntity.class, 3.0F, 1.3D, 1.15D));
-        this.goalSelector.addGoal(3, new ApproachTargetGoal(this, 10, 1.0D, true));
+        this.goalSelector.addGoal(0, new IceologerEntity.SummonIceChunkGoal(this));
+        this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, AbstractVillagerEntity.class, 3.0F, 1.2D, 1.15D));
+        this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, PlayerEntity.class, 3.0F, 1.2D, 1.2D));
+        this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, IronGolemEntity.class, 3.0F, 1.3D, 1.15D));
+        this.goalSelector.addGoal(2, new ApproachTargetGoal(this, 10, 1.0D, true));
         this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 1.0D));
         this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
         this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
