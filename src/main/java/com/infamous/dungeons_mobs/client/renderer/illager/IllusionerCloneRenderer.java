@@ -1,9 +1,6 @@
 package com.infamous.dungeons_mobs.client.renderer.illager;
 
-import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.client.models.illager.DungeonsIllusionerModel;
-import com.infamous.dungeons_mobs.client.models.illager.IllagerBipedModel;
-import com.infamous.dungeons_mobs.client.models.armor.IllagerArmorModel;
 import com.infamous.dungeons_mobs.entities.illagers.IllusionerCloneEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
@@ -11,14 +8,9 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.entity.layers.BipedArmorLayer;
-import net.minecraft.client.renderer.entity.layers.HeadLayer;
-import net.minecraft.client.renderer.entity.layers.HeldItemLayer;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.entity.monster.AbstractIllagerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ShieldItem;
@@ -52,14 +44,6 @@ public class IllusionerCloneRenderer extends ExtendedGeoEntityRenderer<Illusione
         return RenderType.entityTranslucent(getTextureLocation(animatable));
     }
 
-    @Override
-    public void render(IllusionerCloneEntity entity, float entityYaw, float partialTicks, MatrixStack stack,
-                       IRenderTypeBuffer bufferIn, int packedLightIn) {
-
-        super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
-
-    }
-
     @Nullable
     @Override
     protected ResourceLocation getTextureForBone(String s, IllusionerCloneEntity Entity) {
@@ -70,9 +54,9 @@ public class IllusionerCloneRenderer extends ExtendedGeoEntityRenderer<Illusione
     @Override
     protected ItemStack getHeldItemForBone(String s, IllusionerCloneEntity Entity) {
         switch (s) {
-            case "leftHand":
+            case "bipedHandLeft":
                 return Entity.isLeftHanded() ? mainHand : offHand;
-            case "rightHand":
+            case "bipedHandRight":
                 return Entity.isLeftHanded() ? offHand : mainHand;
             case DefaultBipedBoneIdents.POTION_BONE_IDENT:
                 break;
@@ -98,9 +82,10 @@ public class IllusionerCloneRenderer extends ExtendedGeoEntityRenderer<Illusione
     }
 
     @Override
-    protected void postRenderBlock(MatrixStack matrixStack, BlockState blockState, String s, IllusionerCloneEntity illusionerCloneEntity) {
+    protected void postRenderBlock(MatrixStack matrixStack, BlockState blockState, String s, IllusionerCloneEntity dungeonsIllusionerEntity) {
 
     }
+
 
     @Override
     protected void preRenderItem(MatrixStack stack, ItemStack item, String s, IllusionerCloneEntity windcallerEntity, IBone iBone) {
@@ -129,16 +114,16 @@ public class IllusionerCloneRenderer extends ExtendedGeoEntityRenderer<Illusione
     }
 
     @Override
-    protected void preRenderBlock(MatrixStack matrixStack, BlockState blockState, String s, IllusionerCloneEntity illusionerCloneEntity) {
+    protected void preRenderBlock(MatrixStack matrixStack, BlockState blockState, String s, IllusionerCloneEntity dungeonsIllusionerEntity) {
 
     }
 
     @Override
     protected ItemCameraTransforms.TransformType getCameraTransformForItemAtBone(ItemStack itemStack, String s) {
         switch (s) {
-            case "leftHand":
+            case "bipedHandLeft":
                 return ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND;
-            case "rightHand":
+            case "bipedHandRight":
                 return ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND;
             default:
                 return ItemCameraTransforms.TransformType.NONE;
@@ -153,24 +138,23 @@ public class IllusionerCloneRenderer extends ExtendedGeoEntityRenderer<Illusione
     protected EquipmentSlotType getEquipmentSlotForArmorBone(String boneName, IllusionerCloneEntity currentEntity) {
         switch (boneName) {
             case "armorLeftFoot":
-            case "armorRightFoot":
             case "armorLeftFoot2":
-            case "armorRightFoot2":
+            case "armorBipedLeftFoot":
+            case "armorBipedRightFoot":
                 return EquipmentSlotType.FEET;
-            case "armorLeftLeg":
-            case "armorRightLeg":
-            case "armorLeftLeg2":
-            case "armorRightLeg2":
+            case "armorBipedLeftLeg":
+            case "armorBipedRightLeg":
                 return EquipmentSlotType.LEGS;
-            case "armorRightArm":
-            case "armorRightArm2":
+            case "armorBipedRightArm":
+            case "armorIllagerRightArm":
+            case "armorIllagerArm":
                 return !currentEntity.isLeftHanded() ? EquipmentSlotType.MAINHAND : EquipmentSlotType.OFFHAND;
-            case "armorLeftArm":
-            case "armorLeftArm2":
+            case "armorBipedLeftArm":
+            case "armorIllagerLeftArm":
                 return currentEntity.isLeftHanded() ? EquipmentSlotType.MAINHAND : EquipmentSlotType.OFFHAND;
-            case "armorBody":
+            case "armorBipedBody":
                 return EquipmentSlotType.CHEST;
-            case "armorHead":
+            case "armorBipedHead":
                 return EquipmentSlotType.HEAD;
             default:
                 return null;
@@ -181,22 +165,21 @@ public class IllusionerCloneRenderer extends ExtendedGeoEntityRenderer<Illusione
     protected ItemStack getArmorForBone(String boneName, IllusionerCloneEntity currentEntity) {
         switch (boneName) {
             case "armorLeftFoot":
-            case "armorRightFoot":
+            case "armorBipedLeftFoot":
             case "armorLeftFoot2":
-            case "armorRightFoot2":
+            case "armorBipedRightFoot":
                 return boots;
-            case "armorLeftLeg":
-            case "armorRightLeg":
-            case "armorLeftLeg2":
-            case "armorRightLeg2":
+            case "armorBipedLeftLeg":
+            case "armorBipedRightLeg":
                 return leggings;
-            case "armorBody":
-            case "armorRightArm":
-            case "armorRightArm2":
-            case "armorLeftArm":
-            case "armorLeftArm2":
+            case "armorBipedBody":
+            case "armorIllagerArm":
+            case "armorBipedRightArm":
+            case "armorBipedLeftArm":
+            case "armorIllagerRightArm":
+            case "armorIllagerLeftArm":
                 return chestplate;
-            case "armorHead":
+            case "armorBipedHead":
                 return helmet;
             default:
                 return null;
@@ -206,25 +189,21 @@ public class IllusionerCloneRenderer extends ExtendedGeoEntityRenderer<Illusione
     @Override
     protected ModelRenderer getArmorPartForBone(String name, BipedModel<?> armorModel) {
         switch (name) {
-            case "armorLeftFoot":
-            case "armorLeftLeg":
-            case "armorLeftFoot2":
-            case "armorLeftLeg2":
+            case "armorBipedLeftLeg":
+            case "armorBipedLeftFoot":
                 return armorModel.leftLeg;
-            case "armorRightFoot":
-            case "armorRightLeg":
-            case "armorRightFoot2":
-            case "armorRightLeg2":
+            case "armorBipedRightLeg":
+            case "armorBipedRightFoot":
                 return armorModel.rightLeg;
-            case "armorRightArm":
-            case "armorRightArm2":
+            case "armorBipedRightArm":
+            case "armorIllagerRightArm":
                 return armorModel.rightArm;
-            case "armorLeftArm":
-            case "armorLeftArm2":
+            case "armorBipedLeftArm":
+            case "armorIllagerLeftArm":
                 return armorModel.leftArm;
-            case "armorBody":
+            case "armorBipedBody":
                 return armorModel.body;
-            case "armorHead":
+            case "armorBipedHead":
                 return armorModel.head;
             default:
                 return null;

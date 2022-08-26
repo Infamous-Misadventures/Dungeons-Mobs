@@ -54,9 +54,9 @@ public class DungeonsIllusionerRenderer extends ExtendedGeoEntityRenderer<Dungeo
     @Override
     protected ItemStack getHeldItemForBone(String s, DungeonsIllusionerEntity Entity) {
         switch (s) {
-            case "leftHand":
+            case "bipedHandLeft":
                 return Entity.isLeftHanded() ? mainHand : offHand;
-            case "rightHand":
+            case "bipedHandRight":
                 return Entity.isLeftHanded() ? offHand : mainHand;
             case DefaultBipedBoneIdents.POTION_BONE_IDENT:
                 break;
@@ -121,9 +121,9 @@ public class DungeonsIllusionerRenderer extends ExtendedGeoEntityRenderer<Dungeo
     @Override
     protected ItemCameraTransforms.TransformType getCameraTransformForItemAtBone(ItemStack itemStack, String s) {
         switch (s) {
-            case "leftHand":
+            case "bipedHandLeft":
                 return ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND;
-            case "rightHand":
+            case "bipedHandRight":
                 return ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND;
             default:
                 return ItemCameraTransforms.TransformType.NONE;
@@ -138,24 +138,23 @@ public class DungeonsIllusionerRenderer extends ExtendedGeoEntityRenderer<Dungeo
     protected EquipmentSlotType getEquipmentSlotForArmorBone(String boneName, DungeonsIllusionerEntity currentEntity) {
         switch (boneName) {
             case "armorLeftFoot":
-            case "armorRightFoot":
             case "armorLeftFoot2":
-            case "armorRightFoot2":
+            case "armorBipedLeftFoot":
+            case "armorBipedRightFoot":
                 return EquipmentSlotType.FEET;
-            case "armorLeftLeg":
-            case "armorRightLeg":
-            case "armorLeftLeg2":
-            case "armorRightLeg2":
+            case "armorBipedLeftLeg":
+            case "armorBipedRightLeg":
                 return EquipmentSlotType.LEGS;
-            case "armorRightArm":
-            case "armorRightArm2":
+            case "armorBipedRightArm":
+            case "armorIllagerRightArm":
+            case "armorIllagerArm":
                 return !currentEntity.isLeftHanded() ? EquipmentSlotType.MAINHAND : EquipmentSlotType.OFFHAND;
-            case "armorLeftArm":
-            case "armorLeftArm2":
+            case "armorBipedLeftArm":
+            case "armorIllagerLeftArm":
                 return currentEntity.isLeftHanded() ? EquipmentSlotType.MAINHAND : EquipmentSlotType.OFFHAND;
-            case "armorBody":
+            case "armorBipedBody":
                 return EquipmentSlotType.CHEST;
-            case "armorHead":
+            case "armorBipedHead":
                 return EquipmentSlotType.HEAD;
             default:
                 return null;
@@ -166,22 +165,21 @@ public class DungeonsIllusionerRenderer extends ExtendedGeoEntityRenderer<Dungeo
     protected ItemStack getArmorForBone(String boneName, DungeonsIllusionerEntity currentEntity) {
         switch (boneName) {
             case "armorLeftFoot":
-            case "armorRightFoot":
+            case "armorBipedLeftFoot":
             case "armorLeftFoot2":
-            case "armorRightFoot2":
+            case "armorBipedRightFoot":
                 return boots;
-            case "armorLeftLeg":
-            case "armorRightLeg":
-            case "armorLeftLeg2":
-            case "armorRightLeg2":
+            case "armorBipedLeftLeg":
+            case "armorBipedRightLeg":
                 return leggings;
-            case "armorBody":
-            case "armorRightArm":
-            case "armorRightArm2":
-            case "armorLeftArm":
-            case "armorLeftArm2":
+            case "armorBipedBody":
+            case "armorIllagerArm":
+            case "armorBipedRightArm":
+            case "armorBipedLeftArm":
+            case "armorIllagerRightArm":
+            case "armorIllagerLeftArm":
                 return chestplate;
-            case "armorHead":
+            case "armorBipedHead":
                 return helmet;
             default:
                 return null;
@@ -191,25 +189,21 @@ public class DungeonsIllusionerRenderer extends ExtendedGeoEntityRenderer<Dungeo
     @Override
     protected ModelRenderer getArmorPartForBone(String name, BipedModel<?> armorModel) {
         switch (name) {
-            case "armorLeftFoot":
-            case "armorLeftLeg":
-            case "armorLeftFoot2":
-            case "armorLeftLeg2":
+            case "armorBipedLeftLeg":
+            case "armorBipedLeftFoot":
                 return armorModel.leftLeg;
-            case "armorRightFoot":
-            case "armorRightLeg":
-            case "armorRightFoot2":
-            case "armorRightLeg2":
+            case "armorBipedRightLeg":
+            case "armorBipedRightFoot":
                 return armorModel.rightLeg;
-            case "armorRightArm":
-            case "armorRightArm2":
+            case "armorBipedRightArm":
+            case "armorIllagerRightArm":
                 return armorModel.rightArm;
-            case "armorLeftArm":
-            case "armorLeftArm2":
+            case "armorBipedLeftArm":
+            case "armorIllagerLeftArm":
                 return armorModel.leftArm;
-            case "armorBody":
+            case "armorBipedBody":
                 return armorModel.body;
-            case "armorHead":
+            case "armorBipedHead":
                 return armorModel.head;
             default:
                 return null;
