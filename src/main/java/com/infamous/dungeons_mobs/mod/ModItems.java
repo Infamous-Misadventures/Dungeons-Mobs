@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.mod;
 
 import com.infamous.dungeons_mobs.items.*;
+import com.infamous.dungeons_mobs.items.material.ModArmorMaterial;
 import com.infamous.dungeons_mobs.items.shield.RoyalGuardShieldItem;
 import com.infamous.dungeons_mobs.items.shield.SkeletonVanguardShieldItem;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -43,31 +44,43 @@ public class ModItems {
             () -> new ChefHatItem(ArmorMaterial.LEATHER, EquipmentSlotType.HEAD, new Item.Properties().tab(DUNGEONS_MOBS)));
 
     public static final RegistryObject<Item> NETHERITE_PIGLIN_HELMET = ITEMS.register("netherite_piglin_helmet",
-            () -> new PiglinHelmetItem(CustomArmorMaterial.PURE_NETHERITE, EquipmentSlotType.HEAD, new Item.Properties().tab(DUNGEONS_MOBS)));
+            () -> new PiglinHelmetItem(ModArmorMaterial.PURE_NETHERITE, EquipmentSlotType.HEAD, new Item.Properties().tab(DUNGEONS_MOBS)));
     public static final RegistryObject<Item> CRACKED_NETHERITE_PIGLIN_HELMET = ITEMS.register("cracked_netherite_piglin_helmet",
-            () -> new PiglinHelmetItem(CustomArmorMaterial.PURE_NETHERITE, EquipmentSlotType.HEAD, new Item.Properties().tab(DUNGEONS_MOBS)));
+            () -> new PiglinHelmetItem(ModArmorMaterial.PURE_NETHERITE, EquipmentSlotType.HEAD, new Item.Properties().tab(DUNGEONS_MOBS)));
     public static final RegistryObject<Item> GOLD_PIGLIN_HELMET = ITEMS.register("gold_piglin_helmet",
             () -> new PiglinHelmetItem(ArmorMaterial.GOLD, EquipmentSlotType.HEAD, new Item.Properties().tab(DUNGEONS_MOBS)));
     public static final RegistryObject<Item> CRACKED_GOLD_PIGLIN_HELMET = ITEMS.register("cracked_gold_piglin_helmet",
             () -> new PiglinHelmetItem(ArmorMaterial.GOLD, EquipmentSlotType.HEAD, new Item.Properties().tab(DUNGEONS_MOBS)));
 
     public static final RegistryObject<Item> ICEOLOGER_HOOD = ITEMS.register("iceologer_hood",
-        () -> new IceologerClothesItem(CosmeticArmorMaterial.INSTANCE, EquipmentSlotType.HEAD, new Item.Properties().tab(DUNGEONS_MOBS)));
+        () -> new IceologerClothesItem(ModArmorMaterial.UNDEFINED, EquipmentSlotType.HEAD, new Item.Properties().tab(DUNGEONS_MOBS)));
 
     public static final RegistryObject<Item> ICEOLOGER_ROBES = ITEMS.register("iceologer_robes",
-        () -> new IceologerClothesItem(CosmeticArmorMaterial.INSTANCE, EquipmentSlotType.CHEST, new Item.Properties().tab(DUNGEONS_MOBS)));
+        () -> new IceologerClothesItem(ModArmorMaterial.UNDEFINED, EquipmentSlotType.CHEST, new Item.Properties().tab(DUNGEONS_MOBS)));
 
     public static final RegistryObject<Item> ICEOLOGER_PANTS = ITEMS.register("iceologer_pants",
-        () -> new IceologerClothesItem(CosmeticArmorMaterial.INSTANCE, EquipmentSlotType.LEGS, new Item.Properties().tab(DUNGEONS_MOBS)));
+            () -> new IceologerClothesItem(ModArmorMaterial.UNDEFINED, EquipmentSlotType.LEGS, new Item.Properties().tab(DUNGEONS_MOBS)));
 
     public static final RegistryObject<Item> ICEOLOGER_SHOES = ITEMS.register("iceologer_shoes",
-            () -> new IceologerClothesItem(CosmeticArmorMaterial.INSTANCE, EquipmentSlotType.FEET, new Item.Properties().tab(DUNGEONS_MOBS)));
+            () -> new IceologerClothesItem(ModArmorMaterial.UNDEFINED, EquipmentSlotType.FEET, new Item.Properties().tab(DUNGEONS_MOBS)));
+
+    public static final RegistryObject<Item> ILLUSIONER_HOOD = ITEMS.register("illusioner_hood",
+            () -> new IllusionerClothesItem(ModArmorMaterial.UNDEFINED, EquipmentSlotType.HEAD, new Item.Properties().tab(DUNGEONS_MOBS)));
+
+    public static final RegistryObject<Item> ILLUSIONER_ROBES = ITEMS.register("illusioner_robes",
+            () -> new IllusionerClothesItem(ModArmorMaterial.UNDEFINED, EquipmentSlotType.CHEST, new Item.Properties().tab(DUNGEONS_MOBS)));
+
+    public static final RegistryObject<Item> ILLUSIONER_PANTS = ITEMS.register("illusioner_pants",
+            () -> new IllusionerClothesItem(ModArmorMaterial.UNDEFINED, EquipmentSlotType.LEGS, new Item.Properties().tab(DUNGEONS_MOBS)));
+
+    public static final RegistryObject<Item> ILLUSIONER_SHOES = ITEMS.register("illusioner_shoes",
+            () -> new IllusionerClothesItem(ModArmorMaterial.UNDEFINED, EquipmentSlotType.FEET, new Item.Properties().tab(DUNGEONS_MOBS)));
 
     public static final RegistryObject<Item> GEOMANCER_BEADS = ITEMS.register("geomancer_beads",
-            () -> new GeomancerClothesItem(CosmeticArmorMaterial.INSTANCE, EquipmentSlotType.HEAD, new Item.Properties().tab(DUNGEONS_MOBS)));
+            () -> new GeomancerClothesItem(ModArmorMaterial.UNDEFINED, EquipmentSlotType.HEAD, new Item.Properties().tab(DUNGEONS_MOBS)));
 
     public static final RegistryObject<Item> GEOMANCER_ROBES = ITEMS.register("geomancer_robes",
-            () -> new GeomancerClothesItem(CosmeticArmorMaterial.INSTANCE, EquipmentSlotType.CHEST, new Item.Properties().tab(DUNGEONS_MOBS)));
+            () -> new GeomancerClothesItem(ModArmorMaterial.UNDEFINED, EquipmentSlotType.CHEST, new Item.Properties().tab(DUNGEONS_MOBS)));
 
     // SOUL FIRE CHARGE
     public static final RegistryObject<WraithFireChargeItem> WRAITH_FIRE_CHARGE = ITEMS.register("wraith_fire_charge",
