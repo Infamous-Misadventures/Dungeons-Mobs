@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.UUID;
 
 @SuppressWarnings("EntityConstructor")
@@ -163,6 +164,16 @@ public abstract class ConstructEntity extends CreatureEntity {
         //super.tick();
 
     	//this.faceDirection(this.directionToFace);
+
+        if (this.getLifeTicks() >= 100) {
+            List<Entity> v = this.level.getEntities(this, this.getBoundingBox());
+            for (Entity entity : v) {
+                if (entity != this && entity instanceof ConstructEntity) {
+                    this.remove();
+                    break;
+                }
+            }
+        }
 
         this.setLifeTicks(this.getLifeTicks() - 1);
         if(!this.level.isClientSide() && this.getLifeTicks() <= 0){
