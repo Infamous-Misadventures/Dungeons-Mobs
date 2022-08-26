@@ -1,7 +1,6 @@
 package com.infamous.dungeons_mobs.client.renderer.projectiles;
 
-import com.infamous.dungeons_mobs.DungeonsMobs;
-import com.infamous.dungeons_mobs.client.models.projectile.GeoNecromancerOrbModel;
+import com.infamous.dungeons_mobs.client.models.projectile.GeoOrbModel;
 import com.infamous.dungeons_mobs.entities.projectiles.GeoOrbEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
@@ -9,13 +8,12 @@ import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
-import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.renderers.geo.GeoProjectilesRenderer;
 
-public class NecromancerOrbRenderer extends GeoProjectilesRenderer<GeoOrbEntity> {
+public class GeoOrbRenderer extends GeoProjectilesRenderer<GeoOrbEntity> {
 
     public GeoOrbRenderer(EntityRendererManager renderManager) {
-        super(renderManager, new GeoNecromancerOrbModel());
+        super(renderManager, new GeoOrbModel());
     }
 
     @Override

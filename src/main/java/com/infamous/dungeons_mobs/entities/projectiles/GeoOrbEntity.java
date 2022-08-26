@@ -141,9 +141,7 @@ public class GeoOrbEntity extends DamagingProjectileEntity implements IAnimatabl
         RayTraceResult.Type raytraceresult$type = p_70227_1_.getType();
         if (raytraceresult$type != RayTraceResult.Type.ENTITY) {
             if (!this.level.isClientSide()) {
-                if (!(this.getOwner() instanceof NamelessOneEntity)) {
-                    this.remove();
-                }
+                this.remove();
             }
         }
     }
