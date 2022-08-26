@@ -2,8 +2,8 @@ package com.infamous.dungeons_mobs.entities.illagers;
 
 import com.infamous.dungeons_mobs.capabilities.cloneable.CloneableHelper;
 import com.infamous.dungeons_mobs.capabilities.cloneable.ICloneable;
-import com.infamous.dungeons_mobs.entities.illagers.IllusionerCloneEntity;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
+import com.infamous.dungeons_mobs.mod.ModItems;
 import com.infamous.dungeons_mobs.utils.ModProjectileHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -21,6 +21,7 @@ import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -41,6 +42,7 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.EnumSet;
 
 public class DungeonsIllusionerEntity extends SpellcastingIllagerEntity implements IAnimatable,IRangedAttackMob {
@@ -247,23 +249,38 @@ public class DungeonsIllusionerEntity extends SpellcastingIllagerEntity implemen
    @Nullable
    @Override
    public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance p_213386_2_, SpawnReason p_213386_3_, @Nullable ILivingEntityData p_213386_4_, @Nullable CompoundNBT p_213386_5_) {
+
       this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.BOW));
+      this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.ILLUSIONER_HOOD.get()));
+      this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.ILLUSIONER_ROBES.get()));
+      this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(ModItems.ILLUSIONER_PANTS.get()));
+      this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(ModItems.ILLUSIONER_SHOES.get()));
+
       return super.finalizeSpawn(p_213386_1_, p_213386_2_, p_213386_3_, p_213386_4_, p_213386_5_);
    }
 
    @Override
    public void performRangedAttack(LivingEntity target, float p_82196_2_) {
-      {
-         ItemStack fireworkRocket = ModProjectileHelper.createRocket(DyeColor.PINK);
-         FireworkRocketEntity fireworkrocketentity = new FireworkRocketEntity(this.level, fireworkRocket, this, this.getX(), this.getEyeY() - (double) 0.15F, this.getZ(), true);
-         double xDifference = target.getX() - this.getX();
-         double yDifference = target.getY(0.3333333333333333D) - fireworkrocketentity.getY();
-         double zDifference = target.getZ() - this.getZ();
-         double horizontalDifference = (double) MathHelper.sqrt(xDifference * xDifference + zDifference * zDifference);
-         fireworkrocketentity.shoot(xDifference, yDifference, zDifference, 1.6F, (float) (18 - this.level.getDifficulty().getId() * 7.5));
-         this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
-         this.level.addFreshEntity(fireworkrocketentity);
-      }
+      ItemStack fireworkRocket = ModProjectileHelper.createRocket(DyeColor.PINK);
+      CompoundNBT v = fireworkRocket.getOrCreateTagElement("Fireworks");
+      ListNBT explosions = new ListNBT();
+      CompoundNBT explosion = new CompoundNBT();
+      v.put("Explosions", explosions);
+      explosions.add(explosion);
+      explosion.putIntArray("Colors", Collections.singletonList(15961002));
+      explosion.putIntArray("FadeColors", Collections.singletonList(16383998));
+      explosion.putBoolean("Flicker", true);
+      explosion.putBoolean("Flicker", true);
+      explosion.putInt("Type", 1);
+      explosion.putInt("Flight", 1);
+      FireworkRocketEntity fireworkrocketentity = new FireworkRocketEntity(this.level, fireworkRocket, this, this.getX(), this.getEyeY() - (double) 0.15F, this.getZ(), true);
+      double xDifference = target.getX() - this.getX();
+      double yDifference = target.getY(0.3333333333333333D) - fireworkrocketentity.getY();
+      double zDifference = target.getZ() - this.getZ();
+      double horizontalDifference = (double) MathHelper.sqrt(xDifference * xDifference + zDifference * zDifference);
+      fireworkrocketentity.shoot(xDifference, yDifference, zDifference, 1.6F, (float) (18 - this.level.getDifficulty().getId() * 7.5));
+      this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+      this.level.addFreshEntity(fireworkrocketentity);
    }
 
    class CastingSpellGoal extends CastingASpellGoal {
@@ -337,7 +354,9 @@ public class DungeonsIllusionerEntity extends SpellcastingIllagerEntity implemen
    class SummonClonesGoal extends Goal {
 
       private boolean e;
+      private boolean r;
       private int o;
+      private int v;
       public SummonClonesGoal() {
          this.setFlags(EnumSet.of(Flag.MOVE, Flag.JUMP, Flag.LOOK));
       }
@@ -358,7 +377,9 @@ public class DungeonsIllusionerEntity extends SpellcastingIllagerEntity implemen
       public void start() {
          super.start();
          this.e = false;
+         this.r = false;
          this.o = 0;
+         this.v = 5 + DungeonsIllusionerEntity.this.getRandom().nextInt(6);
 
          DungeonsIllusionerEntity.this.setInvulnerable(true);
          DungeonsIllusionerEntity.this.setAttackType(false);
@@ -380,10 +401,19 @@ public class DungeonsIllusionerEntity extends SpellcastingIllagerEntity implemen
          mob.getNavigation().stop();
 
          if (mob.getSummonCloneTick() == 1 && !this.e) {
-            this.summonIllusionerClones();
+            DungeonsIllusionerEntity.this.setSummonCloneTick(60 - DungeonsIllusionerEntity.this.getRandom().nextInt(8));
             this.e = true;
+            return;
+         }
+
+         if (DungeonsIllusionerEntity.this.getSummonCloneTick() >= this.v) {
+            this.v += 8 + DungeonsIllusionerEntity.this.getRandom().nextInt(8);
+            summonIllusionerClones();
+         }
+
+         if (mob.getSummonCloneTick() == 1 && !this.r) {
+            this.r = true;
             DungeonsIllusionerEntity.this.setInvulnerable(false);
-            DungeonsIllusionerEntity.this.setSummonCloneTick(33);
             DungeonsIllusionerEntity.this.setAttackType(true);
             DungeonsIllusionerEntity.this.playSound(SoundEvents.ILLUSIONER_PREPARE_MIRROR, DungeonsIllusionerEntity.this.getSoundVolume(), DungeonsIllusionerEntity.this.getVoicePitch());
             BlockPos blockpos = DungeonsIllusionerEntity.this.getTarget().blockPosition().offset(-5 + DungeonsIllusionerEntity.this.getRandom().nextInt(10) * (target.getBbWidth() / 2 +1), 0, -5 + DungeonsIllusionerEntity.this.getRandom().nextInt(10) * (target.getBbWidth() / 2 +1));
@@ -404,8 +434,7 @@ public class DungeonsIllusionerEntity extends SpellcastingIllagerEntity implemen
       }
 
       private void summonIllusionerClones(){
-         int difficultyAsInt = DungeonsIllusionerEntity.this.level.getDifficulty().getId();
-         int mobsToSummon = difficultyAsInt * 3 + 6;
+         int mobsToSummon = 1 + DungeonsIllusionerEntity.this.getRandom().nextInt(3);
          LivingEntity target = DungeonsIllusionerEntity.this.getTarget();
          for(int i = 0; i < mobsToSummon; ++i) {
             BlockPos blockpos = DungeonsIllusionerEntity.this.getTarget().blockPosition().offset(-5 + DungeonsIllusionerEntity.this.getRandom().nextInt(10) * (target.getBbWidth() / 2 +1), 0, -5 + DungeonsIllusionerEntity.this.getRandom().nextInt(10) * (target.getBbWidth() / 2 +1));
@@ -419,9 +448,9 @@ public class DungeonsIllusionerEntity extends SpellcastingIllagerEntity implemen
                   illusionerCloneEntity.finalizeSpawn((IServerWorld) illusionerCloneEntity.level, difficultyForLocation, SpawnReason.MOB_SUMMONED, (ILivingEntityData)null, (CompoundNBT)null);
                   illusionerCloneEntity.setHealth(DungeonsIllusionerEntity.this.getHealth());
                   illusionerCloneEntity.setTarget(DungeonsIllusionerEntity.this.getTarget());
-                  illusionerCloneEntity.setSummonCloneTick(33);
+                  illusionerCloneEntity.setSummonCloneTick(20);
                   illusionerCloneEntity.setAttackType(true);
-                  illusionerCloneEntity.liftInterval = DungeonsIllusionerEntity.this.getRandom().nextInt(60);
+                  illusionerCloneEntity.liftInterval = DungeonsIllusionerEntity.this.getRandom().nextInt(60) + 20;
                   illusionerCloneEntity.setItemSlot(EquipmentSlotType.MAINHAND, DungeonsIllusionerEntity.this.getItemBySlot(EquipmentSlotType.MAINHAND));
                   illusionerCloneEntity.setItemSlot(EquipmentSlotType.OFFHAND, DungeonsIllusionerEntity.this.getItemBySlot(EquipmentSlotType.OFFHAND));
                   illusionerCloneEntity.setItemSlot(EquipmentSlotType.HEAD, DungeonsIllusionerEntity.this.getItemBySlot(EquipmentSlotType.HEAD));
