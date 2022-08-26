@@ -129,7 +129,7 @@ public class ModEntityTypes {
 
     public static final RegistryObject<EntityType<RoyalGuardEntity>> ROYAL_GUARD = registerEntity("royal_guard", () ->
             EntityType.Builder.<RoyalGuardEntity>of(RoyalGuardEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F * 1.1F, 1.95F * 1.1F)
+                    .sized(0.6F * 1.2F, 1.95F * 1.2F)
                     .clientTrackingRange(8)
                     .setCustomClientFactory((spawnEntity,world) -> new RoyalGuardEntity(world))
                     .build(new ResourceLocation(MODID, "royal_guard").toString()),

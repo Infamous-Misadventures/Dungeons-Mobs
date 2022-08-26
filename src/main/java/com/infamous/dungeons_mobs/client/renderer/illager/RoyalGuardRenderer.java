@@ -1,19 +1,20 @@
 package com.infamous.dungeons_mobs.client.renderer.illager;
 
-import com.infamous.dungeons_mobs.client.models.illager.IceologerModel;
-import com.infamous.dungeons_mobs.entities.illagers.IceologerEntity;
-import com.infamous.dungeons_mobs.entities.illagers.IceologerEntity;
+import javax.annotation.Nullable;
+
+import com.infamous.dungeons_mobs.client.models.illager.RoyalGuardModel;
+import com.infamous.dungeons_mobs.entities.illagers.RoyalGuardEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+
 import it.unimi.dsi.fastutil.objects.ObjectList;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.model.BipedModel;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ShieldItem;
@@ -25,24 +26,22 @@ import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.geo.render.built.GeoCube;
 import software.bernie.geckolib3.renderers.geo.ExtendedGeoEntityRenderer;
-
-import javax.annotation.Nullable;
-public class IceologerRenderer extends ExtendedGeoEntityRenderer<IceologerEntity> {
-    public IceologerRenderer(EntityRendererManager renderManager) {
-        super(renderManager, new IceologerModel());
+public class RoyalGuardRenderer extends ExtendedGeoEntityRenderer<RoyalGuardEntity> {
+    public RoyalGuardRenderer(EntityRendererManager renderManager) {
+        super(renderManager, new RoyalGuardModel());
     }
 
     @Override
-    protected void applyRotations(IceologerEntity entityLiving, MatrixStack matrixStackIn, float ageInTicks,
+    protected void applyRotations(RoyalGuardEntity entityLiving, MatrixStack matrixStackIn, float ageInTicks,
                                   float rotationYaw, float partialTicks) {
-        float scaleFactor = 0.9375F;
+        float scaleFactor = 0.9375F * 1.2F;
         matrixStackIn.scale(scaleFactor, scaleFactor, scaleFactor);
         super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
 
     }
 
     @Override
-    public RenderType getRenderType(IceologerEntity animatable, float partialTicks, MatrixStack stack,
+    public RenderType getRenderType(RoyalGuardEntity animatable, float partialTicks, MatrixStack stack,
                                     IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn,
                                     ResourceLocation textureLocation) {
         return RenderType.entityTranslucent(getTextureLocation(animatable));
@@ -63,12 +62,12 @@ public class IceologerRenderer extends ExtendedGeoEntityRenderer<IceologerEntity
 
     @Nullable
     @Override
-    protected ResourceLocation getTextureForBone(String s, IceologerEntity windcallerEntity) {
+    protected ResourceLocation getTextureForBone(String s, RoyalGuardEntity windcallerEntity) {
         return null;
     }
 
 	@Override
-	protected ItemStack getHeldItemForBone(String boneName, IceologerEntity currentEntity) {
+	protected ItemStack getHeldItemForBone(String boneName, RoyalGuardEntity currentEntity) {
 		switch (boneName) {
 		case DefaultBipedBoneIdents.LEFT_HAND_BONE_IDENT:
 			return currentEntity.isLeftHanded() ? mainHand : offHand;
@@ -93,7 +92,7 @@ public class IceologerRenderer extends ExtendedGeoEntityRenderer<IceologerEntity
 	}
 
 	@Override
-	protected void preRenderItem(MatrixStack stack, ItemStack item, String boneName, IceologerEntity currentEntity, IBone bone) {
+	protected void preRenderItem(MatrixStack stack, ItemStack item, String boneName, RoyalGuardEntity currentEntity, IBone bone) {
 		if(item == this.mainHand || item == this.offHand) {
 			stack.scale(1.1F, 1.1F, 1.1F);
 			stack.mulPose(Vector3f.XP.rotationDegrees(-90.0F));
@@ -118,30 +117,30 @@ public class IceologerRenderer extends ExtendedGeoEntityRenderer<IceologerEntity
 	}
 
 	@Override
-	protected void postRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, IceologerEntity currentEntity, IBone bone) {
+	protected void postRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, RoyalGuardEntity currentEntity, IBone bone) {
 
 	}
     
 	@Override
-	protected BlockState getHeldBlockForBone(String boneName, IceologerEntity currentEntity) {
+	protected BlockState getHeldBlockForBone(String boneName, RoyalGuardEntity currentEntity) {
 		return null;
 	}
 	
 	@Override
 	protected void preRenderBlock(MatrixStack matrixStack, BlockState block, String boneName,
-			IceologerEntity currentEntity) {
+			RoyalGuardEntity currentEntity) {
 		
 	}
 
 	@Override
 	protected void postRenderBlock(MatrixStack matrixStack, BlockState block, String boneName,
-			IceologerEntity currentEntity) {
+			RoyalGuardEntity currentEntity) {
 		
 	}
 
     @Nullable
     @Override
-    protected ItemStack getArmorForBone(String boneName, IceologerEntity currentEntity) {
+    protected ItemStack getArmorForBone(String boneName, RoyalGuardEntity currentEntity) {
         switch (boneName) {
             case "armorBipedLeftFoot":
             case "armorBipedRightFoot":
@@ -163,7 +162,7 @@ public class IceologerRenderer extends ExtendedGeoEntityRenderer<IceologerEntity
     }
 
     @Override
-    protected EquipmentSlotType getEquipmentSlotForArmorBone(String boneName, IceologerEntity currentEntity) {
+    protected EquipmentSlotType getEquipmentSlotForArmorBone(String boneName, RoyalGuardEntity currentEntity) {
         switch (boneName) {
             case "armorBipedLeftFoot":
             case "armorBipedRightFoot":

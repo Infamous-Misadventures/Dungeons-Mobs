@@ -1,4 +1,4 @@
-package com.infamous.dungeons_mobs.tasks;
+package com.infamous.dungeons_mobs.goals;
 
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.LivingEntity;
