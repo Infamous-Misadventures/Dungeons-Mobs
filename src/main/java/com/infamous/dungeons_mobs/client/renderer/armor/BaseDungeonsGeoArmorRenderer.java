@@ -10,6 +10,7 @@ import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.geo.render.built.GeoCube;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib3.renderers.geo.ExtendedGeoEntityRenderer;
 import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 import software.bernie.geckolib3.util.RenderUtils;
@@ -28,7 +29,7 @@ public class BaseDungeonsGeoArmorRenderer<T extends ArmorItem & IAnimatable> ext
         RenderUtils.translate(bone, stack);
         RenderUtils.moveToPivot(bone, stack);
         EntityRenderer<? super LivingEntity> entityRenderer = Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(entityLiving);
-        if(!(entityRenderer instanceof GeoEntityRenderer)) {
+        if(!(entityRenderer instanceof GeoEntityRenderer) || !bone.getName().contains("armor")) {
             RenderUtils.rotate(bone, stack);
         }
         RenderUtils.scale(bone, stack);

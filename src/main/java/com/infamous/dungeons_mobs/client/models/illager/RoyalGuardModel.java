@@ -37,7 +37,8 @@ public class RoyalGuardModel extends AnimatedGeoModel {
 
         LivingEntity entityIn = (LivingEntity) entity;
 
-        IBone head = this.getAnimationProcessor().getBone("bipedHead");
+        IBone head = this.getAnimationProcessor().getBone("bipedHeadBaseRotator");
+        IBone armorHead = this.getAnimationProcessor().getBone("armorBipedHead");
         IBone illagerArms = this.getAnimationProcessor().getBone("illagerArms");
         IBone cape = this.getAnimationProcessor().getBone("bipedCape");
         

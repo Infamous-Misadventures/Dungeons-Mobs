@@ -4,13 +4,17 @@ import com.infamous.dungeons_mobs.items.*;
 import com.infamous.dungeons_mobs.items.shield.RoyalGuardShieldItem;
 import com.infamous.dungeons_mobs.items.shield.SkeletonVanguardShieldItem;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.*;
+import net.minecraft.item.ArmorMaterial;
+import net.minecraft.item.DyeColor;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemTier;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.DUNGEONS_MOBS;
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
+import static net.minecraft.item.ArmorMaterial.DIAMOND;
 
 
 public class ModItems {
@@ -68,6 +72,18 @@ public class ModItems {
 
     public static final RegistryObject<Item> GEOMANCER_ROBES = ITEMS.register("geomancer_robes",
             () -> new GeomancerClothesItem(CosmeticArmorMaterial.INSTANCE, EquipmentSlotType.CHEST, new Item.Properties().tab(DUNGEONS_MOBS)));
+
+    public static final RegistryObject<Item> ROYAL_GUARD_HELMET = ITEMS.register("royal_guard_helmet",
+            () -> new RoyalGuardArmorItem(DIAMOND, EquipmentSlotType.HEAD, new Item.Properties().tab(DUNGEONS_MOBS)));
+
+    public static final RegistryObject<Item> ROYAL_GUARD_CHESTPLATE = ITEMS.register("royal_guard_chestplate",
+            () -> new RoyalGuardArmorItem(DIAMOND, EquipmentSlotType.CHEST, new Item.Properties().tab(DUNGEONS_MOBS)));
+
+    public static final RegistryObject<Item> ROYAL_GUARD_LEGS = ITEMS.register("royal_guard_legs",
+            () -> new RoyalGuardArmorItem(DIAMOND, EquipmentSlotType.LEGS, new Item.Properties().tab(DUNGEONS_MOBS)));
+
+    public static final RegistryObject<Item> ROYAL_GUARD_SABATONS = ITEMS.register("royal_guard_sabatons",
+            () -> new RoyalGuardArmorItem(DIAMOND, EquipmentSlotType.FEET, new Item.Properties().tab(DUNGEONS_MOBS)));
 
     // SOUL FIRE CHARGE
     public static final RegistryObject<WraithFireChargeItem> WRAITH_FIRE_CHARGE = ITEMS.register("wraith_fire_charge",

@@ -21,10 +21,12 @@ import com.infamous.dungeons_mobs.client.ModItemModelProperties;
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
 import com.infamous.dungeons_mobs.client.renderer.armor.GeomancerClothesArmorRenderer;
 import com.infamous.dungeons_mobs.client.renderer.armor.IceologerClothesArmorRenderer;
+import com.infamous.dungeons_mobs.client.renderer.armor.RoyalGuardArmorRenderer;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.items.GeomancerClothesItem;
 import com.infamous.dungeons_mobs.items.GroupDungeonsMobs;
 import com.infamous.dungeons_mobs.items.IceologerClothesItem;
+import com.infamous.dungeons_mobs.items.RoyalGuardArmorItem;
 import com.infamous.dungeons_mobs.mod.*;
 import com.infamous.dungeons_mobs.network.NetworkHandler;
 import com.infamous.dungeons_mobs.network.datasync.ModDataSerializers;
@@ -118,6 +120,7 @@ public class DungeonsMobs
         MinecraftForge.EVENT_BUS.register(new ModItemModelProperties());
         GeoArmorRenderer.registerArmorRenderer(IceologerClothesItem.class, IceologerClothesArmorRenderer::new);
         GeoArmorRenderer.registerArmorRenderer(GeomancerClothesItem.class, GeomancerClothesArmorRenderer::new);
+        GeoArmorRenderer.registerArmorRenderer(RoyalGuardArmorItem.class, RoyalGuardArmorRenderer::new);
 
     }
 
