@@ -296,5 +296,7 @@
   "subtitles.entity.skeleton_vanguard.hurt": "Skeleton Vanguard hurts",
   "subtitles.entity.skeleton_vanguard.death": "Skeleton Vanguard dies",
   "subtitles.entity.skeleton_vanguard.attack": "Skeleton Vanguard stabs",
-  "subtitles.entity.skeleton_vanguard.step": "Footsteps"
+  "subtitles.entity.skeleton_vanguard.step": "Footsteps",
+  
+  "subtitles.entity.icy_creeper.explode": "Icy Creeper explodes"
 }

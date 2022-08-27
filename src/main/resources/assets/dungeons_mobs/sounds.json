@@ -1703,5 +1703,19 @@
 				"stream": true
 			}
 		]
+	},
+	
+	
+	
+	
+			"entity.icy_creeper.explode": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.icy_creeper.explode",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/icy_creeper/explode",
+				"stream": true
+			}
+		]
 	}
 }
