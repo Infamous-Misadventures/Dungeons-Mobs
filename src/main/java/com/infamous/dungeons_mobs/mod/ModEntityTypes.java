@@ -240,7 +240,7 @@ public class ModEntityTypes {
                     .clientTrackingRange(8)
                     .setCustomClientFactory((spawnEntity,world) -> new IcyCreeperEntity(world))
                     .build(new ResourceLocation(MODID, "icy_creeper").toString()),
-                    894731, 0xc9edf2
+                    0x5ccea5, 0xd9eef2
     );
 
     // WRAITH
