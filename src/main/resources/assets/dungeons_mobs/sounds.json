@@ -1602,5 +1602,106 @@
 				"stream": true
 			}
 		]
+	},
+	
+	
+	
+	
+	
+	
+	
+		"entity.skeleton_vanguard.idle": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.skeleton_vanguard.idle",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/skeleton_vanguard/idle1",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/skeleton_vanguard/idle2",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/skeleton_vanguard/idle3",
+				"stream": true
+			}
+		]
+	},
+			"entity.skeleton_vanguard.hurt": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.skeleton_vanguard.hurt",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/skeleton_vanguard/hurt1",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/skeleton_vanguard/hurt2",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/skeleton_vanguard/hurt3",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/skeleton_vanguard/hurt4",
+				"stream": true
+			}
+		]
+	},
+			"entity.skeleton_vanguard.death": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.skeleton_vanguard.death",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/skeleton_vanguard/death1",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/skeleton_vanguard/death2",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/skeleton_vanguard/death3",
+				"stream": true
+			}
+		]
+	},
+			"entity.skeleton_vanguard.attack": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.skeleton_vanguard.attack",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/skeleton_vanguard/attack1",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/skeleton_vanguard/attack2",
+				"stream": true
+			}
+		]
+	},
+			"entity.skeleton_vanguard.step": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.skeleton_vanguard.step",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/skeleton_vanguard/step1",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/skeleton_vanguard/step2",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/skeleton_vanguard/step3",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/skeleton_vanguard/step4",
+				"stream": true
+			}
+		]
 	}
 }

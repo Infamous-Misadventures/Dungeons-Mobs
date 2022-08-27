@@ -290,5 +290,11 @@
   "subtitles.entity.ice_chunk.idle_loop": "Ice Chunk crackles",
   "subtitles.entity.ice_chunk.summoned": "Ice Chunk appears",
   "subtitles.entity.ice_chunk.fall": "Ice Chunk falls",
-  "subtitles.entity.ice_chunk.land": "Ice Chunk smashes"
+  "subtitles.entity.ice_chunk.land": "Ice Chunk smashes",
+  
+  "subtitles.entity.skeleton_vanguard.idle": "Skeleton Vanguard rattles",
+  "subtitles.entity.skeleton_vanguard.hurt": "Skeleton Vanguard hurts",
+  "subtitles.entity.skeleton_vanguard.death": "Skeleton Vanguard dies",
+  "subtitles.entity.skeleton_vanguard.attack": "Skeleton Vanguard stabs",
+  "subtitles.entity.skeleton_vanguard.step": "Footsteps"
 }
