@@ -401,13 +401,13 @@ public class DungeonsIllusionerEntity extends SpellcastingIllagerEntity implemen
          mob.getNavigation().stop();
 
          if (mob.getSummonCloneTick() == 1 && !this.e) {
-            DungeonsIllusionerEntity.this.setSummonCloneTick(60 - DungeonsIllusionerEntity.this.getRandom().nextInt(8));
+            DungeonsIllusionerEntity.this.setSummonCloneTick(30 - DungeonsIllusionerEntity.this.getRandom().nextInt(8));
             this.e = true;
             return;
          }
 
-         if (DungeonsIllusionerEntity.this.getSummonCloneTick() >= this.v) {
-            this.v += 8 + DungeonsIllusionerEntity.this.getRandom().nextInt(8);
+         if (DungeonsIllusionerEntity.this.getSummonCloneTick() >= this.v && this.e) {
+            this.v = this.v + 3 + DungeonsIllusionerEntity.this.getRandom().nextInt(5);
             summonIllusionerClones();
          }
 
