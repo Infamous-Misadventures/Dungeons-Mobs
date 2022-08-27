@@ -100,7 +100,7 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
 	protected void registerGoals() {
 		super.registerGoals();
 		this.goalSelector.addGoal(0, new SwimGoal(this));
-		this.goalSelector.addGoal(0, new UseShieldGoal(this, 5.0D, 60, 160, 15, 10));
+		this.goalSelector.addGoal(0, new UseShieldGoal(this, 7.5D, 60, 160, 15, 10));
 		this.goalSelector.addGoal(1, new RoyalGuardEntity.BasicAttackGoal(this));
 		this.goalSelector.addGoal(2, new ApproachTargetGoal(this, 0, 1.0D, true));
 		this.goalSelector.addGoal(1, new AbstractIllagerEntity.RaidOpenDoorGoal(this));
@@ -213,7 +213,7 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
 
 	public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
 		return ArmoredVindicatorEntity.setCustomAttributes().add(Attributes.KNOCKBACK_RESISTANCE, 0.6D)
-				.add(Attributes.MOVEMENT_SPEED, (double) 0.325F).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
+				.add(Attributes.MOVEMENT_SPEED, (double) 0.325F).add(Attributes.FOLLOW_RANGE, 18.0D).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
 	}
 
 	@Override
@@ -310,7 +310,6 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
 			f += 0.75F;
 		}
 		if (this.random.nextFloat() < f) {
-			this.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.8F + this.level.random.nextFloat() * 0.4F);
             this.shieldCooldownTime = 100;
 			this.stopUsingItem();
 			this.level.broadcastEntityEvent(this, (byte) 30);
@@ -319,7 +318,9 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
 
 	@Override
 	protected void playHurtSound(DamageSource damageSource) {
-		if (this.isBlocking()) {
+		if (this.shieldCooldownTime == 100) {
+			this.playSound(SoundEvents.SHIELD_BREAK, 1.0F, 0.8F + this.level.random.nextFloat() * 0.4F);
+		} else if (this.isBlocking()) {
 			this.playSound(SoundEvents.SHIELD_BLOCK, 1.0F, 0.8F + this.level.random.nextFloat() * 0.4F);
 		} else {
 			super.playHurtSound(damageSource);

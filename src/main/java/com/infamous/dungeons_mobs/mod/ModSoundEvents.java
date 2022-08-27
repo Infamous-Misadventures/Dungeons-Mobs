@@ -101,4 +101,10 @@ public class ModSoundEvents {
 	public static final RegistryObject<SoundEvent> ICE_CHUNK_SUMMONED = SOUNDS.register("entity.ice_chunk.summoned", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.ice_chunk.summoned")));
 	public static final RegistryObject<SoundEvent> ICE_CHUNK_FALL = SOUNDS.register("entity.ice_chunk.fall", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.ice_chunk.fall")));
 	public static final RegistryObject<SoundEvent> ICE_CHUNK_LAND = SOUNDS.register("entity.ice_chunk.land", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.ice_chunk.land")));
+	
+	public static final RegistryObject<SoundEvent> SKELETON_VANGUARD_ATTACK = SOUNDS.register("entity.skeleton_vanguard.attack", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.skeleton_vanguard.attack")));
+	public static final RegistryObject<SoundEvent> SKELETON_VANGUARD_IDLE = SOUNDS.register("entity.skeleton_vanguard.idle", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.skeleton_vanguard.idle")));
+	public static final RegistryObject<SoundEvent> SKELETON_VANGUARD_HURT = SOUNDS.register("entity.skeleton_vanguard.hurt", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.skeleton_vanguard.hurt")));
+	public static final RegistryObject<SoundEvent> SKELETON_VANGUARD_DEATH = SOUNDS.register("entity.skeleton_vanguard.death", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.skeleton_vanguard.death")));
+	public static final RegistryObject<SoundEvent> SKELETON_VANGUARD_STEP = SOUNDS.register("entity.skeleton_vanguard.step", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.skeleton_vanguard.step")));
 }
