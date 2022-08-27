@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ShieldItem;
@@ -25,7 +26,14 @@ import software.bernie.example.client.DefaultBipedBoneIdents;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.geo.render.built.GeoCube;
+import software.bernie.geckolib3.geo.render.built.GeoModel;
+import software.bernie.geckolib3.model.provider.data.EntityModelData;
 import software.bernie.geckolib3.renderers.geo.ExtendedGeoEntityRenderer;
+
+import java.util.Optional;
+
+import static org.jline.utils.Colors.h;
+
 public class RoyalGuardRenderer extends ExtendedGeoEntityRenderer<RoyalGuardEntity> {
     public RoyalGuardRenderer(EntityRendererManager renderManager) {
         super(renderManager, new RoyalGuardModel());
@@ -209,55 +217,5 @@ public class RoyalGuardRenderer extends ExtendedGeoEntityRenderer<RoyalGuardEnti
             default:
                 return null;
         }
-    }
-
-    @Override
-    protected void prepareArmorPositionAndScale(GeoBone bone, ObjectList<ModelRenderer.ModelBox> cubeList, ModelRenderer sourceLimb, MatrixStack stack, boolean geoArmor, boolean modMatrixRot) {
-        GeoCube firstCube = (GeoCube)bone.childCubes.get(0);
-        ModelRenderer.ModelBox armorCube = (ModelRenderer.ModelBox)cubeList.get(0);
-        float targetSizeX = firstCube.size.x();
-        float targetSizeY = firstCube.size.y();
-        float targetSizeZ = firstCube.size.z();
-        float sourceSizeX = Math.abs(armorCube.maxX - armorCube.minX);
-        float sourceSizeY = Math.abs(armorCube.maxY - armorCube.minY);
-        float sourceSizeZ = Math.abs(armorCube.maxZ - armorCube.minZ);
-        float scaleX = targetSizeX / sourceSizeX;
-        float scaleY = targetSizeY / sourceSizeY;
-        float scaleZ = targetSizeZ / sourceSizeZ;
-        sourceLimb.setPos(-(bone.getPivotX() - (bone.getPivotX() * scaleX - bone.getPivotX()) / scaleX), -(bone.getPivotY() - (bone.getPivotY() * scaleY - bone.getPivotY()) / scaleY), bone.getPivotZ() - (bone.getPivotZ() * scaleZ - bone.getPivotZ()) / scaleZ);
-        if (!geoArmor) {
-            sourceLimb.xRot = -bone.getRotationX();
-            sourceLimb.yRot = -bone.getRotationY();
-            sourceLimb.zRot = bone.getRotationZ();
-        } else {
-            float xRot = -bone.getRotationX();
-            float yRot = -bone.getRotationY();
-            float zRot = bone.getRotationZ();
-
-
-            for(GeoBone tmpBone = bone.parent; tmpBone != null; tmpBone = tmpBone.parent) {
-                if(bone.getName().equals("armorBipedHead") && tmpBone.getName().equals("bipedBody")) {
-                   break;
-                }
-                xRot -= tmpBone.getRotationX();
-                yRot -= tmpBone.getRotationY();
-                zRot += tmpBone.getRotationZ();
-            }
-
-            if (modMatrixRot) {
-                xRot = (float)Math.toRadians((double)xRot);
-                yRot = (float)Math.toRadians((double)yRot);
-                zRot = (float)Math.toRadians((double)zRot);
-                stack.mulPose(new Quaternion(0.0F, 0.0F, zRot, false));
-                stack.mulPose(new Quaternion(0.0F, yRot, 0.0F, false));
-                stack.mulPose(new Quaternion(xRot, 0.0F, 0.0F, false));
-            } else {
-                sourceLimb.xRot = xRot;
-                sourceLimb.yRot = yRot;
-                sourceLimb.zRot = zRot;
-            }
-        }
-
-        stack.scale(scaleX, scaleY, scaleZ);
     }
 }

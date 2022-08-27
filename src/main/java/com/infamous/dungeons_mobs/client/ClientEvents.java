@@ -154,7 +154,8 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_SUNKEN_SKELETON.get(), SmartSkeletonRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.LASER_ORB.get(), OrbRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.N_LASER_ORB.get(), NecromancerOrbRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.GEO_ORB.get(),
+                manager -> new GeoOrbRenderer(manager));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.TRIDENT_FUME.get(), OrbRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ENDERSENT.get(), EndersentRenderer::new);

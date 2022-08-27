@@ -62,9 +62,9 @@ public class CustomVindicatorRenderer extends MobRenderer<VindicatorEntity, Illa
             }
             else return GOLD_ARMORED_VINDICATOR_TEXTURE;
         }
-        else if(entity instanceof RoyalGuardEntity){
-            return ROYAL_GUARD_TEXTURE;
-        }
+//        else if(entity instanceof RoyalGuardEntity){
+//            return ROYAL_GUARD_TEXTURE;
+//        }
         else if(entity instanceof VindicatorChefEntity){
             return VINDICATOR_CHEF_TEXTURE;
         }
