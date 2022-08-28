@@ -95,7 +95,7 @@ public class Tornado2Entity extends CreatureEntity implements IAnimatable {
         super.baseTick();
         this.ltick ++;
         if (this.ltick == 4) {
-            this.playSound(ModSoundEvents.B_WIND.get(), 1.5f,1);
+            this.playSound(ModSoundEvents.WINDCALLER_BLAST_WIND.get(), 1.5f,1);
         }
         if (this.ltick <= 3 && this.getTargetr() != null && this.getCaster() != null) {
             WindcallerEntity v = (WindcallerEntity)this.getCaster();
