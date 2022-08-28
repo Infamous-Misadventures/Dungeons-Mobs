@@ -4,7 +4,7 @@ import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
 import com.infamous.dungeons_mobs.client.particle.SnowflakeParticle;
-import com.infamous.dungeons_mobs.client.renderer.creeper.CustomCreeperRenderer;
+import com.infamous.dungeons_mobs.client.renderer.creeper.IcyCreeperRenderer;
 import com.infamous.dungeons_mobs.client.renderer.ender.BlastlingRenderer;
 import com.infamous.dungeons_mobs.client.renderer.ender.EndersentRenderer;
 import com.infamous.dungeons_mobs.client.renderer.ender.SnarelingRenderer;
@@ -108,7 +108,7 @@ public class ClientEvents {
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ENCHANTER.get(), EnchanterRenderer::new);
 
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ICY_CREEPER.get(), CustomCreeperRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ICY_CREEPER.get(), IcyCreeperRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WRAITH.get(), WraithRenderer::new);
 

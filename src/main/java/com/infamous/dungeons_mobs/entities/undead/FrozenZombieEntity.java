@@ -1,11 +1,22 @@
 package com.infamous.dungeons_mobs.entities.undead;
 
+import java.util.Random;
+
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
-import com.infamous.dungeons_mobs.goals.switchcombat.ThrowAndMeleeAttackGoal;
 import com.infamous.dungeons_mobs.goals.switchcombat.SwitchCombatItemGoal;
-import net.minecraft.entity.*;
+import com.infamous.dungeons_mobs.goals.switchcombat.ThrowAndMeleeAttackGoal;
+import com.infamous.dungeons_mobs.mod.ModSoundEvents;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.IRangedAttackMob;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.ai.goal.HurtByTargetGoal;
+import net.minecraft.entity.ai.goal.MoveThroughVillageGoal;
+import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
+import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.monster.ZombifiedPiglinEntity;
@@ -14,16 +25,21 @@ import net.minecraft.entity.passive.TurtleEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.SnowballEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.EggItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.SnowballItem;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.*;
-
-import java.util.Random;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.IServerWorld;
+import net.minecraft.world.World;
 
 public class FrozenZombieEntity extends ZombieEntity implements IRangedAttackMob {
     public FrozenZombieEntity(World worldIn) {
@@ -50,6 +66,18 @@ public class FrozenZombieEntity extends ZombieEntity implements IRangedAttackMob
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
         this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, TurtleEntity.class, 10, true, false, TurtleEntity.BABY_ON_LAND_SELECTOR));
     }
+    
+    protected SoundEvent getAmbientSound() {
+        return ModSoundEvents.FROZEN_ZOMBIE_IDLE.get();
+     }
+
+     protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
+        return ModSoundEvents.FROZEN_ZOMBIE_HURT.get();
+     }
+
+     protected SoundEvent getDeathSound() {
+        return ModSoundEvents.FROZEN_ZOMBIE_DEATH.get();
+     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return ZombieEntity.createAttributes();
@@ -98,7 +126,7 @@ public class FrozenZombieEntity extends ZombieEntity implements IRangedAttackMob
         double yDifference = adjustedEyeY - snowballentity.getY();
         double zDifference = livingEntity.getZ() - this.getZ();
         float adjustedHorizontalDistance = MathHelper.sqrt(xDifference * xDifference + zDifference * zDifference) * 0.2F;
-        snowballentity.shoot(xDifference, yDifference + (double)adjustedHorizontalDistance, zDifference, 1.6F, 12.0F);
+        snowballentity.shoot(xDifference, yDifference + (double)adjustedHorizontalDistance, zDifference, 1.6F, 7.5F);
         this.playSound(SoundEvents.SNOW_GOLEM_SHOOT, 1.0F, 0.4F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
         this.level.addFreshEntity(snowballentity);
     }
@@ -111,6 +139,12 @@ public class FrozenZombieEntity extends ZombieEntity implements IRangedAttackMob
             super(zombieEntity, speedAmplifier, attackInterval, maxDistance, useLongMemory);
             this.zombie = zombieEntity;
         }
+        
+        @Override
+    	public boolean hasThrowableItemInMainhand(){
+    		return (this.zombie.getMainHandItem().getItem() instanceof SnowballItem
+    				| this.zombie.getMainHandItem().getItem() instanceof EggItem) && zombie.getTarget() != null && !zombie.getTarget().hasEffect(Effects.MOVEMENT_SLOWDOWN);
+    	}
 
         public void start() {
             super.start();

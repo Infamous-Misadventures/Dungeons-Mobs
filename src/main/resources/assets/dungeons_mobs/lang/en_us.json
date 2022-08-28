@@ -242,15 +242,7 @@
   "subtitles.entity.squall_golem.step": "Squall Golem steps",
   
   "subtitles.entity.royal_guard.attack": "Royal Guard attacks",
-  "subtitles.entity.royal_guard.step": "Royal Guard steps",
-  
-  "subtitles.entity.windcaller.idle": "Windcaller mumbles",
-  "subtitles.entity.windcaller.hurt": "Windcaller hurts",
-  "subtitles.entity.windcaller.death": "Windcaller dies",
-  "subtitles.entity.windcaller.pre_blast_attack": "Windcaller readies blast",
-  "subtitles.entity.windcaller.blast_attack": "Wind rages",
-  "subtitles.entity.windcaller.pre_lift_attack": "Windcaller calls",
-  "subtitles.entity.windcaller.lift_attack": "Wind rages",
+  "subtitles.entity.royal_guard.step": "Royal Guard steps",  
   
   "subtitles.entity.snareling.idle": "Snareling gurgles",
   "subtitles.entity.snareling.hurt": "Snareling hurts",
@@ -303,5 +295,41 @@
   "subtitles.entity.jungle_zombie.idle": "Jungle Zombie gurgles",
   "subtitles.entity.jungle_zombie.hurt": "Jungle Zombie hurts",
   "subtitles.entity.jungle_zombie.death": "Jungle Zombie dies",
-  "subtitles.entity.jungle_zombie.step": "Footsteps"
+  "subtitles.entity.jungle_zombie.step": "Footsteps",
+  
+  "subtitles.entity.frozen_zombie.idle": "Frozen Zombie groans",
+  "subtitles.entity.frozen_zombie.hurt": "Frozen Zombie hurts",
+  "subtitles.entity.frozen_zombie.death": "Frozen Zombie dies",
+  "subtitles.entity.frozen_zombie.snowball_land": "Snowball impacts",
+  
+  "subtitles.entity.mossy_skeleton.idle": "Mossy Skeleton creaks",
+  "subtitles.entity.mossy_skeleton.hurt": "Mossy Skeleton hurts",
+  "subtitles.entity.mossy_skeleton.death": "Mossy Skeleton dies",
+  "subtitles.entity.mossy_skeleton.shoot": "Mossy Skeleton shoots",
+  "subtitles.entity.mossy_skeleton.step": "Footsteps",
+  
+  "subtitles.entity.necromancer.idle": "Necromancer rattles",
+  "subtitles.entity.necromancer.laugh": "Necromancer cackles",
+  "subtitles.entity.necromancer.hurt": "Necromancer hurts",
+  "subtitles.entity.necromancer.death": "Necromancer dies",
+  "subtitles.entity.necromancer.shoot": "Necromancer shoots",
+  "subtitles.entity.necromancer.orb_impact": "Necromancer orb impacts",
+  "subtitles.entity.necromancer.step": "Footsteps",
+  "subtitles.entity.necromancer.prepare_summon": "Necromancer prepares summon",
+  "subtitles.entity.necromancer.summon": "Necromancer summons mob",
+  
+  "subtitles.entity.windcaller.idle": "Windcaller mumbles",
+  "subtitles.entity.windcaller.hurt": "Windcaller hurts",
+  "subtitles.entity.windcaller.death": "Windcaller dies",
+  "subtitles.entity.windcaller.blast_vocal": "Windcaller shouts",
+  "subtitles.entity.windcaller.blast_wind": "Wind blasts",
+  "subtitles.entity.windcaller.lift_vocal": "Windcaller calls",
+  "subtitles.entity.windcaller.lift_wind": "Wind swirls",
+  "subtitles.entity.windcaller.fly_loop": "Windcaller hovers",
+  
+  "subtitles.entity.illusioner.death": "Illusioner dies",
+  
+  "subtitles.entity.mountaineer.idle": "Mountaineer mutters",
+  "subtitles.entity.mountaineer.hurt": "Mountaineer hurts",
+  "subtitles.entity.mountaineer.death": "Mountaineer dies"
 }

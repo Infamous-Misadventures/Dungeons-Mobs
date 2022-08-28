@@ -23,7 +23,7 @@ public class CustomVindicatorRenderer extends MobRenderer<VindicatorEntity, Illa
     private static final ResourceLocation GOLD_ARMORED_VINDICATOR_TEXTURE = new ResourceLocation(MODID, "textures/entity/illager/gold_armored_vindicator.png");
     private static final ResourceLocation DIAMOND_ARMORED_VINDICATOR_TEXTURE = new ResourceLocation(MODID, "textures/entity/illager/diamond_armored_vindicator.png");
     private static final ResourceLocation VINDICATOR_TEXTURE = new ResourceLocation("textures/entity/illager/vindicator.png");
-    private static final ResourceLocation ROYAL_GUARD_TEXTURE = new ResourceLocation(MODID,"textures/entity/illager/royal_guard.png");
+    private static final ResourceLocation MOUNTAINEER_TEXTURE = new ResourceLocation(MODID,"textures/entity/illager/mountaineer.png");
     private static final ResourceLocation VINDICATOR_CHEF_TEXTURE = new ResourceLocation(MODID, "textures/entity/illager/vindicator_chef.png");
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -62,13 +62,11 @@ public class CustomVindicatorRenderer extends MobRenderer<VindicatorEntity, Illa
             }
             else return GOLD_ARMORED_VINDICATOR_TEXTURE;
         }
-//        else if(entity instanceof RoyalGuardEntity){
-//            return ROYAL_GUARD_TEXTURE;
-//        }
-        else if(entity instanceof VindicatorChefEntity){
+        else if(entity instanceof MountaineerEntity){
+            return MOUNTAINEER_TEXTURE;
+        } else if(entity instanceof VindicatorChefEntity){
             return VINDICATOR_CHEF_TEXTURE;
-        }
-        else{
+        } else {
             return VINDICATOR_TEXTURE;
         }
     }
