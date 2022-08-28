@@ -1717,5 +1717,96 @@
 				"stream": true
 			}
 		]
+	},
+	
+	
+	
+	
+	
+	
+	
+		"entity.jungle_zombie.idle": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.jungle_zombie.idle",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/jungle_zombie/idle1",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/jungle_zombie/idle2",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/jungle_zombie/idle3",
+				"stream": true
+			}
+		]
+	},
+			"entity.jungle_zombie.hurt": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.jungle_zombie.hurt",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/jungle_zombie/hurt1",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/jungle_zombie/hurt2",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/jungle_zombie/hurt3",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/jungle_zombie/hurt4",
+				"stream": true
+			}
+		]
+	},
+			"entity.jungle_zombie.death": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.jungle_zombie.death",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/jungle_zombie/death1",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/jungle_zombie/death2",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/jungle_zombie/death3",
+				"stream": true
+			}
+		]
+	},
+			"entity.jungle_zombie.step": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.jungle_zombie.step",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/jungle_zombie/step1",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/jungle_zombie/step2",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/jungle_zombie/step3",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/jungle_zombie/step4",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/jungle_zombie/step5",
+				"stream": true
+			}
+		]
 	}
 }

@@ -185,17 +185,17 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("royal_guard_attack", true));
 		} else if (this.isBlocking()) {
 			if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("royal_guard_walk_blocking", true));
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("royal_guard_new_walk_blocking", true));
 			} else {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("royal_guard_block", true));
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("royal_guard_new_blocking", true));
 			}
 		} else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("royal_guard_walk", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("royal_guard_new_walk", true));
 		} else {
 			if (this.isCelebrating()) {
 				event.getController().setAnimation(new AnimationBuilder().addAnimation("royal_guard_celebrate", true));
 			} else {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("royal_guard_idle", true));
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("royal_guard_new_idle", true));
 			}
 		}
 		return PlayState.CONTINUE;

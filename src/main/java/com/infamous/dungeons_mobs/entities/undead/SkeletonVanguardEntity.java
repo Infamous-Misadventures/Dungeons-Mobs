@@ -76,8 +76,8 @@ public class SkeletonVanguardEntity extends SkeletonEntity implements IShieldUse
 	private int shieldCooldownTime;
 
 	public int attackAnimationTick;
-	public int attackAnimationLength = 17;
-	public int attackAnimationActionPoint = 7;
+	public int attackAnimationLength = 22;
+	public int attackAnimationActionPoint = 10;
 
 	public SkeletonVanguardEntity(World worldIn) {
 		super(ModEntityTypes.SKELETON_VANGUARD.get(), worldIn);
@@ -198,15 +198,15 @@ public class SkeletonVanguardEntity extends SkeletonEntity implements IShieldUse
 		} else if (this.isBlocking()) {
 			if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
 				event.getController()
-						.setAnimation(new AnimationBuilder().addAnimation("skeleton_vanguard_walk_blocking", true));
+						.setAnimation(new AnimationBuilder().addAnimation("skeleton_vanguard_new_walk_blocking", true));
 			} else {
 				event.getController()
-						.setAnimation(new AnimationBuilder().addAnimation("skeleton_vanguard_blocking", true));
+						.setAnimation(new AnimationBuilder().addAnimation("skeleton_vanguard_new_blocking", true));
 			}
 		} else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("skeleton_vanguard_walk", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("skeleton_vanguard_new_walk", true));
 		} else {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("skeleton_vanguard_idle", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("skeleton_vanguard_new_idle", true));
 		}
 		return PlayState.CONTINUE;
 	}

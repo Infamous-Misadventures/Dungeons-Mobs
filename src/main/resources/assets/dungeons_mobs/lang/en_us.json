@@ -298,5 +298,10 @@
   "subtitles.entity.skeleton_vanguard.attack": "Skeleton Vanguard stabs",
   "subtitles.entity.skeleton_vanguard.step": "Footsteps",
   
-  "subtitles.entity.icy_creeper.explode": "Icy Creeper explodes"
+  "subtitles.entity.icy_creeper.explode": "Icy Creeper explodes",
+  
+  "subtitles.entity.jungle_zombie.idle": "Jungle Zombie gurgles",
+  "subtitles.entity.jungle_zombie.hurt": "Jungle Zombie hurts",
+  "subtitles.entity.jungle_zombie.death": "Jungle Zombie dies",
+  "subtitles.entity.jungle_zombie.step": "Footsteps"
 }
