@@ -22,6 +22,7 @@ public class RedstoneMineRenderer extends GeoProjectilesRenderer<RedstoneMineEnt
       if(entityIn.getLifeTicks() > RedstoneMineEntity.LIFE_TIME){
          return;
       }
+      matrixStackIn.translate(0, 0.01F, 0);
       super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
    }
 

@@ -225,13 +225,7 @@
   "subtitles.entity.geomancer.attack": "Geomancer summons pillars",
   "subtitles.entity.geomancer.wall_spawn": "Geomancer Wall emerges",
   "subtitles.entity.geomancer.wall_despawn": "Geomancer Wall vanishes",
-  "subtitles.entity.geomancer.bomb_spawn": "Geomancer Bomb emerges",
-  
-  "subtitles.entity.redstone_golem.idle": "Redstone Golem breathes",
-  "subtitles.entity.redstone_golem.hurt": "Redstone Golem hurts",
-  "subtitles.entity.redstone_golem.death": "Redstone Golem dies",
-  "subtitles.entity.redstone_golem.attack": "Redstone Golem attacks",
-  "subtitles.entity.redstone_golem.summon_mine": "Redstone Golem summons mines",
+  "subtitles.entity.geomancer.bomb_spawn": "Geomancer Bomb emerges",  
   
   "subtitles.entity.squall_golem.idle": "Squall Golem creaks",
   "subtitles.entity.squall_golem.hurt": "Squall Golem hurts",
@@ -331,5 +325,13 @@
   
   "subtitles.entity.mountaineer.idle": "Mountaineer mutters",
   "subtitles.entity.mountaineer.hurt": "Mountaineer hurts",
-  "subtitles.entity.mountaineer.death": "Mountaineer dies"
+  "subtitles.entity.mountaineer.death": "Mountaineer dies",
+  
+  "subtitles.entity.redstone_golem.idle": "Redstone Golem breathes",
+  "subtitles.entity.redstone_golem.hurt": "Redstone Golem hurts",
+  "subtitles.entity.redstone_golem.death": "Redstone Golem dies",
+  "subtitles.entity.redstone_golem.step": "Redstone Golem steps",
+  "subtitles.entity.redstone_golem.attack": "Redstone Golem attacks",
+  "subtitles.entity.redstone_golem.summon_mines": "Redstone Golem summons mines",
+  "subtitles.entity.redstone_golem.spark": "Redstone sparks"
 }

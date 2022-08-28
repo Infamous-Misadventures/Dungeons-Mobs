@@ -401,108 +401,6 @@
 			}
 		]
 	},
-	"entity.redstone_golem.idle": {
-		"category": "entity",
-		"subtitle": "subtitles.entity.redstone_golem.idle",
-		"sounds": [
-			{
-				"name": "dungeons_mobs:entities/redstone_golem/idle1",
-				"stream": true
-			},
-			{
-				"name": "dungeons_mobs:entities/redstone_golem/idle2",
-				"stream": true
-			},
-			{
-				"name": "dungeons_mobs:entities/redstone_golem/idle3",
-				"stream": true
-			},
-			{
-				"name": "dungeons_mobs:entities/redstone_golem/idle4",
-				"stream": true
-			},
-			{
-				"name": "dungeons_mobs:entities/redstone_golem/idle5",
-				"stream": true
-			}
-		]
-	},
-	"entity.redstone_golem.death": {
-		"category": "entity",
-		"subtitle": "subtitles.entity.redstone_golem.death",
-		"sounds": [
-			{
-				"name": "dungeons_mobs:entities/redstone_golem/death1",
-				"stream": true
-			},
-			{
-				"name": "dungeons_mobs:entities/redstone_golem/death2",
-				"stream": true
-			}
-		]
-	},
-	"entity.redstone_golem.attack": {
-		"category": "entity",
-		"subtitle": "subtitles.entity.redstone_golem.attack",
-		"sounds": [
-			{
-				"name": "dungeons_mobs:entities/redstone_golem/swipe1",
-				"stream": true
-			},
-			{
-				"name": "dungeons_mobs:entities/redstone_golem/swipe2",
-				"stream": true
-			}
-		]
-	},
-	"entity.redstone_golem.hurt": {
-		"category": "entity",
-		"subtitle": "subtitles.entity.redstone_golem.hurt",
-		"sounds": [
-			{
-				"name": "dungeons_mobs:entities/redstone_golem/hurt1",
-				"stream": true
-			},
-			{
-				"name": "dungeons_mobs:entities/redstone_golem/hurt2",
-				"stream": true
-			},
-			{
-				"name": "dungeons_mobs:entities/redstone_golem/hurt3",
-				"stream": true
-			},
-			{
-				"name": "dungeons_mobs:entities/redstone_golem/hurt4",
-				"stream": true
-			},
-			{
-				"name": "dungeons_mobs:entities/redstone_golem/hurt5",
-				"stream": true
-			},
-			{
-				"name": "dungeons_mobs:entities/redstone_golem/hurt6",
-				"stream": true
-			},
-			{
-				"name": "dungeons_mobs:entities/redstone_golem/hurt7",
-				"stream": true
-			},
-			{
-				"name": "dungeons_mobs:entities/redstone_golem/hurt8",
-				"stream": true
-			}
-		]
-	},
-	"entity.redstone_golem.summon_mine": {
-		"category": "entity",
-		"subtitle": "subtitles.entity.redstone_golem.summon_mine",
-		"sounds": [
-			{
-				"name": "dungeons_mobs:entities/redstone_golem/summon",
-				"stream": true
-			}
-		]
-	},
 	"entity.squall_golem.idle": {
 		"category": "entity",
 		"subtitle": "subtitles.entity.squall_golem.idle",
@@ -2275,6 +2173,210 @@
 			},
 			{
 				"name": "dungeons_mobs:entities/mountaineer/death4",
+				"stream": true
+			}
+		]
+	},
+	
+	
+	
+	
+	
+	"entity.redstone_golem.idle": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.redstone_golem.idle",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/redstone_golem/idle1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/redstone_golem/idle2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/redstone_golem/idle3",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/redstone_golem/idle4",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/redstone_golem/idle5",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/redstone_golem/idle6",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/redstone_golem/idle7",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/redstone_golem/idle8",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/redstone_golem/idle9",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/redstone_golem/idle10",
+				"stream": true
+			}
+		]
+	},
+		"entity.redstone_golem.hurt": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.redstone_golem.hurt",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/redstone_golem/hurt1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/redstone_golem/hurt2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/redstone_golem/hurt3",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/redstone_golem/hurt4",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/redstone_golem/hurt5",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/redstone_golem/hurt6",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/redstone_golem/hurt7",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/redstone_golem/hurt8",
+				"stream": true
+			}
+		]
+	},
+		"entity.redstone_golem.death": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.redstone_golem.death",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/redstone_golem/death1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/redstone_golem/death2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/redstone_golem/death3",
+				"stream": true
+			}
+		]
+	},
+		"entity.redstone_golem.step": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.redstone_golem.step",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/redstone_golem/step1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/redstone_golem/step2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/redstone_golem/step3",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/redstone_golem/step4",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/redstone_golem/step5",
+				"stream": true
+			}
+		]
+	},
+		"entity.redstone_golem.attack": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.redstone_golem.attack",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/redstone_golem/attack1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/redstone_golem/attack2",
+				"stream": true
+			}
+		]
+	},
+		"entity.redstone_golem.idle_pulse_loop": {
+		"category": "entity",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/redstone_golem/idle_pulse_loop",
+				"stream": true
+			}
+		]
+	},
+		"entity.redstone_golem.spark": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.redstone_golem.spark",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/redstone_golem/spark1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/redstone_golem/spark2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/redstone_golem/spark3",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/redstone_golem/spark4",
+				"stream": true
+			},			
+						{
+				"name": "dungeons_mobs:entities/redstone_golem/spark5",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/redstone_golem/spark6",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/redstone_golem/spark7",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/redstone_golem/spark8",
+				"stream": true
+			}
+		]
+	},
+		"entity.redstone_golem.summon_mines": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.redstone_golem.summon_mines",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/redstone_golem/summon_mines",
 				"stream": true
 			}
 		]
