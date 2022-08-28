@@ -38,12 +38,7 @@ public class ModSoundEvents {
 	public static final RegistryObject<SoundEvent> GEOMANCER_WALL_SPAWN = SOUNDS.register("entity.geomancer.wall_spawn", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.geomancer.wall_spawn")));
 	public static final RegistryObject<SoundEvent> GEOMANCER_WALL_DESPAWN = SOUNDS.register("entity.geomancer.wall_despawn", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.geomancer.wall_despawn")));
 	public static final RegistryObject<SoundEvent> GEOMANCER_BOMB_SPAWN = SOUNDS.register("entity.geomancer.bomb_spawn", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.geomancer.bomb_spawn")));
-
-	public static final RegistryObject<SoundEvent> REDSTONE_GOLEM_IDLE = SOUNDS.register("entity.redstone_golem.idle", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.redstone_golem.idle")));
-	public static final RegistryObject<SoundEvent> REDSTONE_GOLEM_HURT = SOUNDS.register("entity.redstone_golem.hurt", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.redstone_golem.hurt")));
-	public static final RegistryObject<SoundEvent> REDSTONE_GOLEM_DEATH = SOUNDS.register("entity.redstone_golem.death", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.redstone_golem.death")));
-	public static final RegistryObject<SoundEvent> REDSTONE_GOLEM_ATTACK = SOUNDS.register("entity.redstone_golem.attack", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.redstone_golem.attack")));
-	public static final RegistryObject<SoundEvent> REDSTONE_GOLEM_SUMMON_MINE = SOUNDS.register("entity.redstone_golem.summon_mine", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.redstone_golem.summon_mine")));
+	
 	public static final RegistryObject<SoundEvent> SQUALL_GOLEM_IDLE = SOUNDS.register("entity.squall_golem.idle", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.squall_golem.idle")));
 	public static final RegistryObject<SoundEvent> SQUALL_GOLEM_HURT = SOUNDS.register("entity.squall_golem.hurt", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.squall_golem.hurt")));
 	public static final RegistryObject<SoundEvent> SQUALL_GOLEM_DEATH = SOUNDS.register("entity.squall_golem.death", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.squall_golem.death")));
@@ -142,4 +137,13 @@ public class ModSoundEvents {
 	public static final RegistryObject<SoundEvent> MOUNTAINEER_IDLE = SOUNDS.register("entity.mountaineer.idle", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.mountaineer.idle")));
 	public static final RegistryObject<SoundEvent> MOUNTAINEER_HURT = SOUNDS.register("entity.mountaineer.hurt", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.mountaineer.hurt")));
 	public static final RegistryObject<SoundEvent> MOUNTAINEER_DEATH = SOUNDS.register("entity.mountaineer.death", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.mountaineer.death")));
+	
+	public static final RegistryObject<SoundEvent> REDSTONE_GOLEM_IDLE = SOUNDS.register("entity.redstone_golem.idle", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.redstone_golem.idle")));
+	public static final RegistryObject<SoundEvent> REDSTONE_GOLEM_HURT = SOUNDS.register("entity.redstone_golem.hurt", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.redstone_golem.hurt")));
+	public static final RegistryObject<SoundEvent> REDSTONE_GOLEM_DEATH = SOUNDS.register("entity.redstone_golem.death", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.redstone_golem.death")));
+	public static final RegistryObject<SoundEvent> REDSTONE_GOLEM_STEP = SOUNDS.register("entity.redstone_golem.step", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.redstone_golem.step")));
+	public static final RegistryObject<SoundEvent> REDSTONE_GOLEM_ATTACK = SOUNDS.register("entity.redstone_golem.attack", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.redstone_golem.attack")));
+	public static final RegistryObject<SoundEvent> REDSTONE_GOLEM_SUMMON_MINES = SOUNDS.register("entity.redstone_golem.summon_mines", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.redstone_golem.summon_mines")));
+	public static final RegistryObject<SoundEvent> REDSTONE_GOLEM_IDLE_PULSE_LOOP = SOUNDS.register("entity.redstone_golem.idle_pulse_loop", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.redstone_golem.idle_pulse_loop")));
+	public static final RegistryObject<SoundEvent> REDSTONE_GOLEM_SPARK = SOUNDS.register("entity.redstone_golem.spark", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.redstone_golem.spark")));
 }
