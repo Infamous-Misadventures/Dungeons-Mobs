@@ -24,50 +24,50 @@ public class IcyCreeperModel<T extends Entity> extends SegmentedModel<T> {
 	private final ModelRenderer leg3;
 	private final ModelRenderer leg4;
 
-	public IcyCreeperModel() {
+	public IcyCreeperModel(float inflation) {
 		texWidth = 64;
 		texHeight = 32;
 
 		body = new ModelRenderer(this);
 		body.setPos(0.0F, 18.0F, 0.0F);
-		body.texOffs(16, 16).addBox(-4.0F, -12.0F, -2.0F, 8.0F, 12.0F, 4.0F, 0.0F, false);
-		body.texOffs(40, 16).addBox(-4.0F, -12.0F, -2.0F, 8.0F, 12.0F, 4.0F, 0.25F, true);
+		body.texOffs(16, 16).addBox(-4.0F, -12.0F, -2.0F, 8.0F, 12.0F, 4.0F, inflation + 0.0F, false);
+		body.texOffs(40, 16).addBox(-4.0F, -12.0F, -2.0F, 8.0F, 12.0F, 4.0F, inflation + 0.25F, true);
 
 		head = new ModelRenderer(this);
 		head.setPos(0.0F, -12.0F, 0.0F);
 		body.addChild(head);
-		head.texOffs(0, 0).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, 0.0F, false);
-		head.texOffs(32, 0).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, 0.25F, true);
+		head.texOffs(0, 0).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, inflation + 0.0F, false);
+		head.texOffs(32, 0).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, inflation + 0.25F, true);
 
 		leg1 = new ModelRenderer(this);
 		leg1.setPos(-2.0F, 18.0F, 2.0F);
-		leg1.texOffs(0, 16).addBox(-2.0F, 0.0F, 0.0F, 4.0F, 6.0F, 4.0F, 0.0F, false);
+		leg1.texOffs(0, 16).addBox(-2.0F, 0.0F, 0.0F, 4.0F, 6.0F, 4.0F, inflation + 0.0F, false);
 
 		leg1_r1 = new ModelRenderer(this);
 		leg1_r1.setPos(0.0F, 3.0F, 2.0F);
 		leg1.addChild(leg1_r1);
 		setRotationAngle(leg1_r1, 0.0F, 3.1416F, 0.0F);
-		leg1_r1.texOffs(48, 0).addBox(-2.0F, -3.0F, -2.0F, 4.0F, 4.0F, 4.0F, 0.25F, false);
+		leg1_r1.texOffs(48, 0).addBox(-2.0F, -3.0F, -2.0F, 4.0F, 4.0F, 4.0F, inflation + 0.25F, false);
 
 		leg2 = new ModelRenderer(this);
 		leg2.setPos(2.0F, 18.0F, 2.0F);
-		leg2.texOffs(0, 16).addBox(-2.0F, 0.0F, 0.0F, 4.0F, 6.0F, 4.0F, 0.0F, false);
+		leg2.texOffs(0, 16).addBox(-2.0F, 0.0F, 0.0F, 4.0F, 6.0F, 4.0F, inflation + 0.0F, false);
 
 		leg2_r1 = new ModelRenderer(this);
 		leg2_r1.setPos(0.0F, 2.0F, 2.0F);
 		leg2.addChild(leg2_r1);
 		setRotationAngle(leg2_r1, 0.0F, 3.1416F, 0.0F);
-		leg2_r1.texOffs(48, 0).addBox(-2.0F, -2.0F, -2.0F, 4.0F, 4.0F, 4.0F, 0.25F, true);
+		leg2_r1.texOffs(48, 0).addBox(-2.0F, -2.0F, -2.0F, 4.0F, 4.0F, 4.0F, inflation + 0.25F, true);
 
 		leg3 = new ModelRenderer(this);
 		leg3.setPos(-2.0F, 18.0F, -2.0F);
-		leg3.texOffs(0, 16).addBox(-2.0F, 0.0F, -4.0F, 4.0F, 6.0F, 4.0F, 0.0F, false);
-		leg3.texOffs(48, 0).addBox(-2.0F, 0.0F, -4.0F, 4.0F, 4.0F, 4.0F, 0.25F, true);
+		leg3.texOffs(0, 16).addBox(-2.0F, 0.0F, -4.0F, 4.0F, 6.0F, 4.0F, inflation + 0.0F, false);
+		leg3.texOffs(48, 0).addBox(-2.0F, 0.0F, -4.0F, 4.0F, 4.0F, 4.0F, inflation + 0.25F, true);
 
 		leg4 = new ModelRenderer(this);
 		leg4.setPos(2.0F, 18.0F, -2.0F);
-		leg4.texOffs(0, 16).addBox(-2.0F, 0.0F, -4.0F, 4.0F, 6.0F, 4.0F, 0.0F, false);
-		leg4.texOffs(48, 0).addBox(-2.0F, 0.0F, -4.0F, 4.0F, 3.0F, 4.0F, 0.25F, false);
+		leg4.texOffs(0, 16).addBox(-2.0F, 0.0F, -4.0F, 4.0F, 6.0F, 4.0F, inflation + 0.0F, false);
+		leg4.texOffs(48, 0).addBox(-2.0F, 0.0F, -4.0F, 4.0F, 3.0F, 4.0F, inflation + 0.25F, false);
 	}
 	
 	   public Iterable<ModelRenderer> parts() {

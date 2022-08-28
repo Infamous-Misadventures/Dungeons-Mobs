@@ -3,12 +3,12 @@ package com.infamous.dungeons_mobs.client.renderer.creeper;
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
 import com.infamous.dungeons_mobs.client.models.creeper.IcyCreeperModel;
+import com.infamous.dungeons_mobs.client.renderer.layer.IcyCreeperChargeLayer;
 import com.infamous.dungeons_mobs.entities.creepers.IcyCreeperEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.entity.layers.CreeperChargeLayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
@@ -19,8 +19,8 @@ public class IcyCreeperRenderer extends MobRenderer<IcyCreeperEntity, IcyCreeper
 	private static final ResourceLocation ICY_CREEPER_TEXTURE = new ResourceLocation(MODID,"textures/entity/creeper/icy_creeper.png");
 
    public IcyCreeperRenderer(EntityRendererManager p_i46186_1_) {
-      super(p_i46186_1_, new IcyCreeperModel<>(), 0.5F);
-      //this.addLayer(new CreeperChargeLayer(this));
+      super(p_i46186_1_, new IcyCreeperModel<>(0.0F), 0.5F);
+      this.addLayer(new IcyCreeperChargeLayer(this));
    }
 
    protected void scale(IcyCreeperEntity p_225620_1_, MatrixStack p_225620_2_, float p_225620_3_) {
