@@ -109,4 +109,9 @@ public class ModSoundEvents {
 	public static final RegistryObject<SoundEvent> SKELETON_VANGUARD_STEP = SOUNDS.register("entity.skeleton_vanguard.step", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.skeleton_vanguard.step")));
 	
 	public static final RegistryObject<SoundEvent> ICY_CREEPER_EXPLODE = SOUNDS.register("entity.icy_creeper.explode", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.icy_creeper.explode")));
+	
+	public static final RegistryObject<SoundEvent> JUNGLE_ZOMBIE_IDLE = SOUNDS.register("entity.jungle_zombie.idle", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.jungle_zombie.idle")));
+	public static final RegistryObject<SoundEvent> JUNGLE_ZOMBIE_HURT = SOUNDS.register("entity.jungle_zombie.hurt", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.jungle_zombie.hurt")));
+	public static final RegistryObject<SoundEvent> JUNGLE_ZOMBIE_DEATH = SOUNDS.register("entity.jungle_zombie.death", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.jungle_zombie.death")));
+	public static final RegistryObject<SoundEvent> JUNGLE_ZOMBIE_STEP = SOUNDS.register("entity.jungle_zombie.step", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.jungle_zombie.step")));
 }
