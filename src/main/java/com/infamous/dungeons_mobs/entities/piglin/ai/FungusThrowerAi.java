@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.infamous.dungeons_mobs.entities.piglin.FungusThrowerEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.BlueNethershroomEntity;
 import com.infamous.dungeons_mobs.items.BlueNethershroomItem;
+import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 import com.infamous.dungeons_mobs.tasks.ThrowAtTargetTask;
 import com.infamous.dungeons_mobs.utils.BrainHelper;
 import com.mojang.datafixers.util.Pair;
@@ -59,7 +60,7 @@ public class FungusThrowerAi {
         blueNethershroom.xRot -= -20.0F;
         blueNethershroom.shoot(xDiff, yDiff + (double)(horizDistSq * 0.2F), zDiff, 0.75F, 8.0F);
         if (!fungusThrower.isSilent()) {
-            fungusThrower.level.playSound((PlayerEntity)null, fungusThrower.getX(), fungusThrower.getY(), fungusThrower.getZ(), SoundEvents.FUNGUS_HIT, fungusThrower.getSoundSource(), 1.0F, 0.8F + fungusThrower.getRandom().nextFloat() * 0.4F);
+            fungusThrower.level.playSound((PlayerEntity)null, fungusThrower.getX(), fungusThrower.getY(), fungusThrower.getZ(), ModSoundEvents.FUNGUS_THROWER_THROW.get(), fungusThrower.getSoundSource(), 1.0F, (fungusThrower.getRandom().nextFloat() - fungusThrower.getRandom().nextFloat()) * 0.2F + 1.0F);
         }
 
         fungusThrower.level.addFreshEntity(blueNethershroom);

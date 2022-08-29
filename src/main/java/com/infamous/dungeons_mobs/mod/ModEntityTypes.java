@@ -256,24 +256,22 @@ public class ModEntityTypes {
 
     // SLIME
 
-    public static final RegistryObject<EntityType<ConjuredSlimeEntity>> CONJURED_SLIME = registerEntity("conjured_slime", () ->
+    public static final RegistryObject<EntityType<ConjuredSlimeEntity>> CONJURED_SLIME = registerEntityWithoutEgg("conjured_slime", () ->
                     EntityType.Builder.<ConjuredSlimeEntity>of(ConjuredSlimeEntity::new, EntityClassification.MONSTER)
                             .sized(2.04F, 2.04F)
                             .clientTrackingRange(10)
                             .setCustomClientFactory((spawnEntity,world) -> new ConjuredSlimeEntity(world))
-                            .build(new ResourceLocation(MODID, "conjured_slime").toString()),
-            0xb153c9, 0xdebae7
+                            .build(new ResourceLocation(MODID, "conjured_slime").toString())
     );
 
     // REDSTONE
 
-    public static final RegistryObject<EntityType<RedstoneCubeEntity>> REDSTONE_CUBE = registerEntity("redstone_cube", () ->
+    public static final RegistryObject<EntityType<RedstoneCubeEntity>> REDSTONE_CUBE = registerEntityWithoutEgg("redstone_cube", () ->
             EntityType.Builder.<RedstoneCubeEntity>of(RedstoneCubeEntity::new, EntityClassification.MONSTER)
                     .sized(1.0F, 1.0F)
                     .clientTrackingRange(10)
                     .setCustomClientFactory((spawnEntity,world) -> new RedstoneCubeEntity(world))
-                    .build(new ResourceLocation(MODID, "redstone_cube").toString()),
-            0xd12b13, 0x9a948e
+                    .build(new ResourceLocation(MODID, "redstone_cube").toString())
     );
 
     public static final RegistryObject<EntityType<RedstoneGolemEntity>> REDSTONE_GOLEM = registerEntity("redstone_golem", () ->
@@ -328,7 +326,7 @@ public class ModEntityTypes {
     // GOLEM
     public static final RegistryObject<EntityType<SquallGolemEntity>> SQUALL_GOLEM = registerEntity("squall_golem", () ->
             EntityType.Builder.<SquallGolemEntity>of(SquallGolemEntity::new, EntityClassification.MONSTER)
-                    .sized(2.62F, 2.81F) // 42 px wide, 29px tall + 16px of height
+                    .sized(1.9F, 2.75F) // 42 px wide, 29px tall + 16px of height
                     .clientTrackingRange(10)
                     .setCustomClientFactory((spawnEntity,world) -> new SquallGolemEntity(world))
                     .build(new ResourceLocation(MODID, "squall_golem").toString()),

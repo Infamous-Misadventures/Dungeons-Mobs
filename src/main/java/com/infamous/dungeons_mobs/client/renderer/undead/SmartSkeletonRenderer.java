@@ -18,9 +18,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class SmartSkeletonRenderer<T extends AbstractSkeletonEntity> extends BipedRenderer<T, SmartSkeletonModel<T>> {
    private static final ResourceLocation VANILLA_SKELETON_LOCATION = new ResourceLocation("textures/entity/skeleton/skeleton.png");
-   private static final ResourceLocation SUNKEN_SKELETON_LOCATION = new ResourceLocation(DungeonsMobs.MODID, "textures/entity/ocean/sunken_skeleton.png");
-   private static final ResourceLocation RED_CORAL_ARMORED_SUNKEN_SKELETON_LOCATION = new ResourceLocation(DungeonsMobs.MODID, "textures/entity/ocean/red_coral_armored_sunken_skeleton.png");
-   private static final ResourceLocation YELLOW_CORAL_ARMORED_SUNKEN_SKELETON_LOCATION = new ResourceLocation(DungeonsMobs.MODID, "textures/entity/ocean/yellow_coral_armored_sunken_skeleton.png");
 
    public SmartSkeletonRenderer(EntityRendererManager renderManagerIn) {
       super(renderManagerIn, new SmartSkeletonModel<>(), 0.5F);
@@ -47,18 +44,6 @@ public class SmartSkeletonRenderer<T extends AbstractSkeletonEntity> extends Bip
 
    @Override
    public ResourceLocation getTextureLocation(T skeleton) {
-      if(skeleton instanceof SunkenSkeletonEntity){
-         if(skeleton instanceof IArmoredMob){
-            if(((IArmoredMob) skeleton).hasStrongArmor()){
-               return YELLOW_CORAL_ARMORED_SUNKEN_SKELETON_LOCATION;
-            } else{
-               return RED_CORAL_ARMORED_SUNKEN_SKELETON_LOCATION;
-            }
-         } else{
-            return SUNKEN_SKELETON_LOCATION;
-         }
-      } else{
          return VANILLA_SKELETON_LOCATION;
-      }
    }
 }
