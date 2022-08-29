@@ -5,6 +5,8 @@ import com.infamous.dungeons_mobs.goals.GoToBeachGoal;
 import com.infamous.dungeons_mobs.goals.GoToWaterGoal;
 import com.infamous.dungeons_mobs.goals.SwimUpGoal;
 import com.infamous.dungeons_mobs.interfaces.IAquaticMob;
+import com.infamous.dungeons_mobs.mod.ModSoundEvents;
+
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ICrossbowUser;
 import net.minecraft.entity.LivingEntity;
@@ -33,7 +35,9 @@ import net.minecraft.util.RegistryKey;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.*;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
@@ -56,7 +60,7 @@ public class SunkenSkeletonEntity extends AbstractSkeletonEntity implements ICro
             return super.canContinueToUse() && SunkenSkeletonEntity.this.okTarget(SunkenSkeletonEntity.this, SunkenSkeletonEntity.this.getTarget());
         }
     };
-    private final RangedCrossbowAttackGoal<SunkenSkeletonEntity> crossbowGoal = new RangedCrossbowAttackGoal<>(this, 1.0D, 15.0F);
+    private final RangedCrossbowAttackGoal<SunkenSkeletonEntity> crossbowGoal = new RangedCrossbowAttackGoal<>(this, 1.2D, 10.0F);
 
     private static final DataParameter<Boolean> CHARGING_CROSSBOW = EntityDataManager.defineId(SunkenSkeletonEntity.class, DataSerializers.BOOLEAN);
 
@@ -145,7 +149,7 @@ public class SunkenSkeletonEntity extends AbstractSkeletonEntity implements ICro
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new GoToWaterGoal(this, 1.0D));
         this.goalSelector.addGoal(5, new GoToBeachGoal<>(this, 1.0D));
-        this.goalSelector.addGoal(6, new SwimUpGoal<>(this, 1.0D, this.level.getSeaLevel()));
+        this.goalSelector.addGoal(6, new SwimUpGoal<>(this, 1.2D, this.level.getSeaLevel()));
         this.goalSelector.addGoal(7, new RandomWalkingGoal(this, 1.0D));
         this.goalSelector.addGoal(8, new LookAtGoal(this, PlayerEntity.class, 8.0F));
         this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
@@ -191,25 +195,42 @@ public class SunkenSkeletonEntity extends AbstractSkeletonEntity implements ICro
     protected void populateDefaultEquipmentSlots(DifficultyInstance p_180481_1_) {
         this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.CROSSBOW));
     }
+    
+    @Override
+    public void playAmbientSound() {
+    	if (this.isInWater()) {
+	        SoundEvent soundevent = this.getAmbientSound();
+	        if (soundevent != null) {
+	           this.playSound(soundevent, 0.5F, this.getVoicePitch());
+	        }
+    	} else {
+    		super.playAmbientSound();
+    	}
+    }
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.SKELETON_AMBIENT;
+        return this.isInWater() ? ModSoundEvents.SUNKEN_SKELETON_IDLE.get() : SoundEvents.SKELETON_AMBIENT;
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
-        return SoundEvents.SKELETON_HURT;
+        return this.isInWater() ? ModSoundEvents.SUNKEN_SKELETON_HURT.get() : SoundEvents.SKELETON_HURT;
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.SKELETON_DEATH;
+        return this.isInWater() ? ModSoundEvents.SUNKEN_SKELETON_DEATH.get() : SoundEvents.SKELETON_DEATH;
     }
 
     @Override
     protected SoundEvent getStepSound() {
         return SoundEvents.SKELETON_STEP;
+    }
+    
+    @Override
+    protected SoundEvent getSwimSound() {
+        return ModSoundEvents.SUNKEN_SKELETON_STEP.get();
     }
 
     @Override
@@ -220,6 +241,18 @@ public class SunkenSkeletonEntity extends AbstractSkeletonEntity implements ICro
     @Override
     public void shootCrossbowProjectile(LivingEntity target, ItemStack crossbow, ProjectileEntity projectile, float inaccuracy) {
         this.shootCrossbowProjectile(this, target, projectile, inaccuracy, 1.6F);
+    }
+    
+    @Override
+    public void shootCrossbowProjectile(LivingEntity p_234279_1_, LivingEntity p_234279_2_,
+    		ProjectileEntity p_234279_3_, float p_234279_4_, float p_234279_5_) {
+        double d0 = p_234279_2_.getX() - p_234279_1_.getX();
+        double d1 = p_234279_2_.getZ() - p_234279_1_.getZ();
+        double d2 = (double)MathHelper.sqrt(d0 * d0 + d1 * d1);
+        double d3 = p_234279_2_.getY(0.3333333333333333D) - p_234279_3_.getY() + d2 * (double)0.2F;
+        Vector3f vector3f = this.getProjectileShotVector(p_234279_1_, new Vector3d(d0, d3, d1), p_234279_4_);
+        p_234279_3_.shoot((double)vector3f.x(), (double)vector3f.y(), (double)vector3f.z(), p_234279_5_, (float)(14 - p_234279_1_.level.getDifficulty().getId() * 4));
+        p_234279_1_.playSound(this.isInWater() ? ModSoundEvents.SUNKEN_SKELETON_SHOOT.get() : SoundEvents.CROSSBOW_SHOOT, 1.0F, 1.0F / (p_234279_1_.getRandom().nextFloat() * 0.4F + 0.8F));
     }
 
     @Override

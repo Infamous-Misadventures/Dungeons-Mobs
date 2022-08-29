@@ -2,8 +2,10 @@ package com.infamous.dungeons_mobs.entities.projectiles;
 
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModItems;
+import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 import com.infamous.dungeons_mobs.utils.PotionHelper;
 import net.minecraft.entity.*;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -76,7 +78,7 @@ public class BlueNethershroomEntity extends ProjectileItemEntity implements IRen
             if (tag != null && tag.contains("CustomPotionColor", 99)) {
                color = tag.getInt("CustomPotionColor");
             }
-            com.infamous.dungeons_mobs.client.util.ParticleGenerator.generatePotionImpact(this.level, potion, this.getItem(), blockPos, color, SoundEvents.FUNGUS_BREAK);
+            com.infamous.dungeons_mobs.client.util.ParticleGenerator.generatePotionImpact(this.level, potion, this.getItem(), blockPos, color, ModSoundEvents.FUNGUS_THROWER_FUNGUS_LAND.get());
          }
       }
    }
