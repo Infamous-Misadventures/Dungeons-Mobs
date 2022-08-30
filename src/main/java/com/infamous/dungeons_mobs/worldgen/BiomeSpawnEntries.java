@@ -218,9 +218,6 @@ public class BiomeSpawnEntries {
         if(DungeonsMobsConfig.COMMON.ENABLE_ICY_CREEPER_REPLACES_CREEPER.get()){
             handleVariantReplacementWithCategoryCheck(mobSpawnInfoBuilder, foundCategory, Biome.Category.ICY, EntityType.CREEPER, ModEntityTypes.ICY_CREEPER.get(), 0.8);
         }
-        if(DungeonsMobsConfig.COMMON.ENABLE_ARMORED_DROWNED_REPLACES_DROWNED.get()){
-            handleVariantReplacement(mobSpawnInfoBuilder, EntityType.DROWNED, ModEntityTypes.ARMORED_DROWNED.get(), 0.9);
-        }
         if(DungeonsMobsConfig.COMMON.ENABLE_ARMORED_SUNKEN_SKELETON_REPLACES_SUNKEN_SKELETON.get()){
             handleVariantReplacement(mobSpawnInfoBuilder, ModEntityTypes.SUNKEN_SKELETON.get(), ModEntityTypes.ARMORED_SUNKEN_SKELETON.get(), 0.9);
         }

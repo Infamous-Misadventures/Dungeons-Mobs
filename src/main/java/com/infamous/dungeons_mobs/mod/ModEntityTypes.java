@@ -354,15 +354,6 @@ public class ModEntityTypes {
                     0x2b9477, 0xc436cd
     );
 
-    public static final RegistryObject<EntityType<ArmoredDrownedEntity>> ARMORED_DROWNED = registerEntity("armored_drowned", () ->
-            EntityType.Builder.<ArmoredDrownedEntity>of(ArmoredDrownedEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F * 1.1F, 1.95F * 1.1F)
-                    .clientTrackingRange(8)
-                    .build(new ResourceLocation(MODID, "armored_drowned").toString()),
-                    9433559, 7969893
-    );
-
-
     public static final RegistryObject<EntityType<DrownedNecromancerEntity>> DROWNED_NECROMANCER = registerEntity("drowned_necromancer", () ->
             EntityType.Builder.<DrownedNecromancerEntity>of(DrownedNecromancerEntity::new, EntityClassification.MONSTER)
                     .sized(0.6F * 1.2F, 1.95F * 1.2F)

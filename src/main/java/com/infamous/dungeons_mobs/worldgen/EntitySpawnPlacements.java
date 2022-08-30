@@ -195,10 +195,6 @@ public class EntitySpawnPlacements {
                 IN_WATER_ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                 EntitySpawnPlacements::checkAquaticMobSpawnRules);
-        EntitySpawnPlacementRegistry.register(ModEntityTypes.ARMORED_DROWNED.get(),
-                EntitySpawnPlacementRegistry.PlacementType.IN_WATER,
-                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                EntitySpawnPlacements::checkAquaticMobSpawnRules);
         EntitySpawnPlacementRegistry.register(ModEntityTypes.DROWNED_NECROMANCER.get(),
                 EntitySpawnPlacementRegistry.PlacementType.IN_WATER,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,

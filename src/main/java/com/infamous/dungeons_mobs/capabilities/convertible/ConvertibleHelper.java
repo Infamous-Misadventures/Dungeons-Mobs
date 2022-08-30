@@ -76,9 +76,6 @@ public class ConvertibleHelper {
         if(mob instanceof AbstractSkeletonEntity){
             convertToType = mob instanceof IArmoredMob ? ModEntityTypes.ARMORED_SUNKEN_SKELETON.get() : ModEntityTypes.SUNKEN_SKELETON.get();
         }
-        else if(mob instanceof ZombieEntity){
-            convertToType = mob instanceof IArmoredMob ? ModEntityTypes.ARMORED_DROWNED.get() : EntityType.DROWNED;
-        }
         return convertToType;
     }
 
