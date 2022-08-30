@@ -37,11 +37,6 @@ public class ConvertibleHelper {
             }
             DungeonsMobs.LOGGER.info("Converted {} to {}", original, convertedTo);
         }
-        if(original instanceof IArmoredMob && convertedTo instanceof IArmoredMob){
-            if(((IArmoredMob) original).hasStrongArmor()){
-                ((IArmoredMob) convertedTo).setStrongArmored(convertedTo);
-            }
-        }
 
         if(original instanceof ZombieEntity && convertedTo instanceof ZombieEntity){
             ZombieEntity originalZombie = (ZombieEntity) original;

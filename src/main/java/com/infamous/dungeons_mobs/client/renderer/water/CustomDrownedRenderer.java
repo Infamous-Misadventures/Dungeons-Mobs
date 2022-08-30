@@ -3,7 +3,6 @@ package com.infamous.dungeons_mobs.client.renderer.water;
 import com.infamous.dungeons_libraries.capabilities.armored.ArmoredMob;
 import com.infamous.dungeons_libraries.capabilities.armored.ArmoredMobHelper;
 import com.infamous.dungeons_mobs.DungeonsMobs;
-import com.infamous.dungeons_mobs.interfaces.IArmoredMob;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.entity.AbstractZombieRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
@@ -20,7 +19,7 @@ public class CustomDrownedRenderer extends AbstractZombieRenderer<DrownedEntity,
     private static final ResourceLocation DROWNED_LOCATION = new ResourceLocation("textures/entity/zombie/drowned.png");
     private static final ResourceLocation SEAWEED_ARMORED_DROWNED_LOCATION = new ResourceLocation(DungeonsMobs.MODID, "textures/entity/ocean/seaweed_armored_drowned.png");
     private static final ResourceLocation PALE_ARMORED_DROWNED_LOCATION = new ResourceLocation(DungeonsMobs.MODID, "textures/entity/ocean/pale_armored_drowned.png");
-    private static final List<ResourceLocation> ARMORED_DROWNED_LOCATIONS = Arrays.asList(DROWNED_LOCATION, SEAWEED_ARMORED_DROWNED_LOCATION, PALE_ARMORED_DROWNED_LOCATION);
+    private static final List<ResourceLocation> ARMORED_DROWNED_LOCATIONS = Arrays.asList(SEAWEED_ARMORED_DROWNED_LOCATION, PALE_ARMORED_DROWNED_LOCATION);
 
     public CustomDrownedRenderer(EntityRendererManager rendererManager) {
         super(rendererManager, new DrownedModel<>(0.0F, 0.0F, 64, 64), new DrownedModel<>(0.5F, true), new DrownedModel<>(1.0F, true));
@@ -29,10 +28,6 @@ public class CustomDrownedRenderer extends AbstractZombieRenderer<DrownedEntity,
 
     @Override
     protected void scale(DrownedEntity drowned, MatrixStack matrixStack, float p_225620_3_) {
-        if(drowned instanceof IArmoredMob){
-            float scaleFactor = 1.1F;
-            matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
-        }
         super.scale(drowned, matrixStack, p_225620_3_);
     }
 
@@ -49,7 +44,7 @@ public class CustomDrownedRenderer extends AbstractZombieRenderer<DrownedEntity,
     public ResourceLocation getTextureLocation(DrownedEntity drowned) {
         ArmoredMob cap = ArmoredMobHelper.getArmoredMobCapability(drowned);
         if(cap != null && cap.isArmored()){
-            return ARMORED_DROWNED_LOCATIONS.get(drowned.getRandom().nextInt(ARMORED_DROWNED_LOCATIONS.size()));
+            return ARMORED_DROWNED_LOCATIONS.get(drowned.getId() % ARMORED_DROWNED_LOCATIONS.size());
         } else{
             return DROWNED_LOCATION;
         }
