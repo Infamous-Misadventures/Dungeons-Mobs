@@ -19,7 +19,6 @@ import com.infamous.dungeons_mobs.entities.summonables.GeomancerBombEntity;
 import com.infamous.dungeons_mobs.entities.summonables.GeomancerWallEntity;
 import com.infamous.dungeons_mobs.entities.summonables.Tornado2Entity;
 import com.infamous.dungeons_mobs.entities.undead.*;
-import com.infamous.dungeons_mobs.entities.undead.horseman.SkeletonHorsemanEntity;
 import com.infamous.dungeons_mobs.entities.water.*;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import net.minecraft.entity.EntityType;
@@ -43,7 +42,6 @@ public class EntityTypeAttributes {
 
         event.put(ModEntityTypes.MOSSY_SKELETON.get(), MossySkeletonEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.SKELETON_VANGUARD.get(), SkeletonVanguardEntity.setCustomAttributes().build());
-        event.put(ModEntityTypes.SKELETON_HORSEMAN.get(), SkeletonHorsemanEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.NECROMANCER.get(), NecromancerEntity.setCustomAttributes().build());
 
         event.put(ModEntityTypes.ROYAL_GUARD.get(), RoyalGuardEntity.setCustomAttributes().build());

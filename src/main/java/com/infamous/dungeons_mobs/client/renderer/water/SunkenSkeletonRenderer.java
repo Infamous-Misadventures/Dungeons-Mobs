@@ -5,9 +5,7 @@ import com.infamous.dungeons_libraries.capabilities.armored.ArmoredMobHelper;
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.client.models.undead.SunkenSkeletonModel;
 import com.infamous.dungeons_mobs.entities.water.SunkenSkeletonEntity;
-import com.infamous.dungeons_mobs.interfaces.IArmoredMob;
 import com.mojang.blaze3d.matrix.MatrixStack;
-
 import net.minecraft.client.renderer.entity.BipedRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.layers.BipedArmorLayer;

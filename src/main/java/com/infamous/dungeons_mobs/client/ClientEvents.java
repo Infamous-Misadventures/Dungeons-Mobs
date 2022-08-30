@@ -106,7 +106,6 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(EntityType.DROWNED, CustomDrownedRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.MOSSY_SKELETON.get(), CustomSkeletonRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SKELETON_HORSEMAN.get(), CustomSkeletonRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SKELETON_VANGUARD.get(), SkeletonVanguardRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.NECROMANCER.get(), NecromancerRenderer::new);
 

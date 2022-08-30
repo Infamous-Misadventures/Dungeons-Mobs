@@ -79,12 +79,6 @@ public class BiomeSpawnEntries {
                     DungeonsMobsConfig.COMMON.NECROMANCER_MIN_GROUP_SIZE.get(),
                     DungeonsMobsConfig.COMMON.NECROMANCER_MAX_GROUP_SIZE.get());
 
-            List<String> skeletonHorsemanBiomeTypes = (List<String>) DungeonsMobsConfig.COMMON.SKELETON_HORSEMAN_BIOME_TYPES.get();
-            tryAddMonsterSpawnToBiome(biomeRegistryKey, mobSpawnInfoBuilder, skeletonHorsemanBiomeTypes, ModEntityTypes.SKELETON_HORSEMAN.get(),
-                    DungeonsMobsConfig.COMMON.SKELETON_HORSEMAN_SPAWN_WEIGHT.get(),
-                    DungeonsMobsConfig.COMMON.SKELETON_HORSEMAN_MIN_GROUP_SIZE.get(),
-                    DungeonsMobsConfig.COMMON.SKELETON_HORSEMAN_MAX_GROUP_SIZE.get());
-
             List<String> mountaineerBiomeTypes = (List<String>) DungeonsMobsConfig.COMMON.MOUNTAINEER_BIOME_TYPES.get();
             tryAddMonsterSpawnToBiome(biomeRegistryKey, mobSpawnInfoBuilder, mountaineerBiomeTypes, ModEntityTypes.MOUNTAINEER.get(),
                     DungeonsMobsConfig.COMMON.MOUNTAINEER_SPAWN_WEIGHT.get(),

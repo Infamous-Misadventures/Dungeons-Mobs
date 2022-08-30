@@ -93,10 +93,6 @@ public class EntitySpawnPlacements {
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                 MonsterEntity::checkMonsterSpawnRules);
-        EntitySpawnPlacementRegistry.register(ModEntityTypes.SKELETON_HORSEMAN.get(),
-                EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
-                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                MonsterEntity::checkMonsterSpawnRules);
         EntitySpawnPlacementRegistry.register(ModEntityTypes.NECROMANCER.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,

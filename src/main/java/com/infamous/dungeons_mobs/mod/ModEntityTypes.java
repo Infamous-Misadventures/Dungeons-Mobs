@@ -20,14 +20,12 @@ import com.infamous.dungeons_mobs.entities.redstone.RedstoneMineEntity;
 import com.infamous.dungeons_mobs.entities.slime.ConjuredSlimeEntity;
 import com.infamous.dungeons_mobs.entities.summonables.*;
 import com.infamous.dungeons_mobs.entities.undead.*;
-import com.infamous.dungeons_mobs.entities.undead.horseman.SkeletonHorsemanEntity;
 import com.infamous.dungeons_mobs.entities.water.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.SpawnEggItem;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.fml.RegistryObject;
@@ -85,17 +83,6 @@ public class ModEntityTypes {
                     .build(new ResourceLocation(MODID, "skeleton_vanguard").toString()),
             0x493615, 0xe8b42f
     );
-
-
-    public static final RegistryObject<EntityType<SkeletonHorsemanEntity>> SKELETON_HORSEMAN = registerEntity("skeleton_horseman", () ->
-            EntityType.Builder.<SkeletonHorsemanEntity>of(SkeletonHorsemanEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F * 1.1F, 1.99F * 1.1F)
-                    .clientTrackingRange(8)
-                    .setCustomClientFactory((spawnEntity,world) -> new SkeletonHorsemanEntity(world))
-                    .build(new ResourceLocation(MODID, "skeleton_horseman").toString()),
-            12698049, 0xb0babe
-    );
-
 
     public static final RegistryObject<EntityType<NecromancerEntity>> NECROMANCER = registerEntity("necromancer", () ->
             EntityType.Builder.<NecromancerEntity>of(NecromancerEntity::new, EntityClassification.MONSTER)

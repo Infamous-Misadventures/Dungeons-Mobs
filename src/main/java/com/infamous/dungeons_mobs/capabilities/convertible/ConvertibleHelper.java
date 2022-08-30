@@ -2,7 +2,6 @@ package com.infamous.dungeons_mobs.capabilities.convertible;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.entities.water.SunkenSkeletonEntity;
-import com.infamous.dungeons_mobs.interfaces.IArmoredMob;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.tags.CustomTags;
 import net.minecraft.entity.Entity;
