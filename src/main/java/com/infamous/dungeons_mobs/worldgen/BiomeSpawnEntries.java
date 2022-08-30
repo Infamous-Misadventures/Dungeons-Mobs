@@ -215,9 +215,6 @@ public class BiomeSpawnEntries {
         if(DungeonsMobsConfig.COMMON.ENABLE_ICY_CREEPER_REPLACES_CREEPER.get()){
             handleVariantReplacementWithCategoryCheck(mobSpawnInfoBuilder, foundCategory, Biome.Category.ICY, EntityType.CREEPER, ModEntityTypes.ICY_CREEPER.get(), 0.8);
         }
-        if(DungeonsMobsConfig.COMMON.ENABLE_ARMORED_SUNKEN_SKELETON_REPLACES_SUNKEN_SKELETON.get()){
-            handleVariantReplacement(mobSpawnInfoBuilder, ModEntityTypes.SUNKEN_SKELETON.get(), ModEntityTypes.ARMORED_SUNKEN_SKELETON.get(), 0.9);
-        }
     }
 
     private static void tryAddMonsterSpawnToBiome(RegistryKey<Biome> biomeRegistryKey, MobSpawnInfoBuilder mobSpawnInfoBuilder, List<String> configuredBiomeTypes, EntityType entityType, int spawnWeight, int minGroupSize, int maxGroupSize) {

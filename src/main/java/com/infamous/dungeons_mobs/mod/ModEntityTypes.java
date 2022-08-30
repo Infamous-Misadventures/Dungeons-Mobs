@@ -360,14 +360,6 @@ public class ModEntityTypes {
             .build(new ResourceLocation(MODID, "sunken_skeleton").toString()),
     0x87a964, 0xc06fe5
     	    );
-    
-    public static final RegistryObject<EntityType<ArmoredSunkenSkeletonEntity>> ARMORED_SUNKEN_SKELETON = registerEntity("armored_sunken_skeleton", () ->
-            EntityType.Builder.<ArmoredSunkenSkeletonEntity>of(ArmoredSunkenSkeletonEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F * 1.1F, 1.99F * 1.1F)
-                    .clientTrackingRange(8)
-                    .build(new ResourceLocation(MODID, "armored_sunken_skeleton").toString()),
-                    0x87a964, 0xc06fe5
-    );
 
     // ENDER MOBS
 

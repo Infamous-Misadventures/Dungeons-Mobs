@@ -199,10 +199,6 @@ public class EntitySpawnPlacements {
                 EntitySpawnPlacementRegistry.PlacementType.IN_WATER,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                 EntitySpawnPlacements::checkAquaticMobSpawnRules);
-        EntitySpawnPlacementRegistry.register(ModEntityTypes.ARMORED_SUNKEN_SKELETON.get(),
-                EntitySpawnPlacementRegistry.PlacementType.IN_WATER,
-                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                EntitySpawnPlacements::checkAquaticMobSpawnRules);
 
     }
 

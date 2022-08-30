@@ -69,7 +69,7 @@ public class ConvertibleHelper {
         // default, we will keep converting the mob to itself if it doesn't have an appropriate conversion
         EntityType<? extends MobEntity> convertToType = (EntityType<? extends MobEntity>) mob.getType();
         if(mob instanceof AbstractSkeletonEntity){
-            convertToType = mob instanceof IArmoredMob ? ModEntityTypes.ARMORED_SUNKEN_SKELETON.get() : ModEntityTypes.SUNKEN_SKELETON.get();
+            convertToType = ModEntityTypes.SUNKEN_SKELETON.get();
         }
         return convertToType;
     }
