@@ -89,14 +89,6 @@ public class EntitySpawnPlacements {
                 MossySkeletonEntity::canMossySkeletonSpawn);
 
 
-        EntitySpawnPlacementRegistry.register(ModEntityTypes.ARMORED_VINDICATOR.get(),
-                EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
-                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                EntitySpawnPlacements::canIllagerSpawn);
-        EntitySpawnPlacementRegistry.register(ModEntityTypes.ARMORED_PILLAGER.get(),
-                EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
-                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                PatrollerEntity::checkPatrollingMonsterSpawnRules);
         EntitySpawnPlacementRegistry.register(ModEntityTypes.SKELETON_VANGUARD.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
@@ -110,10 +102,6 @@ public class EntitySpawnPlacements {
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                 MonsterEntity::checkMonsterSpawnRules);
         EntitySpawnPlacementRegistry.register(ModEntityTypes.ROYAL_GUARD.get(),
-                EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
-                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                EntitySpawnPlacements::canIllagerSpawn);
-        EntitySpawnPlacementRegistry.register(ModEntityTypes.VINDICATOR_CHEF.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                 EntitySpawnPlacements::canIllagerSpawn);

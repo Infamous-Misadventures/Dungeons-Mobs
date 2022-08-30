@@ -13,7 +13,6 @@
     "DrownedEntityMixin",
     "GoalSelectorAccessor",
     "MansionTemplateMixin",
-    "PatrolSpawnerMixin",
     "PiglinAccessor",
     "PiglinEntityMixin",
     "RaidMixin",

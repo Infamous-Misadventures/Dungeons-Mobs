@@ -16,7 +16,6 @@ public class SensorMapModifier {
         Map<EntityType<?>, Float> villagerHostiles = new HashMap<>(oldImmutableVillagerHostiles);
 
         // only use for Zombies and Raiders
-        villagerHostiles.put(ModEntityTypes.ARMORED_PILLAGER.get(), 15.0F);
 
         villagerHostiles.put(ModEntityTypes.ICEOLOGER.get(), 12.0F);
         villagerHostiles.put(ModEntityTypes.ILLUSIONER_CLONE.get(), 12.0F);
@@ -26,8 +25,6 @@ public class SensorMapModifier {
         villagerHostiles.put(ModEntityTypes.REDSTONE_GOLEM.get(), 12.0F);
         villagerHostiles.put(ModEntityTypes.SQUALL_GOLEM.get(), 12.0F);
 
-        villagerHostiles.put(ModEntityTypes.VINDICATOR_CHEF.get(), 10.0F);
-        villagerHostiles.put(ModEntityTypes.ARMORED_VINDICATOR.get(), 10.0F);
         villagerHostiles.put(ModEntityTypes.ROYAL_GUARD.get(), 10.0F);
         villagerHostiles.put(ModEntityTypes.MOUNTAINEER.get(), 10.0F);
         villagerHostiles.put(ModEntityTypes.ARMORED_MOUNTAINEER.get(), 10.0F);

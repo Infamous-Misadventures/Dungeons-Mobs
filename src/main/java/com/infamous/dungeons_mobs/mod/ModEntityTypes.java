@@ -109,23 +109,6 @@ public class ModEntityTypes {
 
 
     // ILLAGERS
-    public static final RegistryObject<EntityType<ArmoredVindicatorEntity>> ARMORED_VINDICATOR = registerEntity("armored_vindicator", () ->
-            EntityType.Builder.<ArmoredVindicatorEntity>of(ArmoredVindicatorEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F * 1.1F, 1.95F * 1.1F)
-                    .clientTrackingRange(8)
-                    .setCustomClientFactory((spawnEntity,world) -> new ArmoredVindicatorEntity(world))
-                    .build(new ResourceLocation(MODID, "armored_vindicator").toString()),
-            9804699, 2580065
-    );
-
-    public static final RegistryObject<EntityType<ArmoredPillagerEntity>> ARMORED_PILLAGER = registerEntity("armored_pillager", () ->
-            EntityType.Builder.<ArmoredPillagerEntity>of(ArmoredPillagerEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F * 1.1F, 1.95F * 1.1F)
-                    .clientTrackingRange(8)
-                    .setCustomClientFactory((spawnEntity,world) -> new ArmoredPillagerEntity(world))
-                    .build(new ResourceLocation(MODID, "armored_pillager").toString()),
-            5451574, 9804699
-    );
 
     public static final RegistryObject<EntityType<RoyalGuardEntity>> ROYAL_GUARD = registerEntity("royal_guard", () ->
             EntityType.Builder.<RoyalGuardEntity>of(RoyalGuardEntity::new, EntityClassification.MONSTER)
@@ -189,15 +172,6 @@ public class ModEntityTypes {
             0x62162c, 0xfbd600
     );
     
-    public static final RegistryObject<EntityType<VindicatorChefEntity>> VINDICATOR_CHEF = registerEntity("vindicator_chef", () ->
-            EntityType.Builder.<VindicatorChefEntity>of(VindicatorChefEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F, 1.95F)
-                    .clientTrackingRange(8)
-                    .setCustomClientFactory((spawnEntity,world) -> new VindicatorChefEntity(world))
-                    .build(new ResourceLocation(MODID, "vindicator_chef").toString()),
-            9804699, 0xe0dfdb
-    );
-
     public static final RegistryObject<EntityType<DungeonsIllusionerEntity>> ILLUSIONER = registerEntity("illusioner", () ->
             EntityType.Builder.<DungeonsIllusionerEntity>of(DungeonsIllusionerEntity::new, EntityClassification.MONSTER)
                     .sized(0.6F, 1.95F)

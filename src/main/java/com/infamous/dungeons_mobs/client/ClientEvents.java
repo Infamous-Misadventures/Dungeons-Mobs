@@ -107,10 +107,11 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SKELETON_VANGUARD.get(), SkeletonVanguardRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.NECROMANCER.get(), NecromancerRenderer::new);
 
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_VINDICATOR.get(), CustomVindicatorRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_PILLAGER.get(), CustomPillagerRenderer::new);
+
+        RenderingRegistry.registerEntityRenderingHandler(EntityType.PILLAGER, CustomPillagerRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityType.VINDICATOR, CustomVindicatorRenderer::new);
+
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ROYAL_GUARD.get(), RoyalGuardRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.VINDICATOR_CHEF.get(), CustomVindicatorRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.MOUNTAINEER.get(), CustomVindicatorRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_MOUNTAINEER.get(), CustomVindicatorRenderer::new);
 

@@ -144,8 +144,6 @@ public class DungeonsMobsConfig {
 
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_BIOME_SPECIFIC_RAIDERS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_MOUNTAINEERS_IN_RAIDS;
-        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_VINDICATOR_CHEFS_IN_RAIDS;
-        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_VINDICATORS_IN_RAIDS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_MOUNTAINEERS_IN_RAIDS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ROYAL_GUARDS_IN_RAIDS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_GEOMANCERS_IN_RAIDS;
@@ -777,12 +775,6 @@ public class DungeonsMobsConfig {
             ENABLE_MOUNTAINEERS_IN_RAIDS = builder
                     .comment("Enable the addition of Mountaineers to raids. [true / false]")
                     .define("enableMountaineersInRaids", false);
-            ENABLE_VINDICATOR_CHEFS_IN_RAIDS = builder
-                    .comment("Enable the addition of Vindicator Chefs to raids. [true / false]")
-                    .define("enableVindicatorChefsInRaids", false);
-            ENABLE_ARMORED_VINDICATORS_IN_RAIDS = builder
-                    .comment("Enable the addition of Armored Vindicators to raids. [true / false]")
-                    .define("enableArmoredVindicatorsInRaids", true);
             ENABLE_ARMORED_MOUNTAINEERS_IN_RAIDS = builder
                     .comment("Enable the addition of Armored Mountaineers to raids. [true / false]")
                     .define("enableArmoredMountaineersInRaids", false);
