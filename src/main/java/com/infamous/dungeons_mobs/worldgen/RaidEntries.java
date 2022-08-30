@@ -22,10 +22,6 @@ public class RaidEntries {
             Raid.WaveMember.create("mountaineer", ModEntityTypes.MOUNTAINEER.get(), new int[]{0, 0, 2, 0, 1, 4, 2, 5});
         }
 
-        if(DungeonsMobsConfig.COMMON.ENABLE_ARMORED_MOUNTAINEERS_IN_RAIDS.get()){
-            Raid.WaveMember.create("armored_mountaineer", ModEntityTypes.ARMORED_MOUNTAINEER.get(), new int[]{0, 0, 1, 0, 0, 2, 1, 2});
-        }
-
         if(DungeonsMobsConfig.COMMON.ENABLE_ROYAL_GUARDS_IN_RAIDS.get()){
             Raid.WaveMember.create("royal_guard", ModEntityTypes.ROYAL_GUARD.get(), new int[]{0, 0, 1, 0, 0, 2, 1, 2});
         }

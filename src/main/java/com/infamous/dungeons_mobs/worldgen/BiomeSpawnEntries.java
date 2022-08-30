@@ -203,9 +203,6 @@ public class BiomeSpawnEntries {
     }
 
     private static void replaceMonsterSpawnsWithVariants(MobSpawnInfoBuilder mobSpawnInfoBuilder, Biome.Category foundCategory) {
-        if(DungeonsMobsConfig.COMMON.ENABLE_ARMORED_MOUNTAINEER_REPLACES_MOUNTAINEER.get()){
-            handleVariantReplacement(mobSpawnInfoBuilder, ModEntityTypes.MOUNTAINEER.get(), ModEntityTypes.ARMORED_MOUNTAINEER.get(), 0.9);
-        }
         if(DungeonsMobsConfig.COMMON.ENABLE_JUNGLE_ZOMBIE_REPLACES_ZOMBIE.get()){
             handleVariantReplacementWithCategoryCheck(mobSpawnInfoBuilder, foundCategory, Biome.Category.JUNGLE, EntityType.ZOMBIE, ModEntityTypes.JUNGLE_ZOMBIE.get(), 0.8);
         }

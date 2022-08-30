@@ -197,15 +197,6 @@ public class ModEntityTypes {
             0x715039, 0xe6e4d4
     );
 
-    public static final RegistryObject<EntityType<ArmoredMountaineerEntity>> ARMORED_MOUNTAINEER = registerEntity("armored_mountaineer", () ->
-            EntityType.Builder.<ArmoredMountaineerEntity>of(ArmoredMountaineerEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F * 1.1F, 1.95F * 1.1F)
-                    .clientTrackingRange(8)
-                    .setCustomClientFactory((spawnEntity,world) -> new ArmoredMountaineerEntity(world))
-                    .build(new ResourceLocation(MODID, "armored_mountaineer").toString()),
-                    0x715039, 0xe6e4d4
-    );
-
     // CREEPER
 
     public static final RegistryObject<EntityType<IcyCreeperEntity>> ICY_CREEPER = registerEntity("icy_creeper", () ->
