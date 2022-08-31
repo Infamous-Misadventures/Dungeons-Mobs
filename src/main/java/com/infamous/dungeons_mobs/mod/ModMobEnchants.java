@@ -2,7 +2,7 @@ package com.infamous.dungeons_mobs.mod;
 
 import com.baguchan.enchantwithmob.mobenchant.MobEnchant;
 import com.infamous.dungeons_mobs.DungeonsMobs;
-import com.infamous.dungeons_mobs.mobenchantments.RadianceMobEnchant;
+import com.infamous.dungeons_mobs.mobenchants.RadianceMobEnchant;
 import com.infamous.dungeons_mobs.mobenchants.RegenerationMobEnchant;
 import com.infamous.dungeons_mobs.mobenchants.RushMobEnchant;
 import net.minecraftforge.fml.RegistryObject;
