@@ -114,6 +114,10 @@ public class SkeletonVanguardEntity extends SkeletonEntity implements IShieldUse
 	}
 
 	protected void populateDefaultEquipmentSlots(DifficultyInstance difficultyInstance) {
+		this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.VANGUARD_HELMET.get()));
+		this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.VANGUARD_CHESTPLATE.get()));
+		this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(ModItems.VANGUARD_LEGS.get()));
+
 		if (ModList.get().isLoaded("dungeons_gear")) {
 
 			Item GLAIVE = ForgeRegistries.ITEMS.getValue(new ResourceLocation("dungeons_gear", "glaive"));

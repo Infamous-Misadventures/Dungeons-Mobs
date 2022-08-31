@@ -139,7 +139,9 @@
   "item.dungeons_mobs.diamond_pillager_helmet": "Diamond Pillager Helmet",
   "item.dungeons_mobs.gold_vindicator_helmet": "Gold Vindicator Helmet",
   "item.dungeons_mobs.diamond_vindicator_helmet": "Diamond Vindicator Helmet",
-  "item.dungeons_mobs.skeleton_vanguard_helmet": "Skeleton Vanguard Helmet",
+  "item.dungeons_mobs.vanguard_helmet": "Vanguard Helmet",
+  "item.dungeons_mobs.vanguard_chestplate": "Vanguard Chestplate",
+  "item.dungeons_mobs.vanguard_legs": "Vanguard Legs",
   "item.dungeons_mobs.chef_hat": "Chef Hat",
 
   "item.dungeons_mobs.netherite_piglin_helmet": "Netherite Piglin Helmet",

@@ -40,9 +40,6 @@ public class ModItems {
     public static final RegistryObject<Item> DIAMOND_VINDICATOR_HELMET = ITEMS.register("diamond_vindicator_helmet",
             () -> new VindicatorHelmetItem(ArmorMaterial.IRON, EquipmentSlotType.HEAD, new Item.Properties().tab(DUNGEONS_MOBS), true));
 
-    public static final RegistryObject<Item> SKELETON_VANGUARD_HELMET = ITEMS.register("skeleton_vanguard_helmet",
-            () -> new SkeletonVanguardHelmetItem(ArmorMaterial.IRON, EquipmentSlotType.HEAD, new Item.Properties().tab(DUNGEONS_MOBS)));
-
     public static final RegistryObject<Item> CHEF_HAT = ITEMS.register("chef_hat",
             () -> new ChefHatItem(ArmorMaterial.LEATHER, EquipmentSlotType.HEAD, new Item.Properties().tab(DUNGEONS_MOBS)));
 
@@ -84,6 +81,15 @@ public class ModItems {
 
     public static final RegistryObject<Item> ROYAL_GUARD_SABATONS = ITEMS.register("royal_guard_sabatons",
             () -> new RoyalGuardArmorItem(DIAMOND, EquipmentSlotType.FEET, new Item.Properties().tab(DUNGEONS_MOBS)));
+
+    public static final RegistryObject<Item> VANGUARD_HELMET = ITEMS.register("vanguard_helmet",
+            () -> new VanguardArmorItem(ArmorMaterial.IRON, EquipmentSlotType.HEAD, new Item.Properties().tab(DUNGEONS_MOBS)));
+
+    public static final RegistryObject<Item> VANGUARD_CHESTPLATE = ITEMS.register("vanguard_chestplate",
+            () -> new VanguardArmorItem(ArmorMaterial.IRON, EquipmentSlotType.CHEST, new Item.Properties().tab(DUNGEONS_MOBS)));
+
+    public static final RegistryObject<Item> VANGUARD_LEGS = ITEMS.register("vanguard_legs",
+            () -> new VanguardArmorItem(ArmorMaterial.IRON, EquipmentSlotType.LEGS, new Item.Properties().tab(DUNGEONS_MOBS)));
 
     // SOUL FIRE CHARGE
     public static final RegistryObject<WraithFireChargeItem> WRAITH_FIRE_CHARGE = ITEMS.register("wraith_fire_charge",
