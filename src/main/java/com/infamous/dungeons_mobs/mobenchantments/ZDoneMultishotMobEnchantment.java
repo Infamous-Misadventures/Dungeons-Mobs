@@ -1,4 +1,4 @@
-package com.infamous.dungeons_mobs.mobenchants;
+package com.infamous.dungeons_mobs.mobenchantments;
 
 import com.infamous.dungeons_libraries.mobenchantments.MobEnchantment;
 import com.infamous.dungeons_mobs.DungeonsMobs;

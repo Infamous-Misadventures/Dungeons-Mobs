@@ -1,4 +1,4 @@
-package com.infamous.dungeons_mobs.mobenchants;
+package com.infamous.dungeons_mobs.mobenchantments;
 
 import com.infamous.dungeons_libraries.mobenchantments.MobEnchantment;
 import com.infamous.dungeons_mobs.DungeonsMobs;
@@ -14,12 +14,12 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import static com.infamous.dungeons_libraries.mobenchantments.MobEnchantmentHelper.executeIfPresent;
-import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.LEVITATION_SHOT;
+import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.TEMPO_THEFT;
 
 @Mod.EventBusSubscriber(modid = DungeonsMobs.MODID)
-public class LevitationShotMobEnchantment extends MobEnchantment {
+public class TempoTheftMobEnchantment extends MobEnchantment {
 
-    public LevitationShotMobEnchantment(Rarity rarity) {
+    public TempoTheftMobEnchantment(Rarity rarity) {
         super(rarity, Type.RANGED);
     }
 
@@ -34,8 +34,9 @@ public class LevitationShotMobEnchantment extends MobEnchantment {
             if(!shooterIsLiving(projectile)) return;
             LivingEntity victim = (LivingEntity) ((EntityRayTraceResult) rayTraceResult).getEntity();
             LivingEntity owner = (LivingEntity) projectile.getOwner();
-            executeIfPresent(owner, LEVITATION_SHOT.get(), () -> {
-                victim.addEffect(new EffectInstance(Effects.LEVITATION, 100));
+            executeIfPresent(owner, TEMPO_THEFT.get(), () -> {
+                victim.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 66, 1, false, false));
+                owner.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 66, 1, false, false));
             });
         }
     }

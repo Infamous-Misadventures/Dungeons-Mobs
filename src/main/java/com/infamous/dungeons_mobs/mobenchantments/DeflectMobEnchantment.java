@@ -1,4 +1,4 @@
-package com.infamous.dungeons_mobs.mobenchants;
+package com.infamous.dungeons_mobs.mobenchantments;
 
 import static com.infamous.dungeons_libraries.mobenchantments.MobEnchantmentHelper.executeIfPresent;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.DEFLECT;

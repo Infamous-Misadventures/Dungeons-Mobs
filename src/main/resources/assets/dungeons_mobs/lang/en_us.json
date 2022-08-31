@@ -198,10 +198,12 @@
   "mobEnchantment.dungeons_mobs.multishot": "Multishot",
   "mobEnchantment.dungeons_mobs.protection": "Protection",
   "mobEnchantment.dungeons_mobs.quick": "Quick",
-  "mobEnchantment.dungeons_mobs.regeneration": "Regeneration",
-  "mobEnchantment.dungeons_mobs.rush": "Rush",
   "mobEnchantment.dungeons_mobs.tempo_theft": "Tempo Theft",
   "mobEnchantment.dungeons_mobs.thorns": "Thorns",
+
+  "mobenchant.enchantwithmob.name.dungeons_mobs.regeneration": "Regeneration",
+  "mobenchant.enchantwithmob.name.dungeons_mobs.rush": "Rush",
+  "mobenchant.enchantwithmob.name.dungeons_mobs.radiance": "Radiance",
   
   "subtitles.entity.wraith.idle": "Wraith wails",
   "subtitles.entity.wraith.hurt": "Wraith hurts",

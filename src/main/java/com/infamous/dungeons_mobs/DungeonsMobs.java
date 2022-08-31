@@ -91,6 +91,7 @@ public class DungeonsMobs
         ModRecipes.RECIPES.register(modEventBus);
         ModParticleTypes.PARTICLES.register(modEventBus);
         ModMobEnchantments.MOB_ENCHANTMENTS_DEFERRED.register(modEventBus);
+        ModMobEnchants.MOB_ENCHANTS_DEFERRED.register(modEventBus);
         ModDataSerializers.DATA_SERIALIZERS.register(modEventBus);
         PROXY = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 

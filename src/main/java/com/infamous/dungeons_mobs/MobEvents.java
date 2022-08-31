@@ -23,6 +23,7 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.RangedAttackGoal;
 import net.minecraft.entity.item.ArmorStandEntity;
 import net.minecraft.entity.monster.DrownedEntity;
+import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.SnowballEntity;
 import net.minecraft.entity.projectile.TridentEntity;
