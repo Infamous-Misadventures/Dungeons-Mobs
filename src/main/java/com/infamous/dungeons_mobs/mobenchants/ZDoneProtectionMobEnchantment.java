@@ -11,9 +11,9 @@ import static com.infamous.dungeons_libraries.mobenchantments.MobEnchantmentHelp
 import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.PROTECTION;
 
 @Mod.EventBusSubscriber(modid = DungeonsMobs.MODID)
-public class ProtectionMobEnchantment extends MobEnchantment {
+public class ZDoneProtectionMobEnchantment extends MobEnchantment {
 
-    public ProtectionMobEnchantment(Rarity rarity) {
+    public ZDoneProtectionMobEnchantment(Rarity rarity) {
         super(rarity);
     }
 

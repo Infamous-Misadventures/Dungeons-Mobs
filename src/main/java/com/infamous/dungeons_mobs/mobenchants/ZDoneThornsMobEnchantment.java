@@ -13,9 +13,9 @@ import static com.infamous.dungeons_libraries.mobenchantments.MobEnchantmentHelp
 import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.THORNS;
 
 @Mod.EventBusSubscriber(modid = DungeonsMobs.MODID)
-public class ThornsMobEnchantment extends MobEnchantment {
+public class ZDoneThornsMobEnchantment extends MobEnchantment {
 
-    public ThornsMobEnchantment(Rarity rarity) {
+    public ZDoneThornsMobEnchantment(Rarity rarity) {
         super(rarity);
     }
 

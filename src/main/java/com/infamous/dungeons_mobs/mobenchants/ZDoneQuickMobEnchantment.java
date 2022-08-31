@@ -13,9 +13,9 @@ import net.minecraftforge.fml.common.Mod;
 import static com.infamous.dungeons_libraries.mobenchantments.MobEnchantmentHelper.executeIfPresent;
 
 @Mod.EventBusSubscriber(modid = DungeonsMobs.MODID)
-public class QuickMobEnchantment extends MobEnchantment {
+public class ZDoneQuickMobEnchantment extends MobEnchantment {
 	   
-    public QuickMobEnchantment(Rarity rarity) {
+    public ZDoneQuickMobEnchantment(Rarity rarity) {
         super(rarity);
     }
 

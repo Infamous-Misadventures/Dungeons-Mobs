@@ -12,9 +12,9 @@ import static com.infamous.dungeons_libraries.mobenchantments.MobEnchantmentHelp
 import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.DOUBLE_DAMAGE;
 
 @Mod.EventBusSubscriber(modid = DungeonsMobs.MODID)
-public class DoubleDamageMobEnchantment extends MobEnchantment {
+public class ZDoneDoubleDamageMobEnchantment extends MobEnchantment {
 
-    public DoubleDamageMobEnchantment(Rarity rarity) {
+    public ZDoneDoubleDamageMobEnchantment(Rarity rarity) {
         super(rarity);
     }
 

@@ -20,11 +20,11 @@ import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.MULTISHOT;
 import static net.minecraft.entity.Entity.getHorizontalDistanceSqr;
 
 @Mod.EventBusSubscriber(modid = DungeonsMobs.MODID)
-public class MultishotMobEnchantment extends MobEnchantment {
+public class ZDoneMultishotMobEnchantment extends MobEnchantment {
 
     private static boolean isAdding = false;
 
-    public MultishotMobEnchantment(Rarity rarity) {
+    public ZDoneMultishotMobEnchantment(Rarity rarity) {
         super(rarity, Type.RANGED);
     }
 
