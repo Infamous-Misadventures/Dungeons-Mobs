@@ -1,7 +1,7 @@
 package com.infamous.dungeons_mobs.client.renderer.water;
 
-import com.infamous.dungeons_libraries.capabilities.armored.ArmoredMob;
-import com.infamous.dungeons_libraries.capabilities.armored.ArmoredMobHelper;
+import com.infamous.dungeons_libraries.capabilities.elite.EliteMob;
+import com.infamous.dungeons_libraries.capabilities.elite.EliteMobHelper;
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.client.models.undead.SunkenSkeletonModel;
 import com.infamous.dungeons_mobs.entities.water.SunkenSkeletonEntity;
@@ -46,11 +46,11 @@ public class SunkenSkeletonRenderer<T extends SunkenSkeletonEntity> extends Bipe
 
    @Override
    public ResourceLocation getTextureLocation(T skeleton) {
-      ArmoredMob cap = ArmoredMobHelper.getArmoredMobCapability(skeleton);
-      if(cap != null && cap.isArmored()){
-         return ARMORED_SKELETON_LOCATIONS.get(skeleton.getId() % ARMORED_SKELETON_LOCATIONS.size());
-      } else{
+//      EliteMob cap = EliteMobHelper.getEliteMobCapability(skeleton);
+//      if(cap != null && cap.isElite()){
+//         return ARMORED_SKELETON_LOCATIONS.get(skeleton.getId() % ARMORED_SKELETON_LOCATIONS.size());
+//      } else{
             return SUNKEN_SKELETON_LOCATION;
-         }
+//         }
    }
 }

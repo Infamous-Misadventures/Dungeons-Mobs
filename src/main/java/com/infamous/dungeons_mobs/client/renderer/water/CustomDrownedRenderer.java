@@ -1,7 +1,7 @@
 package com.infamous.dungeons_mobs.client.renderer.water;
 
-import com.infamous.dungeons_libraries.capabilities.armored.ArmoredMob;
-import com.infamous.dungeons_libraries.capabilities.armored.ArmoredMobHelper;
+import com.infamous.dungeons_libraries.capabilities.elite.EliteMob;
+import com.infamous.dungeons_libraries.capabilities.elite.EliteMobHelper;
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.entity.AbstractZombieRenderer;
@@ -42,8 +42,8 @@ public class CustomDrownedRenderer extends AbstractZombieRenderer<DrownedEntity,
 
     @Override
     public ResourceLocation getTextureLocation(DrownedEntity drowned) {
-        ArmoredMob cap = ArmoredMobHelper.getArmoredMobCapability(drowned);
-        if(cap != null && cap.isArmored()){
+        EliteMob cap = EliteMobHelper.getEliteMobCapability(drowned);
+        if(cap != null && cap.isElite()){
             return ARMORED_DROWNED_LOCATIONS.get(drowned.getId() % ARMORED_DROWNED_LOCATIONS.size());
         } else{
             return DROWNED_LOCATION;
