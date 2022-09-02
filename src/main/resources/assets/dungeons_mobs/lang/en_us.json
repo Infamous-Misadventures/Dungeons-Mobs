@@ -124,9 +124,9 @@
   "item.dungeons_mobs.wraith_fire_charge": "Wraith Fire Charge",
   "item.dungeons_mobs.blue_nethershroom": "Blue Nethershroom",
   "item.dungeons_mobs.spatula": "Wooden Ladle",
-  "item.dungeons_mobs.mountaineer_axe": "Mountaineer Axe",
-  "item.dungeons_mobs.gold_mountaineer_axe": "Gold Mountaineer Axe",
-  "item.dungeons_mobs.diamond_mountaineer_axe": "Diamond Mountaineer Axe",
+  "item.dungeons_mobs.mountaineer_axe": "Ice Pick",
+  "item.dungeons_mobs.gold_mountaineer_axe": "Sturdy Ice Pick",
+  "item.dungeons_mobs.diamond_mountaineer_axe": "Reinforced Ice Pick",
 
   "item.dungeons_mobs.windcaller_staff": "Windcaller Staff",
   "item.dungeons_mobs.geomancer_staff": "Geomancer Staff",
@@ -137,17 +137,18 @@
 
   "item.dungeons_mobs.gold_pillager_helmet": "Gold Pillager Helmet",
   "item.dungeons_mobs.diamond_pillager_helmet": "Diamond Pillager Helmet",
-  "item.dungeons_mobs.gold_vindicator_helmet": "Gold Vindicator Helmet",
-  "item.dungeons_mobs.diamond_vindicator_helmet": "Diamond Vindicator Helmet",
+  "item.dungeons_mobs.gold_vindicator_helmet": "Vindicator Helmet",
+  "item.dungeons_mobs.diamond_vindicator_helmet": "Horned Vindicator Helmet",
   "item.dungeons_mobs.vanguard_helmet": "Vanguard Helmet",
   "item.dungeons_mobs.vanguard_chestplate": "Vanguard Chestplate",
-  "item.dungeons_mobs.vanguard_legs": "Vanguard Legs",
+  "item.dungeons_mobs.vanguard_legs": "Vanguard Leggings",
   "item.dungeons_mobs.chef_hat": "Chef Hat",
+  "item.dungeons_mobs.chef_apron": "Chef Apron",
 
   "item.dungeons_mobs.netherite_piglin_helmet": "Netherite Piglin Helmet",
   "item.dungeons_mobs.cracked_netherite_piglin_helmet": "Cracked Netherite Piglin Helmet",
-  "item.dungeons_mobs.gold_piglin_helmet": "Gold Piglin Helmet",
-  "item.dungeons_mobs.cracked_gold_piglin_helmet": "Cracked Gold Piglin Helmet",
+  "item.dungeons_mobs.gold_piglin_helmet": "Golden Piglin Helmet",
+  "item.dungeons_mobs.cracked_gold_piglin_helmet": "Cracked Golden Piglin Helmet",
 
   "item.dungeons_mobs.geomancer_beads": "Geomancer Beads",
   "item.dungeons_mobs.geomancer_robes": "Geomancer Rags",
@@ -157,12 +158,53 @@
   "item.dungeons_mobs.iceologer_pants": "Iceologer Pants",
   "item.dungeons_mobs.iceologer_shoes": "Iceologer Boots",
   
+  "item.dungeons_mobs.illusioner_hood": "Illusioner Hood",
+  "item.dungeons_mobs.illusioner_robes": "Illusioner Cloak",
+  "item.dungeons_mobs.illusioner_pants": "Illusioner Pants",
+  "item.dungeons_mobs.illusioner_shoes": "Illusioner Boots",
+  
+  "item.dungeons_mobs.mage_hood": "Mage Hood",
+  "item.dungeons_mobs.mage_robes": "Mage Cloak",
+  "item.dungeons_mobs.mage_pants": "Mage Pants",
+  "item.dungeons_mobs.mage_shoes": "Mage Boots",
+  
   "item.dungeons_mobs.royal_guard_helmet": "Royal Guard Helmet",
   "item.dungeons_mobs.royal_guard_chestplate": "Royal Guard Chestplate",
   "item.dungeons_mobs.royal_guard_legs": "Royal Guard Kneepads",
-  "item.dungeons_mobs.royal_guard_sabatons": "Royal Guard Sabatons",
+  "item.dungeons_mobs.royal_guard_sabatons": "Royal Guard Sabatons",  
+  
+  "item.dungeons_mobs.mountaineer_hood": "Mountaineering Hood",
+  "item.dungeons_mobs.mountaineer_jacket": "Mountaineering Jacket",
+  "item.dungeons_mobs.mountaineer_pants": "Mountaineering Pants",
+  "item.dungeons_mobs.mountaineer_boots": "Mountaineering Boots",
+  
+  "item.dungeons_mobs.armored_mountaineer_hood": "Expedition Hood",
+  "item.dungeons_mobs.armored_mountaineer_jacket": "Expedition Jacket",
+  "item.dungeons_mobs.armored_mountaineer_pants": "Expedition Pants",
+  
+  "item.dungeons_mobs.strong_armored_mountaineer_hood": "Alpine Hood",
+  "item.dungeons_mobs.strong_armored_mountaineer_jacket": "Alpine Jacket",
+  "item.dungeons_mobs.strong_armored_mountaineer_pants": "Alpine Pants",
+  "item.dungeons_mobs.strong_armored_mountaineer_boots": "Alpine Boots",
+  
+  "item.dungeons_mobs.necromancer_crown": "Necromancer Crown",
+  "item.dungeons_mobs.necromancer_cloak": "Necromancer Cloak",
+  "item.dungeons_mobs.necromancer_belt": "Necromancer Belt",
+  
+  "item.dungeons_mobs.drowned_necromancer_crown": "Drowned Necromancer Crown",
+  "item.dungeons_mobs.drowned_necromancer_cloak": "Drowned Necromancer Cloak",
+  "item.dungeons_mobs.drowned_necromancer_belt": "Drowned Necromancer Belt",
+  
+  "item.dungeons_mobs.enchanter_hat": "Enchanter Hat",
+  "item.dungeons_mobs.enchanter_robes": "Enchanter Robes",
+  
+  "item.dungeons_mobs.wind_wig": "Wind Wig",
+  "item.dungeons_mobs.windcaller_robes": "Windcaller Robes",
+  
+  "item.dungeons_mobs.fungus_thrower_headband": "Fungus Thrower Headband",
+  "item.dungeons_mobs.fungus_thrower_pack": "Fungus Thrower Pack",
 
-  "item.dungeons_mobs.skeleton_vanguard_shield": "Skeleton Vanguard Shield",
+  "item.dungeons_mobs.skeleton_vanguard_shield": "Vanguard Shield",
 
   "item.dungeons_mobs.royal_guard_shield": "Royal Guard Shield",
   "item.dungeons_mobs.royal_guard_shield.black": "Black Royal Guard Shield",
