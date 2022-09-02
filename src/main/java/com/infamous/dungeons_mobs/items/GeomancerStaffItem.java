@@ -1,5 +1,6 @@
 package com.infamous.dungeons_mobs.items;
 
+import com.infamous.dungeons_mobs.interfaces.IHasInventorySprite;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.utils.GeomancyHelper;
 import net.minecraft.entity.Entity;
@@ -10,7 +11,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 
-public class GeomancerStaffItem extends AbstractStaffItem{
+public class GeomancerStaffItem extends AbstractStaffItem implements IHasInventorySprite {
     public GeomancerStaffItem(Properties properties) {
         super(properties);
     }

@@ -2,6 +2,7 @@ package com.infamous.dungeons_mobs.client;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
+import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
 import com.infamous.dungeons_mobs.client.particle.RedstoneSparkParticle;
 import com.infamous.dungeons_mobs.client.particle.SnowflakeParticle;
@@ -70,6 +71,7 @@ import net.minecraft.client.renderer.entity.LivingRenderer;
 import net.minecraft.client.renderer.entity.SkeletonRenderer;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.DyeColor;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;

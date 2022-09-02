@@ -1,18 +1,7 @@
 package com.infamous.dungeons_mobs.mixin;
 
-import com.infamous.dungeons_mobs.items.ColoredTridentItem;
-import com.infamous.dungeons_mobs.items.shield.CustomISTER;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.TridentItem;
-import net.minecraft.world.World;
+import javax.annotation.Nullable;
+
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -21,7 +10,23 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import javax.annotation.Nullable;
+import com.infamous.dungeons_mobs.interfaces.IHasInventorySprite;
+import com.infamous.dungeons_mobs.items.ColoredTridentItem;
+import com.infamous.dungeons_mobs.items.shield.CustomISTER;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.ItemModelMesher;
+import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 @Mixin(ItemRenderer.class)
 public abstract class ItemRendererMixin {
@@ -38,14 +43,16 @@ public abstract class ItemRendererMixin {
     @Inject(at = @At(value = "HEAD"), method = "render", cancellable = true)
     private void renderCustomTrident(ItemStack stack, ItemCameraTransforms.TransformType transformType, boolean leftHandHackery, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int p_229111_6_, int p_229111_7_, IBakedModel bakedModel, CallbackInfo ci){
         Item item = stack.getItem();
-        if(!(item instanceof ColoredTridentItem)) return;
+        if(!((item instanceof IHasInventorySprite && ((IHasInventorySprite)item).getModelLocation() != null))) return;
 
         ci.cancel();
         if (!stack.isEmpty()) {
             matrixStack.pushPose();
             boolean renderSprite = transformType == ItemCameraTransforms.TransformType.GUI || transformType == ItemCameraTransforms.TransformType.GROUND || transformType == ItemCameraTransforms.TransformType.FIXED;
             if (renderSprite) {
-                bakedModel = getCustomTridentMRL((ColoredTridentItem) item, false);
+            	if (item instanceof ColoredTridentItem) {
+            		bakedModel = getCustomTridentMRL((ColoredTridentItem) item, false);
+            	}
             }
 
             bakedModel = net.minecraftforge.client.ForgeHooksClient.handleCameraTransforms(matrixStack, bakedModel, transformType, leftHandHackery);
@@ -69,11 +76,11 @@ public abstract class ItemRendererMixin {
     }
 
     @ModifyVariable(at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/client/renderer/ItemModelMesher;getItemModel(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/client/renderer/model/IBakedModel;"), method = "getModel")
-    private IBakedModel checkForCustomTrident(IBakedModel original, ItemStack stack, @Nullable World world, @Nullable LivingEntity livingEntity){
+    private IBakedModel checkForCustomTridentModel(IBakedModel original, ItemStack stack, @Nullable World world, @Nullable LivingEntity livingEntity){
         Item item = stack.getItem();
-        if(item instanceof ColoredTridentItem){
+        if (item instanceof ColoredTridentItem) {
             return getCustomTridentMRL((ColoredTridentItem) item, true);
-        } else{
+        } else {
             return original;
         }
     }
