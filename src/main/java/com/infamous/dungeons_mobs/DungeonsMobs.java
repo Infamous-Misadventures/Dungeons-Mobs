@@ -22,11 +22,9 @@ import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
 import com.infamous.dungeons_mobs.client.renderer.armor.GeomancerClothesArmorRenderer;
 import com.infamous.dungeons_mobs.client.renderer.armor.IceologerClothesArmorRenderer;
 import com.infamous.dungeons_mobs.client.renderer.armor.RoyalGuardArmorRenderer;
+import com.infamous.dungeons_mobs.client.renderer.armor.VanguardArmorRenderer;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
-import com.infamous.dungeons_mobs.items.GeomancerClothesItem;
-import com.infamous.dungeons_mobs.items.GroupDungeonsMobs;
-import com.infamous.dungeons_mobs.items.IceologerClothesItem;
-import com.infamous.dungeons_mobs.items.RoyalGuardArmorItem;
+import com.infamous.dungeons_mobs.items.*;
 import com.infamous.dungeons_mobs.mod.*;
 import com.infamous.dungeons_mobs.network.NetworkHandler;
 import com.infamous.dungeons_mobs.network.datasync.ModDataSerializers;
@@ -93,6 +91,7 @@ public class DungeonsMobs
         ModRecipes.RECIPES.register(modEventBus);
         ModParticleTypes.PARTICLES.register(modEventBus);
         ModMobEnchantments.MOB_ENCHANTMENTS_DEFERRED.register(modEventBus);
+        ModMobEnchants.MOB_ENCHANTS_DEFERRED.register(modEventBus);
         ModDataSerializers.DATA_SERIALIZERS.register(modEventBus);
         PROXY = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 
@@ -119,6 +118,7 @@ public class DungeonsMobs
         // ITEM MODEL PROPERTIES
         MinecraftForge.EVENT_BUS.register(new ModItemModelProperties());
         GeoArmorRenderer.registerArmorRenderer(IceologerClothesItem.class, IceologerClothesArmorRenderer::new);
+        GeoArmorRenderer.registerArmorRenderer(VanguardArmorItem.class, VanguardArmorRenderer::new);
         GeoArmorRenderer.registerArmorRenderer(GeomancerClothesItem.class, GeomancerClothesArmorRenderer::new);
         GeoArmorRenderer.registerArmorRenderer(RoyalGuardArmorItem.class, RoyalGuardArmorRenderer::new);
 

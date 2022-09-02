@@ -13,12 +13,6 @@
   "entity.dungeons_mobs.necromancer": "Necromancer",
   "item.dungeons_mobs.necromancer_spawn_egg": "Necromancer Spawn Egg",
 
-  "entity.dungeons_mobs.armored_vindicator": "Armored Vindicator",
-  "item.dungeons_mobs.armored_vindicator_spawn_egg": "Armored Vindicator Spawn Egg",
-  "entity.dungeons_mobs.vindicator_chef": "Vindicator Chef",
-  "item.dungeons_mobs.vindicator_chef_spawn_egg": "Vindicator Chef Spawn Egg",
-  "entity.dungeons_mobs.armored_pillager": "Armored Pillager",
-  "item.dungeons_mobs.armored_pillager_spawn_egg": "Armored Pillager Spawn Egg",
   "entity.dungeons_mobs.royal_guard": "Royal Guard",
   "item.dungeons_mobs.royal_guard_spawn_egg": "Royal Guard Spawn Egg",
   "entity.dungeons_mobs.iceologer": "Iceologer",
@@ -145,7 +139,9 @@
   "item.dungeons_mobs.diamond_pillager_helmet": "Diamond Pillager Helmet",
   "item.dungeons_mobs.gold_vindicator_helmet": "Gold Vindicator Helmet",
   "item.dungeons_mobs.diamond_vindicator_helmet": "Diamond Vindicator Helmet",
-  "item.dungeons_mobs.skeleton_vanguard_helmet": "Skeleton Vanguard Helmet",
+  "item.dungeons_mobs.vanguard_helmet": "Vanguard Helmet",
+  "item.dungeons_mobs.vanguard_chestplate": "Vanguard Chestplate",
+  "item.dungeons_mobs.vanguard_legs": "Vanguard Legs",
   "item.dungeons_mobs.chef_hat": "Chef Hat",
 
   "item.dungeons_mobs.netherite_piglin_helmet": "Netherite Piglin Helmet",
@@ -202,10 +198,12 @@
   "mobEnchantment.dungeons_mobs.multishot": "Multishot",
   "mobEnchantment.dungeons_mobs.protection": "Protection",
   "mobEnchantment.dungeons_mobs.quick": "Quick",
-  "mobEnchantment.dungeons_mobs.regeneration": "Regeneration",
-  "mobEnchantment.dungeons_mobs.rush": "Rush",
   "mobEnchantment.dungeons_mobs.tempo_theft": "Tempo Theft",
   "mobEnchantment.dungeons_mobs.thorns": "Thorns",
+
+  "mobenchant.enchantwithmob.name.dungeons_mobs.regeneration": "Regeneration",
+  "mobenchant.enchantwithmob.name.dungeons_mobs.rush": "Rush",
+  "mobenchant.enchantwithmob.name.dungeons_mobs.radiance": "Radiance",
   
   "subtitles.entity.wraith.idle": "Wraith wails",
   "subtitles.entity.wraith.hurt": "Wraith hurts",

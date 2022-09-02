@@ -20,14 +20,12 @@ import com.infamous.dungeons_mobs.entities.redstone.RedstoneMineEntity;
 import com.infamous.dungeons_mobs.entities.slime.ConjuredSlimeEntity;
 import com.infamous.dungeons_mobs.entities.summonables.*;
 import com.infamous.dungeons_mobs.entities.undead.*;
-import com.infamous.dungeons_mobs.entities.undead.horseman.SkeletonHorsemanEntity;
 import com.infamous.dungeons_mobs.entities.water.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.SpawnEggItem;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.fml.RegistryObject;
@@ -86,17 +84,6 @@ public class ModEntityTypes {
             0x493615, 0xe8b42f
     );
 
-
-    public static final RegistryObject<EntityType<SkeletonHorsemanEntity>> SKELETON_HORSEMAN = registerEntity("skeleton_horseman", () ->
-            EntityType.Builder.<SkeletonHorsemanEntity>of(SkeletonHorsemanEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F * 1.1F, 1.99F * 1.1F)
-                    .clientTrackingRange(8)
-                    .setCustomClientFactory((spawnEntity,world) -> new SkeletonHorsemanEntity(world))
-                    .build(new ResourceLocation(MODID, "skeleton_horseman").toString()),
-            12698049, 0xb0babe
-    );
-
-
     public static final RegistryObject<EntityType<NecromancerEntity>> NECROMANCER = registerEntity("necromancer", () ->
             EntityType.Builder.<NecromancerEntity>of(NecromancerEntity::new, EntityClassification.MONSTER)
                     .sized(0.6F * 1.2F, 1.99F * 1.2F)
@@ -109,23 +96,6 @@ public class ModEntityTypes {
 
 
     // ILLAGERS
-    public static final RegistryObject<EntityType<ArmoredVindicatorEntity>> ARMORED_VINDICATOR = registerEntity("armored_vindicator", () ->
-            EntityType.Builder.<ArmoredVindicatorEntity>of(ArmoredVindicatorEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F * 1.1F, 1.95F * 1.1F)
-                    .clientTrackingRange(8)
-                    .setCustomClientFactory((spawnEntity,world) -> new ArmoredVindicatorEntity(world))
-                    .build(new ResourceLocation(MODID, "armored_vindicator").toString()),
-            9804699, 2580065
-    );
-
-    public static final RegistryObject<EntityType<ArmoredPillagerEntity>> ARMORED_PILLAGER = registerEntity("armored_pillager", () ->
-            EntityType.Builder.<ArmoredPillagerEntity>of(ArmoredPillagerEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F * 1.1F, 1.95F * 1.1F)
-                    .clientTrackingRange(8)
-                    .setCustomClientFactory((spawnEntity,world) -> new ArmoredPillagerEntity(world))
-                    .build(new ResourceLocation(MODID, "armored_pillager").toString()),
-            5451574, 9804699
-    );
 
     public static final RegistryObject<EntityType<RoyalGuardEntity>> ROYAL_GUARD = registerEntity("royal_guard", () ->
             EntityType.Builder.<RoyalGuardEntity>of(RoyalGuardEntity::new, EntityClassification.MONSTER)
@@ -189,15 +159,6 @@ public class ModEntityTypes {
             0x62162c, 0xfbd600
     );
     
-    public static final RegistryObject<EntityType<VindicatorChefEntity>> VINDICATOR_CHEF = registerEntity("vindicator_chef", () ->
-            EntityType.Builder.<VindicatorChefEntity>of(VindicatorChefEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F, 1.95F)
-                    .clientTrackingRange(8)
-                    .setCustomClientFactory((spawnEntity,world) -> new VindicatorChefEntity(world))
-                    .build(new ResourceLocation(MODID, "vindicator_chef").toString()),
-            9804699, 0xe0dfdb
-    );
-
     public static final RegistryObject<EntityType<DungeonsIllusionerEntity>> ILLUSIONER = registerEntity("illusioner", () ->
             EntityType.Builder.<DungeonsIllusionerEntity>of(DungeonsIllusionerEntity::new, EntityClassification.MONSTER)
                     .sized(0.6F, 1.95F)
@@ -221,15 +182,6 @@ public class ModEntityTypes {
                     .setCustomClientFactory((spawnEntity,world) -> new MountaineerEntity(world))
                     .build(new ResourceLocation(MODID, "mountaineer").toString()),
             0x715039, 0xe6e4d4
-    );
-
-    public static final RegistryObject<EntityType<ArmoredMountaineerEntity>> ARMORED_MOUNTAINEER = registerEntity("armored_mountaineer", () ->
-            EntityType.Builder.<ArmoredMountaineerEntity>of(ArmoredMountaineerEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F * 1.1F, 1.95F * 1.1F)
-                    .clientTrackingRange(8)
-                    .setCustomClientFactory((spawnEntity,world) -> new ArmoredMountaineerEntity(world))
-                    .build(new ResourceLocation(MODID, "armored_mountaineer").toString()),
-                    0x715039, 0xe6e4d4
     );
 
     // CREEPER
@@ -380,15 +332,6 @@ public class ModEntityTypes {
                     0x2b9477, 0xc436cd
     );
 
-    public static final RegistryObject<EntityType<ArmoredDrownedEntity>> ARMORED_DROWNED = registerEntity("armored_drowned", () ->
-            EntityType.Builder.<ArmoredDrownedEntity>of(ArmoredDrownedEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F * 1.1F, 1.95F * 1.1F)
-                    .clientTrackingRange(8)
-                    .build(new ResourceLocation(MODID, "armored_drowned").toString()),
-                    9433559, 7969893
-    );
-
-
     public static final RegistryObject<EntityType<DrownedNecromancerEntity>> DROWNED_NECROMANCER = registerEntity("drowned_necromancer", () ->
             EntityType.Builder.<DrownedNecromancerEntity>of(DrownedNecromancerEntity::new, EntityClassification.MONSTER)
                     .sized(0.6F * 1.2F, 1.95F * 1.2F)
@@ -404,14 +347,6 @@ public class ModEntityTypes {
             .build(new ResourceLocation(MODID, "sunken_skeleton").toString()),
     0x87a964, 0xc06fe5
     	    );
-    
-    public static final RegistryObject<EntityType<ArmoredSunkenSkeletonEntity>> ARMORED_SUNKEN_SKELETON = registerEntity("armored_sunken_skeleton", () ->
-            EntityType.Builder.<ArmoredSunkenSkeletonEntity>of(ArmoredSunkenSkeletonEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F * 1.1F, 1.99F * 1.1F)
-                    .clientTrackingRange(8)
-                    .build(new ResourceLocation(MODID, "armored_sunken_skeleton").toString()),
-                    0x87a964, 0xc06fe5
-    );
 
     // ENDER MOBS
 

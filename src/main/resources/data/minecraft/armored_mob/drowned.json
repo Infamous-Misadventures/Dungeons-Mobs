@@ -1,0 +1,24 @@
+{
+  "configs": [
+    {
+      "attributes": [
+        {
+          "attribute": "minecraft:generic.armor",
+          "amount": 10,
+          "operation": 0
+        },
+        {
+          "attribute": "minecraft:generic.knockback_resistance",
+          "amount": 0.6,
+          "operation": 0
+        },
+        {
+          "attribute": "minecraft:generic.attack_damage",
+          "amount": 1,
+          "operation": 0
+        }
+      ],
+      "weight": 25
+    }
+  ]
+}

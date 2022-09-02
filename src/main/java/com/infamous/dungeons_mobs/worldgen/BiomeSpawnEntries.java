@@ -79,12 +79,6 @@ public class BiomeSpawnEntries {
                     DungeonsMobsConfig.COMMON.NECROMANCER_MIN_GROUP_SIZE.get(),
                     DungeonsMobsConfig.COMMON.NECROMANCER_MAX_GROUP_SIZE.get());
 
-            List<String> skeletonHorsemanBiomeTypes = (List<String>) DungeonsMobsConfig.COMMON.SKELETON_HORSEMAN_BIOME_TYPES.get();
-            tryAddMonsterSpawnToBiome(biomeRegistryKey, mobSpawnInfoBuilder, skeletonHorsemanBiomeTypes, ModEntityTypes.SKELETON_HORSEMAN.get(),
-                    DungeonsMobsConfig.COMMON.SKELETON_HORSEMAN_SPAWN_WEIGHT.get(),
-                    DungeonsMobsConfig.COMMON.SKELETON_HORSEMAN_MIN_GROUP_SIZE.get(),
-                    DungeonsMobsConfig.COMMON.SKELETON_HORSEMAN_MAX_GROUP_SIZE.get());
-
             List<String> mountaineerBiomeTypes = (List<String>) DungeonsMobsConfig.COMMON.MOUNTAINEER_BIOME_TYPES.get();
             tryAddMonsterSpawnToBiome(biomeRegistryKey, mobSpawnInfoBuilder, mountaineerBiomeTypes, ModEntityTypes.MOUNTAINEER.get(),
                     DungeonsMobsConfig.COMMON.MOUNTAINEER_SPAWN_WEIGHT.get(),
@@ -203,15 +197,6 @@ public class BiomeSpawnEntries {
     }
 
     private static void replaceMonsterSpawnsWithVariants(MobSpawnInfoBuilder mobSpawnInfoBuilder, Biome.Category foundCategory) {
-        if(DungeonsMobsConfig.COMMON.ENABLE_ARMORED_MOUNTAINEER_REPLACES_MOUNTAINEER.get()){
-            handleVariantReplacement(mobSpawnInfoBuilder, ModEntityTypes.MOUNTAINEER.get(), ModEntityTypes.ARMORED_MOUNTAINEER.get(), 0.9);
-        }
-        if(DungeonsMobsConfig.COMMON.ENABLE_ARMORED_VINDICATOR_REPLACES_VINDICATOR.get()){
-            handleVariantReplacement(mobSpawnInfoBuilder, EntityType.VINDICATOR, ModEntityTypes.ARMORED_VINDICATOR.get(), 0.9);
-        }
-        if(DungeonsMobsConfig.COMMON.ENABLE_ARMORED_PILLAGER_REPLACES_PILLAGER.get()){
-            handleVariantReplacement(mobSpawnInfoBuilder, EntityType.PILLAGER, ModEntityTypes.ARMORED_PILLAGER.get(), 0.9);
-        }
         if(DungeonsMobsConfig.COMMON.ENABLE_JUNGLE_ZOMBIE_REPLACES_ZOMBIE.get()){
             handleVariantReplacementWithCategoryCheck(mobSpawnInfoBuilder, foundCategory, Biome.Category.JUNGLE, EntityType.ZOMBIE, ModEntityTypes.JUNGLE_ZOMBIE.get(), 0.8);
         }
@@ -223,12 +208,6 @@ public class BiomeSpawnEntries {
         }
         if(DungeonsMobsConfig.COMMON.ENABLE_ICY_CREEPER_REPLACES_CREEPER.get()){
             handleVariantReplacementWithCategoryCheck(mobSpawnInfoBuilder, foundCategory, Biome.Category.ICY, EntityType.CREEPER, ModEntityTypes.ICY_CREEPER.get(), 0.8);
-        }
-        if(DungeonsMobsConfig.COMMON.ENABLE_ARMORED_DROWNED_REPLACES_DROWNED.get()){
-            handleVariantReplacement(mobSpawnInfoBuilder, EntityType.DROWNED, ModEntityTypes.ARMORED_DROWNED.get(), 0.9);
-        }
-        if(DungeonsMobsConfig.COMMON.ENABLE_ARMORED_SUNKEN_SKELETON_REPLACES_SUNKEN_SKELETON.get()){
-            handleVariantReplacement(mobSpawnInfoBuilder, ModEntityTypes.SUNKEN_SKELETON.get(), ModEntityTypes.ARMORED_SUNKEN_SKELETON.get(), 0.9);
         }
     }
 

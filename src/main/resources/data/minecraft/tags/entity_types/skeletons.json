@@ -3,9 +3,7 @@
   "values": [
     "dungeons_mobs:mossy_skeleton",
     "dungeons_mobs:necromancer",
-    "dungeons_mobs:skeleton_horseman",
     "dungeons_mobs:skeleton_vanguard",
-    "dungeons_mobs:sunken_skeleton",
-    "dungeons_mobs:armored_sunken_skeleton"
+    "dungeons_mobs:sunken_skeleton"
   ]
 }

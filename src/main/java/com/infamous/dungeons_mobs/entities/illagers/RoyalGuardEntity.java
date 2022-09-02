@@ -37,6 +37,7 @@ import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.monster.AbstractIllagerEntity;
 import net.minecraft.entity.monster.AbstractRaiderEntity;
+import net.minecraft.entity.monster.VindicatorEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -212,7 +213,7 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
 	}
 
 	public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-		return ArmoredVindicatorEntity.setCustomAttributes().add(Attributes.KNOCKBACK_RESISTANCE, 0.6D)
+		return VindicatorEntity.createAttributes().add(Attributes.KNOCKBACK_RESISTANCE, 0.6D)
 				.add(Attributes.MOVEMENT_SPEED, (double) 0.325F).add(Attributes.FOLLOW_RANGE, 18.0D).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
 	}
 
