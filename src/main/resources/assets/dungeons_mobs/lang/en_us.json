@@ -124,9 +124,9 @@
   "item.dungeons_mobs.wraith_fire_charge": "Wraith Fire Charge",
   "item.dungeons_mobs.blue_nethershroom": "Blue Nethershroom",
   "item.dungeons_mobs.spatula": "Wooden Ladle",
-  "item.dungeons_mobs.mountaineer_axe": "Mountaineer Axe",
-  "item.dungeons_mobs.gold_mountaineer_axe": "Gold Mountaineer Axe",
-  "item.dungeons_mobs.diamond_mountaineer_axe": "Diamond Mountaineer Axe",
+  "item.dungeons_mobs.mountaineer_axe": "Ice Pick",
+  "item.dungeons_mobs.gold_mountaineer_axe": "Sturdy Ice Pick",
+  "item.dungeons_mobs.diamond_mountaineer_axe": "Reinforced Ice Pick",
 
   "item.dungeons_mobs.windcaller_staff": "Windcaller Staff",
   "item.dungeons_mobs.geomancer_staff": "Geomancer Staff",
@@ -147,8 +147,8 @@
 
   "item.dungeons_mobs.netherite_piglin_helmet": "Netherite Piglin Helmet",
   "item.dungeons_mobs.cracked_netherite_piglin_helmet": "Cracked Netherite Piglin Helmet",
-  "item.dungeons_mobs.gold_piglin_helmet": "Gold Piglin Helmet",
-  "item.dungeons_mobs.cracked_gold_piglin_helmet": "Cracked Gold Piglin Helmet",
+  "item.dungeons_mobs.gold_piglin_helmet": "Golden Piglin Helmet",
+  "item.dungeons_mobs.cracked_gold_piglin_helmet": "Cracked Golden Piglin Helmet",
 
   "item.dungeons_mobs.geomancer_beads": "Geomancer Beads",
   "item.dungeons_mobs.geomancer_robes": "Geomancer Rags",
@@ -204,7 +204,7 @@
   "item.dungeons_mobs.fungus_thrower_headband": "Fungus Thrower Headband",
   "item.dungeons_mobs.fungus_thrower_pack": "Fungus Thrower Pack",
 
-  "item.dungeons_mobs.skeleton_vanguard_shield": "Skeleton Vanguard Shield",
+  "item.dungeons_mobs.skeleton_vanguard_shield": "Vanguard Shield",
 
   "item.dungeons_mobs.royal_guard_shield": "Royal Guard Shield",
   "item.dungeons_mobs.royal_guard_shield.black": "Black Royal Guard Shield",
