@@ -18,12 +18,13 @@ public class UseShieldGoal extends Goal {
 	public int blockChance;
 	public int stopChanceAfterDurationEnds;
 	public double blockDistance;
+	public boolean guaranteedBlockIfTargetNotVisible;
 	
 	public CreatureEntity mob;
 	@Nullable
 	public LivingEntity target;
 	
-    public UseShieldGoal(CreatureEntity attackingMob, double blockDistance, int blockDuration, int maxBlockDuration, int stopChanceAfterDurationEnds, int blockChance) {
+    public UseShieldGoal(CreatureEntity attackingMob, double blockDistance, int blockDuration, int maxBlockDuration, int stopChanceAfterDurationEnds, int blockChance, boolean guaranteedBlockIfTargetNotVisible) {
        this.blockDuration = maxBlockDuration;
 		this.mob = attackingMob;
 		this.target = attackingMob.getTarget();
@@ -31,6 +32,7 @@ public class UseShieldGoal extends Goal {
 		this.maxBlockDuration = maxBlockDuration;
 		this.stopChanceAfterDurationEnds = stopChanceAfterDurationEnds;
 		this.blockDistance = blockDistance;
+		this.guaranteedBlockIfTargetNotVisible = guaranteedBlockIfTargetNotVisible;
     }
     
 	@Override
@@ -61,7 +63,7 @@ public class UseShieldGoal extends Goal {
 	@Override
 	public boolean canUse() {
 		target = mob.getTarget();
-		return target != null && !isShieldDisabled(mob) && shouldBlockForTarget(target) && ((mob.getRandom().nextInt(this.blockChance) == 0 && mob.distanceTo(target) <= blockDistance && mob.canSee(target) && mob.getOffhandItem().getItem().isShield(mob.getOffhandItem(), mob)) || mob.isBlocking());
+		return target != null && !isShieldDisabled(mob) && shouldBlockForTarget(target) && (((mob.getRandom().nextInt(this.blockChance) == 0 && mob.distanceTo(target) <= blockDistance && mob.canSee(target) && mob.getOffhandItem().getItem().isShield(mob.getOffhandItem(), mob)) || mob.isBlocking()) || (guaranteedBlockIfTargetNotVisible && !mob.canSee(target)));
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 
 import com.infamous.dungeons_mobs.entities.summonables.IceCloudEntity;
 import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
+import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModItems;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
@@ -80,6 +81,7 @@ public class IceologerEntity extends AbstractIllagerEntity implements IAnimatabl
         this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, PlayerEntity.class, 3.0F, 1.2D, 1.2D));
         this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, IronGolemEntity.class, 3.0F, 1.3D, 1.15D));
         this.goalSelector.addGoal(2, new ApproachTargetGoal(this, 10, 1.0D, true));
+        this.goalSelector.addGoal(3, new LookAtTargetGoal(this));
         this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 1.0D));
         this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
         this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
@@ -223,7 +225,7 @@ public class IceologerEntity extends AbstractIllagerEntity implements IAnimatabl
 			int nearbyChunks = mob.level.getEntities(mob, mob.getBoundingBox().inflate(100.0D), ICE_CHUNK)
 					.size();
 			
-			return target != null && mob.random.nextInt(20) == 0 && mob.distanceTo(target) <= 12 && nearbyChunks <= 0 && animationsUseable();
+			return target != null && mob.random.nextInt(20) == 0 && mob.distanceTo(target) <= 12 && nearbyChunks <= 0 && mob.canSee(target) && animationsUseable();
 		}
 
 		@Override

@@ -30,6 +30,9 @@
   "entity.dungeons_mobs.mage": "Mage",
   "entity.dungeons_mobs.mage_clone": "Mage",
   "item.dungeons_mobs.mage_spawn_egg": "Mage Spawn Egg",
+  
+  "entity.dungeons_mobs.wildfire": "Wildfire",
+  "item.dungeons_mobs.wildfire_spawn_egg": "Wildfire Spawn Egg",
 
 	"entity.dungeons_mobs.snareling_glob" : "Snareling Glob",
 	"entity.dungeons_mobs.blastling_bullet" : "Blastling Bullet",

@@ -2,10 +2,10 @@ package com.infamous.dungeons_mobs.client;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
-import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
 import com.infamous.dungeons_mobs.client.particle.RedstoneSparkParticle;
 import com.infamous.dungeons_mobs.client.particle.SnowflakeParticle;
+import com.infamous.dungeons_mobs.client.renderer.blaze.WildfireRenderer;
 import com.infamous.dungeons_mobs.client.renderer.creeper.IcyCreeperRenderer;
 import com.infamous.dungeons_mobs.client.renderer.ender.BlastlingRenderer;
 import com.infamous.dungeons_mobs.client.renderer.ender.EndersentRenderer;
@@ -71,7 +71,6 @@ import net.minecraft.client.renderer.entity.LivingRenderer;
 import net.minecraft.client.renderer.entity.SkeletonRenderer;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.DyeColor;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
@@ -183,6 +182,8 @@ public class ClientEvents {
         
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.BLASTLING_BULLET.get(), BlastlingBulletRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SNARELING_GLOB.get(), SnarelingGlobRenderer::new);
+        
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WILDFIRE.get(), WildfireRenderer::new);
     }
 
     @SubscribeEvent
