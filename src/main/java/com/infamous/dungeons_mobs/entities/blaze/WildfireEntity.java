@@ -29,6 +29,7 @@ import net.minecraft.entity.ai.goal.RandomWalkingGoal;
 import net.minecraft.entity.monster.AbstractIllagerEntity;
 import net.minecraft.entity.monster.AbstractRaiderEntity;
 import net.minecraft.entity.monster.BlazeEntity;
+import net.minecraft.entity.monster.EvokerEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.SmallFireballEntity;
@@ -47,6 +48,8 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceContext;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
@@ -371,6 +374,7 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable {
 		public LivingEntity target;
 		
 		public int blazeSummonRange = 3;
+		public int closeBlazeSummonRange = 1;
 		
 	      private final EntityPredicate blazeCountTargeting = (new EntityPredicate()).range(30.0D).ignoreInvisibilityTesting().allowInvulnerable().allowSameTeam();
 	      
@@ -394,7 +398,7 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable {
 			target = mob.getTarget();
 			int nearbyBlazes = mob.level.getNearbyEntities(BlazeEntity.class, blazeCountTargeting, mob, mob.getBoundingBox().inflate(30.0D)).size();
 			
-			return target != null && mob.random.nextInt((30 * (nearbyBlazes + 1))) == 0 && nearbyBlazes < 3 && animationsUseable();
+			return target != null && mob.random.nextInt((80 * (nearbyBlazes + 1))) == 0 && nearbyBlazes < 3 && mob.canSee(target) && animationsUseable();
 		}
 
 		@Override
@@ -420,8 +424,19 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable {
 			if (target != null && mob.summonAnimationTick == mob.summonAnimationActionPoint) {
 	            for (int i = 0; i < 1 + mob.random.nextInt(1); i++) {
 	            	BlazeEntity summonedBlaze = EntityType.BLAZE.create(mob.level);
-	            	BlockPos summonPos = mob.blockPosition().offset(blazeSummonRange + mob.random.nextInt(blazeSummonRange * 2), 0, blazeSummonRange + mob.random.nextInt(blazeSummonRange * 2));
+	            	BlockPos summonPos = mob.blockPosition().offset(-blazeSummonRange + mob.random.nextInt((blazeSummonRange * 2) + 1), 0, -blazeSummonRange + mob.random.nextInt((blazeSummonRange * 2) + 1));
 	            	summonedBlaze.moveTo(summonPos, 0.0F, 0.0F);
+	            	
+	            	// RELOCATES BLAZE CLOSER TO WILDFIRE IF SPAWNED IN A POSITION THAT MAY HINDER ITS ABILITY TO JOIN IN THE BATTLE
+	            	if (mob.isInWall() || !mob.canSee(target)) {
+	            		summonPos = mob.blockPosition().offset(-closeBlazeSummonRange + mob.random.nextInt((closeBlazeSummonRange * 2) + 1), 0, -closeBlazeSummonRange + mob.random.nextInt((closeBlazeSummonRange * 2) + 1));
+	            	}
+	            	
+	            	// RELOCATES BLAZE TO WILDFIRE'S POSITION STILL IN A POSITION THAT MAY HINDER ITS ABILITY TO JOIN IN THE BATTLE
+	            	if (mob.isInWall() || !mob.canSee(target)) {
+	            		summonPos = mob.blockPosition();
+	            	}
+	            	
 	            	summonedBlaze.setTarget(target);
 	            	summonedBlaze.finalizeSpawn(((ServerWorld)mob.level), mob.level.getCurrentDifficultyAt(summonPos), SpawnReason.MOB_SUMMONED, (ILivingEntityData)null, (CompoundNBT)null);
 	            	mob.playSound(ModSoundEvents.WILDFIRE_PROJECTILE_HIT.get(), 1.0F, 1.0F);
@@ -463,7 +478,7 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable {
 		@Override
 		public boolean canUse() {
 			target = mob.getTarget();
-			return target != null && mob.isOnGround() && mob.random.nextInt(20) == 0 && mob.distanceTo(target) < 4 && animationsUseable();
+			return target != null && mob.isOnGround() && mob.random.nextInt(20) == 0 && mob.distanceTo(target) < 4 && mob.canSee(target) && animationsUseable();
 		}
 
 		@Override
@@ -520,7 +535,7 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable {
 		@Override
 		public boolean canUse() {
 			target = mob.getTarget();
-			return target != null && mob.random.nextInt(15) == 0 && mob.distanceTo(target) > 4 && mob.distanceTo(target) < 13 && animationsUseable();
+			return target != null && mob.random.nextInt(15) == 0 && mob.distanceTo(target) > 4 && mob.distanceTo(target) < 13 && mob.canSee(target) && animationsUseable();
 		}
 
 		@Override

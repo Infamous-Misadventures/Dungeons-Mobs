@@ -225,7 +225,7 @@ public class IceologerEntity extends AbstractIllagerEntity implements IAnimatabl
 			int nearbyChunks = mob.level.getEntities(mob, mob.getBoundingBox().inflate(100.0D), ICE_CHUNK)
 					.size();
 			
-			return target != null && mob.random.nextInt(20) == 0 && mob.distanceTo(target) <= 12 && nearbyChunks <= 0 && animationsUseable();
+			return target != null && mob.random.nextInt(20) == 0 && mob.distanceTo(target) <= 12 && nearbyChunks <= 0 && mob.canSee(target) && animationsUseable();
 		}
 
 		@Override

@@ -19,11 +19,11 @@ public class ApproachTargetGoal extends MeleeAttackGoal {
 	    }
 	      
 	    public boolean canUse() {
-	    	return super.canUse() && this.mob.distanceTo(this.mob.getTarget()) >= distanceToApproachTo;
+	    	return super.canUse() && (this.mob.distanceTo(this.mob.getTarget()) >= distanceToApproachTo || !this.mob.canSee(this.mob.getTarget()));
 	    }
 	    
 	    public boolean canContinueToUse() {
-	    	return super.canContinueToUse() && this.mob.distanceTo(this.mob.getTarget()) >= distanceToApproachTo;
+	    	return super.canContinueToUse() && (this.mob.distanceTo(this.mob.getTarget()) >= distanceToApproachTo || !this.mob.canSee(this.mob.getTarget()));
 	    }
 
 	      protected double getAttackReachSqr(LivingEntity p_179512_1_) {

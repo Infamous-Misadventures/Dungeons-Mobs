@@ -91,7 +91,7 @@ public class SkeletonVanguardEntity extends SkeletonEntity implements IShieldUse
 
 	@Override
 	protected void registerGoals() {
-		this.goalSelector.addGoal(0, new UseShieldGoal(this, 10D, 60, 120, 10, 25));
+		this.goalSelector.addGoal(0, new UseShieldGoal(this, 10D, 60, 120, 10, 60, true));
 		this.goalSelector.addGoal(1, new SkeletonVanguardEntity.BasicAttackGoal(this));
 		this.goalSelector.addGoal(2, new ApproachTargetGoal(this, 0, 1.0D, true));
         this.goalSelector.addGoal(3, new LookAtTargetGoal(this));
@@ -362,7 +362,7 @@ public class SkeletonVanguardEntity extends SkeletonEntity implements IShieldUse
 		@Override
 		public void stop() {
 			if (target != null && !isShieldDisabled(mob) && shouldBlockForTarget(target)
-					&& mob.getOffhandItem().getItem().isShield(mob.getOffhandItem(), mob) && mob.random.nextBoolean()) {
+					&& mob.getOffhandItem().getItem().isShield(mob.getOffhandItem(), mob) && mob.random.nextInt(4) == 0) {
 				mob.startUsingItem(Hand.OFF_HAND);
 			}
 		}
