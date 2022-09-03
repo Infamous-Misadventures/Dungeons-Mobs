@@ -23,11 +23,11 @@ import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 
 @OnlyIn(Dist.CLIENT)
-public class PulsatingRedstoneLayer<T extends LivingEntity & IAnimatable> extends GeoLayerRenderer<T> {
+public class PulsatingGlowLayer<T extends LivingEntity & IAnimatable> extends GeoLayerRenderer<T> {
 	   
 	public ResourceLocation textureLocation;
 
-	public PulsatingRedstoneLayer(IGeoRenderer<T> endermanReplacementRenderer, ResourceLocation textureLocation) {
+	public PulsatingGlowLayer(IGeoRenderer<T> endermanReplacementRenderer, ResourceLocation textureLocation) {
 		super(endermanReplacementRenderer);
 		this.textureLocation = textureLocation;
 	}

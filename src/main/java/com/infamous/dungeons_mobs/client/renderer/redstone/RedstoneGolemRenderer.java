@@ -3,7 +3,7 @@ package com.infamous.dungeons_mobs.client.renderer.redstone;
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.client.models.redstone.RedstoneGolemModel;
 import com.infamous.dungeons_mobs.client.renderer.layer.GeoEyeLayer;
-import com.infamous.dungeons_mobs.client.renderer.layer.PulsatingRedstoneLayer;
+import com.infamous.dungeons_mobs.client.renderer.layer.PulsatingGlowLayer;
 import com.infamous.dungeons_mobs.entities.redstone.RedstoneGolemEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
@@ -18,7 +18,7 @@ public class RedstoneGolemRenderer extends GeoEntityRenderer<RedstoneGolemEntity
    public RedstoneGolemRenderer(EntityRendererManager renderManager) {
       super(renderManager, new RedstoneGolemModel());
       this.addLayer(new GeoEyeLayer<>(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/redstone/redstone_golem_light.png")));
-      this.addLayer(new PulsatingRedstoneLayer<>(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/redstone/redstone_golem_pulse_light.png")));
+      this.addLayer(new PulsatingGlowLayer<>(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/redstone/redstone_golem_pulse_light.png")));
       //this.addLayer(new GeoEyeLayer<>(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/enchanter/enchanter_eyes.png")));
       //this.addLayer(new GeoHeldItemLayer<>(this, 0.0, 0.0, 0.5));
    }

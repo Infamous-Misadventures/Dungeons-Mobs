@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.Maps;
 import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
+import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
 import com.infamous.dungeons_mobs.goals.UseShieldGoal;
 import com.infamous.dungeons_mobs.interfaces.IShieldUser;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
@@ -104,6 +105,7 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
 		this.goalSelector.addGoal(0, new UseShieldGoal(this, 7.5D, 60, 160, 15, 10));
 		this.goalSelector.addGoal(1, new RoyalGuardEntity.BasicAttackGoal(this));
 		this.goalSelector.addGoal(2, new ApproachTargetGoal(this, 0, 1.0D, true));
+        this.goalSelector.addGoal(3, new LookAtTargetGoal(this));
 		this.goalSelector.addGoal(1, new AbstractIllagerEntity.RaidOpenDoorGoal(this));
 		this.goalSelector.addGoal(3, new AbstractRaiderEntity.FindTargetGoal(this, 10.0F));
 		this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, AbstractRaiderEntity.class)).setAlertOthers());

@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 
 import com.infamous.dungeons_mobs.entities.illagers.RoyalGuardEntity;
 import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
+import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
 import com.infamous.dungeons_mobs.goals.UseShieldGoal;
 import com.infamous.dungeons_mobs.goals.switchcombat.ShieldAndMeleeAttackGoal;
 import com.infamous.dungeons_mobs.interfaces.IShieldUser;
@@ -93,6 +94,7 @@ public class SkeletonVanguardEntity extends SkeletonEntity implements IShieldUse
 		this.goalSelector.addGoal(0, new UseShieldGoal(this, 10D, 60, 120, 10, 25));
 		this.goalSelector.addGoal(1, new SkeletonVanguardEntity.BasicAttackGoal(this));
 		this.goalSelector.addGoal(2, new ApproachTargetGoal(this, 0, 1.0D, true));
+        this.goalSelector.addGoal(3, new LookAtTargetGoal(this));
 		this.goalSelector.addGoal(5, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
 		this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 8.0F));
 		this.goalSelector.addGoal(6, new LookRandomlyGoal(this));
