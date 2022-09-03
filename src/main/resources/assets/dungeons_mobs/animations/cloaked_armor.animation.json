@@ -1,0 +1,15 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"cloaked_armor": {
+			"loop": true,
+			"bones": {
+				"armorCloak": {
+					"rotation": {
+						"vector": ["Math.clamp(query.ground_speed * 20, 0, 75)", 0, 0]
+					}
+				}
+			}
+		}
+	}
+}
