@@ -234,4 +234,14 @@ public class ModSoundEvents {
 	public static final RegistryObject<SoundEvent> SUNKEN_SKELETON_DEATH = SOUNDS.register("entity.sunken_skeleton.death", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.sunken_skeleton.death")));
 	public static final RegistryObject<SoundEvent> SUNKEN_SKELETON_STEP = SOUNDS.register("entity.sunken_skeleton.step", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.sunken_skeleton.step")));
 	public static final RegistryObject<SoundEvent> SUNKEN_SKELETON_SHOOT = SOUNDS.register("entity.sunken_skeleton.shoot", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.sunken_skeleton.shoot")));
+	
+	public static final RegistryObject<SoundEvent> WILDFIRE_IDLE = SOUNDS.register("entity.wildfire.idle", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.wildfire.idle")));
+	public static final RegistryObject<SoundEvent> WILDFIRE_IDLE_LOOP = SOUNDS.register("entity.wildfire.idle_loop", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.wildfire.idle_loop")));
+	public static final RegistryObject<SoundEvent> WILDFIRE_HURT = SOUNDS.register("entity.wildfire.hurt", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.wildfire.hurt")));
+	public static final RegistryObject<SoundEvent> WILDFIRE_DEATH = SOUNDS.register("entity.wildfire.death", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.wildfire.death")));
+	public static final RegistryObject<SoundEvent> WILDFIRE_MOVE = SOUNDS.register("entity.wildfire.move", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.wildfire.move")));
+	public static final RegistryObject<SoundEvent> WILDFIRE_SHOOT = SOUNDS.register("entity.wildfire.shoot", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.wildfire.shoot")));
+	public static final RegistryObject<SoundEvent> WILDFIRE_PROJECTILE_HIT = SOUNDS.register("entity.wildfire.projectile_hit", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.wildfire.projectile_hit")));
+	public static final RegistryObject<SoundEvent> WILDFIRE_SHOCKWAVE = SOUNDS.register("entity.wildfire.shockwave", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.wildfire.shockwave")));
+	public static final RegistryObject<SoundEvent> WILDFIRE_SHIELD_BREAK = SOUNDS.register("entity.wildfire.shield_break", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.wildfire.shield_break")));
 }

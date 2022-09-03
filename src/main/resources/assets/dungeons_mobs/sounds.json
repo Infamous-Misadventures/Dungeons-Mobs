@@ -3760,5 +3760,191 @@
 				"stream": true
 			}
 		]
+	},
+	
+	
+	
+	
+	
+	"entity.wildfire.idle": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.wildfire.idle",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/wildfire/idle1",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/wildfire/idle2",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/wildfire/idle3",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/wildfire/idle4",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/wildfire/idle5",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/wildfire/idle6",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/wildfire/idle7",
+				"stream": true
+			}
+		]
+	},
+	"entity.wildfire.idle_loop": {
+		"category": "entity",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/wildfire/idle_loop",
+				"stream": true
+			}
+		]
+	},
+	"entity.wildfire.hurt": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.wildfire.hurt",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/wildfire/hurt1",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/wildfire/hurt2",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/wildfire/hurt3",
+				"stream": true
+			}
+		]
+	},
+	"entity.wildfire.death": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.wildfire.death",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/wildfire/death1",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/wildfire/death2",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/wildfire/death3",
+				"stream": true
+			}
+		]
+	},
+	"entity.wildfire.move": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.wildfire.move",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/wildfire/move1",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/wildfire/move2",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/wildfire/move3",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/wildfire/move4",
+				"stream": true
+			}
+		]
+	},
+	"entity.wildfire.shockwave": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.wildfire.shockwave",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/wildfire/shockwave1",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/wildfire/shockwave2",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/wildfire/shockwave3",
+				"stream": true
+			}
+		]
+	},
+	"entity.wildfire.shield_break": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.wildfire.shield_break",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/wildfire/shield_break1",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/wildfire/shield_break2",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/wildfire/shield_break3",
+				"stream": true
+			}
+		]
+	},
+	"entity.wildfire.shoot": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.wildfire.shoot",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/wildfire/shoot1",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/wildfire/shoot2",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/wildfire/shoot3",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/wildfire/shoot4",
+				"stream": true
+			}
+		]
+	},
+	"entity.wildfire.projectile_hit": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.wildfire.projectile_hit",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/wildfire/projectile_hit1",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/wildfire/projectile_hit2",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/wildfire/projectile_hit3",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/wildfire/projectile_hit4",
+				"stream": true
+			}
+		]
 	}
 }

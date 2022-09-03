@@ -203,6 +203,8 @@
   
   "item.dungeons_mobs.fungus_thrower_headband": "Fungus Thrower Headband",
   "item.dungeons_mobs.fungus_thrower_pack": "Fungus Thrower Pack",
+  
+  "item.dungeons_mobs.netherplate_helmet": "Netherplate Helmet",
 
   "item.dungeons_mobs.skeleton_vanguard_shield": "Vanguard Shield",
 
@@ -450,5 +452,14 @@
   "subtitles.entity.sunken_skeleton.hurt": "Sunken Skeleton hurts",
   "subtitles.entity.sunken_skeleton.death": "Sunken Skeleton dies",
   "subtitles.entity.sunken_skeleton.step": "Sunken Skeleton swims",
-  "subtitles.entity.sunken_skeleton.shoot": "Sunken Skeleton shoots"
+  "subtitles.entity.sunken_skeleton.shoot": "Sunken Skeleton shoots",
+  
+  "subtitles.entity.wildfire.idle": "Wildfire groans",
+  "subtitles.entity.wildfire.hurt": "Wildfire hurts",
+  "subtitles.entity.wildfire.death": "Wildfire dies",
+  "subtitles.entity.wildfire.move": "Wildfire hovers",
+  "subtitles.entity.wildfire.shoot": "Wildfire shoots",
+  "subtitles.entity.wildfire.projectile_hit": "Wildfire projectile hits",
+  "subtitles.entity.wildfire.shockwave": "Wildfire slams",
+  "subtitles.entity.wildfire.shield_break": "Wildfire shield crumbles"
 }
