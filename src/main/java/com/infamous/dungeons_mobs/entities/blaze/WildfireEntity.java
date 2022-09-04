@@ -10,6 +10,7 @@ import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.command.arguments.EntityAnchorArgument;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.EntityType;
@@ -106,8 +107,8 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable {
         this.goalSelector.addGoal(1, new WildfireEntity.ShockwaveAttackGoal(this));
         this.goalSelector.addGoal(2, new WildfireEntity.SummonBlazesGoal(this));
         this.goalSelector.addGoal(3, new WildfireEntity.ShootAttackGoal(this));
-        this.goalSelector.addGoal(4, new LookAtTargetGoal(this));
-        this.goalSelector.addGoal(5, new ApproachTargetGoal(this, 12.5, 1.2D, true));
+        this.goalSelector.addGoal(4, new ApproachTargetGoal(this, 10, 1.2D, true));
+        this.goalSelector.addGoal(5, new LookAtTargetGoal(this));
         this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 1.0D));
         this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
         this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
@@ -254,7 +255,7 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable {
 	boolean steepDropBelow() {
 		boolean blockBeneath = false;
 		
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 8; i++) {
 			if (!this.level.getBlockState(new BlockPos(this.blockPosition().getX(), this.blockPosition().getY() - i, this.blockPosition().getZ())).isAir()) {
 				blockBeneath = true;
 			}
@@ -278,8 +279,8 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable {
         	this.breakShield();
         }
         
-        if (this.getTarget() != null && !this.isOnGround() && steepDropBelow()) {
-        	if (this.getY() < this.getTarget().getY() + 4) {
+        if (this.getTarget() != null && ((!this.isOnGround() && steepDropBelow()) || this.getTarget().getY() > this.getY() + 3 || this.getY() > this.getTarget().getY() + 3 || this.distanceTo(this.getTarget()) > 15)) {
+        	if (this.getY() < this.getTarget().getY() + 5) {
         		this.setDeltaMovement(0.0D, 0.04D, 0.0D);
         	} else {
         		this.setDeltaMovement(0.0D, -0.01D, 0.0D);
@@ -293,6 +294,8 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable {
 					.add(x / d * 0.20000000298023224D, y / d * 0.20000000298023224D, z / d * 0.20000000298023224D)
 					.scale(0.4D));
 			this.move(MoverType.SELF, this.getDeltaMovement());
+			
+			this.lookAt(EntityAnchorArgument.Type.EYES, new Vector3d(this.getTarget().getX(), this.getTarget().getEyeY(), this.getTarget().getZ()));
         }
         
         	this.soundLoopTick ++;
