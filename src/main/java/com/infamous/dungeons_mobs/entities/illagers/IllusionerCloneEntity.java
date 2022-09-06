@@ -2,6 +2,7 @@ package com.infamous.dungeons_mobs.entities.illagers;
 
 import com.infamous.dungeons_mobs.entities.illagers.DungeonsIllusionerEntity;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
+import com.infamous.dungeons_mobs.mod.ModItems;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -359,7 +360,13 @@ public class IllusionerCloneEntity extends SpellcastingIllagerEntity implements 
     @Nullable
     @Override
     public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance p_213386_2_, SpawnReason p_213386_3_, @Nullable ILivingEntityData p_213386_4_, @Nullable CompoundNBT p_213386_5_) {
+
         this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.BOW));
+        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.ILLUSIONER_HOOD.get()));
+        this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.ILLUSIONER_ROBES.get()));
+        this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(ModItems.ILLUSIONER_PANTS.get()));
+        this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(ModItems.ILLUSIONER_SHOES.get()));
+
         return super.finalizeSpawn(p_213386_1_, p_213386_2_, p_213386_3_, p_213386_4_, p_213386_5_);
     }
 
