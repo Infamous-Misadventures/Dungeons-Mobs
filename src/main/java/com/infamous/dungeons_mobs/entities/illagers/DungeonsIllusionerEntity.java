@@ -376,10 +376,11 @@ public class DungeonsIllusionerEntity extends SpellcastingIllagerEntity implemen
 
       public void start() {
          super.start();
+         DungeonsIllusionerEntity.this.getNavigation().stop();
          this.e = false;
          this.r = false;
          this.o = 0;
-         this.v = 5 + DungeonsIllusionerEntity.this.getRandom().nextInt(6);
+         this.v = 0;
 
          DungeonsIllusionerEntity.this.setInvulnerable(true);
          DungeonsIllusionerEntity.this.setAttackType(false);
@@ -398,43 +399,56 @@ public class DungeonsIllusionerEntity extends SpellcastingIllagerEntity implemen
 
          DungeonsIllusionerEntity mob = DungeonsIllusionerEntity.this;
 
-         mob.getNavigation().stop();
-
          if (mob.getSummonCloneTick() == 1 && !this.e) {
-            DungeonsIllusionerEntity.this.setSummonCloneTick(30 - DungeonsIllusionerEntity.this.getRandom().nextInt(8));
+            
+            // you can add particle when illusioner move to path
+            // like dungeons illusioner
+            
+            DungeonsIllusionerEntity.this.setSummonCloneTick(35 - DungeonsIllusionerEntity.this.getRandom().nextInt(8));
             this.e = true;
+            BlockPos blockpos = DungeonsIllusionerEntity.this.getTarget().blockPosition().offset(-5 + DungeonsIllusionerEntity.this.getRandom().nextInt(10) * (target.getBbWidth() / 2 + 1), 0, -5 + DungeonsIllusionerEntity.this.getRandom().nextInt(10) * (target.getBbWidth() / 2 + 1));
+            mob.getNavigation().moveTo(
+                    blockpos.getX(),
+                    blockpos.getY(),
+                    blockpos.getZ(),
+                    1.425);
+
+            summonIllusionerClones();
+
             return;
          }
 
-         if (DungeonsIllusionerEntity.this.getSummonCloneTick() >= this.v && this.e) {
-            this.v = this.v + 3 + DungeonsIllusionerEntity.this.getRandom().nextInt(5);
+         if (DungeonsIllusionerEntity.this.getSummonCloneTick() <= this.v && !this.r && this.e) {
+            this.v = DungeonsIllusionerEntity.this.getSummonCloneTick() - DungeonsIllusionerEntity.this.getRandom().nextInt(7) - 6;
             summonIllusionerClones();
          }
 
-         if (mob.getSummonCloneTick() == 1 && !this.r) {
+         if (((mob.getNavigation().isDone()) || mob.getSummonCloneTick() == 1) && !this.r & this.e) {
             this.r = true;
             DungeonsIllusionerEntity.this.setInvulnerable(false);
             DungeonsIllusionerEntity.this.setAttackType(true);
             DungeonsIllusionerEntity.this.playSound(SoundEvents.ILLUSIONER_PREPARE_MIRROR, DungeonsIllusionerEntity.this.getSoundVolume(), DungeonsIllusionerEntity.this.getVoicePitch());
-            BlockPos blockpos = DungeonsIllusionerEntity.this.getTarget().blockPosition().offset(-5 + DungeonsIllusionerEntity.this.getRandom().nextInt(10) * (target.getBbWidth() / 2 +1), 0, -5 + DungeonsIllusionerEntity.this.getRandom().nextInt(10) * (target.getBbWidth() / 2 +1));
-            this.o = 0;
-            do {
-               if (mob.level.isEmptyBlock(blockpos) && !mob.level.isEmptyBlock(blockpos.offset(0,-1,0))) {
-                  mob.moveTo(blockpos,0,0);
-                  break;
-               }else if (!mob.level.isEmptyBlock(blockpos)) {
-                  this.o++;
-                  blockpos = blockpos.offset(0, 1, 0);
-               }else {
-                  this.o++;
-                  blockpos = blockpos.offset(0, -1, 0);
-               }
-            }while (this.o < 20);
+            if (!DungeonsIllusionerEntity.this.getNavigation().isDone()) {
+               BlockPos blockpos = DungeonsIllusionerEntity.this.getTarget().blockPosition().offset(-5 + DungeonsIllusionerEntity.this.getRandom().nextInt(10) * (target.getBbWidth() / 2 + 1), 0, -5 + DungeonsIllusionerEntity.this.getRandom().nextInt(10) * (target.getBbWidth() / 2 + 1));
+               this.o = 0;
+               do {
+                  if (mob.level.isEmptyBlock(blockpos) && !mob.level.isEmptyBlock(blockpos.offset(0, -1, 0))) {
+                     mob.moveTo(blockpos, 0, 0);
+                     break;
+                  } else if (!mob.level.isEmptyBlock(blockpos)) {
+                     this.o++;
+                     blockpos = blockpos.offset(0, 1, 0);
+                  } else {
+                     this.o++;
+                     blockpos = blockpos.offset(0, -1, 0);
+                  }
+               } while (this.o < 20);
+            }
          }
       }
 
       private void summonIllusionerClones(){
-         int mobsToSummon = 1 + DungeonsIllusionerEntity.this.getRandom().nextInt(3);
+         int mobsToSummon = 2 + DungeonsIllusionerEntity.this.getRandom().nextInt(4);
          LivingEntity target = DungeonsIllusionerEntity.this.getTarget();
          for(int i = 0; i < mobsToSummon; ++i) {
             BlockPos blockpos = DungeonsIllusionerEntity.this.getTarget().blockPosition().offset(-5 + DungeonsIllusionerEntity.this.getRandom().nextInt(10) * (target.getBbWidth() / 2 +1), 0, -5 + DungeonsIllusionerEntity.this.getRandom().nextInt(10) * (target.getBbWidth() / 2 +1));
@@ -529,13 +543,13 @@ public class DungeonsIllusionerEntity extends SpellcastingIllagerEntity implemen
          if (--this.delayCounter <= 0) {
             this.delayCounter = 8 + v.getRandom().nextInt(5);
             {
-               if (v.distanceToSqr(livingentity) >= 80) {
+               if (v.distanceToSqr(livingentity) >= 100) {
                   v.getNavigation().moveTo(livingentity,
                           (double) this.moveSpeed
                   );
                }
             }
-            if (v.distanceToSqr(livingentity) >= 60 && v.distanceToSqr(livingentity) <= 70) {
+            if (v.distanceToSqr(livingentity) >= 40 && v.distanceToSqr(livingentity) <= 80) {
                v.getNavigation().stop();
             }
          }
