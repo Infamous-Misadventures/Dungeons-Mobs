@@ -12,4 +12,5 @@ public class ModParticleTypes {
     public static final DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, DungeonsMobs.MODID);
 
     public static final RegistryObject<BasicParticleType> SNOWFLAKE = PARTICLES.register("snowflake", () -> new BasicParticleType(true));
+    public static final RegistryObject<BasicParticleType> REDSTONE_SPARK = PARTICLES.register("redstone_spark", () -> new BasicParticleType(true));
 }

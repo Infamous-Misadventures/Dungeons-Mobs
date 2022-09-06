@@ -17,10 +17,13 @@ import com.infamous.dungeons_mobs.goals.SmartTridentAttackGoal;
 import com.infamous.dungeons_mobs.interfaces.IHasItemStackData;
 import com.infamous.dungeons_mobs.mixin.GoalSelectorAccessor;
 import com.infamous.dungeons_mobs.mixin.TridentEntityAccessor;
+import com.infamous.dungeons_mobs.mod.ModSoundEvents;
+
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.RangedAttackGoal;
 import net.minecraft.entity.item.ArmorStandEntity;
 import net.minecraft.entity.monster.DrownedEntity;
+import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.SnowballEntity;
 import net.minecraft.entity.projectile.TridentEntity;
@@ -29,9 +32,11 @@ import net.minecraft.potion.Effects;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -172,12 +177,23 @@ public class MobEvents {
             SnowballEntity snowballEntity = (SnowballEntity)event.getEntity();
             Entity shooter = snowballEntity.getOwner();
             if(shooter instanceof FrozenZombieEntity){
+            	snowballEntity.playSound(ModSoundEvents.FROZEN_ZOMBIE_SNOWBALL_LAND.get(), 1.0F, 0.4F / (((FrozenZombieEntity)shooter).getRandom().nextFloat() * 0.4F + 0.8F));
                 RayTraceResult rayTraceResult = event.getRayTraceResult();
                 if(rayTraceResult instanceof EntityRayTraceResult){
                     EntityRayTraceResult entityRayTraceResult = (EntityRayTraceResult)rayTraceResult;
                     if(entityRayTraceResult.getEntity() instanceof PlayerEntity){
                         PlayerEntity playerEntity = (PlayerEntity) entityRayTraceResult.getEntity();
-                        playerEntity.hurt(DamageSource.thrown(snowballEntity, shooter), 1.0F);
+                        playerEntity.hurt(DamageSource.thrown(snowballEntity, shooter), 2.0F);
+                            int i = 0;
+                            if (event.getEntity().level.getDifficulty() == Difficulty.NORMAL) {
+                                i = 3;
+                            } else if (event.getEntity().level.getDifficulty() == Difficulty.HARD) {
+                                i = 6;
+                            }
+
+                            if (i > 0) {
+                                ((LivingEntity)playerEntity).addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, i * 20, 1));
+                            }
                     }
                 }
             }
@@ -190,7 +206,17 @@ public class MobEvents {
         if(event.getSource().getDirectEntity() instanceof SnowballEntity){
             if(event.getSource().getEntity() instanceof FrozenZombieEntity){
                 if(!(event.getEntityLiving() instanceof PlayerEntity)){
-                    event.setAmount(event.getAmount() + 1.0F);
+                    event.setAmount(event.getAmount() + 2.0F);
+                        int i = 0;
+                        if (event.getEntityLiving().level.getDifficulty() == Difficulty.NORMAL) {
+                            i = 3;
+                        } else if (event.getEntityLiving().level.getDifficulty() == Difficulty.HARD) {
+                            i = 6;
+                        }
+
+                        if (i > 0) {
+                            event.getEntityLiving().addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, i * 20, 1));
+                        }
                 }
             }
         }

@@ -304,7 +304,7 @@ public class WindcallerEntity extends SpellcastingIllagerEntity implements IAnim
             if (v.getTarget() != null && v.getTarget().isAlive() && v.distanceToSqr(v.getTarget()) > 30 + v.getTarget().getBbWidth()) {
                 v.getLookControl().setLookAt(v.getTarget(), 30.0F, 30.0F);
                 if (v.entityData.get(TIMER) == 14) {
-                    v.playSound(ModSoundEvents.WINDCALLER_LIFT_ATTACK.get(), 3.5f, 1);
+                    v.playSound(ModSoundEvents.WINDCALLER_LIFT_VOCAL.get(), 3.5f, 1);
                 }
                 if (v.entityData.get(TIMER) == 18 ) {
                     TornadoEntity tornadoEntity = new TornadoEntity(WindcallerEntity.this.level, WindcallerEntity.this, WindcallerEntity.this.getTarget(), 12);
@@ -375,7 +375,7 @@ public class WindcallerEntity extends SpellcastingIllagerEntity implements IAnim
             if (v.getTarget() != null && v.getTarget().isAlive()) {
                 v.getLookControl().setLookAt(v.getTarget(),5,5);
                 if (v.entityData.get(TIMER) == 14) {
-                    v.playSound(ModSoundEvents.WINDCALLER_BLAST_ATTACK.get(), 3.5f, 1);
+                    v.playSound(ModSoundEvents.WINDCALLER_BLAST_VOCAL.get(), 3.5f, 1);
                 }
                 if (v.entityData.get(TIMER) == 17) {
                     Tornado2Entity vv = new Tornado2Entity(v.level);

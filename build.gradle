@@ -130,7 +130,9 @@ dependencies {
     implementation fg.deobf("software.bernie.geckolib:geckolib-forge-${mc_version}:${geckolib_version}")
     runtimeOnly fg.deobf("curse.maven:blame-406201:3440093")
     runtimeOnly fg.deobf("curse.maven:neat-238372:3182258")
-    runtimeOnly fg.deobf("curse.maven:enchantwithmob-391187:3539541")
+    implementation fg.deobf("curse.maven:enchantwithmob-391187:3539541")
+    runtimeOnly fg.deobf("dungeons_gear:dungeons_gear:1.16.5-3.1.15-beta")
+    runtimeOnly fg.deobf("curios:curios:forge-1.16.5-4.0.8.1")
 
     runtimeOnly fg.deobf("curse.maven:dungeonsgear-401247:3889856")
     runtimeOnly fg.deobf("curse.maven:curios-309927:3725386")

@@ -1,11 +1,9 @@
 package com.infamous.dungeons_mobs.client.renderer.illager;
 
-import com.infamous.dungeons_mobs.entities.illagers.MountaineerEntity;
-import com.infamous.dungeons_mobs.entities.illagers.VindicatorChefEntity;
-import com.infamous.dungeons_mobs.entities.illagers.ArmoredVindicatorEntity;
-import com.infamous.dungeons_mobs.entities.illagers.RoyalGuardEntity;
 import com.infamous.dungeons_mobs.client.models.armor.IllagerArmorModel;
 import com.infamous.dungeons_mobs.client.models.illager.IllagerBipedModel;
+import com.infamous.dungeons_mobs.entities.illagers.MountaineerEntity;
+import com.infamous.dungeons_mobs.mod.ModItems;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
@@ -15,6 +13,7 @@ import net.minecraft.client.renderer.entity.layers.HeadLayer;
 import net.minecraft.client.renderer.entity.layers.HeldItemLayer;
 import net.minecraft.entity.monster.AbstractIllagerEntity;
 import net.minecraft.entity.monster.VindicatorEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.util.ResourceLocation;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
@@ -23,7 +22,7 @@ public class CustomVindicatorRenderer extends MobRenderer<VindicatorEntity, Illa
     private static final ResourceLocation GOLD_ARMORED_VINDICATOR_TEXTURE = new ResourceLocation(MODID, "textures/entity/illager/gold_armored_vindicator.png");
     private static final ResourceLocation DIAMOND_ARMORED_VINDICATOR_TEXTURE = new ResourceLocation(MODID, "textures/entity/illager/diamond_armored_vindicator.png");
     private static final ResourceLocation VINDICATOR_TEXTURE = new ResourceLocation("textures/entity/illager/vindicator.png");
-    private static final ResourceLocation ROYAL_GUARD_TEXTURE = new ResourceLocation(MODID,"textures/entity/illager/royal_guard.png");
+    private static final ResourceLocation MOUNTAINEER_TEXTURE = new ResourceLocation(MODID,"textures/entity/illager/mountaineer.png");
     private static final ResourceLocation VINDICATOR_CHEF_TEXTURE = new ResourceLocation(MODID, "textures/entity/illager/vindicator_chef.png");
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -42,33 +41,22 @@ public class CustomVindicatorRenderer extends MobRenderer<VindicatorEntity, Illa
 
     @Override
     protected void scale(VindicatorEntity vindicatorEntity, MatrixStack matrixStack, float v) {
-        if(vindicatorEntity instanceof ArmoredVindicatorEntity){
-            float scaleFactor = 1.1F;
-            matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
-        }
-        else{
-            float scaleFactor = 0.9375F;
-            matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
-        }
+        float scaleFactor = 0.9375F;
+        matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
         super.scale(vindicatorEntity, matrixStack, v);
     }
 
     @Override
     public ResourceLocation getTextureLocation(VindicatorEntity entity) {
-        if(entity.getClass() == ArmoredVindicatorEntity.class){
-            ArmoredVindicatorEntity armoredVindicatorEntity = (ArmoredVindicatorEntity)entity;
-            if(armoredVindicatorEntity.isDiamond()){
-                return DIAMOND_ARMORED_VINDICATOR_TEXTURE;
-            }
-            else return GOLD_ARMORED_VINDICATOR_TEXTURE;
-        }
-        else if(entity instanceof RoyalGuardEntity){
-            return ROYAL_GUARD_TEXTURE;
-        }
-        else if(entity instanceof VindicatorChefEntity){
+        if(entity instanceof MountaineerEntity){
+            return MOUNTAINEER_TEXTURE;
+        } else if(entity.getItemBySlot(EquipmentSlotType.HEAD).getItem().equals(ModItems.DIAMOND_VINDICATOR_HELMET.get())){
+            return DIAMOND_ARMORED_VINDICATOR_TEXTURE;
+        }else if(entity.getItemBySlot(EquipmentSlotType.HEAD).getItem().equals(ModItems.GOLD_VINDICATOR_HELMET.get())){
+            return GOLD_ARMORED_VINDICATOR_TEXTURE;
+        } else if(entity.getItemBySlot(EquipmentSlotType.HEAD).getItem().equals(ModItems.CHEF_HAT.get())){
             return VINDICATOR_CHEF_TEXTURE;
-        }
-        else{
+        } else {
             return VINDICATOR_TEXTURE;
         }
     }

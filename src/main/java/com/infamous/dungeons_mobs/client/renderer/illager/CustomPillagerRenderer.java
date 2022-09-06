@@ -1,8 +1,8 @@
 package com.infamous.dungeons_mobs.client.renderer.illager;
 
-import com.infamous.dungeons_mobs.entities.illagers.ArmoredPillagerEntity;
 import com.infamous.dungeons_mobs.client.models.armor.IllagerArmorModel;
 import com.infamous.dungeons_mobs.client.models.illager.IllagerBipedModel;
+import com.infamous.dungeons_mobs.mod.ModItems;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.entity.layers.BipedArmorLayer;
 import net.minecraft.client.renderer.entity.layers.HeadLayer;
 import net.minecraft.client.renderer.entity.layers.HeldItemLayer;
 import net.minecraft.entity.monster.PillagerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.util.ResourceLocation;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
@@ -29,27 +30,18 @@ public class CustomPillagerRenderer extends MobRenderer<PillagerEntity, IllagerB
 
     @Override
     protected void scale(PillagerEntity pillagerEntity, MatrixStack matrixStack, float v) {
-        if(pillagerEntity instanceof ArmoredPillagerEntity){
-            float scaleFactor = 1.1F;
-            matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
-        }
-        else{
-            float scaleFactor = 0.9375F;
-            matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
-        }
+        float scaleFactor = 0.9375F;
+        matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
         super.scale(pillagerEntity, matrixStack, v);
     }
 
     @Override
     public ResourceLocation getTextureLocation(PillagerEntity entity) {
-        if(entity instanceof ArmoredPillagerEntity){
-            ArmoredPillagerEntity armoredPillagerEntity = (ArmoredPillagerEntity)entity;
-            if(armoredPillagerEntity.isDiamond()){
-                return DIAMOND_ARMORED_PILLAGER_TEXTURE;
-            }
-            else return GOLD_ARMORED_PILLAGER_TEXTURE;
-        }
-        else{
+        if(entity.getItemBySlot(EquipmentSlotType.HEAD).getItem().equals(ModItems.DIAMOND_PILLAGER_HELMET.get())){
+            return DIAMOND_ARMORED_PILLAGER_TEXTURE;
+        }else if(entity.getItemBySlot(EquipmentSlotType.HEAD).getItem().equals(ModItems.GOLD_PILLAGER_HELMET.get())){
+            return GOLD_ARMORED_PILLAGER_TEXTURE;
+        } else {
             return PILLAGER_TEXTURE;
         }
     }

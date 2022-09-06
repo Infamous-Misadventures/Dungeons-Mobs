@@ -1,0 +1,55 @@
+{
+"configs": [{
+  "headItem":  {
+    "id": "dungeons_mobs:gold_pillager_helmet",
+    "Count": 1
+  },
+  "chestItem": {
+    "id": "minecraft:empty",
+    "Count": 1
+  },
+  "legsItem":  {
+    "id": "minecraft:empty",
+    "Count": 1
+  },
+  "feetItem": {
+    "id": "minecraft:empty",
+    "Count": 1
+  },
+  "handItem":  {
+    "id": "minecraft:crossbow",
+    "Count": 1
+  },
+  "offhandItem": {
+    "id": "minecraft:empty",
+    "Count": 1
+  },
+  "weight": 75
+},{
+  "headItem":  {
+    "id": "dungeons_mobs:diamond_pillager_helmet",
+    "Count": 1
+  },
+  "chestItem": {
+    "id": "minecraft:empty",
+    "Count": 1
+  },
+  "legsItem":  {
+    "id": "minecraft:empty",
+    "Count": 1
+  },
+  "feetItem": {
+    "id": "minecraft:empty",
+    "Count": 1
+  },
+  "handItem":  {
+    "id": "minecraft:crossbow",
+    "Count": 1
+  },
+  "offhandItem": {
+    "id": "minecraft:empty",
+    "Count": 1
+  },
+  "weight": 25
+}]
+}

@@ -2,6 +2,7 @@ package com.infamous.dungeons_mobs.client.renderer.illager;
 
 import com.infamous.dungeons_mobs.client.models.illager.IceologerModel;
 import com.infamous.dungeons_mobs.entities.illagers.IceologerEntity;
+import com.infamous.dungeons_mobs.entities.illagers.IceologerEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectList;
@@ -12,10 +13,14 @@ import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ShieldItem;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Quaternion;
+import net.minecraft.util.math.vector.Vector3f;
+import software.bernie.example.client.DefaultBipedBoneIdents;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.geo.render.built.GeoCube;
@@ -62,42 +67,77 @@ public class IceologerRenderer extends ExtendedGeoEntityRenderer<IceologerEntity
         return null;
     }
 
-    @Nullable
-    @Override
-    protected ItemStack getHeldItemForBone(String s, IceologerEntity windcallerEntity) {
-        return null;
-    }
+	@Override
+	protected ItemStack getHeldItemForBone(String boneName, IceologerEntity currentEntity) {
+		switch (boneName) {
+		case DefaultBipedBoneIdents.LEFT_HAND_BONE_IDENT:
+			return currentEntity.isLeftHanded() ? mainHand : offHand;
+		case DefaultBipedBoneIdents.RIGHT_HAND_BONE_IDENT:
+			return currentEntity.isLeftHanded() ? offHand : mainHand;
+		case DefaultBipedBoneIdents.POTION_BONE_IDENT:
+			break;
+		}
+		return null;
+	}
 
-    @Override
-    protected ItemCameraTransforms.TransformType getCameraTransformForItemAtBone(ItemStack itemStack, String s) {
-        return null;
-    }
+	@Override
+	protected TransformType getCameraTransformForItemAtBone(ItemStack boneItem, String boneName) {
+		switch (boneName) {
+		case DefaultBipedBoneIdents.LEFT_HAND_BONE_IDENT:
+			return TransformType.THIRD_PERSON_RIGHT_HAND;
+		case DefaultBipedBoneIdents.RIGHT_HAND_BONE_IDENT:
+			return TransformType.THIRD_PERSON_RIGHT_HAND;
+		default:
+			return TransformType.NONE;
+		}
+	}
 
-    @Nullable
-    @Override
-    protected BlockState getHeldBlockForBone(String s, IceologerEntity windcallerEntity) {
-        return null;
-    }
+	@Override
+	protected void preRenderItem(MatrixStack stack, ItemStack item, String boneName, IceologerEntity currentEntity, IBone bone) {
+		if(item == this.mainHand || item == this.offHand) {
+			stack.scale(1.1F, 1.1F, 1.1F);
+			stack.mulPose(Vector3f.XP.rotationDegrees(-90.0F));
+			boolean shieldFlag = item.getItem() instanceof ShieldItem;
+			if(item == this.mainHand) {
+				if(shieldFlag) {
+					stack.translate(0.0, 0.125, -0.25);
+				} else {
+					
+				}
+			} else {
+				if(shieldFlag) {
+					stack.translate(-0.15, 0.125, 0.05);
+					stack.mulPose(Vector3f.YP.rotationDegrees(90));
+				} else {
+					
+				}
+					
+				
+			}
+		}
+	}
 
-    @Override
-    protected void preRenderItem(MatrixStack matrixStack, ItemStack itemStack, String s, IceologerEntity windcallerEntity, IBone iBone) {
+	@Override
+	protected void postRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, IceologerEntity currentEntity, IBone bone) {
 
-    }
+	}
+    
+	@Override
+	protected BlockState getHeldBlockForBone(String boneName, IceologerEntity currentEntity) {
+		return null;
+	}
+	
+	@Override
+	protected void preRenderBlock(MatrixStack matrixStack, BlockState block, String boneName,
+			IceologerEntity currentEntity) {
+		
+	}
 
-    @Override
-    protected void preRenderBlock(MatrixStack matrixStack, BlockState blockState, String s, IceologerEntity windcallerEntity) {
-
-    }
-
-    @Override
-    protected void postRenderItem(MatrixStack matrixStack, ItemStack itemStack, String s, IceologerEntity windcallerEntity, IBone iBone) {
-
-    }
-
-    @Override
-    protected void postRenderBlock(MatrixStack matrixStack, BlockState blockState, String s, IceologerEntity windcallerEntity) {
-
-    }
+	@Override
+	protected void postRenderBlock(MatrixStack matrixStack, BlockState block, String boneName,
+			IceologerEntity currentEntity) {
+		
+	}
 
     @Nullable
     @Override
@@ -170,55 +210,5 @@ public class IceologerRenderer extends ExtendedGeoEntityRenderer<IceologerEntity
             default:
                 return null;
         }
-    }
-
-    @Override
-    protected void prepareArmorPositionAndScale(GeoBone bone, ObjectList<ModelRenderer.ModelBox> cubeList, ModelRenderer sourceLimb, MatrixStack stack, boolean geoArmor, boolean modMatrixRot) {
-        GeoCube firstCube = (GeoCube)bone.childCubes.get(0);
-        ModelRenderer.ModelBox armorCube = (ModelRenderer.ModelBox)cubeList.get(0);
-        float targetSizeX = firstCube.size.x();
-        float targetSizeY = firstCube.size.y();
-        float targetSizeZ = firstCube.size.z();
-        float sourceSizeX = Math.abs(armorCube.maxX - armorCube.minX);
-        float sourceSizeY = Math.abs(armorCube.maxY - armorCube.minY);
-        float sourceSizeZ = Math.abs(armorCube.maxZ - armorCube.minZ);
-        float scaleX = targetSizeX / sourceSizeX;
-        float scaleY = targetSizeY / sourceSizeY;
-        float scaleZ = targetSizeZ / sourceSizeZ;
-        sourceLimb.setPos(-(bone.getPivotX() - (bone.getPivotX() * scaleX - bone.getPivotX()) / scaleX), -(bone.getPivotY() - (bone.getPivotY() * scaleY - bone.getPivotY()) / scaleY), bone.getPivotZ() - (bone.getPivotZ() * scaleZ - bone.getPivotZ()) / scaleZ);
-        if (!geoArmor) {
-            sourceLimb.xRot = -bone.getRotationX();
-            sourceLimb.yRot = -bone.getRotationY();
-            sourceLimb.zRot = bone.getRotationZ();
-        } else {
-            float xRot = -bone.getRotationX();
-            float yRot = -bone.getRotationY();
-            float zRot = bone.getRotationZ();
-
-
-            for(GeoBone tmpBone = bone.parent; tmpBone != null; tmpBone = tmpBone.parent) {
-                if(bone.getName().equals("armorBipedHead") && tmpBone.getName().equals("bipedBody")) {
-                   break;
-                }
-                xRot -= tmpBone.getRotationX();
-                yRot -= tmpBone.getRotationY();
-                zRot += tmpBone.getRotationZ();
-            }
-
-            if (modMatrixRot) {
-                xRot = (float)Math.toRadians((double)xRot);
-                yRot = (float)Math.toRadians((double)yRot);
-                zRot = (float)Math.toRadians((double)zRot);
-                stack.mulPose(new Quaternion(0.0F, 0.0F, zRot, false));
-                stack.mulPose(new Quaternion(0.0F, yRot, 0.0F, false));
-                stack.mulPose(new Quaternion(xRot, 0.0F, 0.0F, false));
-            } else {
-                sourceLimb.xRot = xRot;
-                sourceLimb.yRot = yRot;
-                sourceLimb.zRot = zRot;
-            }
-        }
-
-        stack.scale(scaleX, scaleY, scaleZ);
     }
 }

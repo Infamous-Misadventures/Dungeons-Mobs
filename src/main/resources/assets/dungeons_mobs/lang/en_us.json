@@ -13,12 +13,6 @@
   "entity.dungeons_mobs.necromancer": "Necromancer",
   "item.dungeons_mobs.necromancer_spawn_egg": "Necromancer Spawn Egg",
 
-  "entity.dungeons_mobs.armored_vindicator": "Armored Vindicator",
-  "item.dungeons_mobs.armored_vindicator_spawn_egg": "Armored Vindicator Spawn Egg",
-  "entity.dungeons_mobs.vindicator_chef": "Vindicator Chef",
-  "item.dungeons_mobs.vindicator_chef_spawn_egg": "Vindicator Chef Spawn Egg",
-  "entity.dungeons_mobs.armored_pillager": "Armored Pillager",
-  "item.dungeons_mobs.armored_pillager_spawn_egg": "Armored Pillager Spawn Egg",
   "entity.dungeons_mobs.royal_guard": "Royal Guard",
   "item.dungeons_mobs.royal_guard_spawn_egg": "Royal Guard Spawn Egg",
   "entity.dungeons_mobs.iceologer": "Iceologer",
@@ -36,6 +30,9 @@
   "entity.dungeons_mobs.mage": "Mage",
   "entity.dungeons_mobs.mage_clone": "Mage",
   "item.dungeons_mobs.mage_spawn_egg": "Mage Spawn Egg",
+  
+  "entity.dungeons_mobs.wildfire": "Wildfire",
+  "item.dungeons_mobs.wildfire_spawn_egg": "Wildfire Spawn Egg",
 
 	"entity.dungeons_mobs.snareling_glob" : "Snareling Glob",
 	"entity.dungeons_mobs.blastling_bullet" : "Blastling Bullet",
@@ -130,9 +127,9 @@
   "item.dungeons_mobs.wraith_fire_charge": "Wraith Fire Charge",
   "item.dungeons_mobs.blue_nethershroom": "Blue Nethershroom",
   "item.dungeons_mobs.spatula": "Wooden Ladle",
-  "item.dungeons_mobs.mountaineer_axe": "Mountaineer Axe",
-  "item.dungeons_mobs.gold_mountaineer_axe": "Gold Mountaineer Axe",
-  "item.dungeons_mobs.diamond_mountaineer_axe": "Diamond Mountaineer Axe",
+  "item.dungeons_mobs.mountaineer_axe": "Ice Pick",
+  "item.dungeons_mobs.gold_mountaineer_axe": "Sturdy Ice Pick",
+  "item.dungeons_mobs.diamond_mountaineer_axe": "Reinforced Ice Pick",
 
   "item.dungeons_mobs.windcaller_staff": "Windcaller Staff",
   "item.dungeons_mobs.geomancer_staff": "Geomancer Staff",
@@ -143,15 +140,18 @@
 
   "item.dungeons_mobs.gold_pillager_helmet": "Gold Pillager Helmet",
   "item.dungeons_mobs.diamond_pillager_helmet": "Diamond Pillager Helmet",
-  "item.dungeons_mobs.gold_vindicator_helmet": "Gold Vindicator Helmet",
-  "item.dungeons_mobs.diamond_vindicator_helmet": "Diamond Vindicator Helmet",
-  "item.dungeons_mobs.skeleton_vanguard_helmet": "Skeleton Vanguard Helmet",
+  "item.dungeons_mobs.gold_vindicator_helmet": "Vindicator Helmet",
+  "item.dungeons_mobs.diamond_vindicator_helmet": "Horned Vindicator Helmet",
+  "item.dungeons_mobs.vanguard_helmet": "Vanguard Helmet",
+  "item.dungeons_mobs.vanguard_chestplate": "Vanguard Chestplate",
+  "item.dungeons_mobs.vanguard_legs": "Vanguard Leggings",
   "item.dungeons_mobs.chef_hat": "Chef Hat",
+  "item.dungeons_mobs.chef_apron": "Chef Apron",
 
   "item.dungeons_mobs.netherite_piglin_helmet": "Netherite Piglin Helmet",
   "item.dungeons_mobs.cracked_netherite_piglin_helmet": "Cracked Netherite Piglin Helmet",
-  "item.dungeons_mobs.gold_piglin_helmet": "Gold Piglin Helmet",
-  "item.dungeons_mobs.cracked_gold_piglin_helmet": "Cracked Gold Piglin Helmet",
+  "item.dungeons_mobs.gold_piglin_helmet": "Golden Piglin Helmet",
+  "item.dungeons_mobs.cracked_gold_piglin_helmet": "Cracked Golden Piglin Helmet",
 
   "item.dungeons_mobs.geomancer_beads": "Geomancer Beads",
   "item.dungeons_mobs.geomancer_robes": "Geomancer Rags",
@@ -160,8 +160,56 @@
   "item.dungeons_mobs.iceologer_robes": "Iceologer Cloak",
   "item.dungeons_mobs.iceologer_pants": "Iceologer Pants",
   "item.dungeons_mobs.iceologer_shoes": "Iceologer Boots",
+  
+  "item.dungeons_mobs.illusioner_hood": "Illusioner Hood",
+  "item.dungeons_mobs.illusioner_robes": "Illusioner Cloak",
+  "item.dungeons_mobs.illusioner_pants": "Illusioner Pants",
+  "item.dungeons_mobs.illusioner_shoes": "Illusioner Boots",
+  
+  "item.dungeons_mobs.mage_hood": "Mage Hood",
+  "item.dungeons_mobs.mage_robes": "Mage Cloak",
+  "item.dungeons_mobs.mage_pants": "Mage Pants",
+  "item.dungeons_mobs.mage_shoes": "Mage Boots",
+  
+  "item.dungeons_mobs.royal_guard_helmet": "Royal Guard Helmet",
+  "item.dungeons_mobs.royal_guard_chestplate": "Royal Guard Chestplate",
+  "item.dungeons_mobs.royal_guard_legs": "Royal Guard Kneepads",
+  "item.dungeons_mobs.royal_guard_sabatons": "Royal Guard Sabatons",  
+  
+  "item.dungeons_mobs.mountaineer_hood": "Mountaineering Hood",
+  "item.dungeons_mobs.mountaineer_jacket": "Mountaineering Jacket",
+  "item.dungeons_mobs.mountaineer_pants": "Mountaineering Pants",
+  "item.dungeons_mobs.mountaineer_boots": "Mountaineering Boots",
+  
+  "item.dungeons_mobs.armored_mountaineer_hood": "Expedition Hood",
+  "item.dungeons_mobs.armored_mountaineer_jacket": "Expedition Jacket",
+  "item.dungeons_mobs.armored_mountaineer_pants": "Expedition Pants",
+  
+  "item.dungeons_mobs.strong_armored_mountaineer_hood": "Alpine Hood",
+  "item.dungeons_mobs.strong_armored_mountaineer_jacket": "Alpine Jacket",
+  "item.dungeons_mobs.strong_armored_mountaineer_pants": "Alpine Pants",
+  "item.dungeons_mobs.strong_armored_mountaineer_boots": "Alpine Boots",
+  
+  "item.dungeons_mobs.necromancer_crown": "Necromancer Crown",
+  "item.dungeons_mobs.necromancer_cloak": "Necromancer Cloak",
+  "item.dungeons_mobs.necromancer_belt": "Necromancer Belt",
+  
+  "item.dungeons_mobs.drowned_necromancer_crown": "Drowned Necromancer Crown",
+  "item.dungeons_mobs.drowned_necromancer_cloak": "Drowned Necromancer Cloak",
+  "item.dungeons_mobs.drowned_necromancer_belt": "Drowned Necromancer Belt",
+  
+  "item.dungeons_mobs.enchanter_hat": "Enchanter Hat",
+  "item.dungeons_mobs.enchanter_robes": "Enchanter Robes",
+  
+  "item.dungeons_mobs.wind_wig": "Wind Wig",
+  "item.dungeons_mobs.windcaller_robes": "Windcaller Robes",
+  
+  "item.dungeons_mobs.fungus_thrower_headband": "Fungus Thrower Headband",
+  "item.dungeons_mobs.fungus_thrower_pack": "Fungus Thrower Pack",
+  
+  "item.dungeons_mobs.netherplate_helmet": "Netherplate Helmet",
 
-  "item.dungeons_mobs.skeleton_vanguard_shield": "Skeleton Vanguard Shield",
+  "item.dungeons_mobs.skeleton_vanguard_shield": "Vanguard Shield",
 
   "item.dungeons_mobs.royal_guard_shield": "Royal Guard Shield",
   "item.dungeons_mobs.royal_guard_shield.black": "Black Royal Guard Shield",
@@ -197,10 +245,12 @@
   "mobEnchantment.dungeons_mobs.multishot": "Multishot",
   "mobEnchantment.dungeons_mobs.protection": "Protection",
   "mobEnchantment.dungeons_mobs.quick": "Quick",
-  "mobEnchantment.dungeons_mobs.regeneration": "Regeneration",
-  "mobEnchantment.dungeons_mobs.rush": "Rush",
   "mobEnchantment.dungeons_mobs.tempo_theft": "Tempo Theft",
   "mobEnchantment.dungeons_mobs.thorns": "Thorns",
+
+  "mobenchant.enchantwithmob.name.dungeons_mobs.regeneration": "Regeneration",
+  "mobenchant.enchantwithmob.name.dungeons_mobs.rush": "Rush",
+  "mobenchant.enchantwithmob.name.dungeons_mobs.radiance": "Radiance",
   
   "subtitles.entity.wraith.idle": "Wraith wails",
   "subtitles.entity.wraith.hurt": "Wraith hurts",
@@ -225,13 +275,7 @@
   "subtitles.entity.geomancer.attack": "Geomancer summons pillars",
   "subtitles.entity.geomancer.wall_spawn": "Geomancer Wall emerges",
   "subtitles.entity.geomancer.wall_despawn": "Geomancer Wall vanishes",
-  "subtitles.entity.geomancer.bomb_spawn": "Geomancer Bomb emerges",
-  
-  "subtitles.entity.redstone_golem.idle": "Redstone Golem breathes",
-  "subtitles.entity.redstone_golem.hurt": "Redstone Golem hurts",
-  "subtitles.entity.redstone_golem.death": "Redstone Golem dies",
-  "subtitles.entity.redstone_golem.attack": "Redstone Golem attacks",
-  "subtitles.entity.redstone_golem.summon_mine": "Redstone Golem summons mines",
+  "subtitles.entity.geomancer.bomb_spawn": "Geomancer Bomb emerges",  
   
   "subtitles.entity.squall_golem.idle": "Squall Golem creaks",
   "subtitles.entity.squall_golem.hurt": "Squall Golem hurts",
@@ -242,14 +286,7 @@
   "subtitles.entity.squall_golem.step": "Squall Golem steps",
   
   "subtitles.entity.royal_guard.attack": "Royal Guard attacks",
-  
-  "subtitles.entity.windcaller.idle": "Windcaller mumbles",
-  "subtitles.entity.windcaller.hurt": "Windcaller hurts",
-  "subtitles.entity.windcaller.death": "Windcaller dies",
-  "subtitles.entity.windcaller.pre_blast_attack": "Windcaller readies blast",
-  "subtitles.entity.windcaller.blast_attack": "Wind rages",
-  "subtitles.entity.windcaller.pre_lift_attack": "Windcaller calls",
-  "subtitles.entity.windcaller.lift_attack": "Wind rages",
+  "subtitles.entity.royal_guard.step": "Royal Guard steps",  
   
   "subtitles.entity.snareling.idle": "Snareling gurgles",
   "subtitles.entity.snareling.hurt": "Snareling hurts",
@@ -289,5 +326,143 @@
   "subtitles.entity.ice_chunk.idle_loop": "Ice Chunk crackles",
   "subtitles.entity.ice_chunk.summoned": "Ice Chunk appears",
   "subtitles.entity.ice_chunk.fall": "Ice Chunk falls",
-  "subtitles.entity.ice_chunk.land": "Ice Chunk smashes"
+  "subtitles.entity.ice_chunk.land": "Ice Chunk smashes",
+  
+  "subtitles.entity.skeleton_vanguard.idle": "Skeleton Vanguard rattles",
+  "subtitles.entity.skeleton_vanguard.hurt": "Skeleton Vanguard hurts",
+  "subtitles.entity.skeleton_vanguard.death": "Skeleton Vanguard dies",
+  "subtitles.entity.skeleton_vanguard.attack": "Skeleton Vanguard stabs",
+  "subtitles.entity.skeleton_vanguard.step": "Footsteps",
+  
+  "subtitles.entity.icy_creeper.explode": "Icy Creeper explodes",
+  
+  "subtitles.entity.jungle_zombie.idle": "Jungle Zombie gurgles",
+  "subtitles.entity.jungle_zombie.hurt": "Jungle Zombie hurts",
+  "subtitles.entity.jungle_zombie.death": "Jungle Zombie dies",
+  "subtitles.entity.jungle_zombie.step": "Footsteps",
+  
+  "subtitles.entity.frozen_zombie.idle": "Frozen Zombie groans",
+  "subtitles.entity.frozen_zombie.hurt": "Frozen Zombie hurts",
+  "subtitles.entity.frozen_zombie.death": "Frozen Zombie dies",
+  "subtitles.entity.frozen_zombie.snowball_land": "Snowball impacts",
+  
+  "subtitles.entity.mossy_skeleton.idle": "Mossy Skeleton creaks",
+  "subtitles.entity.mossy_skeleton.hurt": "Mossy Skeleton hurts",
+  "subtitles.entity.mossy_skeleton.death": "Mossy Skeleton dies",
+  "subtitles.entity.mossy_skeleton.shoot": "Mossy Skeleton shoots",
+  "subtitles.entity.mossy_skeleton.step": "Footsteps",
+  
+  "subtitles.entity.necromancer.idle": "Necromancer rattles",
+  "subtitles.entity.necromancer.laugh": "Necromancer cackles",
+  "subtitles.entity.necromancer.hurt": "Necromancer hurts",
+  "subtitles.entity.necromancer.death": "Necromancer dies",
+  "subtitles.entity.necromancer.shoot": "Necromancer shoots",
+  "subtitles.entity.necromancer.orb_impact": "Necromancer orb impacts",
+  "subtitles.entity.necromancer.step": "Footsteps",
+  "subtitles.entity.necromancer.prepare_summon": "Necromancer prepares summon",
+  "subtitles.entity.necromancer.summon": "Necromancer summons mob",
+  
+  "subtitles.entity.windcaller.idle": "Windcaller mumbles",
+  "subtitles.entity.windcaller.hurt": "Windcaller hurts",
+  "subtitles.entity.windcaller.death": "Windcaller dies",
+  "subtitles.entity.windcaller.blast_vocal": "Windcaller shouts",
+  "subtitles.entity.windcaller.blast_wind": "Wind blasts",
+  "subtitles.entity.windcaller.lift_vocal": "Windcaller calls",
+  "subtitles.entity.windcaller.lift_wind": "Wind swirls",
+  "subtitles.entity.windcaller.fly_loop": "Windcaller hovers",
+  
+  "subtitles.entity.illusioner.death": "Illusioner dies",
+  
+  "subtitles.entity.mountaineer.idle": "Mountaineer mutters",
+  "subtitles.entity.mountaineer.hurt": "Mountaineer hurts",
+  "subtitles.entity.mountaineer.death": "Mountaineer dies",
+  
+  "subtitles.entity.redstone_golem.idle": "Redstone Golem breathes",
+  "subtitles.entity.redstone_golem.hurt": "Redstone Golem hurts",
+  "subtitles.entity.redstone_golem.death": "Redstone Golem dies",
+  "subtitles.entity.redstone_golem.step": "Redstone Golem steps",
+  "subtitles.entity.redstone_golem.attack": "Redstone Golem attacks",
+  "subtitles.entity.redstone_golem.summon_mines": "Redstone Golem summons mines",
+  "subtitles.entity.redstone_golem.spark": "Redstone sparks",
+  
+  "subtitles.entity.whisperer.idle": "Whisperer mumbles",
+  "subtitles.entity.whisperer.hurt": "Whisperer hurts",
+  "subtitles.entity.whisperer.step": "Whisperer walks",
+  "subtitles.entity.whisperer.attack": "Whisperer attacks",
+  "subtitles.entity.whisperer.grapple": "Whisperer summons Entangle Vine",
+  "subtitles.entity.whisperer.summon_qgv": "Whisperer summons Quick-Growing Vines",
+  "subtitles.entity.whisperer.summon_pqv": "Whisperer summons Poison-Quill Vines",
+  
+  "subtitles.entity.leapleaf.idle": "Leapleaf growls",
+  "subtitles.entity.leapleaf.hurt": "Leapleaf hurts",
+  "subtitles.entity.leapleaf.step": "Leapleaf steps",
+  "subtitles.entity.leapleaf.attack": "Leapleaf attacks",
+  "subtitles.entity.leapleaf.prepare_leap": "Leapleaf prepares to leap",
+  "subtitles.entity.leapleaf.leap": "Leapleaf leaps",
+  "subtitles.entity.leapleaf.rest": "Leapleaf rests",
+  
+  "subtitles.entity.quick_growing_vine.burst": "Quick-Growing Vine emerges",
+  "subtitles.entity.quick_growing_vine.burst_down": "Quick-Growing Vine retracts",
+  "subtitles.entity.quick_growing_vine.hurt": "Quick-Growing Vine hurts",
+  "subtitles.entity.quick_growing_vine.death": "Quick-Growing Vine dies",
+  
+  "subtitles.entity.poison_quill_vine.burst": "Poison-Quill Vine emerges",
+  "subtitles.entity.poison_quill_vine.idle": "Poison-Quill Vine rustles",
+  "subtitles.entity.poison_quill_vine.hurt": "Poison-Quill Vine hurts",
+  "subtitles.entity.poison_quill_vine.death": "Poison-Quill Vine dies",
+  "subtitles.entity.poison_quill_vine.open": "Poison-Quill Vine opens",
+  "subtitles.entity.poison_quill_vine.close": "Poison-Quill Vine closes",
+  "subtitles.entity.poison_quill_vine.shoot": "Poison-Quill Vine shoots",
+  
+  "subtitles.entity.fungus_thrower.throw": "Fungus thrown",
+  "subtitles.entity.fungus_thrower.fungus_land": "Fungus explodes",
+  
+  "subtitles.entity.wavewhisperer.idle": "Wavewhisperer mumbles",
+  "subtitles.entity.wavewhisperer.hurt": "Wavewhisperer hurts",
+  "subtitles.entity.wavewhisperer.death": "Wavewhisperer dies",
+  "subtitles.entity.wavewhisperer.step": "Wavewhisperer walks",
+  "subtitles.entity.wavewhisperer.attack": "Wavewhisperer attacks",
+  "subtitles.entity.wavewhisperer.grapple": "Wavewhisperer summons Entangle Kelp",
+  "subtitles.entity.wavewhisperer.summon_qgk": "Wavewhisperer summons Quick-Growing Kelp",
+  "subtitles.entity.wavewhisperer.summon_pa": "Wavewhisperer summons Poison Anemone",
+  
+  "subtitles.entity.quick_growing_kelp.burst": "Quick-Growing Kelp emerges",
+  "subtitles.entity.quick_growing_kelp.burst_down": "Quick-Growing Kelp retracts",
+  "subtitles.entity.quick_growing_kelp.hurt": "Quick-Growing Kelp hurts",
+  "subtitles.entity.quick_growing_kelp.death": "Quick-Growing Kelp dies",
+  
+  "subtitles.entity.poison_anemone.burst": "Poison Anemone emerges",
+  "subtitles.entity.poison_anemone.idle": "Poison Anemone rustles",
+  "subtitles.entity.poison_anemone.hurt": "Poison Anemone hurts",
+  "subtitles.entity.poison_anemone.death": "Poison Anemone dies",
+  "subtitles.entity.poison_anemone.close": "Poison Anemone closes",
+  "subtitles.entity.poison_anemone.shoot": "Poison Anemone shoots",
+  
+  "subtitles.entity.drowned_necromancer.idle": "Drowned Necromancer groans",
+  "subtitles.entity.drowned_necromancer.hurt": "Drowned Necromancer hurts",
+  "subtitles.entity.drowned_necromancer.death": "Drowned Necromancer dies",
+  "subtitles.entity.drowned_necromancer.swim": "Drowned Necromancer swims",
+  "subtitles.entity.drowned_necromancer.attack": "Drowned Necromancer attacks",
+  "subtitles.entity.drowned_necromancer.strong_attack": "Drowned Necromancer launches strong attack",
+  "subtitles.entity.drowned_necromancer.shoot": "Drowned Necromancer shoots",
+  "subtitles.entity.drowned_necromancer.summon": "Drowned Necromancer summons",
+  "subtitles.entity.drowned_necromancer.steam_missile": "Steam Missile flies",
+  "subtitles.entity.drowned_necromancer.steam_missile_impact": "Steam Missile hits",
+  "subtitles.entity.drowned_necromancer.prepare_trident_storm": "Trident Storm rumbles",
+  "subtitles.entity.drowned_necromancer.trident_storm_hit": "Trident Storm strikes",
+    
+  "subtitles.entity.sunken_skeleton.idle": "Sunken Skeleton bubbles",
+  "subtitles.entity.sunken_skeleton.hurt": "Sunken Skeleton hurts",
+  "subtitles.entity.sunken_skeleton.death": "Sunken Skeleton dies",
+  "subtitles.entity.sunken_skeleton.step": "Sunken Skeleton swims",
+  "subtitles.entity.sunken_skeleton.shoot": "Sunken Skeleton shoots",
+  
+  "subtitles.entity.wildfire.idle": "Wildfire groans",
+  "subtitles.entity.wildfire.hurt": "Wildfire hurts",
+  "subtitles.entity.wildfire.death": "Wildfire dies",
+  "subtitles.entity.wildfire.move": "Wildfire hovers",
+  "subtitles.entity.wildfire.shoot": "Wildfire shoots",
+  "subtitles.entity.wildfire.projectile_hit": "Wildfire projectile hits",
+  "subtitles.entity.wildfire.shockwave": "Wildfire slams",
+  "subtitles.entity.wildfire.shield_break": "Wildfire shield crumbles"
 }

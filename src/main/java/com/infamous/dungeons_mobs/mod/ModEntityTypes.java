@@ -1,45 +1,76 @@
 package com.infamous.dungeons_mobs.mod;
 
+import static com.infamous.dungeons_mobs.DungeonsMobs.DUNGEONS_MOBS;
+import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Supplier;
+
+import com.infamous.dungeons_mobs.entities.blaze.WildfireEntity;
 import com.infamous.dungeons_mobs.entities.creepers.IcyCreeperEntity;
 import com.infamous.dungeons_mobs.entities.ender.BlastlingEntity;
 import com.infamous.dungeons_mobs.entities.ender.EndersentEntity;
 import com.infamous.dungeons_mobs.entities.ender.SnarelingEntity;
 import com.infamous.dungeons_mobs.entities.ender.WatchlingEntity;
 import com.infamous.dungeons_mobs.entities.golem.SquallGolemEntity;
-import com.infamous.dungeons_mobs.entities.illagers.*;
+import com.infamous.dungeons_mobs.entities.illagers.DungeonsIllusionerEntity;
+import com.infamous.dungeons_mobs.entities.illagers.EnchanterEntity;
+import com.infamous.dungeons_mobs.entities.illagers.GeomancerEntity;
+import com.infamous.dungeons_mobs.entities.illagers.IceologerEntity;
+import com.infamous.dungeons_mobs.entities.illagers.IllusionerCloneEntity;
+import com.infamous.dungeons_mobs.entities.illagers.MageCloneEntity;
+import com.infamous.dungeons_mobs.entities.illagers.MageEntity;
+import com.infamous.dungeons_mobs.entities.illagers.MountaineerEntity;
+import com.infamous.dungeons_mobs.entities.illagers.RoyalGuardEntity;
+import com.infamous.dungeons_mobs.entities.illagers.WindcallerEntity;
 import com.infamous.dungeons_mobs.entities.jungle.LeapleafEntity;
 import com.infamous.dungeons_mobs.entities.jungle.PoisonQuillVineEntity;
 import com.infamous.dungeons_mobs.entities.jungle.QuickGrowingVineEntity;
 import com.infamous.dungeons_mobs.entities.jungle.WhispererEntity;
 import com.infamous.dungeons_mobs.entities.piglin.FungusThrowerEntity;
 import com.infamous.dungeons_mobs.entities.piglin.ZombifiedFungusThrowerEntity;
-import com.infamous.dungeons_mobs.entities.projectiles.*;
+import com.infamous.dungeons_mobs.entities.projectiles.BlastlingBulletEntity;
+import com.infamous.dungeons_mobs.entities.projectiles.BlueNethershroomEntity;
+import com.infamous.dungeons_mobs.entities.projectiles.CobwebProjectileEntity;
+import com.infamous.dungeons_mobs.entities.projectiles.CobwebTrapEntity;
+import com.infamous.dungeons_mobs.entities.projectiles.GeoOrbEntity;
+import com.infamous.dungeons_mobs.entities.projectiles.LaserOrbEntity;
+import com.infamous.dungeons_mobs.entities.projectiles.SlimeballEntity;
+import com.infamous.dungeons_mobs.entities.projectiles.SnarelingGlobEntity;
+import com.infamous.dungeons_mobs.entities.projectiles.TridentFumeEntity;
+import com.infamous.dungeons_mobs.entities.projectiles.WraithFireballEntity;
 import com.infamous.dungeons_mobs.entities.redstone.RedstoneCubeEntity;
 import com.infamous.dungeons_mobs.entities.redstone.RedstoneGolemEntity;
 import com.infamous.dungeons_mobs.entities.redstone.RedstoneMineEntity;
 import com.infamous.dungeons_mobs.entities.slime.ConjuredSlimeEntity;
-import com.infamous.dungeons_mobs.entities.summonables.*;
-import com.infamous.dungeons_mobs.entities.undead.*;
-import com.infamous.dungeons_mobs.entities.undead.horseman.SkeletonHorsemanEntity;
-import com.infamous.dungeons_mobs.entities.water.*;
+import com.infamous.dungeons_mobs.entities.summonables.GeomancerBombEntity;
+import com.infamous.dungeons_mobs.entities.summonables.GeomancerWallEntity;
+import com.infamous.dungeons_mobs.entities.summonables.IceCloudEntity;
+import com.infamous.dungeons_mobs.entities.summonables.Tornado2Entity;
+import com.infamous.dungeons_mobs.entities.summonables.TornadoEntity;
+import com.infamous.dungeons_mobs.entities.undead.FrozenZombieEntity;
+import com.infamous.dungeons_mobs.entities.undead.JungleZombieEntity;
+import com.infamous.dungeons_mobs.entities.undead.MossySkeletonEntity;
+import com.infamous.dungeons_mobs.entities.undead.NecromancerEntity;
+import com.infamous.dungeons_mobs.entities.undead.SkeletonVanguardEntity;
+import com.infamous.dungeons_mobs.entities.undead.WraithEntity;
+import com.infamous.dungeons_mobs.entities.water.DrownedNecromancerEntity;
+import com.infamous.dungeons_mobs.entities.water.PoisonAnemoneEntity;
+import com.infamous.dungeons_mobs.entities.water.QuickGrowingAnemoneEntity;
+import com.infamous.dungeons_mobs.entities.water.SunkenSkeletonEntity;
+import com.infamous.dungeons_mobs.entities.water.WavewhispererEntity;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.SpawnEggItem;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Supplier;
-
-import static com.infamous.dungeons_mobs.DungeonsMobs.DUNGEONS_MOBS;
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
 public class ModEntityTypes {
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITIES, MODID);
@@ -86,17 +117,6 @@ public class ModEntityTypes {
             0x493615, 0xe8b42f
     );
 
-
-    public static final RegistryObject<EntityType<SkeletonHorsemanEntity>> SKELETON_HORSEMAN = registerEntity("skeleton_horseman", () ->
-            EntityType.Builder.<SkeletonHorsemanEntity>of(SkeletonHorsemanEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F * 1.1F, 1.99F * 1.1F)
-                    .clientTrackingRange(8)
-                    .setCustomClientFactory((spawnEntity,world) -> new SkeletonHorsemanEntity(world))
-                    .build(new ResourceLocation(MODID, "skeleton_horseman").toString()),
-            12698049, 0xb0babe
-    );
-
-
     public static final RegistryObject<EntityType<NecromancerEntity>> NECROMANCER = registerEntity("necromancer", () ->
             EntityType.Builder.<NecromancerEntity>of(NecromancerEntity::new, EntityClassification.MONSTER)
                     .sized(0.6F * 1.2F, 1.99F * 1.2F)
@@ -109,27 +129,10 @@ public class ModEntityTypes {
 
 
     // ILLAGERS
-    public static final RegistryObject<EntityType<ArmoredVindicatorEntity>> ARMORED_VINDICATOR = registerEntity("armored_vindicator", () ->
-            EntityType.Builder.<ArmoredVindicatorEntity>of(ArmoredVindicatorEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F * 1.1F, 1.95F * 1.1F)
-                    .clientTrackingRange(8)
-                    .setCustomClientFactory((spawnEntity,world) -> new ArmoredVindicatorEntity(world))
-                    .build(new ResourceLocation(MODID, "armored_vindicator").toString()),
-            9804699, 2580065
-    );
-
-    public static final RegistryObject<EntityType<ArmoredPillagerEntity>> ARMORED_PILLAGER = registerEntity("armored_pillager", () ->
-            EntityType.Builder.<ArmoredPillagerEntity>of(ArmoredPillagerEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F * 1.1F, 1.95F * 1.1F)
-                    .clientTrackingRange(8)
-                    .setCustomClientFactory((spawnEntity,world) -> new ArmoredPillagerEntity(world))
-                    .build(new ResourceLocation(MODID, "armored_pillager").toString()),
-            5451574, 9804699
-    );
 
     public static final RegistryObject<EntityType<RoyalGuardEntity>> ROYAL_GUARD = registerEntity("royal_guard", () ->
             EntityType.Builder.<RoyalGuardEntity>of(RoyalGuardEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F * 1.1F, 1.95F * 1.1F)
+                    .sized(0.6F * 1.2F, 1.95F * 1.2F)
                     .clientTrackingRange(8)
                     .setCustomClientFactory((spawnEntity,world) -> new RoyalGuardEntity(world))
                     .build(new ResourceLocation(MODID, "royal_guard").toString()),
@@ -189,15 +192,6 @@ public class ModEntityTypes {
             0x62162c, 0xfbd600
     );
     
-    public static final RegistryObject<EntityType<VindicatorChefEntity>> VINDICATOR_CHEF = registerEntity("vindicator_chef", () ->
-            EntityType.Builder.<VindicatorChefEntity>of(VindicatorChefEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F, 1.95F)
-                    .clientTrackingRange(8)
-                    .setCustomClientFactory((spawnEntity,world) -> new VindicatorChefEntity(world))
-                    .build(new ResourceLocation(MODID, "vindicator_chef").toString()),
-            9804699, 0xe0dfdb
-    );
-
     public static final RegistryObject<EntityType<DungeonsIllusionerEntity>> ILLUSIONER = registerEntity("illusioner", () ->
             EntityType.Builder.<DungeonsIllusionerEntity>of(DungeonsIllusionerEntity::new, EntityClassification.MONSTER)
                     .sized(0.6F, 1.95F)
@@ -223,15 +217,6 @@ public class ModEntityTypes {
             0x715039, 0xe6e4d4
     );
 
-    public static final RegistryObject<EntityType<ArmoredMountaineerEntity>> ARMORED_MOUNTAINEER = registerEntity("armored_mountaineer", () ->
-            EntityType.Builder.<ArmoredMountaineerEntity>of(ArmoredMountaineerEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F * 1.1F, 1.95F * 1.1F)
-                    .clientTrackingRange(8)
-                    .setCustomClientFactory((spawnEntity,world) -> new ArmoredMountaineerEntity(world))
-                    .build(new ResourceLocation(MODID, "armored_mountaineer").toString()),
-                    0x715039, 0xe6e4d4
-    );
-
     // CREEPER
 
     public static final RegistryObject<EntityType<IcyCreeperEntity>> ICY_CREEPER = registerEntity("icy_creeper", () ->
@@ -240,7 +225,7 @@ public class ModEntityTypes {
                     .clientTrackingRange(8)
                     .setCustomClientFactory((spawnEntity,world) -> new IcyCreeperEntity(world))
                     .build(new ResourceLocation(MODID, "icy_creeper").toString()),
-                    894731, 0xc9edf2
+                    0x5ccea5, 0xd9eef2
     );
 
     // WRAITH
@@ -256,24 +241,22 @@ public class ModEntityTypes {
 
     // SLIME
 
-    public static final RegistryObject<EntityType<ConjuredSlimeEntity>> CONJURED_SLIME = registerEntity("conjured_slime", () ->
+    public static final RegistryObject<EntityType<ConjuredSlimeEntity>> CONJURED_SLIME = registerEntityWithoutEgg("conjured_slime", () ->
                     EntityType.Builder.<ConjuredSlimeEntity>of(ConjuredSlimeEntity::new, EntityClassification.MONSTER)
                             .sized(2.04F, 2.04F)
                             .clientTrackingRange(10)
                             .setCustomClientFactory((spawnEntity,world) -> new ConjuredSlimeEntity(world))
-                            .build(new ResourceLocation(MODID, "conjured_slime").toString()),
-            0xb153c9, 0xdebae7
+                            .build(new ResourceLocation(MODID, "conjured_slime").toString())
     );
 
     // REDSTONE
 
-    public static final RegistryObject<EntityType<RedstoneCubeEntity>> REDSTONE_CUBE = registerEntity("redstone_cube", () ->
+    public static final RegistryObject<EntityType<RedstoneCubeEntity>> REDSTONE_CUBE = registerEntityWithoutEgg("redstone_cube", () ->
             EntityType.Builder.<RedstoneCubeEntity>of(RedstoneCubeEntity::new, EntityClassification.MONSTER)
                     .sized(1.0F, 1.0F)
                     .clientTrackingRange(10)
                     .setCustomClientFactory((spawnEntity,world) -> new RedstoneCubeEntity(world))
-                    .build(new ResourceLocation(MODID, "redstone_cube").toString()),
-            0xd12b13, 0x9a948e
+                    .build(new ResourceLocation(MODID, "redstone_cube").toString())
     );
 
     public static final RegistryObject<EntityType<RedstoneGolemEntity>> REDSTONE_GOLEM = registerEntity("redstone_golem", () ->
@@ -328,7 +311,7 @@ public class ModEntityTypes {
     // GOLEM
     public static final RegistryObject<EntityType<SquallGolemEntity>> SQUALL_GOLEM = registerEntity("squall_golem", () ->
             EntityType.Builder.<SquallGolemEntity>of(SquallGolemEntity::new, EntityClassification.MONSTER)
-                    .sized(2.62F, 2.81F) // 42 px wide, 29px tall + 16px of height
+                    .sized(1.9F, 2.75F) // 42 px wide, 29px tall + 16px of height
                     .clientTrackingRange(10)
                     .setCustomClientFactory((spawnEntity,world) -> new SquallGolemEntity(world))
                     .build(new ResourceLocation(MODID, "squall_golem").toString()),
@@ -382,15 +365,6 @@ public class ModEntityTypes {
                     0x2b9477, 0xc436cd
     );
 
-    public static final RegistryObject<EntityType<ArmoredDrownedEntity>> ARMORED_DROWNED = registerEntity("armored_drowned", () ->
-            EntityType.Builder.<ArmoredDrownedEntity>of(ArmoredDrownedEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F * 1.1F, 1.95F * 1.1F)
-                    .clientTrackingRange(8)
-                    .build(new ResourceLocation(MODID, "armored_drowned").toString()),
-                    9433559, 7969893
-    );
-
-
     public static final RegistryObject<EntityType<DrownedNecromancerEntity>> DROWNED_NECROMANCER = registerEntity("drowned_necromancer", () ->
             EntityType.Builder.<DrownedNecromancerEntity>of(DrownedNecromancerEntity::new, EntityClassification.MONSTER)
                     .sized(0.6F * 1.2F, 1.95F * 1.2F)
@@ -406,14 +380,6 @@ public class ModEntityTypes {
             .build(new ResourceLocation(MODID, "sunken_skeleton").toString()),
     0x87a964, 0xc06fe5
     	    );
-    
-    public static final RegistryObject<EntityType<ArmoredSunkenSkeletonEntity>> ARMORED_SUNKEN_SKELETON = registerEntity("armored_sunken_skeleton", () ->
-            EntityType.Builder.<ArmoredSunkenSkeletonEntity>of(ArmoredSunkenSkeletonEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F * 1.1F, 1.99F * 1.1F)
-                    .clientTrackingRange(8)
-                    .build(new ResourceLocation(MODID, "armored_sunken_skeleton").toString()),
-                    0x87a964, 0xc06fe5
-    );
 
     // ENDER MOBS
 
@@ -448,6 +414,17 @@ public class ModEntityTypes {
                     .build(new ResourceLocation(MODID, "snareling").toString()),
                     0x161616, 0xdbe64e
     );
+    
+    // BLAZES
+    
+    public static final RegistryObject<EntityType<WildfireEntity>> WILDFIRE = registerEntity("wildfire", () ->
+	    EntityType.Builder.<WildfireEntity>of(WildfireEntity::new, EntityClassification.MONSTER)
+	            .fireImmune()
+	            .sized(0.9F, 2.25F)
+	            .clientTrackingRange(10)
+	            .build(new ResourceLocation(MODID, "wildfire").toString()),
+	            0x8b3401, 0xffd528
+	);
 
     // Projectiles
     public static final RegistryObject<EntityType<WraithFireballEntity>> WRAITH_FIREBALL = registerEntityWithoutEgg("wraith_fireball", () ->

@@ -2,7 +2,8 @@ package com.infamous.dungeons_mobs.client.models.illager;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
-import net.minecraft.util.Hand;
+import com.infamous.dungeons_mobs.entities.illagers.MountaineerEntity;
+
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.model.ModelHelper;
 import net.minecraft.client.renderer.model.ModelRenderer;
@@ -12,11 +13,9 @@ import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ShootableItem;
 import net.minecraft.item.UseAction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.math.MathHelper;
-
-// Borrowed from tallestred / seymourimadeit's IllagersWearArmor mod
-import net.minecraft.client.renderer.entity.model.BipedModel.ArmPose;
 
 public class IllagerBipedModel<T extends AbstractIllagerEntity> extends BipedModel<T> {
     public ModelRenderer arms;
@@ -173,6 +172,18 @@ public class IllagerBipedModel<T extends AbstractIllagerEntity> extends BipedMod
         this.arms.visible = flag;
         this.leftArm.visible = !flag;
         this.rightArm.visible = !flag;
+        
+        float f = 1.0F;
+        if (flag) {
+           f = (float)entityIn.getDeltaMovement().lengthSqr();
+           f = f / 0.2F;
+           f = f * f * f;
+        }
+
+        if (f < 1.0F) {
+           f = 1.0F;
+        }
+        
         if (flag) {
             this.leftArm.y = 3.0F;
             this.leftArm.z = -1.0F;
@@ -181,48 +192,81 @@ public class IllagerBipedModel<T extends AbstractIllagerEntity> extends BipedMod
             this.rightArm.z = -1.0F;
             this.rightArm.xRot = -0.75F;
         }
-        switch (armpose) {
-            case ATTACKING:
-                if (!entityIn.getMainHandItem().isEmpty()
-                        && !(entityIn.getMainHandItem().getItem() instanceof ShootableItem)
-                        && !(entityIn.isBlocking())){
-                    // raises arm with weapon, moves left arm back and forth while attacking
-                    ModelHelper.swingWeaponDown(this.rightArm, this.leftArm, entityIn, this.attackTime, ageInTicks);
-                }
-                /*
-                else if(!entityIn.getHeldItemMainhand().isEmpty()
-                        && !(entityIn.getHeldItemMainhand().getItem() instanceof ShootableItem)){
-                    ModelUtils.readyWeaponWhileBlocking(this.bipedRightArm, this.bipedLeftArm, entityIn, this.swingProgress, ageInTicks);
-                }
-
-                 */
-                break;
-            case CELEBRATING:
-                this.rightArm.z = 0.0F;
-                this.rightArm.x = -5.0F;
-                this.rightArm.xRot = MathHelper.cos(ageInTicks * 0.6662F) * 0.05F;
-                this.rightArm.zRot = 2.670354F;
-                this.rightArm.yRot = 0.0F;
-                this.leftArm.z = 0.0F;
-                this.leftArm.x = 5.0F;
-                this.leftArm.xRot = MathHelper.cos(ageInTicks * 0.6662F) * 0.05F;
-                this.leftArm.zRot = -2.3561945F;
-                this.leftArm.yRot = 0.0F;
-                break;
-            case SPELLCASTING:
-                this.rightArm.z = 0.0F;
-                this.rightArm.x = -5.0F;
-                this.leftArm.z = 0.0F;
-                this.leftArm.x = 5.0F;
-                this.rightArm.xRot = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
-                this.leftArm.xRot = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
-                this.rightArm.zRot = 2.3561945F;
-                this.leftArm.zRot = -2.3561945F;
-                this.rightArm.yRot = 0.0F;
-                this.leftArm.yRot = 0.0F;
-                break;
-            default:
-                break;
+        
+        if (this.riding) {
+            this.rightArm.xRot = (-(float)Math.PI / 5F);
+            this.rightArm.yRot = 0.0F;
+            this.rightArm.zRot = 0.0F;
+            this.leftArm.xRot = (-(float)Math.PI / 5F);
+            this.leftArm.yRot = 0.0F;
+            this.leftArm.zRot = 0.0F;
+            this.leftLeg.xRot = -1.4137167F;
+            this.leftLeg.yRot = ((float)Math.PI / 10F);
+            this.leftLeg.zRot = 0.07853982F;
+            this.rightLeg.xRot = -1.4137167F;
+            this.rightLeg.yRot = (-(float)Math.PI / 10F);
+            this.rightLeg.zRot = -0.07853982F;
+         } else {
+            this.rightArm.xRot = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 2.0F * limbSwingAmount * 0.5F;
+            this.rightArm.yRot = 0.0F;
+            this.rightArm.zRot = 0.0F;
+            this.leftArm.xRot = MathHelper.cos(limbSwing * 0.6662F) * 2.0F * limbSwingAmount * 0.5F;
+            this.leftArm.yRot = 0.0F;
+            this.leftArm.zRot = 0.0F;
+            this.leftLeg.xRot = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount * 0.5F;
+            this.leftLeg.yRot = 0.0F;
+            this.leftLeg.zRot = 0.0F;
+            this.rightLeg.xRot = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount * 0.5F;
+            this.rightLeg.yRot = 0.0F;
+            this.rightLeg.zRot = 0.0F;
+         }
+        if (entityIn instanceof MountaineerEntity && ((MountaineerEntity)entityIn).isClimbing()) {
+        	this.rightArm.xRot = -1.8849558F + MathHelper.sin(ageInTicks * 0.35F) * 0.5F;
+        	this.leftArm.xRot = -1.8849558F - MathHelper.sin(ageInTicks * 0.35F) * 0.5F;
+        } else {
+	        switch (armpose) {
+	            case ATTACKING:
+	                if (!entityIn.getMainHandItem().isEmpty()
+	                        && !(entityIn.getMainHandItem().getItem() instanceof ShootableItem)
+	                        && !(entityIn.isBlocking())){
+	                    // raises arm with weapon, moves left arm back and forth while attacking
+	                    ModelHelper.swingWeaponDown(this.rightArm, this.leftArm, entityIn, this.attackTime, ageInTicks);
+	                }
+	                /*
+	                else if(!entityIn.getHeldItemMainhand().isEmpty()
+	                        && !(entityIn.getHeldItemMainhand().getItem() instanceof ShootableItem)){
+	                    ModelUtils.readyWeaponWhileBlocking(this.bipedRightArm, this.bipedLeftArm, entityIn, this.swingProgress, ageInTicks);
+	                }
+	
+	                 */
+	                break;
+	            case CELEBRATING:
+	                this.rightArm.z = 0.0F;
+	                this.rightArm.x = -5.0F;
+	                this.rightArm.xRot = MathHelper.cos(ageInTicks * 0.6662F) * 0.05F;
+	                this.rightArm.zRot = 2.670354F;
+	                this.rightArm.yRot = 0.0F;
+	                this.leftArm.z = 0.0F;
+	                this.leftArm.x = 5.0F;
+	                this.leftArm.xRot = MathHelper.cos(ageInTicks * 0.6662F) * 0.05F;
+	                this.leftArm.zRot = -2.3561945F;
+	                this.leftArm.yRot = 0.0F;
+	                break;
+	            case SPELLCASTING:
+	                this.rightArm.z = 0.0F;
+	                this.rightArm.x = -5.0F;
+	                this.leftArm.z = 0.0F;
+	                this.leftArm.x = 5.0F;
+	                this.rightArm.xRot = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
+	                this.leftArm.xRot = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
+	                this.rightArm.zRot = 2.3561945F;
+	                this.leftArm.zRot = -2.3561945F;
+	                this.rightArm.yRot = 0.0F;
+	                this.leftArm.yRot = 0.0F;
+	                break;
+	            default:
+	                break;
+	        }
         }
     }
 }

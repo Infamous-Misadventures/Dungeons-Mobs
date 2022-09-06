@@ -1,7 +1,8 @@
 package com.infamous.dungeons_mobs.client.renderer.water;
 
+import com.infamous.dungeons_libraries.capabilities.elite.EliteMob;
+import com.infamous.dungeons_libraries.capabilities.elite.EliteMobHelper;
 import com.infamous.dungeons_mobs.DungeonsMobs;
-import com.infamous.dungeons_mobs.interfaces.IArmoredMob;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.IEntityRenderer;
@@ -12,11 +13,15 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import java.util.Arrays;
+import java.util.List;
+
 @OnlyIn(Dist.CLIENT)
 public class CustomDrownedOuterLayer<T extends DrownedEntity> extends LayerRenderer<T, DrownedModel<T>> {
    private static final ResourceLocation DROWNED_OUTER_LAYER_LOCATION = new ResourceLocation("textures/entity/zombie/drowned_outer_layer.png");
    private static final ResourceLocation SEAWEED_ARMORED_DROWNED_OUTER_LAYER_LOCATION = new ResourceLocation(DungeonsMobs.MODID, "textures/entity/ocean/seaweed_armored_drowned_outer_layer.png");
    private static final ResourceLocation PALE_ARMORED_DROWNED_OUTER_LAYER_LOCATION = new ResourceLocation(DungeonsMobs.MODID, "textures/entity/ocean/pale_armored_drowned_outer_layer.png");
+   private static final List<ResourceLocation> ARMORED_DROWNED_LOCATIONS = Arrays.asList(SEAWEED_ARMORED_DROWNED_OUTER_LAYER_LOCATION, PALE_ARMORED_DROWNED_OUTER_LAYER_LOCATION);
    private final DrownedModel<T> model = new DrownedModel<>(0.25F, 0.0F, 64, 64);
 
    public CustomDrownedOuterLayer(IEntityRenderer<T, DrownedModel<T>> p_i50943_1_) {
@@ -28,12 +33,9 @@ public class CustomDrownedOuterLayer<T extends DrownedEntity> extends LayerRende
    }
 
    protected ResourceLocation getLayerTexture(T drowned) {
-      if(drowned instanceof IArmoredMob){
-         if(((IArmoredMob) drowned).hasStrongArmor()){
-            return PALE_ARMORED_DROWNED_OUTER_LAYER_LOCATION;
-         } else{
-            return SEAWEED_ARMORED_DROWNED_OUTER_LAYER_LOCATION;
-         }
+      EliteMob cap = EliteMobHelper.getEliteMobCapability(drowned);
+      if(cap != null && cap.isElite()){
+         return ARMORED_DROWNED_LOCATIONS.get(drowned.getId() % ARMORED_DROWNED_LOCATIONS.size());
       } else{
          return DROWNED_OUTER_LAYER_LOCATION;
       }

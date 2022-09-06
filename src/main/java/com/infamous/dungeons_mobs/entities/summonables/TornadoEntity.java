@@ -143,7 +143,7 @@ public class TornadoEntity extends Entity implements IAnimatable {
                 }
             }
             if (this.fallTime == 4) {
-                this.playSound(ModSoundEvents.L_WIND.get(), 1.5f,1);
+                this.playSound(ModSoundEvents.WINDCALLER_LIFT_WIND.get(), 1.5f,1);
             }
 
             if (this.fallTime >= 40) {

@@ -3,14 +3,26 @@ package com.infamous.dungeons_mobs.client;
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
+import com.infamous.dungeons_mobs.client.particle.RedstoneSparkParticle;
 import com.infamous.dungeons_mobs.client.particle.SnowflakeParticle;
-import com.infamous.dungeons_mobs.client.renderer.creeper.CustomCreeperRenderer;
+import com.infamous.dungeons_mobs.client.renderer.blaze.WildfireRenderer;
+import com.infamous.dungeons_mobs.client.renderer.creeper.IcyCreeperRenderer;
 import com.infamous.dungeons_mobs.client.renderer.ender.BlastlingRenderer;
 import com.infamous.dungeons_mobs.client.renderer.ender.EndersentRenderer;
 import com.infamous.dungeons_mobs.client.renderer.ender.SnarelingRenderer;
 import com.infamous.dungeons_mobs.client.renderer.ender.WatchlingRenderer;
 import com.infamous.dungeons_mobs.client.renderer.golem.SquallGolemRenderer;
-import com.infamous.dungeons_mobs.client.renderer.illager.*;
+import com.infamous.dungeons_mobs.client.renderer.illager.CustomPillagerRenderer;
+import com.infamous.dungeons_mobs.client.renderer.illager.CustomVindicatorRenderer;
+import com.infamous.dungeons_mobs.client.renderer.illager.DungeonsIllusionerRenderer;
+import com.infamous.dungeons_mobs.client.renderer.illager.EnchanterRenderer;
+import com.infamous.dungeons_mobs.client.renderer.illager.GeomancerRenderer;
+import com.infamous.dungeons_mobs.client.renderer.illager.IceologerRenderer;
+import com.infamous.dungeons_mobs.client.renderer.illager.IllusionerCloneRenderer;
+import com.infamous.dungeons_mobs.client.renderer.illager.MageCloneRenderer;
+import com.infamous.dungeons_mobs.client.renderer.illager.MageRenderer;
+import com.infamous.dungeons_mobs.client.renderer.illager.RoyalGuardRenderer;
+import com.infamous.dungeons_mobs.client.renderer.illager.WindcallerRenderer;
 import com.infamous.dungeons_mobs.client.renderer.jungle.LeapleafRenderer;
 import com.infamous.dungeons_mobs.client.renderer.jungle.PoisonQuillVineRenderer;
 import com.infamous.dungeons_mobs.client.renderer.jungle.QuickGrowingVineRenderer;
@@ -19,7 +31,14 @@ import com.infamous.dungeons_mobs.client.renderer.layer.GeoMobEnchantmentGlintLa
 import com.infamous.dungeons_mobs.client.renderer.layer.MobEnchantmentGlintLayer;
 import com.infamous.dungeons_mobs.client.renderer.layers.SkeletonEyesLayer;
 import com.infamous.dungeons_mobs.client.renderer.piglin.CustomPiglinRenderer;
-import com.infamous.dungeons_mobs.client.renderer.projectiles.*;
+import com.infamous.dungeons_mobs.client.renderer.projectiles.BlastlingBulletRenderer;
+import com.infamous.dungeons_mobs.client.renderer.projectiles.BlueNethershroomRenderer;
+import com.infamous.dungeons_mobs.client.renderer.projectiles.CobwebProjectileRenderer;
+import com.infamous.dungeons_mobs.client.renderer.projectiles.CustomFireballRenderer;
+import com.infamous.dungeons_mobs.client.renderer.projectiles.GeoOrbRenderer;
+import com.infamous.dungeons_mobs.client.renderer.projectiles.OrbRenderer;
+import com.infamous.dungeons_mobs.client.renderer.projectiles.SlimeballRenderer;
+import com.infamous.dungeons_mobs.client.renderer.projectiles.SnarelingGlobRenderer;
 import com.infamous.dungeons_mobs.client.renderer.redstone.RedstoneCubeRenderer;
 import com.infamous.dungeons_mobs.client.renderer.redstone.RedstoneGolemRenderer;
 import com.infamous.dungeons_mobs.client.renderer.redstone.RedstoneMineRenderer;
@@ -33,12 +52,12 @@ import com.infamous.dungeons_mobs.client.renderer.undead.CustomSkeletonRenderer;
 import com.infamous.dungeons_mobs.client.renderer.undead.CustomZombieRenderer;
 import com.infamous.dungeons_mobs.client.renderer.undead.NecromancerRenderer;
 import com.infamous.dungeons_mobs.client.renderer.undead.SkeletonVanguardRenderer;
-import com.infamous.dungeons_mobs.client.renderer.undead.SmartSkeletonRenderer;
 import com.infamous.dungeons_mobs.client.renderer.undead.WraithRenderer;
 import com.infamous.dungeons_mobs.client.renderer.water.CustomDrownedRenderer;
 import com.infamous.dungeons_mobs.client.renderer.water.DrownedNecromancerRenderer;
 import com.infamous.dungeons_mobs.client.renderer.water.PoisonAnemoneRenderer;
 import com.infamous.dungeons_mobs.client.renderer.water.QuickGrowingAnemoneRenderer;
+import com.infamous.dungeons_mobs.client.renderer.water.SunkenSkeletonRenderer;
 import com.infamous.dungeons_mobs.client.renderer.water.WavewhispererRenderer;
 import com.infamous.dungeons_mobs.items.WraithFireChargeItem;
 import com.infamous.dungeons_mobs.items.shield.CustomISTER;
@@ -83,18 +102,18 @@ public class ClientEvents {
 
         // To match Husk proportions found in MCD
         RenderingRegistry.registerEntityRenderingHandler(EntityType.HUSK, CustomZombieRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityType.PILLAGER, CustomPillagerRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityType.VINDICATOR, CustomVindicatorRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityType.DROWNED, CustomDrownedRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.MOSSY_SKELETON.get(), CustomSkeletonRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SKELETON_HORSEMAN.get(), CustomSkeletonRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SKELETON_VANGUARD.get(), SkeletonVanguardRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.NECROMANCER.get(), NecromancerRenderer::new);
 
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_VINDICATOR.get(), CustomVindicatorRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_PILLAGER.get(), CustomPillagerRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ROYAL_GUARD.get(), CustomVindicatorRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.VINDICATOR_CHEF.get(), CustomVindicatorRenderer::new);
+
+
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ROYAL_GUARD.get(), RoyalGuardRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.MOUNTAINEER.get(), CustomVindicatorRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_MOUNTAINEER.get(), CustomVindicatorRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ICEOLOGER.get(), IceologerRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.GEOMANCER.get(), GeomancerRenderer::new);
@@ -108,7 +127,7 @@ public class ClientEvents {
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ENCHANTER.get(), EnchanterRenderer::new);
 
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ICY_CREEPER.get(), CustomCreeperRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ICY_CREEPER.get(), IcyCreeperRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WRAITH.get(), WraithRenderer::new);
 
@@ -148,10 +167,8 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WAVEWHISPERER.get(), WavewhispererRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.POISON_ANEMONE.get(), PoisonAnemoneRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.QUICK_GROWING_ANEMONE.get(), QuickGrowingAnemoneRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_DROWNED.get(), CustomDrownedRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.DROWNED_NECROMANCER.get(), DrownedNecromancerRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SUNKEN_SKELETON.get(), SmartSkeletonRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ARMORED_SUNKEN_SKELETON.get(), SmartSkeletonRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SUNKEN_SKELETON.get(), SunkenSkeletonRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.LASER_ORB.get(), OrbRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.GEO_ORB.get(),
@@ -165,6 +182,8 @@ public class ClientEvents {
         
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.BLASTLING_BULLET.get(), BlastlingBulletRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SNARELING_GLOB.get(), SnarelingGlobRenderer::new);
+        
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WILDFIRE.get(), WildfireRenderer::new);
     }
 
     @SubscribeEvent
@@ -196,6 +215,7 @@ public class ClientEvents {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onParticleFactory(ParticleFactoryRegisterEvent event) {
         Minecraft.getInstance().particleEngine.register(ModParticleTypes.SNOWFLAKE.get(), SnowflakeParticle.Factory::new);
+        Minecraft.getInstance().particleEngine.register(ModParticleTypes.REDSTONE_SPARK.get(), RedstoneSparkParticle.Factory::new);
     }
 
     /*@SubscribeEvent

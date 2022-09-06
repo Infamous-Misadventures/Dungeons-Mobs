@@ -1,6 +1,5 @@
 package com.infamous.dungeons_mobs.mobenchantments;
 
-import com.infamous.dungeons_libraries.capabilities.enchantable.EnchantableHelper;
 import com.infamous.dungeons_libraries.capabilities.enchantable.IEnchantable;
 import com.infamous.dungeons_libraries.mobenchantments.MobEnchantment;
 import com.infamous.dungeons_libraries.network.MobEnchantmentMessage;
@@ -10,7 +9,6 @@ import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.data.AncientDataHelper;
 import com.infamous.dungeons_mobs.data.MobAncientData;
 import com.infamous.dungeons_mobs.data.UniqueAncientData;
-import com.infamous.dungeons_mobs.mobenchants.MobEnchantmentSelector;
 import com.infamous.dungeons_mobs.network.NetworkHandler;
 import com.infamous.dungeons_mobs.network.message.AncientMessage;
 import net.minecraft.entity.*;
@@ -23,8 +21,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.registries.ForgeRegistries;

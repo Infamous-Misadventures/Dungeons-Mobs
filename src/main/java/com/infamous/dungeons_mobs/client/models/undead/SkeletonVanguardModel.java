@@ -1,137 +1,62 @@
 package com.infamous.dungeons_mobs.client.models.undead;
 
-import com.infamous.dungeons_mobs.entities.undead.SkeletonVanguardEntity;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.entity.model.BipedModel;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.UseAction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.HandSide;
+import com.infamous.dungeons_mobs.DungeonsMobs;
 
-public class SkeletonVanguardModel<T extends SkeletonVanguardEntity> extends BipedModel<T> {
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.processor.IBone;
+import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib3.model.provider.data.EntityModelData;
+import software.bernie.geckolib3.resource.GeckoLibCache;
+import software.bernie.shadowed.eliotlash.molang.MolangParser;
 
-  public SkeletonVanguardModel() {
-  this(0.0F);
-}
-
-  public SkeletonVanguardModel(float modelSize) {
-    super(modelSize);
-    this.texHeight = 128;
-    this.texWidth = 128;
-    this.body = new ModelRenderer(this);
-    this.body.setPos(0.0F, 0.0F, 0.0F);
-    this.body.texOffs(0, 38).addBox(-4.0F, 0.0F, -2.0F, 8.0F, 12.0F, 4.0F, 0.0F);
-    this.body.texOffs(32, 0).addBox(-5.0F, 0.0F, -3.0F, 10.0F, 6.0F, 6.0F, 0.0F); // pants
-
-    this.head = new ModelRenderer(this);
-    this.head.setPos(0.0F, 0.0F, 0.0F);
-    this.head.texOffs(32, 32).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, 0.0F);
-
-    this.rightArm = new ModelRenderer(this);
-    this.rightArm.setPos(5.0F, 2.0F, 0.0F);
-    this.rightArm.texOffs(22, 63).addBox(-1.0F, -2.0F, -1.0F, 2.0F, 12.0F, 2.0F, modelSize);
-
-    this.leftArm = new ModelRenderer(this);
-    this.leftArm.setPos(-5.0F, 2.0F, 0.0F);
-    this.leftArm.texOffs(56, 59).addBox(-1.0F, -2.0F, -1.0F, 2.0F, 12.0F, 2.0F, modelSize);
-
-    this.rightLeg = new ModelRenderer(this);
-    this.rightLeg.setPos(2.0F, 12.0F, 0.0F);
-    this.rightLeg.texOffs(48, 59).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 12.0F, 2.0F, modelSize);
-    this.rightLeg.texOffs(18, 48).addBox(-2.0F, -2.0F, -3.0F, 5.0F, 9.0F, 6.0F, modelSize); // right legwear
-
-    this.leftLeg = new ModelRenderer(this);
-    this.leftLeg.setPos(-2.0F, 12.0F, 0.0F);
-    this.leftLeg.texOffs(40, 59).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 12.0F, 2.0F, modelSize);
-    this.leftLeg.texOffs(46, 15).addBox(-3.0F, -2.0F, -3.0F, 5.0F, 9.0F, 6.0F, modelSize); // left legwear
-  }
-
-  @Override
-  public void prepareMobModel(T entityIn, float limbSwing, float limbSwingAmount, float partialTick) {
-    this.rightArmPose = BipedModel.ArmPose.EMPTY;
-    this.leftArmPose = BipedModel.ArmPose.EMPTY;
-    if (entityIn.getMainArm() == HandSide.RIGHT) {
-      this.giveModelRightArmPoses(Hand.MAIN_HAND, entityIn);
-      this.giveModelLeftArmPoses(Hand.OFF_HAND, entityIn);
-    } else {
-      this.giveModelRightArmPoses(Hand.OFF_HAND, entityIn);
-      this.giveModelLeftArmPoses(Hand.MAIN_HAND, entityIn);
+public class SkeletonVanguardModel extends AnimatedGeoModel {
+	
+    @Override
+    public ResourceLocation getAnimationFileLocation(Object entity) {
+        return new ResourceLocation(DungeonsMobs.MODID, "animations/skeleton_vanguard.animation.json");
     }
-    super.prepareMobModel(entityIn, limbSwing, limbSwingAmount, partialTick);
-  }
 
-  private void giveModelRightArmPoses(Hand hand, T entityIn) {
-    ItemStack itemstack = entityIn.getItemInHand(hand);
-    UseAction useaction = itemstack.getUseAnimation();
-    switch (useaction) {
-      case BLOCK:
-        if(entityIn.isBlocking()){
-          this.rightArmPose = ArmPose.BLOCK;
-        }
-        else{
-          this.rightArmPose = ArmPose.ITEM;
-        }
-        break;
-      case CROSSBOW:
-        this.rightArmPose = ArmPose.CROSSBOW_HOLD;
-        if (entityIn.isUsingItem()) {
-          this.rightArmPose = ArmPose.CROSSBOW_CHARGE;
-        }
-        break;
-      case BOW:
-        this.rightArmPose = ArmPose.BOW_AND_ARROW;
-        break;
-      case SPEAR:
-        this.leftArmPose = ArmPose.THROW_SPEAR;
-        break;
-      default:
-        this.rightArmPose = ArmPose.EMPTY;
-        if (!itemstack.isEmpty()) {
-          this.rightArmPose = ArmPose.ITEM;
-        }
-        break;
+    @Override
+    public ResourceLocation getModelLocation(Object entity) {
+        return new ResourceLocation(DungeonsMobs.MODID, "geo/geo_skeleton.geo.json") ;
     }
-  }
 
-  private void giveModelLeftArmPoses(Hand hand, T entityIn) {
-    ItemStack itemstack = entityIn.getItemInHand(hand);
-    UseAction useaction = itemstack.getUseAnimation();
-    switch (useaction) {
-      case BLOCK:
-        if(entityIn.isBlocking()){
-          this.leftArmPose = ArmPose.BLOCK;
-        }
-        else{
-          this.leftArmPose = ArmPose.ITEM;
-        }
-        break;
-      case CROSSBOW:
-        this.leftArmPose = ArmPose.CROSSBOW_HOLD;
-        if (entityIn.isUsingItem()) {
-          this.leftArmPose = ArmPose.CROSSBOW_CHARGE;
-        }
-        break;
-      case BOW:
-        this.leftArmPose = ArmPose.BOW_AND_ARROW;
-        break;
-      case SPEAR:
-        this.leftArmPose = ArmPose.THROW_SPEAR;
-        break;
-      default:
-        this.leftArmPose = ArmPose.EMPTY;
-        if (!itemstack.isEmpty()) {
-          this.leftArmPose = ArmPose.ITEM;
-        }
-        break;
+    @Override
+    public ResourceLocation getTextureLocation(Object entity) {
+        return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/skeleton/skeleton_vanguard.png");
     }
-  }
 
-  public void translateToHand(HandSide sideIn, MatrixStack matrixStackIn) {
-    float f = sideIn == HandSide.RIGHT ? 1.0F : -1.0F;
-    ModelRenderer modelrenderer = this.getArm(sideIn);
-    modelrenderer.x += f;
-    modelrenderer.translateAndRotate(matrixStackIn);
-    modelrenderer.x -= f;
-  }
+    @Override
+    public void setLivingAnimations(IAnimatable entity, Integer uniqueID, AnimationEvent customPredicate) {
+        super.setLivingAnimations(entity, uniqueID, customPredicate);
+
+        LivingEntity entityIn = (LivingEntity) entity;
+
+        IBone head = this.getAnimationProcessor().getBone("bipedHead");
+        IBone cape = this.getAnimationProcessor().getBone("bipedCape");
+        
+        cape.setHidden(true);
+
+        EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
+        if (extraData.headPitch != 0 || extraData.netHeadYaw != 0) {
+            head.setRotationX(head.getRotationX() + (extraData.headPitch * ((float) Math.PI / 180F)));
+            head.setRotationY(head.getRotationY() + (extraData.netHeadYaw * ((float) Math.PI / 180F)));
+        }
+    }
+    
+	@Override
+	public void setMolangQueries(IAnimatable animatable, double currentTick) {
+		super.setMolangQueries(animatable, currentTick);
+		
+		MolangParser parser = GeckoLibCache.getInstance().parser;
+		LivingEntity livingEntity = (LivingEntity) animatable;
+		Vector3d velocity = livingEntity.getDeltaMovement();
+		float groundSpeed = MathHelper.sqrt((float) ((velocity.x * velocity.x) + (velocity.z * velocity.z)));
+		parser.setValue("query.ground_speed", groundSpeed * 20);
+	}
 }
