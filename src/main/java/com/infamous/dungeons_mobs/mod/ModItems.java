@@ -1,5 +1,10 @@
 package com.infamous.dungeons_mobs.mod;
 
+import com.infamous.dungeons_libraries.DungeonsLibraries;
+import com.infamous.dungeons_libraries.items.gearconfig.ArmorGear;
+import com.infamous.dungeons_libraries.items.gearconfig.ArmorSet;
+import com.infamous.dungeons_mobs.DungeonsMobs;
+import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.items.*;
 import com.infamous.dungeons_mobs.items.shield.RoyalGuardShieldItem;
 import com.infamous.dungeons_mobs.items.shield.SkeletonVanguardShieldItem;
@@ -8,9 +13,12 @@ import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemTier;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.function.Supplier;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.DUNGEONS_MOBS;
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
@@ -19,6 +27,9 @@ import static net.minecraft.item.ArmorMaterial.DIAMOND;
 
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
+
+    public static final Item.Properties ARMOR_PROPERTIES = DungeonsMobsConfig.COMMON.ENABLE_ITEM_TAB.get() ?
+            new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS) : new Item.Properties();
 
     // SHIELD
     public static final RegistryObject<Item> ROYAL_GUARD_SHIELD = ITEMS.register("royal_guard_shield",
@@ -52,44 +63,13 @@ public class ModItems {
     public static final RegistryObject<Item> CRACKED_GOLD_PIGLIN_HELMET = ITEMS.register("cracked_gold_piglin_helmet",
             () -> new PiglinHelmetItem(ArmorMaterial.GOLD, EquipmentSlotType.HEAD, new Item.Properties().tab(DUNGEONS_MOBS)));
 
-    public static final RegistryObject<Item> ICEOLOGER_HOOD = ITEMS.register("iceologer_hood",
-        () -> new IceologerClothesItem(CosmeticArmorMaterial.INSTANCE, EquipmentSlotType.HEAD, new Item.Properties().tab(DUNGEONS_MOBS)));
 
-    public static final RegistryObject<Item> ICEOLOGER_ROBES = ITEMS.register("iceologer_robes",
-        () -> new IceologerClothesItem(CosmeticArmorMaterial.INSTANCE, EquipmentSlotType.CHEST, new Item.Properties().tab(DUNGEONS_MOBS)));
-
-    public static final RegistryObject<Item> ICEOLOGER_PANTS = ITEMS.register("iceologer_pants",
-        () -> new IceologerClothesItem(CosmeticArmorMaterial.INSTANCE, EquipmentSlotType.LEGS, new Item.Properties().tab(DUNGEONS_MOBS)));
-
-    public static final RegistryObject<Item> ICEOLOGER_SHOES = ITEMS.register("iceologer_shoes",
-            () -> new IceologerClothesItem(CosmeticArmorMaterial.INSTANCE, EquipmentSlotType.FEET, new Item.Properties().tab(DUNGEONS_MOBS)));
-
-    public static final RegistryObject<Item> GEOMANCER_BEADS = ITEMS.register("geomancer_beads",
-            () -> new GeomancerClothesItem(CosmeticArmorMaterial.INSTANCE, EquipmentSlotType.HEAD, new Item.Properties().tab(DUNGEONS_MOBS)));
-
-    public static final RegistryObject<Item> GEOMANCER_ROBES = ITEMS.register("geomancer_robes",
-            () -> new GeomancerClothesItem(CosmeticArmorMaterial.INSTANCE, EquipmentSlotType.CHEST, new Item.Properties().tab(DUNGEONS_MOBS)));
-
-    public static final RegistryObject<Item> ROYAL_GUARD_HELMET = ITEMS.register("royal_guard_helmet",
-            () -> new RoyalGuardArmorItem(DIAMOND, EquipmentSlotType.HEAD, new Item.Properties().tab(DUNGEONS_MOBS)));
-
-    public static final RegistryObject<Item> ROYAL_GUARD_CHESTPLATE = ITEMS.register("royal_guard_chestplate",
-            () -> new RoyalGuardArmorItem(DIAMOND, EquipmentSlotType.CHEST, new Item.Properties().tab(DUNGEONS_MOBS)));
-
-    public static final RegistryObject<Item> ROYAL_GUARD_LEGS = ITEMS.register("royal_guard_legs",
-            () -> new RoyalGuardArmorItem(DIAMOND, EquipmentSlotType.LEGS, new Item.Properties().tab(DUNGEONS_MOBS)));
-
-    public static final RegistryObject<Item> ROYAL_GUARD_SABATONS = ITEMS.register("royal_guard_sabatons",
-            () -> new RoyalGuardArmorItem(DIAMOND, EquipmentSlotType.FEET, new Item.Properties().tab(DUNGEONS_MOBS)));
-
-    public static final RegistryObject<Item> VANGUARD_HELMET = ITEMS.register("vanguard_helmet",
-            () -> new VanguardArmorItem(ArmorMaterial.IRON, EquipmentSlotType.HEAD, new Item.Properties().tab(DUNGEONS_MOBS)));
-
-    public static final RegistryObject<Item> VANGUARD_CHESTPLATE = ITEMS.register("vanguard_chestplate",
-            () -> new VanguardArmorItem(ArmorMaterial.IRON, EquipmentSlotType.CHEST, new Item.Properties().tab(DUNGEONS_MOBS)));
-
-    public static final RegistryObject<Item> VANGUARD_LEGS = ITEMS.register("vanguard_legs",
-            () -> new VanguardArmorItem(ArmorMaterial.IRON, EquipmentSlotType.LEGS, new Item.Properties().tab(DUNGEONS_MOBS)));
+    public static final ArmorSet GEOMANCER_CLOTHES = registerArmorSet("geomancer_clothes", "geomancer_beads", "geomancer_robes", null, null);
+    public static final ArmorSet ICEOLOGER_CLOTHES = registerArmorSet("iceologer_clothes", "iceologer_hood", "iceologer_robes", "iceologer_pants", "iceologer_shoes");
+    public static final ArmorSet ILLUSIONER_CLOTHES = registerArmorSet("illusioner_clothes", "illusioner_hood", "illusioner_robes", "illusioner_pants", "illusioner_shoes");
+    public static final ArmorSet NETHERPLATE_ARMOR = registerArmorSet("netherplate_armor", "netherplate_helmet", null, null, null);
+    public static final ArmorSet ROYAL_GUARD_ARMOR = registerArmorSet("royal_guard_armor", "royal_guard_helmet", "royal_guard_chestplate", "royal_guard_legs", "royal_guard_sabatons");
+    public static final ArmorSet VANGUARD_ARMOR = registerArmorSet("vanguard_armor", "vanguard_helmet", "vanguard_chestplate", "vanguard_legs", null);
 
     // SOUL FIRE CHARGE
     public static final RegistryObject<WraithFireChargeItem> WRAITH_FIRE_CHARGE = ITEMS.register("wraith_fire_charge",
@@ -130,4 +110,29 @@ public class ModItems {
 
     public static final RegistryObject<Item> PURPLE_TRIDENT = ITEMS.register("purple_trident",
             () -> new ColoredTridentItem((new Item.Properties().durability(250).tab(DUNGEONS_MOBS)), DyeColor.PURPLE));
+
+
+
+    private static ArmorSet registerArmorSet(String armorSetId, String helmetId, String chestId, String legsId, String bootsId, boolean animated) {
+        ResourceLocation armorSet = new ResourceLocation(MODID, armorSetId);
+        ResourceLocation modelLocation = new ResourceLocation(MODID, "geo/armor/"+armorSetId+".geo.json");
+        ResourceLocation textureLocation = new ResourceLocation(MODID, "textures/models/armor/"+armorSetId+".png");
+        ResourceLocation animationFileLocation = animated ? new ResourceLocation(MODID, "animations/armor/" + armorSetId + ".animation.json") : new ResourceLocation(DungeonsLibraries.MODID, "animations/armor/armor_default.animation.json");
+        return new ArmorSet(
+                armorSetId,
+                registerArmor(helmetId, () -> new ArmorGear(EquipmentSlotType.HEAD, ARMOR_PROPERTIES, armorSet, modelLocation, textureLocation, animationFileLocation)),
+                registerArmor(chestId, () -> new ArmorGear(EquipmentSlotType.CHEST, ARMOR_PROPERTIES, armorSet, modelLocation, textureLocation, animationFileLocation)),
+                registerArmor(legsId, () -> new ArmorGear(EquipmentSlotType.LEGS, ARMOR_PROPERTIES, armorSet, modelLocation, textureLocation, animationFileLocation)),
+                registerArmor(bootsId, () -> new ArmorGear(EquipmentSlotType.FEET, ARMOR_PROPERTIES, armorSet, modelLocation, textureLocation, animationFileLocation))
+        );
+    }
+
+    private static ArmorSet registerArmorSet(String armorSetId, String helmetId, String chestId, String legsId, String bootsId) {
+        return registerArmorSet(armorSetId, helmetId, chestId, legsId, bootsId, false);
+    }
+
+    private static RegistryObject<Item> registerArmor(String armorId, Supplier<Item> itemSupplier) {
+        if(armorId == null) return null;
+        return ITEMS.register(armorId, itemSupplier);
+    }
 }

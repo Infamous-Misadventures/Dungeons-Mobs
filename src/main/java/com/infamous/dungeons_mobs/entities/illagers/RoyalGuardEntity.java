@@ -221,10 +221,10 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
 
 	@Override
 	protected void populateDefaultEquipmentSlots(DifficultyInstance difficultyInstance) {
-		this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.ROYAL_GUARD_HELMET.get()));
-		this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.ROYAL_GUARD_CHESTPLATE.get()));
-		this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(ModItems.ROYAL_GUARD_LEGS.get()));
-		this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(ModItems.ROYAL_GUARD_SABATONS.get()));
+		this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.ROYAL_GUARD_ARMOR.getHead().get()));
+		this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.ROYAL_GUARD_ARMOR.getChest().get()));
+		this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(ModItems.ROYAL_GUARD_ARMOR.getLegs().get()));
+		this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(ModItems.ROYAL_GUARD_ARMOR.getFeet().get()));
 
 		if (ModList.get().isLoaded("dungeons_gear")) {
 			Item MACE = ForgeRegistries.ITEMS.getValue(new ResourceLocation("dungeons_gear", "mace"));

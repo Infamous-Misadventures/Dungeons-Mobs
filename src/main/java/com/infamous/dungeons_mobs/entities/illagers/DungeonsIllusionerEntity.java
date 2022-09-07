@@ -4,6 +4,7 @@ import com.infamous.dungeons_mobs.capabilities.cloneable.CloneableHelper;
 import com.infamous.dungeons_mobs.capabilities.cloneable.ICloneable;
 import com.infamous.dungeons_mobs.entities.illagers.IllusionerCloneEntity;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
+import com.infamous.dungeons_mobs.mod.ModItems;
 import com.infamous.dungeons_mobs.utils.ModProjectileHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -244,11 +245,23 @@ public class DungeonsIllusionerEntity extends SpellcastingIllagerEntity implemen
       return SoundEvents.ILLUSIONER_AMBIENT;
    }
 
+   @Override
+   protected void populateDefaultEquipmentSlots(DifficultyInstance p_180481_1_) {
+//      super.populateDefaultEquipmentSlots(p_180481_1_);
+      this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.BOW));
+      this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.ILLUSIONER_CLOTHES.getHead().get()));
+      this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.ILLUSIONER_CLOTHES.getChest().get()));
+      this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(ModItems.ILLUSIONER_CLOTHES.getLegs().get()));
+      this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(ModItems.ILLUSIONER_CLOTHES.getFeet().get()));
+   }
+
    @Nullable
    @Override
    public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance p_213386_2_, SpawnReason p_213386_3_, @Nullable ILivingEntityData p_213386_4_, @Nullable CompoundNBT p_213386_5_) {
-      this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.BOW));
-      return super.finalizeSpawn(p_213386_1_, p_213386_2_, p_213386_3_, p_213386_4_, p_213386_5_);
+      ILivingEntityData iLivingEntityData = super.finalizeSpawn(p_213386_1_, p_213386_2_, p_213386_3_, p_213386_4_, p_213386_5_);
+      this.populateDefaultEquipmentSlots(p_213386_2_);
+      this.populateDefaultEquipmentEnchantments(p_213386_2_);
+      return iLivingEntityData;
    }
 
    @Override

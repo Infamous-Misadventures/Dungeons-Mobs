@@ -19,10 +19,7 @@ import com.infamous.dungeons_mobs.capabilities.teamable.Teamable;
 import com.infamous.dungeons_mobs.capabilities.teamable.TeamableStorage;
 import com.infamous.dungeons_mobs.client.ModItemModelProperties;
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
-import com.infamous.dungeons_mobs.client.renderer.armor.GeomancerClothesArmorRenderer;
-import com.infamous.dungeons_mobs.client.renderer.armor.IceologerClothesArmorRenderer;
-import com.infamous.dungeons_mobs.client.renderer.armor.RoyalGuardArmorRenderer;
-import com.infamous.dungeons_mobs.client.renderer.armor.VanguardArmorRenderer;
+import com.infamous.dungeons_mobs.client.renderer.armor.*;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.items.*;
 import com.infamous.dungeons_mobs.mod.*;
@@ -60,6 +57,7 @@ public class DungeonsMobs
     public static final Logger LOGGER = LogManager.getLogger();
     public static final String MODID = "dungeons_mobs";
     public static final ItemGroup DUNGEONS_MOBS = new GroupDungeonsMobs("dungeonsMobs");
+    public static final ItemGroup DUNGEONS_MOBS_ITEMS = new GroupDungeonsMobsItems("dungeonsMobsItems");
 
     public static CommonProxy PROXY;
 
@@ -117,11 +115,6 @@ public class DungeonsMobs
     private void doClientStuff(final FMLClientSetupEvent event) {
         // ITEM MODEL PROPERTIES
         MinecraftForge.EVENT_BUS.register(new ModItemModelProperties());
-        GeoArmorRenderer.registerArmorRenderer(IceologerClothesItem.class, IceologerClothesArmorRenderer::new);
-        GeoArmorRenderer.registerArmorRenderer(VanguardArmorItem.class, VanguardArmorRenderer::new);
-        GeoArmorRenderer.registerArmorRenderer(GeomancerClothesItem.class, GeomancerClothesArmorRenderer::new);
-        GeoArmorRenderer.registerArmorRenderer(RoyalGuardArmorItem.class, RoyalGuardArmorRenderer::new);
-
     }
 
     private void onLoadComplete(final FMLLoadCompleteEvent event){

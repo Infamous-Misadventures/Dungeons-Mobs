@@ -34,16 +34,16 @@
   "entity.dungeons_mobs.wildfire": "Wildfire",
   "item.dungeons_mobs.wildfire_spawn_egg": "Wildfire Spawn Egg",
 
-	"entity.dungeons_mobs.snareling_glob" : "Snareling Glob",
-	"entity.dungeons_mobs.blastling_bullet" : "Blastling Bullet",
+  "entity.dungeons_mobs.snareling_glob" : "Snareling Glob",
+  "entity.dungeons_mobs.blastling_bullet" : "Blastling Bullet",
 	
-	"effect.dungeons_mobs.ensnared" : "Ensnared",
+  "effect.dungeons_mobs.ensnared" : "Ensnared",
 	
-		"death.blastling": "%1$s was blasted",	
-	"death.attack.blastling": "%1$s was blasted by %2$s",
+  "death.blastling": "%1$s was blasted",
+  "death.attack.blastling": "%1$s was blasted by %2$s",
 	
-			"death.ice_chunk": "%1$s was crushed by an Ice Chunk",	
-	"death.attack.ice_chunk": "%1$s was crushed by an Ice Chunk from %2$s",
+  "death.ice_chunk": "%1$s was crushed by an Ice Chunk",
+  "death.attack.ice_chunk": "%1$s was crushed by an Ice Chunk from %2$s",
 
   "entity.dungeons_mobs.illusioner": "Illusioner",
   "entity.dungeons_mobs.illusioner_clone": "Illusioner",
@@ -162,9 +162,10 @@
   "item.dungeons_mobs.iceologer_shoes": "Iceologer Boots",
   
   "item.dungeons_mobs.illusioner_hood": "Illusioner Hood",
-  "item.dungeons_mobs.illusioner_robes": "Illusioner Cloak",
+  "item.dungeons_mobs.illusioner_robes": "Illusioner Robes",
   "item.dungeons_mobs.illusioner_pants": "Illusioner Pants",
-  "item.dungeons_mobs.illusioner_shoes": "Illusioner Boots",
+  "item.dungeons_mobs.illusioner_shoes": "Illusioner Shoes",
+  "lore.dungeons_mobs.illusioner_clothes": "Illusive garb of the illusioners, the sorcerous marksmen of the illager empire. These secretive agents are rarely ever seen. After all, purple is sneaky.",
   
   "item.dungeons_mobs.mage_hood": "Mage Hood",
   "item.dungeons_mobs.mage_robes": "Mage Cloak",

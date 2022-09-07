@@ -139,10 +139,10 @@ public class IceologerEntity extends AbstractIllagerEntity implements IAnimatabl
     @Override
     protected void populateDefaultEquipmentSlots(DifficultyInstance p_180481_1_) {
         super.populateDefaultEquipmentSlots(p_180481_1_);
-        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.ICEOLOGER_HOOD.get()));
-        this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.ICEOLOGER_ROBES.get()));
-        this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(ModItems.ICEOLOGER_PANTS.get()));
-        this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(ModItems.ICEOLOGER_SHOES.get()));
+        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.ICEOLOGER_CLOTHES.getHead().get()));
+        this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.ICEOLOGER_CLOTHES.getChest().get()));
+        this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(ModItems.ICEOLOGER_CLOTHES.getLegs().get()));
+        this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(ModItems.ICEOLOGER_CLOTHES.getFeet().get()));
     }
 
     @Nullable

@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 
 import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
 import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
+import com.infamous.dungeons_mobs.mod.ModItems;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 
 import net.minecraft.block.BlockState;
@@ -150,8 +151,7 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable {
     @Override
     protected void populateDefaultEquipmentSlots(DifficultyInstance p_180481_1_) {
         super.populateDefaultEquipmentSlots(p_180481_1_);
-        // REPLACE WITH NETHERPLATE HELMET WHEN ADDED
-        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Items.NETHERITE_HELMET));
+        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.NETHERPLATE_ARMOR.getHead().get()));
     }
     
     public int getShields() {

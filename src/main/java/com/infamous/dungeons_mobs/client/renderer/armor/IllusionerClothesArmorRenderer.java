@@ -1,6 +1,6 @@
 package com.infamous.dungeons_mobs.client.renderer.armor;
 
-import com.infamous.dungeons_mobs.client.models.armor.IceologerClothesModel;
+import com.infamous.dungeons_mobs.client.models.armor.IllusionerClothesModel;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
@@ -11,10 +11,10 @@ import software.bernie.geckolib3.geo.render.built.GeoCube;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 import software.bernie.geckolib3.util.RenderUtils;
 
-public class IceologerClothesArmorRenderer extends BaseDungeonsGeoArmorRenderer {
-    public IceologerClothesArmorRenderer()
+public class IllusionerClothesArmorRenderer extends BaseDungeonsGeoArmorRenderer {
+    public IllusionerClothesArmorRenderer()
     {
-        super(new IceologerClothesModel());
+        super(new IllusionerClothesModel());
     }
 
 
@@ -30,7 +30,7 @@ public class IceologerClothesArmorRenderer extends BaseDungeonsGeoArmorRenderer 
         }
         RenderUtils.scale(bone, stack);
         if(bone.getName().contains("Body")){
-            stack.scale(1.0F, 1.0F, 0.83F);
+            stack.scale(1.0F, 1.0F, 0.85F);
         }
         RenderUtils.moveBackFromPivot(bone, stack);
 

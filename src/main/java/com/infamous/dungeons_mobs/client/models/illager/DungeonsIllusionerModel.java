@@ -20,12 +20,11 @@ public class DungeonsIllusionerModel extends AnimatedGeoModel {
 
     @Override
     public ResourceLocation getModelLocation(Object entity) {
-        return new ResourceLocation(DungeonsMobs.MODID, "geo/illusioner.geo.json");
+        return new ResourceLocation(DungeonsMobs.MODID, "geo/geo_illager.geo.json");
     }
 
     @Override
     public ResourceLocation getTextureLocation(Object entity) {
-        //ChorusGormandizerEntity entityIn = (ChorusGormandizerEntity) entity;
         return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/illusioner.png");
     }
 

@@ -417,13 +417,13 @@ public class ModEntityTypes {
     
     // BLAZES
     
-    public static final RegistryObject<EntityType<WildfireEntity>> WILDFIRE = registerEntity("wildfire", () ->
+    public static final RegistryObject<EntityType<WildfireEntity>> WILDFIRE = registerEntityWithoutEgg("wildfire", () ->
 	    EntityType.Builder.<WildfireEntity>of(WildfireEntity::new, EntityClassification.MONSTER)
 	            .fireImmune()
 	            .sized(0.9F, 2.25F)
 	            .clientTrackingRange(10)
-	            .build(new ResourceLocation(MODID, "wildfire").toString()),
-	            0x8b3401, 0xffd528
+	            .build(new ResourceLocation(MODID, "wildfire").toString())/*,
+	            0x8b3401, 0xffd528*/
 	);
 
     // Projectiles

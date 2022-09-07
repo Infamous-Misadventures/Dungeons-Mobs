@@ -11,9 +11,9 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.item.GeoArmorItem;
 
-public class VanguardArmorItem extends GeoArmorItem implements IAnimatable {
+public class IllusionerClothesItem extends GeoArmorItem implements IAnimatable {
 
-    public VanguardArmorItem(IArmorMaterial materialIn, EquipmentSlotType slot, Properties builderIn) {
+    public IllusionerClothesItem(IArmorMaterial materialIn, EquipmentSlotType slot, Properties builderIn) {
         super(materialIn, slot, builderIn);
     }
 
@@ -34,4 +34,6 @@ public class VanguardArmorItem extends GeoArmorItem implements IAnimatable {
         event.getController().setAnimation(new AnimationBuilder().addAnimation("idle", true));
         return PlayState.CONTINUE;
     }
+
+
 }

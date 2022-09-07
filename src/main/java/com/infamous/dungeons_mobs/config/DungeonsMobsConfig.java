@@ -1,7 +1,6 @@
 package com.infamous.dungeons_mobs.config;
 
 import com.google.common.collect.Lists;
-import cpw.mods.modlauncher.LaunchPluginHandler;
 import net.minecraftforge.common.ForgeConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -157,6 +156,8 @@ public class DungeonsMobsConfig {
 
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_STRONGER_HUSKS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_RANGED_SPIDERS;
+
+        public static ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ITEM_TAB;
 
         public Common(ForgeConfigSpec.Builder builder){
             // MOB CONFIGURATION
@@ -814,6 +815,13 @@ public class DungeonsMobsConfig {
             ENABLE_RANGED_SPIDERS = builder
                     .comment("Enables Spiders and Cave Spiders shooting webs as a ranged attack like they do in Minecraft Dungeons. [true / false]")
                     .define("enableRangedSpiders", true);
+            builder.pop();
+
+            builder.comment("Mob Items Configuration").push("mob_items_configuration");
+            ENABLE_ITEM_TAB = builder
+                    .comment("Enable armors appearing in their own tab in the creative menu. \n" +
+                            "Disabling this feature will hide them from creative tab. [true / false]")
+                    .define("enableItemTab", true);
             builder.pop();
 
         }
