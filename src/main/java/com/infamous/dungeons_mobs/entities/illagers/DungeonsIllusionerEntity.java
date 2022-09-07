@@ -25,6 +25,8 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.IParticleData;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
@@ -53,6 +55,7 @@ public class DungeonsIllusionerEntity extends SpellcastingIllagerEntity implemen
 
    private int liftInterval = 0;
    private int duplicateInterval = 0;
+   private boolean aBoolean;
 
    AnimationFactory factory = new AnimationFactory(this);
 
@@ -125,6 +128,27 @@ public class DungeonsIllusionerEntity extends SpellcastingIllagerEntity implemen
 
       if (this.getSummonCloneTick() > 0) {
          this.setSummonCloneTick(this.getSummonCloneTick() - 1);
+
+         float radius = (float) ((this.getBbWidth() * 2) / Math.PI);
+
+         if (this.level.isClientSide) {
+            IParticleData iparticledata = ParticleTypes.CAMPFIRE_SIGNAL_SMOKE;
+            if (this.random.nextBoolean() && this.random.nextBoolean()) {
+               for (int i = 0; i < 1; ++i) {
+                  float randWithin2Pi = this.random.nextFloat() * ((float)Math.PI * 2F);
+                  float adjustedSqrtFloat = MathHelper.sqrt(this.random.nextFloat()) * radius;
+                  float adjustedCosine = MathHelper.cos(randWithin2Pi) * adjustedSqrtFloat;
+                  float adjustedSine = MathHelper.sin(randWithin2Pi) * adjustedSqrtFloat;
+                  this.level.addAlwaysVisibleParticle(iparticledata, true,
+                          this.getX() + (double) adjustedCosine,
+                          this.getY(0.1),
+                          this.getZ() + (double) adjustedSine,
+                          0.0D,
+                          -0.01D,
+                          0.0D);
+               }
+            }
+         }
       }
    }
 
@@ -190,16 +214,11 @@ public class DungeonsIllusionerEntity extends SpellcastingIllagerEntity implemen
       return duplicateInterval;
    }
 
-   public void setDuplicateInterval(int duplicateInterval) {
-      this.duplicateInterval = duplicateInterval;
-   }
-
    public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
       return MonsterEntity.createMonsterAttributes()
               .add(Attributes.MOVEMENT_SPEED, 0.25D)
               .add(Attributes.FOLLOW_RANGE, 32.0D)
-              .add(Attributes.MAX_HEALTH, 30.0D)
-              .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D);
+              .add(Attributes.MAX_HEALTH, 30.0D);
    }
 
 
@@ -378,6 +397,7 @@ public class DungeonsIllusionerEntity extends SpellcastingIllagerEntity implemen
          super.start();
          DungeonsIllusionerEntity.this.getNavigation().stop();
          this.e = false;
+         DungeonsIllusionerEntity.this.aBoolean = false;
          this.r = false;
          this.o = 0;
          this.v = 0;
@@ -400,11 +420,8 @@ public class DungeonsIllusionerEntity extends SpellcastingIllagerEntity implemen
          DungeonsIllusionerEntity mob = DungeonsIllusionerEntity.this;
 
          if (mob.getSummonCloneTick() == 1 && !this.e) {
-            
-            // you can add particle when illusioner move to path
-            // like dungeons illusioner
-            
-            DungeonsIllusionerEntity.this.setSummonCloneTick(35 - DungeonsIllusionerEntity.this.getRandom().nextInt(8));
+            DungeonsIllusionerEntity.this.aBoolean = true;
+            DungeonsIllusionerEntity.this.setSummonCloneTick(50 - DungeonsIllusionerEntity.this.getRandom().nextInt(5));
             this.e = true;
             BlockPos blockpos = DungeonsIllusionerEntity.this.getTarget().blockPosition().offset(-5 + DungeonsIllusionerEntity.this.getRandom().nextInt(10) * (target.getBbWidth() / 2 + 1), 0, -5 + DungeonsIllusionerEntity.this.getRandom().nextInt(10) * (target.getBbWidth() / 2 + 1));
             mob.getNavigation().moveTo(
@@ -425,24 +442,12 @@ public class DungeonsIllusionerEntity extends SpellcastingIllagerEntity implemen
 
          if (((mob.getNavigation().isDone()) || mob.getSummonCloneTick() == 1) && !this.r & this.e) {
             this.r = true;
+            DungeonsIllusionerEntity.this.aBoolean = false;
             DungeonsIllusionerEntity.this.setInvulnerable(false);
             DungeonsIllusionerEntity.this.setAttackType(true);
-            DungeonsIllusionerEntity.this.playSound(SoundEvents.ILLUSIONER_PREPARE_MIRROR, DungeonsIllusionerEntity.this.getSoundVolume(), DungeonsIllusionerEntity.this.getVoicePitch());
+            DungeonsIllusionerEntity.this.playSound(SoundEvents.ILLUSIONER_MIRROR_MOVE, DungeonsIllusionerEntity.this.getSoundVolume(), DungeonsIllusionerEntity.this.getVoicePitch());
             if (!DungeonsIllusionerEntity.this.getNavigation().isDone()) {
-               BlockPos blockpos = DungeonsIllusionerEntity.this.getTarget().blockPosition().offset(-5 + DungeonsIllusionerEntity.this.getRandom().nextInt(10) * (target.getBbWidth() / 2 + 1), 0, -5 + DungeonsIllusionerEntity.this.getRandom().nextInt(10) * (target.getBbWidth() / 2 + 1));
-               this.o = 0;
-               do {
-                  if (mob.level.isEmptyBlock(blockpos) && !mob.level.isEmptyBlock(blockpos.offset(0, -1, 0))) {
-                     mob.moveTo(blockpos, 0, 0);
-                     break;
-                  } else if (!mob.level.isEmptyBlock(blockpos)) {
-                     this.o++;
-                     blockpos = blockpos.offset(0, 1, 0);
-                  } else {
-                     this.o++;
-                     blockpos = blockpos.offset(0, -1, 0);
-                  }
-               } while (this.o < 20);
+               mob.getNavigation().stop();
             }
          }
       }
@@ -495,6 +500,7 @@ public class DungeonsIllusionerEntity extends SpellcastingIllagerEntity implemen
          super.stop();
          DungeonsIllusionerEntity.this.setInvulnerable(false);
          DungeonsIllusionerEntity.this.setSummonCloneTick(0);
+         DungeonsIllusionerEntity.this.aBoolean = false;
       }
    }
 
