@@ -24,7 +24,7 @@ public class BaseDungeonsGeoArmorRenderer<T extends ArmorItem & IAnimatable> ext
 
     @Override
     public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn,
-                                   int packedOverlayIn, float red, float green, float blue, float alpha) {
+                                  int packedOverlayIn, float red, float green, float blue, float alpha) {
         stack.pushPose();
         RenderUtils.translate(bone, stack);
         RenderUtils.moveToPivot(bone, stack);
@@ -33,6 +33,9 @@ public class BaseDungeonsGeoArmorRenderer<T extends ArmorItem & IAnimatable> ext
             RenderUtils.rotate(bone, stack);
         }
         RenderUtils.scale(bone, stack);
+        if(bone.getName().contains("Body") && this.isClothes()){
+            stack.scale(1.0F, 1.0F, 0.83F);
+        }
         RenderUtils.moveBackFromPivot(bone, stack);
 
         if (!bone.isHidden()) {
@@ -51,6 +54,10 @@ public class BaseDungeonsGeoArmorRenderer<T extends ArmorItem & IAnimatable> ext
         }
 
         stack.popPose();
+    }
+
+    protected boolean isClothes() {
+        return false;
     }
 
 }
