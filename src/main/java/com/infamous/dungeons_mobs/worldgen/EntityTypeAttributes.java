@@ -29,7 +29,6 @@ import com.infamous.dungeons_mobs.entities.redstone.RedstoneGolemEntity;
 import com.infamous.dungeons_mobs.entities.slime.ConjuredSlimeEntity;
 import com.infamous.dungeons_mobs.entities.summonables.GeomancerBombEntity;
 import com.infamous.dungeons_mobs.entities.summonables.GeomancerWallEntity;
-import com.infamous.dungeons_mobs.entities.summonables.Tornado2Entity;
 import com.infamous.dungeons_mobs.entities.undead.FrozenZombieEntity;
 import com.infamous.dungeons_mobs.entities.undead.JungleZombieEntity;
 import com.infamous.dungeons_mobs.entities.undead.MossySkeletonEntity;
@@ -94,8 +93,6 @@ public class EntityTypeAttributes {
 
         event.put(ModEntityTypes.GEOMANCER_WALL.get(), GeomancerWallEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.GEOMANCER_BOMB.get(), GeomancerBombEntity.setCustomAttributes().build());
-
-        event.put(ModEntityTypes.TORNADO_MELEE.get(), Tornado2Entity.setCustomAttributes().build());
         
         event.put(ModEntityTypes.FUNGUS_THROWER.get(), PiglinEntity.createAttributes().build());
         event.put(ModEntityTypes.ZOMBIFIED_FUNGUS_THROWER.get(), ZombifiedPiglinEntity.createAttributes().build());

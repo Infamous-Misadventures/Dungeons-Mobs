@@ -5,6 +5,7 @@ import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
 import com.infamous.dungeons_mobs.client.particle.RedstoneSparkParticle;
 import com.infamous.dungeons_mobs.client.particle.SnowflakeParticle;
+import com.infamous.dungeons_mobs.client.particle.WindParticle;
 import com.infamous.dungeons_mobs.client.renderer.blaze.WildfireRenderer;
 import com.infamous.dungeons_mobs.client.renderer.creeper.IcyCreeperRenderer;
 import com.infamous.dungeons_mobs.client.renderer.ender.BlastlingRenderer;
@@ -39,6 +40,7 @@ import com.infamous.dungeons_mobs.client.renderer.projectiles.GeoOrbRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.OrbRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.SlimeballRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.SnarelingGlobRenderer;
+import com.infamous.dungeons_mobs.client.renderer.projectiles.WindcallerBlastProjectileRenderer;
 import com.infamous.dungeons_mobs.client.renderer.redstone.RedstoneCubeRenderer;
 import com.infamous.dungeons_mobs.client.renderer.redstone.RedstoneGolemRenderer;
 import com.infamous.dungeons_mobs.client.renderer.redstone.RedstoneMineRenderer;
@@ -47,7 +49,7 @@ import com.infamous.dungeons_mobs.client.renderer.summonables.CobwebTrapRenderer
 import com.infamous.dungeons_mobs.client.renderer.summonables.GeomancerBombRenderer;
 import com.infamous.dungeons_mobs.client.renderer.summonables.GeomancerWallRenderer;
 import com.infamous.dungeons_mobs.client.renderer.summonables.IceCloudRenderer;
-import com.infamous.dungeons_mobs.client.renderer.summonables.TornadoRenderer;
+import com.infamous.dungeons_mobs.client.renderer.summonables.WindcallerTornadoRenderer;
 import com.infamous.dungeons_mobs.client.renderer.undead.CustomSkeletonRenderer;
 import com.infamous.dungeons_mobs.client.renderer.undead.CustomZombieRenderer;
 import com.infamous.dungeons_mobs.client.renderer.undead.NecromancerRenderer;
@@ -158,7 +160,8 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.GEOMANCER_BOMB.get(), GeomancerBombRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.REDSTONE_MINE.get(), RedstoneMineRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ICE_CLOUD.get(), IceCloudRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.TORNADO.get(), TornadoRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.TORNADO.get(), WindcallerTornadoRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WINDCALLER_BLAST_PROJECTILE.get(), WindcallerBlastProjectileRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.COBWEB_TRAP.get(), CobwebTrapRenderer::new);
 
         RenderTypeLookup.setRenderLayer(ModBlocks.WRAITH_FIRE_BLOCK.get(), RenderType.cutout());
@@ -216,6 +219,7 @@ public class ClientEvents {
     public static void onParticleFactory(ParticleFactoryRegisterEvent event) {
         Minecraft.getInstance().particleEngine.register(ModParticleTypes.SNOWFLAKE.get(), SnowflakeParticle.Factory::new);
         Minecraft.getInstance().particleEngine.register(ModParticleTypes.REDSTONE_SPARK.get(), RedstoneSparkParticle.Factory::new);
+        Minecraft.getInstance().particleEngine.register(ModParticleTypes.WIND.get(), WindParticle.Factory::new);
     }
 
     /*@SubscribeEvent

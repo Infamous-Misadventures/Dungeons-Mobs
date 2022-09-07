@@ -11,47 +11,34 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 
-public class SnowflakeParticle extends SpriteTexturedParticle {
+public class WindParticle extends SpriteTexturedParticle {
 	
-    protected SnowflakeParticle(ClientWorld level, double xCoord, double yCoord, double zCoord,
+    protected WindParticle(ClientWorld level, double xCoord, double yCoord, double zCoord,
     		IAnimatedSprite spriteSet, double xd, double yd, double zd) {
         super(level, xCoord, yCoord, zCoord, xd, yd, zd);
 
-        this.quadSize *= 1.25F;
-        this.lifetime = 5 + this.random.nextInt(10);
+        this.quadSize *= 1.75F;
+        this.lifetime = 15 + this.random.nextInt(15);
         this.hasPhysics = false;
         
         this.pickSprite(spriteSet);
     }
 
     public IParticleRenderType getRenderType() {
-        return IParticleRenderType.PARTICLE_SHEET_OPAQUE;
+        return IParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
     }
 
-
+    @Override
     public void tick() {
-        this.xo = this.x;
-        this.yo = this.y;
-        this.zo = this.z;
-        if (this.age++ >= this.lifetime) {
-            this.remove();
-        } else {
-            this.yd += 0.004D;
-            this.move(this.xd, this.yd, this.zd);
-            if (this.y == this.yo) {
-                this.xd *= 1.1D;
-                this.zd *= 1.1D;
-            }
+        super.tick();
+        this.xd = this.xd * 0.75F;
+        this.yd = this.yd * 0.75F;
+        this.zd = this.zd * 0.75F;
+        fadeOut();
+    }
 
-            this.xd *= (double)0.96F;
-            this.yd *= (double)0.96F;
-            this.zd *= (double)0.96F;
-            if (this.onGround) {
-                this.xd *= (double)0.7F;
-                this.zd *= (double)0.7F;
-            }
-
-        }
+    private void fadeOut() {
+        this.alpha = (-(1/(float)lifetime) * age + 1);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -65,7 +52,7 @@ public class SnowflakeParticle extends SpriteTexturedParticle {
         public Particle createParticle(BasicParticleType particleType, ClientWorld level,
                                        double x, double y, double z,
                                        double dx, double dy, double dz) {
-            return new SnowflakeParticle(level, x, y, z, this.sprites, dx, dy, dz);
+            return new WindParticle(level, x, y, z, this.sprites, dx, dy, dz);
         }
     }
 }

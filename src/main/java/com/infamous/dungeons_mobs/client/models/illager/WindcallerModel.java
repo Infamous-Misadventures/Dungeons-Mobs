@@ -32,7 +32,7 @@ public class WindcallerModel extends AnimatedGeoModel {
 
 		LivingEntity entityIn = (LivingEntity) entity;
 
-		IBone head = this.getAnimationProcessor().getBone("head");
+		IBone head = this.getAnimationProcessor().getBone("bipedHead");
 
 		EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
 

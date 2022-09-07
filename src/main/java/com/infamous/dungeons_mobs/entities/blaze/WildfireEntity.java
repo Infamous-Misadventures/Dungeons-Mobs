@@ -279,7 +279,7 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable {
         	this.breakShield();
         }
         
-        if (this.getTarget() != null && ((!this.isOnGround() && steepDropBelow()) || this.getTarget().getY() > this.getY() + 3 || this.getY() > this.getTarget().getY() + 3 || this.distanceTo(this.getTarget()) > 15)) {
+        if (this.getTarget() != null && ((!this.isOnGround() && steepDropBelow()) || this.getTarget().getY() > this.getY() + 3 || this.getY() < this.getTarget().getY() + 2 || this.distanceTo(this.getTarget()) > 15)) {
         	if (this.getY() < this.getTarget().getY() + 5) {
         		this.setDeltaMovement(0.0D, 0.04D, 0.0D);
         	} else {
