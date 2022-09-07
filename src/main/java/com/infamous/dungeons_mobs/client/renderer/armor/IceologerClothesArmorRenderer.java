@@ -17,38 +17,8 @@ public class IceologerClothesArmorRenderer extends BaseDungeonsGeoArmorRenderer 
         super(new IceologerClothesModel());
     }
 
-
     @Override
-    public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn,
-                                  int packedOverlayIn, float red, float green, float blue, float alpha) {
-        stack.pushPose();
-        RenderUtils.translate(bone, stack);
-        RenderUtils.moveToPivot(bone, stack);
-        EntityRenderer<? super LivingEntity> entityRenderer = Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(entityLiving);
-        if(!(entityRenderer instanceof GeoEntityRenderer) || !bone.getName().contains("armor")) {
-            RenderUtils.rotate(bone, stack);
-        }
-        RenderUtils.scale(bone, stack);
-        if(bone.getName().contains("Body")){
-            stack.scale(1.0F, 1.0F, 0.83F);
-        }
-        RenderUtils.moveBackFromPivot(bone, stack);
-
-        if (!bone.isHidden()) {
-            for (GeoCube cube : bone.childCubes) {
-                stack.pushPose();
-                if (!bone.cubesAreHidden()) {
-                    renderCube(cube, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-                }
-                stack.popPose();
-            }
-        }
-        if (!bone.childBonesAreHiddenToo()) {
-            for (GeoBone childBone : bone.childBones) {
-                renderRecursively(childBone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-            }
-        }
-
-        stack.popPose();
+    protected boolean isClothes() {
+        return true;
     }
 }
