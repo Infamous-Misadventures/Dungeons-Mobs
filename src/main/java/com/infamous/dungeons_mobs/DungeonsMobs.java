@@ -118,6 +118,8 @@ public class DungeonsMobs
     private void doClientStuff(final FMLClientSetupEvent event) {
         // ITEM MODEL PROPERTIES
         MinecraftForge.EVENT_BUS.register(new ModItemModelProperties());
+        
+        // it can move to clients events
         GeoArmorRenderer.registerArmorRenderer(IceologerClothesItem.class, IceologerClothesArmorRenderer::new);
         GeoArmorRenderer.registerArmorRenderer(VanguardArmorItem.class, VanguardArmorRenderer::new);
         GeoArmorRenderer.registerArmorRenderer(GeomancerClothesItem.class, GeomancerClothesArmorRenderer::new);
