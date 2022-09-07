@@ -7,5 +7,10 @@ public class IllusionerClothesArmorRenderer extends BaseDungeonsGeoArmorRenderer
     {
         super(new IllusionerClothesModel());
     }
+    
+    @Override
+    protected boolean isClothes() {
+        return true;
+    }
 
 }
