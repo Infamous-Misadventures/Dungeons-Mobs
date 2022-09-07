@@ -119,7 +119,7 @@ public class DungeonsMobs
         // ITEM MODEL PROPERTIES
         MinecraftForge.EVENT_BUS.register(new ModItemModelProperties());
         
-        // it can move to clients events
+        // it can move to clients events or ModItemModelProperties
         GeoArmorRenderer.registerArmorRenderer(IceologerClothesItem.class, IceologerClothesArmorRenderer::new);
         GeoArmorRenderer.registerArmorRenderer(VanguardArmorItem.class, VanguardArmorRenderer::new);
         GeoArmorRenderer.registerArmorRenderer(GeomancerClothesItem.class, GeomancerClothesArmorRenderer::new);
