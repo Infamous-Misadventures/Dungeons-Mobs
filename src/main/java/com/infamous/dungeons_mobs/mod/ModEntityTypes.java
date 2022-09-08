@@ -39,6 +39,7 @@ import com.infamous.dungeons_mobs.entities.projectiles.LaserOrbEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.SlimeballEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.SnarelingGlobEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.TridentFumeEntity;
+import com.infamous.dungeons_mobs.entities.projectiles.WindcallerBlastProjectileEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.WraithFireballEntity;
 import com.infamous.dungeons_mobs.entities.redstone.RedstoneCubeEntity;
 import com.infamous.dungeons_mobs.entities.redstone.RedstoneGolemEntity;
@@ -47,8 +48,7 @@ import com.infamous.dungeons_mobs.entities.slime.ConjuredSlimeEntity;
 import com.infamous.dungeons_mobs.entities.summonables.GeomancerBombEntity;
 import com.infamous.dungeons_mobs.entities.summonables.GeomancerWallEntity;
 import com.infamous.dungeons_mobs.entities.summonables.IceCloudEntity;
-import com.infamous.dungeons_mobs.entities.summonables.Tornado2Entity;
-import com.infamous.dungeons_mobs.entities.summonables.TornadoEntity;
+import com.infamous.dungeons_mobs.entities.summonables.WindcallerTornadoEntity;
 import com.infamous.dungeons_mobs.entities.undead.FrozenZombieEntity;
 import com.infamous.dungeons_mobs.entities.undead.JungleZombieEntity;
 import com.infamous.dungeons_mobs.entities.undead.MossySkeletonEntity;
@@ -512,23 +512,20 @@ public class ModEntityTypes {
                     .build(new ResourceLocation(MODID, "ice_cloud").toString())
     );
 
-    public static final RegistryObject<EntityType<TornadoEntity>> TORNADO = registerEntityWithoutEgg("tornado", () ->
-            EntityType.Builder.<TornadoEntity>of(TornadoEntity::new, EntityClassification.MISC)
+    public static final RegistryObject<EntityType<WindcallerTornadoEntity>> TORNADO = registerEntityWithoutEgg("tornado", () ->
+            EntityType.Builder.<WindcallerTornadoEntity>of(WindcallerTornadoEntity::new, EntityClassification.MISC)
                     .fireImmune()
-                    .sized(6.0F, 0.5F)
+                    .sized(3.25F, 6F)
                     .clientTrackingRange(10)
-                    .updateInterval(Integer.MAX_VALUE)
-                    .setCustomClientFactory((spawnEntity,world) -> new TornadoEntity(world))
+                    .setCustomClientFactory((spawnEntity,world) -> new WindcallerTornadoEntity(world))
                     .build(new ResourceLocation(MODID, "tornado").toString())
     );
-    public static final RegistryObject<EntityType<Tornado2Entity>> TORNADO_MELEE = ENTITY_TYPES.register("melee_tornado", () ->
-            EntityType.Builder.<Tornado2Entity>of(Tornado2Entity::new, EntityClassification.MISC)
+    public static final RegistryObject<EntityType<WindcallerBlastProjectileEntity>> WINDCALLER_BLAST_PROJECTILE = ENTITY_TYPES.register("windcaller_blast_projectile", () ->
+            EntityType.Builder.<WindcallerBlastProjectileEntity>of(WindcallerBlastProjectileEntity::new, EntityClassification.MISC)
                     .fireImmune()
-                    .sized(0.5F, 6.0F)
-                    .clientTrackingRange(10)
-                    .updateInterval(Integer.MAX_VALUE)
-                    .setCustomClientFactory((spawnEntity,world) -> new Tornado2Entity(world))
-                    .build(new ResourceLocation(MODID, "melee_tornado").toString())
+                    .sized(2F, 2F)
+                    .setCustomClientFactory((spawnEntity,world) -> new WindcallerBlastProjectileEntity(world))
+                    .build(new ResourceLocation(MODID, "windcaller_blast_projectile").toString())
     );
 
     public static final RegistryObject<EntityType<LaserOrbEntity>> LASER_ORB = registerEntityWithoutEgg("laser_orb", () ->
