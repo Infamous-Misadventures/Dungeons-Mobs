@@ -373,6 +373,7 @@
   "subtitles.entity.windcaller.fly_loop": "Windcaller hovers",
   
   "subtitles.entity.illusioner.death": "Illusioner dies",
+  "subtitles.entity.illusioner.clone_arrow_hit": "Odd Arrow hits",
   
   "subtitles.entity.mountaineer.idle": "Mountaineer mutters",
   "subtitles.entity.mountaineer.hurt": "Mountaineer hurts",

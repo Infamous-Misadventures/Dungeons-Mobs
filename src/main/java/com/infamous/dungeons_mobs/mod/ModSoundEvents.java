@@ -133,6 +133,7 @@ public class ModSoundEvents {
 	public static final RegistryObject<SoundEvent> WINDCALLER_FLY_LOOP = SOUNDS.register("entity.windcaller.fly_loop", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.windcaller.fly_loop")));
 	
 	public static final RegistryObject<SoundEvent> ILLUSIONER_DEATH = SOUNDS.register("entity.illusioner.death", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.illusioner.death")));
+	public static final RegistryObject<SoundEvent> ILLUSIONER_CLONE_ARROW_HIT = SOUNDS.register("entity.illusioner.clone_arrow_hit", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.illusioner.clone_arrow_hit")));
 	
 	public static final RegistryObject<SoundEvent> MOUNTAINEER_IDLE = SOUNDS.register("entity.mountaineer.idle", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.mountaineer.idle")));
 	public static final RegistryObject<SoundEvent> MOUNTAINEER_HURT = SOUNDS.register("entity.mountaineer.hurt", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.mountaineer.hurt")));

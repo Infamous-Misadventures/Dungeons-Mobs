@@ -2102,6 +2102,28 @@
 			}
 		]
 	},
+	"entity.illusioner.clone_arrow_hit": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.illusioner.clone_arrow_hit",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/illusioner/clone_arrow_hit1",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/illusioner/clone_arrow_hit2",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/illusioner/clone_arrow_hit3",
+				"stream": true
+			},
+						{
+				"name": "dungeons_mobs:entities/illusioner/clone_arrow_hit4",
+				"stream": true
+			}
+		]
+	},
 	
 	
 	
