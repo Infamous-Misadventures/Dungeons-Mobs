@@ -18,7 +18,8 @@ public class SensorMapModifier {
         // only use for Zombies and Raiders
 
         villagerHostiles.put(ModEntityTypes.ICEOLOGER.get(), 12.0F);
-        villagerHostiles.put(ModEntityTypes.ILLUSIONER_CLONE.get(), 12.0F);
+        villagerHostiles.put(ModEntityTypes.ILLUSIONER.get(), 15.0F);
+        villagerHostiles.put(ModEntityTypes.ILLUSIONER_CLONE.get(), 15.0F);
         villagerHostiles.put(ModEntityTypes.WINDCALLER.get(), 12.0F);
         villagerHostiles.put(ModEntityTypes.GEOMANCER.get(), 12.0F);
 

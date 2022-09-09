@@ -49,6 +49,7 @@ import com.infamous.dungeons_mobs.client.renderer.summonables.CobwebTrapRenderer
 import com.infamous.dungeons_mobs.client.renderer.summonables.GeomancerBombRenderer;
 import com.infamous.dungeons_mobs.client.renderer.summonables.GeomancerWallRenderer;
 import com.infamous.dungeons_mobs.client.renderer.summonables.IceCloudRenderer;
+import com.infamous.dungeons_mobs.client.renderer.summonables.SummonSpotRenderer;
 import com.infamous.dungeons_mobs.client.renderer.summonables.WindcallerTornadoRenderer;
 import com.infamous.dungeons_mobs.client.renderer.undead.CustomSkeletonRenderer;
 import com.infamous.dungeons_mobs.client.renderer.undead.CustomZombieRenderer;
@@ -163,6 +164,8 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.TORNADO.get(), WindcallerTornadoRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WINDCALLER_BLAST_PROJECTILE.get(), WindcallerBlastProjectileRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.COBWEB_TRAP.get(), CobwebTrapRenderer::new);
+        
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SUMMON_SPOT.get(), SummonSpotRenderer::new);
 
         RenderTypeLookup.setRenderLayer(ModBlocks.WRAITH_FIRE_BLOCK.get(), RenderType.cutout());
         RenderTypeLookup.setRenderLayer(ModBlocks.CORRUPTED_PYRE_BLOCK.get(), RenderType.cutout());

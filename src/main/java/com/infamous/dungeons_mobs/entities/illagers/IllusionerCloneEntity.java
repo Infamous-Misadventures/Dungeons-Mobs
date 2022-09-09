@@ -2,6 +2,7 @@ package com.infamous.dungeons_mobs.entities.illagers;
 
 import com.infamous.dungeons_mobs.entities.illagers.IllusionerCloneEntity;
 import com.infamous.dungeons_mobs.entities.summonables.SummonSpotEntity;
+import com.infamous.dungeons_mobs.entities.summonables.WindcallerTornadoEntity;
 import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
 import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
@@ -68,6 +69,9 @@ import java.util.UUID;
 
 public class IllusionerCloneEntity extends AbstractIllagerEntity implements IAnimatable {
 
+	private static final DataParameter<Boolean> DELAYED_APPEAR = EntityDataManager.defineId(IllusionerCloneEntity.class,
+			DataSerializers.BOOLEAN);
+	
 	public int shootAnimationTick;
 	public int shootAnimationLength = 38;
 	public int shootAnimationActionPoint = 16;
@@ -87,6 +91,7 @@ public class IllusionerCloneEntity extends AbstractIllagerEntity implements IAni
 
 	public IllusionerCloneEntity(EntityType<? extends IllusionerCloneEntity> type, World world) {
 		super(type, world);
+		this.xpReward = 0;
 	}
 
 	protected void registerGoals() {
@@ -99,18 +104,28 @@ public class IllusionerCloneEntity extends AbstractIllagerEntity implements IAni
 		this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 1.0D));
 		this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
 		this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
-		this.targetSelector.addGoal(2, new IllusionerCloneEntity.CopyOwnerTargetGoal(this));
-		this.targetSelector.addGoal(3,
-				(new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true)).setUnseenMemoryTicks(600));
-		this.targetSelector.addGoal(4, (new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, false))
-				.setUnseenMemoryTicks(600));
-		this.targetSelector.addGoal(4,
-				new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, false).setUnseenMemoryTicks(600));
+		this.targetSelector.addGoal(1, new IllusionerCloneEntity.CopyOwnerTargetGoal(this));
+	}
+	
+	
+	@Override
+	protected void defineSynchedData() {
+		super.defineSynchedData();
+		
+		this.entityData.define(DELAYED_APPEAR, false);
+	}
+	
+	public boolean hasDelayedAppear() {
+		return this.entityData.get(DELAYED_APPEAR);
+	}
+
+	public void setDelayedAppear(boolean attached) {
+		this.entityData.set(DELAYED_APPEAR, attached);
 	}
 	
 	@Override
 	public boolean hurt(DamageSource p_70097_1_, float p_70097_2_) {
-		if (p_70097_1_.getEntity() != null && this.isAlliedTo(p_70097_1_.getEntity())) {
+		if (p_70097_1_.getEntity() != null && this.isAlliedTo(p_70097_1_.getEntity()) && p_70097_1_ != DamageSource.OUT_OF_WORLD) {
 			return false;
 		} else {
 			return super.hurt(p_70097_1_, p_70097_2_);
@@ -150,8 +165,8 @@ public class IllusionerCloneEntity extends AbstractIllagerEntity implements IAni
 	}
 
 	public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-		return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.275D)
-				.add(Attributes.FOLLOW_RANGE, 20.0D).add(Attributes.MAX_HEALTH, 1.0D);
+		return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.3D)
+				.add(Attributes.FOLLOW_RANGE, 25.0D).add(Attributes.MAX_HEALTH, 50.0D);
 	}
 
 	public void handleEntityEvent(byte p_28844_) {
@@ -159,6 +174,13 @@ public class IllusionerCloneEntity extends AbstractIllagerEntity implements IAni
 			this.shootAnimationTick = shootAnimationLength;
 		} else if (p_28844_ == 8) {
 			this.appearAnimationTick = appearAnimationLength;
+		} else if (p_28844_ == 11) {
+			for(int i = 0; i < 20; ++i) {
+	            double d0 = this.random.nextGaussian() * 0.02D;
+	            double d1 = this.random.nextGaussian() * 0.02D;
+	            double d2 = this.random.nextGaussian() * 0.02D;
+	            this.level.addParticle(ParticleTypes.POOF, this.getRandomX(1.0D), this.getRandomY(), this.getRandomZ(1.0D), d0, d1, d2);
+	         }
 		} else {
 			super.handleEntityEvent(p_28844_);
 		}
@@ -170,8 +192,26 @@ public class IllusionerCloneEntity extends AbstractIllagerEntity implements IAni
 		
 		this.lifeTime++;
 		
-		if (!this.level.isClientSide && ((this.lifeTime >= 200) || this.getOwner() != null && this.getOwner().isDeadOrDying())) {
-			this.kill();
+		if (!this.level.isClientSide && this.hasDelayedAppear()) {
+			this.appearAnimationTick = this.appearAnimationLength;
+			this.level.broadcastEntityEvent(this, (byte) 8);
+			this.setDelayedAppear(false);
+		}
+		
+		int lifeTimeByDifficulty = this.level.getCurrentDifficultyAt(this.blockPosition()).getDifficulty().getId();
+		
+		if (!this.level.isClientSide && (this.hurtTime > 0 || ((this.lifeTime >= lifeTimeByDifficulty * 100) || this.getOwner() != null && (this.getOwner().isDeadOrDying() || this.getOwner().hurtTime > 0 || this.getOwner().getTarget() == null)))) {
+			if (this.hurtTime > 0) {
+				this.playSound(this.getDeathSound(), this.getSoundVolume(), this.getVoicePitch());
+			} else {
+				this.playSound(SoundEvents.ILLUSIONER_MIRROR_MOVE, this.getSoundVolume(), 1.0F);
+			}
+			this.remove();
+			this.level.broadcastEntityEvent(this, (byte) 11);
+		}
+		
+		if (!this.level.isClientSide && this.getOwner() != null) {
+			this.setHealth(this.getOwner().getHealth());
 		}
 	}
 

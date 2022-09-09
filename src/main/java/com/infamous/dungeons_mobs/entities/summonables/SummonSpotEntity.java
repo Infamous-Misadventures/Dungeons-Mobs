@@ -32,6 +32,8 @@ public class SummonSpotEntity extends Entity implements IAnimatable {
 	
 	AnimationFactory factory = new AnimationFactory(this);
 	
+	public int mobSpawnRotation;
+	
     public SummonSpotEntity(World worldIn) {
         super(ModEntityTypes.SUMMON_SPOT.get(), worldIn);
     }
@@ -48,6 +50,7 @@ public class SummonSpotEntity extends Entity implements IAnimatable {
 		
 		if (!this.level.isClientSide && this.lifeTime == this.getSummonTime() && this.summonedEntity != null) {
 			summonedEntity.moveTo(this.blockPosition(), 0.0F, 0.0F);
+			summonedEntity.setYBodyRot(this.random.nextInt(360));
 			((ServerWorld)this.level).addFreshEntityWithPassengers(summonedEntity);
 		}
 		

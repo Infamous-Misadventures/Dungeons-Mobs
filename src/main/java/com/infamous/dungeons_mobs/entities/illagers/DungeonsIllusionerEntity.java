@@ -37,6 +37,7 @@ import net.minecraft.entity.monster.AbstractIllagerEntity;
 import net.minecraft.entity.monster.AbstractRaiderEntity;
 import net.minecraft.entity.monster.EvokerEntity;
 import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.FireworkRocketEntity;
@@ -112,7 +113,7 @@ public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements I
 		this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, AbstractRaiderEntity.class)).setAlertOthers());
 		this.targetSelector.addGoal(2,
 				(new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true)).setUnseenMemoryTicks(600));
-		this.targetSelector.addGoal(3, (new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, false))
+		this.targetSelector.addGoal(4, (new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, false))
 				.setUnseenMemoryTicks(600));
 		this.targetSelector.addGoal(3,
 				new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, false).setUnseenMemoryTicks(600));
@@ -128,8 +129,8 @@ public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements I
 	}
 
 	public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-		return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.275D)
-				.add(Attributes.FOLLOW_RANGE, 20.0D).add(Attributes.MAX_HEALTH, 50.0D);
+		return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.3D)
+				.add(Attributes.FOLLOW_RANGE, 25.0D).add(Attributes.MAX_HEALTH, 50.0D);
 	}
 
 	public void handleEntityEvent(byte p_28844_) {
@@ -141,6 +142,8 @@ public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements I
 			this.vanishAnimationTick = vanishAnimationLength;
 		} else if (p_28844_ == 8) {
 			this.appearAnimationTick = appearAnimationLength;
+		} else if (p_28844_ == 6) {
+			this.appearDelay = 11;
 		} else if (p_28844_ == 7) {
 			for(int i = 0; i < 20; ++i) {
 	            double d0 = this.random.nextGaussian() * 0.02D;
@@ -282,9 +285,19 @@ public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements I
 		return SoundEvents.ILLUSIONER_AMBIENT;
 	}
 	
+	@Override
+	public boolean hurt(DamageSource p_70097_1_, float p_70097_2_) {
+		if (p_70097_1_.getEntity() != null && this.isAlliedTo(p_70097_1_.getEntity()) && p_70097_1_ != DamageSource.OUT_OF_WORLD) {
+			return false;
+		} else {
+			return super.hurt(p_70097_1_, p_70097_2_);
+		}
+	}
+	
 	   public void shootRocket(LivingEntity target) {
 		      {
-		         ItemStack fireworkRocket = ModProjectileHelper.createRocket(DyeColor.PINK);
+		    	 int explosionsByDifficulty = this.level.getCurrentDifficultyAt(this.blockPosition()).getDifficulty().getId();
+		         ItemStack fireworkRocket = ModProjectileHelper.createRocket(explosionsByDifficulty * 2, DyeColor.PINK, DyeColor.PURPLE);
 		         FireworkRocketEntity fireworkrocketentity = new FireworkRocketEntity(this.level, fireworkRocket, this, this.getX(), this.getEyeY() - (double) 0.15F, this.getZ(), true);
 		         double xDifference = target.getX() - this.getX();
 		         double yDifference = target.getY(0.3333333333333333D) - fireworkrocketentity.getY();
@@ -368,7 +381,7 @@ public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements I
 		@Override
 			public void stop() {
 				super.stop();
-				this.cooldown = 20 + mob.random.nextInt(40);
+				this.cooldown = 60 + mob.random.nextInt(40);
 			}
 
 		public boolean animationsUseable() {
@@ -441,6 +454,7 @@ public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements I
 						((IAngerable)target).stopBeingAngry();
 						((IAngerable)target).setLastHurtByMob(null);
 						((IAngerable)target).setTarget(null);
+						((IAngerable)target).setPersistentAngerTarget(null);
 					}
 				}
 			}
@@ -518,9 +532,11 @@ public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements I
 				((ServerWorld)mob.level).addFreshEntityWithPassengers(summonSpot);
 				
 				mob.level.broadcastEntityEvent(mob, (byte) 7);
-				mob.moveTo(summonSpot.blockPosition(), 0, 0);
+				mob.moveTo(summonSpot.blockPosition(), 0.0F, 0.0F);
+				mob.setYBodyRot(mob.random.nextInt(360));
 				mob.lookAt(EntityAnchorArgument.Type.EYES, new Vector3d(mob.getX(), mob.getEyeY(), mob.getZ()));
 				mob.appearDelay = 11;
+				mob.level.broadcastEntityEvent(mob, (byte) 6);
 				mob.playSound(SoundEvents.ILLUSIONER_MIRROR_MOVE, 1.0F, 1.0F);
 				
 				if (target instanceof MobEntity) {
@@ -530,20 +546,24 @@ public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements I
 						((IAngerable)target).stopBeingAngry();
 						((IAngerable)target).setLastHurtByMob(null);
 						((IAngerable)target).setTarget(null);
+						((IAngerable)target).setPersistentAngerTarget(null);
 					}
 				}
 				
-				for (int i = 0; i < 7; i ++) {
+				int clonesByDifficulty = mob.level.getCurrentDifficultyAt(mob.blockPosition()).getDifficulty().getId();
+				
+				for (int i = 0; i < clonesByDifficulty * 5; i ++) {
 					SummonSpotEntity cloneSummonSpot = ModEntityTypes.SUMMON_SPOT.get().create(mob.level);
 					cloneSummonSpot.moveTo(target.blockPosition().offset(-12.5 + mob.random.nextInt(25), 0, -12.5 + mob.random.nextInt(25)), 0.0F, 0.0F);
+					cloneSummonSpot.mobSpawnRotation = mob.random.nextInt(360);
 					((ServerWorld)mob.level).addFreshEntityWithPassengers(cloneSummonSpot);
 					
 					IllusionerCloneEntity clone = ModEntityTypes.ILLUSIONER_CLONE.get().create(mob.level);
 					clone.finalizeSpawn(((ServerWorld)mob.level), mob.level.getCurrentDifficultyAt(cloneSummonSpot.blockPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData)null, (CompoundNBT)null);
 					clone.setOwner(mob);
+					clone.setHealth(mob.getHealth());
 					clone.lookAt(EntityAnchorArgument.Type.EYES, new Vector3d(mob.getX(), mob.getEyeY(), mob.getZ()));
-					clone.appearAnimationTick = clone.appearAnimationLength;
-					clone.level.broadcastEntityEvent(clone, (byte) 4);
+					clone.setDelayedAppear(true);
 					cloneSummonSpot.summonedEntity = clone;					
 					cloneSummonSpot.playSound(SoundEvents.ILLUSIONER_MIRROR_MOVE, 1.0F, 1.0F);
 				}
