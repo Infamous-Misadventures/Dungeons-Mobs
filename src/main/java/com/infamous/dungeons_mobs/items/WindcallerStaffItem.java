@@ -1,16 +1,12 @@
 package com.infamous.dungeons_mobs.items;
 
-import com.infamous.dungeons_mobs.entities.summonables.TornadoEntity;
 import com.infamous.dungeons_mobs.interfaces.IHasInventorySprite;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class WindcallerStaffItem extends AbstractStaffItem implements IHasInventorySprite {
     public WindcallerStaffItem(Properties properties) {

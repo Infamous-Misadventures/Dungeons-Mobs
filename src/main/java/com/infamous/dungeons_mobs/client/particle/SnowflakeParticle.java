@@ -43,12 +43,12 @@ public class SnowflakeParticle extends SpriteTexturedParticle {
                 this.zd *= 1.1D;
             }
 
-            this.xd *= (double)0.96F;
-            this.yd *= (double)0.96F;
-            this.zd *= (double)0.96F;
+            this.xd *= (double)0.75F;
+            this.yd *= (double)0.75F;
+            this.zd *= (double)0.75F;
             if (this.onGround) {
-                this.xd *= (double)0.7F;
-                this.zd *= (double)0.7F;
+                this.xd *= (double)0.6F;
+                this.zd *= (double)0.6F;
             }
 
         }

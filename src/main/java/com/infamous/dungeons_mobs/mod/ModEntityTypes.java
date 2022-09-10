@@ -256,6 +256,7 @@ public class ModEntityTypes {
             EntityType.Builder.<RedstoneCubeEntity>of(RedstoneCubeEntity::new, EntityClassification.MONSTER)
                     .sized(1.0F, 1.0F)
                     .clientTrackingRange(10)
+                    .fireImmune()
                     .setCustomClientFactory((spawnEntity,world) -> new RedstoneCubeEntity(world))
                     .build(new ResourceLocation(MODID, "redstone_cube").toString())
     );
@@ -264,6 +265,7 @@ public class ModEntityTypes {
             EntityType.Builder.<RedstoneGolemEntity>of(RedstoneGolemEntity::new, EntityClassification.MONSTER)
                     .sized(2.66F, 3.83F)
                     .clientTrackingRange(10)
+                    .fireImmune()
                     .setCustomClientFactory((spawnEntity,world) -> new RedstoneGolemEntity(world))
                     .build(new ResourceLocation(MODID, "redstone_golem").toString()),
             0xaeaaa6, 0xe3260c

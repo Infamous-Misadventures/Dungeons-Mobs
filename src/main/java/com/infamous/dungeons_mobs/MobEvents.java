@@ -5,6 +5,7 @@ import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 import com.infamous.dungeons_mobs.capabilities.ancient.AncientProvider;
@@ -39,6 +40,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.SnowballEntity;
 import net.minecraft.entity.projectile.TridentEntity;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.tags.FluidTags;
@@ -66,6 +68,8 @@ import net.minecraftforge.fml.common.Mod;
 public class MobEvents {
     private static ArmorStandEntity DUMMY_TARGET;
 
+    public static Random random = new Random();
+    
     @SubscribeEvent
     public static void onSetAttackTarget(LivingSetAttackTargetEvent event){
         LivingEntity attacker = event.getEntityLiving();
@@ -181,7 +185,7 @@ public class MobEvents {
             SnowballEntity snowballEntity = (SnowballEntity)event.getEntity();
             Entity shooter = snowballEntity.getOwner();
             if(shooter instanceof FrozenZombieEntity){
-            	snowballEntity.playSound(ModSoundEvents.FROZEN_ZOMBIE_SNOWBALL_LAND.get(), 1.0F, 0.4F / (((FrozenZombieEntity)shooter).getRandom().nextFloat() * 0.4F + 0.8F));
+            	snowballEntity.playSound(ModSoundEvents.FROZEN_ZOMBIE_SNOWBALL_LAND.get(), 1.0F, 1.0F);
                 RayTraceResult rayTraceResult = event.getRayTraceResult();
                 if(rayTraceResult instanceof EntityRayTraceResult){
                     EntityRayTraceResult entityRayTraceResult = (EntityRayTraceResult)rayTraceResult;
@@ -232,7 +236,17 @@ public class MobEvents {
         	AbstractArrowEntity arrowEntity = (AbstractArrowEntity)event.getEntity();
             Entity shooter = arrowEntity.getOwner();
             if(shooter instanceof IllusionerCloneEntity){
-            	arrowEntity.playSound(ModSoundEvents.ILLUSIONER_CLONE_ARROW_HIT.get(), 1.0F, 1.0F);               
+            	arrowEntity.playSound(ModSoundEvents.ILLUSIONER_CLONE_ARROW_HIT.get(), 1.0F, 1.0F);   
+            	if (!arrowEntity.level.isClientSide) {
+            		arrowEntity.remove();
+            	} else {
+            		for(int i = 0; i < 2; ++i) {
+        	            double d0 = random.nextGaussian() * 0.02D;
+        	            double d1 = random.nextGaussian() * 0.02D;
+        	            double d2 = random.nextGaussian() * 0.02D;
+        	            arrowEntity.level.addParticle(ParticleTypes.POOF, arrowEntity.getRandomX(1.0D), arrowEntity.getRandomY(), arrowEntity.getRandomZ(1.0D), d0, d1, d2);
+        	         }
+            	}
             }
         }
     }
