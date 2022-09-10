@@ -20,7 +20,8 @@
     "TridentEntityAccessor",
     "TridentEntityMixin",
     "WitherSkeletonEntityMixin",
-    "ZombifiedPiglinEntityMixin"
+    "ZombifiedPiglinEntityMixin",
+    "ProjectileEntityMixin"
   ],
   "client": [
     "DrownedModelMixin",

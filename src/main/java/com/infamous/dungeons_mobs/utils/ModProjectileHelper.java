@@ -26,7 +26,7 @@ public class ModProjectileHelper {
         return itemPredicate.test(livingEntity.getMainHandItem().getItem()) ? Hand.MAIN_HAND : Hand.OFF_HAND;
     }
 
-    public static ItemStack createRocket(DyeColor dyeColor) {
+    public static ItemStack createRocket(int explosions, DyeColor... dyeColor) {
        ItemStack rocket = new ItemStack(Items.FIREWORK_ROCKET);
        ItemStack star = new ItemStack(Items.FIREWORK_STAR);
        CompoundNBT starExplosionNBT = star.getOrCreateTagElement("Explosion");
@@ -37,15 +37,19 @@ public class ModProjectileHelper {
        if (actualStarExplosionNBT != null) {
           // making firework pink
           List<Integer> colorList = Lists.newArrayList();
-          int pinkFireworkColor = dyeColor.getFireworkColor();
-          colorList.add(pinkFireworkColor);
+          for (int i = 0; i < dyeColor.length; i++) {
+        	  int pinkFireworkColor = dyeColor[i].getFireworkColor();
+        	  colorList.add(pinkFireworkColor);
+          }
           actualStarExplosionNBT.putIntArray("Colors", colorList);
           actualStarExplosionNBT.putIntArray("FadeColors", colorList);
           // adding actualStarExplosionNBT to rocketExplosionsNBT
-          rocketExplosionsNBT.add(actualStarExplosionNBT);
+          for (int i = 0; i < explosions; i++) { 
+        	  rocketExplosionsNBT.add(actualStarExplosionNBT);
+          }
        }
        if (!rocketExplosionsNBT.isEmpty()) {
-          rocketFireworksNBT.put("Explosions", rocketExplosionsNBT);
+    	rocketFireworksNBT.put("Explosions", rocketExplosionsNBT);
        }
        return rocket;
     }

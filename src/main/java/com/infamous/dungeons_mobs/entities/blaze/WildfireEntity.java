@@ -235,6 +235,11 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable {
 	@Override
 	public boolean hurt(DamageSource p_70097_1_, float p_70097_2_) {
 		if (this.getShields() > 0 && p_70097_1_ != DamageSource.OUT_OF_WORLD && p_70097_1_ != DamageSource.DROWN) {
+			
+			if (p_70097_1_.getEntity() != null && p_70097_1_.getEntity() instanceof LivingEntity) {
+				this.setLastHurtByMob(((LivingEntity)p_70097_1_.getEntity()));
+			}
+			
 			this.setShieldHealth(this.getShieldHealth() - p_70097_2_);	
 			
 			if (this.getShieldHealth() < individualShieldHealth * 3 && this.getShields() > 3 ||
@@ -279,7 +284,7 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable {
         	this.breakShield();
         }
         
-        if (this.getTarget() != null && ((!this.isOnGround() && steepDropBelow()) || this.getTarget().getY() > this.getY() + 3 || this.getY() < this.getTarget().getY() + 2 || this.distanceTo(this.getTarget()) > 15)) {
+        if (this.getTarget() != null && ((!this.isOnGround() && steepDropBelow()) || this.getTarget().getY() > this.getY() + 3 || this.getY() < this.getTarget().getY() || this.distanceTo(this.getTarget()) > 15)) {
         	if (this.getY() < this.getTarget().getY() + 5) {
         		this.setDeltaMovement(0.0D, 0.04D, 0.0D);
         	} else {

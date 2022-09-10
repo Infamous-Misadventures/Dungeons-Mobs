@@ -28,6 +28,16 @@ public class DungeonsIllusionerRenderer extends ExtendedGeoEntityRenderer<Dungeo
     public DungeonsIllusionerRenderer(EntityRendererManager renderManager) {
         super(renderManager, new DungeonsIllusionerModel());
     }
+    
+    @Override
+    public void render(DungeonsIllusionerEntity entity, float entityYaw, float partialTicks, MatrixStack stack,
+    		IRenderTypeBuffer bufferIn, int packedLightIn) {
+    	if (entity.appearDelay <= 0) {
+    		super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
+    	} else {
+    		
+    	}
+    }
 
     @Override
     protected void applyRotations(DungeonsIllusionerEntity entityLiving, MatrixStack matrixStackIn, float ageInTicks,

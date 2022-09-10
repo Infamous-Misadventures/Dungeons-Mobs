@@ -231,6 +231,7 @@
   "item.dungeons_mobs.royal_guard_shield.white": "White Royal Guard Shield",
 
   "itemGroup.dungeonsMobs": "Dungeons - Mobs",
+  "itemGroup.dungeonsMobsItems": "Dungeons - Mob Equipment",
 
   "death.attack.iceCloud": "%1$s was crushed by an Ice Cloud",
   "death.attack.iceCloud.player": "%1$s was crushed by an Ice Cloud whilst fighting %2$s",
@@ -373,6 +374,7 @@
   "subtitles.entity.windcaller.fly_loop": "Windcaller hovers",
   
   "subtitles.entity.illusioner.death": "Illusioner dies",
+  "subtitles.entity.illusioner.clone_arrow_hit": "Odd Arrow hits",
   
   "subtitles.entity.mountaineer.idle": "Mountaineer mutters",
   "subtitles.entity.mountaineer.hurt": "Mountaineer hurts",

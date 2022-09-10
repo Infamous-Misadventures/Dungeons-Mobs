@@ -48,6 +48,7 @@ import com.infamous.dungeons_mobs.entities.slime.ConjuredSlimeEntity;
 import com.infamous.dungeons_mobs.entities.summonables.GeomancerBombEntity;
 import com.infamous.dungeons_mobs.entities.summonables.GeomancerWallEntity;
 import com.infamous.dungeons_mobs.entities.summonables.IceCloudEntity;
+import com.infamous.dungeons_mobs.entities.summonables.SummonSpotEntity;
 import com.infamous.dungeons_mobs.entities.summonables.WindcallerTornadoEntity;
 import com.infamous.dungeons_mobs.entities.undead.FrozenZombieEntity;
 import com.infamous.dungeons_mobs.entities.undead.JungleZombieEntity;
@@ -528,6 +529,15 @@ public class ModEntityTypes {
                     .build(new ResourceLocation(MODID, "windcaller_blast_projectile").toString())
     );
 
+    public static final RegistryObject<EntityType<SummonSpotEntity>> SUMMON_SPOT = registerEntityWithoutEgg("summon_spot", () ->
+    EntityType.Builder.<SummonSpotEntity>of(SummonSpotEntity::new, EntityClassification.MISC)
+            .fireImmune()
+            .sized(1.0F, 2.0F)
+            .clientTrackingRange(10)
+            .setCustomClientFactory((spawnEntity,world) -> new SummonSpotEntity(world))
+            .build(new ResourceLocation(MODID, "summon_spot").toString())
+);
+    
     public static final RegistryObject<EntityType<LaserOrbEntity>> LASER_ORB = registerEntityWithoutEgg("laser_orb", () ->
             EntityType.Builder.<LaserOrbEntity>of(LaserOrbEntity::new, EntityClassification.MISC)
                     .sized(0.25F, 0.25F)
