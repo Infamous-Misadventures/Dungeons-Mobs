@@ -2,10 +2,13 @@ package com.infamous.dungeons_mobs.client;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
+import com.infamous.dungeons_libraries.client.renderer.ArmorGearRenderer;
+import com.infamous.dungeons_libraries.items.gearconfig.ArmorGear;
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
 import com.infamous.dungeons_mobs.client.particle.RedstoneSparkParticle;
 import com.infamous.dungeons_mobs.client.particle.SnowflakeParticle;
 import com.infamous.dungeons_mobs.client.particle.WindParticle;
+import com.infamous.dungeons_mobs.client.renderer.armor.WindcallerClothesArmorGearRenderer;
 import com.infamous.dungeons_mobs.client.renderer.blaze.WildfireRenderer;
 import com.infamous.dungeons_mobs.client.renderer.creeper.IcyCreeperRenderer;
 import com.infamous.dungeons_mobs.client.renderer.ender.BlastlingRenderer;
@@ -63,6 +66,7 @@ import com.infamous.dungeons_mobs.client.renderer.water.QuickGrowingAnemoneRende
 import com.infamous.dungeons_mobs.client.renderer.water.SunkenSkeletonRenderer;
 import com.infamous.dungeons_mobs.client.renderer.water.WavewhispererRenderer;
 import com.infamous.dungeons_mobs.items.WraithFireChargeItem;
+import com.infamous.dungeons_mobs.items.armor.WindcallerClothesArmorGear;
 import com.infamous.dungeons_mobs.items.shield.CustomISTER;
 import com.infamous.dungeons_mobs.mod.ModBlocks;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
@@ -85,6 +89,7 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
+import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
@@ -190,6 +195,9 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SNARELING_GLOB.get(), SnarelingGlobRenderer::new);
         
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WILDFIRE.get(), WildfireRenderer::new);
+
+
+        GeoArmorRenderer.registerArmorRenderer(WindcallerClothesArmorGear.class, new WindcallerClothesArmorGearRenderer());
     }
 
     @SubscribeEvent
