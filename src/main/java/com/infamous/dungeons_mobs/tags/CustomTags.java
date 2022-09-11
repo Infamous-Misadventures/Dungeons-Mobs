@@ -11,6 +11,9 @@ public class CustomTags {
 
     public static final Tags.IOptionalNamedTag<EntityType<?>> CONVERTS_IN_WATER =
             tag("converts_in_water");
+    
+    public static final Tags.IOptionalNamedTag<EntityType<?>> PLANT_MOBS =
+            tag("plant_mobs");
 
     private static Tags.IOptionalNamedTag<EntityType<?>> tag(String name)
     {

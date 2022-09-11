@@ -398,10 +398,12 @@
   
   "subtitles.entity.leapleaf.idle": "Leapleaf growls",
   "subtitles.entity.leapleaf.hurt": "Leapleaf hurts",
+  "subtitles.entity.leapleaf.death": "Leapleaf dies",
   "subtitles.entity.leapleaf.step": "Leapleaf steps",
   "subtitles.entity.leapleaf.attack": "Leapleaf attacks",
   "subtitles.entity.leapleaf.prepare_leap": "Leapleaf prepares to leap",
   "subtitles.entity.leapleaf.leap": "Leapleaf leaps",
+  "subtitles.entity.leapleaf.land": "Leapleaf smashes",
   "subtitles.entity.leapleaf.rest": "Leapleaf rests",
   
   "subtitles.entity.quick_growing_vine.burst": "Quick-Growing Vine emerges",
