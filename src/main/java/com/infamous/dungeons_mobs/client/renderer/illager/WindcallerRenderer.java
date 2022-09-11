@@ -6,6 +6,7 @@ import com.infamous.dungeons_mobs.entities.illagers.WindcallerEntity;
 import com.infamous.dungeons_mobs.entities.illagers.WindcallerEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import it.unimi.dsi.fastutil.objects.ObjectList;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
@@ -25,6 +26,9 @@ import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.renderers.geo.ExtendedGeoEntityRenderer;
 
 import javax.annotation.Nullable;
+
+import static com.infamous.dungeons_mobs.mod.ModItems.WINDCALLER_CLOTHES;
+
 public class WindcallerRenderer extends ExtendedGeoEntityRenderer<WindcallerEntity> {
     public WindcallerRenderer(EntityRendererManager renderManager) {
         super(renderManager, new WindcallerModel());
@@ -207,6 +211,14 @@ public class WindcallerRenderer extends ExtendedGeoEntityRenderer<WindcallerEnti
                 return armorBipedModel.head;
             default:
                 return null;
+        }
+    }
+
+    @Override
+    protected void prepareArmorPositionAndScale(GeoBone bone, ObjectList<ModelRenderer.ModelBox> cubeList, ModelRenderer sourceLimb, MatrixStack stack, boolean geoArmor, boolean modMatrixRot) {
+        super.prepareArmorPositionAndScale(bone, cubeList, sourceLimb, stack, geoArmor, modMatrixRot);
+        if (bone.getName().equals("armorBipedHead")) {
+            stack.translate(0, -0.125, 0); // -1 is 1 cube up, we want 1/16
         }
     }
 }

@@ -217,8 +217,8 @@ public class WindcallerEntity extends AbstractIllagerEntity implements IAnimatab
     protected void populateDefaultEquipmentSlots(DifficultyInstance p_180481_1_) {
         super.populateDefaultEquipmentSlots(p_180481_1_);
         this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModItems.WINDCALLER_STAFF.get()));
-        //this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.WIND_WIG.get()));
-        //this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.WINDCALLER_ROBES.get()));
+        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.WINDCALLER_CLOTHES.getHead().get()));
+        this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.WINDCALLER_CLOTHES.getChest().get()));
     }
 
     @Nullable

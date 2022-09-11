@@ -1,7 +1,6 @@
 package com.infamous.dungeons_mobs.items;
 
 import com.infamous.dungeons_mobs.interfaces.IHasInventorySprite;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
