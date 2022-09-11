@@ -118,12 +118,11 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
 		this.targetSelector.addGoal(0, new HurtByTargetGoal(this));
 		this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, true));
 	}
 	
 	public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
 		return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.275D)
-				.add(Attributes.FOLLOW_RANGE, 20.0D).add(Attributes.MAX_HEALTH, 50.0D).add(Attributes.ARMOR, 12.5D).add(Attributes.KNOCKBACK_RESISTANCE, 1.0D);
+				.add(Attributes.FOLLOW_RANGE, 25.0D).add(Attributes.MAX_HEALTH, 75.0D).add(Attributes.ARMOR, 15D).add(Attributes.KNOCKBACK_RESISTANCE, 1.0D);
 	}
 	
 	public boolean shouldBeStationary() {
@@ -172,7 +171,7 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
 	
 	@Override
 	public int getAmbientSoundInterval() {
-		return 150;
+		return 250;
 	}
 	
 	@Override
@@ -274,7 +273,7 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
 	               this.level.addParticle(ModParticleTypes.DUST.get(), this.getX() + ((double)this.random.nextFloat() - 0.5D) * (double)this.getBbWidth(), this.getY() + 0.1D, this.getZ() + ((double)this.random.nextFloat() - 0.5D) * (double)this.getBbWidth(), this.random.nextFloat() * 0.5, this.random.nextGaussian() * 1, this.random.nextGaussian() * 1);
 	            }
 	         }
-		
+
 		if (this.restTick > 0) {
 			this.restTick--;
 		}
