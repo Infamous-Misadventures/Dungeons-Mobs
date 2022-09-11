@@ -66,16 +66,16 @@ public class SummonSpotEntity extends Entity implements IAnimatable {
 
 	@Override
 	protected void readAdditionalSaveData(CompoundNBT p_70037_1_) {
-		
+		this.setSummonType(p_70037_1_.getInt("SummonType"));
 	}
 
 	@Override
 	protected void addAdditionalSaveData(CompoundNBT p_213281_1_) {
-		
+		p_213281_1_.putInt("SummonType", this.getSummonType());
 	}
 	
 	public int getSummonType() {
-		return MathHelper.clamp(this.entityData.get(SUMMON_TYPE), 0, 0);
+		return MathHelper.clamp(this.entityData.get(SUMMON_TYPE), 0, 1);
 	}
 
 	public void setSummonType(int attached) {
@@ -85,6 +85,8 @@ public class SummonSpotEntity extends Entity implements IAnimatable {
 	public int getDespawnTime() {
 		if (this.getSummonType() == 0) {
 			return 18;
+		} else if (this.getSummonType() == 1) {
+			return 18;
 		} else {
 			return 2;
 		}
@@ -92,6 +94,8 @@ public class SummonSpotEntity extends Entity implements IAnimatable {
 	
 	public int getSummonTime() {
 		if (this.getSummonType() == 0) {
+			return 10;
+		} else if (this.getSummonType() == 1) {
 			return 10;
 		} else {
 			return 1;
@@ -107,6 +111,8 @@ public class SummonSpotEntity extends Entity implements IAnimatable {
     private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
     	if (this.getSummonType() == 0) {
     		event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_summon_spot_summon", true));    
+    	} else if (this.getSummonType() == 1) {
+    		event.getController().setAnimation(new AnimationBuilder().addAnimation("wildfire_summon_spot_summon", true));    
     	} else {
  
     	}

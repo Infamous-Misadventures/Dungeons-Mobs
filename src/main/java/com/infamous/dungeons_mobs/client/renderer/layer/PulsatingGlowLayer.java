@@ -27,9 +27,16 @@ public class PulsatingGlowLayer<T extends LivingEntity & IAnimatable> extends Ge
 	   
 	public ResourceLocation textureLocation;
 
-	public PulsatingGlowLayer(IGeoRenderer<T> endermanReplacementRenderer, ResourceLocation textureLocation) {
+	public float pulseSpeed;
+	public float pulseAmount;
+	public float minimumPulseAmount;
+	
+	public PulsatingGlowLayer(IGeoRenderer<T> endermanReplacementRenderer, ResourceLocation textureLocation, float pulseSpeed, float pulseAmount, float minimumPulseAmount) {
 		super(endermanReplacementRenderer);
 		this.textureLocation = textureLocation;
+		this.pulseSpeed = pulseSpeed;
+		this.pulseAmount = pulseAmount;
+		this.minimumPulseAmount = minimumPulseAmount;
 	}
 
 		@Override
@@ -38,7 +45,11 @@ public class PulsatingGlowLayer<T extends LivingEntity & IAnimatable> extends Ge
 				float ageInTicks, float netHeadYaw, float headPitch) {
 			
 		      GeoModelProvider<T> geomodel = (GeoModelProvider<T>)this.getEntityModel();
-		      float glow = Math.max(0.0F, MathHelper.cos(ageInTicks * 0.045F) * 0.25F);
+		      
+		      // original speed: 0.045F
+		      // original amount: 0.25F
+		      
+		      float glow = Math.max(minimumPulseAmount, MathHelper.cos(ageInTicks * pulseSpeed) * pulseAmount);
 			  renderModel(geomodel, textureLocation, matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, 1.0F, glow, glow, glow);    
 		   }
 		
