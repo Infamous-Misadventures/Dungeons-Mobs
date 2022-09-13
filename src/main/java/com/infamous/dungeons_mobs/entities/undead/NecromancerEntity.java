@@ -255,7 +255,7 @@ public class NecromancerEntity extends SkeletonEntity implements IAnimatable {
 		@Nullable
 		public LivingEntity target;
 		
-		public int cooldown;
+		public int nextUseTime;
 
 		public int mobSummonRange = 3;
 		public int closeMobSummonRange = 1;
@@ -277,13 +277,9 @@ public class NecromancerEntity extends SkeletonEntity implements IAnimatable {
 
 		@Override
 		public boolean canUse() {
-			target = mob.getTarget();
+			target = mob.getTarget();			
 			
-			if (this.cooldown > 0) {
-				this.cooldown --;
-			}
-			
-			return target != null && this.cooldown <= 0 && mob.distanceTo(target) > 5 && animationsUseable()
+			return target != null && mob.tickCount >= this.nextUseTime && mob.distanceTo(target) > 5 && animationsUseable()
 					&& mob.canSee(target);
 		}
 
@@ -363,7 +359,7 @@ public class NecromancerEntity extends SkeletonEntity implements IAnimatable {
 
 		@Override
 		public void stop() {
-			this.cooldown = 200 + mob.random.nextInt(200);
+			this.nextUseTime = mob.tickCount + (200 + mob.random.nextInt(200));
 		}
 
 		public boolean animationsUseable() {
