@@ -121,7 +121,7 @@ public class ClientEvents {
 
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ROYAL_GUARD.get(), RoyalGuardRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.MOUNTAINEER.get(), CustomVindicatorRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.MOUNTAINEER.get(), MountaineerRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ICEOLOGER.get(), IceologerRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.GEOMANCER.get(), GeomancerRenderer::new);
