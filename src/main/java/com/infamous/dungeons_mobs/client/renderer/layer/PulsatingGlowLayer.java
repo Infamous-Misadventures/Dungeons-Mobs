@@ -24,27 +24,46 @@ import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 
 @OnlyIn(Dist.CLIENT)
 public class PulsatingGlowLayer<T extends LivingEntity & IAnimatable> extends GeoLayerRenderer<T> {
-	   
+
 	public ResourceLocation textureLocation;
 
-	public PulsatingGlowLayer(IGeoRenderer<T> endermanReplacementRenderer, ResourceLocation textureLocation) {
+	public float pulseSpeed;
+	public float pulseAmount;
+	public float minimumPulseAmount;
+	public float pulseSpeedMath;
+
+	public PulsatingGlowLayer(IGeoRenderer<T> endermanReplacementRenderer, ResourceLocation textureLocation,
+							  float pulseSpeed,
+							  float pulseAmount,
+							  float minimumPulseAmount) {
 		super(endermanReplacementRenderer);
 		this.textureLocation = textureLocation;
+		this.pulseSpeed = pulseSpeed;
+		this.pulseAmount = pulseAmount;
+		this.minimumPulseAmount = minimumPulseAmount;
 	}
 
-		@Override
-		public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn,
-				T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
-				float ageInTicks, float netHeadYaw, float headPitch) {
-			
-		      GeoModelProvider<T> geomodel = (GeoModelProvider<T>)this.getEntityModel();
-		      float glow = Math.max(0.0F, MathHelper.cos(ageInTicks * 0.045F) * 0.25F);
-			  renderModel(geomodel, textureLocation, matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, 1.0F, glow, glow, glow);    
-		   }
-		
-		@Override
-		public RenderType getRenderType(ResourceLocation textureLocation) {
-			return RenderType.eyes(textureLocation);
+	@Override
+	public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn,
+					   T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
+					   float ageInTicks, float netHeadYaw, float headPitch) {
+
+		GeoModelProvider<T> geomodel = (GeoModelProvider<T>)this.getEntityModel();
+
+		// original speed: 0.045F
+		// original amount: 0.25F
+		float glow = Math.max(minimumPulseAmount, MathHelper.cos(ageInTicks * pulseSpeed) * pulseAmount);
+
+		if (entitylivingbaseIn instanceof RedstoneGolemEntity) {
+			if (((RedstoneGolemEntity)entitylivingbaseIn).isSummoningMines() && ((RedstoneGolemEntity)entitylivingbaseIn).getAttackTimer() >= 20 && ((RedstoneGolemEntity)entitylivingbaseIn).getAttackTimer() <= 77)
+				glow = Math.max(minimumPulseAmount, MathHelper.cos(ageInTicks * pulseSpeed * ((((RedstoneGolemEntity)entitylivingbaseIn).getAttackTimer()) / 50.0f)) * pulseAmount);
 		}
+		renderModel(geomodel, textureLocation, matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, 1.0F, glow, glow, glow);
+	}
+
+	@Override
+	public RenderType getRenderType(ResourceLocation textureLocation) {
+		return RenderType.eyes(textureLocation);
+	}
 
 }
