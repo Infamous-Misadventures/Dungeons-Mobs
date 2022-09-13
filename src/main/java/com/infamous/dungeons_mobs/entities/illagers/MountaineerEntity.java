@@ -333,7 +333,7 @@ public class MountaineerEntity extends VindicatorEntity implements IAnimatable {
         @Override
         public boolean canUse() {
             target = mob.getTarget();
-            return target != null && !mob.isBlocking() && mob.distanceTo(target) <= 2.5 && mob.canMeleeAttack()
+            return target != null && mob.canMeleeAttack()
                     && mob.canSee(target);
         }
 
