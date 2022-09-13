@@ -10,6 +10,10 @@ import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
 
+/**
+ * Necromancer - BklynKian
+ * Created using Tabula 8.0.0
+ */
 @OnlyIn(Dist.CLIENT)
 public class DrownedNecromancerModel extends AnimatedGeoModel<DrownedNecromancerEntity> {
 
