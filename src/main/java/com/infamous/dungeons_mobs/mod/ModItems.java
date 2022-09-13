@@ -74,6 +74,9 @@ public class ModItems {
     public static final ArmorSet ROYAL_GUARD_ARMOR = registerArmorSet("royal_guard_armor", "royal_guard_helmet", "royal_guard_chestplate", "royal_guard_legs", "royal_guard_sabatons");
     public static final ArmorSet VANGUARD_ARMOR = registerArmorSet("vanguard_armor", "vanguard_helmet", "vanguard_chestplate", "vanguard_legs", null);
     public static final ArmorSet WINDCALLER_CLOTHES = registerArmorSetWindcallerClothes("windcaller_armor", "wind_wig", "windcaller_robes", null, null);
+    public static final ArmorSet MOUNTAINEER_ARMOR = registerArmorSet("mountaineer_armor", "moutaineer_hood", "mountaineer_jacket", "mountaineer_pants", "mountaineer_boots");
+    public static final ArmorSet ARMORED_MOUNTAINEER_ARMOR = registerArmorSet("armoured_mountaineer_armor", "armored_mountaineer_hood", "armored_mountaineer_jacket", "armored_mountaineer_pants", "armored_mountaineer_boots");
+    public static final ArmorSet STRONG_ARMORED_MOUNTAINEER_ARMOR = registerArmorSet("strong_armoured_mountaineer_armor", "strong_armored_mountaineer_hood", "strong_armored_mountaineer_jacket", "strong_armored_mountaineer_pants", "strong_armored_mountaineer_boots");
 
     // SOUL FIRE CHARGE
     public static final RegistryObject<WraithFireChargeItem> WRAITH_FIRE_CHARGE = ITEMS.register("wraith_fire_charge",
