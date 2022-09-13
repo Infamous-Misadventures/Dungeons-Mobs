@@ -32,7 +32,7 @@ public class SummonMobsGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        return mobEntity.getTarget() != null && mobEntity.cd <= 0;
+        return mobEntity.getTarget() != null;// && mobEntity.cd <= 0;
     }
 
     @Override
@@ -44,13 +44,13 @@ public class SummonMobsGoal extends Goal {
     public void start() {
         super.start();
         this.timer = 0;
-        mobEntity.setIsSummoning(true);
+        //mobEntity.setIsSummoning(true);
     }
 
     @Override
     public void stop() {
-        mobEntity.cd = 168;
-        mobEntity.setIsSummoning(false);
+        //mobEntity.cd = 168;
+        //mobEntity.setIsSummoning(false);
     }
 
     @Override

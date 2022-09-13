@@ -44,7 +44,7 @@ public class AreaDamageEntity extends Entity {
 			DataSerializers.INT);
 	
 	public float damage;
-	public DamageSource damageSource;
+	public DamageSource damageSource = DamageSource.GENERIC;
 	public LivingEntity owner;
 	
 	public boolean constantDamage;
@@ -249,12 +249,32 @@ public class AreaDamageEntity extends Entity {
 
 	@Override
 	protected void readAdditionalSaveData(CompoundNBT p_70037_1_) {
-		
+		this.setSize(p_70037_1_.getFloat("Size"));
+		this.setSizeToReach(p_70037_1_.getFloat("SizeToReach"));
+		this.setYSize(p_70037_1_.getFloat("YSize"));
+		this.setGrowSpeed(p_70037_1_.getFloat("GrowSpeed"));
+		this.setParticleType(p_70037_1_.getInt("ParticleType"));
+		this.damage = p_70037_1_.getFloat("Damage");
+		this.constantDamage = p_70037_1_.getBoolean("ConstantDamage");
+		this.knockbackAmount = p_70037_1_.getDouble("KnockbackAmount");
+		this.knockbackAmountY = p_70037_1_.getDouble("KnockbackAmountY");
+		this.disableShieldTime = p_70037_1_.getInt("DisableShieldTime");
+		this.disableShields = p_70037_1_.getBoolean("DisableShields");
 	}
 
 	@Override
 	protected void addAdditionalSaveData(CompoundNBT p_213281_1_) {
-		
+		p_213281_1_.putFloat("Size", this.getSize());
+		p_213281_1_.putFloat("SizeToReach", this.getSizeToReach());
+		p_213281_1_.putFloat("YSize", this.getYSize());
+		p_213281_1_.putFloat("GrowSpeed", this.getGrowSpeed());
+		p_213281_1_.putInt("ParticleType", this.getParticleType());
+		p_213281_1_.putFloat("Damage", this.damage);
+		p_213281_1_.putBoolean("ConstantDamage", this.constantDamage);
+		p_213281_1_.putDouble("KnockbackAmount", this.knockbackAmount);
+		p_213281_1_.putDouble("KnockbackAmountY", this.knockbackAmountY);
+		p_213281_1_.putInt("DisableShieldTime", this.disableShieldTime);
+		p_213281_1_.putBoolean("DisableShields", this.disableShields);
 	}
 
 	@Override

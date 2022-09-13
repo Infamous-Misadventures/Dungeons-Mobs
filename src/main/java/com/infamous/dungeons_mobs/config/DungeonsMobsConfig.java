@@ -177,8 +177,7 @@ public class DungeonsMobsConfig {
                             "If a mob chosen from this list cannot be spawned, a zombie will be summoned instead." )
                     .defineList("necromancerMobSummons", Lists.newArrayList(
                             "minecraft:zombie",
-                            "minecraft:skeleton",
-                            "dungeons_mobs:wraith"
+                            "minecraft:skeleton"
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             DROWNED_NECROMANCER_MOB_SUMMONS = builder
@@ -188,7 +187,7 @@ public class DungeonsMobsConfig {
                             "If a mob chosen from this list cannot be spawned, a drowned will be summoned instead." )
                     .defineList("drownedNecromancerMobSummons", Lists.newArrayList(
                             "minecraft:drowned",
-                            "dungeons_mobs:armored_drowned"
+                            "dungeons_mobs:sunken_skeleton"
                             ),
                             (itemRaw) -> itemRaw instanceof String);
 
