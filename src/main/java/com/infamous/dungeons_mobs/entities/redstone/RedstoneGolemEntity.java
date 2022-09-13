@@ -265,7 +265,7 @@ public class RedstoneGolemEntity extends AbstractRaiderEntity implements IAnimat
                 .add(Attributes.MOVEMENT_SPEED, 0.275D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
                 .add(Attributes.ATTACK_DAMAGE, 17.0D) // >= Golem Attack
-                .add(Attributes.ATTACK_KNOCKBACK, 4.25D) // 2x Ravager knockback
+                .add(Attributes.ATTACK_KNOCKBACK, 3.0D) // 2x Ravager knockback
                 .add(Attributes.FOLLOW_RANGE, 25.0D);
     }
 
@@ -494,25 +494,10 @@ public class RedstoneGolemEntity extends AbstractRaiderEntity implements IAnimat
                     RedstoneGolemEntity.this.playSound(ModSoundEvents.REDSTONE_GOLEM_ATTACK.get(),1,1);
                 }
                 if (attackTimer == 9) {
-                    CombatEvent.AreaAttack(RedstoneGolemEntity.this, 4.5f,4.5f,1,4.5f,120,1,0.233, 0.625);
+                    CombatEvent.AreaAttack(RedstoneGolemEntity.this, 4.5f, 4.5f, 1, 4.5f, 120,1, 0.233, 0.625);
                 }
             }
 
-        }
-
-        private void forceKnockback(LivingEntity attackTarget, float strength, double ratioX, double ratioZ, double knockbackResistanceReduction) {
-            LivingKnockBackEvent event = ForgeHooks.onLivingKnockBack(attackTarget, strength, ratioX, ratioZ);
-            if(event.isCanceled()) return;
-            strength = event.getStrength();
-            ratioX = event.getRatioX();
-            ratioZ = event.getRatioZ();
-            strength = (float)((double)strength * (1.0D - attackTarget.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE) * knockbackResistanceReduction));
-            if (!(strength <= 0.0F)) {
-                attackTarget.hasImpulse = true;
-                Vector3d vector3d = attackTarget.getDeltaMovement();
-                Vector3d vector3d1 = (new Vector3d(ratioX, 0.0D, ratioZ)).normalize().scale((double)strength);
-                attackTarget.setDeltaMovement(vector3d.x / 2.0D - vector3d1.x, attackTarget.isOnGround() ? Math.min(0.4D, vector3d.y / 2.0D + (double)strength) : vector3d.y, vector3d.z / 2.0D - vector3d1.z);
-            }
         }
 
 
@@ -528,7 +513,7 @@ public class RedstoneGolemEntity extends AbstractRaiderEntity implements IAnimat
     // MINES
 
     class SummonRedstoneMinesGoal extends Goal{
-        static final int MINE_ATTACK_COOLDOWN = 10 * 20;
+        static final int MINE_ATTACK_COOLDOWN = 20 * 25;
 
 
         SummonRedstoneMinesGoal(){
