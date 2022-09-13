@@ -1,55 +1,82 @@
 {
-"configs": [{
-  "headItem":  {
-    "id": "minecraft:empty",
-    "Count": 1
-  },
-  "chestItem": {
-    "id": "minecraft:empty",
-    "Count": 1
-  },
-  "legsItem":  {
-    "id": "minecraft:empty",
-    "Count": 1
-  },
-  "feetItem": {
-    "id": "minecraft:empty",
-    "Count": 1
-  },
-  "handItem":  {
-    "id": "dungeons_mobs:gold_mountaineer_axe",
-    "Count": 1
-  },
-  "offhandItem": {
-    "id": "minecraft:empty",
-    "Count": 1
-  },
-  "weight": 75
-},{
-  "headItem":  {
-    "id": "minecraft:empty",
-    "Count": 1
-  },
-  "chestItem": {
-    "id": "minecraft:empty",
-    "Count": 1
-  },
-  "legsItem":  {
-    "id": "minecraft:empty",
-    "Count": 1
-  },
-  "feetItem": {
-    "id": "minecraft:empty",
-    "Count": 1
-  },
-  "handItem":  {
-    "id": "dungeons_mobs:diamond_mountaineer_axe",
-    "Count": 1
-  },
-  "offhandItem": {
-    "id": "minecraft:empty",
-    "Count": 1
-  },
-  "weight": 25
-}]
+  "configs": [
+    {
+      "attributes": [
+        {
+          "attribute": "minecraft:generic.armor",
+          "amount": 6,
+          "operation": 0
+        },
+        {
+          "attribute": "minecraft:generic.knockback_resistance",
+          "amount": 0.2,
+          "operation": 0
+        }
+      ],
+      "headItem": {
+        "id": "dungeons_mobs:armored_mountaineer_hood",
+        "Count": 1
+      },
+      "chestItem": {
+        "id": "dungeons_mobs:armored_mountaineer_jacket",
+        "Count": 1
+      },
+      "legsItem": {
+        "id": "dungeons_mobs:armored_mountaineer_pants",
+        "Count": 1
+      },
+      "feetItem": {
+        "id": "dungeons_mobs:armored_mountaineer_boots",
+        "Count": 1
+      },
+      "handItem": {
+        "id": "dungeons_mobs:gold_mountaineer_axe",
+        "Count": 1
+      },
+      "offhandItem": {
+        "id": "minecraft:empty",
+        "Count": 1
+      },
+      "weight": 75
+    },
+    {
+      "attributes": [
+        {
+          "attribute": "minecraft:generic.armor",
+          "amount": 12,
+          "operation": 0
+        },
+        {
+          "attribute": "minecraft:generic.knockback_resistance",
+          "amount": 0.6,
+          "operation": 0
+        }
+      ],
+      "headItem": {
+        "id": "dungeons_mobs:strong_armored_mountaineer_hood",
+        "Count": 1
+      },
+      "chestItem": {
+        "id": "dungeons_mobs:strong_armored_mountaineer_jacket",
+        "Count": 1
+      },
+      "legsItem": {
+        "id": "dungeons_mobs:strong_armored_mountaineer_pants",
+        "Count": 1
+      },
+      "feetItem": {
+        "id": "dungeons_mobs:strong_armored_mountaineer_boots",
+        "Count": 1
+      },
+      "handItem": {
+        "id": "dungeons_mobs:diamond_mountaineer_axe",
+        "Count": 1
+      },
+      "offhandItem": {
+        "id": "minecraft:empty",
+        "Count": 1
+      },
+      "weight": 25
+    }
+  ]
 }
