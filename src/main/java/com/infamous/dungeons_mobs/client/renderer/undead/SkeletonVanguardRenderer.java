@@ -151,8 +151,6 @@ public class SkeletonVanguardRenderer extends ExtendedGeoEntityRenderer<Skeleton
             case "armorBipedBody":
             case "armorBipedRightArm":
             case "armorBipedLeftArm":
-            case "armorIllagerRightArm":
-            case "armorIllagerLeftArm":
                 return chestplate;
             case "armorBipedHead":
                 return helmet;
@@ -176,8 +174,6 @@ public class SkeletonVanguardRenderer extends ExtendedGeoEntityRenderer<Skeleton
                 return currentEntity.isLeftHanded() ? EquipmentSlotType.MAINHAND : EquipmentSlotType.OFFHAND;
             case "armorBipedRightArm":
             case "armorBipedLeftArm":
-            case "armorIllagerRightArm":
-            case "armorIllagerLeftArm":
             case "armorBipedBody":
                 return EquipmentSlotType.CHEST;
             case "armorBipedHead":
@@ -197,10 +193,8 @@ public class SkeletonVanguardRenderer extends ExtendedGeoEntityRenderer<Skeleton
             case "armorBipedRightLeg":
                 return armorBipedModel.rightLeg;
             case "armorBipedRightArm":
-            case "armorIllagerRightArm":
                 return armorBipedModel.rightArm;
             case "armorBipedLeftArm":
-            case "armorIllagerLeftArm":
                 return armorBipedModel.leftArm;
             case "armorBipedBody":
                 return armorBipedModel.body;

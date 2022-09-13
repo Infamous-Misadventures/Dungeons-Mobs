@@ -17,6 +17,8 @@ public class SummonSpotModel<T extends SummonSpotEntity> extends AnimatedGeoMode
 			return new ResourceLocation(DungeonsMobs.MODID, "animations/illusioner_summon_spot.animation.json");
 		} else if (entity.getSummonType() == 1) {
 			return new ResourceLocation(DungeonsMobs.MODID, "animations/wildfire_summon_spot.animation.json");
+		} else if (entity.getSummonType() == 2) {
+			return new ResourceLocation(DungeonsMobs.MODID, "animations/illusioner_summon_spot.animation.json");
 		} else {
 			return new ResourceLocation(DungeonsMobs.MODID, "animations/illusioner_summon_spot.animation.json");
 		}	
@@ -28,6 +30,8 @@ public class SummonSpotModel<T extends SummonSpotEntity> extends AnimatedGeoMode
 			return new ResourceLocation(DungeonsMobs.MODID, "geo/illusioner_summon_spot.geo.json");
 		} else if (entity.getSummonType() == 1) {
 			return new ResourceLocation(DungeonsMobs.MODID, "geo/wildfire_summon_spot.geo.json");
+		} else if (entity.getSummonType() == 2) {
+			return new ResourceLocation(DungeonsMobs.MODID, "geo/illusioner_summon_spot.geo.json");
 		} else {
 			return new ResourceLocation(DungeonsMobs.MODID, "geo/illusioner_summon_spot.geo.json");
 		}	
@@ -39,6 +43,8 @@ public class SummonSpotModel<T extends SummonSpotEntity> extends AnimatedGeoMode
 			return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illusioner_summon_spot.png");
 		} else if (entity.getSummonType() == 1) {
 			return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/wildfire_summon_spot.png");
+		} else if (entity.getSummonType() == 2) {
+			return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/necromancer_summon_spot.png");
 		} else {
 			return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illusioner_summon_spot.png");
 		}	

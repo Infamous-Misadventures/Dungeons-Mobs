@@ -383,8 +383,8 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable {
 		@Nullable
 		public LivingEntity target;
 		
-		public int blazeSummonRange = 3;
-		public int closeBlazeSummonRange = 1;
+		public int blazeSummonRange = 5;
+		public int closeBlazeSummonRange = 2;
 		
 	      private final EntityPredicate blazeCountTargeting = (new EntityPredicate()).range(30.0D).ignoreInvisibilityTesting().allowInvulnerable().allowSameTeam();
 	      
@@ -434,7 +434,6 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable {
 			if (target != null && mob.summonAnimationTick == mob.summonAnimationActionPoint) {
 	            for (int i = 0; i < 1 + mob.random.nextInt(1); i++) {
 					SummonSpotEntity blazeSummonSpot = ModEntityTypes.SUMMON_SPOT.get().create(mob.level);
-					blazeSummonSpot.moveTo(target.blockPosition().offset(-12.5 + mob.random.nextInt(25), 0, -12.5 + mob.random.nextInt(25)), 0.0F, 0.0F);
 					blazeSummonSpot.mobSpawnRotation = mob.random.nextInt(360);
 					blazeSummonSpot.setSummonType(1);
 	            	BlockPos summonPos = mob.blockPosition().offset(-blazeSummonRange + mob.random.nextInt((blazeSummonRange * 2) + 1), 0, -blazeSummonRange + mob.random.nextInt((blazeSummonRange * 2) + 1));
@@ -445,7 +444,7 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable {
 	            		summonPos = mob.blockPosition().offset(-closeBlazeSummonRange + mob.random.nextInt((closeBlazeSummonRange * 2) + 1), 0, -closeBlazeSummonRange + mob.random.nextInt((closeBlazeSummonRange * 2) + 1));
 	            	}
 	            	
-	            	// RELOCATES BLAZE TO WILDFIRE'S POSITION STILL IN A POSITION THAT MAY HINDER ITS ABILITY TO JOIN IN THE BATTLE
+	            	// RELOCATES BLAZE TO WILDFIRE'S POSITION IF STILL IN A POSITION THAT MAY HINDER ITS ABILITY TO JOIN IN THE BATTLE
 	            	if (blazeSummonSpot.isInWall() || !canSee(blazeSummonSpot, target)) {
 	            		summonPos = mob.blockPosition();
 	            	}
@@ -455,7 +454,7 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable {
 	            	
 	            	summonedBlaze.setTarget(target);
 	            	summonedBlaze.finalizeSpawn(((ServerWorld)mob.level), mob.level.getCurrentDifficultyAt(summonPos), SpawnReason.MOB_SUMMONED, (ILivingEntityData)null, (CompoundNBT)null);
-	            	mob.playSound(ModSoundEvents.WILDFIRE_PROJECTILE_HIT.get(), 1.0F, 1.0F);
+	            	blazeSummonSpot.playSound(ModSoundEvents.WILDFIRE_PROJECTILE_HIT.get(), 1.0F, 1.0F);
 					if (mob.getTeam() != null) {
 						Scoreboard scoreboard = mob.level.getScoreboard();
 						scoreboard.addPlayerToTeam(summonedBlaze.getScoreboardName(), scoreboard.getPlayerTeam(mob.getTeam().getName()));

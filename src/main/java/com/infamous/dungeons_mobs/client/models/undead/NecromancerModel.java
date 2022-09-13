@@ -1,26 +1,24 @@
 package com.infamous.dungeons_mobs.client.models.undead;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
+import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
 import com.infamous.dungeons_mobs.entities.undead.NecromancerEntity;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.entity.model.BipedModel;
-import net.minecraft.client.renderer.model.ModelRenderer;
+
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.HandSide;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
+import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
+import software.bernie.geckolib3.resource.GeckoLibCache;
+import software.bernie.shadowed.eliotlash.molang.MolangParser;
 
-/**
- * Necromancer - BklynKian
- * Created using Tabula 8.0.0
- */
 @OnlyIn(Dist.CLIENT)
 public class NecromancerModel extends AnimatedGeoModel<NecromancerEntity> {
 
@@ -43,7 +41,17 @@ public class NecromancerModel extends AnimatedGeoModel<NecromancerEntity> {
     public void setLivingAnimations(NecromancerEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
 
-        IBone head = this.getAnimationProcessor().getBone("head");
+        IBone head = this.getAnimationProcessor().getBone("bipedHead");
+        IBone cape = this.getAnimationProcessor().getBone("bipedCape");
+        
+        IBone particles = this.getAnimationProcessor().getBone("staffParticles");
+        
+        //if (particles instanceof GeoBone && (entity.shootAnimationTick > 0 || entity.summonAnimationTick > 0)) {
+        //	GeoBone particleBone = ((GeoBone)particles);
+        //	entity.level.addParticle(ModParticleTypes.NECROMANCY.get(), particleBone.getWorldPosition().x, particleBone.getWorldPosition().y, particleBone.getWorldPosition().z, 0, 0, 0);
+        //}
+        
+        cape.setHidden(true);
 
         EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
 
@@ -52,4 +60,15 @@ public class NecromancerModel extends AnimatedGeoModel<NecromancerEntity> {
             head.setRotationY(head.getRotationY() + (extraData.netHeadYaw * ((float) Math.PI / 180F)));
         }
     }
+    
+	@Override
+	public void setMolangQueries(IAnimatable animatable, double currentTick) {
+		super.setMolangQueries(animatable, currentTick);
+		
+		MolangParser parser = GeckoLibCache.getInstance().parser;
+		LivingEntity livingEntity = (LivingEntity) animatable;
+		Vector3d velocity = livingEntity.getDeltaMovement();
+		float groundSpeed = MathHelper.sqrt((float) ((velocity.x * velocity.x) + (velocity.z * velocity.z)));
+		parser.setValue("query.ground_speed", groundSpeed * 20);
+	}
 }
