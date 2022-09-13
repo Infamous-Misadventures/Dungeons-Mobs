@@ -370,10 +370,10 @@ public class DrownedNecromancerEntity extends AbstractSkeletonEntity implements 
 
         double x = this.getX() + Math.cos(f) * 1.2 + (shooter.getRandom().nextDouble() / 2 * (shooter.getRandom().nextBoolean() ? -1 : 1));
         double z = this.getZ() + Math.sin(f) * 1.2 + (shooter.getRandom().nextDouble() / 2 * (shooter.getRandom().nextBoolean() ? -1 : 1));
-        laserOrb.setPos(x, shooter.getY(0.5D) + 0.5D, z);
-        double xAccel = target.getX() - laserOrb.getX();
+        laserOrb.setPos(x, shooter.getY(0.5D + (shooter.getRandom().nextDouble() / 2 * (shooter.getRandom().nextBoolean() ? -1 : 1))) + 0.5D, z);
+        double xAccel = target.getX() - shooter.getX();
         double yAccel = target.getY() - shooter.getY();
-        double zAccel = target.getZ() - laserOrb.getZ();
+        double zAccel = target.getZ() - shooter.getZ();
         laserOrb.shoot(xAccel, yAccel, zAccel, 0.2f, 0.0F);
         shooter.level.addFreshEntity(laserOrb);
     }
