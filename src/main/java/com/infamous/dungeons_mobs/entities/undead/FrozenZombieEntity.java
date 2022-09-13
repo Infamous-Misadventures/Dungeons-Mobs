@@ -3,10 +3,12 @@ package com.infamous.dungeons_mobs.entities.undead;
 import java.util.Random;
 
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
+import com.infamous.dungeons_mobs.entities.illagers.DungeonsIllusionerEntity;
 import com.infamous.dungeons_mobs.goals.switchcombat.SwitchCombatItemGoal;
 import com.infamous.dungeons_mobs.goals.switchcombat.ThrowAndMeleeAttackGoal;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.IRangedAttackMob;
@@ -82,6 +84,20 @@ public class FrozenZombieEntity extends ZombieEntity implements IRangedAttackMob
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return ZombieEntity.createAttributes();
     }
+    
+	/**
+	 * Returns whether this Entity is on the same team as the given Entity.
+	 */
+	public boolean isAlliedTo(Entity entityIn) {
+		if (super.isAlliedTo(entityIn)) {
+			return true;
+		} else if (entityIn instanceof LivingEntity
+				&& ((LivingEntity)entityIn) instanceof ZombieEntity) {
+			return this.getTeam() == null && entityIn.getTeam() == null;
+		} else {
+			return false;
+		}
+	}
 
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficultyInstance) {
         super.populateDefaultEquipmentSlots(difficultyInstance);

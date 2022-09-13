@@ -211,4 +211,12 @@ public class IceologerRenderer extends ExtendedGeoEntityRenderer<IceologerEntity
                 return null;
         }
     }
+
+    @Override
+    protected void prepareArmorPositionAndScale(GeoBone bone, ObjectList<ModelRenderer.ModelBox> cubeList, ModelRenderer sourceLimb, MatrixStack stack, boolean geoArmor, boolean modMatrixRot) {
+        super.prepareArmorPositionAndScale(bone, cubeList, sourceLimb, stack, geoArmor, modMatrixRot);
+        if (bone.getName().equals("armorBipedHead") && geoArmor) {
+            stack.translate(0, -0.125, 0); // -1 is 1 cube up, we want 1/16
+        }
+    }
 }

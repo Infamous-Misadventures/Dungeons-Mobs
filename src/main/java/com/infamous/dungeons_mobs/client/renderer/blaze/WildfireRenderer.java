@@ -32,7 +32,7 @@ import software.bernie.geckolib3.renderers.geo.ExtendedGeoEntityRenderer;
 public class WildfireRenderer extends ExtendedGeoEntityRenderer<WildfireEntity> {
     public WildfireRenderer(EntityRendererManager renderManager) {
         super(renderManager, new WildfireModel());
-        this.addLayer(new PulsatingGlowLayer<>(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/blaze/wildfire.png")));
+        this.addLayer(new PulsatingGlowLayer<>(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/blaze/wildfire.png"), 0.1F, 1.0F, 0.25F));
     }
     
     @Override

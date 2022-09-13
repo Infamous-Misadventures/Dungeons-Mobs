@@ -133,6 +133,9 @@ dependencies {
     implementation fg.deobf("curse.maven:enchantwithmob-391187:3539541")
 //    runtimeOnly fg.deobf("dungeons_gear:dungeons_gear:1.16.5-3.1.15-beta")
     runtimeOnly fg.deobf("curios:curios:forge-1.16.5-4.0.8.1")
+    
+    runtimeOnly fg.deobf("rubidium:rubidium:0.2.10")
+    runtimeOnly fg.deobf("oculus:oculus:1.2.6")
 
 //    runtimeOnly fg.deobf("curse.maven:dungeonsgear-401247:3889856")
     runtimeOnly fg.deobf("curse.maven:curios-309927:3725386")
