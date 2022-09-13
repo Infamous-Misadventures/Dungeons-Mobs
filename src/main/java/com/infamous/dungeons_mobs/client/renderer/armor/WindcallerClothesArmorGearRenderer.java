@@ -9,6 +9,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.LivingRenderer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.IArmorMaterial;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
@@ -16,6 +17,8 @@ import software.bernie.geckolib3.geo.render.built.GeoCube;
 import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 import software.bernie.geckolib3.util.RenderUtils;
+
+import static com.infamous.dungeons_mobs.mod.ModEntityTypes.WINDCALLER;
 
 public class WindcallerClothesArmorGearRenderer extends GeoArmorRenderer<WindcallerClothesArmorGear> {
 
@@ -48,7 +51,8 @@ public class WindcallerClothesArmorGearRenderer extends GeoArmorRenderer<Windcal
             for (GeoCube cube : bone.childCubes) {
                 stack.pushPose();
                 if (!bone.cubesAreHidden()) {
-                    renderCube(cube, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+                    int overlay = entityLiving.getType() == WINDCALLER.get() ? LivingRenderer.getOverlayCoords(entityLiving, 0.0F) : packedOverlayIn;
+                    renderCube(cube, stack, bufferIn, packedLightIn, overlay, red, green, blue, alpha);
                 }
                 stack.popPose();
             }

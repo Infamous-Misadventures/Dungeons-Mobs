@@ -1,6 +1,8 @@
 package com.infamous.dungeons_mobs.client.renderer.jungle;
 
+import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.client.models.jungle.LeapleafModel;
+import com.infamous.dungeons_mobs.client.renderer.layer.PulsatingGlowLayer;
 import com.infamous.dungeons_mobs.entities.jungle.LeapleafEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
@@ -13,8 +15,7 @@ import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 public class LeapleafRenderer extends GeoEntityRenderer<LeapleafEntity> {
    public LeapleafRenderer(EntityRendererManager renderManager) {
       super(renderManager, new LeapleafModel());
-      //this.addLayer(new GeoEyeLayer<>(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/enchanter/enchanter_eyes.png")));
-      //this.addLayer(new GeoHeldItemLayer<>(this, 0.0, 0.0, 0.5));
+      this.addLayer(new PulsatingGlowLayer<>(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/jungle/leapleaf_glow.png"), 0.25F, 1.0F, 0.75F));
    }
 
    protected void applyRotations(LeapleafEntity entityLiving, MatrixStack matrixStackIn, float ageInTicks,

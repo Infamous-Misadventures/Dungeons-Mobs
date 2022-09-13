@@ -5,8 +5,10 @@ import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
+import com.infamous.dungeons_mobs.entities.summonables.SummonSpotEntity;
 import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
 import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
+import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModItems;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 
@@ -431,19 +433,25 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable {
 
 			if (target != null && mob.summonAnimationTick == mob.summonAnimationActionPoint) {
 	            for (int i = 0; i < 1 + mob.random.nextInt(1); i++) {
-	            	BlazeEntity summonedBlaze = EntityType.BLAZE.create(mob.level);
+					SummonSpotEntity blazeSummonSpot = ModEntityTypes.SUMMON_SPOT.get().create(mob.level);
+					blazeSummonSpot.moveTo(target.blockPosition().offset(-12.5 + mob.random.nextInt(25), 0, -12.5 + mob.random.nextInt(25)), 0.0F, 0.0F);
+					blazeSummonSpot.mobSpawnRotation = mob.random.nextInt(360);
+					blazeSummonSpot.setSummonType(1);
 	            	BlockPos summonPos = mob.blockPosition().offset(-blazeSummonRange + mob.random.nextInt((blazeSummonRange * 2) + 1), 0, -blazeSummonRange + mob.random.nextInt((blazeSummonRange * 2) + 1));
-	            	summonedBlaze.moveTo(summonPos, 0.0F, 0.0F);
+	            	blazeSummonSpot.moveTo(summonPos, 0.0F, 0.0F);
 	            	
 	            	// RELOCATES BLAZE CLOSER TO WILDFIRE IF SPAWNED IN A POSITION THAT MAY HINDER ITS ABILITY TO JOIN IN THE BATTLE
-	            	if (mob.isInWall() || !mob.canSee(target)) {
+	            	if (blazeSummonSpot.isInWall() || !canSee(blazeSummonSpot, target)) {
 	            		summonPos = mob.blockPosition().offset(-closeBlazeSummonRange + mob.random.nextInt((closeBlazeSummonRange * 2) + 1), 0, -closeBlazeSummonRange + mob.random.nextInt((closeBlazeSummonRange * 2) + 1));
 	            	}
 	            	
 	            	// RELOCATES BLAZE TO WILDFIRE'S POSITION STILL IN A POSITION THAT MAY HINDER ITS ABILITY TO JOIN IN THE BATTLE
-	            	if (mob.isInWall() || !mob.canSee(target)) {
+	            	if (blazeSummonSpot.isInWall() || !canSee(blazeSummonSpot, target)) {
 	            		summonPos = mob.blockPosition();
 	            	}
+					((ServerWorld)mob.level).addFreshEntityWithPassengers(blazeSummonSpot);
+					
+	            	BlazeEntity summonedBlaze = EntityType.BLAZE.create(mob.level);
 	            	
 	            	summonedBlaze.setTarget(target);
 	            	summonedBlaze.finalizeSpawn(((ServerWorld)mob.level), mob.level.getCurrentDifficultyAt(summonPos), SpawnReason.MOB_SUMMONED, (ILivingEntityData)null, (CompoundNBT)null);
@@ -452,7 +460,7 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable {
 						Scoreboard scoreboard = mob.level.getScoreboard();
 						scoreboard.addPlayerToTeam(summonedBlaze.getScoreboardName(), scoreboard.getPlayerTeam(mob.getTeam().getName()));
 					}
-					((ServerWorld)mob.level).addFreshEntityWithPassengers(summonedBlaze);
+					blazeSummonSpot.summonedEntity = summonedBlaze;		
 	            }
 			}
 		}
@@ -460,6 +468,13 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable {
 		public boolean animationsUseable() {
 			return mob.summonAnimationTick <= 0;
 		}
+		
+		   public boolean canSee(Entity entitySeeing, Entity p_70685_1_) {
+			      Vector3d vector3d = new Vector3d(entitySeeing.getX(), entitySeeing.getEyeY(), entitySeeing.getZ());
+			      Vector3d vector3d1 = new Vector3d(p_70685_1_.getX(), p_70685_1_.getEyeY(), p_70685_1_.getZ());
+			      if (p_70685_1_.level != entitySeeing.level || vector3d1.distanceToSqr(vector3d) > 128.0D * 128.0D) return false; //Forge Backport MC-209819
+			      return entitySeeing.level.clip(new RayTraceContext(vector3d, vector3d1, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, entitySeeing)).getType() == RayTraceResult.Type.MISS;
+			   }
 
 	}
     

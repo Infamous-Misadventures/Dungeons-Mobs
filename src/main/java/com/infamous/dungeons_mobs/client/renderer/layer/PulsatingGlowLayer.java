@@ -30,6 +30,7 @@ public class PulsatingGlowLayer<T extends LivingEntity & IAnimatable> extends Ge
 	public float pulseSpeed;
 	public float pulseAmount;
 	public float minimumPulseAmount;
+  
 	public float pulseSpeedMath;
 
 	public PulsatingGlowLayer(IGeoRenderer<T> endermanReplacementRenderer, ResourceLocation textureLocation,
@@ -57,6 +58,7 @@ public class PulsatingGlowLayer<T extends LivingEntity & IAnimatable> extends Ge
 		if (entitylivingbaseIn instanceof RedstoneGolemEntity) {
 			if (((RedstoneGolemEntity)entitylivingbaseIn).isSummoningMines() && ((RedstoneGolemEntity)entitylivingbaseIn).getAttackTimer() >= 20 && ((RedstoneGolemEntity)entitylivingbaseIn).getAttackTimer() <= 77)
 				glow = Math.max(minimumPulseAmount, MathHelper.cos(ageInTicks * pulseSpeed * ((((RedstoneGolemEntity)entitylivingbaseIn).getAttackTimer()) / 50.0f)) * pulseAmount);
+
 		}
 		renderModel(geomodel, textureLocation, matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, 1.0F, glow, glow, glow);
 	}

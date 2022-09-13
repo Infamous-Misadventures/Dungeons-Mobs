@@ -1863,19 +1863,19 @@
 		"subtitle": "subtitles.entity.necromancer.orb_impact",
 		"sounds": [
 			{
-				"name": "dungeons_mobs:entities/necromancer/arrow_imact_normal1",
+				"name": "dungeons_mobs:entities/necromancer/arrow_impact_normal1",
 				"stream": true
 			},
 			{
-				"name": "dungeons_mobs:entities/necromancer/arrow_imact_normal2",
+				"name": "dungeons_mobs:entities/necromancer/arrow_impact_normal2",
 				"stream": true
 			},
 			{
-				"name": "dungeons_mobs:entities/necromancer/arrow_imact_normal3",
+				"name": "dungeons_mobs:entities/necromancer/arrow_impact_normal3",
 				"stream": true
 			},
 			{
-				"name": "dungeons_mobs:entities/necromancer/arrow_imact_normal4",
+				"name": "dungeons_mobs:entities/necromancer/arrow_impact_normal4",
 				"stream": true
 			}
 		]
@@ -2683,6 +2683,34 @@
 			},
 			{
 				"name": "dungeons_mobs:entities/leapleaf/hurt_foley3",
+				"stream": true
+			}
+		]
+	},
+			"entity.leapleaf.death": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.leapleaf.death",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/leapleaf/death",
+				"stream": true
+			}
+		]
+	},
+			"entity.leapleaf.land": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.leapleaf.land",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/leapleaf/land1",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/leapleaf/land2",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/leapleaf/land3",
 				"stream": true
 			}
 		]

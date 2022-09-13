@@ -45,6 +45,7 @@ import com.infamous.dungeons_mobs.entities.redstone.RedstoneCubeEntity;
 import com.infamous.dungeons_mobs.entities.redstone.RedstoneGolemEntity;
 import com.infamous.dungeons_mobs.entities.redstone.RedstoneMineEntity;
 import com.infamous.dungeons_mobs.entities.slime.ConjuredSlimeEntity;
+import com.infamous.dungeons_mobs.entities.summonables.AreaDamageEntity;
 import com.infamous.dungeons_mobs.entities.summonables.GeomancerBombEntity;
 import com.infamous.dungeons_mobs.entities.summonables.GeomancerWallEntity;
 import com.infamous.dungeons_mobs.entities.summonables.IceCloudEntity;
@@ -256,6 +257,7 @@ public class ModEntityTypes {
             EntityType.Builder.<RedstoneCubeEntity>of(RedstoneCubeEntity::new, EntityClassification.MONSTER)
                     .sized(1.0F, 1.0F)
                     .clientTrackingRange(10)
+                    .fireImmune()
                     .setCustomClientFactory((spawnEntity,world) -> new RedstoneCubeEntity(world))
                     .build(new ResourceLocation(MODID, "redstone_cube").toString())
     );
@@ -264,6 +266,7 @@ public class ModEntityTypes {
             EntityType.Builder.<RedstoneGolemEntity>of(RedstoneGolemEntity::new, EntityClassification.MONSTER)
                     .sized(2.66F, 3.83F)
                     .clientTrackingRange(10)
+                    .fireImmune()
                     .setCustomClientFactory((spawnEntity,world) -> new RedstoneGolemEntity(world))
                     .build(new ResourceLocation(MODID, "redstone_golem").toString()),
             0xaeaaa6, 0xe3260c
@@ -282,7 +285,7 @@ public class ModEntityTypes {
 
     public static final RegistryObject<EntityType<LeapleafEntity>> LEAPLEAF = registerEntity("leapleaf", () ->
             EntityType.Builder.<LeapleafEntity>of(LeapleafEntity::new, EntityClassification.MONSTER)
-                    .sized(2.02F, 2.81F) 
+                    .sized(1.9F, 1.9F) 
                     .clientTrackingRange(10)
                     .setCustomClientFactory((spawnEntity,world) -> new LeapleafEntity(world))
                     .build(new ResourceLocation(MODID, "leapleaf").toString()),
@@ -536,7 +539,16 @@ public class ModEntityTypes {
             .clientTrackingRange(10)
             .setCustomClientFactory((spawnEntity,world) -> new SummonSpotEntity(world))
             .build(new ResourceLocation(MODID, "summon_spot").toString())
-);
+    );
+    
+    public static final RegistryObject<EntityType<AreaDamageEntity>> AREA_DAMAGE = registerEntityWithoutEgg("area_damage", () ->
+    EntityType.Builder.<AreaDamageEntity>of(AreaDamageEntity::new, EntityClassification.MISC)
+            .fireImmune()
+            .sized(1.0F, 1.0F)
+            .clientTrackingRange(10)
+            .setCustomClientFactory((spawnEntity,world) -> new AreaDamageEntity(world))
+            .build(new ResourceLocation(MODID, "area_damage").toString())
+    );
     
     public static final RegistryObject<EntityType<LaserOrbEntity>> LASER_ORB = registerEntityWithoutEgg("laser_orb", () ->
             EntityType.Builder.<LaserOrbEntity>of(LaserOrbEntity::new, EntityClassification.MISC)

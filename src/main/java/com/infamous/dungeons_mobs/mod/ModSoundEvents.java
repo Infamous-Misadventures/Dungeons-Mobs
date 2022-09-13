@@ -177,6 +177,9 @@ public class ModSoundEvents {
 	public static final RegistryObject<SoundEvent> LEAPLEAF_PREPARE_LEAP_FOLEY = SOUNDS.register("entity.leapleaf.prepare_leap_foley", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.leapleaf.prepare_leap_foley")));
 	public static final RegistryObject<SoundEvent> LEAPLEAF_LEAP_FOLEY = SOUNDS.register("entity.leapleaf.leap_foley", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.leapleaf.leap_foley")));
 	public static final RegistryObject<SoundEvent> LEAPLEAF_REST_FOLEY = SOUNDS.register("entity.leapleaf.rest_foley", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.leapleaf.rest_foley")));
+	public static final RegistryObject<SoundEvent> LEAPLEAF_DEATH = SOUNDS.register("entity.leapleaf.death", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.leapleaf.death")));
+	public static final RegistryObject<SoundEvent> LEAPLEAF_LAND = SOUNDS.register("entity.leapleaf.land", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.leapleaf.land")));
+
 	
 	public static final RegistryObject<SoundEvent> QUICK_GROWING_VINE_BURST = SOUNDS.register("entity.quick_growing_vine.burst", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.quick_growing_vine.burst")));
 	public static final RegistryObject<SoundEvent> QUICK_GROWING_VINE_BURST_DOWN = SOUNDS.register("entity.quick_growing_vine.burst_down", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.quick_growing_vine.burst_down")));
