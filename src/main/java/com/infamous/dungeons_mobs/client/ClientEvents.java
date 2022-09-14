@@ -3,9 +3,8 @@ package com.infamous.dungeons_mobs.client;
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
 import com.infamous.dungeons_mobs.client.particle.DustParticle;
-import com.infamous.dungeons_libraries.client.renderer.ArmorGearRenderer;
-import com.infamous.dungeons_libraries.items.gearconfig.ArmorGear;
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
+import com.infamous.dungeons_mobs.client.particle.NecromancyParticle;
 import com.infamous.dungeons_mobs.client.particle.RedstoneSparkParticle;
 import com.infamous.dungeons_mobs.client.particle.SnowflakeParticle;
 import com.infamous.dungeons_mobs.client.particle.WindParticle;
@@ -32,6 +31,7 @@ import com.infamous.dungeons_mobs.client.renderer.projectiles.BlueNethershroomRe
 import com.infamous.dungeons_mobs.client.renderer.projectiles.CobwebProjectileRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.CustomFireballRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.GeoOrbRenderer;
+import com.infamous.dungeons_mobs.client.renderer.projectiles.NecromancerOrbRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.OrbRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.SlimeballRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.SnarelingGlobRenderer;
@@ -176,6 +176,7 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.LASER_ORB.get(), OrbRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.GEO_ORB.get(),
                 manager -> new GeoOrbRenderer(manager));
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.NECROMANCER_ORB.get(), NecromancerOrbRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.TRIDENT_FUME.get(), OrbRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ENDERSENT.get(), EndersentRenderer::new);
@@ -189,7 +190,7 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WILDFIRE.get(), WildfireRenderer::new);
 
 
-        GeoArmorRenderer.registerArmorRenderer(WindcallerClothesArmorGear.class, new WindcallerClothesArmorGearRenderer());
+        GeoArmorRenderer.registerArmorRenderer(WindcallerClothesArmorGear.class, new WindcallerClothesArmorGearRenderer());        
     }
 
     @SubscribeEvent
@@ -224,6 +225,7 @@ public class ClientEvents {
         Minecraft.getInstance().particleEngine.register(ModParticleTypes.REDSTONE_SPARK.get(), RedstoneSparkParticle.Factory::new);
         Minecraft.getInstance().particleEngine.register(ModParticleTypes.WIND.get(), WindParticle.Factory::new);
         Minecraft.getInstance().particleEngine.register(ModParticleTypes.DUST.get(), DustParticle.Factory::new);
+        Minecraft.getInstance().particleEngine.register(ModParticleTypes.NECROMANCY.get(), NecromancyParticle.Factory::new);
     }
 
     /*@SubscribeEvent

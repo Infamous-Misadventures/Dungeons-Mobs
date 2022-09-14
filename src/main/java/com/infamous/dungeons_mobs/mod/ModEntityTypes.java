@@ -36,6 +36,7 @@ import com.infamous.dungeons_mobs.entities.projectiles.CobwebProjectileEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.CobwebTrapEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.GeoOrbEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.LaserOrbEntity;
+import com.infamous.dungeons_mobs.entities.projectiles.NecromancerOrbEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.SlimeballEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.SnarelingGlobEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.TridentFumeEntity;
@@ -85,7 +86,6 @@ public class ModEntityTypes {
     EntityType.Builder.<JungleZombieEntity>of(com.infamous.dungeons_mobs.entities.undead.JungleZombieEntity::new, EntityClassification.MONSTER)
                         .sized(0.6F, 1.95F)
                         .clientTrackingRange(8)
-                        .setCustomClientFactory((spawnEntity, world) -> new JungleZombieEntity(world))
             .build(new ResourceLocation(MODID, "jungle_zombie").toString()),
             0x4f7d33, 0x00afa8);
 
@@ -94,7 +94,6 @@ public class ModEntityTypes {
             EntityType.Builder.<FrozenZombieEntity>of(FrozenZombieEntity::new, EntityClassification.MONSTER)
                     .sized(0.6F, 1.95F)
                     .clientTrackingRange(8)
-                    .setCustomClientFactory((spawnEntity,world) -> new FrozenZombieEntity(world))
                     .build(new ResourceLocation(MODID, "frozen_zombie").toString()),
             0x639694, 0xbae1ec
     );
@@ -104,7 +103,6 @@ public class ModEntityTypes {
             EntityType.Builder.<MossySkeletonEntity>of(MossySkeletonEntity::new, EntityClassification.MONSTER)
                     .sized(0.6F, 1.99F)
                     .clientTrackingRange(8)
-                    .setCustomClientFactory((spawnEntity,world) -> new MossySkeletonEntity(world))
                     .build(new ResourceLocation(MODID, "mossy_skeleton").toString()),
             0xd6d7c6, 0x4a5d18
     );
@@ -114,16 +112,14 @@ public class ModEntityTypes {
             EntityType.Builder.<SkeletonVanguardEntity>of(SkeletonVanguardEntity::new, EntityClassification.MONSTER)
                     .sized(0.6F * 1.1F, 1.99F * 1.1F)
                     .clientTrackingRange(8)
-                    .setCustomClientFactory((spawnEntity,world) -> new SkeletonVanguardEntity(world))
                     .build(new ResourceLocation(MODID, "skeleton_vanguard").toString()),
             0x493615, 0xe8b42f
     );
 
     public static final RegistryObject<EntityType<NecromancerEntity>> NECROMANCER = registerEntity("necromancer", () ->
             EntityType.Builder.<NecromancerEntity>of(NecromancerEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F * 1.2F, 1.99F * 1.2F)
+                    .sized(0.6F * 1.3F, 1.99F * 1.3F)
                     .clientTrackingRange(8)
-                    .setCustomClientFactory((spawnEntity,world) -> new NecromancerEntity(world))
                     .build(new ResourceLocation(MODID, "necromancer").toString()),
             0x3f243d, 0x0b9cbb
     );
@@ -136,7 +132,6 @@ public class ModEntityTypes {
             EntityType.Builder.<RoyalGuardEntity>of(RoyalGuardEntity::new, EntityClassification.MONSTER)
                     .sized(0.6F * 1.2F, 1.95F * 1.2F)
                     .clientTrackingRange(8)
-                    .setCustomClientFactory((spawnEntity,world) -> new RoyalGuardEntity(world))
                     .build(new ResourceLocation(MODID, "royal_guard").toString()),
             0x676767, 0x014675
     );
@@ -145,7 +140,6 @@ public class ModEntityTypes {
             EntityType.Builder.<IceologerEntity>of(IceologerEntity::new, EntityClassification.MONSTER)
                     .sized(0.6F, 1.95F)
                     .clientTrackingRange(8)
-                    .setCustomClientFactory((spawnEntity,world) -> new IceologerEntity(world))
                     .build(new ResourceLocation(MODID, "iceologer").toString()),
             0x173873, 0xb6c6ca
     );
@@ -154,7 +148,6 @@ public class ModEntityTypes {
     EntityType.Builder.<MageEntity>of(MageEntity::new, EntityClassification.MONSTER)
             .sized(0.6F, 1.95F)
             .clientTrackingRange(8)
-            .setCustomClientFactory((spawnEntity,world) -> new MageEntity(world))
             .build(new ResourceLocation(MODID, "mage").toString()),
             0x951f75, 0xe3ab58
     );
@@ -163,7 +156,6 @@ public class ModEntityTypes {
     EntityType.Builder.<MageCloneEntity>of(MageCloneEntity::new, EntityClassification.MONSTER)
             .sized(0.6F, 1.95F)
             .clientTrackingRange(8)
-            .setCustomClientFactory((spawnEntity,world) -> new MageCloneEntity(world))
             .build(new ResourceLocation(MODID, "mage_clone").toString())
     );
 
@@ -171,7 +163,6 @@ public class ModEntityTypes {
             EntityType.Builder.<GeomancerEntity>of(GeomancerEntity::new, EntityClassification.MONSTER)
                     .sized(0.6F, 1.95F)
                     .clientTrackingRange(8)
-                    .setCustomClientFactory((spawnEntity,world) -> new GeomancerEntity(world))
                     .build(new ResourceLocation(MODID, "geomancer").toString()),
             0x373b3b, 0x8b5ea3
     );
@@ -180,7 +171,6 @@ public class ModEntityTypes {
             EntityType.Builder.<WindcallerEntity>of(WindcallerEntity::new, EntityClassification.MONSTER)
                     .sized(0.6F, 1.95F)
                     .clientTrackingRange(8)
-                    .setCustomClientFactory((spawnEntity,world) -> new WindcallerEntity(world))
                     .build(new ResourceLocation(MODID, "windcaller").toString()),
             0x348179, 0xdc6c46
     );
@@ -189,7 +179,6 @@ public class ModEntityTypes {
     EntityType.Builder.<EnchanterEntity>of(EnchanterEntity::new, EntityClassification.MONSTER)
             .sized(0.6F, 1.95F)
             .clientTrackingRange(8)
-            .setCustomClientFactory((spawnEntity,world) -> new EnchanterEntity(world))
             .build(new ResourceLocation(MODID, "enchanter").toString()),
             0x62162c, 0xfbd600
     );
@@ -206,7 +195,6 @@ public class ModEntityTypes {
             EntityType.Builder.<IllusionerCloneEntity>of(IllusionerCloneEntity::new, EntityClassification.MONSTER)
                     .sized(0.6F, 1.95F)
                     .clientTrackingRange(8)
-                    .setCustomClientFactory((spawnEntity,world) -> new IllusionerCloneEntity(world))
                     .build(new ResourceLocation(MODID, "illusioner_clone").toString())
     );
 
@@ -214,7 +202,6 @@ public class ModEntityTypes {
             EntityType.Builder.<MountaineerEntity>of(MountaineerEntity::new, EntityClassification.MONSTER)
                     .sized(0.6F, 1.95F)
                     .clientTrackingRange(8)
-                    .setCustomClientFactory((spawnEntity,world) -> new MountaineerEntity(world))
                     .build(new ResourceLocation(MODID, "mountaineer").toString()),
             0x715039, 0xe6e4d4
     );
@@ -225,7 +212,6 @@ public class ModEntityTypes {
             EntityType.Builder.<IcyCreeperEntity>of(IcyCreeperEntity::new, EntityClassification.MONSTER)
                     .sized(0.6F, 1.7F)
                     .clientTrackingRange(8)
-                    .setCustomClientFactory((spawnEntity,world) -> new IcyCreeperEntity(world))
                     .build(new ResourceLocation(MODID, "icy_creeper").toString()),
                     0x5ccea5, 0xd9eef2
     );
@@ -236,7 +222,6 @@ public class ModEntityTypes {
             EntityType.Builder.<WraithEntity>of(WraithEntity::new, EntityClassification.MONSTER)
                     .sized(0.6F, 1.99F)
                     .clientTrackingRange(8)
-                    .setCustomClientFactory((spawnEntity,world) -> new WraithEntity(world))
                     .build(new ResourceLocation(MODID, "wraith").toString()),
             0x1a1862, 0x2586d9
     );
@@ -247,7 +232,6 @@ public class ModEntityTypes {
                     EntityType.Builder.<ConjuredSlimeEntity>of(ConjuredSlimeEntity::new, EntityClassification.MONSTER)
                             .sized(2.04F, 2.04F)
                             .clientTrackingRange(10)
-                            .setCustomClientFactory((spawnEntity,world) -> new ConjuredSlimeEntity(world))
                             .build(new ResourceLocation(MODID, "conjured_slime").toString())
     );
 
@@ -258,7 +242,6 @@ public class ModEntityTypes {
                     .sized(1.0F, 1.0F)
                     .clientTrackingRange(10)
                     .fireImmune()
-                    .setCustomClientFactory((spawnEntity,world) -> new RedstoneCubeEntity(world))
                     .build(new ResourceLocation(MODID, "redstone_cube").toString())
     );
 
@@ -267,7 +250,6 @@ public class ModEntityTypes {
                     .sized(2.66F, 3.83F)
                     .clientTrackingRange(10)
                     .fireImmune()
-                    .setCustomClientFactory((spawnEntity,world) -> new RedstoneGolemEntity(world))
                     .build(new ResourceLocation(MODID, "redstone_golem").toString()),
             0xaeaaa6, 0xe3260c
     );
@@ -278,7 +260,6 @@ public class ModEntityTypes {
             EntityType.Builder.<WhispererEntity>of(WhispererEntity::new, EntityClassification.MONSTER)
                     .sized(0.6F, 2.99F)
                     .clientTrackingRange(10)
-                    .setCustomClientFactory((spawnEntity,world) -> new WhispererEntity(world))
                     .build(new ResourceLocation(MODID, "whisperer").toString()),
             0x80a242, 0xe20703
     );
@@ -287,7 +268,6 @@ public class ModEntityTypes {
             EntityType.Builder.<LeapleafEntity>of(LeapleafEntity::new, EntityClassification.MONSTER)
                     .sized(1.9F, 1.9F) 
                     .clientTrackingRange(10)
-                    .setCustomClientFactory((spawnEntity,world) -> new LeapleafEntity(world))
                     .build(new ResourceLocation(MODID, "leapleaf").toString()),
             0x818a1a, 0x8a54ef
     );
@@ -297,7 +277,6 @@ public class ModEntityTypes {
                     //.fireImmune()
                     .sized(1.0F, 2.5F)
                     .clientTrackingRange(10)
-                    .setCustomClientFactory((spawnEntity,world) -> new QuickGrowingVineEntity(world))
                     .build(new ResourceLocation(MODID, "quick_growing_vine").toString()),
             0x90ad49, 0xfbc883
     );
@@ -307,7 +286,6 @@ public class ModEntityTypes {
                     //.fireImmune()
                     .sized(1.0F, 2.5F)
                     .clientTrackingRange(10)
-                    .setCustomClientFactory((spawnEntity,world) -> new PoisonQuillVineEntity(world))
                     .build(new ResourceLocation(MODID, "poison_quill_vine").toString()),
             0x90ad49, 0x632cbb
     );
@@ -317,7 +295,6 @@ public class ModEntityTypes {
             EntityType.Builder.<SquallGolemEntity>of(SquallGolemEntity::new, EntityClassification.MONSTER)
                     .sized(1.9F, 2.75F) // 42 px wide, 29px tall + 16px of height
                     .clientTrackingRange(10)
-                    .setCustomClientFactory((spawnEntity,world) -> new SquallGolemEntity(world))
                     .build(new ResourceLocation(MODID, "squall_golem").toString()),
             0x828f8f, 0xffd426
     );
@@ -436,7 +413,6 @@ public class ModEntityTypes {
                     .sized(0.3125F, 0.3125F)
                     .clientTrackingRange(4)
                     .updateInterval(10)
-                    .setCustomClientFactory((spawnEntity,world) -> new WraithFireballEntity(world))
                     .build(new ResourceLocation(MODID, "wraith_fireball").toString())
     );
 
@@ -445,7 +421,6 @@ public class ModEntityTypes {
                     .sized(0.3125F, 0.3125F)
                     .clientTrackingRange(4)
                     .updateInterval(10)
-                    .setCustomClientFactory((spawnEntity,world) -> new SlimeballEntity(world))
                     .build(new ResourceLocation(MODID, "slimeball").toString())
     );
 
@@ -454,7 +429,6 @@ public class ModEntityTypes {
                     .sized(0.3125F, 0.3125F)
                     .clientTrackingRange(4)
                     .updateInterval(10)
-                    .setCustomClientFactory((spawnEntity,world) -> new CobwebProjectileEntity(world))
                     .build(new ResourceLocation(MODID, "cobweb_projectile").toString())
     );
 
@@ -472,7 +446,6 @@ public class ModEntityTypes {
                     .sized(1.0F, 1.0F)
                     .clientTrackingRange(4)
                     .updateInterval(10)
-                    .setCustomClientFactory((spawnEntity,world) -> new CobwebTrapEntity(world))
                     .build(new ResourceLocation(MODID, "cobweb_trap").toString())
     );
 
@@ -482,7 +455,6 @@ public class ModEntityTypes {
                     .sized(1.0F, 2.5F)
                     .clientTrackingRange(6)
                     .updateInterval(2)
-                    .setCustomClientFactory((spawnEntity,world) -> new GeomancerWallEntity(world))
                     .build(new ResourceLocation(MODID, "geomancer_wall").toString())
     );
 
@@ -492,7 +464,6 @@ public class ModEntityTypes {
                     .sized(1.0F, 2.5F)
                     .clientTrackingRange(6)
                     .updateInterval(2)
-                    .setCustomClientFactory((spawnEntity,world) -> new GeomancerBombEntity(world))
                     .build(new ResourceLocation(MODID, "geomancer_bomb").toString())
     );
 
@@ -502,7 +473,6 @@ public class ModEntityTypes {
                     .sized(1.0F, 0.5F)
                     .clientTrackingRange(6)
                     .updateInterval(2)
-                    .setCustomClientFactory((spawnEntity,world) -> new RedstoneMineEntity(world))
                     .build(new ResourceLocation(MODID, "redstone_mine").toString())
     );
 
@@ -512,7 +482,6 @@ public class ModEntityTypes {
                     .sized(2.0F, 1.0F)
                     .clientTrackingRange(6)
                     .updateInterval(1)
-                    .setCustomClientFactory((spawnEntity,world) -> new IceCloudEntity(world))
                     .build(new ResourceLocation(MODID, "ice_cloud").toString())
     );
 
@@ -521,23 +490,29 @@ public class ModEntityTypes {
                     .fireImmune()
                     .sized(3.25F, 6F)
                     .clientTrackingRange(10)
-                    .setCustomClientFactory((spawnEntity,world) -> new WindcallerTornadoEntity(world))
                     .build(new ResourceLocation(MODID, "tornado").toString())
     );
+    
     public static final RegistryObject<EntityType<WindcallerBlastProjectileEntity>> WINDCALLER_BLAST_PROJECTILE = ENTITY_TYPES.register("windcaller_blast_projectile", () ->
             EntityType.Builder.<WindcallerBlastProjectileEntity>of(WindcallerBlastProjectileEntity::new, EntityClassification.MISC)
                     .fireImmune()
                     .sized(2F, 2F)
-                    .setCustomClientFactory((spawnEntity,world) -> new WindcallerBlastProjectileEntity(world))
                     .build(new ResourceLocation(MODID, "windcaller_blast_projectile").toString())
     );
+    
+    public static final RegistryObject<EntityType<NecromancerOrbEntity>> NECROMANCER_ORB = ENTITY_TYPES.register("necromancer_orb", () ->
+    EntityType.Builder.<NecromancerOrbEntity>of(NecromancerOrbEntity::new, EntityClassification.MISC)
+            .fireImmune()
+            .sized(0.5F, 0.5F)
+            .updateInterval(1)
+            .build(new ResourceLocation(MODID, "necromancer_orb").toString())
+);
 
     public static final RegistryObject<EntityType<SummonSpotEntity>> SUMMON_SPOT = registerEntityWithoutEgg("summon_spot", () ->
     EntityType.Builder.<SummonSpotEntity>of(SummonSpotEntity::new, EntityClassification.MISC)
             .fireImmune()
             .sized(1.0F, 2.0F)
             .clientTrackingRange(10)
-            .setCustomClientFactory((spawnEntity,world) -> new SummonSpotEntity(world))
             .build(new ResourceLocation(MODID, "summon_spot").toString())
     );
     
@@ -546,7 +521,7 @@ public class ModEntityTypes {
             .fireImmune()
             .sized(1.0F, 1.0F)
             .clientTrackingRange(10)
-            .setCustomClientFactory((spawnEntity,world) -> new AreaDamageEntity(world))
+            .updateInterval(1)
             .build(new ResourceLocation(MODID, "area_damage").toString())
     );
     
@@ -555,7 +530,6 @@ public class ModEntityTypes {
                     .sized(0.25F, 0.25F)
                     .clientTrackingRange(4)
                     .updateInterval(10)
-                    //.setCustomClientFactory((spawnEntity,world) -> new LaserOrbEntity(world, spawnEntity.getPosX(), spawnEntity.getPosY(), spawnEntity.getPosZ(), spawnEntity.getVelX(), spawnEntity.getVelY(), spawnEntity.getVelZ()))
                     .build(new ResourceLocation(MODID, "laser_orb").toString())
     );
 
@@ -564,7 +538,6 @@ public class ModEntityTypes {
                     .fireImmune()
                     .sized(.5F, .5F)
                     .clientTrackingRange(10)
-                    .setCustomClientFactory((spawnEntity,world) -> new GeoOrbEntity(world))
                     .build(new ResourceLocation(MODID, "geo_orb").toString())
     );
     public static final RegistryObject<EntityType<TridentFumeEntity>> TRIDENT_FUME = registerEntityWithoutEgg("trident_fume", () ->
@@ -572,7 +545,6 @@ public class ModEntityTypes {
                     .sized(0.25F, 0.25F)
                     .clientTrackingRange(4)
                     .updateInterval(10)
-                    //.setCustomClientFactory((spawnEntity,world) -> new TridentFumeEntity(world, spawnEntity.getPosX(), spawnEntity.getPosY(), spawnEntity.getPosZ(), spawnEntity.getVelX(), spawnEntity.getVelY(), spawnEntity.getVelZ()))
                     .build(new ResourceLocation(MODID, "trident_fume").toString())
     );
 
@@ -581,7 +553,6 @@ public class ModEntityTypes {
             .sized(0.3F, 0.3F)
             .clientTrackingRange(4)
             .updateInterval(2)
-            //.setCustomClientFactory((spawnEntity,world) -> new LaserOrbEntity(world, spawnEntity.getPosX(), spawnEntity.getPosY(), spawnEntity.getPosZ(), spawnEntity.getVelX(), spawnEntity.getVelY(), spawnEntity.getVelZ()))
             .build(new ResourceLocation(MODID, "blastling_bullet").toString())
 );
     
@@ -590,7 +561,6 @@ public class ModEntityTypes {
             .sized(0.6F, 0.6F)
             .clientTrackingRange(4)
             .updateInterval(2)
-            //.setCustomClientFactory((spawnEntity,world) -> new LaserOrbEntity(world, spawnEntity.getPosX(), spawnEntity.getPosY(), spawnEntity.getPosZ(), spawnEntity.getVelX(), spawnEntity.getVelY(), spawnEntity.getVelZ()))
             .build(new ResourceLocation(MODID, "snareling_glob").toString())
 );
 

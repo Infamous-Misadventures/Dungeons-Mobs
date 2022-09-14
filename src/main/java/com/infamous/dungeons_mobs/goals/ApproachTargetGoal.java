@@ -1,7 +1,10 @@
 package com.infamous.dungeons_mobs.goals;
 
+import java.util.EnumSet;
+
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 
 public class ApproachTargetGoal extends MeleeAttackGoal {
@@ -10,6 +13,7 @@ public class ApproachTargetGoal extends MeleeAttackGoal {
 	
 	      public ApproachTargetGoal(CreatureEntity attackingMob, double distanceToApproachTo, double moveSpeed, boolean shouldFollowUnseenTarget) {
 	         super(attackingMob, moveSpeed, shouldFollowUnseenTarget);
+	         this.setFlags(EnumSet.of(Goal.Flag.MOVE));
 	         this.distanceToApproachTo = distanceToApproachTo;
 	      }
 	      
