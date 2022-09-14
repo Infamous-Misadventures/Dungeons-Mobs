@@ -5,6 +5,7 @@ import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
+import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
 import com.infamous.dungeons_mobs.entities.projectiles.WindcallerBlastProjectileEntity;
 import com.infamous.dungeons_mobs.entities.summonables.IceCloudEntity;
@@ -46,6 +47,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
@@ -61,7 +63,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class WindcallerEntity extends AbstractIllagerEntity implements IAnimatable {
+public class WindcallerEntity extends AbstractIllagerEntity implements IAnimatable, SpawnArmoredMob {
 
 	public int liftAttackAnimationTick;
 	public int liftAttackAnimationLength = 25;
@@ -270,8 +272,13 @@ public class WindcallerEntity extends AbstractIllagerEntity implements IAnimatab
     public SoundEvent getCelebrateSound() {
         return ModSoundEvents.WINDCALLER_BLAST_VOCAL.get();
     }
-    
-    class LiftAttackGoal extends Goal {
+
+	@Override
+	public ResourceLocation getArmorSet() {
+		return ModItems.WINDCALLER_CLOTHES.getArmorSet();
+	}
+
+	class LiftAttackGoal extends Goal {
 		public WindcallerEntity mob;
 		@Nullable
 		public LivingEntity target;
