@@ -53,9 +53,6 @@ public class ModItems {
     public static final RegistryObject<Item> DIAMOND_VINDICATOR_HELMET = ITEMS.register("diamond_vindicator_helmet",
             () -> new VindicatorHelmetItem(ArmorMaterial.IRON, EquipmentSlotType.HEAD, new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS), true));
 
-    public static final RegistryObject<Item> CHEF_HAT = ITEMS.register("chef_hat",
-            () -> new ChefHatItem(ArmorMaterial.LEATHER, EquipmentSlotType.HEAD, new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS)));
-
     public static final RegistryObject<Item> NETHERITE_PIGLIN_HELMET = ITEMS.register("netherite_piglin_helmet",
             () -> new PiglinHelmetItem(CustomArmorMaterial.PURE_NETHERITE, EquipmentSlotType.HEAD, new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS)));
     public static final RegistryObject<Item> CRACKED_NETHERITE_PIGLIN_HELMET = ITEMS.register("cracked_netherite_piglin_helmet",
@@ -77,6 +74,12 @@ public class ModItems {
     public static final ArmorSet MOUNTAINEER_ARMOR = registerArmorSet("mountaineer_armor", "moutaineer_hood", "mountaineer_jacket", "mountaineer_pants", "mountaineer_boots");
     public static final ArmorSet ARMORED_MOUNTAINEER_ARMOR = registerArmorSet("armoured_mountaineer_armor", "armored_mountaineer_hood", "armored_mountaineer_jacket", "armored_mountaineer_pants", "armored_mountaineer_boots");
     public static final ArmorSet STRONG_ARMORED_MOUNTAINEER_ARMOR = registerArmorSet("strong_armoured_mountaineer_armor", "strong_armored_mountaineer_hood", "strong_armored_mountaineer_jacket", "strong_armored_mountaineer_pants", "strong_armored_mountaineer_boots");
+    public static final ArmorSet ENCHANTER_ARMOR = registerArmorSet("enchanter_armor", "enchanter_hat", "enchanter_robes", null, null);
+    public static final ArmorSet FUNGUS_THROWER_ARMOR = registerArmorSet("fungus_thrower_armor", "fungus_thrower_headband", "fungus_thrower_pack", null, null);
+    public static final ArmorSet MAGE_ARMOR = registerArmorSet("mage_armor", "mage_hood", "mage_robes", "mage_pants", "mage_shoes");
+    public static final ArmorSet NECROMANCER_ARMOR = registerArmorSet("necromancer_armor", "necromancer_crown", "necromancer_cloak", "necromancer_belt", null);
+    public static final ArmorSet DROWNED_NECROMANCER_ROBES = registerArmorSet("drowned_necromancer_armor", "drowned_necromancer_crown", "drowned_necromancer_cloak", "drowned_necromancer_belt", null);
+    public static final ArmorSet VINDICATOR_CHEF_ARMOR = registerArmorSet("vindicator_chef_armor", "chef_hat", "chef_apron", null, null);
 
     // SOUL FIRE CHARGE
     public static final RegistryObject<WraithFireChargeItem> WRAITH_FIRE_CHARGE = ITEMS.register("wraith_fire_charge",
