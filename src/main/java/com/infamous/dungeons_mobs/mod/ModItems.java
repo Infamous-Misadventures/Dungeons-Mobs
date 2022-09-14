@@ -77,8 +77,6 @@ public class ModItems {
     public static final ArmorSet ENCHANTER_ARMOR = registerArmorSet("enchanter_armor", "enchanter_hat", "enchanter_robes", null, null);
     public static final ArmorSet FUNGUS_THROWER_ARMOR = registerArmorSet("fungus_thrower_armor", "fungus_thrower_headband", "fungus_thrower_pack", null, null);
     public static final ArmorSet MAGE_ARMOR = registerArmorSet("mage_armor", "mage_hood", "mage_robes", "mage_pants", "mage_shoes");
-    public static final ArmorSet NECROMANCER_ARMOR = registerArmorSet("necromancer_armor", "necromancer_crown", "necromancer_cloak", "necromancer_belt", null);
-    public static final ArmorSet DROWNED_NECROMANCER_ROBES = registerArmorSet("drowned_necromancer_armor", "drowned_necromancer_crown", "drowned_necromancer_cloak", "drowned_necromancer_belt", null);
     public static final ArmorSet VINDICATOR_CHEF_ARMOR = registerArmorSet("vindicator_chef_armor", "chef_hat", "chef_apron", null, null);
 
     // SOUL FIRE CHARGE
