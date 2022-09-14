@@ -7,6 +7,7 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import com.google.common.collect.Maps;
+import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
 import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
 import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
 import com.infamous.dungeons_mobs.goals.UseShieldGoal;
@@ -69,7 +70,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatable, IShieldUser {
+public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatable, IShieldUser, SpawnArmoredMob {
 
 	private static final UUID SPEED_MODIFIER_BLOCKING_UUID = UUID.fromString("05cd371b-0ff4-4ded-8630-b380232ed7b1");
 	private static final AttributeModifier SPEED_MODIFIER_BLOCKING = new AttributeModifier(SPEED_MODIFIER_BLOCKING_UUID,
@@ -360,6 +361,11 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
 				}
 			}
 		}
+	}
+
+	@Override
+	public ResourceLocation getArmorSet() {
+		return ModItems.ROYAL_GUARD_ARMOR.getArmorSet();
 	}
 
 	class BasicAttackGoal extends Goal {
