@@ -40,6 +40,7 @@ import com.infamous.dungeons_mobs.client.renderer.projectiles.BlastlingBulletRen
 import com.infamous.dungeons_mobs.client.renderer.projectiles.BlueNethershroomRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.CobwebProjectileRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.CustomFireballRenderer;
+import com.infamous.dungeons_mobs.client.renderer.projectiles.DrownedNecromancerOrbRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.GeoOrbRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.NecromancerOrbRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.OrbRenderer;
@@ -54,6 +55,7 @@ import com.infamous.dungeons_mobs.client.renderer.summonables.GeomancerBombRende
 import com.infamous.dungeons_mobs.client.renderer.summonables.GeomancerWallRenderer;
 import com.infamous.dungeons_mobs.client.renderer.summonables.IceCloudRenderer;
 import com.infamous.dungeons_mobs.client.renderer.summonables.SummonSpotRenderer;
+import com.infamous.dungeons_mobs.client.renderer.summonables.TridentStormRenderer;
 import com.infamous.dungeons_mobs.client.renderer.summonables.WindcallerTornadoRenderer;
 import com.infamous.dungeons_mobs.client.renderer.undead.CustomSkeletonRenderer;
 import com.infamous.dungeons_mobs.client.renderer.undead.CustomZombieRenderer;
@@ -187,7 +189,10 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.GEO_ORB.get(),
                 manager -> new GeoOrbRenderer(manager));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.NECROMANCER_ORB.get(), NecromancerOrbRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.DROWNED_NECROMANCER_ORB.get(), DrownedNecromancerOrbRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.TRIDENT_FUME.get(), OrbRenderer::new);
+        
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.TRIDENT_STORM.get(), TridentStormRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ENDERSENT.get(), EndersentRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.BLASTLING.get(), BlastlingRenderer::new);
