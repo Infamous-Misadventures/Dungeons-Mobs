@@ -39,7 +39,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.monster.AbstractIllagerEntity.ArmPose;
 
-public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnimatable {
+public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnimatable, SpawnArmoredMob {
 	
 	public static final DataParameter<Integer> CAST_TICKS = EntityDataManager.defineId(GeomancerEntity.class, DataSerializers.INT);
 
