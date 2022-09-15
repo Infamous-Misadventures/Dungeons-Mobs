@@ -1,5 +1,6 @@
 package com.infamous.dungeons_mobs.entities.illagers;
 
+import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
 import com.infamous.dungeons_mobs.entities.summonables.ConstructEntity;
 import com.infamous.dungeons_mobs.goals.AvoidBaseEntityGoal;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
