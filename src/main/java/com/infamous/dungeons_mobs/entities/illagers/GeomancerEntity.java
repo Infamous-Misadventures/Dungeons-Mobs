@@ -1,6 +1,5 @@
 package com.infamous.dungeons_mobs.entities.illagers;
 
-import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
 import com.infamous.dungeons_mobs.entities.summonables.ConstructEntity;
 import com.infamous.dungeons_mobs.goals.AvoidBaseEntityGoal;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
@@ -22,6 +21,8 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.*;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.IWorld;
@@ -38,7 +39,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.monster.AbstractIllagerEntity.ArmPose;
 
-public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnimatable, SpawnArmoredMob {
+public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnimatable {
 	
 	public static final DataParameter<Integer> CAST_TICKS = EntityDataManager.defineId(GeomancerEntity.class, DataSerializers.INT);
 
@@ -112,13 +113,19 @@ public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnima
 	}
    
 	private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
-			if (this.getCastTicks() > 0) {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("geomancer_cast", true));				
-			} else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("geomancer_walk", true));
-			} else {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("geomancer_idle", true));
-			}
+        event.getController().setAnimationSpeed(1);
+
+        Vector3d velocity = this.getDeltaMovement();
+        float groundSpeed = MathHelper.sqrt((float) ((velocity.x * velocity.x) + (velocity.z * velocity.z)));
+
+        if (this.getCastTicks() > 0) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("geomancer_cast", true));
+        } else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
+            event.getController().setAnimationSpeed(groundSpeed * 15);
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("geomancer_walk", true));
+        } else {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("geomancer_idle", true));
+        }
 		return PlayState.CONTINUE;
 	}
 	
@@ -141,11 +148,6 @@ public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnima
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 
-    @Override
-    public ResourceLocation getArmorSet() {
-        return ModItems.GEOMANCER_CLOTHES.getArmorSet();
-    }
-
     class SummonPillarsGoal extends SpellcastingIllagerEntity.UseSpellGoal {
         private SummonPillarsGoal() {
         }
@@ -162,12 +164,17 @@ public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnima
             return false;
         }
 
+        @Override
+        protected int getCastWarmupTime() {
+            return 12;
+        }
+
         protected int getCastingTime() {
             return 26;
         }
 
         protected int getCastingInterval() {
-            return 125;
+            return 100 - GeomancerEntity.this.getRandom().nextInt(60);
         }
 
         protected void performSpellCasting() {
