@@ -1,55 +1,210 @@
 package com.infamous.dungeons_mobs.client.renderer.water;
 
+import javax.annotation.Nullable;
+
+import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.client.models.ocean.DrownedNecromancerModel;
+import com.infamous.dungeons_mobs.client.renderer.layer.PulsatingGlowLayer;
 import com.infamous.dungeons_mobs.entities.water.DrownedNecromancerEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+
+import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.entity.BipedRenderer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.layers.BipedArmorLayer;
 import net.minecraft.client.renderer.entity.model.BipedModel;
+import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
+import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ShieldItem;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3f;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import software.bernie.example.client.DefaultBipedBoneIdents;
+import software.bernie.geckolib3.core.processor.IBone;
+import software.bernie.geckolib3.geo.render.built.GeoBone;
+import software.bernie.geckolib3.renderers.geo.ExtendedGeoEntityRenderer;
 
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
-
-@OnlyIn(Dist.CLIENT)
-public class DrownedNecromancerRenderer extends BipedRenderer<DrownedNecromancerEntity, DrownedNecromancerModel<DrownedNecromancerEntity>> {
-    private static final ResourceLocation DROWNED_NECROMANCER_TEXTURE = new ResourceLocation(MODID, "textures/entity/ocean/drowned_necromancer.png");
-
-    public DrownedNecromancerRenderer(EntityRendererManager renderManagerIn) {
-        super(renderManagerIn, new DrownedNecromancerModel<>(), 0.5F);
-        this.addLayer(new BipedArmorLayer<>(this, new BipedModel<>(0.5F), new BipedModel<>(1.0F)));
+public class DrownedNecromancerRenderer extends ExtendedGeoEntityRenderer<DrownedNecromancerEntity> {
+	
+    @SuppressWarnings("unchecked")
+	public DrownedNecromancerRenderer(EntityRendererManager renderManager) {
+        super(renderManager, new DrownedNecromancerModel());
+        this.addLayer(new PulsatingGlowLayer(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/ocean/drowned_necromancer_eyes.png"), 0.2F, 0.5F, 1.0F));
     }
 
     @Override
-    public void render(DrownedNecromancerEntity p_225623_1_, float p_225623_2_, float p_225623_3_, MatrixStack p_225623_4_, IRenderTypeBuffer p_225623_5_, int p_225623_6_) {
-        super.render(p_225623_1_, p_225623_2_, p_225623_3_, p_225623_4_, p_225623_5_, p_225623_6_);
+    protected void applyRotations(DrownedNecromancerEntity entityLiving, MatrixStack matrixStackIn, float ageInTicks,
+                                  float rotationYaw, float partialTicks) {
+        float scaleFactor = 1.5F;
+        matrixStackIn.scale(scaleFactor, scaleFactor, scaleFactor);
+        super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
+
     }
 
     @Override
-    protected void scale(DrownedNecromancerEntity necromancerEntity, MatrixStack matrixStack, float v) {
-        float scaleFactor = 1.2F;
-        matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
-        super.scale(necromancerEntity, matrixStack, v);
+    public RenderType getRenderType(DrownedNecromancerEntity animatable, float partialTicks, MatrixStack stack,
+                                    IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn,
+                                    ResourceLocation textureLocation) {
+        return RenderType.entityTranslucent(getTextureLocation(animatable));
+    }
+    
+    @Override
+    public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+        if(this.isArmorBone(bone)) {
+            bone.setCubesHidden(true);
+        }      
+        super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
     }
 
-    protected void setupRotations(DrownedNecromancerEntity drownedNecromancer, MatrixStack matrixStack, float p_225621_3_, float p_225621_4_, float p_225621_5_) {
-        super.setupRotations(drownedNecromancer, matrixStack, p_225621_3_, p_225621_4_, p_225621_5_);
-        float swimAmount = drownedNecromancer.getSwimAmount(p_225621_5_);
-        if (swimAmount > 0.0F) {
-            matrixStack.mulPose(Vector3f.XP.rotationDegrees(MathHelper.lerp(swimAmount, drownedNecromancer.xRot, -10.0F - drownedNecromancer.xRot)));
+    @Override
+    protected boolean isArmorBone(GeoBone bone) {
+        return bone.getName().startsWith("armor");
+    }
+
+    @Nullable
+    @Override
+    protected ResourceLocation getTextureForBone(String s, DrownedNecromancerEntity windcallerEntity) {
+        return null;
+    }
+
+	@Override
+	protected ItemStack getHeldItemForBone(String boneName, DrownedNecromancerEntity currentEntity) {
+		switch (boneName) {
+		case DefaultBipedBoneIdents.LEFT_HAND_BONE_IDENT:
+			return currentEntity.isLeftHanded() ? mainHand : offHand;
+		case DefaultBipedBoneIdents.RIGHT_HAND_BONE_IDENT:
+			return currentEntity.isLeftHanded() ? offHand : mainHand;
+		case DefaultBipedBoneIdents.POTION_BONE_IDENT:
+			break;
+		}
+		return null;
+	}
+
+	@Override
+	protected TransformType getCameraTransformForItemAtBone(ItemStack boneItem, String boneName) {
+		switch (boneName) {
+		case DefaultBipedBoneIdents.LEFT_HAND_BONE_IDENT:
+			return TransformType.THIRD_PERSON_RIGHT_HAND;
+		case DefaultBipedBoneIdents.RIGHT_HAND_BONE_IDENT:
+			return TransformType.THIRD_PERSON_RIGHT_HAND;
+		default:
+			return TransformType.NONE;
+		}
+	}
+
+	@Override
+	protected void preRenderItem(MatrixStack stack, ItemStack item, String boneName, DrownedNecromancerEntity currentEntity, IBone bone) {
+		if(item == this.mainHand || item == this.offHand) {
+			stack.scale(1.1F, 1.1F, 1.1F);
+			stack.mulPose(Vector3f.XP.rotationDegrees(-90.0F));
+			boolean shieldFlag = item.getItem() instanceof ShieldItem;
+			if(item == this.mainHand) {
+				if(shieldFlag) {
+					stack.translate(0.0, 0.125, -0.25);
+				} else {
+					
+				}
+			} else {
+				if(shieldFlag) {
+					stack.translate(-0.15, 0.125, 0.05);
+					stack.mulPose(Vector3f.YP.rotationDegrees(90));
+				} else {
+					
+				}
+					
+				
+			}
+		}
+	}
+
+	@Override
+	protected void postRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, DrownedNecromancerEntity currentEntity, IBone bone) {
+
+	}
+    
+	@Override
+	protected BlockState getHeldBlockForBone(String boneName, DrownedNecromancerEntity currentEntity) {
+		return null;
+	}
+	
+	@Override
+	protected void preRenderBlock(MatrixStack matrixStack, BlockState block, String boneName,
+			DrownedNecromancerEntity currentEntity) {
+		
+	}
+
+	@Override
+	protected void postRenderBlock(MatrixStack matrixStack, BlockState block, String boneName,
+			DrownedNecromancerEntity currentEntity) {
+		
+	}
+
+    @Nullable
+    @Override
+    protected ItemStack getArmorForBone(String boneName, DrownedNecromancerEntity currentEntity) {
+        switch (boneName) {
+            case "armorBipedLeftFoot":
+            case "armorBipedRightFoot":
+                return boots;
+            case "armorBipedLeftLeg":
+            case "armorBipedRightLeg":
+                return leggings;
+            case "armorBipedBody":
+            case "armorBipedRightArm":
+            case "armorBipedLeftArm":
+                return chestplate;
+            case "armorBipedHead":
+                return helmet;
+            default:
+                return null;
         }
-
     }
 
-    /**
-     * Returns the location of an entity's texture.
-     */
-    public ResourceLocation getTextureLocation(DrownedNecromancerEntity entity) {
-        return DROWNED_NECROMANCER_TEXTURE;
+    @Override
+    protected EquipmentSlotType getEquipmentSlotForArmorBone(String boneName, DrownedNecromancerEntity currentEntity) {
+        switch (boneName) {
+            case "armorBipedLeftFoot":
+            case "armorBipedRightFoot":
+                return EquipmentSlotType.FEET;
+            case "armorBipedLeftLeg":
+            case "armorBipedRightLeg":
+                return EquipmentSlotType.LEGS;
+            case "armorBipedRightHand":
+                return !currentEntity.isLeftHanded() ? EquipmentSlotType.MAINHAND : EquipmentSlotType.OFFHAND;
+            case "armorBipedLeftHand":
+                return currentEntity.isLeftHanded() ? EquipmentSlotType.MAINHAND : EquipmentSlotType.OFFHAND;
+            case "armorBipedRightArm":
+            case "armorBipedLeftArm":
+            case "armorBipedBody":
+                return EquipmentSlotType.CHEST;
+            case "armorBipedHead":
+                return EquipmentSlotType.HEAD;
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    protected ModelRenderer getArmorPartForBone(String name, BipedModel<?> armorBipedModel) {
+        switch (name) {
+            case "armorBipedLeftFoot":
+            case "armorBipedLeftLeg":
+                return armorBipedModel.leftLeg;
+            case "armorBipedRightFoot":
+            case "armorBipedRightLeg":
+                return armorBipedModel.rightLeg;
+            case "armorBipedRightArm":
+                return armorBipedModel.rightArm;
+            case "armorBipedLeftArm":
+                return armorBipedModel.leftArm;
+            case "armorBipedBody":
+                return armorBipedModel.body;
+            case "armorBipedHead":
+                return armorBipedModel.head;
+            default:
+                return null;
+        }
     }
 }

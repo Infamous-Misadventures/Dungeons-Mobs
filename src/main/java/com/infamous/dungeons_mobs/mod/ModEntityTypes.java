@@ -34,6 +34,7 @@ import com.infamous.dungeons_mobs.entities.projectiles.BlastlingBulletEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.BlueNethershroomEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.CobwebProjectileEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.CobwebTrapEntity;
+import com.infamous.dungeons_mobs.entities.projectiles.DrownedNecromancerOrbEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.GeoOrbEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.LaserOrbEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.NecromancerOrbEntity;
@@ -51,6 +52,7 @@ import com.infamous.dungeons_mobs.entities.summonables.GeomancerBombEntity;
 import com.infamous.dungeons_mobs.entities.summonables.GeomancerWallEntity;
 import com.infamous.dungeons_mobs.entities.summonables.IceCloudEntity;
 import com.infamous.dungeons_mobs.entities.summonables.SummonSpotEntity;
+import com.infamous.dungeons_mobs.entities.summonables.TridentStormEntity;
 import com.infamous.dungeons_mobs.entities.summonables.WindcallerTornadoEntity;
 import com.infamous.dungeons_mobs.entities.undead.FrozenZombieEntity;
 import com.infamous.dungeons_mobs.entities.undead.JungleZombieEntity;
@@ -348,7 +350,7 @@ public class ModEntityTypes {
 
     public static final RegistryObject<EntityType<DrownedNecromancerEntity>> DROWNED_NECROMANCER = registerEntity("drowned_necromancer", () ->
             EntityType.Builder.<DrownedNecromancerEntity>of(DrownedNecromancerEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F * 1.2F, 1.95F * 1.2F)
+                    .sized(0.6F * 1.5F, 1.95F * 1.5F)
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(MODID, "drowned_necromancer").toString()),
                     9433559, 0x274d72
@@ -500,13 +502,30 @@ public class ModEntityTypes {
                     .build(new ResourceLocation(MODID, "windcaller_blast_projectile").toString())
     );
     
+    public static final RegistryObject<EntityType<TridentStormEntity>> TRIDENT_STORM = registerEntityWithoutEgg("trident_storm", () ->
+	    EntityType.Builder.<TridentStormEntity>of(TridentStormEntity::new, EntityClassification.MISC)
+	            .fireImmune()
+	            .sized(2F, 32F)
+	            .clientTrackingRange(10)
+	            .build(new ResourceLocation(MODID, "trident_storm").toString())
+    );
+
+    
     public static final RegistryObject<EntityType<NecromancerOrbEntity>> NECROMANCER_ORB = ENTITY_TYPES.register("necromancer_orb", () ->
-    EntityType.Builder.<NecromancerOrbEntity>of(NecromancerOrbEntity::new, EntityClassification.MISC)
-            .fireImmune()
-            .sized(0.5F, 0.5F)
-            .updateInterval(1)
-            .build(new ResourceLocation(MODID, "necromancer_orb").toString())
-);
+	    EntityType.Builder.<NecromancerOrbEntity>of(NecromancerOrbEntity::new, EntityClassification.MISC)
+	            .fireImmune()
+	            .sized(0.5F, 0.5F)
+	            .updateInterval(1)
+	            .build(new ResourceLocation(MODID, "necromancer_orb").toString())
+	);
+    
+    public static final RegistryObject<EntityType<DrownedNecromancerOrbEntity>> DROWNED_NECROMANCER_ORB = ENTITY_TYPES.register("drowned_necromancer_orb", () ->
+	    EntityType.Builder.<DrownedNecromancerOrbEntity>of(DrownedNecromancerOrbEntity::new, EntityClassification.MISC)
+	            .fireImmune()
+	            .sized(0.5F, 0.5F)
+	            .updateInterval(1)
+	            .build(new ResourceLocation(MODID, "drowned_necromancer_orb").toString())
+	);
 
     public static final RegistryObject<EntityType<SummonSpotEntity>> SUMMON_SPOT = registerEntityWithoutEgg("summon_spot", () ->
     EntityType.Builder.<SummonSpotEntity>of(SummonSpotEntity::new, EntityClassification.MISC)

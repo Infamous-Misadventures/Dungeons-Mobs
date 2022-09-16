@@ -12,6 +12,7 @@ import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModItems;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
+import com.infamous.dungeons_mobs.utils.PositionUtils;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.command.arguments.EntityAnchorArgument;
@@ -456,6 +457,7 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable, SpawnA
 	            		summonPos = mob.blockPosition();
 	            	}
 					((ServerWorld)mob.level).addFreshEntityWithPassengers(blazeSummonSpot);
+					PositionUtils.moveToCorrectHeight(blazeSummonSpot);
 					
 	            	BlazeEntity summonedBlaze = EntityType.BLAZE.create(mob.level);
 	            	

@@ -1,19 +1,21 @@
 package com.infamous.dungeons_mobs.client.renderer.water;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.infamous.dungeons_libraries.capabilities.elite.EliteMob;
 import com.infamous.dungeons_libraries.capabilities.elite.EliteMobHelper;
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.mojang.blaze3d.matrix.MatrixStack;
+
 import net.minecraft.client.renderer.entity.AbstractZombieRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.model.DrownedModel;
 import net.minecraft.entity.monster.DrownedEntity;
+import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3f;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class CustomDrownedRenderer extends AbstractZombieRenderer<DrownedEntity, DrownedModel<DrownedEntity>> {
     private static final ResourceLocation DROWNED_LOCATION = new ResourceLocation("textures/entity/zombie/drowned.png");
@@ -41,7 +43,7 @@ public class CustomDrownedRenderer extends AbstractZombieRenderer<DrownedEntity,
     }
 
     @Override
-    public ResourceLocation getTextureLocation(DrownedEntity drowned) {
+    public ResourceLocation getTextureLocation(ZombieEntity drowned) {
         EliteMob cap = EliteMobHelper.getEliteMobCapability(drowned);
         if(cap != null && cap.isElite()){
             return ARMORED_DROWNED_LOCATIONS.get(drowned.getId() % ARMORED_DROWNED_LOCATIONS.size());
