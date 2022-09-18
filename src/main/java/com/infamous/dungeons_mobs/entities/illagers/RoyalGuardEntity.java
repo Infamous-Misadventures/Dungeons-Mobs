@@ -159,7 +159,7 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
 
 	public void baseTick() {
         super.baseTick();
-        ModifiableAttributeInstance modifiableattributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
+        ModifiableAttributeInstance modifiableattributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);   
         
         if (this.isBlocking()) {
             if (!modifiableattributeinstance.hasModifier(SPEED_MODIFIER_BLOCKING)) {
