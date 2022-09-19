@@ -104,20 +104,10 @@ public abstract class AbstractVineEntity extends MobEntity implements IMob {
     public net.minecraftforge.entity.PartEntity<?>[] getParts() {    
         return subEntities;
     }
-    
-	   public boolean isAlliedTo(Entity p_184191_1_) {
-		      if (super.isAlliedTo(p_184191_1_)) {
-		         return true;
-		      } else if (p_184191_1_ instanceof LivingEntity && ((LivingEntity)p_184191_1_).getType().is(CustomTags.PLANT_MOBS)) {
-		         return this.getTeam() == null && p_184191_1_.getTeam() == null;
-		      } else {
-		         return false;
-		      }
-		   }
 	
 	   protected void tickDeath() {
 		      ++this.deathTime;
-		      if (this.deathTime == this.getRetractAnimationLength()) {
+		      if (this.deathTime == this.getRetractAnimationLength() + 2) {
 		    	  this.remove();
 		      }
 		}
@@ -172,14 +162,6 @@ public abstract class AbstractVineEntity extends MobEntity implements IMob {
 
     public void setLengthInSegments(int setTo){
         this.entityData.set(LENGTH, setTo);
-    }
-    
-    public void setLengthInPixels(int setTo){
-        this.setLengthInSegments(setTo / 22);
-    }
-    
-    public void setLengthInBlocks(float setTo){
-        this.setLengthInPixels(Math.round(setTo * 16));
     }
     
     public boolean getVanishes() {

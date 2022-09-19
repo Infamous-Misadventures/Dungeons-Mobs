@@ -1,12 +1,16 @@
 package com.infamous.dungeons_mobs.entities.jungle;
 
+import com.infamous.dungeons_mobs.entities.projectiles.DrownedNecromancerOrbEntity;
 import com.infamous.dungeons_mobs.entities.summonables.AreaDamageEntity;
+import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -45,12 +49,12 @@ public class QuickGrowingVineEntity extends AbstractVineEntity implements IAnima
 		} else if (this.retractAnimationTick > 0) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("quick_growing_vine_retract", true));
 		} else {
-			if (this.isOut() || this.burstAnimationTick > 0) {
+			if (this.isOut()) {
 				event.getController().setAnimation(new AnimationBuilder().addAnimation("quick_growing_vine_idle", true));
 			} else {
 				event.getController().setAnimation(new AnimationBuilder().addAnimation("quick_growing_vine_idle_underground", true));
 			}
-		} 
+		}
 		return PlayState.CONTINUE;
 	}
 
@@ -66,7 +70,7 @@ public class QuickGrowingVineEntity extends AbstractVineEntity implements IAnima
 
 	@Override
 	public int getRetractAnimationLength() {
-		return 8;
+		return 10;
 	}
 
 	@Override
@@ -117,8 +121,7 @@ public class QuickGrowingVineEntity extends AbstractVineEntity implements IAnima
 
 	@Override
 	public void setDefaultFeatures() {
-		//this.setLengthInSegments(2 + this.random.nextInt(3));
-		this.setLengthInBlocks(3);
+		this.setLengthInSegments(2 + this.random.nextInt(3));
 		this.setVanishes(false);
 		this.setAlwaysOut(false);
 		this.setShouldRetract(true);

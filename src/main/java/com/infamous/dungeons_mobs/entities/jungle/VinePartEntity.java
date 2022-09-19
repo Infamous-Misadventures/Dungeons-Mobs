@@ -23,23 +23,22 @@ public class VinePartEntity extends PartEntity<AbstractVineEntity> {
 	protected void defineSynchedData() {
 	}
 
-	   public boolean hurt(DamageSource p_70097_1_, float p_70097_2_) {
-		   if (p_70097_1_.getEntity() != null && p_70097_1_.getEntity().getType().is(CustomTags.PLANT_MOBS)) {
-			   return false;
-		   } else {
-		       return this.isInvulnerableTo(p_70097_1_) ? false : this.parentMob.hurt(p_70097_1_, p_70097_2_);
-		   }
-	   }
-
 	protected void readAdditionalSaveData(CompoundNBT p_70037_1_) {
 	}
-
 
 	protected void addAdditionalSaveData(CompoundNBT p_213281_1_) {
 	}
 
 	public boolean isPickable() {
 		return parentMob.isOut();
+	}
+
+	public boolean hurt(DamageSource p_70097_1_, float p_70097_2_) {
+		if (p_70097_1_.getEntity() != null && p_70097_1_.getEntity().getType().is(CustomTags.PLANT_MOBS)) {
+			return false;
+		} else {
+			return this.isInvulnerableTo(p_70097_1_) ? false : this.parentMob.hurt(p_70097_1_, p_70097_2_);
+		}
 	}
 
 	public void refreshDimensions() {
@@ -55,34 +54,32 @@ public class VinePartEntity extends PartEntity<AbstractVineEntity> {
 		return parentMob.isOut();
 	}
 
-	   
-	   public EntitySize getSizeForSegment() {
-		   EntitySize size = EntitySize.scalable(0, 0);
-		   
-		   if(this.segmentNumber < 27 - parentMob.getLengthInSegments()) {
-			   return size;
-		   }
-		   
-			    if (this.segmentNumber == 26) {
-			   		size = EntitySize.scalable(0.25F, 1.375F);
-			   	} else if (this.segmentNumber == 25) {
-			   		size = EntitySize.scalable(0.5F, 1.375F);
-			   	} else if (this.segmentNumber >= 23 && this.segmentNumber <= 24) {
-			   		size = EntitySize.scalable(0.75F, 1.375F);
-			   	} else if (this.segmentNumber >= 20 && this.segmentNumber <= 22) {
-			   		size = EntitySize.scalable(1.0F, 1.375F);
-			   	} else if (this.segmentNumber >= 16 && this.segmentNumber <= 19) {
-			   		size = EntitySize.scalable(1.25F, 1.375F);
-			   	} else if (this.segmentNumber >= 11 && this.segmentNumber <= 15) {
-			   		size = EntitySize.scalable(1.5F, 1.375F);
-			   	} else if (this.segmentNumber >= 5 && this.segmentNumber <= 10) {
-			   		size = EntitySize.scalable(1.75F, 1.375F);
-		   		} else if (this.segmentNumber >= 1 && this.segmentNumber <= 4) {
-			   		size = EntitySize.scalable(2.0F, 1.375F);
-		   		}
-		   return size;
-	   }
+	public EntitySize getSizeForSegment() {
+		EntitySize size = EntitySize.scalable(0, 0);
 
+		if(this.segmentNumber < 27 - parentMob.getLengthInSegments()) {
+			return size;
+		}
+
+		if (this.segmentNumber == 26) {
+			size = EntitySize.scalable(0.25F, 1.375F);
+		} else if (this.segmentNumber == 25) {
+			size = EntitySize.scalable(0.5F, 1.375F);
+		} else if (this.segmentNumber >= 23 && this.segmentNumber <= 24) {
+			size = EntitySize.scalable(0.75F, 1.375F);
+		} else if (this.segmentNumber >= 20 && this.segmentNumber <= 22) {
+			size = EntitySize.scalable(1.0F, 1.375F);
+		} else if (this.segmentNumber >= 16 && this.segmentNumber <= 19) {
+			size = EntitySize.scalable(1.25F, 1.375F);
+		} else if (this.segmentNumber >= 11 && this.segmentNumber <= 15) {
+			size = EntitySize.scalable(1.5F, 1.375F);
+		} else if (this.segmentNumber >= 5 && this.segmentNumber <= 10) {
+			size = EntitySize.scalable(1.75F, 1.375F);
+		} else if (this.segmentNumber >= 1 && this.segmentNumber <= 4) {
+			size = EntitySize.scalable(2.0F, 1.375F);
+		}
+		return size;
+	}
 
 	public float getYOffsetForSegment() {
 		return (1.375F * (this.segmentNumber - 1)) - (1.375F * 26) + this.parentMob.getLengthInBlocks();
