@@ -9,6 +9,7 @@ import com.infamous.dungeons_mobs.client.particle.RedstoneSparkParticle;
 import com.infamous.dungeons_mobs.client.particle.SnowflakeParticle;
 import com.infamous.dungeons_mobs.client.particle.WindParticle;
 import com.infamous.dungeons_mobs.client.renderer.EmptyRenderer;
+import com.infamous.dungeons_mobs.client.renderer.armor.NecromancerArmorGearRenderer;
 import com.infamous.dungeons_mobs.client.renderer.armor.WindcallerClothesArmorGearRenderer;
 import com.infamous.dungeons_mobs.client.renderer.blaze.WildfireRenderer;
 import com.infamous.dungeons_mobs.client.renderer.creeper.IcyCreeperRenderer;
@@ -68,6 +69,7 @@ import com.infamous.dungeons_mobs.client.renderer.water.PoisonAnemoneRenderer;
 import com.infamous.dungeons_mobs.client.renderer.water.SunkenSkeletonRenderer;
 import com.infamous.dungeons_mobs.client.renderer.water.WavewhispererRenderer;
 import com.infamous.dungeons_mobs.items.WraithFireChargeItem;
+import com.infamous.dungeons_mobs.items.armor.NecromancerArmorGear;
 import com.infamous.dungeons_mobs.items.armor.WindcallerClothesArmorGear;
 import com.infamous.dungeons_mobs.items.shield.CustomISTER;
 import com.infamous.dungeons_mobs.mod.ModBlocks;
@@ -204,7 +206,8 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WILDFIRE.get(), WildfireRenderer::new);
 
 
-        GeoArmorRenderer.registerArmorRenderer(WindcallerClothesArmorGear.class, new WindcallerClothesArmorGearRenderer());        
+        GeoArmorRenderer.registerArmorRenderer(WindcallerClothesArmorGear.class, WindcallerClothesArmorGearRenderer::new);
+        GeoArmorRenderer.registerArmorRenderer(NecromancerArmorGear.class, NecromancerArmorGearRenderer::new);
     }
 
     @SubscribeEvent

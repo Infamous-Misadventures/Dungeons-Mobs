@@ -5,6 +5,7 @@ import javax.annotation.Nullable;
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.client.models.undead.NecromancerModel;
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
+import com.infamous.dungeons_mobs.client.renderer.armor.NecromancerArmorGearRenderer;
 import com.infamous.dungeons_mobs.client.renderer.layer.GeoEyeLayer;
 import com.infamous.dungeons_mobs.client.renderer.layer.PulsatingGlowLayer;
 import com.infamous.dungeons_mobs.entities.undead.NecromancerEntity;
@@ -31,7 +32,10 @@ import software.bernie.example.client.DefaultBipedBoneIdents;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.geo.render.built.GeoCube;
+import software.bernie.geckolib3.item.GeoArmorItem;
 import software.bernie.geckolib3.renderers.geo.ExtendedGeoEntityRenderer;
+import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
+
 public class NecromancerRenderer extends ExtendedGeoEntityRenderer<NecromancerEntity> {
 	
     @SuppressWarnings("unchecked")
@@ -211,6 +215,25 @@ public class NecromancerRenderer extends ExtendedGeoEntityRenderer<NecromancerEn
                 return armorBipedModel.head;
             default:
                 return null;
+        }
+    }
+
+    protected void handleGeoArmorBoneVisibility(GeoArmorRenderer<? extends GeoArmorItem> geoArmorRenderer, ModelRenderer sourceLimb, BipedModel<?> armorModel, EquipmentSlotType slot) {
+        super.handleGeoArmorBoneVisibility(geoArmorRenderer, sourceLimb, armorModel, slot);
+        if(geoArmorRenderer instanceof NecromancerArmorGearRenderer) {
+            IBone gbHood = geoArmorRenderer.getGeoModelProvider().getBone(((NecromancerArmorGearRenderer) geoArmorRenderer).hoodBodyBone);
+            IBone gbLeggingsBody = geoArmorRenderer.getGeoModelProvider().getBone(((NecromancerArmorGearRenderer) geoArmorRenderer).leggingsBodyBone);
+            gbHood.setHidden(true);
+            gbLeggingsBody.setHidden(true);
+
+            if (sourceLimb == armorModel.body) {
+                gbHood.setHidden(false);
+                return;
+            }
+            if (sourceLimb == armorModel.rightLeg) {
+                gbLeggingsBody.setHidden(true);
+                return;
+            }
         }
     }
 }
