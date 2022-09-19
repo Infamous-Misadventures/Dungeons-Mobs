@@ -743,7 +743,7 @@ public class DrownedNecromancerEntity extends DrownedEntity implements IAnimatab
     			mob.playSound(ModSoundEvents.DROWNED_NECROMANCER_SHOOT.get(), 1.25F, 1.0F);
 			}
 			
-			if (target != null && mob.rainShootAnimationTick == mob.rainShootAnimationActionPoint || mob.rainShootAnimationTick == mob.rainShootAnimationActionPoint - 3 || mob.rainShootAnimationTick == mob.rainShootAnimationActionPoint - 6 || mob.rainShootAnimationTick == mob.rainShootAnimationActionPoint - 9) {
+			if (target != null && (mob.rainShootAnimationTick == mob.rainShootAnimationActionPoint || mob.rainShootAnimationTick == mob.rainShootAnimationActionPoint - 3 || mob.rainShootAnimationTick == mob.rainShootAnimationActionPoint - 6 || mob.rainShootAnimationTick == mob.rainShootAnimationActionPoint - 9)) {
     			Vector3d pos = PositionUtils.getOffsetPos(mob, 0.3, 1.5, 0.5);
 	 	               double d1 = target.getX() - pos.x;
 	 	               double d2 = target.getY(0.6D) - pos.y;
@@ -936,7 +936,7 @@ public class DrownedNecromancerEntity extends DrownedEntity implements IAnimatab
     			mob.playSound(ModSoundEvents.DROWNED_NECROMANCER_ATTACK.get(), 1.5F, 1.0F);
 			}
 			
-			if (target != null && mob.shootAnimationTick == mob.shootAnimationActionPoint || mob.shootAnimationTick == mob.shootAnimationActionPoint - 2 || mob.shootAnimationTick == mob.shootAnimationActionPoint - 4 || mob.shootAnimationTick == mob.shootAnimationActionPoint - 6 || mob.shootAnimationTick == mob.shootAnimationActionPoint - 8 || mob.shootAnimationTick == mob.shootAnimationActionPoint - 10) {
+			if (target != null && (mob.shootAnimationTick == mob.shootAnimationActionPoint || mob.shootAnimationTick == mob.shootAnimationActionPoint - 2 || mob.shootAnimationTick == mob.shootAnimationActionPoint - 4 || mob.shootAnimationTick == mob.shootAnimationActionPoint - 6 || mob.shootAnimationTick == mob.shootAnimationActionPoint - 8 || mob.shootAnimationTick == mob.shootAnimationActionPoint - 10)) {
     			Vector3d pos = PositionUtils.getOffsetPos(mob, 0.3, 1.5, 0.5);
 	 	               double d1 = target.getX() - pos.x;
 	 	               double d2 = target.getY(0.6D) - pos.y;

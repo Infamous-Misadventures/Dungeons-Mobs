@@ -1,5 +1,6 @@
 package com.infamous.dungeons_mobs.entities.water;
 
+import com.infamous.dungeons_mobs.entities.jungle.PoisonQuillVineEntity;
 import com.infamous.dungeons_mobs.entities.jungle.QuickGrowingVineEntity;
 import com.infamous.dungeons_mobs.interfaces.IAquaticMob;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
@@ -12,9 +13,9 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
-public class QuickGrowingAnemoneEntity extends QuickGrowingVineEntity implements IAquaticMob {
+public class QuickGrowingAnemoneEntity extends PoisonQuillVineEntity implements IAquaticMob {
 
-    public QuickGrowingAnemoneEntity(EntityType<? extends QuickGrowingVineEntity> entityType, World world) {
+    public QuickGrowingAnemoneEntity(EntityType<? extends QuickGrowingAnemoneEntity> entityType, World world) {
         super(entityType, world);
     }
 
