@@ -5,6 +5,7 @@ import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
+import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
 import com.infamous.dungeons_mobs.entities.summonables.IceCloudEntity;
 import com.infamous.dungeons_mobs.entities.summonables.SummonSpotEntity;
 import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
@@ -13,6 +14,7 @@ import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModItems;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 import com.infamous.dungeons_mobs.utils.ModProjectileHelper;
+import com.infamous.dungeons_mobs.utils.PositionUtils;
 
 import net.minecraft.command.arguments.EntityAnchorArgument;
 import net.minecraft.entity.AreaEffectCloudEntity;
@@ -70,7 +72,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements IAnimatable {
+public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements IAnimatable, SpawnArmoredMob {
 
 	public int shootAnimationTick;
 	public int shootAnimationLength = 35;
@@ -321,6 +323,11 @@ public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements I
 
 		   }
 
+	@Override
+	public ResourceLocation getArmorSet() {
+		return ModItems.ILLUSIONER_CLOTHES.getArmorSet();
+	}
+
 	class ShootAttackGoal extends Goal {
 		public DungeonsIllusionerEntity mob;
 		@Nullable
@@ -530,6 +537,7 @@ public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements I
 				SummonSpotEntity summonSpot = ModEntityTypes.SUMMON_SPOT.get().create(mob.level);
 				summonSpot.moveTo(target.blockPosition().offset(-12.5 + mob.random.nextInt(25), 0, -12.5 + mob.random.nextInt(25)), 0.0F, 0.0F);
 				((ServerWorld)mob.level).addFreshEntityWithPassengers(summonSpot);
+				PositionUtils.moveToCorrectHeight(summonSpot);
 				
 				mob.level.broadcastEntityEvent(mob, (byte) 7);
 				mob.moveTo(summonSpot.blockPosition(), 0.0F, 0.0F);
@@ -557,6 +565,7 @@ public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements I
 					cloneSummonSpot.moveTo(target.blockPosition().offset(-12.5 + mob.random.nextInt(25), 0, -12.5 + mob.random.nextInt(25)), 0.0F, 0.0F);
 					cloneSummonSpot.mobSpawnRotation = mob.random.nextInt(360);
 					((ServerWorld)mob.level).addFreshEntityWithPassengers(cloneSummonSpot);
+					PositionUtils.moveToCorrectHeight(cloneSummonSpot);
 					
 					IllusionerCloneEntity clone = ModEntityTypes.ILLUSIONER_CLONE.get().create(mob.level);
 					clone.finalizeSpawn(((ServerWorld)mob.level), mob.level.getCurrentDifficultyAt(cloneSummonSpot.blockPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData)null, (CompoundNBT)null);

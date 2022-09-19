@@ -66,7 +66,7 @@ public class WavewhispererEntity extends WhispererEntity implements IAquaticMob 
 
     @Override
     protected EntityType<? extends QuickGrowingVineEntity> getQuickGrowingVineType() {
-        return ModEntityTypes.QUICK_GROWING_ANEMONE.get();
+        return ModEntityTypes.QUICK_GROWING_VINE.get();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.infamous.dungeons_mobs.entities.illagers;
 
+import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
 import com.infamous.dungeons_mobs.entities.summonables.ConstructEntity;
 import com.infamous.dungeons_mobs.goals.AvoidBaseEntityGoal;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
@@ -37,7 +38,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.monster.AbstractIllagerEntity.ArmPose;
 
-public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnimatable {
+public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnimatable, SpawnArmoredMob {
 	
 	public static final DataParameter<Integer> CAST_TICKS = EntityDataManager.defineId(GeomancerEntity.class, DataSerializers.INT);
 
@@ -138,6 +139,11 @@ public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnima
         this.populateDefaultEquipmentSlots(difficultyIn);
         this.populateDefaultEquipmentEnchantments(difficultyIn);
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+    }
+
+    @Override
+    public ResourceLocation getArmorSet() {
+        return ModItems.GEOMANCER_CLOTHES.getArmorSet();
     }
 
     class SummonPillarsGoal extends SpellcastingIllagerEntity.UseSpellGoal {

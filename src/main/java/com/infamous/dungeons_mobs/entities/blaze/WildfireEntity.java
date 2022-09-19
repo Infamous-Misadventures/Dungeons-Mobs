@@ -5,12 +5,14 @@ import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
+import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
 import com.infamous.dungeons_mobs.entities.summonables.SummonSpotEntity;
 import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
 import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModItems;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
+import com.infamous.dungeons_mobs.utils.PositionUtils;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.command.arguments.EntityAnchorArgument;
@@ -48,6 +50,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
@@ -67,7 +70,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class WildfireEntity extends MonsterEntity implements IAnimatable {
+public class WildfireEntity extends MonsterEntity implements IAnimatable, SpawnArmoredMob {
 
 	private static final DataParameter<Integer> SHIELDS = EntityDataManager.defineId(WildfireEntity.class, DataSerializers.INT);
 	private static final DataParameter<Float> SHIELD_HEALTH = EntityDataManager.defineId(WildfireEntity.class, DataSerializers.FLOAT);
@@ -377,8 +380,13 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable {
     public AnimationFactory getFactory() {
         return factory;
     }
-    
-    class SummonBlazesGoal extends Goal {
+
+	@Override
+	public ResourceLocation getArmorSet() {
+		return ModItems.NETHERPLATE_ARMOR.getArmorSet();
+	}
+
+	class SummonBlazesGoal extends Goal {
 		public WildfireEntity mob;
 		@Nullable
 		public LivingEntity target;
@@ -449,6 +457,7 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable {
 	            		summonPos = mob.blockPosition();
 	            	}
 					((ServerWorld)mob.level).addFreshEntityWithPassengers(blazeSummonSpot);
+					PositionUtils.moveToCorrectHeight(blazeSummonSpot);
 					
 	            	BlazeEntity summonedBlaze = EntityType.BLAZE.create(mob.level);
 	            	

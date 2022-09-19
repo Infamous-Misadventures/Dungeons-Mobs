@@ -1,5 +1,6 @@
 package com.infamous.dungeons_mobs.entities.illagers;
 
+import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
 import com.infamous.dungeons_mobs.entities.illagers.IllusionerCloneEntity;
 import com.infamous.dungeons_mobs.entities.summonables.SummonSpotEntity;
 import com.infamous.dungeons_mobs.entities.summonables.WindcallerTornadoEntity;
@@ -67,7 +68,7 @@ import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.UUID;
 
-public class IllusionerCloneEntity extends AbstractIllagerEntity implements IAnimatable {
+public class IllusionerCloneEntity extends AbstractIllagerEntity implements IAnimatable, SpawnArmoredMob {
 
 	private static final DataParameter<Boolean> DELAYED_APPEAR = EntityDataManager.defineId(IllusionerCloneEntity.class,
 			DataSerializers.BOOLEAN);
@@ -337,6 +338,11 @@ public class IllusionerCloneEntity extends AbstractIllagerEntity implements IAni
 	   protected AbstractArrowEntity getArrow(ItemStack p_213624_1_, float p_213624_2_) {
 		      return ProjectileHelper.getMobArrow(this, p_213624_1_, p_213624_2_);
 		   }
+
+	@Override
+	public ResourceLocation getArmorSet() {
+		return ModItems.ILLUSIONER_CLOTHES.getArmorSet();
+	}
 
 	class ShootAttackGoal extends Goal {
 		public IllusionerCloneEntity mob;

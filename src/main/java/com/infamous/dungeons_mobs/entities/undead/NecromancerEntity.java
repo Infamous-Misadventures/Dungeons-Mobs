@@ -323,7 +323,8 @@ public class NecromancerEntity extends SkeletonEntity implements IAnimatable {
 	            		summonPos = mob.blockPosition();
 	            	}
 					((ServerWorld)mob.level).addFreshEntityWithPassengers(mobSummonSpot);
-
+					PositionUtils.moveToCorrectHeight(mobSummonSpot);
+					
 	            	MobEntity summonedMob = null;
 	            	
 	                List<String> necromancerMobSummons = (List<String>) DungeonsMobsConfig.COMMON.NECROMANCER_MOB_SUMMONS.get();

@@ -50,6 +50,15 @@ public abstract class StraightMovingProjectileEntity extends ProjectileEntity {
 
 	   protected void defineSynchedData() {
 	   }
+	   
+	   public void setPower(double powerX, double powerY, double powerZ) {
+		      double d0 = (double)MathHelper.sqrt(powerX * powerX + powerY * powerY + powerZ * powerZ);
+		      if (d0 != 0.0D) {
+		         this.xPower = powerX / d0 * 0.1D;
+		         this.yPower = powerY / d0 * 0.1D;
+		         this.zPower = powerZ / d0 * 0.1D;
+		      }
+	   }
 
 	   @OnlyIn(Dist.CLIENT)
 	   public boolean shouldRenderAtSqrDistance(double p_70112_1_) {
@@ -88,7 +97,9 @@ public abstract class StraightMovingProjectileEntity extends ProjectileEntity {
 	               }
 	            }
 
-	            f = 0.8F;
+	            if (this.slowedDownInWater()) {
+	            	f = 0.8F;
+	            }
 	         }
 
 	         this.setDeltaMovement(vector3d.add(this.xPower, this.yPower, this.zPower).scale((double)f));
@@ -99,6 +110,10 @@ public abstract class StraightMovingProjectileEntity extends ProjectileEntity {
 	      } else {
 	         this.remove();
 	      }
+	   }
+	   
+	   public boolean slowedDownInWater() {
+		   return true;
 	   }
 
 	   public void spawnTrailParticle() {

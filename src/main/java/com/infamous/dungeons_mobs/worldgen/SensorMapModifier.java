@@ -31,6 +31,8 @@ public class SensorMapModifier {
 
         villagerHostiles.put(ModEntityTypes.FROZEN_ZOMBIE.get(), 8.0F);
         villagerHostiles.put(ModEntityTypes.JUNGLE_ZOMBIE.get(), 8.0F);
+        
+        villagerHostiles.put(ModEntityTypes.DROWNED_NECROMANCER.get(), 20.0F);
 
         VillagerHostilesSensor.ACCEPTABLE_DISTANCE_FROM_HOSTILES = ImmutableMap.copyOf(villagerHostiles);
     }
