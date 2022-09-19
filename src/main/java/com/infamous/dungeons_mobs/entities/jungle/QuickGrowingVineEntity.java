@@ -38,7 +38,7 @@ public class QuickGrowingVineEntity extends AbstractVineEntity implements IAnima
 
 	@Override
 	public void registerControllers(AnimationData data) {
-		data.addAnimationController(new AnimationController(this, "controller", 5, this::predicate));
+		data.addAnimationController(new AnimationController(this, "controller", 2, this::predicate));
 	}
 
 	private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
@@ -65,7 +65,7 @@ public class QuickGrowingVineEntity extends AbstractVineEntity implements IAnima
 
 	@Override
 	public int getBurstAnimationLength() {
-		return 10;
+		return 12;
 	}
 
 	@Override
