@@ -1,7 +1,4 @@
-package com.infamous.dungeons_mobs.client.models.jungle;// Made with Blockbench 3.7.4
-// Exported for Minecraft version 1.15
-// Paste this class into your mod and generate all required imports
-
+package com.infamous.dungeons_mobs.client.models.jungle;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.entities.jungle.QuickGrowingVineEntity;
@@ -38,7 +35,7 @@ public class QuickGrowingVineModel extends AnimatedGeoModel<QuickGrowingVineEnti
 
 		IBone everything = this.getAnimationProcessor().getBone("everything");
 
-		if (entity.tickCount <= 2 || (!entity.isOut() && entity.burstAnimationTick <= 0 && entity.retractAnimationTick <= 0)) {
+		if (entity.tickCount <= 2) {
 			everything.setHidden(true);
 		} else {
 			everything.setHidden(false);
