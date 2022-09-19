@@ -16,6 +16,7 @@ public class VinePartEntity extends PartEntity<AbstractVineEntity> {
 	      super(p_i50232_1_);
 	      this.parentMob = p_i50232_1_;
 	      this.segmentNumber = segmentNumber;
+		  this.refreshDimensions();
 	   }
 
 	   protected void defineSynchedData() {
@@ -28,7 +29,7 @@ public class VinePartEntity extends PartEntity<AbstractVineEntity> {
 	   }
 	   
 	   public boolean isPickable() {
-	      return true;
+	      return parentMob.isOut();
 	   }
 
 	   public boolean hurt(DamageSource p_70097_1_, float p_70097_2_) {
@@ -45,7 +46,7 @@ public class VinePartEntity extends PartEntity<AbstractVineEntity> {
 	   
 	   @Override
 	public boolean canBeCollidedWith() {
-		return true;
+		return parentMob.isOut();
 	}
 	   
 	   public EntitySize getSizeForSegment() {

@@ -53,16 +53,23 @@ public abstract class AbstractVineEntity extends MobEntity implements IMob {
 		      return this.shouldBurstFor(entity);
 	   };
 	   
-	public List<VinePartEntity> subEntities = Lists.newArrayList();
+	public VinePartEntity[] subEntities = new VinePartEntity[27];
     
 	protected AbstractVineEntity(EntityType<? extends AbstractVineEntity> entityType, World level) {
-		super(entityType, level);	
+		super(entityType, level);
+        int adjustedLength = 27;
+
+        for (int i = 0; i < adjustedLength; i++) {
+            VinePartEntity newPart = new VinePartEntity(this, 26 - i);
+            this.subEntities[i] = newPart;
+            this.level.addFreshEntity(newPart);
+        }
 	}
 	
     protected void updateParts()
     {
         for (VinePartEntity part : subEntities) {
-            part.refreshDimensions();
+//            part.refreshDimensions();
             movePart(part, 0, part.getYOffsetForSegment(), 0);
         }
     }
@@ -85,33 +92,17 @@ public abstract class AbstractVineEntity extends MobEntity implements IMob {
     public void aiStep()
     {
         super.aiStep();
-
-        int adjustedLength = this.getLengthInSegments() + 1;
-        
-        if (this.subEntities.size() <= 0) {
-        	for (int i = 0; i < adjustedLength; i++) {
-        		VinePartEntity newPart = new VinePartEntity(this, 26 - i);
-        		this.subEntities.add(newPart);
-        	}
-        }        
-    	
-        if (this.subEntities.size() > adjustedLength || this.subEntities.size() < adjustedLength) {
-        	this.subEntities.clear();
-        } else {
-        	updateParts();
-        }
+        updateParts();
     }
 
     @Override
     public boolean isMultipartEntity() {
-        return this.subEntities.size() > 0;
+        return true;
     }
 
     @Override
     public net.minecraftforge.entity.PartEntity<?>[] getParts() {    
-    	VinePartEntity[] vineParts = new VinePartEntity[this.subEntities.size()];
-    	vineParts = this.subEntities.toArray(vineParts);
-    	return vineParts;    	
+        return subEntities;
     }
 	
 	   protected void tickDeath() {
@@ -296,12 +287,12 @@ public abstract class AbstractVineEntity extends MobEntity implements IMob {
    
     @Override
     public boolean canBeCollidedWith() {
-        return this.isOut();
+        return false;
     }
     
     @Override
     public boolean isPickable() {
-    	return this.isOut();
+    	return false;
     }
     
     @Override
@@ -425,4 +416,11 @@ public abstract class AbstractVineEntity extends MobEntity implements IMob {
 			this.retractAnimationTick--;
 		}
 	}
+
+    @Override
+    public void setId(int p_145769_1_) {
+        super.setId(p_145769_1_);
+        for(int i = 0; i < this.subEntities.length; ++i) // Forge: Fix MC-158205: Set part ids to successors of parent mob id
+            this.subEntities[i].setId(p_145769_1_ + i + 1);
+    }
 }
