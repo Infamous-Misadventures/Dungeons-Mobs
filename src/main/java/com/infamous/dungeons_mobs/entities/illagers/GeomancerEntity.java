@@ -167,7 +167,7 @@ public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnima
             LivingEntity targetEntity = GeomancerEntity.this.getTarget();
             if (targetEntity != null && GeomancerEntity.this.distanceTo(targetEntity) > 4.0D) {
             	if (super.canUse()) {
-            		GeomancerEntity.this.setCastTicks(25);
+            		GeomancerEntity.this.setCastTicks(30);
             	}
                 return super.canUse();
             }
@@ -184,7 +184,7 @@ public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnima
         }
 
         protected int getCastingInterval() {
-            return 120 - GeomancerEntity.this.getRandom().nextInt(45);
+            return 110 - GeomancerEntity.this.getRandom().nextInt(45);
         }
 
         protected void performSpellCasting() {
