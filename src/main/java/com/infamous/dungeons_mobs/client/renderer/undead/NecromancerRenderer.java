@@ -218,22 +218,22 @@ public class NecromancerRenderer extends ExtendedGeoEntityRenderer<NecromancerEn
         }
     }
 
-    protected void handleGeoArmorBoneVisibility(GeoArmorRenderer<? extends GeoArmorItem> geoArmorRenderer, ModelRenderer sourceLimb, BipedModel<?> armorModel, EquipmentSlotType slot) {
-        super.handleGeoArmorBoneVisibility(geoArmorRenderer, sourceLimb, armorModel, slot);
-        if(geoArmorRenderer instanceof NecromancerArmorGearRenderer) {
-            IBone gbHood = geoArmorRenderer.getGeoModelProvider().getBone(((NecromancerArmorGearRenderer) geoArmorRenderer).hoodBodyBone);
-            IBone gbLeggingsBody = geoArmorRenderer.getGeoModelProvider().getBone(((NecromancerArmorGearRenderer) geoArmorRenderer).leggingsBodyBone);
-            gbHood.setHidden(true);
-            gbLeggingsBody.setHidden(true);
-
-            if (sourceLimb == armorModel.body) {
-                gbHood.setHidden(false);
-                return;
-            }
-            if (sourceLimb == armorModel.rightLeg) {
-                gbLeggingsBody.setHidden(true);
-                return;
-            }
-        }
-    }
+//    protected void handleGeoArmorBoneVisibility(GeoArmorRenderer<? extends GeoArmorItem> geoArmorRenderer, ModelRenderer sourceLimb, BipedModel<?> armorModel, EquipmentSlotType slot) {
+//        super.handleGeoArmorBoneVisibility(geoArmorRenderer, sourceLimb, armorModel, slot);
+//        if(geoArmorRenderer instanceof NecromancerArmorGearRenderer) {
+//            IBone gbHood = geoArmorRenderer.getGeoModelProvider().getBone(((NecromancerArmorGearRenderer) geoArmorRenderer).hoodBodyBone);
+//            IBone gbLeggingsBody = geoArmorRenderer.getGeoModelProvider().getBone(((NecromancerArmorGearRenderer) geoArmorRenderer).leggingsBodyBone);
+//            gbHood.setHidden(true);
+//            gbLeggingsBody.setHidden(true);
+//
+//            if (sourceLimb == armorModel.body) {
+//                gbHood.setHidden(false);
+//                return;
+//            }
+//            if (sourceLimb == armorModel.rightLeg) {
+//                gbLeggingsBody.setHidden(true);
+//                return;
+//            }
+//        }
+//    }
 }
