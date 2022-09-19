@@ -9,4 +9,5 @@ public class NecromancerArmorGear extends ArmorGear {
     public NecromancerArmorGear(EquipmentSlotType slotType, Properties properties, ResourceLocation armorSet, ResourceLocation modelLocation, ResourceLocation textureLocation, ResourceLocation animationFileLocation) {
         super(slotType, properties, armorSet, modelLocation, textureLocation, animationFileLocation);
     }
+
 }
