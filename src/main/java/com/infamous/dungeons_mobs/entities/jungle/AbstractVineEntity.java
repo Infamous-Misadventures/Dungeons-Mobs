@@ -62,7 +62,7 @@ public abstract class AbstractVineEntity extends MobEntity implements IMob {
         for (int i = 0; i < adjustedLength; i++) {
             VinePartEntity newPart = new VinePartEntity(this, 26 - i);
             this.subEntities[i] = newPart;
-            this.level.addFreshEntity(newPart);
+//            this.level.addFreshEntity(newPart);
         }
 	}
 	
