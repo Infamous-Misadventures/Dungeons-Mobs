@@ -9,6 +9,7 @@ import com.infamous.dungeons_mobs.client.particle.RedstoneSparkParticle;
 import com.infamous.dungeons_mobs.client.particle.SnowflakeParticle;
 import com.infamous.dungeons_mobs.client.particle.WindParticle;
 import com.infamous.dungeons_mobs.client.renderer.EmptyRenderer;
+import com.infamous.dungeons_mobs.client.renderer.armor.NecromancerArmorGearRenderer;
 import com.infamous.dungeons_mobs.client.renderer.armor.WindcallerClothesArmorGearRenderer;
 import com.infamous.dungeons_mobs.client.renderer.blaze.WildfireRenderer;
 import com.infamous.dungeons_mobs.client.renderer.creeper.IcyCreeperRenderer;
@@ -40,6 +41,7 @@ import com.infamous.dungeons_mobs.client.renderer.projectiles.BlastlingBulletRen
 import com.infamous.dungeons_mobs.client.renderer.projectiles.BlueNethershroomRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.CobwebProjectileRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.CustomFireballRenderer;
+import com.infamous.dungeons_mobs.client.renderer.projectiles.DrownedNecromancerOrbRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.GeoOrbRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.NecromancerOrbRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.OrbRenderer;
@@ -54,6 +56,7 @@ import com.infamous.dungeons_mobs.client.renderer.summonables.GeomancerBombRende
 import com.infamous.dungeons_mobs.client.renderer.summonables.GeomancerWallRenderer;
 import com.infamous.dungeons_mobs.client.renderer.summonables.IceCloudRenderer;
 import com.infamous.dungeons_mobs.client.renderer.summonables.SummonSpotRenderer;
+import com.infamous.dungeons_mobs.client.renderer.summonables.TridentStormRenderer;
 import com.infamous.dungeons_mobs.client.renderer.summonables.WindcallerTornadoRenderer;
 import com.infamous.dungeons_mobs.client.renderer.undead.CustomSkeletonRenderer;
 import com.infamous.dungeons_mobs.client.renderer.undead.CustomZombieRenderer;
@@ -63,10 +66,10 @@ import com.infamous.dungeons_mobs.client.renderer.undead.WraithRenderer;
 import com.infamous.dungeons_mobs.client.renderer.water.CustomDrownedRenderer;
 import com.infamous.dungeons_mobs.client.renderer.water.DrownedNecromancerRenderer;
 import com.infamous.dungeons_mobs.client.renderer.water.PoisonAnemoneRenderer;
-import com.infamous.dungeons_mobs.client.renderer.water.QuickGrowingAnemoneRenderer;
 import com.infamous.dungeons_mobs.client.renderer.water.SunkenSkeletonRenderer;
 import com.infamous.dungeons_mobs.client.renderer.water.WavewhispererRenderer;
 import com.infamous.dungeons_mobs.items.WraithFireChargeItem;
+import com.infamous.dungeons_mobs.items.armor.NecromancerArmorGear;
 import com.infamous.dungeons_mobs.items.armor.WindcallerClothesArmorGear;
 import com.infamous.dungeons_mobs.items.shield.CustomISTER;
 import com.infamous.dungeons_mobs.mod.ModBlocks;
@@ -179,7 +182,7 @@ public class ClientEvents {
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WAVEWHISPERER.get(), WavewhispererRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.POISON_ANEMONE.get(), PoisonAnemoneRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.QUICK_GROWING_ANEMONE.get(), QuickGrowingAnemoneRenderer::new);
+        //RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.QUICK_GROWING_ANEMONE.get(), QuickGrowingAnemoneRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.DROWNED_NECROMANCER.get(), DrownedNecromancerRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SUNKEN_SKELETON.get(), SunkenSkeletonRenderer::new);
 
@@ -187,7 +190,10 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.GEO_ORB.get(),
                 manager -> new GeoOrbRenderer(manager));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.NECROMANCER_ORB.get(), NecromancerOrbRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.DROWNED_NECROMANCER_ORB.get(), DrownedNecromancerOrbRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.TRIDENT_FUME.get(), OrbRenderer::new);
+        
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.TRIDENT_STORM.get(), TridentStormRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ENDERSENT.get(), EndersentRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.BLASTLING.get(), BlastlingRenderer::new);
@@ -200,7 +206,8 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WILDFIRE.get(), WildfireRenderer::new);
 
 
-        GeoArmorRenderer.registerArmorRenderer(WindcallerClothesArmorGear.class, new WindcallerClothesArmorGearRenderer());        
+        GeoArmorRenderer.registerArmorRenderer(WindcallerClothesArmorGear.class, WindcallerClothesArmorGearRenderer::new);
+        GeoArmorRenderer.registerArmorRenderer(NecromancerArmorGear.class, NecromancerArmorGearRenderer::new);
     }
 
     @SubscribeEvent

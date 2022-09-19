@@ -76,9 +76,13 @@ public abstract class ConstructEntity extends CreatureEntity {
         return false;
     }
 
-    public boolean hurt(DamageSource p_70097_1_, float p_70097_2_) {
-        return false;
-    }
+     public boolean hurt(DamageSource p_70097_1_, float p_70097_2_) {
+     	if (p_70097_1_ == DamageSource.OUT_OF_WORLD) {
+     		return super.hurt(p_70097_1_, p_70097_2_);
+     	} else {
+     		return false;
+     	}
+     }
 
     public void faceDirection(Direction directionToFace){
 

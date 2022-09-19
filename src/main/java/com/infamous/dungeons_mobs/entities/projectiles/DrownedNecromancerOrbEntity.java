@@ -13,12 +13,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.passive.horse.HorseEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.network.IPacket;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -29,22 +27,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class NecromancerOrbEntity extends StraightMovingProjectileEntity implements IAnimatable {
-
-	private static final DataParameter<Boolean> DELAYED_FORM = EntityDataManager.defineId(NecromancerOrbEntity.class,
-			DataSerializers.BOOLEAN);
-	
-	public int formAnimationTick;
-	public int formAnimationLength = 20;
-
-	public int vanishAnimationTick;
-	public int vanishAnimationLength = 40;
+public class DrownedNecromancerOrbEntity extends StraightMovingProjectileEntity implements IAnimatable {
 
 	public int lifeTime;
 	
@@ -56,39 +44,29 @@ public class NecromancerOrbEntity extends StraightMovingProjectileEntity impleme
 		      return entity.isAlive() && !entity.isSpectator() && !(entity instanceof PlayerEntity && ((PlayerEntity)entity).isCreative());
 		   };
 		   
-	public NecromancerOrbEntity(World worldIn) {
-		super(ModEntityTypes.NECROMANCER_ORB.get(), worldIn);
+	public DrownedNecromancerOrbEntity(World worldIn) {
+		super(ModEntityTypes.DROWNED_NECROMANCER_ORB.get(), worldIn);
 	}
 
-	public NecromancerOrbEntity(EntityType<? extends NecromancerOrbEntity> p_i50147_1_, World p_i50147_2_) {
+	public DrownedNecromancerOrbEntity(EntityType<? extends DrownedNecromancerOrbEntity> p_i50147_1_, World p_i50147_2_) {
 		super(p_i50147_1_, p_i50147_2_);
 	}
 
-	public NecromancerOrbEntity(World p_i1794_1_, LivingEntity p_i1794_2_, double p_i1794_3_, double p_i1794_5_,
+	public DrownedNecromancerOrbEntity(World p_i1794_1_, LivingEntity p_i1794_2_, double p_i1794_3_, double p_i1794_5_,
 			double p_i1794_7_) {
-		super(ModEntityTypes.NECROMANCER_ORB.get(), p_i1794_2_, p_i1794_3_, p_i1794_5_, p_i1794_7_, p_i1794_1_);
+		super(ModEntityTypes.DROWNED_NECROMANCER_ORB.get(), p_i1794_2_, p_i1794_3_, p_i1794_5_, p_i1794_7_, p_i1794_1_);
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public NecromancerOrbEntity(World p_i1795_1_, double p_i1795_2_, double p_i1795_4_, double p_i1795_6_,
+	public DrownedNecromancerOrbEntity(World p_i1795_1_, double p_i1795_2_, double p_i1795_4_, double p_i1795_6_,
 			double p_i1795_8_, double p_i1795_10_, double p_i1795_12_) {
-		super(ModEntityTypes.NECROMANCER_ORB.get(), p_i1795_2_, p_i1795_4_, p_i1795_6_, p_i1795_8_, p_i1795_10_,
+		super(ModEntityTypes.DROWNED_NECROMANCER_ORB.get(), p_i1795_2_, p_i1795_4_, p_i1795_6_, p_i1795_8_, p_i1795_10_,
 				p_i1795_12_, p_i1795_1_);
 	}
 	
 	@Override
 	protected boolean canHitEntity(Entity p_230298_1_) {
 		return !(p_230298_1_ instanceof ProjectileEntity) && !(p_230298_1_ instanceof TridentStormEntity);
-	}
-	
-	public void handleEntityEvent(byte p_28844_) {
-		if (p_28844_ == 1) {
-			this.vanishAnimationTick = vanishAnimationLength;
-		} else if (p_28844_ == 2) {
-			this.formAnimationTick = formAnimationLength;
-		} else {
-			super.handleEntityEvent(p_28844_);
-		}
 	}
 	
 	@Override
@@ -102,20 +80,13 @@ public class NecromancerOrbEntity extends StraightMovingProjectileEntity impleme
 	}
 	
 	@Override
-	public boolean shouldSpawnParticles() {
-		return this.vanishAnimationTick <= 0;
+	public boolean slowedDownInWater() {
+		return false;
 	}
 	
 	@Override
 	protected float getInertia() {
 		return 0.8F;
-	}
-
-	public void startForming() {
-		if (!this.level.isClientSide) {
-			this.formAnimationTick = this.formAnimationLength;
-			this.level.broadcastEntityEvent(this, (byte) 2);
-		}
 	}
 	
 	@Override
@@ -130,10 +101,9 @@ public class NecromancerOrbEntity extends StraightMovingProjectileEntity impleme
 	@Override
 	public void baseTick() {
 		super.baseTick();
-		this.tickDownAnimTimers();
 		
     	List<Entity> list = this.level.getEntities(this, this.getBoundingBox(), CAN_HIT);
-		if (!list.isEmpty() && !this.level.isClientSide && this.vanishAnimationTick <= 0) {
+		if (!list.isEmpty() && !this.level.isClientSide) {
 			for (Entity entity : list) {
 				if (this.canHitEntity(entity)) {
 					this.onHitEntity(entity);
@@ -146,35 +116,12 @@ public class NecromancerOrbEntity extends StraightMovingProjectileEntity impleme
 		this.updateRotation();
 		
 		if (this.tickCount % 5 == 0) {
-			textureChange ++;
+			textureChange ++;		
 		}
 		
-		if (!this.level.isClientSide && this.lifeTime > 200 && this.vanishAnimationTick <= 0) {
-			this.vanishAnimationTick = this.vanishAnimationLength;
-			this.level.broadcastEntityEvent(this, (byte) 1);
-		}
-		
-		if (!this.level.isClientSide && this.hasDelayedForm()) {
-			this.startForming();
-			this.setDelayedForm(false);
-		}
-		
-		if (!this.level.isClientSide && this.vanishAnimationTick > 0) {
-			this.setDeltaMovement(0, 0, 0);
-		}
-
-		if (!this.level.isClientSide && this.vanishAnimationTick == 2) {
+		if (!this.level.isClientSide && !this.isInWaterRainOrBubble()) {
+			this.playSound(ModSoundEvents.DROWNED_NECROMANCER_STEAM_MISSILE_IMPACT.get(), 1.0F, 1.0F);
 			this.remove();
-		}
-	}
-
-	public void tickDownAnimTimers() {
-		if (this.formAnimationTick > 0) {
-			this.formAnimationTick--;
-		}
-
-		if (this.vanishAnimationTick > 0) {
-			this.vanishAnimationTick--;
 		}
 	}
 
@@ -184,28 +131,7 @@ public class NecromancerOrbEntity extends StraightMovingProjectileEntity impleme
 	}
 
 	private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
-		if (this.vanishAnimationTick > 0) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("necromancer_orb_vanish", true));
-		} else if (this.formAnimationTick > 0) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("necromancer_orb_form", true));
-		} else {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("necromancer_orb_idle", true));
-		}
 		return PlayState.CONTINUE;
-	}
-	
-	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(DELAYED_FORM, false);
-	}
-	
-	public boolean hasDelayedForm() {
-		return this.entityData.get(DELAYED_FORM);
-	}
-
-	public void setDelayedForm(boolean attached) {
-		this.entityData.set(DELAYED_FORM, attached);
 	}
 
 	@Override
@@ -229,7 +155,7 @@ public class NecromancerOrbEntity extends StraightMovingProjectileEntity impleme
 			boolean flag;
 			if (entity1 instanceof LivingEntity) {
 				LivingEntity livingentity = (LivingEntity) entity1;
-				flag = entity.hurt(DamageSource.indirectMagic(this, livingentity), 6.0F);
+				flag = entity.hurt(DamageSource.indirectMobAttack(this, livingentity), 8.0F);
 				if (flag) {
 					if (entity.isAlive()) {
 						this.doEnchantDamageEffects(livingentity, entity);
@@ -238,14 +164,13 @@ public class NecromancerOrbEntity extends StraightMovingProjectileEntity impleme
 			} else {
 				flag = entity.hurt(DamageSource.MAGIC, 6.0F);
 			}
-	    	
+
 	    	entity.getRootVehicle().ejectPassengers();
 	    	
-		    entity.setDeltaMovement(entity.getDeltaMovement().add(this.getDeltaMovement().scale(2.0D)));
-		    	
-			this.playSound(ModSoundEvents.NECROMANCER_ORB_IMPACT.get(), 1.0F, 1.0F);
-			this.vanishAnimationTick = this.vanishAnimationLength;
-			this.level.broadcastEntityEvent(this, (byte) 1);
+	    	entity.setDeltaMovement(entity.getDeltaMovement().add(this.getDeltaMovement().scale(2.0D)));
+			
+			this.playSound(ModSoundEvents.DROWNED_NECROMANCER_STEAM_MISSILE_IMPACT.get(), 1.0F, 1.0F);
+			this.remove();
 		}
 	}
 	
@@ -253,9 +178,8 @@ public class NecromancerOrbEntity extends StraightMovingProjectileEntity impleme
 	protected void onHitBlock(BlockRayTraceResult p_230299_1_) {
 		super.onHitBlock(p_230299_1_);	
 		if (!this.level.isClientSide) {
-			this.playSound(ModSoundEvents.NECROMANCER_ORB_IMPACT.get(), 1.0F, 1.0F);
-			this.vanishAnimationTick = this.vanishAnimationLength;
-			this.level.broadcastEntityEvent(this, (byte) 1);
+			this.playSound(ModSoundEvents.DROWNED_NECROMANCER_STEAM_MISSILE_IMPACT.get(), 1.0F, 1.0F);
+			this.remove();
 		}
 	}
 

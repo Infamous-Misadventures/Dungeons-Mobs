@@ -54,8 +54,7 @@ public class WindcallerBlastProjectileEntity extends DamagingProjectileEntity {
      
      @Override
     public void tick() {
-    	super.tick();
-        
+    	super.tick();    
     	for (int i = 0; i < 3; i++) {
     		this.level.addParticle(this.getTrailParticle(), this.getRandomX(1), this.getRandomY(), this.getRandomZ(1), 0.0D, 0.0D, 0.0D);
     	}
@@ -89,7 +88,11 @@ public class WindcallerBlastProjectileEntity extends DamagingProjectileEntity {
     protected void onHitEntity(EntityRayTraceResult p_213868_1_) {
     	super.onHitEntity(p_213868_1_);
     	
-    	p_213868_1_.getEntity().setDeltaMovement(p_213868_1_.getEntity().getDeltaMovement().add(this.getDeltaMovement().scale(1.5D).add(0, 0.5, 0)));
+    	if (!this.level.isClientSide) {
+    		p_213868_1_.getEntity().getRootVehicle().ejectPassengers();
+    		
+	    	p_213868_1_.getEntity().setDeltaMovement(p_213868_1_.getEntity().getDeltaMovement().add(this.getDeltaMovement().scale(1.5D).add(0, 0.5, 0)));
+    	}
     }
      
 	   public boolean isPickable() {

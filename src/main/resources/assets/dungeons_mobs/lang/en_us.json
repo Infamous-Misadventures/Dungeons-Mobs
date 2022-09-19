@@ -44,6 +44,12 @@
 	
   "death.ice_chunk": "%1$s was crushed by an Ice Chunk",
   "death.attack.ice_chunk": "%1$s was crushed by an Ice Chunk from %2$s",
+  
+  "death.summoned_trident_storm": "%1$s was struck by an electrically charged trident",
+  "death.attack.summoned_trident_storm": "%1$s was struck by an electrically charged trident summoned by %2$s",
+  
+  "death.trident_storm": "%1$s was struck by an electrically charged trident",
+  "death.attack.trident_storm": "%1$s was struck by an electrically charged trident",
 
   "entity.dungeons_mobs.illusioner": "Illusioner",
   "entity.dungeons_mobs.illusioner_clone": "Illusioner",
@@ -233,9 +239,6 @@
   "itemGroup.dungeonsMobs": "Dungeons - Mobs",
   "itemGroup.dungeonsMobsItems": "Dungeons - Mob Equipment",
 
-  "death.attack.iceCloud": "%1$s was crushed by an Ice Cloud",
-  "death.attack.iceCloud.player": "%1$s was crushed by an Ice Cloud whilst fighting %2$s",
-
   "mobEnchantment.dungeons_mobs.burning": "Burning",
   "mobEnchantment.dungeons_mobs.chilling": "Chilling",
   "mobEnchantment.dungeons_mobs.deflect": "Deflect",
@@ -318,7 +321,6 @@
   "subtitles.entity.endersent.step": "Endersent steps",
   "subtitles.entity.endersent.idle_smash": "Endersent smashes",
   "subtitles.entity.endersent.attack": "Endersent smashes",
-  "subtitles.entity.endersent.teleport": "Endersent teleports",
   
   "subtitles.entity.iceologer.idle": "Iceologer grumbles",
   "subtitles.entity.iceologer.hurt": "Iceologer hurts",
@@ -447,11 +449,11 @@
   "subtitles.entity.drowned_necromancer.hurt": "Drowned Necromancer hurts",
   "subtitles.entity.drowned_necromancer.death": "Drowned Necromancer dies",
   "subtitles.entity.drowned_necromancer.swim": "Drowned Necromancer swims",
-  "subtitles.entity.drowned_necromancer.attack": "Drowned Necromancer attacks",
-  "subtitles.entity.drowned_necromancer.strong_attack": "Drowned Necromancer launches strong attack",
+  "subtitles.entity.drowned_necromancer.attack": "Drowned Necromancer shoots",
+  "subtitles.entity.drowned_necromancer.strong_attack": "Drowned Necromancer prepares summon",
   "subtitles.entity.drowned_necromancer.shoot": "Drowned Necromancer shoots",
   "subtitles.entity.drowned_necromancer.summon": "Drowned Necromancer summons",
-  "subtitles.entity.drowned_necromancer.steam_missile": "Steam Missile flies",
+  "subtitles.entity.drowned_necromancer.steam_missile": "Steam Missile launches",
   "subtitles.entity.drowned_necromancer.steam_missile_impact": "Steam Missile hits",
   "subtitles.entity.drowned_necromancer.prepare_trident_storm": "Trident Storm rumbles",
   "subtitles.entity.drowned_necromancer.trident_storm_hit": "Trident Storm strikes",

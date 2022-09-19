@@ -75,7 +75,7 @@ public class SquallGolemEntity extends AbstractRaiderEntity implements IAnimatab
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MonsterEntity.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 125.0D) // >= Golem Health
+                .add(Attributes.MAX_HEALTH, 90.0D) // >= Golem Health
                 .add(Attributes.MOVEMENT_SPEED, 0.3D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
                 .add(Attributes.ATTACK_DAMAGE, 15.0D) // 1x Golem Attack
@@ -325,7 +325,7 @@ public class SquallGolemEntity extends AbstractRaiderEntity implements IAnimatab
     @Override
     public boolean hurt(DamageSource source, float amount) {
         boolean flag = false;
-        if (!this.getActivate()) {
+        if (!this.getActivate() && source != DamageSource.OUT_OF_WORLD) {
             this.playSound(SoundEvents.ZOMBIE_ATTACK_IRON_DOOR, 1.0F, 0.4F);
             if (source.getEntity() instanceof LivingEntity && source.getEntity().isInvulnerable()) {
                 this.setTarget((LivingEntity) source.getEntity());

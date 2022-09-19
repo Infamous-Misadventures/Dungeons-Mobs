@@ -15,7 +15,7 @@ import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
-public class QuickGrowingAnemoneRenderer<T extends QuickGrowingAnemoneEntity> extends GeoEntityRenderer<T> {
+/*public class QuickGrowingAnemoneRenderer extends GeoEntityRenderer<QuickGrowingAnemoneEntity> {
 
     private static final ResourceLocation QUICK_GROWING_ANEMONE_TEXTURE = new ResourceLocation(MODID, "textures/entity/ocean/quick_growing_anemone.png");
     
@@ -24,14 +24,14 @@ public class QuickGrowingAnemoneRenderer<T extends QuickGrowingAnemoneEntity> ex
     }
     
     @Override
-    public ResourceLocation getTextureLocation(T entity) {
+    public ResourceLocation getTextureLocation(QuickGrowingAnemoneEntity entity) {
         return QUICK_GROWING_ANEMONE_TEXTURE;
     }
     
     @Override
- 	public RenderType getRenderType(T animatable, float partialTicks, MatrixStack stack,
+ 	public RenderType getRenderType(QuickGrowingAnemoneEntity animatable, float partialTicks, MatrixStack stack,
  			IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn,
  			ResourceLocation textureLocation) {
  		return RenderType.entityTranslucent(textureLocation);
  	}
-}
+}*/
