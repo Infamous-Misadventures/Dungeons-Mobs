@@ -62,12 +62,14 @@ public abstract class AbstractVineEntity extends MobEntity implements IMob {
         for (int i = 0; i < adjustedLength; i++) {
             VinePartEntity newPart = new VinePartEntity(this, 26 - i);
             this.subEntities[i] = newPart;
+//            this.level.addFreshEntity(newPart);
         }
 	}
 	
     protected void updateParts()
     {
         for (VinePartEntity part : subEntities) {
+            part.refreshDimensions();
             movePart(part, 0, part.getYOffsetForSegment(), 0);
         }
     }
@@ -115,7 +117,7 @@ public abstract class AbstractVineEntity extends MobEntity implements IMob {
 	
 	   protected void tickDeath() {
 		      ++this.deathTime;
-		      if (this.deathTime == this.getRetractAnimationLength() + 2) {
+		      if (this.deathTime == this.getRetractAnimationLength()) {
 		    	  this.remove();
 		      }
 		}
@@ -173,11 +175,11 @@ public abstract class AbstractVineEntity extends MobEntity implements IMob {
     }
     
     public void setLengthInPixels(int setTo){
-        this.setLengthInSegments(setTo * 22);
+        this.setLengthInSegments(setTo / 22);
     }
     
-    public void setLengthInBlocks(int setTo){
-        this.setLengthInPixels(setTo / 16);
+    public void setLengthInBlocks(float setTo){
+        this.setLengthInPixels(Math.round(setTo * 16));
     }
     
     public boolean getVanishes() {
@@ -399,50 +401,28 @@ public abstract class AbstractVineEntity extends MobEntity implements IMob {
     	
 		if (!this.level.isClientSide) {
 			
-			if (this.lifeTime < this.getStayTime() && this.getVanishes()) {
-				this.lifeTime++;
-			}
-			
-			if (this.lifeTime >= this.getStayTime() && this.getVanishes()) {
-				if (this.canRetract() && this.getShouldRetract()) {
-					this.retract();
-				}
-			}
-			
 			if (this.burstAnimationTick == 1) {
 				this.setOut(true);
 			} else if (this.retractAnimationTick == 1) {
 				this.setOut(false);
 			}
 			
-			if (this.getAlwaysOut() && this.canBurst()) {
-				this.burst();
-			}
-			
 			if (nearbyEntities > 0) {
 				if (this.canBurst()) {
-					this.burst();
+					this.spawnAreaDamage();
+					this.playBurstSound();
+					this.burstAnimationTick = this.getBurstAnimationLength();
+					this.level.broadcastEntityEvent(this, (byte) 4);
 				}
 			} else {
 				if (this.canRetract() && this.getShouldRetract()) {
-					this.retract();
+					this.spawnAreaDamage();
+					this.playRetractSound();
+					this.retractAnimationTick = this.getRetractAnimationLength();
+					this.level.broadcastEntityEvent(this, (byte) 11);
 				}
 			}
 		}
-	}
-	
-	public void burst() {
-		this.spawnAreaDamage();
-		this.playBurstSound();
-		this.burstAnimationTick = this.getBurstAnimationLength();
-		this.level.broadcastEntityEvent(this, (byte) 4);
-	}
-	
-	public void retract() {
-		this.spawnAreaDamage();
-		this.playRetractSound();
-		this.retractAnimationTick = this.getRetractAnimationLength();
-		this.level.broadcastEntityEvent(this, (byte) 11);
 	}
 	
 	public void tickDownAnimTimers() {

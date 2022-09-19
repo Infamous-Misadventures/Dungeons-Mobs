@@ -1,9 +1,7 @@
 package com.infamous.dungeons_mobs.entities.jungle;
 
 import com.infamous.dungeons_mobs.tags.CustomTags;
-
 import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
