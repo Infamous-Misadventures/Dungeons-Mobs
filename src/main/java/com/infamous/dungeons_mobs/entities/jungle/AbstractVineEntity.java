@@ -1,9 +1,7 @@
 package com.infamous.dungeons_mobs.entities.jungle;
 
-import java.util.List;
 import java.util.function.Predicate;
 
-import com.google.common.collect.Lists;
 import com.infamous.dungeons_mobs.tags.CustomTags;
 
 import net.minecraft.entity.Entity;
@@ -15,7 +13,6 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.Pose;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.monster.SlimeEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -28,7 +25,6 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
-import net.minecraftforge.entity.PartEntity;
 
 public abstract class AbstractVineEntity extends MobEntity implements IMob {
 
@@ -62,7 +58,6 @@ public abstract class AbstractVineEntity extends MobEntity implements IMob {
         for (int i = 0; i < adjustedLength; i++) {
             VinePartEntity newPart = new VinePartEntity(this, 26 - i);
             this.subEntities[i] = newPart;
-//            this.level.addFreshEntity(newPart);
         }
 	}
 	
@@ -104,10 +99,20 @@ public abstract class AbstractVineEntity extends MobEntity implements IMob {
     public net.minecraftforge.entity.PartEntity<?>[] getParts() {    
         return subEntities;
     }
+    
+	   public boolean isAlliedTo(Entity p_184191_1_) {
+		      if (super.isAlliedTo(p_184191_1_)) {
+		         return true;
+		      } else if (p_184191_1_ instanceof LivingEntity && ((LivingEntity)p_184191_1_).getType().is(CustomTags.PLANT_MOBS)) {
+		         return this.getTeam() == null && p_184191_1_.getTeam() == null;
+		      } else {
+		         return false;
+		      }
+		   }
 	
 	   protected void tickDeath() {
 		      ++this.deathTime;
-		      if (this.deathTime == this.getRetractAnimationLength() + 2) {
+		      if (this.deathTime == this.getRetractAnimationLength()) {
 		    	  this.remove();
 		      }
 		}
@@ -162,6 +167,14 @@ public abstract class AbstractVineEntity extends MobEntity implements IMob {
 
     public void setLengthInSegments(int setTo){
         this.entityData.set(LENGTH, setTo);
+    }
+    
+    public void setLengthInPixels(int setTo){
+        this.setLengthInPixels(setTo / 22);
+    }
+    
+    public void setLengthInBlocks(float setTo){
+        this.setLengthInPixels(Math.round(setTo * 16));
     }
     
     public boolean getVanishes() {

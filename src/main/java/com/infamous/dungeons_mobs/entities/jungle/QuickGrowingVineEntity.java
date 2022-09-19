@@ -49,7 +49,7 @@ public class QuickGrowingVineEntity extends AbstractVineEntity implements IAnima
 		} else if (this.retractAnimationTick > 0) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("quick_growing_vine_retract", true));
 		} else {
-			if (this.isOut()) {
+			if (this.isOut() || this.burstAnimationTick > 0) {
 				event.getController().setAnimation(new AnimationBuilder().addAnimation("quick_growing_vine_idle", true));
 			} else {
 				event.getController().setAnimation(new AnimationBuilder().addAnimation("quick_growing_vine_idle_underground", true));
@@ -65,7 +65,7 @@ public class QuickGrowingVineEntity extends AbstractVineEntity implements IAnima
 
 	@Override
 	public int getBurstAnimationLength() {
-		return 12;
+		return 10;
 	}
 
 	@Override
