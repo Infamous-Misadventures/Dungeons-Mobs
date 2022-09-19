@@ -69,7 +69,7 @@ public abstract class AbstractVineEntity extends MobEntity implements IMob {
     protected void updateParts()
     {
         for (VinePartEntity part : subEntities) {
-//            part.refreshDimensions();
+            part.refreshDimensions();
             movePart(part, 0, part.getYOffsetForSegment(), 0);
         }
     }

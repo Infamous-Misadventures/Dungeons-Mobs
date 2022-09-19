@@ -51,6 +51,9 @@ public class VinePartEntity extends PartEntity<AbstractVineEntity> {
 	   
 	   public EntitySize getSizeForSegment() {
 		   EntitySize size = EntitySize.scalable(0, 0);
+		   if(this.segmentNumber < 27 - parentMob.getLengthInSegments()) {
+			   return size;
+		   }
 		   	if (this.segmentNumber >= 1 && this.segmentNumber <= 4) {
 		   		size = EntitySize.scalable(2.0F, 1.375F);
 		   	} else if (this.segmentNumber >= 5 && this.segmentNumber <= 10) {
