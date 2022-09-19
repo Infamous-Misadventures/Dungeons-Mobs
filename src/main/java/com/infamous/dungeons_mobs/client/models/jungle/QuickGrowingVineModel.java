@@ -31,29 +31,37 @@ public class QuickGrowingVineModel extends AnimatedGeoModel<QuickGrowingVineEnti
 	public ResourceLocation getTextureLocation(QuickGrowingVineEntity entity) {
 		return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/jungle/quick_growing_vine.png");
 	}
-	
-    @Override
-    public void setLivingAnimations(QuickGrowingVineEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
-        super.setLivingAnimations(entity, uniqueID, customPredicate);
-        
-        for (int i = 1; i < 26; i++) {
-        	IBone part = this.getAnimationProcessor().getBone("part" + i);
-        	int partsToShow = 27 - entity.getLengthInSegments();
-        	if (part != null) {
-	        	if (i >= partsToShow) {
-	        		part.setHidden(false);
-	        	} else {
-	        		part.setHidden(true);
-	        	}
-        	}
-        }
 
-    }
-	
+	@Override
+	public void setLivingAnimations(QuickGrowingVineEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
+		super.setLivingAnimations(entity, uniqueID, customPredicate);
+
+		IBone everything = this.getAnimationProcessor().getBone("everything");
+
+		if (entity.tickCount <= 2 || (!entity.isOut() && entity.burstAnimationTick <= 0 && entity.retractAnimationTick <= 0)) {
+			everything.setHidden(true);
+		} else {
+			everything.setHidden(false);
+		}
+
+		for (int i = 1; i < 26; i++) {
+			IBone part = this.getAnimationProcessor().getBone("part" + i);
+			int partsToShow = 27 - entity.getLengthInSegments();
+			if (part != null) {
+				if (i >= partsToShow) {
+					part.setHidden(false);
+				} else {
+					part.setHidden(true);
+				}
+			}
+		}
+
+	}
+
 	@Override
 	public void setMolangQueries(IAnimatable animatable, double currentTick) {
 		super.setMolangQueries(animatable, currentTick);
-		
+
 		MolangParser parser = GeckoLibCache.getInstance().parser;
 		QuickGrowingVineEntity vine = (QuickGrowingVineEntity) animatable;
 		parser.setValue("query.vine_length", vine.getLengthInSegments());
