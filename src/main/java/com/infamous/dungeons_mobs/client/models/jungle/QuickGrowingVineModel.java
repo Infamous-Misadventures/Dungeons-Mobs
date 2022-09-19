@@ -55,12 +55,12 @@ public class QuickGrowingVineModel extends AnimatedGeoModel<QuickGrowingVineEnti
 
     }
 
-    @Override
-    public void setMolangQueries(IAnimatable animatable, double currentTick) {
-        super.setMolangQueries(animatable, currentTick);
+	@Override
+	public void setMolangQueries(IAnimatable animatable, double currentTick) {
+		super.setMolangQueries(animatable, currentTick);
 
-        MolangParser parser = GeckoLibCache.getInstance().parser;
-        QuickGrowingVineEntity vine = (QuickGrowingVineEntity) animatable;
-        parser.setValue("query.vine_length", vine.getLengthInSegments());
-    }
+		MolangParser parser = GeckoLibCache.getInstance().parser;
+		QuickGrowingVineEntity vine = (QuickGrowingVineEntity) animatable;
+		parser.setValue("query.vine_length", vine.getLengthInSegments());
+	}
 }

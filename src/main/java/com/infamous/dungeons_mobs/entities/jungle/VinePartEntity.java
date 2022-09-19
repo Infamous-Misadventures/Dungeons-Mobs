@@ -9,29 +9,19 @@ import net.minecraft.util.DamageSource;
 import net.minecraftforge.entity.PartEntity;
 
 public class VinePartEntity extends PartEntity<AbstractVineEntity> {
-	   public final AbstractVineEntity parentMob;
-	   
-	   public int segmentNumber;
-	   
-	   public VinePartEntity(AbstractVineEntity p_i50232_1_, int segmentNumber) {
-	      super(p_i50232_1_);
-	      this.parentMob = p_i50232_1_;
-	      this.segmentNumber = segmentNumber;
-		  this.refreshDimensions();
-	   }
+	public final AbstractVineEntity parentMob;
 
-	   protected void defineSynchedData() {
-	   }
+	public int segmentNumber;
 
-	   protected void readAdditionalSaveData(CompoundNBT p_70037_1_) {
-	   }
+	public VinePartEntity(AbstractVineEntity p_i50232_1_, int segmentNumber) {
+		super(p_i50232_1_);
+		this.parentMob = p_i50232_1_;
+		this.segmentNumber = segmentNumber;
+		this.refreshDimensions();
+	}
 
-	   protected void addAdditionalSaveData(CompoundNBT p_213281_1_) {
-	   }
-	   
-	   public boolean isPickable() {
-	      return parentMob.isOut();
-	   }
+	protected void defineSynchedData() {
+	}
 
 	   public boolean hurt(DamageSource p_70097_1_, float p_70097_2_) {
 		   if (p_70097_1_.getEntity() != null && p_70097_1_.getEntity().getType().is(CustomTags.PLANT_MOBS)) {
@@ -41,18 +31,30 @@ public class VinePartEntity extends PartEntity<AbstractVineEntity> {
 		   }
 	   }
 
-	   public void refreshDimensions() {
-		      double d0 = this.getX();
-		      double d1 = this.getY();
-		      double d2 = this.getZ();
-		      super.refreshDimensions();
-		      this.setPos(d0, d1, d2);
-		   }
-	   
-	   @Override
+	protected void readAdditionalSaveData(CompoundNBT p_70037_1_) {
+	}
+
+
+	protected void addAdditionalSaveData(CompoundNBT p_213281_1_) {
+	}
+
+	public boolean isPickable() {
+		return parentMob.isOut();
+	}
+
+	public void refreshDimensions() {
+		double d0 = this.getX();
+		double d1 = this.getY();
+		double d2 = this.getZ();
+		super.refreshDimensions();
+		this.setPos(d0, d1, d2);
+	}
+
+	@Override
 	public boolean canBeCollidedWith() {
 		return parentMob.isOut();
 	}
+
 	   
 	   public EntitySize getSizeForSegment() {
 		   EntitySize size = EntitySize.scalable(0, 0);
@@ -80,16 +82,17 @@ public class VinePartEntity extends PartEntity<AbstractVineEntity> {
 		   		}
 		   return size;
 	   }
-	   
-	   public float getYOffsetForSegment() {
-		   return (1.375F * (this.segmentNumber - 1)) - (1.375F * 26) + this.parentMob.getLengthInBlocks();
-	   }
 
-	   public EntitySize getDimensions(Pose p_213305_1_) {
-	      return this.getSizeForSegment();
-	   }
-	   
-	   public IPacket<?> getAddEntityPacket() {
-		      throw new UnsupportedOperationException();
-		   }
+
+	public float getYOffsetForSegment() {
+		return (1.375F * (this.segmentNumber - 1)) - (1.375F * 26) + this.parentMob.getLengthInBlocks();
 	}
+
+	public EntitySize getDimensions(Pose p_213305_1_) {
+		return this.getSizeForSegment();
+	}
+
+	public IPacket<?> getAddEntityPacket() {
+		throw new UnsupportedOperationException();
+	}
+}

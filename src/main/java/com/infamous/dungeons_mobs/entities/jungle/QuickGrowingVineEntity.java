@@ -21,16 +21,16 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 public class QuickGrowingVineEntity extends AbstractVineEntity implements IAnimatable {
 
 	AnimationFactory factory = new AnimationFactory(this);
-	
+
 	public QuickGrowingVineEntity(EntityType<? extends QuickGrowingVineEntity> p_i50147_1_, World p_i50147_2_) {
 		super(p_i50147_1_, p_i50147_2_);
 	}
 
-	
-    public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
-        return MonsterEntity.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 15.0D);
-    }
+
+	public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
+		return MonsterEntity.createMonsterAttributes()
+				.add(Attributes.MAX_HEALTH, 15.0D);
+	}
 
 	@Override
 	public void registerControllers(AnimationData data) {
@@ -61,7 +61,7 @@ public class QuickGrowingVineEntity extends AbstractVineEntity implements IAnima
 
 	@Override
 	public int getBurstAnimationLength() {
-		return 10;
+		return 12;
 	}
 
 	@Override
@@ -73,12 +73,12 @@ public class QuickGrowingVineEntity extends AbstractVineEntity implements IAnima
 	protected SoundEvent getAmbientSoundFoley() {
 		return null;
 	}
-	
+
 	@Override
 	protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
 		return ModSoundEvents.QUICK_GROWING_VINE_HURT.get();
 	}
-	
+
 	@Override
 	protected SoundEvent getDeathSound() {
 		return ModSoundEvents.QUICK_GROWING_VINE_DEATH.get();
