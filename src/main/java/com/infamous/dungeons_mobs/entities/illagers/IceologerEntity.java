@@ -5,6 +5,7 @@ import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
+import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
 import com.infamous.dungeons_mobs.entities.summonables.IceCloudEntity;
 import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
 import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
@@ -39,6 +40,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.DifficultyInstance;
@@ -52,7 +54,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class IceologerEntity extends AbstractIllagerEntity implements IAnimatable {
+public class IceologerEntity extends AbstractIllagerEntity implements IAnimatable, SpawnArmoredMob {
 
 	public int summonAnimationTick;
 	public int summonAnimationLength = 60;
@@ -194,7 +196,12 @@ public class IceologerEntity extends AbstractIllagerEntity implements IAnimatabl
     public SoundEvent getCelebrateSound() {
         return ModSoundEvents.ICEOLOGER_ATTACK.get();
     }
-    
+
+    @Override
+    public ResourceLocation getArmorSet() {
+        return ModItems.ICEOLOGER_CLOTHES.getArmorSet();
+    }
+
     class SummonIceChunkGoal extends Goal {
 		public IceologerEntity mob;
 		@Nullable

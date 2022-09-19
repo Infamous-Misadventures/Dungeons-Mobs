@@ -153,10 +153,10 @@ public class EntitySpawnPlacements {
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING,
                 EntitySpawnPlacements::canJungleMobSpawn);
-        EntitySpawnPlacementRegistry.register(ModEntityTypes.QUICK_GROWING_VINE.get(),
-                EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
-                Heightmap.Type.MOTION_BLOCKING,
-                VineEntity::canVineSpawnInLight);
+//        EntitySpawnPlacementRegistry.register(ModEntityTypes.QUICK_GROWING_VINE.get(),
+//                EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
+//                Heightmap.Type.MOTION_BLOCKING,
+//                VineEntity::canVineSpawnInLight);
         EntitySpawnPlacementRegistry.register(ModEntityTypes.POISON_QUILL_VINE.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING,

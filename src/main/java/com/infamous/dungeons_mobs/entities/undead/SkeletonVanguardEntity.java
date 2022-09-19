@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
+import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
 import com.infamous.dungeons_mobs.entities.illagers.RoyalGuardEntity;
 import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
 import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
@@ -66,7 +67,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class SkeletonVanguardEntity extends SkeletonEntity implements IShieldUser, IAnimatable {
+public class SkeletonVanguardEntity extends SkeletonEntity implements IShieldUser, IAnimatable, SpawnArmoredMob {
 
 	private static final UUID SPEED_MODIFIER_BLOCKING_UUID = UUID.fromString("e4c96392-42f5-4028-ac44-cad469c10d51");
 	private static final AttributeModifier SPEED_MODIFIER_BLOCKING = new AttributeModifier(SPEED_MODIFIER_BLOCKING_UUID,
@@ -304,6 +305,11 @@ public class SkeletonVanguardEntity extends SkeletonEntity implements IShieldUse
 	@Override
 	public boolean isShieldDisabled() {
 		return this.shieldCooldownTime > 0;
+	}
+
+	@Override
+	public ResourceLocation getArmorSet() {
+		return ModItems.VANGUARD_ARMOR.getArmorSet();
 	}
 
 	class BasicAttackGoal extends Goal {

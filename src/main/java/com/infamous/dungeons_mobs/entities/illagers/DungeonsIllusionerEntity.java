@@ -5,6 +5,7 @@ import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
+import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
 import com.infamous.dungeons_mobs.entities.summonables.IceCloudEntity;
 import com.infamous.dungeons_mobs.entities.summonables.SummonSpotEntity;
 import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
@@ -71,7 +72,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements IAnimatable {
+public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements IAnimatable, SpawnArmoredMob {
 
 	public int shootAnimationTick;
 	public int shootAnimationLength = 35;
@@ -321,6 +322,11 @@ public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements I
 		         this.level.addFreshEntity(areaeffectcloudentity);
 
 		   }
+
+	@Override
+	public ResourceLocation getArmorSet() {
+		return ModItems.ILLUSIONER_CLOTHES.getArmorSet();
+	}
 
 	class ShootAttackGoal extends Goal {
 		public DungeonsIllusionerEntity mob;
