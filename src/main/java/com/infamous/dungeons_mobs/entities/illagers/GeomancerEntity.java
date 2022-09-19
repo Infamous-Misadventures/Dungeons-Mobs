@@ -55,7 +55,10 @@ public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnima
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
-        return EvokerEntity.createAttributes().add(Attributes.MOVEMENT_SPEED, 0.25D).add(Attributes.FOLLOW_RANGE, 32.0D);
+        return EvokerEntity.createAttributes()
+				  .add(Attributes.MAX_HEALTH, 18.0D)
+				  .add(Attributes.MOVEMENT_SPEED, 0.25D)
+				  .add(Attributes.FOLLOW_RANGE, 32.0D);
     }
 
     @Override
@@ -89,6 +92,7 @@ public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnima
 		if (this.getCastTicks() > 0) {
 			this.setCastTicks(this.getCastTicks() - 1);
 		}
+		   if (this.hurtTime > 0) this.tickCount ++;
     }
     
 	   public int getCastTicks() {
@@ -180,7 +184,7 @@ public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnima
         }
 
         protected int getCastingInterval() {
-            return 100 - GeomancerEntity.this.getRandom().nextInt(60);
+            return 120 - GeomancerEntity.this.getRandom().nextInt(45);
         }
 
         protected void performSpellCasting() {
