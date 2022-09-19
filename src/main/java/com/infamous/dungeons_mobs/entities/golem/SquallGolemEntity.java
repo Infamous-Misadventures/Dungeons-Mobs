@@ -51,6 +51,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
+import java.util.UUID;
 
 public class SquallGolemEntity extends AbstractRaiderEntity implements IAnimatable {
 	
