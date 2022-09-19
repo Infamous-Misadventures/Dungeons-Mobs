@@ -10,8 +10,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.attributes.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.monster.AbstractRaiderEntity;
@@ -54,6 +53,15 @@ import javax.annotation.Nullable;
 import java.util.EnumSet;
 
 public class SquallGolemEntity extends AbstractRaiderEntity implements IAnimatable {
+	
+    private static final UUID SPEED_MODIFIER_BLOCKING_UUID = UUID.fromString("5402abc5-9c78-4b2f-86db-be5fbce609ca");
+    private static final AttributeModifier SPEED_MODIFIER_BLOCKING = new AttributeModifier(SPEED_MODIFIER_BLOCKING_UUID,
+            "move speed decrease", -0.1D, AttributeModifier.Operation.ADDITION);
+	
+    private static final UUID SPEED_MODIFIER_BLOCKING_UUID2 = UUID.fromString("5402abc5-9c78-4b2f-86db-be5fbce600ca");
+    private static final AttributeModifier SPEED_MODIFIER_BLOCKING2 = new AttributeModifier(SPEED_MODIFIER_BLOCKING_UUID2,
+            "water speed decrease", 0.65D, AttributeModifier.Operation.ADDITION);
+	
     private int attackTimer;
     private int attackID;
     public int cd;
@@ -75,7 +83,7 @@ public class SquallGolemEntity extends AbstractRaiderEntity implements IAnimatab
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MonsterEntity.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 90.0D) // >= Golem Health
+                .add(Attributes.MAX_HEALTH, 100.0D) // == Golem Health
                 .add(Attributes.MOVEMENT_SPEED, 0.3D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
                 .add(Attributes.ATTACK_DAMAGE, 15.0D) // 1x Golem Attack
@@ -226,6 +234,28 @@ public class SquallGolemEntity extends AbstractRaiderEntity implements IAnimatab
                 this.attackID = GOLEM_DEACTIVATE;
 
             }
+        }
+	  
+        ModifiableAttributeInstance modifiableattributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
+	    
+        if (target != null) {
+            if (this.distanceTo(target) <= 9) {
+                if (!modifiableattributeinstance.hasModifier(SPEED_MODIFIER_BLOCKING)) {
+                    modifiableattributeinstance.addTransientModifier(SPEED_MODIFIER_BLOCKING);
+                }
+            } else {
+                modifiableattributeinstance.removeModifier(SPEED_MODIFIER_BLOCKING);
+            }
+        } else {
+            modifiableattributeinstance.removeModifier(SPEED_MODIFIER_BLOCKING);
+        }
+
+        if (this.isInWater()) {
+            if (!modifiableattributeinstance.hasModifier(SPEED_MODIFIER_BLOCKING2)) {
+                modifiableattributeinstance.addTransientModifier(SPEED_MODIFIER_BLOCKING2);
+            }
+        } else {
+            modifiableattributeinstance.removeModifier(SPEED_MODIFIER_BLOCKING2);
         }
 
         if (this.cd > 0) {
