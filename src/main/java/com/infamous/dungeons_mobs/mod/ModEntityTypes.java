@@ -62,7 +62,7 @@ import com.infamous.dungeons_mobs.entities.undead.SkeletonVanguardEntity;
 import com.infamous.dungeons_mobs.entities.undead.WraithEntity;
 import com.infamous.dungeons_mobs.entities.water.DrownedNecromancerEntity;
 import com.infamous.dungeons_mobs.entities.water.PoisonAnemoneEntity;
-import com.infamous.dungeons_mobs.entities.water.QuickGrowingAnemoneEntity;
+import com.infamous.dungeons_mobs.entities.water.QuickGrowingKelpEntity;
 import com.infamous.dungeons_mobs.entities.water.SunkenSkeletonEntity;
 import com.infamous.dungeons_mobs.entities.water.WavewhispererEntity;
 
@@ -330,18 +330,16 @@ public class ModEntityTypes {
                     0x48a867, 0x69ebff
     );
 
-    public static final RegistryObject<EntityType<QuickGrowingAnemoneEntity>> QUICK_GROWING_ANEMONE = registerEntity("quick_growing_anemone", () ->
-            EntityType.Builder.<QuickGrowingAnemoneEntity>of(QuickGrowingAnemoneEntity::new, EntityClassification.MONSTER)
-                    //.fireImmune()
+    public static final RegistryObject<EntityType<QuickGrowingKelpEntity>> QUICK_GROWING_KELP = registerEntity("quick_growing_kelp", () ->
+            EntityType.Builder.<QuickGrowingKelpEntity>of(QuickGrowingKelpEntity::new, EntityClassification.MONSTER)
                     .sized(1.0F, 2.5F)
                     .clientTrackingRange(10)
-                    .build(new ResourceLocation(MODID, "quick_growing_anemone").toString()),
+                    .build(new ResourceLocation(MODID, "quick_growing_kelp").toString()),
                     0x2b9477, 0x0d8f99
     );
 
     public static final RegistryObject<EntityType<PoisonAnemoneEntity>> POISON_ANEMONE = registerEntity("poison_anemone", () ->
             EntityType.Builder.<PoisonAnemoneEntity>of(PoisonAnemoneEntity::new, EntityClassification.MONSTER)
-                    //.fireImmune()
                     .sized(1.0F, 2.5F)
                     .clientTrackingRange(10)
                     .build(new ResourceLocation(MODID, "poison_anemone").toString()),

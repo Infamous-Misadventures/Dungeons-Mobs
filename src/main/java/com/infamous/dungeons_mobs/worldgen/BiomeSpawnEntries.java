@@ -133,13 +133,14 @@ public class BiomeSpawnEntries {
                     DungeonsMobsConfig.COMMON.LEAPLEAF_MIN_GROUP_SIZE.get(),
                     DungeonsMobsConfig.COMMON.LEAPLEAF_MAX_GROUP_SIZE.get());
 
-            List<String> quickGrowingVineBiomeTypes = (List<String>) DungeonsMobsConfig.COMMON.QUICK_GROWING_VINE_BIOME_TYPES.get();
+            // COMMENTED OUT BECAUSE THEY SHOULDN'T SPAWN WITHOUT WORLD
+            /*List<String> quickGrowingVineBiomeTypes = (List<String>) DungeonsMobsConfig.COMMON.QUICK_GROWING_VINE_BIOME_TYPES.get();
             tryAddMonsterSpawnToBiome(biomeRegistryKey, mobSpawnInfoBuilder, quickGrowingVineBiomeTypes, ModEntityTypes.QUICK_GROWING_VINE.get(),
                     DungeonsMobsConfig.COMMON.QUICK_GROWING_VINE_SPAWN_WEIGHT.get(),
                     DungeonsMobsConfig.COMMON.QUICK_GROWING_VINE_MIN_GROUP_SIZE.get(),
                     DungeonsMobsConfig.COMMON.QUICK_GROWING_VINE_MAX_GROUP_SIZE.get());
 
-            /*List<String> poisonQuillVineBiomeTypes = (List<String>) DungeonsMobsConfig.COMMON.POISON_QUILL_VINE_BIOME_TYPES.get();
+            List<String> poisonQuillVineBiomeTypes = (List<String>) DungeonsMobsConfig.COMMON.POISON_QUILL_VINE_BIOME_TYPES.get();
             tryAddMonsterSpawnToBiome(biomeRegistryKey, mobSpawnInfoBuilder, poisonQuillVineBiomeTypes, ModEntityTypes.POISON_QUILL_VINE.get(),
                     DungeonsMobsConfig.COMMON.POISON_QUILL_VINE_SPAWN_WEIGHT.get(),
                     DungeonsMobsConfig.COMMON.POISON_QUILL_VINE_MIN_GROUP_SIZE.get(),
@@ -181,7 +182,8 @@ public class BiomeSpawnEntries {
                 DungeonsMobsConfig.COMMON.WAVEWHISPERER_MIN_GROUP_SIZE.get(),
                 DungeonsMobsConfig.COMMON.WAVEWHISPERER_MAX_GROUP_SIZE.get());
 
-        List<String> quickGrowingAnemoneBiomeTypes = (List<String>) DungeonsMobsConfig.COMMON.QUICK_GROWING_ANEMONE_BIOME_TYPES.get();
+        // COMMENTED OUT BECAUSE THEY SHOULDN'T SPAWN WITHOUT WORLD
+        /*List<String> quickGrowingAnemoneBiomeTypes = (List<String>) DungeonsMobsConfig.COMMON.QUICK_GROWING_ANEMONE_BIOME_TYPES.get();
         tryAddMonsterSpawnToBiome(biomeRegistryKey, mobSpawnInfoBuilder, quickGrowingAnemoneBiomeTypes, ModEntityTypes.QUICK_GROWING_ANEMONE.get(),
                 DungeonsMobsConfig.COMMON.QUICK_GROWING_ANEMONE_SPAWN_WEIGHT.get(),
                 DungeonsMobsConfig.COMMON.QUICK_GROWING_ANEMONE_MIN_GROUP_SIZE.get(),
@@ -191,7 +193,7 @@ public class BiomeSpawnEntries {
         tryAddMonsterSpawnToBiome(biomeRegistryKey, mobSpawnInfoBuilder, poisonAnemoneBiomeTypes, ModEntityTypes.POISON_ANEMONE.get(),
                 DungeonsMobsConfig.COMMON.POISON_ANEMONE_SPAWN_WEIGHT.get(),
                 DungeonsMobsConfig.COMMON.POISON_ANEMONE_MIN_GROUP_SIZE.get(),
-                DungeonsMobsConfig.COMMON.POISON_ANEMONE_MAX_GROUP_SIZE.get());
+                DungeonsMobsConfig.COMMON.POISON_ANEMONE_MAX_GROUP_SIZE.get());*/
 
         //}
     }

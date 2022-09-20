@@ -137,11 +137,4 @@ public abstract class VineEntity extends MobEntity implements IMob {
             }
         }
     }
-
-    public static boolean canVineSpawnInLight(EntityType<? extends VineEntity> type, IServerWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
-        return worldIn.getDifficulty() != Difficulty.PEACEFUL
-                && MonsterEntity.isDarkEnoughToSpawn(worldIn, pos, randomIn)
-                && checkMobSpawnRules(type, worldIn, reason, pos, randomIn)
-                && (reason == SpawnReason.SPAWNER || worldIn.canSeeSky(pos));
-    }
 }

@@ -22,7 +22,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class QuickGrowingVineEntity extends AbstractVineEntity implements IAnimatable {
+public class QuickGrowingVineEntity extends AbstractVineEntity {
 
 	AnimationFactory factory = new AnimationFactory(this);
 
@@ -111,6 +111,21 @@ public class QuickGrowingVineEntity extends AbstractVineEntity implements IAnima
 	@Override
 	public SoundEvent getRetractSoundFoley() {
 		return null;
+	}
+	
+	@Override
+	public boolean isKelp() {
+		return false;
+	}
+
+	@Override
+	public boolean shouldDieInWrongHabitat() {
+		return true;
+	}
+
+	@Override
+	public int wrongHabitatDieChance() {
+		return 50;
 	}
 
 	@Override

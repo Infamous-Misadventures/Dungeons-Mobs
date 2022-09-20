@@ -37,7 +37,7 @@ import com.infamous.dungeons_mobs.entities.undead.SkeletonVanguardEntity;
 import com.infamous.dungeons_mobs.entities.undead.WraithEntity;
 import com.infamous.dungeons_mobs.entities.water.DrownedNecromancerEntity;
 import com.infamous.dungeons_mobs.entities.water.PoisonAnemoneEntity;
-import com.infamous.dungeons_mobs.entities.water.QuickGrowingAnemoneEntity;
+import com.infamous.dungeons_mobs.entities.water.QuickGrowingKelpEntity;
 import com.infamous.dungeons_mobs.entities.water.SunkenSkeletonEntity;
 import com.infamous.dungeons_mobs.entities.water.WavewhispererEntity;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
@@ -100,7 +100,7 @@ public class EntityTypeAttributes {
         event.put(ModEntityTypes.DROWNED_NECROMANCER.get(), DrownedNecromancerEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.SUNKEN_SKELETON.get(), SunkenSkeletonEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.WAVEWHISPERER.get(), WavewhispererEntity.setCustomAttributes().build());
-        event.put(ModEntityTypes.QUICK_GROWING_ANEMONE.get(), QuickGrowingAnemoneEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.QUICK_GROWING_KELP.get(), QuickGrowingKelpEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.POISON_ANEMONE.get(), PoisonAnemoneEntity.setCustomAttributes().build());
 
         event.put(ModEntityTypes.ENDERSENT.get(), EndersentEntity.setCustomAttributes().build());

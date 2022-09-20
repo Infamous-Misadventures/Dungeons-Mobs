@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.client.models.jungle;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
+import com.infamous.dungeons_mobs.entities.jungle.AbstractVineEntity;
 import com.infamous.dungeons_mobs.entities.jungle.QuickGrowingVineEntity;
 
 import net.minecraft.util.ResourceLocation;
@@ -12,25 +13,25 @@ import software.bernie.geckolib3.model.provider.data.EntityModelData;
 import software.bernie.geckolib3.resource.GeckoLibCache;
 import software.bernie.shadowed.eliotlash.molang.MolangParser;
 
-public class QuickGrowingVineModel extends AnimatedGeoModel<QuickGrowingVineEntity> {
+public class QuickGrowingVineModel extends AnimatedGeoModel<AbstractVineEntity> {
 
 	@Override
-	public ResourceLocation getAnimationFileLocation(QuickGrowingVineEntity entity) {
+	public ResourceLocation getAnimationFileLocation(AbstractVineEntity entity) {
 		return new ResourceLocation(DungeonsMobs.MODID, "animations/quick_growing_vine.animation.json");
 	}
 
 	@Override
-	public ResourceLocation getModelLocation(QuickGrowingVineEntity entity) {
+	public ResourceLocation getModelLocation(AbstractVineEntity entity) {
 		return new ResourceLocation(DungeonsMobs.MODID, "geo/quick_growing_vine.geo.json");
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(QuickGrowingVineEntity entity) {
+	public ResourceLocation getTextureLocation(AbstractVineEntity entity) {
 		return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/jungle/quick_growing_vine.png");
 	}
 
 	@Override
-	public void setLivingAnimations(QuickGrowingVineEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
+	public void setLivingAnimations(AbstractVineEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
 		super.setLivingAnimations(entity, uniqueID, customPredicate);
 
 		IBone everything = this.getAnimationProcessor().getBone("everything");
