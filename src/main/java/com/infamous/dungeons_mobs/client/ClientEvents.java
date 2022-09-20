@@ -66,6 +66,7 @@ import com.infamous.dungeons_mobs.client.renderer.undead.WraithRenderer;
 import com.infamous.dungeons_mobs.client.renderer.water.CustomDrownedRenderer;
 import com.infamous.dungeons_mobs.client.renderer.water.DrownedNecromancerRenderer;
 import com.infamous.dungeons_mobs.client.renderer.water.PoisonAnemoneRenderer;
+import com.infamous.dungeons_mobs.client.renderer.water.QuickGrowingKelpRenderer;
 import com.infamous.dungeons_mobs.client.renderer.water.SunkenSkeletonRenderer;
 import com.infamous.dungeons_mobs.client.renderer.water.WavewhispererRenderer;
 import com.infamous.dungeons_mobs.items.WraithFireChargeItem;
@@ -182,7 +183,7 @@ public class ClientEvents {
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WAVEWHISPERER.get(), WavewhispererRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.POISON_ANEMONE.get(), PoisonAnemoneRenderer::new);
-        //RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.QUICK_GROWING_ANEMONE.get(), QuickGrowingAnemoneRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.QUICK_GROWING_KELP.get(), QuickGrowingKelpRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.DROWNED_NECROMANCER.get(), DrownedNecromancerRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SUNKEN_SKELETON.get(), SunkenSkeletonRenderer::new);
 

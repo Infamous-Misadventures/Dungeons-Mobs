@@ -4,6 +4,7 @@ import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.client.models.jungle.QuickGrowingVineModel;
 import com.infamous.dungeons_mobs.client.models.undead.NecromancerModel;
 import com.infamous.dungeons_mobs.client.renderer.layer.PulsatingGlowLayer;
+import com.infamous.dungeons_mobs.entities.jungle.AbstractVineEntity;
 import com.infamous.dungeons_mobs.entities.jungle.QuickGrowingVineEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
@@ -17,7 +18,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 @OnlyIn(Dist.CLIENT)
-public class QuickGrowingVineRenderer extends GeoEntityRenderer<QuickGrowingVineEntity> {
+public class QuickGrowingVineRenderer extends GeoEntityRenderer<AbstractVineEntity> {
 
     @SuppressWarnings("unchecked")
 	public QuickGrowingVineRenderer(EntityRendererManager renderManager) {
@@ -26,14 +27,14 @@ public class QuickGrowingVineRenderer extends GeoEntityRenderer<QuickGrowingVine
     }
     
    @Override
-	public RenderType getRenderType(QuickGrowingVineEntity animatable, float partialTicks, MatrixStack stack,
+	public RenderType getRenderType(AbstractVineEntity animatable, float partialTicks, MatrixStack stack,
 			IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn,
 			ResourceLocation textureLocation) {
 		return RenderType.entityTranslucent(textureLocation);
 	}
    
    @Override
-	protected float getDeathMaxRotation(QuickGrowingVineEntity entityLivingBaseIn) {
+	protected float getDeathMaxRotation(AbstractVineEntity entityLivingBaseIn) {
 		return 0;
 	}
 }

@@ -1,19 +1,29 @@
 package com.infamous.dungeons_mobs.worldgen;
 
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Random;
+
 import com.infamous.dungeons_mobs.entities.creepers.IcyCreeperEntity;
+import com.infamous.dungeons_mobs.entities.jungle.AbstractVineEntity;
 import com.infamous.dungeons_mobs.entities.jungle.VineEntity;
 import com.infamous.dungeons_mobs.entities.undead.FrozenZombieEntity;
 import com.infamous.dungeons_mobs.entities.undead.JungleZombieEntity;
 import com.infamous.dungeons_mobs.entities.undead.MossySkeletonEntity;
 import com.infamous.dungeons_mobs.interfaces.IAquaticMob;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.monster.*;
+import net.minecraft.entity.monster.AbstractIllagerEntity;
+import net.minecraft.entity.monster.AbstractRaiderEntity;
+import net.minecraft.entity.monster.DrownedEntity;
+import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.entity.monster.ZombifiedPiglinEntity;
 import net.minecraft.entity.monster.piglin.PiglinEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.tags.BlockTags;
@@ -27,10 +37,6 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.gen.Heightmap;
-
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Random;
 
 public class EntitySpawnPlacements {
 
@@ -153,14 +159,15 @@ public class EntitySpawnPlacements {
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING,
                 EntitySpawnPlacements::canJungleMobSpawn);
-//        EntitySpawnPlacementRegistry.register(ModEntityTypes.QUICK_GROWING_VINE.get(),
-//                EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
-//                Heightmap.Type.MOTION_BLOCKING,
-//                VineEntity::canVineSpawnInLight);
+     // COMMENTED OUT BECAUSE THEY SHOULDN'T SPAWN WITHOUT DUNGEONS WORLD
+        /*EntitySpawnPlacementRegistry.register(ModEntityTypes.QUICK_GROWING_VINE.get(),
+                EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
+                Heightmap.Type.MOTION_BLOCKING,
+                AbstractVineEntity::canVineSpawnInLight);
         EntitySpawnPlacementRegistry.register(ModEntityTypes.POISON_QUILL_VINE.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING,
-                VineEntity::canVineSpawnInLight);
+                VineEntity::canVineSpawnInLight);*/
 
 
         EntitySpawnPlacementRegistry.register(ModEntityTypes.FUNGUS_THROWER.get(),
@@ -179,14 +186,15 @@ public class EntitySpawnPlacements {
                 EntitySpawnPlacementRegistry.PlacementType.IN_WATER,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                 EntitySpawnPlacements::checkAquaticMobSpawnRules);
-        EntitySpawnPlacementRegistry.register(ModEntityTypes.QUICK_GROWING_ANEMONE.get(),
+     // COMMENTED OUT BECAUSE THEY SHOULDN'T SPAWN WITHOUT DUNGEONS WORLD
+        /*EntitySpawnPlacementRegistry.register(ModEntityTypes.QUICK_GROWING_KELP.get(),
                 IN_WATER_ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                 EntitySpawnPlacements::checkAquaticMobSpawnRules);
         EntitySpawnPlacementRegistry.register(ModEntityTypes.POISON_ANEMONE.get(),
                 IN_WATER_ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                EntitySpawnPlacements::checkAquaticMobSpawnRules);
+                EntitySpawnPlacements::checkAquaticMobSpawnRules);*/
         EntitySpawnPlacementRegistry.register(ModEntityTypes.DROWNED_NECROMANCER.get(),
                 EntitySpawnPlacementRegistry.PlacementType.IN_WATER,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,

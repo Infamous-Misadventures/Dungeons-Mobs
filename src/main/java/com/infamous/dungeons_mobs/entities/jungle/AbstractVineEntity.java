@@ -1,5 +1,6 @@
 package com.infamous.dungeons_mobs.entities.jungle;
 
+import java.util.Random;
 import java.util.function.Predicate;
 
 import com.infamous.dungeons_mobs.tags.CustomTags;
@@ -13,6 +14,8 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.Pose;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -20,13 +23,16 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
+import software.bernie.geckolib3.core.IAnimatable;
 
-public abstract class AbstractVineEntity extends MobEntity implements IMob {
+public abstract class AbstractVineEntity extends MobEntity implements IMob, IAnimatable {
 
     public static final DataParameter<Integer> LENGTH = EntityDataManager.defineId(AbstractVineEntity.class, DataSerializers.INT);
     
@@ -99,6 +105,15 @@ public abstract class AbstractVineEntity extends MobEntity implements IMob {
     public net.minecraftforge.entity.PartEntity<?>[] getParts() {    
         return subEntities;
     }
+    
+    protected int decreaseAirSupply(int p_70682_1_) {
+        return p_70682_1_;
+     }
+    
+    public boolean causeFallDamage(float p_225503_1_, float p_225503_2_) {
+        return false;
+     }
+
     
 	   public boolean isAlliedTo(Entity p_184191_1_) {
 		      if (super.isAlliedTo(p_184191_1_)) {
@@ -378,6 +393,14 @@ public abstract class AbstractVineEntity extends MobEntity implements IMob {
 	
 	public abstract void setDefaultFeatures();
 	
+	public abstract boolean isKelp();
+	public abstract boolean shouldDieInWrongHabitat();	
+	public abstract int wrongHabitatDieChance();
+	
+	public boolean isInWrongHabitat() {
+		return ((this.isKelp() && !this.isInWaterOrBubble()) || (!this.isKelp() && this.isInWaterOrBubble()));
+	}
+	
 	@Override
 	public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance p_213386_2_,
 			SpawnReason p_213386_3_, ILivingEntityData p_213386_4_, CompoundNBT p_213386_5_) {
@@ -395,6 +418,10 @@ public abstract class AbstractVineEntity extends MobEntity implements IMob {
     	int nearbyEntities = this.level.getEntities(this, this.getBoundingBox().inflate(this.getDetectionDistance()), SHOULD_BURST_FOR).size();
     	
 		if (!this.level.isClientSide) {
+			
+			if (this.isInWrongHabitat() && this.random.nextInt(this.wrongHabitatDieChance()) == 0 && this.shouldDieInWrongHabitat() && this.isOut()) {
+				this.kill();
+			}
 			
 			if (this.burstAnimationTick == 1) {
 				this.setOut(true);
@@ -436,4 +463,5 @@ public abstract class AbstractVineEntity extends MobEntity implements IMob {
         for(int i = 0; i < this.subEntities.length; ++i) // Forge: Fix MC-158205: Set part ids to successors of parent mob id
             this.subEntities[i].setId(p_145769_1_ + i + 1);
     }
+    
 }

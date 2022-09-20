@@ -124,6 +124,25 @@ public class AreaDamageEntity extends Entity {
 	            double d2 = this.random.nextGaussian() * 15.0D;
 	            this.level.addParticle(ModParticleTypes.DUST.get(), vector3d.x, vector3d.y, vector3d.z, d0, d1, d2);
 	         }
+		} else if (p_70103_1_ == 2) {
+			for (int particleAmount = 0; particleAmount < 25; particleAmount++) {
+	            int i = MathHelper.floor(this.getX());
+	            int j = MathHelper.floor(this.getY() - (double)0.2F);
+	            int k = MathHelper.floor(this.getZ());
+	            BlockPos pos = new BlockPos(i, j, k);
+	            BlockState blockstate = this.level.getBlockState(pos);
+	            if (!blockstate.isAir(this.level, pos)) {
+	               this.level.addParticle(new BlockParticleData(ParticleTypes.BLOCK, blockstate).setPos(pos), this.getX(), this.getY() + 0.1D, this.getZ(), 0, 0, 0);
+	            }
+			}
+			
+			for(int i = 0; i < 50; ++i) {
+				Vector3d vector3d = this.position();
+	            double d0 = this.random.nextGaussian() * 0.5D;
+	            double d1 = this.random.nextFloat() * 2.0D;
+	            double d2 = this.random.nextGaussian() * 0.5D;
+	            this.level.addParticle(ParticleTypes.BUBBLE, vector3d.x, vector3d.y, vector3d.z, d0, d1, d2);
+	         }
 		} else {
 			super.handleEntityEvent(p_70103_1_);
 		}
