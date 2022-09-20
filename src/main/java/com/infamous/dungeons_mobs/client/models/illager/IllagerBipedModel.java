@@ -206,19 +206,19 @@ public class IllagerBipedModel<T extends AbstractIllagerEntity> extends BipedMod
             this.rightLeg.xRot = -1.4137167F;
             this.rightLeg.yRot = (-(float)Math.PI / 10F);
             this.rightLeg.zRot = -0.07853982F;
-         } else {
-            this.rightArm.xRot = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 2.0F * limbSwingAmount * 0.5F;
-            this.rightArm.yRot = 0.0F;
-            this.rightArm.zRot = 0.0F;
-            this.leftArm.xRot = MathHelper.cos(limbSwing * 0.6662F) * 2.0F * limbSwingAmount * 0.5F;
-            this.leftArm.yRot = 0.0F;
-            this.leftArm.zRot = 0.0F;
-            this.leftLeg.xRot = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount * 0.5F;
-            this.leftLeg.yRot = 0.0F;
-            this.leftLeg.zRot = 0.0F;
-            this.rightLeg.xRot = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount * 0.5F;
-            this.rightLeg.yRot = 0.0F;
-            this.rightLeg.zRot = 0.0F;
+//         } else {
+//            this.rightArm.xRot = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 2.0F * limbSwingAmount * 0.5F;
+//            this.rightArm.yRot = 0.0F;
+//            this.rightArm.zRot = 0.0F;
+//            this.leftArm.xRot = MathHelper.cos(limbSwing * 0.6662F) * 2.0F * limbSwingAmount * 0.5F;
+//            this.leftArm.yRot = 0.0F;
+//            this.leftArm.zRot = 0.0F;
+//            this.leftLeg.xRot = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount * 0.5F;
+//            this.leftLeg.yRot = 0.0F;
+//            this.leftLeg.zRot = 0.0F;
+//            this.rightLeg.xRot = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount * 0.5F;
+//            this.rightLeg.yRot = 0.0F;
+//            this.rightLeg.zRot = 0.0F;
          }
         if (entityIn instanceof MountaineerEntity && ((MountaineerEntity)entityIn).isClimbing()) {
         	this.rightArm.xRot = -1.8849558F + MathHelper.sin(ageInTicks * 0.35F) * 0.5F;
