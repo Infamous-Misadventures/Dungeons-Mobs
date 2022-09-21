@@ -256,6 +256,12 @@
   "mobenchant.enchantwithmob.name.dungeons_mobs.regeneration": "Regeneration",
   "mobenchant.enchantwithmob.name.dungeons_mobs.rush": "Rush",
   "mobenchant.enchantwithmob.name.dungeons_mobs.radiance": "Radiance",
+  "mobenchant.enchantwithmob.name.dungeons_mobs.gravity_pulse":  "Gravity Pulse",
+  "mobenchant.enchantwithmob.name.dungeons_mobs.burning": "Burning",
+  "mobenchant.enchantwithmob.name.dungeons_mobs.chilling":  "Chilling",
+  "mobenchant.enchantwithmob.name.dungeons_mobs.heals_allies": "Heals Allies",
+  "mobenchant.enchantwithmob.name.dungeons_mobs.deflect":  "Deflect",
+  "mobenchant.enchantwithmob.name.dungeons_mobs.echo": "Echo",
   
   "subtitles.entity.wraith.idle": "Wraith wails",
   "subtitles.entity.wraith.hurt": "Wraith hurts",
