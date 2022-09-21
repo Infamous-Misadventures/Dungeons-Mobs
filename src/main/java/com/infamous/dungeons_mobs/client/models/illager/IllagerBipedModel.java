@@ -17,6 +17,8 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.math.MathHelper;
 
+import static com.infamous.dungeons_mobs.client.renderer.layers.IllagerBipedArmorLayer.armorHasCrossedArms;
+
 public class IllagerBipedModel<T extends AbstractIllagerEntity> extends BipedModel<T> {
     public ModelRenderer arms;
     public ModelRenderer jacket;
@@ -91,7 +93,7 @@ public class IllagerBipedModel<T extends AbstractIllagerEntity> extends BipedMod
     private void giveModelRightArmPoses(Hand hand, T entityIn) {
         ItemStack itemstack = entityIn.getItemInHand(hand);
         UseAction useaction = itemstack.getUseAnimation();
-        if (entityIn.getArmPose() != AbstractIllagerEntity.ArmPose.CROSSED) {
+        if (entityIn.getArmPose() != AbstractIllagerEntity.ArmPose.CROSSED || !armorHasCrossedArms(entityIn, entityIn.getItemBySlot(EquipmentSlotType.CHEST))) {
             switch (useaction) {
                 case BLOCK:
                     if(entityIn.isBlocking()){
@@ -126,7 +128,7 @@ public class IllagerBipedModel<T extends AbstractIllagerEntity> extends BipedMod
     private void giveModelLeftArmPoses(Hand hand, T entityIn) {
         ItemStack itemstack = entityIn.getItemInHand(hand);
         UseAction useaction = itemstack.getUseAnimation();
-        if (entityIn.getArmPose() != AbstractIllagerEntity.ArmPose.CROSSED) {
+        if (entityIn.getArmPose() != AbstractIllagerEntity.ArmPose.CROSSED || !armorHasCrossedArms(entityIn, entityIn.getItemBySlot(EquipmentSlotType.CHEST))) {
             switch (useaction) {
                 case BLOCK:
                     if(entityIn.isBlocking()){
@@ -168,7 +170,7 @@ public class IllagerBipedModel<T extends AbstractIllagerEntity> extends BipedMod
         this.jacket.copyFrom(body);
         boolean isWearingChestplateOrLeggings = entityIn.getItemBySlot(EquipmentSlotType.CHEST).getItem() instanceof ArmorItem || entityIn.getItemBySlot(EquipmentSlotType.LEGS).getItem() instanceof ArmorItem;
         this.jacket.visible = !isWearingChestplateOrLeggings;
-        boolean flag = armpose == AbstractIllagerEntity.ArmPose.CROSSED;
+        boolean flag = armpose == AbstractIllagerEntity.ArmPose.CROSSED && armorHasCrossedArms(entityIn, entityIn.getItemBySlot(EquipmentSlotType.CHEST));
         this.arms.visible = flag;
         this.leftArm.visible = !flag;
         this.rightArm.visible = !flag;
@@ -268,5 +270,11 @@ public class IllagerBipedModel<T extends AbstractIllagerEntity> extends BipedMod
 	                break;
 	        }
         }
+    }
+
+    public void copyPropertiesTo(IllagerBipedModel<T> p_217148_1_) {
+        super.copyPropertiesTo(p_217148_1_);
+        p_217148_1_.arms.copyFrom(this.arms);
+        p_217148_1_.jacket.copyFrom(this.jacket);
     }
 }
