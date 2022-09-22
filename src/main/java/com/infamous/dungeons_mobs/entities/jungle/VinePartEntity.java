@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.entities.jungle;
 
 import com.infamous.dungeons_mobs.tags.CustomTags;
+
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.Pose;
 import net.minecraft.nbt.CompoundNBT;
@@ -48,6 +49,10 @@ public class VinePartEntity extends PartEntity<AbstractVineEntity> {
 		super.refreshDimensions();
 		this.setPos(d0, d1, d2);
 	}
+	
+	public boolean isPoisonQuill() {
+		return parentMob instanceof PoisonQuillVineEntity;
+	}
 
 	@Override
 	public boolean canBeCollidedWith() {
@@ -62,11 +67,11 @@ public class VinePartEntity extends PartEntity<AbstractVineEntity> {
 		}
 
 		if (this.segmentNumber == 26) {
-			size = EntitySize.scalable(0.25F, 1.375F);
+			size = EntitySize.scalable(0.25F, this.isPoisonQuill() ? 1.625F : 1.375F);
 		} else if (this.segmentNumber == 25) {
-			size = EntitySize.scalable(0.5F, 1.375F);
+			size = EntitySize.scalable(0.5F, this.isPoisonQuill() ? 2.0F : 1.375F);
 		} else if (this.segmentNumber >= 23 && this.segmentNumber <= 24) {
-			size = EntitySize.scalable(0.75F, 1.375F);
+			size = EntitySize.scalable(0.75F, this.isPoisonQuill() && this.segmentNumber == 24 ? 2.0F : 1.375F);
 		} else if (this.segmentNumber >= 20 && this.segmentNumber <= 22) {
 			size = EntitySize.scalable(1.0F, 1.375F);
 		} else if (this.segmentNumber >= 16 && this.segmentNumber <= 19) {
@@ -82,7 +87,8 @@ public class VinePartEntity extends PartEntity<AbstractVineEntity> {
 	}
 
 	public float getYOffsetForSegment() {
-		return (1.375F * (this.segmentNumber - 1)) - (1.375F * 26) + this.parentMob.getLengthInBlocks();
+		float extraHeight = this.isPoisonQuill() && this.segmentNumber > 24 ? (0.625F * (-24 + this.segmentNumber)) : 0.0F;
+		return ((1.375F * (this.segmentNumber - 1)) - (1.375F * 26) + this.parentMob.getLengthInBlocks()) + extraHeight;
 	}
 
 	public EntitySize getDimensions(Pose p_213305_1_) {

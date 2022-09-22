@@ -2561,7 +2561,7 @@
 		"subtitle": "subtitles.entity.whisperer.summon_pqv",
 		"sounds": [
 			{
-				"name": "dungeons_mobs:entities/whisperer/summon_pqv_vocal1",
+				"name": "dungeons_mobs:entities/whisperer/summon_pqv_vocal",
 				"stream": true
 			}
 		]
@@ -2570,7 +2570,7 @@
 		"category": "entity",
 		"sounds": [
 			{
-				"name": "dungeons_mobs:entities/whisperer/summon_pqv_foley1",
+				"name": "dungeons_mobs:entities/whisperer/summon_pqv_foley",
 				"stream": true
 			}
 		]
@@ -2580,7 +2580,7 @@
 		"subtitle": "subtitles.entity.whisperer.summon_qgv",
 		"sounds": [
 			{
-				"name": "dungeons_mobs:entities/whisperer/summon_qgv_vocal1",
+				"name": "dungeons_mobs:entities/whisperer/summon_qgv_vocal",
 				"stream": true
 			}
 		]
@@ -2589,7 +2589,7 @@
 		"category": "entity",
 		"sounds": [
 			{
-				"name": "dungeons_mobs:entities/whisperer/summon_qgv_foley1",
+				"name": "dungeons_mobs:entities/whisperer/summon_qgv_foley",
 				"stream": true
 			}
 		]
@@ -2599,7 +2599,7 @@
 		"subtitle": "subtitles.entity.whisperer.grapple",
 		"sounds": [
 			{
-				"name": "dungeons_mobs:entities/whisperer/grapple_vocal1",
+				"name": "dungeons_mobs:entities/whisperer/grapple_vocal",
 				"stream": true
 			}
 		]
@@ -2608,7 +2608,7 @@
 		"category": "entity",
 		"sounds": [
 			{
-				"name": "dungeons_mobs:entities/whisperer/grapple_foley1",
+				"name": "dungeons_mobs:entities/whisperer/grapple_foley",
 				"stream": true
 			}
 		]

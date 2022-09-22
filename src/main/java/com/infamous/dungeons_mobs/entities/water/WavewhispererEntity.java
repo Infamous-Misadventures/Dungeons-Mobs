@@ -61,7 +61,7 @@ public class WavewhispererEntity extends WhispererEntity implements IAquaticMob 
 
     @Override
     protected EntityType<? extends PoisonQuillVineEntity> getPoisonVineType() {
-        return ModEntityTypes.POISON_ANEMONE.get();
+        return ModEntityTypes.POISON_QUILL_VINE.get();
     }
 
     @Override

@@ -38,6 +38,7 @@ import com.infamous.dungeons_mobs.entities.projectiles.DrownedNecromancerOrbEnti
 import com.infamous.dungeons_mobs.entities.projectiles.GeoOrbEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.LaserOrbEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.NecromancerOrbEntity;
+import com.infamous.dungeons_mobs.entities.projectiles.PoisonQuillEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.SlimeballEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.SnarelingGlobEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.TridentFumeEntity;
@@ -523,6 +524,14 @@ public class ModEntityTypes {
 	            .sized(0.5F, 0.5F)
 	            .updateInterval(1)
 	            .build(new ResourceLocation(MODID, "drowned_necromancer_orb").toString())
+	);
+    
+    public static final RegistryObject<EntityType<PoisonQuillEntity>> POISON_QUILL = ENTITY_TYPES.register("poison_quill", () ->
+	    EntityType.Builder.<PoisonQuillEntity>of(PoisonQuillEntity::new, EntityClassification.MISC)
+	            .fireImmune()
+	            .sized(0.35F, 0.35F)
+	            .updateInterval(1)
+	            .build(new ResourceLocation(MODID, "poison_quill").toString())
 	);
 
     public static final RegistryObject<EntityType<SummonSpotEntity>> SUMMON_SPOT = registerEntityWithoutEgg("summon_spot", () ->

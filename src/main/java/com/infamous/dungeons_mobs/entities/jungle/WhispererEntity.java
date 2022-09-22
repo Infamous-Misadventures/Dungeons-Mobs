@@ -295,7 +295,7 @@ public class WhispererEntity extends MonsterEntity implements IMagicUser, IAnima
             LivingEntity targetEntity = WhispererEntity.this.getTarget();
             if (targetEntity != null) {
                 if(this.s < 0.25F){
-                    GeomancyHelper.summonOffensiveVine(WhispererEntity.this, WhispererEntity.this, WhispererEntity.this.getPoisonVineType());
+                    //GeomancyHelper.summonOffensiveVine(WhispererEntity.this, WhispererEntity.this, WhispererEntity.this.getPoisonVineType());
                 }
                 else{
                     int[] rowToRemove = Util.getRandom(GeomancyHelper.CONFIG_1_ROWS, WhispererEntity.this.getRandom());

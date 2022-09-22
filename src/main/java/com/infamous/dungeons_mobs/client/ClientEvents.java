@@ -45,6 +45,7 @@ import com.infamous.dungeons_mobs.client.renderer.projectiles.DrownedNecromancer
 import com.infamous.dungeons_mobs.client.renderer.projectiles.GeoOrbRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.NecromancerOrbRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.OrbRenderer;
+import com.infamous.dungeons_mobs.client.renderer.projectiles.PoisonQuillRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.SlimeballRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.SnarelingGlobRenderer;
 import com.infamous.dungeons_mobs.client.renderer.redstone.RedstoneCubeRenderer;
@@ -153,6 +154,8 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.LEAPLEAF.get(), LeapleafRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.POISON_QUILL_VINE.get(), PoisonQuillVineRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.QUICK_GROWING_VINE.get(), QuickGrowingVineRenderer::new);
+        
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.POISON_QUILL.get(), PoisonQuillRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SQUALL_GOLEM.get(), SquallGolemRenderer::new);
 

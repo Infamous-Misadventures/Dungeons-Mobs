@@ -3,6 +3,7 @@ package com.infamous.dungeons_mobs.client.renderer.jungle;
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.client.models.jungle.QuickGrowingVineModel;
 import com.infamous.dungeons_mobs.client.models.undead.NecromancerModel;
+import com.infamous.dungeons_mobs.client.renderer.layer.GeoEyeLayer;
 import com.infamous.dungeons_mobs.client.renderer.layer.PulsatingGlowLayer;
 import com.infamous.dungeons_mobs.entities.jungle.AbstractVineEntity;
 import com.infamous.dungeons_mobs.entities.jungle.QuickGrowingVineEntity;
@@ -18,23 +19,10 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 @OnlyIn(Dist.CLIENT)
-public class QuickGrowingVineRenderer extends GeoEntityRenderer<AbstractVineEntity> {
-
+public class QuickGrowingVineRenderer extends AbstractVineRenderer {
     @SuppressWarnings("unchecked")
 	public QuickGrowingVineRenderer(EntityRendererManager renderManager) {
         super(renderManager, new QuickGrowingVineModel());
-        this.addLayer(new PulsatingGlowLayer(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/jungle/quick_growing_vine_glow.png"), 0.1F, 0.75F, 0.75F));
+        this.addLayer(new GeoEyeLayer(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/jungle/quick_growing_vine_glow.png")));
     }
-    
-   @Override
-	public RenderType getRenderType(AbstractVineEntity animatable, float partialTicks, MatrixStack stack,
-			IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn,
-			ResourceLocation textureLocation) {
-		return RenderType.entityTranslucent(textureLocation);
-	}
-   
-   @Override
-	protected float getDeathMaxRotation(AbstractVineEntity entityLivingBaseIn) {
-		return 0;
-	}
 }
