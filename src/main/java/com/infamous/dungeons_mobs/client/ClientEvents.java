@@ -1,13 +1,6 @@
 package com.infamous.dungeons_mobs.client;
 
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
-
-import com.infamous.dungeons_mobs.client.particle.DustParticle;
-import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
-import com.infamous.dungeons_mobs.client.particle.NecromancyParticle;
-import com.infamous.dungeons_mobs.client.particle.RedstoneSparkParticle;
-import com.infamous.dungeons_mobs.client.particle.SnowflakeParticle;
-import com.infamous.dungeons_mobs.client.particle.WindParticle;
+import com.infamous.dungeons_mobs.client.particle.*;
 import com.infamous.dungeons_mobs.client.renderer.EmptyRenderer;
 import com.infamous.dungeons_mobs.client.renderer.armor.NecromancerArmorGearRenderer;
 import com.infamous.dungeons_mobs.client.renderer.armor.WindcallerClothesArmorGearRenderer;
@@ -18,70 +11,32 @@ import com.infamous.dungeons_mobs.client.renderer.ender.EndersentRenderer;
 import com.infamous.dungeons_mobs.client.renderer.ender.SnarelingRenderer;
 import com.infamous.dungeons_mobs.client.renderer.ender.WatchlingRenderer;
 import com.infamous.dungeons_mobs.client.renderer.golem.SquallGolemRenderer;
-import com.infamous.dungeons_mobs.client.renderer.illager.CustomPillagerRenderer;
-import com.infamous.dungeons_mobs.client.renderer.illager.CustomVindicatorRenderer;
-import com.infamous.dungeons_mobs.client.renderer.illager.DungeonsIllusionerRenderer;
-import com.infamous.dungeons_mobs.client.renderer.illager.EnchanterRenderer;
-import com.infamous.dungeons_mobs.client.renderer.illager.GeomancerRenderer;
-import com.infamous.dungeons_mobs.client.renderer.illager.IceologerRenderer;
-import com.infamous.dungeons_mobs.client.renderer.illager.IllusionerCloneRenderer;
-import com.infamous.dungeons_mobs.client.renderer.illager.MageCloneRenderer;
-import com.infamous.dungeons_mobs.client.renderer.illager.MageRenderer;
-import com.infamous.dungeons_mobs.client.renderer.illager.RoyalGuardRenderer;
-import com.infamous.dungeons_mobs.client.renderer.illager.WindcallerRenderer;
+import com.infamous.dungeons_mobs.client.renderer.illager.*;
 import com.infamous.dungeons_mobs.client.renderer.jungle.LeapleafRenderer;
 import com.infamous.dungeons_mobs.client.renderer.jungle.PoisonQuillVineRenderer;
 import com.infamous.dungeons_mobs.client.renderer.jungle.QuickGrowingVineRenderer;
 import com.infamous.dungeons_mobs.client.renderer.jungle.WhispererRenderer;
 import com.infamous.dungeons_mobs.client.renderer.layer.GeoMobEnchantmentGlintLayer;
 import com.infamous.dungeons_mobs.client.renderer.layer.MobEnchantmentGlintLayer;
-import com.infamous.dungeons_mobs.client.renderer.layers.SkeletonEyesLayer;
 import com.infamous.dungeons_mobs.client.renderer.piglin.CustomPiglinRenderer;
-import com.infamous.dungeons_mobs.client.renderer.projectiles.BlastlingBulletRenderer;
-import com.infamous.dungeons_mobs.client.renderer.projectiles.BlueNethershroomRenderer;
-import com.infamous.dungeons_mobs.client.renderer.projectiles.CobwebProjectileRenderer;
-import com.infamous.dungeons_mobs.client.renderer.projectiles.CustomFireballRenderer;
-import com.infamous.dungeons_mobs.client.renderer.projectiles.DrownedNecromancerOrbRenderer;
-import com.infamous.dungeons_mobs.client.renderer.projectiles.GeoOrbRenderer;
-import com.infamous.dungeons_mobs.client.renderer.projectiles.NecromancerOrbRenderer;
-import com.infamous.dungeons_mobs.client.renderer.projectiles.OrbRenderer;
-import com.infamous.dungeons_mobs.client.renderer.projectiles.PoisonQuillRenderer;
-import com.infamous.dungeons_mobs.client.renderer.projectiles.SlimeballRenderer;
-import com.infamous.dungeons_mobs.client.renderer.projectiles.SnarelingGlobRenderer;
+import com.infamous.dungeons_mobs.client.renderer.projectiles.*;
 import com.infamous.dungeons_mobs.client.renderer.redstone.RedstoneCubeRenderer;
 import com.infamous.dungeons_mobs.client.renderer.redstone.RedstoneGolemRenderer;
 import com.infamous.dungeons_mobs.client.renderer.redstone.RedstoneMineRenderer;
 import com.infamous.dungeons_mobs.client.renderer.slime.ConjuredSlimeRenderer;
-import com.infamous.dungeons_mobs.client.renderer.summonables.CobwebTrapRenderer;
-import com.infamous.dungeons_mobs.client.renderer.summonables.GeomancerBombRenderer;
-import com.infamous.dungeons_mobs.client.renderer.summonables.GeomancerWallRenderer;
-import com.infamous.dungeons_mobs.client.renderer.summonables.IceCloudRenderer;
-import com.infamous.dungeons_mobs.client.renderer.summonables.SummonSpotRenderer;
-import com.infamous.dungeons_mobs.client.renderer.summonables.TridentStormRenderer;
-import com.infamous.dungeons_mobs.client.renderer.summonables.WindcallerTornadoRenderer;
-import com.infamous.dungeons_mobs.client.renderer.undead.CustomSkeletonRenderer;
-import com.infamous.dungeons_mobs.client.renderer.undead.CustomZombieRenderer;
-import com.infamous.dungeons_mobs.client.renderer.undead.NecromancerRenderer;
-import com.infamous.dungeons_mobs.client.renderer.undead.SkeletonVanguardRenderer;
-import com.infamous.dungeons_mobs.client.renderer.undead.WraithRenderer;
-import com.infamous.dungeons_mobs.client.renderer.water.CustomDrownedRenderer;
-import com.infamous.dungeons_mobs.client.renderer.water.DrownedNecromancerRenderer;
-import com.infamous.dungeons_mobs.client.renderer.water.PoisonAnemoneRenderer;
-import com.infamous.dungeons_mobs.client.renderer.water.QuickGrowingKelpRenderer;
-import com.infamous.dungeons_mobs.client.renderer.water.SunkenSkeletonRenderer;
-import com.infamous.dungeons_mobs.client.renderer.water.WavewhispererRenderer;
+import com.infamous.dungeons_mobs.client.renderer.summonables.*;
+import com.infamous.dungeons_mobs.client.renderer.undead.*;
+import com.infamous.dungeons_mobs.client.renderer.water.*;
 import com.infamous.dungeons_mobs.items.WraithFireChargeItem;
 import com.infamous.dungeons_mobs.items.armor.NecromancerArmorGear;
 import com.infamous.dungeons_mobs.items.armor.WindcallerClothesArmorGear;
 import com.infamous.dungeons_mobs.items.shield.CustomISTER;
 import com.infamous.dungeons_mobs.mod.ModBlocks;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.entity.LivingRenderer;
-import net.minecraft.client.renderer.entity.SkeletonRenderer;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.DyeColor;
 import net.minecraftforge.api.distmarker.Dist;
@@ -97,6 +52,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
+
+import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientEvents {
@@ -182,7 +139,6 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SUMMON_SPOT.get(), SummonSpotRenderer::new);
 
         RenderTypeLookup.setRenderLayer(ModBlocks.WRAITH_FIRE_BLOCK.get(), RenderType.cutout());
-        RenderTypeLookup.setRenderLayer(ModBlocks.CORRUPTED_PYRE_BLOCK.get(), RenderType.cutout());
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WAVEWHISPERER.get(), WavewhispererRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.POISON_ANEMONE.get(), PoisonAnemoneRenderer::new);
@@ -221,9 +177,6 @@ public class ClientEvents {
                 ((LivingRenderer) r).addLayer(new MobEnchantmentGlintLayer((LivingRenderer) r));
             } else if (r instanceof GeoEntityRenderer) {
                 ((GeoEntityRenderer) r).addLayer(new GeoMobEnchantmentGlintLayer((GeoEntityRenderer) r));
-            }
-            if (r instanceof SkeletonRenderer) {
-                ((SkeletonRenderer) r).addLayer(new SkeletonEyesLayer<>((SkeletonRenderer) r));
             }
         });
 

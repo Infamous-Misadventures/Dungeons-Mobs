@@ -1,12 +1,12 @@
 package com.infamous.dungeons_mobs.datagen;
 
-import com.infamous.dungeons_libraries.mobenchantments.MobEnchantment;
+import com.baguchan.enchantwithmob.mobenchant.MobEnchant;
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.data.LanguageProvider;
 
-import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.MOB_ENCHANTMENTS_DEFERRED;
+import static com.infamous.dungeons_mobs.mod.ModMobEnchants.MOB_ENCHANTS_DEFERRED;
 
 public class ModLanguageProvider extends LanguageProvider {
 
@@ -22,10 +22,10 @@ public class ModLanguageProvider extends LanguageProvider {
     }
 
     private void addMobEnchantments() {
-        MOB_ENCHANTMENTS_DEFERRED.getEntries().forEach(mobEnchantmentRegistryObject -> {
+        MOB_ENCHANTS_DEFERRED.getEntries().forEach(mobEnchantmentRegistryObject -> {
             ResourceLocation id = mobEnchantmentRegistryObject.getId();
-            MobEnchantment mobEnchantment = mobEnchantmentRegistryObject.get();
-            add(mobEnchantment.getDescriptionId(), getNameFromId(id.getPath()));
+            MobEnchant mobEnchant = mobEnchantmentRegistryObject.get();
+            add("mobenchant.enchantwithmob.name.dungeons_mobs."+mobEnchant.getRegistryName().getPath(), getNameFromId(id.getPath()));
         });
     }
 

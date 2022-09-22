@@ -11,17 +11,17 @@ import com.infamous.dungeons_mobs.capabilities.cloneable.ICloneable;
 import com.infamous.dungeons_mobs.capabilities.convertible.Convertible;
 import com.infamous.dungeons_mobs.capabilities.convertible.ConvertibleStorage;
 import com.infamous.dungeons_mobs.capabilities.convertible.IConvertible;
+import com.infamous.dungeons_mobs.capabilities.properties.IMobProps;
 import com.infamous.dungeons_mobs.capabilities.properties.MobProps;
 import com.infamous.dungeons_mobs.capabilities.properties.MobPropsStorage;
-import com.infamous.dungeons_mobs.capabilities.properties.IMobProps;
 import com.infamous.dungeons_mobs.capabilities.teamable.ITeamable;
 import com.infamous.dungeons_mobs.capabilities.teamable.Teamable;
 import com.infamous.dungeons_mobs.capabilities.teamable.TeamableStorage;
 import com.infamous.dungeons_mobs.client.ModItemModelProperties;
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
-import com.infamous.dungeons_mobs.client.renderer.armor.*;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
-import com.infamous.dungeons_mobs.items.*;
+import com.infamous.dungeons_mobs.items.GroupDungeonsMobs;
+import com.infamous.dungeons_mobs.items.GroupDungeonsMobsItems;
 import com.infamous.dungeons_mobs.mod.*;
 import com.infamous.dungeons_mobs.network.NetworkHandler;
 import com.infamous.dungeons_mobs.network.datasync.ModDataSerializers;
@@ -47,7 +47,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.bernie.geckolib3.GeckoLib;
-import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod("dungeons_mobs")
@@ -88,7 +87,6 @@ public class DungeonsMobs
         ModBlocks.BLOCKS.register(modEventBus);
         ModRecipes.RECIPES.register(modEventBus);
         ModParticleTypes.PARTICLES.register(modEventBus);
-        ModMobEnchantments.MOB_ENCHANTMENTS_DEFERRED.register(modEventBus);
         ModMobEnchants.MOB_ENCHANTS_DEFERRED.register(modEventBus);
         ModDataSerializers.DATA_SERIALIZERS.register(modEventBus);
         PROXY = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
