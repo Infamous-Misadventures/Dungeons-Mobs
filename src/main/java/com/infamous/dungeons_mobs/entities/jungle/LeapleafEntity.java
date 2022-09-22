@@ -29,22 +29,18 @@ import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.ai.goal.LookAtGoal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.ai.goal.RandomWalkingGoal;
-import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.BlockParticleData;
-import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -397,7 +393,7 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
 			target = mob.getTarget();
 
 			if (mob.attackAnimationTick == mob.attackAnimationActionPoint) {			
-				Vector3d areaDamagePos = PositionUtils.getOffsetPos(mob, -1, 0, 1.5);
+				Vector3d areaDamagePos = PositionUtils.getOffsetPos(mob, -1, 0, 1.5, mob.yBodyRot);
 				AreaDamageEntity areaDamage = AreaDamageEntity.spawnAreaDamage(mob.level, areaDamagePos, mob, 15F, DamageSource.mobAttack(mob), 0.0F, 4.5F, 1.0F, 0.5F, false, false, 1.0D, 0.2D, false, 0, 1);
 				mob.level.addFreshEntity(areaDamage);
 			}
@@ -534,10 +530,10 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
 			}
 			
 			if (mob.smashAnimationTick == mob.smashAnimationActionPoint) {
-				Vector3d areaDamagePos = PositionUtils.getOffsetPos(mob, -1.5, 0, 2);
+				Vector3d areaDamagePos = PositionUtils.getOffsetPos(mob, -1.5, 0, 2, mob.yBodyRot);
 				AreaDamageEntity areaDamage = AreaDamageEntity.spawnAreaDamage(mob.level, areaDamagePos, mob, 25F, DamageSource.mobAttack(mob), 0.0F, 6.0F, 1.0F, 0.75F, false, false, 2.0D, 0.4D, true, 120, 1);
 
-				Vector3d areaDamagePos2 = PositionUtils.getOffsetPos(mob, 1.5, 0, 2);
+				Vector3d areaDamagePos2 = PositionUtils.getOffsetPos(mob, 1.5, 0, 2, mob.yBodyRot);
 				AreaDamageEntity areaDamage2 = AreaDamageEntity.spawnAreaDamage(mob.level, areaDamagePos2, mob, 25F, DamageSource.mobAttack(mob), 0.0F, 6.0F, 1.0F, 0.75F, false, false, 2.0D, 0.4D, true, 120, 1);
 				
 				areaDamage.connectedAreaDamages.add(areaDamage2);

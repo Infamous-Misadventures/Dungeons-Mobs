@@ -44,7 +44,6 @@ import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.monster.DrownedEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -56,9 +55,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
@@ -470,7 +467,7 @@ public class DrownedNecromancerEntity extends DrownedEntity implements IAnimatab
 			this.mob.getNavigation().stop();
 
 			if (target != null && mob.landShootAnimationTick == mob.landShootAnimationActionPoint) {
-    			Vector3d pos = PositionUtils.getOffsetPos(mob, 0.3, 1.5, 0.5);
+    			Vector3d pos = PositionUtils.getOffsetPos(mob, 0.3, 1.5, 0.5, mob.yRot);
 	               double d1 = target.getX() - pos.x;
 	               double d2 = target.getY(0.6D) - pos.y;
 	               double d3 = target.getZ() - pos.z;
@@ -744,7 +741,7 @@ public class DrownedNecromancerEntity extends DrownedEntity implements IAnimatab
 			}
 			
 			if (target != null && (mob.rainShootAnimationTick == mob.rainShootAnimationActionPoint || mob.rainShootAnimationTick == mob.rainShootAnimationActionPoint - 3 || mob.rainShootAnimationTick == mob.rainShootAnimationActionPoint - 6 || mob.rainShootAnimationTick == mob.rainShootAnimationActionPoint - 9)) {
-    			Vector3d pos = PositionUtils.getOffsetPos(mob, 0.3, 1.5, 0.5);
+    			Vector3d pos = PositionUtils.getOffsetPos(mob, 0.3, 1.5, 0.5, mob.yRot);
 	 	               double d1 = target.getX() - pos.x;
 	 	               double d2 = target.getY(0.6D) - pos.y;
 	 	               double d3 = target.getZ() - pos.z;
@@ -937,7 +934,7 @@ public class DrownedNecromancerEntity extends DrownedEntity implements IAnimatab
 			}
 			
 			if (target != null && (mob.shootAnimationTick == mob.shootAnimationActionPoint || mob.shootAnimationTick == mob.shootAnimationActionPoint - 2 || mob.shootAnimationTick == mob.shootAnimationActionPoint - 4 || mob.shootAnimationTick == mob.shootAnimationActionPoint - 6 || mob.shootAnimationTick == mob.shootAnimationActionPoint - 8 || mob.shootAnimationTick == mob.shootAnimationActionPoint - 10)) {
-    			Vector3d pos = PositionUtils.getOffsetPos(mob, 0.3, 1.5, 0.5);
+    			Vector3d pos = PositionUtils.getOffsetPos(mob, 0.3, 1.5, 0.5, mob.yRot);
 	 	               double d1 = target.getX() - pos.x;
 	 	               double d2 = target.getY(0.6D) - pos.y;
 	 	               double d3 = target.getZ() - pos.z;
