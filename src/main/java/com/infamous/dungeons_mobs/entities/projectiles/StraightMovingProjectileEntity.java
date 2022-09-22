@@ -1,9 +1,13 @@
 package com.infamous.dungeons_mobs.entities.projectiles;
 
+import java.util.List;
+import java.util.function.Predicate;
+
+import com.infamous.dungeons_mobs.mod.ModSoundEvents;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MoverType;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.nbt.CompoundNBT;
@@ -12,19 +16,33 @@ import net.minecraft.network.IPacket;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.entity.PartEntity;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 public abstract class StraightMovingProjectileEntity extends ProjectileEntity {
 	   public double xPower;
 	   public double yPower;
 	   public double zPower;
+	   
+	   public boolean stuckInBlock;
+	   
+	   public int lifeTime;
+	   
+	   public float lockedXRot;
+	   public float lockedYRot;
 
+	   private final Predicate<Entity> CAN_HIT = (entity) -> {
+		      return this.canHitEntity(entity);
+		   };
+		   
 	   protected StraightMovingProjectileEntity(EntityType<? extends StraightMovingProjectileEntity> p_i50173_1_, World p_i50173_2_) {
 	      super(p_i50173_1_, p_i50173_2_);
 	   }
@@ -70,9 +88,60 @@ public abstract class StraightMovingProjectileEntity extends ProjectileEntity {
 	      d0 = d0 * 64.0D;
 	      return p_70112_1_ < d0 * d0;
 	   }
+	   
+	public void tryToDealDamage() {
+    	List<Entity> list = this.level.getEntities(this, this.getBoundingBox(), CAN_HIT);
+		if (!list.isEmpty() && !this.level.isClientSide) {
+			for (Entity entity : list) {
+					this.onHitEntity(entity);
+			}
+		}
+	}	
+	
+	public void rotateToMatchMovement() {
+		this.updateRotation();
+	}
+	
+	public boolean shouldUpdateRotation() {
+		return true;
+	}
+	
+	@Override
+	protected void updateRotation() {
+		if (this.stuckInBlock) {
+			this.xRot = this.lockedXRot;
+			this.yRot = this.lockedYRot;
+		} else {
+			super.updateRotation();
+		}
+	}
+	
+	   @Override
+	public void baseTick() {
+		super.baseTick();
+		
+		if (this.shouldUpdateRotation()) {
+			this.updateRotation();
+		}
+		
+		if (!this.level.isClientSide && this.vanishesAfterTime()) {
+			if (this.lifeTime < this.vanishAfterTime()) {
+				this.lifeTime++;
+			} else {
+				this.remove();
+			}
+		}
+		
+		this.tryToDealDamage();
+	}
 
 	   public void tick() {
 	      Entity entity = this.getOwner();
+	      
+	      if (this.getsStuckInBlocks()) {
+	    	  this.noPhysics = false;
+	      }
+	      
 	      if (this.level.isClientSide || (entity == null || !entity.removed) && this.level.hasChunkAt(this.blockPosition())) {
 	         super.tick();
 	         if (this.shouldBurn()) {
@@ -90,27 +159,72 @@ public abstract class StraightMovingProjectileEntity extends ProjectileEntity {
 	         double d1 = this.getY() + vector3d.y;
 	         double d2 = this.getZ() + vector3d.z;
 	         float f = this.getInertia();
-	         if (this.isInWater()) {
-	            for(int i = 0; i < 4; ++i) {
-	               if (this.getUnderWaterTrailParticle() != null && this.shouldSpawnParticles()) {
-	            	   this.spawnUnderWaterTrailParticle();
-	               }
-	            }
-
-	            if (this.slowedDownInWater()) {
-	            	f = 0.8F;
-	            }
-	         }
-
-	         this.setDeltaMovement(vector3d.add(this.xPower, this.yPower, this.zPower).scale((double)f));
-	         if (this.getTrailParticle() != null && this.shouldSpawnParticles()) {
-	        	 this.spawnTrailParticle();
-	         }
-	         this.setPos(d0, d1, d2);
+		         if (this.isInWater()) {
+		            for(int i = 0; i < 4; ++i) {
+		               if (this.getUnderWaterTrailParticle() != null && this.shouldSpawnParticles()) {
+		            	   this.spawnUnderWaterTrailParticle();
+		               }
+		            }
+	
+		            if (this.slowedDownInWater()) {
+		            	f = 0.8F;
+		            }
+		         }
+	
+		         this.setDeltaMovement(vector3d.add(this.xPower, this.yPower, this.zPower).scale((double)f));
+		         if (this.getTrailParticle() != null && this.shouldSpawnParticles()) {
+		        	 this.spawnTrailParticle();
+		         }
+		         this.setPos(d0, d1, d2);
 	      } else {
 	         this.remove();
 	      }
 	   }
+	   
+	   public boolean vanishesAfterTime() {
+		   return true;
+	   }
+	   
+	   public int vanishAfterTime() {
+		   return 200;
+	   }
+	   
+	   public void onHitEntity(Entity entity) {
+
+	   }
+	   
+		public boolean getsStuckInBlocks() {
+			return false;
+		}
+		
+		public boolean keepsHittingAfterStuck() {
+			return false;
+		}
+		
+		public abstract SoundEvent getImpactSound();
+		
+		public void playImpactSound() {
+			this.playSound(this.getImpactSound(), 1.0F, 1.0F);
+		}
+		
+		@Override
+		protected void onHitBlock(BlockRayTraceResult p_230299_1_) {
+			super.onHitBlock(p_230299_1_);	
+			if (!this.level.isClientSide) {
+				if (!this.stuckInBlock && this.getImpactSound() != null) {
+					this.playImpactSound();
+				}
+				if (!this.getsStuckInBlocks()) {
+					this.remove();
+				} else {
+					this.lockedXRot = this.xRot;
+					this.lockedYRot = this.yRot;
+					this.stuckInBlock = true;
+					this.setPower(0, 0, 0);
+					this.setDeltaMovement(0, 0, 0);
+				}
+			}
+		}
 	   
 	   public boolean slowedDownInWater() {
 		   return true;
@@ -133,7 +247,15 @@ public abstract class StraightMovingProjectileEntity extends ProjectileEntity {
 	   }
 	   
 	   protected boolean canHitEntity(Entity p_230298_1_) {
-	      return super.canHitEntity(p_230298_1_) && !p_230298_1_.noPhysics;
+		  boolean foundOwnerPartInEntity = false;
+		  if (this.getOwner() != null) {
+			  for (PartEntity<?> entity : this.getOwner().getParts()) {
+				  if (p_230298_1_ == entity) {
+					  foundOwnerPartInEntity = true;
+				  }
+			  }
+		  }
+	      return super.canHitEntity(p_230298_1_) && ((this.keepsHittingAfterStuck() && this.stuckInBlock) || !this.stuckInBlock) && !p_230298_1_.noPhysics && foundOwnerPartInEntity == false;
 	   }
 
 	   protected boolean shouldBurn() {

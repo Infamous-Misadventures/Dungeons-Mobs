@@ -38,7 +38,12 @@ public class QuickGrowingVineEntity extends AbstractVineEntity {
 
 	@Override
 	public void registerControllers(AnimationData data) {
-		data.addAnimationController(new AnimationController(this, "controller", 2, this::predicate));
+		data.addAnimationController(new AnimationController(this, "controller", this.getAnimationTransitionTime(), this::predicate));
+	}
+	
+	@Override
+	public int getAnimationTransitionTime() {
+		return 2;
 	}
 
 	private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {

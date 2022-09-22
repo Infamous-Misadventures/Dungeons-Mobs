@@ -51,6 +51,9 @@
   "death.trident_storm": "%1$s was struck by an electrically charged trident",
   "death.attack.trident_storm": "%1$s was struck by an electrically charged trident",
 
+  "death.poison_quill": "%1$s was hit by a Poison Quill",
+  "death.attack.poison_quill": "%1$s was hit by a Poison Quill from %2$s",
+  
   "entity.dungeons_mobs.illusioner": "Illusioner",
   "entity.dungeons_mobs.illusioner_clone": "Illusioner",
   "item.dungeons_mobs.illusioner_spawn_egg": "Illusioner Spawn Egg",

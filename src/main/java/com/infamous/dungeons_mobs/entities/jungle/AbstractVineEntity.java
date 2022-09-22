@@ -5,6 +5,7 @@ import java.util.function.Predicate;
 
 import com.infamous.dungeons_mobs.tags.CustomTags;
 
+import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;
@@ -32,7 +33,7 @@ import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 
-public abstract class AbstractVineEntity extends MobEntity implements IMob, IAnimatable {
+public abstract class AbstractVineEntity extends CreatureEntity implements IMob, IAnimatable {
 
     public static final DataParameter<Integer> LENGTH = EntityDataManager.defineId(AbstractVineEntity.class, DataSerializers.INT);
     
@@ -296,6 +297,13 @@ public abstract class AbstractVineEntity extends MobEntity implements IMob, IAni
     public abstract SoundEvent getBurstSoundFoley();
     
     public abstract SoundEvent getRetractSoundFoley();
+    
+    @Override
+    protected float getSoundVolume() {
+    	return super.getSoundVolume() + ((float)(this.getLengthInSegments() * 0.5));
+    }
+    
+    public abstract int getAnimationTransitionTime();
 	
     public boolean isOut() {
         return this.getAlwaysOut() || this.getOut();
@@ -338,7 +346,7 @@ public abstract class AbstractVineEntity extends MobEntity implements IMob, IAni
      }
 
     public boolean hurt(DamageSource p_70097_1_, float p_70097_2_) {
-    	if (p_70097_1_ == DamageSource.OUT_OF_WORLD || this.isOut()) {
+    	if (p_70097_1_ == DamageSource.OUT_OF_WORLD || (this.isOut() && p_70097_1_ != DamageSource.IN_WALL)) {
     		return super.hurt(p_70097_1_, p_70097_2_);
     	} else {
     		return false;
@@ -378,7 +386,7 @@ public abstract class AbstractVineEntity extends MobEntity implements IMob, IAni
     
     @Override
     public EntitySize getDimensions(Pose p_213305_1_) {
-    	return !this.isOut() ? EntitySize.scalable(1.0F, 0.1F) : EntitySize.scalable(0.1F, ((float)this.getLengthInBlocks()) + this.getExtraHitboxY());
+    	return !this.isOut() ? EntitySize.scalable(1.0F, 0.1F) : EntitySize.scalable(1.5F, ((float)this.getLengthInBlocks()) + this.getExtraHitboxY());
     }
     
 	public void refreshDimensions() {
@@ -429,22 +437,34 @@ public abstract class AbstractVineEntity extends MobEntity implements IMob, IAni
 				this.setOut(false);
 			}
 			
+			if (this.getAlwaysOut() && this.canBurst()) {
+				this.burst();
+			}
+			
 			if (nearbyEntities > 0) {
 				if (this.canBurst()) {
-					this.spawnAreaDamage();
-					this.playBurstSound();
-					this.burstAnimationTick = this.getBurstAnimationLength();
-					this.level.broadcastEntityEvent(this, (byte) 4);
+					this.burst();
 				}
 			} else {
 				if (this.canRetract() && this.getShouldRetract()) {
-					this.spawnAreaDamage();
-					this.playRetractSound();
-					this.retractAnimationTick = this.getRetractAnimationLength();
-					this.level.broadcastEntityEvent(this, (byte) 11);
+					this.retract();
 				}
 			}
 		}
+	}
+	
+	public void burst() {
+		this.spawnAreaDamage();
+		this.playBurstSound();
+		this.burstAnimationTick = this.getBurstAnimationLength();
+		this.level.broadcastEntityEvent(this, (byte) 4);
+	}
+	
+	public void retract() {
+		this.spawnAreaDamage();
+		this.playRetractSound();
+		this.retractAnimationTick = this.getRetractAnimationLength();
+		this.level.broadcastEntityEvent(this, (byte) 11);
 	}
 	
 	public void tickDownAnimTimers() {

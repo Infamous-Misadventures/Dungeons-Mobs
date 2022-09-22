@@ -1,64 +1,79 @@
 package com.infamous.dungeons_mobs.entities.water;
 
 import com.infamous.dungeons_mobs.entities.jungle.PoisonQuillVineEntity;
-import com.infamous.dungeons_mobs.interfaces.IAquaticMob;
-import com.infamous.dungeons_mobs.mod.ModEntityTypes;
+import com.infamous.dungeons_mobs.entities.summonables.AreaDamageEntity;
+import com.infamous.dungeons_mobs.mod.ModSoundEvents;
+
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.pathfinding.GroundPathNavigator;
-import net.minecraft.pathfinding.PathNavigator;
-import net.minecraft.pathfinding.SwimmerPathNavigator;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
-public class PoisonAnemoneEntity extends PoisonQuillVineEntity implements IAquaticMob {
+public class PoisonAnemoneEntity extends PoisonQuillVineEntity {
 
-    public PoisonAnemoneEntity(EntityType<? extends PoisonQuillVineEntity> entityType, World world) {
-        super(entityType, world);
-    }
+	public PoisonAnemoneEntity(EntityType<? extends PoisonAnemoneEntity> p_i50147_1_, World p_i50147_2_) {
+		super(p_i50147_1_, p_i50147_2_);
+	}
 
-    public PoisonAnemoneEntity(World worldIn, double x, double y, double z, LivingEntity casterIn, int lifeTicks) {
-        super(ModEntityTypes.POISON_ANEMONE.get(), worldIn, x, y, z, casterIn, lifeTicks);
-    }
+	@Override
+	protected SoundEvent getAmbientSound() {
+		return ModSoundEvents.POISON_ANEMONE_IDLE.get();
+	}
 
-    @Override
-    public boolean checkSpawnObstruction(IWorldReader worldReader) {
-        return worldReader.isUnobstructed(this);
-    }
+	@Override
+	protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
+		return ModSoundEvents.POISON_ANEMONE_HURT.get();
+	}
 
-    @Override
-    public boolean canBreatheUnderwater() {
-        return true;
-    }
+	@Override
+	protected SoundEvent getDeathSound() {
+		return ModSoundEvents.POISON_ANEMONE_DEATH.get();
+	}
 
-    @Override
-    public void setSearchingForLand(boolean searchingForLand) {
-        // NO-OP
-    }
+	@Override
+	protected SoundEvent getHurtSoundFoley(DamageSource p_184601_1_) {
+		return null;
+	}
 
-    @Override
-    public void normalTravel(Vector3d travelVec) {
-        // NO-OP
-    }
+	@Override
+	public SoundEvent getBurstSound() {
+		return ModSoundEvents.POISON_ANEMONE_BURST.get();
+	}
 
-    @Override
-    public boolean isSearchingForLand() {
-        return false;
-    }
-
-    @Override
-    public void setNavigation(PathNavigator navigation) {
-        // NO-OP
-    }
-
-    @Override
-    public GroundPathNavigator getGroundNavigation() {
-        return null;
-    }
-
-    @Override
-    public SwimmerPathNavigator getWaterNavigation() {
-        return null;
-    }
+	@Override
+	public SoundEvent getRetractSound() {
+		return ModSoundEvents.POISON_ANEMONE_BURST.get();
+	}
+	
+	@Override
+	public SoundEvent getCloseSound() {
+		return ModSoundEvents.POISON_ANEMONE_CLOSE.get();
+	}
+	
+	@Override
+	public SoundEvent getShootSound() {
+		return ModSoundEvents.POISON_ANEMONE_SHOOT.get();
+	}
+	
+	@Override
+	public boolean isKelp() {
+		return true;
+	}
+	
+	@Override
+	public int wrongHabitatDieChance() {
+		return 75;
+	}
+	
+	@Override
+	public void spawnAreaDamage() {
+		AreaDamageEntity areaDamage = AreaDamageEntity.spawnAreaDamage(this.level, this.position(), this, 5.0F, DamageSource.mobAttack(this), 0.0F, 1.5F, 0.25F, 0.25F, false, false, 0.75, 0.25, false, 0, 2);
+		this.level.addFreshEntity(areaDamage);
+	}
+	
+	@Override
+	public void setDefaultFeatures() {
+		super.setDefaultFeatures();
+		this.setLengthInSegments(4 + this.random.nextInt(9));
+	}
 }

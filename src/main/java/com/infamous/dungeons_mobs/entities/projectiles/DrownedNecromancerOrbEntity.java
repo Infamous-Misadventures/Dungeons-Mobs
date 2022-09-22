@@ -19,6 +19,7 @@ import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.network.IPacket;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.world.World;
@@ -33,16 +34,10 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 public class DrownedNecromancerOrbEntity extends StraightMovingProjectileEntity implements IAnimatable {
-
-	public int lifeTime;
 	
 	public int textureChange = 0;
 
 	AnimationFactory factory = new AnimationFactory(this);
-
-	   private static final Predicate<Entity> CAN_HIT = (entity) -> {
-		      return entity.isAlive() && !entity.isSpectator() && !(entity instanceof PlayerEntity && ((PlayerEntity)entity).isCreative());
-		   };
 		   
 	public DrownedNecromancerOrbEntity(World worldIn) {
 		super(ModEntityTypes.DROWNED_NECROMANCER_ORB.get(), worldIn);
@@ -62,11 +57,6 @@ public class DrownedNecromancerOrbEntity extends StraightMovingProjectileEntity 
 			double p_i1795_8_, double p_i1795_10_, double p_i1795_12_) {
 		super(ModEntityTypes.DROWNED_NECROMANCER_ORB.get(), p_i1795_2_, p_i1795_4_, p_i1795_6_, p_i1795_8_, p_i1795_10_,
 				p_i1795_12_, p_i1795_1_);
-	}
-	
-	@Override
-	protected boolean canHitEntity(Entity p_230298_1_) {
-		return !(p_230298_1_ instanceof ProjectileEntity) && !(p_230298_1_ instanceof TridentStormEntity);
 	}
 	
 	@Override
@@ -93,27 +83,10 @@ public class DrownedNecromancerOrbEntity extends StraightMovingProjectileEntity 
 	protected boolean isMovementNoisy() {
 		return false;
 	}
-	
-	public void rotateToMatchMovement() {
-		this.updateRotation();
-	}
 
 	@Override
 	public void baseTick() {
-		super.baseTick();
-		
-    	List<Entity> list = this.level.getEntities(this, this.getBoundingBox(), CAN_HIT);
-		if (!list.isEmpty() && !this.level.isClientSide) {
-			for (Entity entity : list) {
-				if (this.canHitEntity(entity)) {
-					this.onHitEntity(entity);
-				}
-			}
-		}
-
-		this.lifeTime++;
-
-		this.updateRotation();
+		super.baseTick();		
 		
 		if (this.tickCount % 5 == 0) {
 			textureChange ++;		
@@ -173,15 +146,6 @@ public class DrownedNecromancerOrbEntity extends StraightMovingProjectileEntity 
 			this.remove();
 		}
 	}
-	
-	@Override
-	protected void onHitBlock(BlockRayTraceResult p_230299_1_) {
-		super.onHitBlock(p_230299_1_);	
-		if (!this.level.isClientSide) {
-			this.playSound(ModSoundEvents.DROWNED_NECROMANCER_STEAM_MISSILE_IMPACT.get(), 1.0F, 1.0F);
-			this.remove();
-		}
-	}
 
 	public boolean isPickable() {
 		return false;
@@ -198,5 +162,10 @@ public class DrownedNecromancerOrbEntity extends StraightMovingProjectileEntity 
 	@Override
 	public IPacket<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
+	}
+	
+	@Override
+	public SoundEvent getImpactSound() {
+		return ModSoundEvents.DROWNED_NECROMANCER_STEAM_MISSILE_IMPACT.get();
 	}
 }

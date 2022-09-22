@@ -21,6 +21,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.world.World;
@@ -45,16 +46,10 @@ public class NecromancerOrbEntity extends StraightMovingProjectileEntity impleme
 
 	public int vanishAnimationTick;
 	public int vanishAnimationLength = 40;
-
-	public int lifeTime;
 	
 	public int textureChange = 0;
 
 	AnimationFactory factory = new AnimationFactory(this);
-
-	   private static final Predicate<Entity> CAN_HIT = (entity) -> {
-		      return entity.isAlive() && !entity.isSpectator() && !(entity instanceof PlayerEntity && ((PlayerEntity)entity).isCreative());
-		   };
 		   
 	public NecromancerOrbEntity(World worldIn) {
 		super(ModEntityTypes.NECROMANCER_ORB.get(), worldIn);
@@ -74,11 +69,6 @@ public class NecromancerOrbEntity extends StraightMovingProjectileEntity impleme
 			double p_i1795_8_, double p_i1795_10_, double p_i1795_12_) {
 		super(ModEntityTypes.NECROMANCER_ORB.get(), p_i1795_2_, p_i1795_4_, p_i1795_6_, p_i1795_8_, p_i1795_10_,
 				p_i1795_12_, p_i1795_1_);
-	}
-	
-	@Override
-	protected boolean canHitEntity(Entity p_230298_1_) {
-		return !(p_230298_1_ instanceof ProjectileEntity) && !(p_230298_1_ instanceof TridentStormEntity);
 	}
 	
 	public void handleEntityEvent(byte p_28844_) {
@@ -122,34 +112,16 @@ public class NecromancerOrbEntity extends StraightMovingProjectileEntity impleme
 	protected boolean isMovementNoisy() {
 		return false;
 	}
-	
-	public void rotateToMatchMovement() {
-		this.updateRotation();
-	}
 
 	@Override
 	public void baseTick() {
 		super.baseTick();
-		this.tickDownAnimTimers();
-		
-    	List<Entity> list = this.level.getEntities(this, this.getBoundingBox(), CAN_HIT);
-		if (!list.isEmpty() && !this.level.isClientSide && this.vanishAnimationTick <= 0) {
-			for (Entity entity : list) {
-				if (this.canHitEntity(entity)) {
-					this.onHitEntity(entity);
-				}
-			}
-		}
-
-		this.lifeTime++;
-
-		this.updateRotation();
 		
 		if (this.tickCount % 5 == 0) {
 			textureChange ++;
 		}
 		
-		if (!this.level.isClientSide && this.lifeTime > 200 && this.vanishAnimationTick <= 0) {
+		if (!this.level.isClientSide && this.vanishAnimationTick <= 0) {
 			this.vanishAnimationTick = this.vanishAnimationLength;
 			this.level.broadcastEntityEvent(this, (byte) 1);
 		}
@@ -248,16 +220,6 @@ public class NecromancerOrbEntity extends StraightMovingProjectileEntity impleme
 			this.level.broadcastEntityEvent(this, (byte) 1);
 		}
 	}
-	
-	@Override
-	protected void onHitBlock(BlockRayTraceResult p_230299_1_) {
-		super.onHitBlock(p_230299_1_);	
-		if (!this.level.isClientSide) {
-			this.playSound(ModSoundEvents.NECROMANCER_ORB_IMPACT.get(), 1.0F, 1.0F);
-			this.vanishAnimationTick = this.vanishAnimationLength;
-			this.level.broadcastEntityEvent(this, (byte) 1);
-		}
-	}
 
 	public boolean isPickable() {
 		return false;
@@ -274,5 +236,10 @@ public class NecromancerOrbEntity extends StraightMovingProjectileEntity impleme
 	@Override
 	public IPacket<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
+	}
+
+	@Override
+	public SoundEvent getImpactSound() {
+		return ModSoundEvents.NECROMANCER_ORB_IMPACT.get();
 	}
 }

@@ -3,6 +3,7 @@ package com.infamous.dungeons_mobs.mod;
 import java.util.Random;
 
 import com.infamous.dungeons_mobs.entities.projectiles.BlastlingBulletEntity;
+import com.infamous.dungeons_mobs.entities.projectiles.PoisonQuillEntity;
 import com.infamous.dungeons_mobs.entities.summonables.IceCloudEntity;
 import com.infamous.dungeons_mobs.entities.summonables.TridentStormEntity;
 
@@ -30,4 +31,9 @@ public class ModDamageSources {
 	public static DamageSource tridentStorm(TridentStormEntity p_233549_0_) {
 		return (new IndirectEntityDamageSource("trident_storm", p_233549_0_, null)).setProjectile();
 	}
+	
+	public static DamageSource poisonQuill(PoisonQuillEntity p_233549_0_, Entity p_233549_1_) {
+		return (new IndirectEntityDamageSource("poison_quill", p_233549_0_, p_233549_1_)).setProjectile();
+	}
+	
 }
