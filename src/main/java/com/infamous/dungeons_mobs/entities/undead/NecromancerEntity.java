@@ -426,7 +426,7 @@ public class NecromancerEntity extends SkeletonEntity implements IAnimatable {
             this.mob.getNavigation().stop();
 
             if (target != null && mob.shootAnimationTick == mob.shootAnimationActionPoint) {
-                Vector3d pos = PositionUtils.getOffsetPos(mob, 0.3, 1.5, 0.5, mob.yRot);
+                Vector3d pos = PositionUtils.getOffsetPos(mob, 0.3, 1.5, 0.5, mob.yBodyRot);
                 double d1 = target.getX() - pos.x;
                 double d2 = target.getY(0.6D) - pos.y;
                 double d3 = target.getZ() - pos.z;
