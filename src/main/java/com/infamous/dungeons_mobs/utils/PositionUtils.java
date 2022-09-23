@@ -15,13 +15,13 @@ public class PositionUtils {
         return entity.position().add(vector3d.x, vector3d.y, vector3d.z);
 	}
 	
-	public static BlockPos getOffsetBlockPos(Entity entity, double offsetX, double offsetY, double offsetZ) {
-        Vector3d vector3d = (new Vector3d(offsetZ, offsetY, offsetX).yRot(-entity.yRot * ((float)Math.PI / 180F) - ((float)Math.PI / 2F)));
+	public static BlockPos getOffsetBlockPos(Entity entity, double offsetX, double offsetY, double offsetZ, float rotation) {
+        Vector3d vector3d = (new Vector3d(offsetZ, offsetY, offsetX).yRot(-rotation * ((float)Math.PI / 180F) - ((float)Math.PI / 2F)));
         return entity.blockPosition().offset(vector3d.x, vector3d.y, vector3d.z);
 	}
 	
-	public static Vector3d getOffsetMotion(Entity entity, double offsetX, double offsetY, double offsetZ) {
-        Vector3d vector3d = (new Vector3d(offsetZ, offsetY, offsetX).yRot(-entity.yRot * ((float)Math.PI / 180F) - ((float)Math.PI / 2F)));
+	public static Vector3d getOffsetMotion(Entity entity, double offsetX, double offsetY, double offsetZ, float rotation) {
+        Vector3d vector3d = (new Vector3d(offsetZ, offsetY, offsetX).yRot(-rotation * ((float)Math.PI / 180F) - ((float)Math.PI / 2F)));
         return vector3d;
 	}
 	
