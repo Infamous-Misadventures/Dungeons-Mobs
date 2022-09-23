@@ -6,6 +6,7 @@ import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
+import com.infamous.dungeons_libraries.summon.SummonHelper;
 import com.infamous.dungeons_mobs.entities.summonables.SummonSpotEntity;
 import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
 import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
@@ -458,17 +459,30 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable, SpawnA
 	            	}
 					((ServerWorld)mob.level).addFreshEntityWithPassengers(blazeSummonSpot);
 					PositionUtils.moveToCorrectHeight(blazeSummonSpot);
-					
-	            	BlazeEntity summonedBlaze = EntityType.BLAZE.create(mob.level);
-	            	
-	            	summonedBlaze.setTarget(target);
-	            	summonedBlaze.finalizeSpawn(((ServerWorld)mob.level), mob.level.getCurrentDifficultyAt(summonPos), SpawnReason.MOB_SUMMONED, (ILivingEntityData)null, (CompoundNBT)null);
-	            	blazeSummonSpot.playSound(ModSoundEvents.WILDFIRE_PROJECTILE_HIT.get(), 1.0F, 1.0F);
+
+					EntityType<?> entityType = EntityType.BLAZE;
+
+					MobEntity summonedMob = null;
+
+					Entity entity = SummonHelper.summonEntity(mob, blazeSummonSpot.blockPosition(), entityType);
+
+					if (entity == null) {
+						blazeSummonSpot.remove();
+						return;
+					}
+
+					if (entity instanceof MobEntity) {
+						summonedMob = ((MobEntity) entity);
+					}
+
+					summonedMob.setTarget(target);
+					summonedMob.finalizeSpawn(((ServerWorld) mob.level), mob.level.getCurrentDifficultyAt(summonPos), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
+					blazeSummonSpot.playSound(ModSoundEvents.NECROMANCER_SUMMON.get(), 1.0F, 1.0F);
 					if (mob.getTeam() != null) {
 						Scoreboard scoreboard = mob.level.getScoreboard();
-						scoreboard.addPlayerToTeam(summonedBlaze.getScoreboardName(), scoreboard.getPlayerTeam(mob.getTeam().getName()));
+						scoreboard.addPlayerToTeam(summonedMob.getScoreboardName(), scoreboard.getPlayerTeam(mob.getTeam().getName()));
 					}
-					blazeSummonSpot.summonedEntity = summonedBlaze;		
+					blazeSummonSpot.summonedEntity = summonedMob;
 	            }
 			}
 		}

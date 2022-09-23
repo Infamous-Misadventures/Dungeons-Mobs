@@ -1,11 +1,10 @@
 package com.infamous.dungeons_mobs.entities.illagers;
 
-import com.infamous.dungeons_libraries.capabilities.enchantable.IEnchantable;
-import com.infamous.dungeons_libraries.network.MobEnchantmentMessage;
+import com.baguchan.enchantwithmob.EnchantWithMob;
+import com.baguchan.enchantwithmob.capability.MobEnchantCapability;
 import com.infamous.dungeons_libraries.utils.AreaOfEffectHelper;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
-import com.infamous.dungeons_mobs.network.NetworkHandler;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -22,7 +21,6 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.network.PacketDistributor;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -38,10 +36,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.infamous.dungeons_libraries.capabilities.enchantable.EnchantableHelper.getEnchantableCapability;
-import static com.infamous.dungeons_libraries.capabilities.enchantable.EnchantableHelper.getEnchantableCapabilityLazy;
-import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.DOUBLE_DAMAGE;
-import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.PROTECTION;
+import static com.baguchan.enchantwithmob.registry.MobEnchants.PROTECTION;
+import static com.baguchan.enchantwithmob.registry.MobEnchants.STRONG;
 import static com.infamous.dungeons_mobs.network.datasync.ModDataSerializers.UUID_LIST;
 
 public class EnchanterEntity extends SpellcastingIllagerEntity implements IAnimatable {
@@ -163,10 +159,10 @@ public class EnchanterEntity extends SpellcastingIllagerEntity implements IAnima
     }
 
     private void clearEntityMobEnchantments(MonsterEntity entity) {
-        IEnchantable enchantableCapability = getEnchantableCapability(entity);
-        enchantableCapability.clearAllEnchantments();
-        entity.refreshDimensions();
-        NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new MobEnchantmentMessage(entity.getId(), enchantableCapability.getEnchantments()));
+        entity.getCapability(EnchantWithMob.MOB_ENCHANT_CAP).ifPresent(enchantableCapability ->{
+            enchantableCapability.removeAllMobEnchant(entity);
+            entity.refreshDimensions();
+        });
     }
 
     private boolean isValidEnchantmentTarget(MonsterEntity monsterEntity) {
@@ -274,8 +270,12 @@ public class EnchanterEntity extends SpellcastingIllagerEntity implements IAnima
                 return false;
             } else {
                 List<LivingEntity> list = AreaOfEffectHelper.getNearbyEnemies(EnchanterEntity.this, 16, EnchanterEntity.this.level, livingEntity -> {
-                    IEnchantable enchantableCapability = getEnchantableCapability(livingEntity);
-                    return !enchantableCapability.hasEnchantment() && livingEntity instanceof MonsterEntity;
+                    if(livingEntity.getCapability(EnchantWithMob.MOB_ENCHANT_CAP).isPresent()) {
+                        MobEnchantCapability mobEnchantCapability = livingEntity.getCapability(EnchantWithMob.MOB_ENCHANT_CAP).resolve().get();
+                        return !mobEnchantCapability.hasEnchant() && livingEntity instanceof MonsterEntity;
+                    }else{
+                        return false;
+                    }
                 });
                 if (list.isEmpty()) {
                     return false;
@@ -299,11 +299,10 @@ public class EnchanterEntity extends SpellcastingIllagerEntity implements IAnima
         protected void performSpellCasting() {
             MonsterEntity selectedMonsterEntity = EnchanterEntity.this.getEnchantmentTarget();
             if (selectedMonsterEntity != null && selectedMonsterEntity.isAlive()) {
-                getEnchantableCapabilityLazy(selectedMonsterEntity).ifPresent(cap -> {
-                    cap.addEnchantment(DOUBLE_DAMAGE.get());
-                    cap.addEnchantment(PROTECTION.get());
+                selectedMonsterEntity.getCapability(EnchantWithMob.MOB_ENCHANT_CAP).ifPresent(cap -> {
+                    cap.addMobEnchant(selectedMonsterEntity, STRONG, 2);
+                    cap.addMobEnchant(selectedMonsterEntity, PROTECTION, 2);
                     selectedMonsterEntity.refreshDimensions();
-                    NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> selectedMonsterEntity), new MobEnchantmentMessage(selectedMonsterEntity.getId(), cap.getEnchantments()));
                 });
                 EnchanterEntity.this.addEnchantmentTarget(selectedMonsterEntity);
             }

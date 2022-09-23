@@ -6,7 +6,6 @@ import net.minecraft.entity.LivingEntity;
 
 import java.util.function.Consumer;
 
-import static com.baguchan.enchantwithmob.utils.MobEnchantUtils.findMobEnchantFromHandler;
 import static com.baguchan.enchantwithmob.utils.MobEnchantUtils.getMobEnchantLevelFromHandler;
 
 public class NewMobEnchantUtils {

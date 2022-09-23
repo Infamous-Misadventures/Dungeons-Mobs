@@ -31,18 +31,18 @@ public abstract class StraightMovingProjectileEntity extends ProjectileEntity {
 	   public double xPower;
 	   public double yPower;
 	   public double zPower;
-	   
+
 	   public boolean stuckInBlock;
-	   
+
 	   public int lifeTime;
-	   
+
 	   public float lockedXRot;
 	   public float lockedYRot;
 
 	   private final Predicate<Entity> CAN_HIT = (entity) -> {
 		      return this.canHitEntity(entity);
 		   };
-		   
+
 	   protected StraightMovingProjectileEntity(EntityType<? extends StraightMovingProjectileEntity> p_i50173_1_, World p_i50173_2_) {
 	      super(p_i50173_1_, p_i50173_2_);
 	   }
@@ -68,7 +68,7 @@ public abstract class StraightMovingProjectileEntity extends ProjectileEntity {
 
 	   protected void defineSynchedData() {
 	   }
-	   
+
 	   public void setPower(double powerX, double powerY, double powerZ) {
 		      double d0 = (double)MathHelper.sqrt(powerX * powerX + powerY * powerY + powerZ * powerZ);
 		      if (d0 != 0.0D) {
@@ -88,7 +88,7 @@ public abstract class StraightMovingProjectileEntity extends ProjectileEntity {
 	      d0 = d0 * 64.0D;
 	      return p_70112_1_ < d0 * d0;
 	   }
-	   
+
 	public void tryToDealDamage() {
     	List<Entity> list = this.level.getEntities(this, this.getBoundingBox(), CAN_HIT);
 		if (!list.isEmpty() && !this.level.isClientSide) {
@@ -96,16 +96,16 @@ public abstract class StraightMovingProjectileEntity extends ProjectileEntity {
 					this.onHitEntity(entity);
 			}
 		}
-	}	
-	
+	}
+
 	public void rotateToMatchMovement() {
 		this.updateRotation();
 	}
-	
+
 	public boolean shouldUpdateRotation() {
 		return true;
 	}
-	
+
 	@Override
 	protected void updateRotation() {
 		if (this.stuckInBlock) {
@@ -115,15 +115,15 @@ public abstract class StraightMovingProjectileEntity extends ProjectileEntity {
 			super.updateRotation();
 		}
 	}
-	
+
 	   @Override
 	public void baseTick() {
 		super.baseTick();
-		
+
 		if (this.shouldUpdateRotation()) {
 			this.updateRotation();
 		}
-		
+
 		if (!this.level.isClientSide && this.vanishesAfterTime()) {
 			if (this.lifeTime < this.vanishAfterTime()) {
 				this.lifeTime++;
@@ -131,17 +131,17 @@ public abstract class StraightMovingProjectileEntity extends ProjectileEntity {
 				this.remove();
 			}
 		}
-		
+
 		this.tryToDealDamage();
 	}
 
 	   public void tick() {
 	      Entity entity = this.getOwner();
-	      
+
 	      if (this.getsStuckInBlocks()) {
 	    	  this.noPhysics = false;
 	      }
-	      
+
 	      if (this.level.isClientSide || (entity == null || !entity.removed) && this.level.hasChunkAt(this.blockPosition())) {
 	         super.tick();
 	         if (this.shouldBurn()) {
@@ -165,12 +165,12 @@ public abstract class StraightMovingProjectileEntity extends ProjectileEntity {
 		            	   this.spawnUnderWaterTrailParticle();
 		               }
 		            }
-	
+
 		            if (this.slowedDownInWater()) {
 		            	f = 0.8F;
 		            }
 		         }
-	
+
 		         this.setDeltaMovement(vector3d.add(this.xPower, this.yPower, this.zPower).scale((double)f));
 		         if (this.getTrailParticle() != null && this.shouldSpawnParticles()) {
 		        	 this.spawnTrailParticle();
@@ -180,36 +180,36 @@ public abstract class StraightMovingProjectileEntity extends ProjectileEntity {
 	         this.remove();
 	      }
 	   }
-	   
+
 	   public boolean vanishesAfterTime() {
 		   return true;
 	   }
-	   
+
 	   public int vanishAfterTime() {
 		   return 200;
 	   }
-	   
+
 	   public void onHitEntity(Entity entity) {
 
 	   }
-	   
+
 		public boolean getsStuckInBlocks() {
 			return false;
 		}
-		
+
 		public boolean keepsHittingAfterStuck() {
 			return false;
 		}
-		
+
 		public abstract SoundEvent getImpactSound();
-		
+
 		public void playImpactSound() {
 			this.playSound(this.getImpactSound(), 1.0F, 1.0F);
 		}
-		
+
 		@Override
 		protected void onHitBlock(BlockRayTraceResult p_230299_1_) {
-			super.onHitBlock(p_230299_1_);	
+			super.onHitBlock(p_230299_1_);
 			if (!this.level.isClientSide) {
 				if (!this.stuckInBlock && this.getImpactSound() != null) {
 					this.playImpactSound();
@@ -225,7 +225,7 @@ public abstract class StraightMovingProjectileEntity extends ProjectileEntity {
 				}
 			}
 		}
-	   
+
 	   public boolean slowedDownInWater() {
 		   return true;
 	   }
@@ -233,22 +233,22 @@ public abstract class StraightMovingProjectileEntity extends ProjectileEntity {
 	   public void spawnTrailParticle() {
 		   this.level.addParticle(this.getTrailParticle(), this.getX(), this.getY() + this.getSpawnParticlesY(), this.getZ(), 0, 0, 0);
 	   }
-	   
+
 	   public void spawnUnderWaterTrailParticle() {
 		   this.level.addParticle(this.getUnderWaterTrailParticle(), this.getX(), this.getY() + this.getSpawnParticlesY(), this.getZ(), 0, 0, 0);
 	   }
-	   
+
 	   public double getSpawnParticlesY() {
 		   return 0.5D;
 	   }
-	   
+
 	   public boolean shouldSpawnParticles() {
 		   return true;
 	   }
-	   
+
 	   protected boolean canHitEntity(Entity p_230298_1_) {
 		  boolean foundOwnerPartInEntity = false;
-		  if (this.getOwner() != null) {
+		  if (this.getOwner() != null && this.getOwner().isMultipartEntity()) {
 			  for (PartEntity<?> entity : this.getOwner().getParts()) {
 				  if (p_230298_1_ == entity) {
 					  foundOwnerPartInEntity = true;
@@ -265,7 +265,7 @@ public abstract class StraightMovingProjectileEntity extends ProjectileEntity {
 	   protected IParticleData getTrailParticle() {
 	      return ParticleTypes.SMOKE;
 	   }
-	   
+
 	   protected IParticleData getUnderWaterTrailParticle() {
 		      return ParticleTypes.BUBBLE;
 		   }

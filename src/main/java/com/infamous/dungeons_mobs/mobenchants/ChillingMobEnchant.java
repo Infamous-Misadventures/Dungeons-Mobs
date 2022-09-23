@@ -1,6 +1,6 @@
-package com.infamous.dungeons_mobs.mobenchantments;
+package com.infamous.dungeons_mobs.mobenchants;
 
-import com.infamous.dungeons_libraries.mobenchantments.MobEnchantment;
+import com.baguchan.enchantwithmob.mobenchant.MobEnchant;
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.capabilities.properties.IMobProps;
 import com.infamous.dungeons_mobs.capabilities.properties.MobPropsHelper;
@@ -12,31 +12,33 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import static com.infamous.dungeons_libraries.mobenchantments.MobEnchantmentHelper.executeIfPresent;
 import static com.infamous.dungeons_libraries.utils.AreaOfEffectHelper.applyToNearbyEntities;
 import static com.infamous.dungeons_libraries.utils.AreaOfEffectHelper.getCanApplyToEnemyPredicate;
 import static com.infamous.dungeons_mobs.DungeonsMobs.PROXY;
-import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.CHILLING;
+import static com.infamous.dungeons_mobs.mobenchants.NewMobEnchantUtils.executeIfPresentWithLevel;
+import static com.infamous.dungeons_mobs.mod.ModMobEnchants.CHILLING;
 
 @Mod.EventBusSubscriber(modid = DungeonsMobs.MODID)
-public class ChillingMobEnchantment extends MobEnchantment {
+public class ChillingMobEnchant extends MobEnchant {
 
-    public ChillingMobEnchantment(Rarity rarity) {
-        super(rarity);
+    public ChillingMobEnchant(Properties properties) {
+        super(properties);
     }
 
     @SubscribeEvent
     public static void OnLivingUpdate(LivingEvent.LivingUpdateEvent event) {
         LivingEntity entity = (LivingEntity) event.getEntity();
 
-        executeIfPresent(entity, CHILLING.get(), () -> {
+        executeIfPresentWithLevel(entity, CHILLING.get(), (level) -> {
             IMobProps comboCap = MobPropsHelper.getMobPropsCapability(entity);
             if(comboCap == null) return;
             int freezeNearbyTimer = comboCap.getFreezeNearbyTimer();
             if(freezeNearbyTimer <= 0){
+                PROXY.spawnParticles(entity, ParticleTypes.ITEM_SNOWBALL);
                 applyToNearbyEntities(entity, 1.5F,
                         getCanApplyToEnemyPredicate(entity), (LivingEntity nearbyEntity) -> {
-                            freezeEnemy(1, nearbyEntity, 1);
+                            freezeEnemy(1, nearbyEntity, level);
+                            PROXY.spawnParticles(nearbyEntity, ParticleTypes.ITEM_SNOWBALL);
                         }
                 );
                 comboCap.setFreezeNearbyTimer(40);

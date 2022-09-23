@@ -1,10 +1,7 @@
-package com.infamous.dungeons_mobs.mobenchantments;
+package com.infamous.dungeons_mobs.mobenchants;
 
-import static com.infamous.dungeons_libraries.mobenchantments.MobEnchantmentHelper.executeIfPresent;
-import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.DEFLECT;
-import com.infamous.dungeons_libraries.mobenchantments.MobEnchantment;
+import com.baguchan.enchantwithmob.mobenchant.MobEnchant;
 import com.infamous.dungeons_mobs.DungeonsMobs;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
@@ -17,14 +14,14 @@ import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import static com.infamous.dungeons_libraries.mobenchantments.MobEnchantmentHelper.executeIfPresent;
-import static com.infamous.dungeons_mobs.mod.ModMobEnchantments.DEFLECT;
+import static com.infamous.dungeons_mobs.mobenchants.NewMobEnchantUtils.executeIfPresentWithLevel;
+import static com.infamous.dungeons_mobs.mod.ModMobEnchants.DEFLECT;
 
 @Mod.EventBusSubscriber(modid = DungeonsMobs.MODID)
-public class DeflectMobEnchantment extends MobEnchantment {
+public class DeflectMobEnchant extends MobEnchant {
 
-    public DeflectMobEnchantment(Rarity rarity) {
-        super(rarity);
+    public DeflectMobEnchant(Properties properties) {
+        super(properties);
     }
 
     @SubscribeEvent
@@ -40,7 +37,7 @@ public class DeflectMobEnchantment extends MobEnchantment {
                 event.setCanceled(true);
                 return;
             }
-            executeIfPresent(victim, DEFLECT.get(), () -> {
+            executeIfPresentWithLevel(victim, DEFLECT.get(), (level) -> {
                 if (projectile.level.isClientSide) {
                     deflectProjectile(projectile, victim);
                     projectile.setOwner(victim);

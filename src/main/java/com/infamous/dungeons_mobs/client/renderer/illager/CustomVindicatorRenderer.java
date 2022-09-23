@@ -2,13 +2,13 @@ package com.infamous.dungeons_mobs.client.renderer.illager;
 
 import com.infamous.dungeons_mobs.client.models.armor.IllagerArmorModel;
 import com.infamous.dungeons_mobs.client.models.illager.IllagerBipedModel;
+import com.infamous.dungeons_mobs.client.renderer.layers.IllagerBipedArmorLayer;
 import com.infamous.dungeons_mobs.entities.illagers.MountaineerEntity;
 import com.infamous.dungeons_mobs.mod.ModItems;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.entity.layers.BipedArmorLayer;
 import net.minecraft.client.renderer.entity.layers.HeadLayer;
 import net.minecraft.client.renderer.entity.layers.HeldItemLayer;
 import net.minecraft.entity.monster.AbstractIllagerEntity;
@@ -29,7 +29,7 @@ public class CustomVindicatorRenderer extends MobRenderer<VindicatorEntity, Illa
     public CustomVindicatorRenderer(EntityRendererManager renderManagerIn) {
         super(renderManagerIn, new IllagerBipedModel<>(0.0F, 0.0F, 64, 64), 0.5f);
         this.addLayer(new HeadLayer<>(this));
-        this.addLayer(new BipedArmorLayer(this, new IllagerArmorModel(0.5F), new IllagerArmorModel(1.0F)));
+        this.addLayer(new IllagerBipedArmorLayer(this, new IllagerArmorModel(0.5F), new IllagerArmorModel(1.0F), new IllagerBipedModel(1.0F, 0.0F, 64, 64)));
         this.addLayer(new HeldItemLayer<VindicatorEntity, IllagerBipedModel<VindicatorEntity>>(this) {
             public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, VindicatorEntity vindicatorEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
                 if (vindicatorEntity.isAggressive() || vindicatorEntity.getArmPose() == AbstractIllagerEntity.ArmPose.NEUTRAL) {
@@ -60,4 +60,6 @@ public class CustomVindicatorRenderer extends MobRenderer<VindicatorEntity, Illa
             return VINDICATOR_TEXTURE;
         }
     }
+
+
 }
