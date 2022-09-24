@@ -618,13 +618,13 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
 				}
 				
 				if (mob.distanceTo(target) < 4) {
-					mob.setDeltaMovement(mob.getDeltaMovement().add(PositionUtils.getOffsetMotion(mob, 0, 0, -0.1)));
+					mob.setDeltaMovement(mob.getDeltaMovement().add(PositionUtils.getOffsetMotion(mob, 0, 0, -0.1, mob.yBodyRot)));
 				}
 				
 				if (this.strafingLeft) {
-					mob.setDeltaMovement(mob.getDeltaMovement().add(PositionUtils.getOffsetMotion(mob, 0.05, 0, 0)));
+					mob.setDeltaMovement(mob.getDeltaMovement().add(PositionUtils.getOffsetMotion(mob, 0.05, 0, 0, mob.yBodyRot)));
 				} else {
-					mob.setDeltaMovement(mob.getDeltaMovement().add(PositionUtils.getOffsetMotion(mob, -0.05, 0, 0)));
+					mob.setDeltaMovement(mob.getDeltaMovement().add(PositionUtils.getOffsetMotion(mob, -0.05, 0, 0, mob.yBodyRot)));
 				}
 			}
 		}

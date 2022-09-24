@@ -379,7 +379,7 @@ public class PoisonQuillVineEntity extends AbstractVineEntity {
 			this.mob.getNavigation().stop();
 
 			if (target != null && mob.shootAnimationTick == mob.shootAnimationActionPoint) {
-				Vector3d pos = PositionUtils.getOffsetPos(mob, 0, mob.getStandingEyeHeight(mob.getPose(), mob.getDimensions(mob.getPose())), 1.0, yBodyRot);
+				Vector3d pos = PositionUtils.getOffsetPos(mob, 0, mob.getStandingEyeHeight(mob.getPose(), mob.getDimensions(mob.getPose())), 1.0, yHeadRot);
 				double d1 = target.getX() - pos.x;
 				double d2 = target.getY(0.6D) - pos.y;
 				double d3 = target.getZ() - pos.z;

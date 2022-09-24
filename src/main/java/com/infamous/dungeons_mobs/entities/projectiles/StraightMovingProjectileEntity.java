@@ -138,7 +138,7 @@ public abstract class StraightMovingProjectileEntity extends ProjectileEntity {
 	   public void tick() {
 	      Entity entity = this.getOwner();
 
-	      if (this.getsStuckInBlocks()) {
+	      if (this.stuckInBlock) {
 	    	  this.noPhysics = false;
 	      }
 
@@ -210,12 +210,13 @@ public abstract class StraightMovingProjectileEntity extends ProjectileEntity {
 		@Override
 		protected void onHitBlock(BlockRayTraceResult p_230299_1_) {
 			super.onHitBlock(p_230299_1_);
-			if (!this.level.isClientSide) {
 				if (!this.stuckInBlock && this.getImpactSound() != null) {
 					this.playImpactSound();
 				}
 				if (!this.getsStuckInBlocks()) {
-					this.remove();
+					if (!this.level.isClientSide) {
+						this.remove();
+					}
 				} else {
 					this.lockedXRot = this.xRot;
 					this.lockedYRot = this.yRot;
@@ -223,7 +224,6 @@ public abstract class StraightMovingProjectileEntity extends ProjectileEntity {
 					this.setPower(0, 0, 0);
 					this.setDeltaMovement(0, 0, 0);
 				}
-			}
 		}
 
 	   public boolean slowedDownInWater() {
