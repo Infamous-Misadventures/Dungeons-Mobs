@@ -4,11 +4,16 @@ import javax.annotation.Nullable;
 
 import com.infamous.dungeons_mobs.interfaces.IShieldUser;
 
+import com.infamous.dungeons_mobs.tags.CustomTags;
 import net.minecraft.entity.CreatureEntity;
+import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.util.Hand;
+
+import java.util.List;
 
 public class UseShieldGoal extends Goal {
 
@@ -17,21 +22,23 @@ public class UseShieldGoal extends Goal {
 	public int maxBlockDuration;
 	public int blockChance;
 	public int stopChanceAfterDurationEnds;
-	public double blockDistance;
+	public double MaxBlockDistance;
+	public double MinBlockDistance;
 	public boolean guaranteedBlockIfTargetNotVisible;
 	
 	public CreatureEntity mob;
 	@Nullable
 	public LivingEntity target;
 	
-    public UseShieldGoal(CreatureEntity attackingMob, double blockDistance, int blockDuration, int maxBlockDuration, int stopChanceAfterDurationEnds, int blockChance, boolean guaranteedBlockIfTargetNotVisible) {
+    public UseShieldGoal(CreatureEntity attackingMob, double maxBlockDistance, double minBlockDistance, int maxBlockDuration, int stopChanceAfterDurationEnds, int blockChance, boolean guaranteedBlockIfTargetNotVisible) {
        this.blockDuration = maxBlockDuration;
 		this.mob = attackingMob;
 		this.target = attackingMob.getTarget();
 		this.blockChance = blockChance;
 		this.maxBlockDuration = maxBlockDuration;
+		this.MinBlockDistance = minBlockDistance;
 		this.stopChanceAfterDurationEnds = stopChanceAfterDurationEnds;
-		this.blockDistance = blockDistance;
+		this.MaxBlockDistance = maxBlockDistance;
 		this.guaranteedBlockIfTargetNotVisible = guaranteedBlockIfTargetNotVisible;
     }
     
@@ -44,31 +51,25 @@ public class UseShieldGoal extends Goal {
 		return true;
 	}
 	
-	public boolean shouldBlockForTarget(LivingEntity target) {
-		if (target instanceof MobEntity && ((MobEntity)target).getTarget() != null && ((MobEntity)target).getTarget() != mob) {
-			return false;
-		} else {
-			return true;
-		}
-	}
-	
 	public boolean isShieldDisabled(CreatureEntity shieldUser) {
-		if (shieldUser instanceof IShieldUser && ((IShieldUser)shieldUser).isShieldDisabled()) {
-			return true;
-		} else {
-			return false;
-		}
+		return shieldUser instanceof IShieldUser && ((IShieldUser) shieldUser).isShieldDisabled();
 	}
 
 	@Override
 	public boolean canUse() {
 		target = mob.getTarget();
-		return target != null && !isShieldDisabled(mob) && shouldBlockForTarget(target) && (((mob.getRandom().nextInt(this.blockChance) == 0 && mob.distanceTo(target) <= blockDistance && mob.canSee(target) && mob.getOffhandItem().getItem().isShield(mob.getOffhandItem(), mob)) || mob.isBlocking()) || (guaranteedBlockIfTargetNotVisible && !mob.canSee(target)));
+
+		List<? extends CreatureEntity> list = mob.level.getEntitiesOfClass(mob.getClass(), mob.getBoundingBox().inflate(3));
+		list.removeIf(pg -> !pg.isBlocking());
+
+		List<? extends ProjectileEntity> projectileList = mob.level.getEntitiesOfClass(ProjectileEntity.class, mob.getBoundingBox().inflate(8));
+
+		return target != null && ((!isShieldDisabled(mob) && (((mob.getRandom().nextInt(this.blockChance) == 0 && (mob.distanceTo(target) <= MaxBlockDistance || target instanceof IRangedAttackMob || !projectileList.isEmpty()) && mob.canSee(target) && mob.getOffhandItem().getItem().isShield(mob.getOffhandItem(), mob)) || mob.isBlocking()) || (guaranteedBlockIfTargetNotVisible && !mob.canSee(target)))) || !list.isEmpty() && !target.getType().is(CustomTags.DONT_SHIELD_AGAINST));
 	}
 
 	@Override
 	public boolean canContinueToUse() {
-		return target != null && mob.invulnerableTime <= 0 && !isShieldDisabled(mob) && mob.getOffhandItem().getItem().isShield(mob.getOffhandItem(), mob);
+		return target != null && !isShieldDisabled(mob) && mob.getOffhandItem().getItem().isShield(mob.getOffhandItem(), mob);
 	}
 
 	@Override
@@ -82,6 +83,9 @@ public class UseShieldGoal extends Goal {
 		this.blockingFor ++;
 		
 		if ((this.blockingFor >= this.blockDuration && mob.getRandom().nextInt(this.stopChanceAfterDurationEnds) == 0) || this.blockingFor >= this.maxBlockDuration) {
+			this.stop();
+		}
+		if (target != null && mob.distanceTo(target) <= this.MinBlockDistance && mob.getRandom().nextInt(20) == 0) {
 			this.stop();
 		}
 	}
