@@ -7,10 +7,11 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import com.google.common.collect.Maps;
-import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
 import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
 import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
+import com.infamous.dungeons_mobs.goals.PatrolStructureGoal;
 import com.infamous.dungeons_mobs.goals.UseShieldGoal;
+import com.infamous.dungeons_mobs.interfaces.IPatrolStructureEntity;
 import com.infamous.dungeons_mobs.interfaces.IShieldUser;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModItems;
@@ -47,6 +48,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
@@ -72,6 +76,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatable, IShieldUser, SpawnArmoredMob {
 
+	private static final DataParameter<Boolean> CAN_PATROL = EntityDataManager.defineId(RoyalGuardEntity.class, DataSerializers.BOOLEAN);
 	private static final UUID SPEED_MODIFIER_BLOCKING_UUID = UUID.fromString("05cd371b-0ff4-4ded-8630-b380232ed7b1");
 	private static final AttributeModifier SPEED_MODIFIER_BLOCKING = new AttributeModifier(SPEED_MODIFIER_BLOCKING_UUID,
 			"Blocking speed decrease", -0.1D, AttributeModifier.Operation.ADDITION);
@@ -80,18 +85,30 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
 
     private int shieldCooldownTime;
     
-	public int attackAnimationTick;
-	public int attackAnimationLength = 27;
-	public int attackAnimationActionPoint = 15;
+	private int attackAnimationTick;
+	private static final int attackAnimationLength = 22;
+	private static final int attackAnimationActionPoint = 10;
 
 	public RoyalGuardEntity(World world) {
 		super(ModEntityTypes.ROYAL_GUARD.get(), world);
+		this.attackAnimationTick = 0;
 		this.shieldCooldownTime = 0;
 	}
 
 	public RoyalGuardEntity(EntityType<? extends RoyalGuardEntity> p_i50189_1_, World p_i50189_2_) {
 		super(p_i50189_1_, p_i50189_2_);
+		this.attackAnimationTick = 0;
 		this.shieldCooldownTime = 0;
+	}
+
+	@Override
+	public int getMaxSpawnClusterSize() {
+		return 1;
+	}
+
+	@Override
+	public boolean hurt(DamageSource p_70097_1_, float p_70097_2_) {
+		return super.hurt(p_70097_1_, p_70097_2_ * .8f);
 	}
 
 	@Override
@@ -103,8 +120,8 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
 	protected void registerGoals() {
 		super.registerGoals();
 		this.goalSelector.addGoal(0, new SwimGoal(this));
-		this.goalSelector.addGoal(0, new UseShieldGoal(this, 7.5D, 60, 160, 15, 100, false));
-		this.goalSelector.addGoal(1, new RoyalGuardEntity.BasicAttackGoal(this));
+		this.goalSelector.addGoal(0, new UseShieldGoal(this, 10.5D, 4.75D, 160, 35, 38, false));
+		this.goalSelector.addGoal(1, new BasicAttackGoal(this));
 		this.goalSelector.addGoal(2, new ApproachTargetGoal(this, 0, 1.0D, true));
         this.goalSelector.addGoal(3, new LookAtTargetGoal(this));
 		this.goalSelector.addGoal(1, new AbstractIllagerEntity.RaidOpenDoorGoal(this));
@@ -113,9 +130,16 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
 		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, true));
 		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
+		this.goalSelector.addGoal(5, new PatrolStructureGoal<>(this, 1.1, AbstractIllagerEntity.class));
 		this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 0.6D));
 		this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
 		this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
+	}
+
+	@Override
+	protected void defineSynchedData() {
+		super.defineSynchedData();
+		this.entityData.define(CAN_PATROL, false);
 	}
 
 	@Nullable
@@ -126,6 +150,9 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
 		((GroundPathNavigator) this.getNavigation()).setCanOpenDoors(true);
 		this.populateDefaultEquipmentSlots(p_213386_2_);
 		this.populateDefaultEquipmentEnchantments(p_213386_2_);
+		if (p_213386_3_ == SpawnReason.STRUCTURE) {
+			this.entityData.set(CAN_PATROL, true);
+		}
 		return ilivingentitydata;
 	}
 	
@@ -158,11 +185,16 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
 		}
 	}
 
+	@Override
+	public void tick() {
+		super.tick();
+	}
+
 	public void baseTick() {
         super.baseTick();
-        ModifiableAttributeInstance modifiableattributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);   
+        ModifiableAttributeInstance modifiableattributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
         
-        if (this.isBlocking()) {
+        if (this.isBlocking() && this.invulnerableTime <= 0) {
             if (!modifiableattributeinstance.hasModifier(SPEED_MODIFIER_BLOCKING)) {
                 modifiableattributeinstance.addTransientModifier(SPEED_MODIFIER_BLOCKING);
              }
@@ -216,8 +248,11 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
 	}
 
 	public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-		return VindicatorEntity.createAttributes().add(Attributes.KNOCKBACK_RESISTANCE, 0.6D)
-				.add(Attributes.MOVEMENT_SPEED, (double) 0.325F).add(Attributes.FOLLOW_RANGE, 18.0D).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
+		return VindicatorEntity.createAttributes()
+				.add(Attributes.KNOCKBACK_RESISTANCE, 0.6D)
+				.add(Attributes.MOVEMENT_SPEED, (double) 0.325F)
+				.add(Attributes.FOLLOW_RANGE, 18.0D)
+				.add(Attributes.ATTACK_KNOCKBACK, 1.0D);
 	}
 
 	@Override
@@ -267,6 +302,7 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
 		}
 
 		this.setItemSlot(EquipmentSlotType.MAINHAND, mainhandWeapon);
+		
 	}
 
 	@Override
@@ -361,18 +397,20 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
 				}
 			}
 		}
+		
 	}
 
 	@Override
 	public ResourceLocation getArmorSet() {
 		return ModItems.ROYAL_GUARD_ARMOR.getArmorSet();
 	}
-
-	class BasicAttackGoal extends Goal {
+	
+	static class BasicAttackGoal extends Goal {
 
 		public RoyalGuardEntity mob;
 		@Nullable
 		public LivingEntity target;
+		private int cooldown = 0;
 
 		public BasicAttackGoal(RoyalGuardEntity mob) {
 			this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP));
@@ -392,8 +430,8 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
 		@Override
 		public boolean canUse() {
 			target = mob.getTarget();
-			return target != null && !mob.isBlocking() && mob.distanceTo(target) <= 2.5 && animationsUseable()
-					&& mob.canSee(target);
+			return target != null && !mob.isBlocking() && mob.distanceTo(target) <= 1.5 + target.getBbWidth() + mob.getBbWidth() && animationsUseable()
+					&& mob.canSee(target) && this.cooldown <= mob.tickCount;
 		}
 
 		@Override
@@ -403,20 +441,21 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
 
 		@Override
 		public void start() {
-			mob.attackAnimationTick = mob.attackAnimationLength;
+			mob.attackAnimationTick = attackAnimationLength;
 			mob.level.broadcastEntityEvent(mob, (byte) 4);
 		}
 
 		@Override
 		public void tick() {
 			target = mob.getTarget();
+			mob.getNavigation().stop();
 
-			if (mob.attackAnimationTick == mob.attackAnimationActionPoint) {
+			if (mob.attackAnimationTick == attackAnimationActionPoint) {
 				mob.playSound(ModSoundEvents.ROYAL_GUARD_ATTACK.get(), 1.25F, 1.0F);
 			}
 
-			if (target != null && mob.distanceTo(target) < 3.5
-					&& mob.attackAnimationTick == mob.attackAnimationActionPoint) {
+			if (target != null && mob.distanceTo(target) < 2.5 + target.getBbWidth() + mob.getBbWidth()
+					&& mob.attackAnimationTick == attackAnimationActionPoint) {
 				mob.doHurtTarget(target);
 				RoyalGuardEntity.disableShield(target, 60);
 			}
@@ -424,9 +463,13 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
 		
 		@Override
 		public void stop() {
-			if (target != null && !isShieldDisabled(mob) && shouldBlockForTarget(target) && mob.getOffhandItem().getItem().isShield(mob.getOffhandItem(), mob) && mob.random.nextInt(6) == 0) {
+			this.cooldown = mob.tickCount + 5;
+			if (target != null && !isShieldDisabled(mob) && shouldBlockForTarget(target) && mob.getOffhandItem().getItem().isShield(mob.getOffhandItem(), mob)) {
 				mob.startUsingItem(Hand.OFF_HAND);
+				this.cooldown = mob.tickCount + 15;
 			}
+
+
 		}
 		
 		public boolean isShieldDisabled(CreatureEntity shieldUser) {
@@ -453,10 +496,10 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
 
 	public static void disableShield(LivingEntity livingEntity, int ticks) {
 		if (livingEntity instanceof PlayerEntity && livingEntity.isBlocking()) {
-			((PlayerEntity) livingEntity).getCooldowns()
-					.addCooldown(livingEntity.getItemInHand(livingEntity.getUsedItemHand()).getItem(), ticks);
+			((PlayerEntity) livingEntity).getCooldowns().addCooldown(livingEntity.getItemInHand(livingEntity.getUsedItemHand()).getItem(), ticks);
 			livingEntity.stopUsingItem();
 			livingEntity.level.broadcastEntityEvent(livingEntity, (byte) 30);
 		}
 	}
+	
 }
