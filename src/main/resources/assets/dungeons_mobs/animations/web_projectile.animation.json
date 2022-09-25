@@ -1,0 +1,1 @@
+{"format_version":"1.8.0","animations":{"web_projectile_idle":{"loop":true,"animation_length":0.33333,"bones":{"everything":{"scale":{"0.0":{"vector":[1,1,1]},"0.1667":{"vector":[0.9,0.9,1],"easing":"linear"},"0.3333":{"vector":[1,1,1],"easing":"linear"}}}}}},"geckolib_format_version":2}

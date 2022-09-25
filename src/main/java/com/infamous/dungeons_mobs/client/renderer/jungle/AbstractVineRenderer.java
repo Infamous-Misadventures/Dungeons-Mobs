@@ -21,7 +21,7 @@ public class AbstractVineRenderer<M extends AbstractVineModel> extends GeoEntity
 	}
 
 	public boolean isShaking(AbstractVineEntity p_230495_1_) {
-		return false;
+		return p_230495_1_.isInWrongHabitat();
 	}
 
 	@Override

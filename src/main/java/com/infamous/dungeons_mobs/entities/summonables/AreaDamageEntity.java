@@ -43,6 +43,9 @@ public class AreaDamageEntity extends Entity {
 	private static final DataParameter<Integer> PARTICLE_TYPE = EntityDataManager.defineId(AreaDamageEntity.class,
 			DataSerializers.INT);
 	
+	private static final DataParameter<Integer> EXTRA_TIME = EntityDataManager.defineId(AreaDamageEntity.class,
+			DataSerializers.INT);
+	
 	public float damage;
 	public DamageSource damageSource = DamageSource.GENERIC;
 	public LivingEntity owner;
@@ -57,6 +60,8 @@ public class AreaDamageEntity extends Entity {
 	
 	public boolean disableShields;
 	public int disableShieldTime;
+	
+	public int extraTimeTick;
 	
 	public List<AreaDamageEntity> connectedAreaDamages = Lists.newArrayList();
 
@@ -148,7 +153,7 @@ public class AreaDamageEntity extends Entity {
 		}
 	}
 	
-	public static AreaDamageEntity spawnAreaDamage(World level, Vector3d pos, LivingEntity owner, float damage, DamageSource damageSource, float size, float sizeToReach, float growSpeed, float ySize, boolean constantDamage, boolean friendlyFire, double knockbackAmount, double knockbackAmountY, boolean disableShields, int disableShieldTime, int particleVariant) {
+	public static AreaDamageEntity spawnAreaDamage(World level, Vector3d pos, LivingEntity owner, float damage, DamageSource damageSource, float size, float sizeToReach, float growSpeed, float ySize, int extraTime, boolean constantDamage, boolean friendlyFire, double knockbackAmount, double knockbackAmountY, boolean disableShields, int disableShieldTime, int particleVariant) {
 		AreaDamageEntity areaDamage = ModEntityTypes.AREA_DAMAGE.get().create(level);
 			areaDamage.moveTo(pos.x, pos.y, pos.z);
 			areaDamage.owner = owner;
@@ -165,6 +170,7 @@ public class AreaDamageEntity extends Entity {
 			areaDamage.disableShields = disableShields;
 			areaDamage.disableShieldTime = disableShieldTime;
 			areaDamage.setParticleType(particleVariant);
+			areaDamage.setExtraTime(extraTime);
 		return areaDamage;
 	}
 
@@ -179,7 +185,7 @@ public class AreaDamageEntity extends Entity {
 			for (Entity entity : list) {
 				if (!this.level.isClientSide && this.canEntityBeDamaged(entity)) {
 					entity.hurt(this.damageSource, damage);
-					if (this.distanceTo(entity) >= 0.25) {
+					if (this.distanceTo(entity) >= 0.5) {
 						double d0 = entity.getX() - this.getX();
 					    double d1 = entity.getZ() - this.getZ();
 					    double d2 = Math.max(d0 * d0 + d1 * d1, 0.001D);
@@ -202,7 +208,11 @@ public class AreaDamageEntity extends Entity {
     		this.setSize(this.getSize() + this.getGrowSpeed());
     	}
     	
-    	if (!this.level.isClientSide && this.getSize() >= this.getSizeToReach()) {
+    	if (this.getSize() >= this.getSizeToReach()) {
+    		this.extraTimeTick ++;
+    	}
+    	
+    	if (!this.level.isClientSide && ((this.getExtraTime() > 0 && this.extraTimeTick >= this.getExtraTime()) || (this.getExtraTime() <= 0 && this.getSize() >= this.getSizeToReach()))) {
     		this.remove();
     	}   	
     }
@@ -223,6 +233,7 @@ public class AreaDamageEntity extends Entity {
 		this.entityData.define(Y_SIZE, 0.0F);
 		this.entityData.define(GROW_SPEED, 0.0F);
 		this.entityData.define(PARTICLE_TYPE, 0);
+		this.entityData.define(EXTRA_TIME, 0);
 	}
 	
 	public float getSize() {
@@ -265,6 +276,14 @@ public class AreaDamageEntity extends Entity {
 		this.entityData.set(PARTICLE_TYPE, attached);
 	}
 	
+	public int getExtraTime() {
+		return this.entityData.get(EXTRA_TIME);
+	}
+
+	public void setExtraTime(int attached) {
+		this.entityData.set(EXTRA_TIME, attached);
+	}
+	
 
 	@Override
 	protected void readAdditionalSaveData(CompoundNBT p_70037_1_) {
@@ -273,6 +292,7 @@ public class AreaDamageEntity extends Entity {
 		this.setYSize(p_70037_1_.getFloat("YSize"));
 		this.setGrowSpeed(p_70037_1_.getFloat("GrowSpeed"));
 		this.setParticleType(p_70037_1_.getInt("ParticleType"));
+		this.setExtraTime(p_70037_1_.getInt("ExtraTime"));
 		this.damage = p_70037_1_.getFloat("Damage");
 		this.constantDamage = p_70037_1_.getBoolean("ConstantDamage");
 		this.knockbackAmount = p_70037_1_.getDouble("KnockbackAmount");
@@ -294,6 +314,7 @@ public class AreaDamageEntity extends Entity {
 		p_213281_1_.putDouble("KnockbackAmountY", this.knockbackAmountY);
 		p_213281_1_.putInt("DisableShieldTime", this.disableShieldTime);
 		p_213281_1_.putBoolean("DisableShields", this.disableShields);
+		p_213281_1_.putInt("ExtraTime", this.getExtraTime());
 	}
 
 	@Override

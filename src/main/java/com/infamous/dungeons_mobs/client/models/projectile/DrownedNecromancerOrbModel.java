@@ -24,7 +24,7 @@ public class DrownedNecromancerOrbModel extends AnimatedGeoModel<DrownedNecroman
 
 	@Override
 	public ResourceLocation getTextureLocation(DrownedNecromancerOrbEntity entity) {
-		return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/projectile/drowned_necromancer_orb_0.png"); //new ResourceLocation(DungeonsMobs.MODID, "textures/entity/projectile/drowned_necromancer_orb_" + entity.textureChange % 3 + ".png");
+		return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/projectile/drowned_necromancer_orb_" + entity.textureChange % 2 + ".png");
 	}
 
 	@Override

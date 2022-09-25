@@ -47,7 +47,7 @@ public class QuickGrowingKelpEntity extends QuickGrowingVineEntity {
 	
 	@Override
 	public void spawnAreaDamage() {
-		AreaDamageEntity areaDamage = AreaDamageEntity.spawnAreaDamage(this.level, this.position(), this, 2.5F, DamageSource.mobAttack(this), 0.0F, 1.25F, 0.25F, 0.25F, false, false, 0.75, 0.25, false, 0, 2);
+		AreaDamageEntity areaDamage = AreaDamageEntity.spawnAreaDamage(this.level, this.position(), this, 2.5F, DamageSource.mobAttack(this), 0.0F, 1.25F, 0.25F, 0.25F, 0, false, false, 0.75, 0.25, false, 0, 2);
 		this.level.addFreshEntity(areaDamage);
 	}
 	

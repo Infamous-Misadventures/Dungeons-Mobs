@@ -480,5 +480,9 @@
   "subtitles.entity.wildfire.shoot": "Wildfire shoots",
   "subtitles.entity.wildfire.projectile_hit": "Wildfire projectile hits",
   "subtitles.entity.wildfire.shockwave": "Wildfire slams",
-  "subtitles.entity.wildfire.shield_break": "Wildfire shield crumbles"
+  "subtitles.entity.wildfire.shield_break": "Wildfire shield crumbles",
+  
+  "subtitles.entity.spider.prepare_shoot": "Spider calls",
+  "subtitles.entity.spider.shoot": "Spider shoots",
+  "subtitles.entity.spider.web_impact": "Spider Web hits"
 }

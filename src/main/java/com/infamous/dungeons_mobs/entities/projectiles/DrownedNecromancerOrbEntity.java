@@ -116,6 +116,7 @@ public class DrownedNecromancerOrbEntity extends StraightMovingProjectileEntity 
 		if (entity instanceof MobEntity && ((MobEntity)entity).getMobType() == CreatureAttribute.UNDEAD) {
 			
 		} else if (!this.level.isClientSide) {
+			super.onHitEntity(entity);
 			Entity entity1 = this.getOwner();
 			boolean flag;
 			if (entity1 instanceof LivingEntity) {

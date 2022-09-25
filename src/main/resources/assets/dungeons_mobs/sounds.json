@@ -3996,5 +3996,51 @@
 				"stream": true
 			}
 		]
+	},
+	"entity.spider.prepare_shoot": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.spider.prepare_shoot",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/spider/prepare_shoot1",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/spider/prepare_shoot2",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/spider/prepare_shoot3",
+				"stream": true
+			}
+		]
+	},
+	"entity.spider.shoot": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.spider.shoot",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/spider/shoot1",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/spider/shoot2",
+				"stream": true
+			}
+		]
+	},
+	"entity.spider.web_impact": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.spider.web_impact",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/spider/web_impact1",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/spider/web_impact2",
+				"stream": true
+			}
+		]
 	}
 }

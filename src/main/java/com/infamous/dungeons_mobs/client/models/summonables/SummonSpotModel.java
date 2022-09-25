@@ -1,6 +1,4 @@
-package com.infamous.dungeons_mobs.client.models.summonables;// Made with Blockbench 3.6.6
-// Exported for Minecraft version 1.15
-// Paste this class into your mod and generate all required imports
+package com.infamous.dungeons_mobs.client.models.summonables;
 
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
