@@ -92,7 +92,7 @@ public class SkeletonVanguardEntity extends SkeletonEntity implements IShieldUse
 
 	@Override
 	protected void registerGoals() {
-		this.goalSelector.addGoal(0, new UseShieldGoal(this, 10D, 60, 120, 10, 60, true));
+		this.goalSelector.addGoal(0, new UseShieldGoal(this, 10D, 7.5D, 120, 20, 52, true));
 		this.goalSelector.addGoal(1, new SkeletonVanguardEntity.BasicAttackGoal(this));
 		this.goalSelector.addGoal(2, new ApproachTargetGoal(this, 0, 1.0D, true));
         this.goalSelector.addGoal(3, new LookAtTargetGoal(this));
@@ -177,7 +177,7 @@ public class SkeletonVanguardEntity extends SkeletonEntity implements IShieldUse
 		super.baseTick();
 		ModifiableAttributeInstance modifiableattributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
 
-		if (this.isBlocking()) {
+		if (this.isBlocking() && this.invulnerableTime <= 0) {
 			if (!modifiableattributeinstance.hasModifier(SPEED_MODIFIER_BLOCKING)) {
 				modifiableattributeinstance.addTransientModifier(SPEED_MODIFIER_BLOCKING);
 			}
