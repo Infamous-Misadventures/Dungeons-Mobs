@@ -3,8 +3,6 @@ package com.infamous.dungeons_mobs.entities.projectiles;
 import java.util.List;
 import java.util.function.Predicate;
 
-import com.infamous.dungeons_mobs.mod.ModSoundEvents;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -28,305 +26,306 @@ import net.minecraftforge.entity.PartEntity;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 public abstract class StraightMovingProjectileEntity extends ProjectileEntity {
-	   public double xPower;
-	   public double yPower;
-	   public double zPower;
+    public double xPower;
+    public double yPower;
+    public double zPower;
 
-	   public boolean stuckInBlock;
+    public boolean stuckInBlock;
+    private final Predicate<Entity> CAN_HIT = (entity) -> {
+        return this.canHitEntity(entity);
+    };
+    public int lifeTime;
+    public float lockedXRot;
+    public float lockedYRot;
 
-	   public int lifeTime;
+    protected StraightMovingProjectileEntity(EntityType<? extends StraightMovingProjectileEntity> p_i50173_1_, World p_i50173_2_) {
+        super(p_i50173_1_, p_i50173_2_);
+    }
 
-	   public float lockedXRot;
-	   public float lockedYRot;
+    public StraightMovingProjectileEntity(EntityType<? extends StraightMovingProjectileEntity> p_i50174_1_, double p_i50174_2_, double p_i50174_4_, double p_i50174_6_, double p_i50174_8_, double p_i50174_10_, double p_i50174_12_, World p_i50174_14_) {
+        this(p_i50174_1_, p_i50174_14_);
+        this.moveTo(p_i50174_2_, p_i50174_4_, p_i50174_6_, this.yRot, this.xRot);
+        this.reapplyPosition();
+        double d0 = (double) MathHelper.sqrt(p_i50174_8_ * p_i50174_8_ + p_i50174_10_ * p_i50174_10_ + p_i50174_12_ * p_i50174_12_);
+        if (d0 != 0.0D) {
+            this.xPower = p_i50174_8_ / d0 * 0.1D;
+            this.yPower = p_i50174_10_ / d0 * 0.1D;
+            this.zPower = p_i50174_12_ / d0 * 0.1D;
+        }
 
-	   private final Predicate<Entity> CAN_HIT = (entity) -> {
-		      return this.canHitEntity(entity);
-		   };
+    }
 
-	   protected StraightMovingProjectileEntity(EntityType<? extends StraightMovingProjectileEntity> p_i50173_1_, World p_i50173_2_) {
-	      super(p_i50173_1_, p_i50173_2_);
-	   }
+    public StraightMovingProjectileEntity(EntityType<? extends StraightMovingProjectileEntity> p_i50175_1_, LivingEntity p_i50175_2_, double p_i50175_3_, double p_i50175_5_, double p_i50175_7_, World p_i50175_9_) {
+        this(p_i50175_1_, p_i50175_2_.getX(), p_i50175_2_.getY(), p_i50175_2_.getZ(), p_i50175_3_, p_i50175_5_, p_i50175_7_, p_i50175_9_);
+        this.setOwner(p_i50175_2_);
+        this.setRot(p_i50175_2_.yRot, p_i50175_2_.xRot);
+    }
 
-	   public StraightMovingProjectileEntity(EntityType<? extends StraightMovingProjectileEntity> p_i50174_1_, double p_i50174_2_, double p_i50174_4_, double p_i50174_6_, double p_i50174_8_, double p_i50174_10_, double p_i50174_12_, World p_i50174_14_) {
-	      this(p_i50174_1_, p_i50174_14_);
-	      this.moveTo(p_i50174_2_, p_i50174_4_, p_i50174_6_, this.yRot, this.xRot);
-	      this.reapplyPosition();
-	      double d0 = (double)MathHelper.sqrt(p_i50174_8_ * p_i50174_8_ + p_i50174_10_ * p_i50174_10_ + p_i50174_12_ * p_i50174_12_);
-	      if (d0 != 0.0D) {
-	         this.xPower = p_i50174_8_ / d0 * 0.1D;
-	         this.yPower = p_i50174_10_ / d0 * 0.1D;
-	         this.zPower = p_i50174_12_ / d0 * 0.1D;
-	      }
+    protected void defineSynchedData() {
+    }
 
-	   }
+    public void setPower(double powerX, double powerY, double powerZ) {
+        double d0 = (double) MathHelper.sqrt(powerX * powerX + powerY * powerY + powerZ * powerZ);
+        if (d0 != 0.0D) {
+            this.xPower = powerX / d0 * 0.1D;
+            this.yPower = powerY / d0 * 0.1D;
+            this.zPower = powerZ / d0 * 0.1D;
+        }
+    }
 
-	   public StraightMovingProjectileEntity(EntityType<? extends StraightMovingProjectileEntity> p_i50175_1_, LivingEntity p_i50175_2_, double p_i50175_3_, double p_i50175_5_, double p_i50175_7_, World p_i50175_9_) {
-	      this(p_i50175_1_, p_i50175_2_.getX(), p_i50175_2_.getY(), p_i50175_2_.getZ(), p_i50175_3_, p_i50175_5_, p_i50175_7_, p_i50175_9_);
-	      this.setOwner(p_i50175_2_);
-	      this.setRot(p_i50175_2_.yRot, p_i50175_2_.xRot);
-	   }
+    @OnlyIn(Dist.CLIENT)
+    public boolean shouldRenderAtSqrDistance(double p_70112_1_) {
+        double d0 = this.getBoundingBox().getSize() * 4.0D;
+        if (Double.isNaN(d0)) {
+            d0 = 4.0D;
+        }
 
-	   protected void defineSynchedData() {
-	   }
+        d0 = d0 * 64.0D;
+        return p_70112_1_ < d0 * d0;
+    }
 
-	   public void setPower(double powerX, double powerY, double powerZ) {
-		      double d0 = (double)MathHelper.sqrt(powerX * powerX + powerY * powerY + powerZ * powerZ);
-		      if (d0 != 0.0D) {
-		         this.xPower = powerX / d0 * 0.1D;
-		         this.yPower = powerY / d0 * 0.1D;
-		         this.zPower = powerZ / d0 * 0.1D;
-		      }
-	   }
+    public void tryToDealDamage() {
+        List<Entity> list = this.level.getEntities(this, this.getBoundingBox(), CAN_HIT);
+        if (!list.isEmpty() && !this.level.isClientSide) {
+            for (Entity entity : list) {
+                this.onHitEntity(entity);
+            }
+        }
+    }
 
-	   @OnlyIn(Dist.CLIENT)
-	   public boolean shouldRenderAtSqrDistance(double p_70112_1_) {
-	      double d0 = this.getBoundingBox().getSize() * 4.0D;
-	      if (Double.isNaN(d0)) {
-	         d0 = 4.0D;
-	      }
+    public void rotateToMatchMovement() {
+        this.updateRotation();
+    }
 
-	      d0 = d0 * 64.0D;
-	      return p_70112_1_ < d0 * d0;
-	   }
+    public boolean shouldUpdateRotation() {
+        return true;
+    }
 
-	public void tryToDealDamage() {
-    	List<Entity> list = this.level.getEntities(this, this.getBoundingBox(), CAN_HIT);
-		if (!list.isEmpty() && !this.level.isClientSide) {
-			for (Entity entity : list) {
-					this.onHitEntity(entity);
-			}
-		}
-	}
+    @Override
+    protected void updateRotation() {
+        if (this.stuckInBlock) {
+            this.xRot = this.lockedXRot;
+            this.yRot = this.lockedYRot;
+        } else {
+            super.updateRotation();
+        }
+    }
 
-	public void rotateToMatchMovement() {
-		this.updateRotation();
-	}
+    @Override
+    public void baseTick() {
+        super.baseTick();
 
-	public boolean shouldUpdateRotation() {
-		return true;
-	}
+        if (this.shouldUpdateRotation()) {
+            this.updateRotation();
+        }
 
-	@Override
-	protected void updateRotation() {
-		if (this.stuckInBlock) {
-			this.xRot = this.lockedXRot;
-			this.yRot = this.lockedYRot;
-		} else {
-			super.updateRotation();
-		}
-	}
+        if (!this.level.isClientSide && this.vanishesAfterTime()) {
+            if (this.lifeTime < this.vanishAfterTime() + this.getVanishAnimationLength()) {
+                this.lifeTime++;
+            } else {
+                this.remove();
+            }
+        }
 
-	   @Override
-	public void baseTick() {
-		super.baseTick();
+        this.tryToDealDamage();
+    }
 
-		if (this.shouldUpdateRotation()) {
-			this.updateRotation();
-		}
+    public void tick() {
+        Entity entity = this.getOwner();
 
-		if (!this.level.isClientSide && this.vanishesAfterTime()) {
-			if (this.lifeTime < this.vanishAfterTime()) {
-				this.lifeTime++;
-			} else {
-				this.remove();
-			}
-		}
+        if (this.stuckInBlock) {
+            this.noPhysics = false;
+        }
 
-		this.tryToDealDamage();
-	}
+        if (this.level.isClientSide || (entity == null || !entity.removed) && this.level.hasChunkAt(this.blockPosition())) {
+            super.tick();
+            if (this.shouldBurn()) {
+                this.setSecondsOnFire(1);
+            }
 
-	   public void tick() {
-	      Entity entity = this.getOwner();
+            RayTraceResult raytraceresult = ProjectileHelper.getHitResult(this, this::canHitEntity);
+            if (raytraceresult.getType() != RayTraceResult.Type.MISS && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
+                this.onHit(raytraceresult);
+            }
 
-	      if (this.stuckInBlock) {
-	    	  this.noPhysics = false;
-	      }
+            this.checkInsideBlocks();
+            Vector3d vector3d = this.getDeltaMovement();
+            double d0 = this.getX() + vector3d.x;
+            double d1 = this.getY() + vector3d.y;
+            double d2 = this.getZ() + vector3d.z;
+            float f = this.getInertia();
+            if (this.isInWater()) {
+                for (int i = 0; i < 4; ++i) {
+                    if (this.getUnderWaterTrailParticle() != null && this.shouldSpawnParticles()) {
+                        this.spawnUnderWaterTrailParticle();
+                    }
+                }
 
-	      if (this.level.isClientSide || (entity == null || !entity.removed) && this.level.hasChunkAt(this.blockPosition())) {
-	         super.tick();
-	         if (this.shouldBurn()) {
-	            this.setSecondsOnFire(1);
-	         }
+                if (this.slowedDownInWater()) {
+                    f = 0.8F;
+                }
+            }
 
-	         RayTraceResult raytraceresult = ProjectileHelper.getHitResult(this, this::canHitEntity);
-	         if (raytraceresult.getType() != RayTraceResult.Type.MISS && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
-	            this.onHit(raytraceresult);
-	         }
+            this.setDeltaMovement(vector3d.add(this.xPower, this.yPower, this.zPower).scale((double) f));
+            if (this.getTrailParticle() != null && this.shouldSpawnParticles()) {
+                this.spawnTrailParticle();
+            }
+            this.setPos(d0, d1, d2);
+        } else {
+            this.remove();
+        }
+    }
 
-	         this.checkInsideBlocks();
-	         Vector3d vector3d = this.getDeltaMovement();
-	         double d0 = this.getX() + vector3d.x;
-	         double d1 = this.getY() + vector3d.y;
-	         double d2 = this.getZ() + vector3d.z;
-	         float f = this.getInertia();
-		         if (this.isInWater()) {
-		            for(int i = 0; i < 4; ++i) {
-		               if (this.getUnderWaterTrailParticle() != null && this.shouldSpawnParticles()) {
-		            	   this.spawnUnderWaterTrailParticle();
-		               }
-		            }
+    public boolean vanishesAfterTime() {
+        return true;
+    }
 
-		            if (this.slowedDownInWater()) {
-		            	f = 0.8F;
-		            }
-		         }
+    public int vanishAfterTime() {
+        return 200;
+    }
 
-		         this.setDeltaMovement(vector3d.add(this.xPower, this.yPower, this.zPower).scale((double)f));
-		         if (this.getTrailParticle() != null && this.shouldSpawnParticles()) {
-		        	 this.spawnTrailParticle();
-		         }
-		         this.setPos(d0, d1, d2);
-	      } else {
-	         this.remove();
-	      }
-	   }
+    public int getVanishAnimationLength() {
+        return 0;
+    }
 
-	   public boolean vanishesAfterTime() {
-		   return true;
-	   }
+    public void onHitEntity(Entity entity) {
+        this.playImpactSound();
+    }
 
-	   public int vanishAfterTime() {
-		   return 200;
-	   }
+    public boolean getsStuckInBlocks() {
+        return false;
+    }
 
-	   public void onHitEntity(Entity entity) {
-		   this.playImpactSound();
-	   }
+    public boolean keepsHittingAfterStuck() {
+        return false;
+    }
 
-		public boolean getsStuckInBlocks() {
-			return false;
-		}
+    public abstract SoundEvent getImpactSound();
 
-		public boolean keepsHittingAfterStuck() {
-			return false;
-		}
+    public void playImpactSound() {
+        if (this.getImpactSound() != null) {
+            this.playSound(this.getImpactSound(), 1.0F, 1.0F);
+        }
+    }
 
-		public abstract SoundEvent getImpactSound();
+    @Override
+    protected void onHitBlock(BlockRayTraceResult p_230299_1_) {
+        super.onHitBlock(p_230299_1_);
+        if (!this.stuckInBlock) {
+            this.playImpactSound();
+        }
+        if (!this.getsStuckInBlocks()) {
+            if (!this.level.isClientSide) {
+                this.remove();
+            }
+        } else {
+            this.lockedXRot = this.xRot;
+            this.lockedYRot = this.yRot;
+            this.stuckInBlock = true;
+            this.setPower(0, 0, 0);
+            this.setDeltaMovement(0, 0, 0);
+        }
+    }
 
-		public void playImpactSound() {
-			if (this.getImpactSound() != null) {
-				this.playSound(this.getImpactSound(), 1.0F, 1.0F);
-			}
-		}
+    public boolean slowedDownInWater() {
+        return true;
+    }
 
-		@Override
-		protected void onHitBlock(BlockRayTraceResult p_230299_1_) {
-			super.onHitBlock(p_230299_1_);
-				if (!this.stuckInBlock) {
-					this.playImpactSound();
-				}
-				if (!this.getsStuckInBlocks()) {
-					if (!this.level.isClientSide) {
-						this.remove();
-					}
-				} else {
-					this.lockedXRot = this.xRot;
-					this.lockedYRot = this.yRot;
-					this.stuckInBlock = true;
-					this.setPower(0, 0, 0);
-					this.setDeltaMovement(0, 0, 0);
-				}
-		}
+    public void spawnTrailParticle() {
+        this.level.addParticle(this.getTrailParticle(), this.getX(), this.getY() + this.getSpawnParticlesY(), this.getZ(), 0, 0, 0);
+    }
 
-	   public boolean slowedDownInWater() {
-		   return true;
-	   }
+    public void spawnUnderWaterTrailParticle() {
+        this.level.addParticle(this.getUnderWaterTrailParticle(), this.getX(), this.getY() + this.getSpawnParticlesY(), this.getZ(), 0, 0, 0);
+    }
 
-	   public void spawnTrailParticle() {
-		   this.level.addParticle(this.getTrailParticle(), this.getX(), this.getY() + this.getSpawnParticlesY(), this.getZ(), 0, 0, 0);
-	   }
+    public double getSpawnParticlesY() {
+        return 0.5D;
+    }
 
-	   public void spawnUnderWaterTrailParticle() {
-		   this.level.addParticle(this.getUnderWaterTrailParticle(), this.getX(), this.getY() + this.getSpawnParticlesY(), this.getZ(), 0, 0, 0);
-	   }
+    public boolean shouldSpawnParticles() {
+        return true;
+    }
 
-	   public double getSpawnParticlesY() {
-		   return 0.5D;
-	   }
+    protected boolean canHitEntity(Entity p_230298_1_) {
+        boolean foundOwnerPartInEntity = false;
+        if (this.getOwner() != null && this.getOwner().isMultipartEntity()) {
+            for (PartEntity<?> entity : this.getOwner().getParts()) {
+                if (p_230298_1_ == entity) {
+                    foundOwnerPartInEntity = true;
+                }
+            }
+        }
+        return super.canHitEntity(p_230298_1_) && ((this.keepsHittingAfterStuck() && this.stuckInBlock) || !this.stuckInBlock) && !p_230298_1_.noPhysics && foundOwnerPartInEntity == false;
+    }
 
-	   public boolean shouldSpawnParticles() {
-		   return true;
-	   }
+    protected boolean shouldBurn() {
+        return true;
+    }
 
-	   protected boolean canHitEntity(Entity p_230298_1_) {
-		  boolean foundOwnerPartInEntity = false;
-		  if (this.getOwner() != null && this.getOwner().isMultipartEntity()) {
-			  for (PartEntity<?> entity : this.getOwner().getParts()) {
-				  if (p_230298_1_ == entity) {
-					  foundOwnerPartInEntity = true;
-				  }
-			  }
-		  }
-	      return super.canHitEntity(p_230298_1_) && ((this.keepsHittingAfterStuck() && this.stuckInBlock) || !this.stuckInBlock) && !p_230298_1_.noPhysics && foundOwnerPartInEntity == false;
-	   }
+    protected IParticleData getTrailParticle() {
+        return ParticleTypes.SMOKE;
+    }
 
-	   protected boolean shouldBurn() {
-	      return true;
-	   }
+    protected IParticleData getUnderWaterTrailParticle() {
+        return ParticleTypes.BUBBLE;
+    }
 
-	   protected IParticleData getTrailParticle() {
-	      return ParticleTypes.SMOKE;
-	   }
+    protected float getInertia() {
+        return 0.95F;
+    }
 
-	   protected IParticleData getUnderWaterTrailParticle() {
-		      return ParticleTypes.BUBBLE;
-		   }
+    public void addAdditionalSaveData(CompoundNBT p_213281_1_) {
+        super.addAdditionalSaveData(p_213281_1_);
+        p_213281_1_.put("power", this.newDoubleList(new double[]{this.xPower, this.yPower, this.zPower}));
+    }
 
-	   protected float getInertia() {
-	      return 0.95F;
-	   }
+    public void readAdditionalSaveData(CompoundNBT p_70037_1_) {
+        super.readAdditionalSaveData(p_70037_1_);
+        if (p_70037_1_.contains("power", 9)) {
+            ListNBT listnbt = p_70037_1_.getList("power", 6);
+            if (listnbt.size() == 3) {
+                this.xPower = listnbt.getDouble(0);
+                this.yPower = listnbt.getDouble(1);
+                this.zPower = listnbt.getDouble(2);
+            }
+        }
 
-	   public void addAdditionalSaveData(CompoundNBT p_213281_1_) {
-	      super.addAdditionalSaveData(p_213281_1_);
-	      p_213281_1_.put("power", this.newDoubleList(new double[]{this.xPower, this.yPower, this.zPower}));
-	   }
+    }
 
-	   public void readAdditionalSaveData(CompoundNBT p_70037_1_) {
-	      super.readAdditionalSaveData(p_70037_1_);
-	      if (p_70037_1_.contains("power", 9)) {
-	         ListNBT listnbt = p_70037_1_.getList("power", 6);
-	         if (listnbt.size() == 3) {
-	            this.xPower = listnbt.getDouble(0);
-	            this.yPower = listnbt.getDouble(1);
-	            this.zPower = listnbt.getDouble(2);
-	         }
-	      }
+    public boolean isPickable() {
+        return true;
+    }
 
-	   }
+    public float getPickRadius() {
+        return 1.0F;
+    }
 
-	   public boolean isPickable() {
-	      return true;
-	   }
+    public boolean hurt(DamageSource p_70097_1_, float p_70097_2_) {
+        if (this.isInvulnerableTo(p_70097_1_)) {
+            return false;
+        } else {
+            this.markHurt();
+            Entity entity = p_70097_1_.getEntity();
+            if (entity != null) {
+                Vector3d vector3d = entity.getLookAngle();
+                this.setDeltaMovement(vector3d);
+                this.xPower = vector3d.x * 0.1D;
+                this.yPower = vector3d.y * 0.1D;
+                this.zPower = vector3d.z * 0.1D;
+                this.setOwner(entity);
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
 
-	   public float getPickRadius() {
-	      return 1.0F;
-	   }
+    public float getBrightness() {
+        return 1.0F;
+    }
 
-	   public boolean hurt(DamageSource p_70097_1_, float p_70097_2_) {
-	      if (this.isInvulnerableTo(p_70097_1_)) {
-	         return false;
-	      } else {
-	         this.markHurt();
-	         Entity entity = p_70097_1_.getEntity();
-	         if (entity != null) {
-	            Vector3d vector3d = entity.getLookAngle();
-	            this.setDeltaMovement(vector3d);
-	            this.xPower = vector3d.x * 0.1D;
-	            this.yPower = vector3d.y * 0.1D;
-	            this.zPower = vector3d.z * 0.1D;
-	            this.setOwner(entity);
-	            return true;
-	         } else {
-	            return false;
-	         }
-	      }
-	   }
-
-	   public float getBrightness() {
-	      return 1.0F;
-	   }
-
-	   public IPacket<?> getAddEntityPacket() {
-	      return NetworkHooks.getEntitySpawningPacket(this);
-	   }
-	}
+    public IPacket<?> getAddEntityPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
+    }
+}
