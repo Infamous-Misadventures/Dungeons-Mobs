@@ -190,7 +190,7 @@ public abstract class StraightMovingProjectileEntity extends ProjectileEntity {
 	   }
 
 	   public void onHitEntity(Entity entity) {
-
+		   this.playImpactSound();
 	   }
 
 		public boolean getsStuckInBlocks() {
@@ -204,13 +204,15 @@ public abstract class StraightMovingProjectileEntity extends ProjectileEntity {
 		public abstract SoundEvent getImpactSound();
 
 		public void playImpactSound() {
-			this.playSound(this.getImpactSound(), 1.0F, 1.0F);
+			if (this.getImpactSound() != null) {
+				this.playSound(this.getImpactSound(), 1.0F, 1.0F);
+			}
 		}
 
 		@Override
 		protected void onHitBlock(BlockRayTraceResult p_230299_1_) {
 			super.onHitBlock(p_230299_1_);
-				if (!this.stuckInBlock && this.getImpactSound() != null) {
+				if (!this.stuckInBlock) {
 					this.playImpactSound();
 				}
 				if (!this.getsStuckInBlocks()) {

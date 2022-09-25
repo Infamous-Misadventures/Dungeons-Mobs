@@ -107,9 +107,14 @@ public class PoisonQuillEntity extends StraightMovingProjectileEntity implements
 		super.onHitEntity(p_213868_1_);
 	}
 	
+	@Override
+	public void playImpactSound() {
+		this.playSound(ModSoundEvents.JUNGLE_ZOMBIE_STEP.get(), 0.75F, 1.0F + (this.random.nextFloat() * 0.5F));
+	}
+	
 	public void onHitEntity(Entity entity) {
 		if (!this.level.isClientSide) {
-			this.playSound(ModSoundEvents.JUNGLE_ZOMBIE_STEP.get(), 0.75F, 1.0F + (this.random.nextFloat() * 0.5F));
+			super.onHitEntity(entity);
 			boolean flag;
 				flag = entity.hurt(ModDamageSources.poisonQuill(this, MoreObjects.firstNonNull(this.getOwner(), this)), 5.0F);
 	            if (entity instanceof LivingEntity) {

@@ -67,7 +67,7 @@ public class PoisonAnemoneEntity extends PoisonQuillVineEntity {
 	
 	@Override
 	public void spawnAreaDamage() {
-		AreaDamageEntity areaDamage = AreaDamageEntity.spawnAreaDamage(this.level, this.position(), this, 5.0F, DamageSource.mobAttack(this), 0.0F, 1.5F, 0.25F, 0.25F, false, false, 0.75, 0.25, false, 0, 2);
+		AreaDamageEntity areaDamage = AreaDamageEntity.spawnAreaDamage(this.level, this.position(), this, 5.0F, DamageSource.mobAttack(this), 0.0F, 1.5F, 0.25F, 0.25F, 5, false, false, 0.75, 0.25, false, 0, 2);
 		this.level.addFreshEntity(areaDamage);
 	}
 	

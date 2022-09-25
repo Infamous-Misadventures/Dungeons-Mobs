@@ -33,7 +33,6 @@ import com.infamous.dungeons_mobs.entities.piglin.ZombifiedFungusThrowerEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.BlastlingBulletEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.BlueNethershroomEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.CobwebProjectileEntity;
-import com.infamous.dungeons_mobs.entities.projectiles.CobwebTrapEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.DrownedNecromancerOrbEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.GeoOrbEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.LaserOrbEntity;
@@ -52,6 +51,8 @@ import com.infamous.dungeons_mobs.entities.summonables.AreaDamageEntity;
 import com.infamous.dungeons_mobs.entities.summonables.GeomancerBombEntity;
 import com.infamous.dungeons_mobs.entities.summonables.GeomancerWallEntity;
 import com.infamous.dungeons_mobs.entities.summonables.IceCloudEntity;
+import com.infamous.dungeons_mobs.entities.summonables.KelpTrapEntity;
+import com.infamous.dungeons_mobs.entities.summonables.SimpleTrapEntity;
 import com.infamous.dungeons_mobs.entities.summonables.SummonSpotEntity;
 import com.infamous.dungeons_mobs.entities.summonables.TridentStormEntity;
 import com.infamous.dungeons_mobs.entities.summonables.WindcallerTornadoEntity;
@@ -442,14 +443,6 @@ public class ModEntityTypes {
                     .build(new ResourceLocation(MODID, "blue_nethershroom").toString())
     );
 
-    public static final RegistryObject<EntityType<CobwebTrapEntity>> COBWEB_TRAP = registerEntityWithoutEgg("cobweb_trap", () ->
-            EntityType.Builder.<CobwebTrapEntity>of(CobwebTrapEntity::new, EntityClassification.MISC)
-                    .sized(1.0F, 1.0F)
-                    .clientTrackingRange(4)
-                    .updateInterval(10)
-                    .build(new ResourceLocation(MODID, "cobweb_trap").toString())
-    );
-
     public static final RegistryObject<EntityType<GeomancerWallEntity>> GEOMANCER_WALL = registerEntityWithoutEgg("geomancer_wall", () ->
             EntityType.Builder.<GeomancerWallEntity>of(GeomancerWallEntity::new, EntityClassification.MISC)
                     .fireImmune()
@@ -540,6 +533,22 @@ public class ModEntityTypes {
             .sized(1.0F, 2.0F)
             .clientTrackingRange(10)
             .build(new ResourceLocation(MODID, "summon_spot").toString())
+    );
+
+    public static final RegistryObject<EntityType<SimpleTrapEntity>> SIMPLE_TRAP = registerEntityWithoutEgg("simple_trap", () ->
+    EntityType.Builder.<SimpleTrapEntity>of(SimpleTrapEntity::new, EntityClassification.MISC)
+            .fireImmune()
+            .sized(2.0F, 0.5F)
+            .clientTrackingRange(10)
+            .build(new ResourceLocation(MODID, "simple_trap").toString())
+    );
+    
+    public static final RegistryObject<EntityType<KelpTrapEntity>> KELP_TRAP = registerEntityWithoutEgg("kelp_trap", () ->
+    EntityType.Builder.<KelpTrapEntity>of(KelpTrapEntity::new, EntityClassification.MISC)
+            .fireImmune()
+            .sized(2.0F, 0.5F)
+            .clientTrackingRange(10)
+            .build(new ResourceLocation(MODID, "kelp_trap").toString())
     );
     
     public static final RegistryObject<EntityType<AreaDamageEntity>> AREA_DAMAGE = registerEntityWithoutEgg("area_damage", () ->

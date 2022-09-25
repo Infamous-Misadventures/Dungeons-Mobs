@@ -188,6 +188,11 @@ public class DrownedNecromancerEntity extends DrownedEntity implements IAnimatab
     public boolean isLeftHanded() {
         return false;
     }
+    
+    @Override
+    public boolean isBaby() {
+        return false;
+    }
 
     public void handleEntityEvent(byte p_28844_) {
         if (p_28844_ == 11) {

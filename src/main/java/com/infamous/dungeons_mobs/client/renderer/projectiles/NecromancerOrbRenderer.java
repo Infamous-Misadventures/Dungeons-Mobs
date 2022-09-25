@@ -22,12 +22,14 @@ public class NecromancerOrbRenderer extends GeoProjectilesRenderer<NecromancerOr
 	public void renderEarly(NecromancerOrbEntity animatable, MatrixStack stackIn, float partialTicks,
 			IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn,
 			float red, float green, float blue, float alpha) {
+		
+		float scaleFactor = 1.0F;
 		if (animatable.lifeTime <= 3) {
-			float scaleFactor = 0.0F;
-			stackIn.scale(scaleFactor, scaleFactor, scaleFactor);
+			scaleFactor = 0.0F;
 		} else {
-			
+			scaleFactor = 1.0F;
 		}
+		stackIn.scale(scaleFactor, scaleFactor, scaleFactor);
 	}
 	
 	@Override
