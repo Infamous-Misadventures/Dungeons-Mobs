@@ -7,11 +7,11 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import com.google.common.collect.Maps;
+import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
 import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
 import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
 import com.infamous.dungeons_mobs.goals.PatrolStructureGoal;
 import com.infamous.dungeons_mobs.goals.UseShieldGoal;
-import com.infamous.dungeons_mobs.interfaces.IPatrolStructureEntity;
 import com.infamous.dungeons_mobs.interfaces.IShieldUser;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModItems;
