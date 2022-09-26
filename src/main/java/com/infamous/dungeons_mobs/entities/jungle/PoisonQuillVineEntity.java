@@ -388,7 +388,7 @@ public class PoisonQuillVineEntity extends AbstractVineEntity {
 				poisonQuill.rotateToMatchMovement();
 				poisonQuill.moveTo(pos.x, pos.y, pos.z);
 				mob.level.addFreshEntity(poisonQuill);
-				mob.playSound(mob.getShootSound(), 1.0F, 1.0F);
+				mob.playSound(mob.getShootSound(), 1.25F, 1.0F);
 			}
 		}
 

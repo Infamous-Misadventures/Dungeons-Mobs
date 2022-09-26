@@ -66,7 +66,6 @@ import com.infamous.dungeons_mobs.entities.water.DrownedNecromancerEntity;
 import com.infamous.dungeons_mobs.entities.water.PoisonAnemoneEntity;
 import com.infamous.dungeons_mobs.entities.water.QuickGrowingKelpEntity;
 import com.infamous.dungeons_mobs.entities.water.SunkenSkeletonEntity;
-import com.infamous.dungeons_mobs.entities.water.WavewhispererEntity;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
@@ -262,7 +261,7 @@ public class ModEntityTypes {
 
     public static final RegistryObject<EntityType<WhispererEntity>> WHISPERER = registerEntity("whisperer", () ->
             EntityType.Builder.<WhispererEntity>of(WhispererEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F, 2.99F)
+                    .sized(0.8F, 2.25F)
                     .clientTrackingRange(10)
                     .build(new ResourceLocation(MODID, "whisperer").toString()),
             0x80a242, 0xe20703
@@ -324,9 +323,9 @@ public class ModEntityTypes {
     );
 
     // WATER
-    public static final RegistryObject<EntityType<WavewhispererEntity>> WAVEWHISPERER = registerEntity("wavewhisperer", () ->
-            EntityType.Builder.<WavewhispererEntity>of(WavewhispererEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F, 2.99F)
+    public static final RegistryObject<EntityType<WhispererEntity>> WAVEWHISPERER = registerEntity("wavewhisperer", () ->
+            EntityType.Builder.<WhispererEntity>of(WhispererEntity::new, EntityClassification.MONSTER)
+                    .sized(0.8F, 2.25F)
                     .clientTrackingRange(10)
                     .build(new ResourceLocation(MODID, "wavewhisperer").toString()),
                     0x48a867, 0x69ebff

@@ -1,7 +1,7 @@
 package com.infamous.dungeons_mobs.client.renderer.piglin;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
-import com.infamous.dungeons_mobs.client.renderer.layer.FungusSackLayer;
+import com.infamous.dungeons_mobs.client.renderer.layers.FungusSackLayer;
 import com.infamous.dungeons_mobs.interfaces.ISmartCrossbowUser;
 import com.infamous.dungeons_mobs.mod.ModItems;
 import com.mojang.blaze3d.matrix.MatrixStack;

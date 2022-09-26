@@ -186,7 +186,7 @@ public abstract class AbstractVineEntity extends CreatureEntity implements IMob,
     }
     
     public void setLengthInPixels(int setTo){
-        this.setLengthInPixels(setTo / 22);
+        this.setLengthInSegments(setTo / 22);
     }
     
     public void setLengthInBlocks(float setTo){
@@ -306,7 +306,7 @@ public abstract class AbstractVineEntity extends CreatureEntity implements IMob,
     public abstract int getAnimationTransitionTime();
 	
     public boolean isOut() {
-        return this.getAlwaysOut() || this.getOut();
+        return this.getOut();
     }
     
     public boolean canBurst() {
@@ -423,6 +423,8 @@ public abstract class AbstractVineEntity extends CreatureEntity implements IMob,
 		
 		this.tickDownAnimTimers();
 		
+		this.lifeTime ++;
+		
     	int nearbyEntities = this.level.getEntities(this, this.getBoundingBox().inflate(this.getDetectionDistance()), SHOULD_BURST_FOR).size();
     	
 		if (!this.level.isClientSide) {
@@ -448,6 +450,15 @@ public abstract class AbstractVineEntity extends CreatureEntity implements IMob,
 			} else {
 				if (this.canRetract() && this.getShouldRetract()) {
 					this.retract();
+				}
+			}
+			
+			if (this.getVanishes() && this.lifeTime > this.getStayTime()) {
+				if (this.retractAnimationTick <= 0) {
+					this.retract();
+				}
+				if (this.retractAnimationTick == 1) {
+					this.remove();
 				}
 			}
 		}

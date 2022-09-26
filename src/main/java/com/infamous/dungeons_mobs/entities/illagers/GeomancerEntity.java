@@ -177,7 +177,8 @@ public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnima
                 	if (GeomancerEntity.this.getRandom().nextBoolean()) {
                 	GeomancyHelper.summonQuadOffensiveTrap(targetEntity, targetEntity, ModEntityTypes.GEOMANCER_BOMB.get());	
                 	} else {
-                    GeomancyHelper.summonOffensiveConstruct(GeomancerEntity.this, targetEntity, ModEntityTypes.GEOMANCER_BOMB.get(), 0, 0, Direction.NORTH);
+                		boolean movingOnX = GeomancerEntity.this.random.nextBoolean();
+                		GeomancyHelper.summonOffensiveConstruct(GeomancerEntity.this, targetEntity, ModEntityTypes.GEOMANCER_BOMB.get(), movingOnX ? (GeomancerEntity.this.random.nextBoolean() ? 2 : -2) : 0, !movingOnX ? (GeomancerEntity.this.random.nextBoolean() ? 2 : -2) : 0, Direction.NORTH);
                 	}
                 }
                 else{

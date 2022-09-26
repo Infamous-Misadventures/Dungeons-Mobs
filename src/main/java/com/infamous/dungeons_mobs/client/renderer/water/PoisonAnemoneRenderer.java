@@ -6,8 +6,8 @@ import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.client.models.jungle.PoisonQuillVineModel;
 import com.infamous.dungeons_mobs.client.models.jungle.QuickGrowingVineModel;
 import com.infamous.dungeons_mobs.client.renderer.jungle.AbstractVineRenderer;
-import com.infamous.dungeons_mobs.client.renderer.layer.GeoEyeLayer;
-import com.infamous.dungeons_mobs.client.renderer.layer.PulsatingGlowLayer;
+import com.infamous.dungeons_mobs.client.renderer.layers.GeoEyeLayer;
+import com.infamous.dungeons_mobs.client.renderer.layers.PulsatingGlowLayer;
 import com.infamous.dungeons_mobs.entities.jungle.AbstractVineEntity;
 
 import net.minecraft.client.renderer.entity.EntityRendererManager;

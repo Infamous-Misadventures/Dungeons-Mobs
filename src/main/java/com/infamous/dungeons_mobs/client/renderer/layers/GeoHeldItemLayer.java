@@ -1,4 +1,4 @@
-package com.infamous.dungeons_mobs.client.renderer.layer;
+package com.infamous.dungeons_mobs.client.renderer.layers;
 
 import com.infamous.dungeons_mobs.interfaces.IHasGeoArm;
 import com.mojang.blaze3d.matrix.MatrixStack;

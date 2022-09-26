@@ -5,8 +5,6 @@ import java.util.Optional;
 import java.util.Random;
 
 import com.infamous.dungeons_mobs.entities.creepers.IcyCreeperEntity;
-import com.infamous.dungeons_mobs.entities.jungle.AbstractVineEntity;
-import com.infamous.dungeons_mobs.entities.jungle.VineEntity;
 import com.infamous.dungeons_mobs.entities.undead.FrozenZombieEntity;
 import com.infamous.dungeons_mobs.entities.undead.JungleZombieEntity;
 import com.infamous.dungeons_mobs.entities.undead.MossySkeletonEntity;

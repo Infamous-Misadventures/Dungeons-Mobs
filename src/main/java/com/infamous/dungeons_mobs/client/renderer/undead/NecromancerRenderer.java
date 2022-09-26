@@ -2,7 +2,7 @@ package com.infamous.dungeons_mobs.client.renderer.undead;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.client.models.undead.NecromancerModel;
-import com.infamous.dungeons_mobs.client.renderer.layer.PulsatingGlowLayer;
+import com.infamous.dungeons_mobs.client.renderer.layers.PulsatingGlowLayer;
 import com.infamous.dungeons_mobs.entities.undead.NecromancerEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;

@@ -401,6 +401,7 @@
   
   "subtitles.entity.whisperer.idle": "Whisperer mumbles",
   "subtitles.entity.whisperer.hurt": "Whisperer hurts",
+  "subtitles.entity.whisperer.death": "Whisperer dies",
   "subtitles.entity.whisperer.step": "Whisperer walks",
   "subtitles.entity.whisperer.attack": "Whisperer attacks",
   "subtitles.entity.whisperer.grapple": "Whisperer summons Entangle Vine",
