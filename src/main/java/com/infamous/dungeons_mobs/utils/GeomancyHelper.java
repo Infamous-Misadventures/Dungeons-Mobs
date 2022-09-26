@@ -8,6 +8,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Util;
@@ -175,7 +176,9 @@ public class GeomancyHelper {
             	double vineLength = targetEntity.getY() - vineEntity.getY();
             	vineEntity.setLengthInBlocks((float)vineLength + 3 + vineEntity.getRandom().nextInt(6));
                 casterEntity.level.addFreshEntity(vineEntity);
-            	vineEntity.setTarget(targetEntity);
+                if (casterEntity instanceof MobEntity) {
+                	vineEntity.setTarget(((MobEntity)casterEntity).getTarget());
+                }
             }
         }
     }

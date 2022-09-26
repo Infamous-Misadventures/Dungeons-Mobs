@@ -679,7 +679,7 @@ public class WhispererEntity extends MonsterEntity implements IAnimatable, IAqua
 				if (target != null
 						&& (mob.summonPQVAnimationTick == mob.summonPQVAnimationActionPoint1 || mob.summonPQVAnimationTick == mob.summonPQVAnimationActionPoint2)) {
 					boolean movingOnX = mob.random.nextBoolean();
-                    GeomancyHelper.summonOffensiveVine(mob, target, mob.isWavewhisperer() ? ModEntityTypes.POISON_ANEMONE.get() : ModEntityTypes.POISON_QUILL_VINE.get(), movingOnX ? (mob.random.nextBoolean() ? 3 : -3) : 0, !movingOnX ? (mob.random.nextBoolean() ? 3 : -3) : 0);
+                    GeomancyHelper.summonOffensiveVine(mob, mob, mob.isWavewhisperer() ? ModEntityTypes.POISON_ANEMONE.get() : ModEntityTypes.POISON_QUILL_VINE.get(), movingOnX ? (mob.random.nextBoolean() ? 3 : -3) : 0, !movingOnX ? (mob.random.nextBoolean() ? 3 : -3) : 0);
 				}
 			}
 			
