@@ -84,6 +84,7 @@ public abstract class AbstractTrapEntity extends Entity implements IAnimatable {
     		for (Entity entity : trappedEntities) {
 					int entityIndex = trappedEntities.indexOf(entity);
 					Vector3d entityTrappedPosition = trappedEntityPositions.get(entityIndex);
+					entity.fallDistance = 0;
 					if (this.distanceBetweenVector3ds(entity.position(), entityTrappedPosition) > 0.1) {
 						entity.teleportTo(entityTrappedPosition.x, entityTrappedPosition.y, entityTrappedPosition.z);
 					}
