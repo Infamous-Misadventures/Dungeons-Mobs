@@ -1,8 +1,9 @@
 package com.infamous.dungeons_mobs.utils;
 
-import com.infamous.dungeons_mobs.entities.jungle.VineEntity;
+import com.infamous.dungeons_mobs.entities.jungle.AbstractVineEntity;
 import com.infamous.dungeons_mobs.entities.summonables.ConstructEntity;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -114,6 +115,7 @@ public class GeomancyHelper {
                 constructEntity.setPos(targetPos.getX(), targetPos.getY() + yShift, targetPos.getZ());
                 constructEntity.setLifeTicks(100 + casterEntity.getRandom().nextInt(10));
                 constructEntity.directionToFace = pillarFacing;
+                constructEntity.spawnAreaDamage();
                 casterEntity.level.addFreshEntity(constructEntity);
             }
         }
@@ -151,34 +153,48 @@ public class GeomancyHelper {
                 constructEntity.setPos(targetPos.getX(), targetPos.getY() + yShift, targetPos.getZ());
                 constructEntity.setLifeTicks(100 + casterEntity.getRandom().nextInt(10));
                 constructEntity.directionToFace = pillarFacing;
+                constructEntity.spawnAreaDamage();
                 casterEntity.level.addFreshEntity(constructEntity);
             }
         }
     }
 
-    public static void summonOffensiveVine(LivingEntity casterEntity, LivingEntity targetEntity, EntityType<? extends VineEntity> entityType) {
+    public static void summonOffensiveVine(LivingEntity casterEntity, LivingEntity targetEntity, EntityType<? extends AbstractVineEntity> entityType, int xShift, int zShift) {
         BlockPos targetPos = createCenteredBlockPosOnTarget(targetEntity);
         // verify that the construct will be summoned on valid ground
         if(canAllowBlockEntitySpawn(casterEntity, targetPos)){
-            VineEntity vineEntity = entityType.create(casterEntity.level);
+            AbstractVineEntity vineEntity = entityType.create(casterEntity.level);
             if (vineEntity != null) {
-                vineEntity.setCaster(casterEntity);
-                vineEntity.setLifeTicks(300 + casterEntity.getRandom().nextInt(25));
-                vineEntity.setPos(targetPos.getX(), targetPos.getY(), targetPos.getZ());
+                vineEntity.setPos(targetPos.getX() + xShift, targetPos.getY(), targetPos.getZ() + zShift);
+                PositionUtils.moveToCorrectHeight(vineEntity);
+                vineEntity.setDefaultFeatures();
+            	vineEntity.setVanishes(true);
+                vineEntity.setStayTime(300 + casterEntity.getRandom().nextInt(50));
+            	vineEntity.setAlwaysOut(true);
+            	vineEntity.setShouldRetract(false);
+            	double vineLength = targetEntity.getY() - vineEntity.getY();
+            	vineEntity.setLengthInBlocks((float)vineLength + 3 + vineEntity.getRandom().nextInt(6));
                 casterEntity.level.addFreshEntity(vineEntity);
+            	vineEntity.setTarget(targetEntity);
             }
         }
     }
 
-    private static void summonAreaDenialVine(LivingEntity casterEntity, LivingEntity targetEntity, EntityType<? extends VineEntity> entityType, double xshift, double zshift, Direction pillarFacing) {
+    private static void summonAreaDenialVine(LivingEntity casterEntity, LivingEntity targetEntity, EntityType<? extends AbstractVineEntity> entityType, double xshift, double zshift, Direction pillarFacing) {
         BlockPos targetPos = createCenteredBlockPosOnTarget(targetEntity).offset(xshift, 0, zshift);
         // verify that the construct will be summoned on valid ground
         if(canAllowBlockEntitySpawn(casterEntity, targetPos)){
-            VineEntity vineEntity = entityType.create(casterEntity.level);
+        	AbstractVineEntity vineEntity = entityType.create(casterEntity.level);
             if (vineEntity != null) {
-                vineEntity.setCaster(casterEntity);
-                vineEntity.setLifeTicks(100 + casterEntity.getRandom().nextInt(10));
                 vineEntity.setPos(targetPos.getX(), targetPos.getY(), targetPos.getZ());
+                PositionUtils.moveToCorrectHeight(vineEntity);
+                vineEntity.setDefaultFeatures();
+            	vineEntity.setVanishes(true);
+                vineEntity.setStayTime(100 + casterEntity.getRandom().nextInt(20));
+            	vineEntity.setAlwaysOut(true);
+            	vineEntity.setShouldRetract(false);
+            	double vineLength = targetEntity.getY() - vineEntity.getY();
+            	vineEntity.setLengthInBlocks((float)vineLength + 3 + vineEntity.getRandom().nextInt(6));
                 casterEntity.level.addFreshEntity(vineEntity);
             }
         }
@@ -216,6 +232,7 @@ public class GeomancyHelper {
                 constructEntity.setPos(targetPos.getX(), targetPos.getY() + yShift, targetPos.getZ());
                 constructEntity.setLifeTicks(100 + casterEntity.getRandom().nextInt(10));
                 constructEntity.directionToFace = pillarFacing;
+                constructEntity.spawnAreaDamage();
                 constructEntity.playSound(ModSoundEvents.GEOMANCER_BOMB_SPAWN.get(), 2.0F, 1.0F);
                 casterEntity.level.addFreshEntity(constructEntity);
             }
@@ -298,7 +315,7 @@ public class GeomancyHelper {
         }
     }
 
-    public static void summonAreaDenialVineTrap(LivingEntity casterEntity, LivingEntity targetEntity, EntityType<? extends VineEntity> entityType, int[] rowToRemove) {
+    public static void summonAreaDenialVineTrap(LivingEntity casterEntity, LivingEntity targetEntity, EntityType<? extends AbstractVineEntity> entityType, int[] rowToRemove) {
 
         for(int constructPositionIndex = 0; constructPositionIndex <= 15; constructPositionIndex++){
 

@@ -2,8 +2,8 @@ package com.infamous.dungeons_mobs.client.renderer.jungle;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.client.models.jungle.PoisonQuillVineModel;
-import com.infamous.dungeons_mobs.client.renderer.layer.GeoEyeLayer;
-import com.infamous.dungeons_mobs.client.renderer.layer.PulsatingGlowLayer;
+import com.infamous.dungeons_mobs.client.renderer.layers.GeoEyeLayer;
+import com.infamous.dungeons_mobs.client.renderer.layers.PulsatingGlowLayer;
 
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;

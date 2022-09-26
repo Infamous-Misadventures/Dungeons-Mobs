@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.client.models.ocean.DrownedNecromancerModel;
-import com.infamous.dungeons_mobs.client.renderer.layer.PulsatingGlowLayer;
+import com.infamous.dungeons_mobs.client.renderer.layers.PulsatingGlowLayer;
 import com.infamous.dungeons_mobs.entities.water.DrownedNecromancerEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;

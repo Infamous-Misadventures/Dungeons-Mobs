@@ -2,8 +2,8 @@ package com.infamous.dungeons_mobs.client.renderer.illager;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.client.models.illager.EnchanterModel;
-import com.infamous.dungeons_mobs.client.renderer.layer.GeoEyeLayer;
-import com.infamous.dungeons_mobs.client.renderer.layer.GeoHeldItemLayer;
+import com.infamous.dungeons_mobs.client.renderer.layers.GeoEyeLayer;
+import com.infamous.dungeons_mobs.client.renderer.layers.GeoHeldItemLayer;
 import com.infamous.dungeons_mobs.entities.illagers.EnchanterEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;

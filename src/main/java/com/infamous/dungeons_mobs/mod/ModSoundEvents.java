@@ -163,6 +163,8 @@ public class ModSoundEvents {
 	public static final RegistryObject<SoundEvent> WHISPERER_SUMMON_QGV_FOLEY = SOUNDS.register("entity.whisperer.summon_qgv_foley", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.whisperer.summon_qgv_foley")));
 	public static final RegistryObject<SoundEvent> WHISPERER_GRAPPLE_FOLEY = SOUNDS.register("entity.whisperer.grapple_foley", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.whisperer.grapple_foley")));
 	
+	public static final RegistryObject<SoundEvent> WHISPERER_DEATH = SOUNDS.register("entity.whisperer.death", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.whisperer.death")));
+	
 	public static final RegistryObject<SoundEvent> LEAPLEAF_IDLE_VOCAL = SOUNDS.register("entity.leapleaf.idle_vocal", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.leapleaf.idle_vocal")));
 	public static final RegistryObject<SoundEvent> LEAPLEAF_HURT_VOCAL = SOUNDS.register("entity.leapleaf.hurt_vocal", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.leapleaf.hurt_vocal")));
 	public static final RegistryObject<SoundEvent> LEAPLEAF_STEP_VOCAL = SOUNDS.register("entity.leapleaf.step_vocal", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.leapleaf.step_vocal")));

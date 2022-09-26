@@ -1,4 +1,4 @@
-package com.infamous.dungeons_mobs.client.renderer.layer;
+package com.infamous.dungeons_mobs.client.renderer.layers;
 
 import java.util.List;
 

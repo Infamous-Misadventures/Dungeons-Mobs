@@ -2,7 +2,7 @@ package com.infamous.dungeons_mobs.client.renderer.ender;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.client.models.ender.BlastlingModel;
-import com.infamous.dungeons_mobs.client.renderer.layer.GeoEyeLayer;
+import com.infamous.dungeons_mobs.client.renderer.layers.GeoEyeLayer;
 import com.infamous.dungeons_mobs.entities.ender.AbstractEnderlingEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;

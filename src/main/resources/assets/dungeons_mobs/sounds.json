@@ -2461,6 +2461,24 @@
 			}
 		]
 	},
+		"entity.whisperer.death": {
+		"category": "entity",
+		"subtitle": "subtitles.entity.whisperer.death",
+		"sounds": [
+			{
+				"name": "dungeons_mobs:entities/whisperer/hurt_vocal1",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/whisperer/hurt_vocal2",
+				"stream": true
+			},
+			{
+				"name": "dungeons_mobs:entities/whisperer/hurt_vocal3",
+				"stream": true
+			}
+		]
+	},
 		"entity.whisperer.hurt_foley": {
 		"category": "entity",
 		"sounds": [
