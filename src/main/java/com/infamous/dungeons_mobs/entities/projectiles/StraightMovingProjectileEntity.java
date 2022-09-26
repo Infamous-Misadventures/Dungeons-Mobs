@@ -127,6 +127,12 @@ public abstract class StraightMovingProjectileEntity extends ProjectileEntity {
             }
         }
 
+        if (this.level.isClientSide ) {
+            if (this.lifeTime < this.vanishAfterTime() + this.getVanishAnimationLength()) {
+                this.lifeTime++;
+            }
+        }
+
         this.tryToDealDamage();
     }
 

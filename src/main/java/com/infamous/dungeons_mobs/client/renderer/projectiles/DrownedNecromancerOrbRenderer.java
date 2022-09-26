@@ -24,11 +24,11 @@ public class DrownedNecromancerOrbRenderer extends GeoProjectilesRenderer<Drowne
 			float red, float green, float blue, float alpha) {
 		
 		float scaleFactor = 1.0F;
-//		if (animatable.lifeTime <= 3) {
-//			scaleFactor = 0.0F;
-//		} else {
+		if (animatable.lifeTime <= 3) {
+			scaleFactor = 0.0F;
+		} else {
 			scaleFactor = 1.0F;
-//		}
+		}
 		stackIn.scale(scaleFactor, scaleFactor, scaleFactor);
 	}
 	
