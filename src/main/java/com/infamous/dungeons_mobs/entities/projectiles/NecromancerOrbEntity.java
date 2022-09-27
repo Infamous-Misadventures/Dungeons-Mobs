@@ -38,8 +38,7 @@ public class NecromancerOrbEntity extends StraightMovingProjectileEntity impleme
 	public int formAnimationLength = 20;
 
 	public int vanishAnimationTick;
-	public int vanishAnimationLength = 40;
-	
+
 	public int textureChange = 0;
 
 	AnimationFactory factory = new AnimationFactory(this);
@@ -66,7 +65,7 @@ public class NecromancerOrbEntity extends StraightMovingProjectileEntity impleme
 	
 	public void handleEntityEvent(byte p_28844_) {
 		if (p_28844_ == 1) {
-			this.vanishAnimationTick = vanishAnimationLength;
+			this.vanishAnimationTick = this.getVanishAnimationLength();
 		} else if (p_28844_ == 2) {
 			this.formAnimationTick = formAnimationLength;
 		} else {
@@ -109,13 +108,14 @@ public class NecromancerOrbEntity extends StraightMovingProjectileEntity impleme
 	@Override
 	public void baseTick() {
 		super.baseTick();
+		this.tickDownAnimTimers();
 		
 		if (this.tickCount % 5 == 0) {
 			textureChange ++;
 		}
 		
-		if (!this.level.isClientSide && this.vanishAnimationTick <= 0) {
-			this.vanishAnimationTick = this.vanishAnimationLength;
+		if (!this.level.isClientSide && this.lifeTime >= this.vanishAfterTime() && this.vanishAnimationTick <= 0) {
+			this.vanishAnimationTick = this.getVanishAnimationLength();
 			this.level.broadcastEntityEvent(this, (byte) 1);
 		}
 		
@@ -210,7 +210,7 @@ public class NecromancerOrbEntity extends StraightMovingProjectileEntity impleme
 		    entity.setDeltaMovement(entity.getDeltaMovement().add(this.getDeltaMovement().scale(2.0D)));
 		    	
 			this.playSound(ModSoundEvents.NECROMANCER_ORB_IMPACT.get(), 1.0F, 1.0F);
-			this.vanishAnimationTick = this.vanishAnimationLength;
+			this.vanishAnimationTick = this.getVanishAnimationLength();
 			this.level.broadcastEntityEvent(this, (byte) 1);
 		}
 	}
@@ -235,5 +235,10 @@ public class NecromancerOrbEntity extends StraightMovingProjectileEntity impleme
 	@Override
 	public SoundEvent getImpactSound() {
 		return ModSoundEvents.NECROMANCER_ORB_IMPACT.get();
+	}
+
+	@Override
+	public int getVanishAnimationLength() {
+		return 40;
 	}
 }
