@@ -35,7 +35,7 @@ public class IllagerBipedArmorLayer<T extends AbstractIllagerEntity, M extends I
     }
 
     public static boolean armorHasCrossedArms(AbstractIllagerEntity p_241739_3_, ItemStack itemstack) {
-        return resourceExists(getArmorResourceStatic(p_241739_3_, itemstack, EquipmentSlotType.CHEST, "crossed"));
+        return itemstack.getItem() instanceof ArmorItem ? resourceExists(getArmorResourceStatic(p_241739_3_, itemstack, EquipmentSlotType.CHEST, "crossed")) : true;
     }
 
     private static ResourceLocation getArmorResourceStatic(net.minecraft.entity.Entity entity, ItemStack stack, EquipmentSlotType slot, @Nullable String type) {
@@ -55,12 +55,16 @@ public class IllagerBipedArmorLayer<T extends AbstractIllagerEntity, M extends I
     }
 
     private static boolean resourceExists(ResourceLocation resourceLocation) {
-        try {
-            Minecraft.getInstance().getResourceManager().getResource(resourceLocation);
-            return true;
-        } catch (IOException e) {
-            return false;
-        }
+    	if (resourceLocation != null) {
+	        try {
+	            Minecraft.getInstance().getResourceManager().getResource(resourceLocation);
+	            return true;
+	        } catch (IOException e) {
+	            return false;
+	        }
+    	} else {
+    		return false;
+    	}
     }
 
     public void render(MatrixStack p_225628_1_, IRenderTypeBuffer p_225628_2_, int p_225628_3_, T p_225628_4_, float p_225628_5_, float p_225628_6_, float p_225628_7_, float p_225628_8_, float p_225628_9_, float p_225628_10_) {
