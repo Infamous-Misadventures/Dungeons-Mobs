@@ -18,6 +18,7 @@ apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
+apply plugin: 'org.spongepowered.mixin'
 
 version = "${mc_version}-${mod_version}"
 group = 'com.infamous.dungeons_mobs' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -125,13 +126,13 @@ dependencies {
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     //Library
-    implementation fg.deobf("dungeons_libraries:dungeons_libraries:1.16.5-0.0.15-beta")
+    implementation fg.deobf("dungeons_libraries:dungeons_libraries:1.16.5-0.0.16-beta")
 //    implementation fg.deobf("mutantmore-test:mutantmore-test:11")
     implementation fg.deobf("software.bernie.geckolib:geckolib-forge-${mc_version}:${geckolib_version}")
     runtimeOnly fg.deobf("curse.maven:blame-406201:3440093")
     runtimeOnly fg.deobf("curse.maven:neat-238372:3182258")
     implementation fg.deobf("curse.maven:enchantwithmob-391187:3539541")
-//    runtimeOnly fg.deobf("dungeons_gear:dungeons_gear:1.16.5-3.1.15-beta")
+    runtimeOnly fg.deobf("dungeons_gear:dungeons_gear:1.16.5-3.1.16-beta")
     runtimeOnly fg.deobf("curios:curios:forge-1.16.5-4.0.8.1")
     
     runtimeOnly fg.deobf("rubidium:rubidium:0.2.10")
@@ -194,7 +195,6 @@ publishing {
         }
     }
 }
-apply plugin: 'org.spongepowered.mixin'
 
 mixin {
     add sourceSets.main, "${modid}.refmap.json"
