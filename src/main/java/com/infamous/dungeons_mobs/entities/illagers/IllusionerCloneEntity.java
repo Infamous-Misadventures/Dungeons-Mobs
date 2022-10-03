@@ -232,17 +232,21 @@ public class IllusionerCloneEntity extends AbstractIllagerEntity implements IAni
 	}
 
 	private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
+		String suffix = "_uncrossed";
+		if(IllagerArmsUtil.armorHasCrossedArms(this, this.getItemBySlot(EquipmentSlotType.CHEST))){
+			suffix = "";
+		}
 		if (this.appearAnimationTick > 0) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_appear", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_appear"+suffix, true));
 		} else if (this.shootAnimationTick > 0) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_clone_shoot", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_clone_shoot"+suffix, true));
 		} else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_walk", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_walk"+suffix, true));
 		} else {
 			if (this.isCelebrating()) {
 				event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_celebrate", true));
 			} else {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_idle", true));
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_idle"+suffix, true));
 			}
 		}
 		return PlayState.CONTINUE;
