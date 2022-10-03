@@ -1,6 +1,8 @@
 package com.infamous.dungeons_mobs.entities.redstone;
 
+import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
+import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 import com.infamous.dungeons_mobs.utils.GeomancyHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -64,6 +66,8 @@ public class RedstoneGolemEntity extends AbstractRaiderEntity implements IAnimat
     }
 
     AnimationFactory factory = new AnimationFactory(this);
+    
+	public int soundLoopTick;
 
     public RedstoneGolemEntity(EntityType<? extends RedstoneGolemEntity> type, World worldIn) {
         super(type, worldIn);
@@ -97,17 +101,23 @@ public class RedstoneGolemEntity extends AbstractRaiderEntity implements IAnimat
 
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController(this, "controller", 5, this::predicate));
+        data.addAnimationController(new AnimationController(this, "controller", 2, this::predicate));
     }
 
     private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
+		Vector3d velocity = this.getDeltaMovement();
+		float groundSpeed = MathHelper.sqrt((float) ((velocity.x * velocity.x) + (velocity.z * velocity.z)));
         if (this.isSummoningMines()) {
+        	event.getController().setAnimationSpeed(1.0D);
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.redstone_golem.summon", false));
         } else if (isMeleeAttacking()) {
+        	event.getController().setAnimationSpeed(1.0D);
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.redstone_golem.attack", false));
         } else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
+        	event.getController().setAnimationSpeed(groundSpeed * 10);
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.redstone_golem.walk", true));
         } else {
+        	event.getController().setAnimationSpeed(1.0D);
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.redstone_golem.general", true));
         }
         return PlayState.CONTINUE;
@@ -118,9 +128,9 @@ public class RedstoneGolemEntity extends AbstractRaiderEntity implements IAnimat
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new RedstoneGolemEntity.MeleeGoal());
-        this.goalSelector.addGoal(5, new RedstoneGolemEntity.AttackGoal(this, 1.0));
+        this.goalSelector.addGoal(5, new RedstoneGolemEntity.AttackGoal(this, 1.3D));
         this.goalSelector.addGoal(4, new RedstoneGolemEntity.SummonRedstoneMinesGoal());
-        this.goalSelector.addGoal(6, new WaterAvoidingRandomWalkingGoal(this, 0.6D));
+        this.goalSelector.addGoal(6, new WaterAvoidingRandomWalkingGoal(this, 0.8D));
         this.goalSelector.addGoal(7, new LookAtGoal(this, PlayerEntity.class, 6.0F));
         this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
 
@@ -128,6 +138,39 @@ public class RedstoneGolemEntity extends AbstractRaiderEntity implements IAnimat
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, true));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
+    }
+    
+    protected SoundEvent getAmbientSound() {
+    	return ModSoundEvents.REDSTONE_GOLEM_IDLE.get();
+    }
+    
+    protected void playStepSound(BlockPos pos, BlockState blockIn) {
+        this.playSound(ModSoundEvents.REDSTONE_GOLEM_STEP.get(), 1.0F, 1.0F);
+    }
+
+    @Nullable
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+        return ModSoundEvents.REDSTONE_GOLEM_HURT.get();
+    }
+
+    @Nullable
+    protected SoundEvent getDeathSound() {
+        return ModSoundEvents.REDSTONE_GOLEM_DEATH.get();
+    }
+    
+    @Override
+    public void baseTick() {
+    	super.baseTick();
+    	
+    	this.soundLoopTick ++;
+        if (this.soundLoopTick % 30 == 0) {
+        	this.playSound(ModSoundEvents.REDSTONE_GOLEM_IDLE_PULSE_LOOP.get(), 0.75F, 1.0F);
+        }
+        
+    	if (!this.level.isClientSide && this.random.nextInt(100) == 0) {
+    		this.playSound(ModSoundEvents.REDSTONE_GOLEM_SPARK.get(), 0.25F, this.getVoicePitch());
+    		this.level.broadcastEntityEvent(this, (byte) 4);
+    	}
     }
 
     public void aiStep() {
@@ -188,11 +231,8 @@ public class RedstoneGolemEntity extends AbstractRaiderEntity implements IAnimat
                 .add(Attributes.MOVEMENT_SPEED, 0.25D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
                 .add(Attributes.ATTACK_DAMAGE, 16.0D) // >= Golem Attack
-                .add(Attributes.ATTACK_KNOCKBACK, 3.0D); // 2x Ravager knockback
-    }
-
-    private float getAttackDamage() {
-        return (float)this.getAttributeValue(Attributes.ATTACK_DAMAGE);
+                .add(Attributes.ATTACK_KNOCKBACK, 3.0D) // 2x Ravager knockback
+                .add(Attributes.FOLLOW_RANGE, 25.0D); 
     }
 
     private float getAttackKnockback() {
@@ -211,18 +251,6 @@ public class RedstoneGolemEntity extends AbstractRaiderEntity implements IAnimat
             this.attackID = MELEE_ATTACK;
         }
         return true;
-    }
-
-    /**
-     * Called when the entity is attacked.
-     */
-    public boolean hurt(DamageSource source, float amount) {
-        boolean flag = super.hurt(source, amount);
-        if (flag) {
-            this.playSound(SoundEvents.IRON_GOLEM_DAMAGE, 1.0F, 1.0F);
-        }
-
-        return flag;
     }
 
     public boolean checkSpawnObstruction(IWorldReader worldIn) {
@@ -268,6 +296,10 @@ public class RedstoneGolemEntity extends AbstractRaiderEntity implements IAnimat
         if (id <= 0) {
             this.attackID = Math.abs(id);
             this.attackTimer = 0;
+        } else if (id == 4) {
+    		for (int i = 0; i < 5; i++) {
+    			this.level.addParticle(ModParticleTypes.REDSTONE_SPARK.get(), this.getRandomX(1.1D), this.getRandomY(), this.getRandomZ(1.1D), -0.15D + this.random.nextDouble() * 0.15D, -0.15D + this.random.nextDouble() * 0.15D, -0.15D + this.random.nextDouble() * 0.15D);
+    		}
         } else {
             super.handleEntityEvent(id);
         }
@@ -281,20 +313,6 @@ public class RedstoneGolemEntity extends AbstractRaiderEntity implements IAnimat
 
     public SoundCategory getSoundSource() {
         return SoundCategory.HOSTILE;
-    }
-
-    protected void playStepSound(BlockPos pos, BlockState blockIn) {
-        this.playSound(SoundEvents.IRON_GOLEM_STEP, 1.0F, 1.0F);
-    }
-
-    @Nullable
-    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return SoundEvents.IRON_GOLEM_HURT;
-    }
-
-    @Nullable
-    protected SoundEvent getDeathSound() {
-        return SoundEvents.IRON_GOLEM_DEATH;
     }
 
     // NAVIGATION
@@ -438,6 +456,9 @@ public class RedstoneGolemEntity extends AbstractRaiderEntity implements IAnimat
         public void tick() {
            if(RedstoneGolemEntity.this.getTarget() != null && RedstoneGolemEntity.this.getTarget().isAlive()) {
                RedstoneGolemEntity.this.getLookControl().setLookAt(RedstoneGolemEntity.this.getTarget(), 30.0F, 30.0F);
+               if(attackTimer == 8) {
+                   RedstoneGolemEntity.this.playSound(ModSoundEvents.REDSTONE_GOLEM_ATTACK.get(),1,1);
+               }
                if (attackTimer == 9) {
                    float attackKnockback = RedstoneGolemEntity.this.getAttackKnockback();
                    LivingEntity attackTarget = RedstoneGolemEntity.this.getTarget();
@@ -493,7 +514,7 @@ public class RedstoneGolemEntity extends AbstractRaiderEntity implements IAnimat
 
         @Override
         public boolean canContinueToUse() {
-            return attackTimer < 140;
+            return attackTimer < 100;
         }
 
         @Override
@@ -501,7 +522,7 @@ public class RedstoneGolemEntity extends AbstractRaiderEntity implements IAnimat
             RedstoneGolemEntity.this.setSummoningMines(true);
             // Play the summoning sound
             setAttackID(MINE_ATTACK);
-            RedstoneGolemEntity.this.playSound(SoundEvents.EVOKER_CAST_SPELL, 1.0F, 1.0F);
+            RedstoneGolemEntity.this.playSound(ModSoundEvents.REDSTONE_GOLEM_SUMMON_MINES.get(),1.5F,1);
         }
 
         @Override

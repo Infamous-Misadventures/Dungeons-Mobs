@@ -12,12 +12,12 @@ import java.util.EnumSet;
 import java.util.Random;
 
 public class GoToWaterGoal extends Goal {
-    private final CreatureEntity mob;
-    private double wantedX;
-    private double wantedY;
-    private double wantedZ;
-    private final double speedModifier;
-    private final World level;
+    public final CreatureEntity mob;
+    public double wantedX;
+    public double wantedY;
+    public double wantedZ;
+    public final double speedModifier;
+    public final World level;
 
     public GoToWaterGoal(CreatureEntity p_i48910_1_, double p_i48910_2_) {
         this.mob = p_i48910_1_;
@@ -53,7 +53,7 @@ public class GoToWaterGoal extends Goal {
     }
 
     @Nullable
-    private Vector3d getWaterPos() {
+    public Vector3d getWaterPos() {
         Random random = this.mob.getRandom();
         BlockPos blockpos = this.mob.blockPosition();
 

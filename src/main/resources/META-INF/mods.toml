@@ -42,7 +42,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed mollis lacinia magn
 [[dependencies.dungeons_mobs]]
     modId="geckolib3"
     mandatory=true
-    versionRange="[3.0.65,)"
+    versionRange="[3.0.89,)"
     ordering="NONE"
     side="CLIENT"
 [[dependencies.dungeons_mobs]] #optional
@@ -51,18 +51,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed mollis lacinia magn
     # Does this dependency have to exist - if not, ordering below must be specified
     mandatory=true #mandatory
     # The version range of the dependency
-    versionRange="[1.16.5-0.0.1-beta,)" #mandatory
-    # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
-    ordering="NONE"
-    # Side this dependency is applied on - BOTH, CLIENT or SERVER
-    side="BOTH"
-[[dependencies.dungeons_mobs]] #optional
-    # the modid of the dependency
-    modId="geckolib3" #mandatory
-    # Does this dependency have to exist - if not, ordering below must be specified
-    mandatory=true #mandatory
-    # The version range of the dependency
-    versionRange="[3.0.49,)" #mandatory
+    versionRange="[1.16.5-0.0.16-alpha,)" #mandatory
     # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
     ordering="NONE"
     # Side this dependency is applied on - BOTH, CLIENT or SERVER

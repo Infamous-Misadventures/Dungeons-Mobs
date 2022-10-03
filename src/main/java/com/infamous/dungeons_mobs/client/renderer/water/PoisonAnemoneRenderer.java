@@ -1,21 +1,33 @@
 package com.infamous.dungeons_mobs.client.renderer.water;
 
-import com.infamous.dungeons_mobs.client.renderer.jungle.PoisonQuillVineRenderer;
-import com.infamous.dungeons_mobs.entities.water.PoisonAnemoneEntity;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.util.ResourceLocation;
-
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
-public class PoisonAnemoneRenderer<T extends PoisonAnemoneEntity> extends PoisonQuillVineRenderer<T> {
+import com.infamous.dungeons_mobs.DungeonsMobs;
+import com.infamous.dungeons_mobs.client.models.jungle.PoisonQuillVineModel;
+import com.infamous.dungeons_mobs.client.models.jungle.QuickGrowingVineModel;
+import com.infamous.dungeons_mobs.client.renderer.jungle.AbstractVineRenderer;
+import com.infamous.dungeons_mobs.client.renderer.layers.GeoEyeLayer;
+import com.infamous.dungeons_mobs.client.renderer.layers.PulsatingGlowLayer;
+import com.infamous.dungeons_mobs.entities.jungle.AbstractVineEntity;
+
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+@OnlyIn(Dist.CLIENT)
+public class PoisonAnemoneRenderer extends AbstractVineRenderer {
+	
     private static final ResourceLocation POISON_ANEMONE_TEXTURE = new ResourceLocation(MODID, "textures/entity/ocean/poison_anemone.png");
-
-    public PoisonAnemoneRenderer(EntityRendererManager renderManagerIn) {
-        super(renderManagerIn);
+    
+    @SuppressWarnings("unchecked")
+	public PoisonAnemoneRenderer(EntityRendererManager renderManager) {
+        super(renderManager, new PoisonQuillVineModel());
+        this.addLayer(new GeoEyeLayer(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/ocean/quick_growing_kelp_glow.png")));
     }
-
+    
     @Override
-    public ResourceLocation getTextureLocation(T entity) {
+    public ResourceLocation getTextureLocation(AbstractVineEntity entity) {
         return POISON_ANEMONE_TEXTURE;
     }
 }

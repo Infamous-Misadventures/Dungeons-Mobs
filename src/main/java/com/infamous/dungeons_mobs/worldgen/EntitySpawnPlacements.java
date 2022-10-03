@@ -1,19 +1,27 @@
 package com.infamous.dungeons_mobs.worldgen;
 
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Random;
+
 import com.infamous.dungeons_mobs.entities.creepers.IcyCreeperEntity;
-import com.infamous.dungeons_mobs.entities.jungle.VineEntity;
 import com.infamous.dungeons_mobs.entities.undead.FrozenZombieEntity;
 import com.infamous.dungeons_mobs.entities.undead.JungleZombieEntity;
 import com.infamous.dungeons_mobs.entities.undead.MossySkeletonEntity;
 import com.infamous.dungeons_mobs.interfaces.IAquaticMob;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.monster.*;
+import net.minecraft.entity.monster.AbstractIllagerEntity;
+import net.minecraft.entity.monster.AbstractRaiderEntity;
+import net.minecraft.entity.monster.DrownedEntity;
+import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.entity.monster.ZombifiedPiglinEntity;
 import net.minecraft.entity.monster.piglin.PiglinEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.tags.BlockTags;
@@ -27,10 +35,6 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.gen.Heightmap;
-
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Random;
 
 public class EntitySpawnPlacements {
 
@@ -67,14 +71,6 @@ public class EntitySpawnPlacements {
     }
 
     public static void initSpawnPlacements(){
-        EntitySpawnPlacementRegistry.register(ModEntityTypes.ARMORED_ZOMBIE.get(),
-                EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
-                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                MonsterEntity::checkMonsterSpawnRules);
-        EntitySpawnPlacementRegistry.register(ModEntityTypes.ARMORED_SKELETON.get(),
-                EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
-                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                MonsterEntity::checkMonsterSpawnRules);
         EntitySpawnPlacementRegistry.register(ModEntityTypes.WRAITH.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
@@ -97,19 +93,7 @@ public class EntitySpawnPlacements {
                 MossySkeletonEntity::canMossySkeletonSpawn);
 
 
-        EntitySpawnPlacementRegistry.register(ModEntityTypes.ARMORED_VINDICATOR.get(),
-                EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
-                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                EntitySpawnPlacements::canIllagerSpawn);
-        EntitySpawnPlacementRegistry.register(ModEntityTypes.ARMORED_PILLAGER.get(),
-                EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
-                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                PatrollerEntity::checkPatrollingMonsterSpawnRules);
         EntitySpawnPlacementRegistry.register(ModEntityTypes.SKELETON_VANGUARD.get(),
-                EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
-                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                MonsterEntity::checkMonsterSpawnRules);
-        EntitySpawnPlacementRegistry.register(ModEntityTypes.SKELETON_HORSEMAN.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                 MonsterEntity::checkMonsterSpawnRules);
@@ -121,15 +105,7 @@ public class EntitySpawnPlacements {
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                 EntitySpawnPlacements::canIllagerSpawn);
-        EntitySpawnPlacementRegistry.register(ModEntityTypes.VINDICATOR_CHEF.get(),
-                EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
-                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                EntitySpawnPlacements::canIllagerSpawn);
         EntitySpawnPlacementRegistry.register(ModEntityTypes.MOUNTAINEER.get(),
-                EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
-                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                EntitySpawnPlacements::canIllagerSpawn);
-        EntitySpawnPlacementRegistry.register(ModEntityTypes.ARMORED_MOUNTAINEER.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                 EntitySpawnPlacements::canIllagerSpawn);
@@ -181,28 +157,21 @@ public class EntitySpawnPlacements {
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING,
                 EntitySpawnPlacements::canJungleMobSpawn);
-        EntitySpawnPlacementRegistry.register(ModEntityTypes.QUICK_GROWING_VINE.get(),
+     // COMMENTED OUT BECAUSE THEY SHOULDN'T SPAWN WITHOUT DUNGEONS WORLD
+        /*EntitySpawnPlacementRegistry.register(ModEntityTypes.QUICK_GROWING_VINE.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING,
-                VineEntity::canVineSpawnInLight);
+                AbstractVineEntity::canVineSpawnInLight);
         EntitySpawnPlacementRegistry.register(ModEntityTypes.POISON_QUILL_VINE.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING,
-                VineEntity::canVineSpawnInLight);
+                VineEntity::canVineSpawnInLight);*/
 
 
-        EntitySpawnPlacementRegistry.register(ModEntityTypes.ARMORED_PIGLIN.get(),
-                EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
-                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                EntitySpawnPlacements::checkPiglinSpawnRules);
         EntitySpawnPlacementRegistry.register(ModEntityTypes.FUNGUS_THROWER.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                 EntitySpawnPlacements::checkPiglinSpawnRules);
-        EntitySpawnPlacementRegistry.register(ModEntityTypes.ZOMBIFIED_ARMORED_PIGLIN.get(),
-                EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
-                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                EntitySpawnPlacements::checkZombifiedPiglinSpawnRules);
 
         EntitySpawnPlacementRegistry.register(ModEntityTypes.ZOMBIFIED_FUNGUS_THROWER.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
@@ -215,27 +184,20 @@ public class EntitySpawnPlacements {
                 EntitySpawnPlacementRegistry.PlacementType.IN_WATER,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                 EntitySpawnPlacements::checkAquaticMobSpawnRules);
-        EntitySpawnPlacementRegistry.register(ModEntityTypes.QUICK_GROWING_ANEMONE.get(),
+     // COMMENTED OUT BECAUSE THEY SHOULDN'T SPAWN WITHOUT DUNGEONS WORLD
+        /*EntitySpawnPlacementRegistry.register(ModEntityTypes.QUICK_GROWING_KELP.get(),
                 IN_WATER_ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                 EntitySpawnPlacements::checkAquaticMobSpawnRules);
         EntitySpawnPlacementRegistry.register(ModEntityTypes.POISON_ANEMONE.get(),
                 IN_WATER_ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                EntitySpawnPlacements::checkAquaticMobSpawnRules);
-        EntitySpawnPlacementRegistry.register(ModEntityTypes.ARMORED_DROWNED.get(),
-                EntitySpawnPlacementRegistry.PlacementType.IN_WATER,
-                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                EntitySpawnPlacements::checkAquaticMobSpawnRules);
+                EntitySpawnPlacements::checkAquaticMobSpawnRules);*/
         EntitySpawnPlacementRegistry.register(ModEntityTypes.DROWNED_NECROMANCER.get(),
                 EntitySpawnPlacementRegistry.PlacementType.IN_WATER,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                 EntitySpawnPlacements::checkAquaticMobSpawnRules);
         EntitySpawnPlacementRegistry.register(ModEntityTypes.SUNKEN_SKELETON.get(),
-                EntitySpawnPlacementRegistry.PlacementType.IN_WATER,
-                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                EntitySpawnPlacements::checkAquaticMobSpawnRules);
-        EntitySpawnPlacementRegistry.register(ModEntityTypes.ARMORED_SUNKEN_SKELETON.get(),
                 EntitySpawnPlacementRegistry.PlacementType.IN_WATER,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                 EntitySpawnPlacements::checkAquaticMobSpawnRules);

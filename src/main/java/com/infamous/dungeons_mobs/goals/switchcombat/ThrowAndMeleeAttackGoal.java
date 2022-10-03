@@ -16,7 +16,7 @@ import net.minecraft.entity.ai.goal.Goal.Flag;
 
 public class ThrowAndMeleeAttackGoal<T extends CreatureEntity & IRangedAttackMob> extends MeleeAttackGoal
 {
-	private final T hostCreature;
+	public final T hostCreature;
 	private int rangedAttackTime;
 	private final double entityMoveSpeed;
 	private int seeTime;
@@ -52,7 +52,7 @@ public class ThrowAndMeleeAttackGoal<T extends CreatureEntity & IRangedAttackMob
 		}
 	}
 
-	private boolean hasThrowableItemInMainhand(){
+	public boolean hasThrowableItemInMainhand(){
 		return this.hostCreature.getMainHandItem().getItem() instanceof SnowballItem
 				| this.hostCreature.getMainHandItem().getItem() instanceof EggItem;
 	}

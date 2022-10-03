@@ -2,7 +2,6 @@ package com.infamous.dungeons_mobs.capabilities.convertible;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.entities.water.SunkenSkeletonEntity;
-import com.infamous.dungeons_mobs.interfaces.IArmoredMob;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.tags.CustomTags;
 import net.minecraft.entity.Entity;
@@ -37,11 +36,6 @@ public class ConvertibleHelper {
             }
             DungeonsMobs.LOGGER.info("Converted {} to {}", original, convertedTo);
         }
-        if(original instanceof IArmoredMob && convertedTo instanceof IArmoredMob){
-            if(((IArmoredMob) original).hasStrongArmor()){
-                ((IArmoredMob) convertedTo).setStrongArmored(convertedTo);
-            }
-        }
 
         if(original instanceof ZombieEntity && convertedTo instanceof ZombieEntity){
             ZombieEntity originalZombie = (ZombieEntity) original;
@@ -74,10 +68,7 @@ public class ConvertibleHelper {
         // default, we will keep converting the mob to itself if it doesn't have an appropriate conversion
         EntityType<? extends MobEntity> convertToType = (EntityType<? extends MobEntity>) mob.getType();
         if(mob instanceof AbstractSkeletonEntity){
-            convertToType = mob instanceof IArmoredMob ? ModEntityTypes.ARMORED_SUNKEN_SKELETON.get() : ModEntityTypes.SUNKEN_SKELETON.get();
-        }
-        else if(mob instanceof ZombieEntity){
-            convertToType = mob instanceof IArmoredMob ? ModEntityTypes.ARMORED_DROWNED.get() : EntityType.DROWNED;
+            convertToType = ModEntityTypes.SUNKEN_SKELETON.get();
         }
         return convertToType;
     }

@@ -1,5 +1,9 @@
 package com.infamous.dungeons_mobs.entities.undead;
 
+import java.util.Random;
+
+import com.infamous.dungeons_mobs.mod.ModSoundEvents;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -8,15 +12,14 @@ import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.IServerWorld;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
-import java.util.Random;
-
-public class JungleZombieEntity extends ZombieEntity{
+public class JungleZombieEntity extends ZombieEntity {
 
     public JungleZombieEntity(World worldIn) {
         super(worldIn);
@@ -33,6 +36,30 @@ public class JungleZombieEntity extends ZombieEntity{
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return ZombieEntity.createAttributes();
     }
+    
+    protected boolean isSunSensitive() {
+        return false;
+     }
+    
+    protected float getSoundVolume() {
+    	return 0.5F;
+    }
+    
+    protected SoundEvent getAmbientSound() {
+        return ModSoundEvents.JUNGLE_ZOMBIE_IDLE.get();
+     }
+
+     protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
+        return ModSoundEvents.JUNGLE_ZOMBIE_HURT.get();
+     }
+
+     protected SoundEvent getDeathSound() {
+        return ModSoundEvents.JUNGLE_ZOMBIE_DEATH.get();
+     }
+
+     protected SoundEvent getStepSound() {
+        return ModSoundEvents.JUNGLE_ZOMBIE_STEP.get();
+     }
 
     @Override
     public boolean doHurtTarget(Entity targetEntity) {

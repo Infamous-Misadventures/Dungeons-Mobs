@@ -79,14 +79,14 @@ public class MageRenderer extends GeoEntityRenderer<MageEntity> {
 	public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
 		bufferIn = rtb.getBuffer(RenderType.entityTranslucent(thisMage.isAngry() ? new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/mage_angry.png") : new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/mage.png")));
 		
-	    if (bone.getName().equals("armourLeftArm")) { // rArmRuff is the name of the bone you to set the item to attach too. Please see Note
+	    if (bone.getName().equals("armorLeftArm")) { // rArmRuff is the name of the bone you to set the item to attach too. Please see Note
 	        bufferIn = rtb.getBuffer(RenderType.entityTranslucent(whTexture));    
 		      if (this.getArmorResource(thisMage, thisMage.getItemBySlot(EquipmentSlotType.CHEST), EquipmentSlotType.CHEST, null) != null) {
 			        bufferIn = rtb.getBuffer(RenderType.entityTranslucent((this.getArmorResource(thisMage, thisMage.getItemBySlot(EquipmentSlotType.CHEST), EquipmentSlotType.CHEST, null))));
 			      } 
 	    }	
 	    
-	    if (bone.getName().equals("armourRightArm")) { // rArmRuff is the name of the bone you to set the item to attach too. Please see Note
+	    if (bone.getName().equals("armorRightArm")) { // rArmRuff is the name of the bone you to set the item to attach too. Please see Note
 	        bufferIn = rtb.getBuffer(RenderType.entityTranslucent(whTexture));
 		      if (this.getArmorResource(thisMage, thisMage.getItemBySlot(EquipmentSlotType.CHEST), EquipmentSlotType.CHEST, null) != null) {
 			        bufferIn = rtb.getBuffer(RenderType.entityTranslucent((this.getArmorResource(thisMage, thisMage.getItemBySlot(EquipmentSlotType.CHEST), EquipmentSlotType.CHEST, null))));
@@ -94,7 +94,7 @@ public class MageRenderer extends GeoEntityRenderer<MageEntity> {
 
 	    }	
 	    
-	    if (bone.getName().equals("armourBody")) { // rArmRuff is the name of the bone you to set the item to attach too. Please see Note
+	    if (bone.getName().equals("armorBody")) { // rArmRuff is the name of the bone you to set the item to attach too. Please see Note
 	        bufferIn = rtb.getBuffer(RenderType.entityTranslucent(whTexture));
 		      if (this.getArmorResource(thisMage, thisMage.getItemBySlot(EquipmentSlotType.CHEST), EquipmentSlotType.CHEST, null) != null) {
 			        bufferIn = rtb.getBuffer(RenderType.entityTranslucent((this.getArmorResource(thisMage, thisMage.getItemBySlot(EquipmentSlotType.CHEST), EquipmentSlotType.CHEST, null))));
@@ -102,7 +102,7 @@ public class MageRenderer extends GeoEntityRenderer<MageEntity> {
 
 	    }	
 	    
-	    if (bone.getName().equals("innerArmourBody")) { // rArmRuff is the name of the bone you to set the item to attach too. Please see Note
+	    if (bone.getName().equals("innerArmorBody")) { // rArmRuff is the name of the bone you to set the item to attach too. Please see Note
 	        bufferIn = rtb.getBuffer(RenderType.entityTranslucent(whTexture));
 		      if (this.getArmorResource(thisMage, thisMage.getItemBySlot(EquipmentSlotType.LEGS), EquipmentSlotType.LEGS, null) != null) {
 			        bufferIn = rtb.getBuffer(RenderType.entityTranslucent((this.getArmorResource(thisMage, thisMage.getItemBySlot(EquipmentSlotType.LEGS), EquipmentSlotType.LEGS, null))));
@@ -110,7 +110,7 @@ public class MageRenderer extends GeoEntityRenderer<MageEntity> {
 
 	    }	
 	    
-	    if (bone.getName().equals("innerArmourLeftLeg")) { // rArmRuff is the name of the bone you to set the item to attach too. Please see Note
+	    if (bone.getName().equals("innerArmorLeftLeg")) { // rArmRuff is the name of the bone you to set the item to attach too. Please see Note
 	        bufferIn = rtb.getBuffer(RenderType.entityTranslucent(whTexture));
 		      if (this.getArmorResource(thisMage, thisMage.getItemBySlot(EquipmentSlotType.LEGS), EquipmentSlotType.LEGS, null) != null) {
 			        bufferIn = rtb.getBuffer(RenderType.entityTranslucent((this.getArmorResource(thisMage, thisMage.getItemBySlot(EquipmentSlotType.LEGS), EquipmentSlotType.LEGS, null))));
@@ -118,7 +118,7 @@ public class MageRenderer extends GeoEntityRenderer<MageEntity> {
 
 	    }	
 	    
-	    if (bone.getName().equals("innerArmourRightLeg")) { // rArmRuff is the name of the bone you to set the item to attach too. Please see Note
+	    if (bone.getName().equals("innerArmorRightLeg")) { // rArmRuff is the name of the bone you to set the item to attach too. Please see Note
 	        bufferIn = rtb.getBuffer(RenderType.entityTranslucent(whTexture));
 		      if (this.getArmorResource(thisMage, thisMage.getItemBySlot(EquipmentSlotType.LEGS), EquipmentSlotType.LEGS, null) != null) {
 			        bufferIn = rtb.getBuffer(RenderType.entityTranslucent((this.getArmorResource(thisMage, thisMage.getItemBySlot(EquipmentSlotType.LEGS), EquipmentSlotType.LEGS, null))));
@@ -126,7 +126,7 @@ public class MageRenderer extends GeoEntityRenderer<MageEntity> {
 
 	    }	
 	    
-	    if (bone.getName().equals("armourLeftLeg")) { // rArmRuff is the name of the bone you to set the item to attach too. Please see Note
+	    if (bone.getName().equals("armorLeftLeg")) { // rArmRuff is the name of the bone you to set the item to attach too. Please see Note
 	        bufferIn = rtb.getBuffer(RenderType.entityTranslucent(whTexture));
 		      if (this.getArmorResource(thisMage, thisMage.getItemBySlot(EquipmentSlotType.FEET), EquipmentSlotType.FEET, null) != null) {
 			        bufferIn = rtb.getBuffer(RenderType.entityTranslucent((this.getArmorResource(thisMage, thisMage.getItemBySlot(EquipmentSlotType.FEET), EquipmentSlotType.FEET, null))));
@@ -134,7 +134,7 @@ public class MageRenderer extends GeoEntityRenderer<MageEntity> {
 
 	    }	
 	    
-	    if (bone.getName().equals("armourRightLeg")) { // rArmRuff is the name of the bone you to set the item to attach too. Please see Note
+	    if (bone.getName().equals("armorRightLeg")) { // rArmRuff is the name of the bone you to set the item to attach too. Please see Note
 	        bufferIn = rtb.getBuffer(RenderType.entityTranslucent(whTexture));
 		      if (this.getArmorResource(thisMage, thisMage.getItemBySlot(EquipmentSlotType.FEET), EquipmentSlotType.FEET, null) != null) {
 			        bufferIn = rtb.getBuffer(RenderType.entityTranslucent((this.getArmorResource(thisMage, thisMage.getItemBySlot(EquipmentSlotType.FEET), EquipmentSlotType.FEET, null))));
@@ -142,7 +142,7 @@ public class MageRenderer extends GeoEntityRenderer<MageEntity> {
 
 	    }	
 	    
-	    if (bone.getName().equals("armourHead")) { // rArmRuff is the name of the bone you to set the item to attach too. Please see Note
+	    if (bone.getName().equals("armorHead")) { // rArmRuff is the name of the bone you to set the item to attach too. Please see Note
 	        bufferIn = rtb.getBuffer(RenderType.entityTranslucent(whTexture));
 		      if (this.getArmorResource(thisMage, thisMage.getItemBySlot(EquipmentSlotType.HEAD), EquipmentSlotType.HEAD, null) != null) {
 			        bufferIn = rtb.getBuffer(RenderType.entityTranslucent((this.getArmorResource(thisMage, thisMage.getItemBySlot(EquipmentSlotType.HEAD), EquipmentSlotType.HEAD, null))));

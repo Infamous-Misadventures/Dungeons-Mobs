@@ -1,21 +1,32 @@
 package com.infamous.dungeons_mobs.client.renderer.ender;
 
+import com.infamous.dungeons_mobs.DungeonsMobs;
+import com.infamous.dungeons_mobs.client.models.ender.EndersentModel;
+import com.infamous.dungeons_mobs.client.renderer.layers.GeoEyeLayer;
+import com.infamous.dungeons_mobs.entities.ender.AbstractEnderlingEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.entity.EndermanRenderer;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.entity.monster.EndermanEntity;
+import net.minecraft.util.ResourceLocation;
+import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
-public class EndersentRenderer extends EndermanRenderer {
+public class EndersentRenderer extends GeoEntityRenderer<AbstractEnderlingEntity> {
+	public EndersentRenderer(EntityRendererManager renderManager) {
+		super(renderManager, new EndersentModel());
+		this.addLayer(new GeoEyeLayer<>(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/ender/endersent_eyes.png")));
+	}
 
-    public EndersentRenderer(EntityRendererManager rendererManager) {
-        super(rendererManager);
-    }
-
-    @Override
-    protected void scale(EndermanEntity enderman, MatrixStack matrixStack, float p_225620_3_) {
-        float scale = 1.5F;
-        matrixStack.scale(scale, scale, scale);
-
-        super.scale(enderman, matrixStack, p_225620_3_);
-    }
+	@Override
+	public RenderType getRenderType(AbstractEnderlingEntity animatable, float partialTicks, MatrixStack stack,
+			IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn,
+			ResourceLocation textureLocation) {
+		return RenderType.entityTranslucent(getTextureLocation(animatable));
+	}
+	
+	   protected float getDeathMaxRotation(AbstractEnderlingEntity p_77037_1_) {
+		      return 0.0F;
+		   }
 }

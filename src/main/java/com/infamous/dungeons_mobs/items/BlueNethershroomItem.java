@@ -1,6 +1,8 @@
 package com.infamous.dungeons_mobs.items;
 
 import com.infamous.dungeons_mobs.entities.projectiles.BlueNethershroomEntity;
+import com.infamous.dungeons_mobs.mod.ModSoundEvents;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PotionEntity;
 import net.minecraft.entity.projectile.SnowballEntity;
@@ -35,6 +37,7 @@ public class BlueNethershroomItem extends ShootableItem {
          BlueNethershroomEntity.setLightBluePotionColor(itemstack);
          blueNethershroom.setItem(PotionUtils.setPotion(itemstack, Potions.POISON));
          blueNethershroom.shootFromRotation(player, player.xRot, player.yRot, -20.0F, 0.5F, 1.0F);
+         player.level.playSound((PlayerEntity)null, player.getX(), player.getY(), player.getZ(), ModSoundEvents.FUNGUS_THROWER_THROW.get(), player.getSoundSource(), 1.0F, (player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.2F + 1.0F);
          world.addFreshEntity(blueNethershroom);
       }
 

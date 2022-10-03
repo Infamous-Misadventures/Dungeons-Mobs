@@ -11,20 +11,17 @@ import com.infamous.dungeons_mobs.capabilities.cloneable.ICloneable;
 import com.infamous.dungeons_mobs.capabilities.convertible.Convertible;
 import com.infamous.dungeons_mobs.capabilities.convertible.ConvertibleStorage;
 import com.infamous.dungeons_mobs.capabilities.convertible.IConvertible;
+import com.infamous.dungeons_mobs.capabilities.properties.IMobProps;
 import com.infamous.dungeons_mobs.capabilities.properties.MobProps;
 import com.infamous.dungeons_mobs.capabilities.properties.MobPropsStorage;
-import com.infamous.dungeons_mobs.capabilities.properties.IMobProps;
 import com.infamous.dungeons_mobs.capabilities.teamable.ITeamable;
 import com.infamous.dungeons_mobs.capabilities.teamable.Teamable;
 import com.infamous.dungeons_mobs.capabilities.teamable.TeamableStorage;
 import com.infamous.dungeons_mobs.client.ModItemModelProperties;
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
-import com.infamous.dungeons_mobs.data.AncientDataHelper;
-import com.infamous.dungeons_mobs.data.MobAncientData;
-import com.infamous.dungeons_mobs.data.MobEnchantmentAncientData;
-import com.infamous.dungeons_mobs.data.util.MergeableCodecDataManager;
 import com.infamous.dungeons_mobs.items.GroupDungeonsMobs;
+import com.infamous.dungeons_mobs.items.GroupDungeonsMobsItems;
 import com.infamous.dungeons_mobs.mod.*;
 import com.infamous.dungeons_mobs.network.NetworkHandler;
 import com.infamous.dungeons_mobs.network.datasync.ModDataSerializers;
@@ -38,7 +35,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemGroup;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -60,6 +56,7 @@ public class DungeonsMobs
     public static final Logger LOGGER = LogManager.getLogger();
     public static final String MODID = "dungeons_mobs";
     public static final ItemGroup DUNGEONS_MOBS = new GroupDungeonsMobs("dungeonsMobs");
+    public static final ItemGroup DUNGEONS_MOBS_ITEMS = new GroupDungeonsMobsItems("dungeonsMobsItems");
 
     public static CommonProxy PROXY;
 
@@ -80,14 +77,17 @@ public class DungeonsMobs
         // Registering custom tags to ensure compat with Morph.
         CustomTags.register();
 
+
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
     	ModSoundEvents.SOUNDS.register(modEventBus);
+    	ModEffects.EFFECTS.register(modEventBus);
         ModEntityTypes.ENTITY_TYPES.register(modEventBus);
+        ModEntityTypes.SPAWN_EGGS.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
         ModBlocks.BLOCKS.register(modEventBus);
         ModRecipes.RECIPES.register(modEventBus);
         ModParticleTypes.PARTICLES.register(modEventBus);
-        ModMobEnchantments.MOB_ENCHANTMENTS_DEFERRED.register(modEventBus);
+        ModMobEnchants.MOB_ENCHANTS_DEFERRED.register(modEventBus);
         ModDataSerializers.DATA_SERIALIZERS.register(modEventBus);
         PROXY = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 
@@ -113,7 +113,6 @@ public class DungeonsMobs
     private void doClientStuff(final FMLClientSetupEvent event) {
         // ITEM MODEL PROPERTIES
         MinecraftForge.EVENT_BUS.register(new ModItemModelProperties());
-
     }
 
     private void onLoadComplete(final FMLLoadCompleteEvent event){

@@ -1,9 +1,6 @@
 package com.infamous.dungeons_mobs.client.renderer.undead;
 
-import com.infamous.dungeons_mobs.entities.undead.ArmoredSkeletonEntity;
 import com.infamous.dungeons_mobs.entities.undead.MossySkeletonEntity;
-import com.infamous.dungeons_mobs.interfaces.IArmoredMob;
-import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.SkeletonRenderer;
 import net.minecraft.entity.monster.AbstractSkeletonEntity;
@@ -16,16 +13,6 @@ public class CustomSkeletonRenderer extends SkeletonRenderer {
 
     public CustomSkeletonRenderer(EntityRendererManager rendererManager) {
         super(rendererManager);
-    }
-
-
-    @Override
-    protected void scale(AbstractSkeletonEntity abstractSkeletonEntity, MatrixStack matrixStack, float v) {
-        if(abstractSkeletonEntity instanceof ArmoredSkeletonEntity || abstractSkeletonEntity instanceof IArmoredMob){
-            float scaleFactor = 1.1F;
-            matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
-        }
-        super.scale(abstractSkeletonEntity, matrixStack, v);
     }
 
     public ResourceLocation getTextureLocation(AbstractSkeletonEntity abstractSkeletonEntity) {

@@ -1,34 +1,42 @@
 package com.infamous.dungeons_mobs.client.renderer.water;
 
-import com.infamous.dungeons_mobs.client.renderer.jungle.WhispererRenderer;
-import com.infamous.dungeons_mobs.entities.jungle.WhispererEntity;
-import com.infamous.dungeons_mobs.entities.water.WavewhispererEntity;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3f;
-
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
-public class WavewhispererRenderer<T extends WavewhispererEntity> extends WhispererRenderer<T> {
+import com.infamous.dungeons_mobs.DungeonsMobs;
+import com.infamous.dungeons_mobs.client.renderer.jungle.WhispererRenderer;
+import com.infamous.dungeons_mobs.client.renderer.layers.GeoEyeLayer;
+import com.infamous.dungeons_mobs.entities.jungle.AbstractVineEntity;
+import com.infamous.dungeons_mobs.entities.jungle.WhispererEntity;
+import com.mojang.blaze3d.matrix.MatrixStack;
+
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.util.ResourceLocation;
+
+public class WavewhispererRenderer extends WhispererRenderer {
+
     private static final ResourceLocation WAVEWHISPERER_TEXTURE = new ResourceLocation(MODID, "textures/entity/ocean/wavewhisperer.png");
-
-    public WavewhispererRenderer(EntityRendererManager renderManagerIn) {
-        super(renderManagerIn);
+    
+    @SuppressWarnings("unchecked")
+	public WavewhispererRenderer(EntityRendererManager renderManager) {
+        super(renderManager);
+        this.addLayer(new GeoEyeLayer(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/ocean/wavewhisperer_glow.png")));
     }
+    
+	public boolean isShaking(WhispererEntity p_230495_1_) {
+		return p_230495_1_.isInWrongHabitat();
+	}
 
+	@Override
+	protected void applyRotations(WhispererEntity entityLiving, MatrixStack matrixStackIn, float ageInTicks,
+			float rotationYaw, float partialTicks) {
+		if (this.isShaking(entityLiving)) {
+			rotationYaw += (float) (Math.cos((double) entityLiving.tickCount * 3.25D) * Math.PI * (double) 0.4F);
+		}
+		super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
+	}
+    
     @Override
-    public ResourceLocation getTextureLocation(T whispererEntity) {
+    public ResourceLocation getTextureLocation(WhispererEntity entity) {
         return WAVEWHISPERER_TEXTURE;
-    }
-
-    @Override
-    protected void setupRotations(T skeleton, MatrixStack matrixStack, float p_225621_3_, float p_225621_4_, float p_225621_5_) {
-        super.setupRotations(skeleton, matrixStack, p_225621_3_, p_225621_4_, p_225621_5_);
-        float swimAmount = skeleton.getSwimAmount(p_225621_5_);
-        if (swimAmount > 0.0F) {
-            matrixStack.mulPose(Vector3f.XP.rotationDegrees(MathHelper.lerp(swimAmount, skeleton.xRot, -10.0F - skeleton.xRot)));
-        }
     }
 }

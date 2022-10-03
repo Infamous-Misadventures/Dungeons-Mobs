@@ -1,6 +1,10 @@
 package com.infamous.dungeons_mobs.entities.undead;
 
+import java.util.Random;
+
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
+import com.infamous.dungeons_mobs.mod.ModSoundEvents;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -9,6 +13,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.monster.AbstractSkeletonEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
+import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
@@ -16,12 +21,10 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.IServerWorld;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-
-import java.util.Random;
 
 public class MossySkeletonEntity extends AbstractSkeletonEntity {
     public MossySkeletonEntity(World worldIn) {
@@ -39,23 +42,46 @@ public class MossySkeletonEntity extends AbstractSkeletonEntity {
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return AbstractSkeletonEntity.createAttributes();
     }
+    
+    @Override
+    public void playAmbientSound() {
+        SoundEvent soundevent = this.getAmbientSound();
+        if (soundevent != null) {
+           this.playSound(soundevent, 0.25F, this.getVoicePitch());
+        }
+    }
 
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.SKELETON_AMBIENT;
+        return ModSoundEvents.MOSSY_SKELETON_IDLE.get();
     }
 
     protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
-        return SoundEvents.SKELETON_HURT;
+        return ModSoundEvents.MOSSY_SKELETON_HURT.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return SoundEvents.SKELETON_DEATH;
+        return ModSoundEvents.MOSSY_SKELETON_DEATH.get();
     }
 
     @Override
     protected SoundEvent getStepSound() {
-        return SoundEvents.SKELETON_STEP;
+        return ModSoundEvents.MOSSY_SKELETON_STEP.get();
     }
+    
+    @Override
+    public void performRangedAttack(LivingEntity p_82196_1_, float p_82196_2_) {
+        ItemStack itemstack = this.getProjectile(this.getItemInHand(ProjectileHelper.getWeaponHoldingHand(this, item -> item instanceof net.minecraft.item.BowItem)));
+        AbstractArrowEntity abstractarrowentity = this.getArrow(itemstack, p_82196_2_);
+        if (this.getMainHandItem().getItem() instanceof net.minecraft.item.BowItem)
+           abstractarrowentity = ((net.minecraft.item.BowItem)this.getMainHandItem().getItem()).customArrow(abstractarrowentity);
+        double d0 = p_82196_1_.getX() - this.getX();
+        double d1 = p_82196_1_.getY(0.3333333333333333D) - abstractarrowentity.getY();
+        double d2 = p_82196_1_.getZ() - this.getZ();
+        double d3 = (double)MathHelper.sqrt(d0 * d0 + d2 * d2);
+        abstractarrowentity.shoot(d0, d1 + d3 * (double)0.2F, d2, 1.6F, (float)(14 - this.level.getDifficulty().getId() * 4));
+        this.playSound(ModSoundEvents.MOSSY_SKELETON_SHOOT.get(), 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+        this.level.addFreshEntity(abstractarrowentity);
+     }
 
 
     @Override

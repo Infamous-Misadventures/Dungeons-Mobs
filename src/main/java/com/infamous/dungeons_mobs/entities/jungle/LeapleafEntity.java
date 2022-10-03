@@ -1,389 +1,646 @@
 package com.infamous.dungeons_mobs.entities.jungle;
 
+import java.util.EnumSet;
+import java.util.UUID;
+
+import javax.annotation.Nullable;
+
+import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
+import com.infamous.dungeons_mobs.entities.summonables.AreaDamageEntity;
+import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
+import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
+import com.infamous.dungeons_mobs.mod.ModSoundEvents;
+import com.infamous.dungeons_mobs.tags.CustomTags;
+import com.infamous.dungeons_mobs.utils.PositionUtils;
+
+import net.minecraft.block.BlockState;
+import net.minecraft.command.arguments.EntityAnchorArgument;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.controller.LookController;
-import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
+import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.goal.HurtByTargetGoal;
+import net.minecraft.entity.ai.goal.LookAtGoal;
+import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
+import net.minecraft.entity.ai.goal.RandomWalkingGoal;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-import java.util.EnumSet;
+public class LeapleafEntity extends MonsterEntity implements IAnimatable {
+	
+	private static final UUID SPEED_MODIFIER_CHARGING_UUID = UUID.fromString("b380d5fd-85cb-4ac3-9450-d9092a09e0c9");
+	private static final AttributeModifier SPEED_MODIFIER_CHARGING = new AttributeModifier(SPEED_MODIFIER_CHARGING_UUID,
+			"Charging speed increase", 0.1D, AttributeModifier.Operation.ADDITION);
+	
+	private static final DataParameter<Integer> TIMES_LEAPT = EntityDataManager.defineId(LeapleafEntity.class,
+			DataSerializers.INT);
+	
+	private static final DataParameter<Boolean> CAN_LEAP = EntityDataManager.defineId(LeapleafEntity.class,
+			DataSerializers.BOOLEAN);
+	
+	private static final DataParameter<Boolean> LEAPING = EntityDataManager.defineId(LeapleafEntity.class,
+			DataSerializers.BOOLEAN);
+	
+    public int strafeTick;
+    public int strafeLength = 40;
+    
+    public int restTick;
+    public int restLength = 100;
+    
+	public int attackAnimationTick;
+	public int attackAnimationLength = 30;
+	public int attackAnimationActionPoint = 15;
+	
+	public int prepareLeapAnimationTick;
+	public int prepareLeapAnimationLength = 30;
+	
+	public int leapAnimationTick;
+	public int leapAnimationLength = 9;
+	
+	public int smashAnimationTick;
+	public int smashAnimationLength = 25;
+	public int smashAnimationActionPoint = 18;
+	
+	public int leapCooldown;
 
-public class LeapleafEntity extends MonsterEntity {
-    private static final DataParameter<Boolean> IS_STALKING = EntityDataManager.defineId(LeapleafEntity.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> IS_CROUCHING = EntityDataManager.defineId(LeapleafEntity.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> IS_LEAPING = EntityDataManager.defineId(LeapleafEntity.class, DataSerializers.BOOLEAN);
+	AnimationFactory factory = new AnimationFactory(this);
+	
+	public LeapleafEntity(World world) {
+		super(ModEntityTypes.LEAPLEAF.get(), world);
+	}
 
-    private float primaryCrouchAmount;
-    private float secondaryCrouchAmount;
+	public LeapleafEntity(EntityType<? extends LeapleafEntity> type, World world) {
+		super(type, world);
+		this.xpReward = 20;
+		this.maxUpStep = 1.0F;
+	}
+	
+	@Override
+	protected void registerGoals() {
+		super.registerGoals();
+		this.goalSelector.addGoal(0, new LeapleafEntity.RemainStationaryGoal());
+		this.goalSelector.addGoal(1, new LeapleafEntity.StrafeGoal(this));
+		this.goalSelector.addGoal(2, new LeapleafEntity.LeapGoal(this));
+		this.goalSelector.addGoal(3, new LeapleafEntity.PrepareLeapGoal(this));
+		this.goalSelector.addGoal(4, new LeapleafEntity.BasicAttackGoal(this));
+		this.goalSelector.addGoal(5, new ApproachTargetGoal(this, 0, 1.2D, true));
+		this.goalSelector.addGoal(6, new LookAtTargetGoal(this));
+		this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 1.0D));
+		this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
+		this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
+		this.targetSelector.addGoal(0, new HurtByTargetGoal(this));
+		this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
+		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
+	}
+	
+	public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
+		return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.275D)
+				.add(Attributes.FOLLOW_RANGE, 25.0D).add(Attributes.MAX_HEALTH, 75.0D).add(Attributes.ARMOR, 15D).add(Attributes.KNOCKBACK_RESISTANCE, 1.0D);
+	}
+	
+	public boolean shouldBeStationary() {
+		return this.restTick > 0;
+	}
+	
+	@Override
+	public void playAmbientSound() {
+	      SoundEvent soundeventVocal = this.getAmbientSound();
+	      SoundEvent soundeventFoley = this.getAmbientSoundFoley();
+	      this.playSound(soundeventVocal, soundeventFoley, this.getSoundVolume(), this.getVoicePitch(), this.getSoundVolume(), this.getVoicePitch());
+	}
+	
+	@Override
+	protected void playHurtSound(DamageSource p_184581_1_) {
+		  this.ambientSoundTime = -this.getAmbientSoundInterval();
+		  SoundEvent soundeventVocal = this.getHurtSound(p_184581_1_);
+	      SoundEvent soundeventFoley = this.getHurtSoundFoley(p_184581_1_);
+	      this.playSound(soundeventVocal, soundeventFoley, this.getSoundVolume(), this.getVoicePitch(), this.getSoundVolume(), this.getVoicePitch());
+	}
+	
+	@Override
+	protected void playStepSound(BlockPos p_180429_1_, BlockState p_180429_2_) {
+		this.playSound(this.getStepSound(), 0.5F, 1.0F);
+		this.playSound(this.getStepSoundFoley(), 0.5F, 1.0F);
+	}
+	
+	public void playSound(SoundEvent vocalSound, SoundEvent foleySound, float vocalVolume, float vocalPitch, float foleyVolume, float foleyPitch) {
+		if (!this.isSilent()) {
+			if (vocalSound != null) {
+	         this.level.playSound((PlayerEntity)null, this.getX(), this.getY(), this.getZ(), vocalSound, this.getSoundSource(), vocalVolume, vocalPitch);
+			}
+			if (foleySound != null) {
+	         this.level.playSound((PlayerEntity)null, this.getX(), this.getY(), this.getZ(), foleySound, this.getSoundSource(), foleyVolume, foleyPitch);
+			}
+	    }
+	}
+	
+	@Override
+	protected SoundEvent getAmbientSound() {
+		return ModSoundEvents.LEAPLEAF_IDLE_VOCAL.get();
+	}
+	protected SoundEvent getAmbientSoundFoley() {
+		return ModSoundEvents.LEAPLEAF_IDLE_FOLEY.get();
+	}
+	
+	@Override
+	public int getAmbientSoundInterval() {
+		return 250;
+	}
+	
+	@Override
+	protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
+		return ModSoundEvents.LEAPLEAF_HURT_VOCAL.get();
+	}
+	protected SoundEvent getHurtSoundFoley(DamageSource p_184601_1_) {
+		return ModSoundEvents.LEAPLEAF_HURT_FOLEY.get();
+	}
+	
+	@Override
+	protected SoundEvent getDeathSound() {
+		return ModSoundEvents.LEAPLEAF_DEATH.get();
+	}
+	
+	protected SoundEvent getStepSound() {
+		return ModSoundEvents.LEAPLEAF_STEP_VOCAL.get();
+	}
+	protected SoundEvent getStepSoundFoley() {
+		return ModSoundEvents.LEAPLEAF_STEP_FOLEY.get();
+	}
+	
+	@Override
+	protected void defineSynchedData() {
+		super.defineSynchedData();		
+		this.entityData.define(TIMES_LEAPT, 0);
+		this.entityData.define(CAN_LEAP, false);
+		this.entityData.define(LEAPING, false);
+	}
+	
+	public int getTimesLeapt() {
+		return this.entityData.get(TIMES_LEAPT);
+	}
 
-    public LeapleafEntity(World world){
-        super(ModEntityTypes.LEAPLEAF.get(), world);
-    }
+	public void setTimesLeapt(int attached) {
+		this.entityData.set(TIMES_LEAPT, attached);
+	}
+	
+	public boolean canLeap() {
+		return this.entityData.get(CAN_LEAP);
+	}
 
-    public LeapleafEntity(EntityType<? extends MonsterEntity> type, World worldIn) {
-        super(type, worldIn);
-        this.lookControl = new LeapleafEntity.LookHelperController();
-        this.maxUpStep = 1.0F;
-        this.xpReward = 20;
-    }
+	public void setCanLeap(boolean attached) {
+		this.entityData.set(CAN_LEAP, attached);
+	}
+	
+	public boolean isLeaping() {
+		return this.entityData.get(LEAPING);
+	}
 
+	public void setLeaping(boolean attached) {
+		this.entityData.set(LEAPING, attached);
+	}
+	
+	public void handleEntityEvent(byte p_28844_) {
+		if (p_28844_ == 4) {
+			this.attackAnimationTick = attackAnimationLength;
+		} else if (p_28844_ == 8) {
+			this.prepareLeapAnimationTick = prepareLeapAnimationLength;
+		} else if (p_28844_ == 9) {
+			this.leapAnimationTick = leapAnimationLength;
+		} else if (p_28844_ == 11) {
+			this.smashAnimationTick = smashAnimationLength;
+		} else if (p_28844_ == 7) {
+			this.restTick = restLength;
+		} else {
+			super.handleEntityEvent(p_28844_);
+		}
+	}	
 
-    public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return MonsterEntity.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 100.0D) // 1x Golem Health
-                .add(Attributes.MOVEMENT_SPEED, 0.25D)
-                .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
-                .add(Attributes.ATTACK_DAMAGE, 15.0D) // 1x Golem Attack
-                .add(Attributes.ATTACK_KNOCKBACK, 1.5D); // 1x Ravager knockback
-    }
+	public void baseTick() {
+		super.baseTick();
+		this.tickDownAnimTimers();
+		
+		 ModifiableAttributeInstance modifiableattributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
+	        
+		 if (!this.level.isClientSide && this.canLeap() && (this.getTarget() == null || this.getTarget().isDeadOrDying())) {
+			 this.restTick = this.restLength;
+			 this.level.broadcastEntityEvent(this, (byte) 7);
+			 this.setCanLeap(false);
+			 this.setTimesLeapt(0);
+		 }
+			  
+	        if (this.canLeap()) {
+	            if (!modifiableattributeinstance.hasModifier(SPEED_MODIFIER_CHARGING)) {
+	                modifiableattributeinstance.addTransientModifier(SPEED_MODIFIER_CHARGING);
+	             }
+	        } else {
+	        	modifiableattributeinstance.removeModifier(SPEED_MODIFIER_CHARGING);
+	        }	 
+	        
+	        if (getHorizontalDistanceSqr(this.getDeltaMovement()) > (double)2.5000003E-7F && this.random.nextInt(3) == 0) {
+	            int i = MathHelper.floor(this.getX());
+	            int j = MathHelper.floor(this.getY() - (double)0.2F);
+	            int k = MathHelper.floor(this.getZ());
+	            BlockPos pos = new BlockPos(i, j, k);
+	            BlockState blockstate = this.level.getBlockState(pos);
+	            if (!blockstate.isAir(this.level, pos)) {
+	               this.level.addParticle(ModParticleTypes.DUST.get(), this.getX() + ((double)this.random.nextFloat() - 0.5D) * (double)this.getBbWidth(), this.getY() + 0.1D, this.getZ() + ((double)this.random.nextFloat() - 0.5D) * (double)this.getBbWidth(), this.random.nextFloat() * 0.5, this.random.nextGaussian() * 1, this.random.nextGaussian() * 1);
+	            }
+	         }
 
-    @Override
-    protected void registerGoals() {
-        this.goalSelector.addGoal(0, new SwimGoal(this));
-        this.goalSelector.addGoal(1, new WaterAvoidingRandomWalkingGoal(this, 0.6D));
-        this.goalSelector.addGoal(2, new LeapleafEntity.StalkGoal());
-        this.goalSelector.addGoal(3, new LeapleafEntity.LeapGoal());
-        this.goalSelector.addGoal(4, new LeapleafEntity.AttackGoal());
-        this.goalSelector.addGoal(5, new LeapAtTargetGoal(this, 0.4F));
-        this.goalSelector.addGoal(6, new LeapleafEntity.WatchGoal(this, PlayerEntity.class, 24.0F));
+		if (this.restTick > 0) {
+			this.restTick--;
+		}
 
-        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, LeapleafEntity.class)).setAlertOthers());
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
-    }
+		if (this.strafeTick > 0) {
+			this.strafeTick--;
+		}
+		
+		if (this.leapCooldown > 0) {
+			this.leapCooldown--;
+		}
+	}
+	
+	public void tickDownAnimTimers() {
+		if (this.attackAnimationTick > 0) {
+			this.attackAnimationTick--;
+		}
 
-    @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(IS_STALKING, false);
-        this.entityData.define(IS_CROUCHING, false);
-        this.entityData.define(IS_LEAPING, false);
-    }
+		if (this.prepareLeapAnimationTick > 0) {
+			this.prepareLeapAnimationTick--;
+		}
+		
+		if (this.leapAnimationTick > 0) {
+			this.leapAnimationTick--;
+		}
+		
+		if (this.smashAnimationTick > 0) {
+			this.smashAnimationTick--;
+		}
+	}
+	
+	@Override
+	public boolean causeFallDamage(float p_225503_1_, float p_225503_2_) {
+		return false;
+	}
 
-    @Override
-    public void tick() {
-        super.tick();
-        this.tickCrouch();
-    }
+	@Override
+	public void registerControllers(AnimationData data) {
+		data.addAnimationController(new AnimationController(this, "controller", 2, this::predicate));
+	}
 
-    private void tickCrouch() {
-        this.secondaryCrouchAmount = this.primaryCrouchAmount;
-        if (this.isCrouching()) {
-            this.primaryCrouchAmount += 0.2F;
-            if (this.primaryCrouchAmount > 3.0F) {
-                this.primaryCrouchAmount = 3.0F;
-            }
-        } else {
-            this.primaryCrouchAmount = 0.0F;
-        }
-    }
+	private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
+		if (this.smashAnimationTick > 0) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("leapleaf_smash", true));
+		} else if (this.leapAnimationTick > 0) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("leapleaf_leap", true));
+		} else if (this.prepareLeapAnimationTick > 0) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("leapleaf_prepare_leap", true));
+		} else if (this.attackAnimationTick > 0) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("leapleaf_attack", true));
+		} else if (this.restTick > 0) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("leapleaf_rest", true));
+		} else if (this.isLeaping()) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("leapleaf_leaping", true));
+		} else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("leapleaf_walk", true));
+		} else {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("leapleaf_idle", true));
+		}
+		return PlayState.CONTINUE;
+	}
 
-    @Override
-    public void addAdditionalSaveData(CompoundNBT compound) {
-        super.addAdditionalSaveData(compound);
+	@Override
+	public AnimationFactory getFactory() {
+		return factory;
+	}
+	
+	   public boolean isAlliedTo(Entity p_184191_1_) {
+		      if (super.isAlliedTo(p_184191_1_)) {
+		         return true;
+		      } else if (p_184191_1_ instanceof LivingEntity && ((LivingEntity)p_184191_1_).getType().is(CustomTags.PLANT_MOBS)) {
+		         return this.getTeam() == null && p_184191_1_.getTeam() == null;
+		      } else {
+		         return false;
+		      }
+		   }
+	
+	class BasicAttackGoal extends Goal {
 
-        compound.putBoolean("Crouching", this.isCrouching());
-    }
+		public LeapleafEntity mob;
+		@Nullable
+		public LivingEntity target;
 
-    @Override
-    public void readAdditionalSaveData(CompoundNBT compound) {
-        super.readAdditionalSaveData(compound);
+		public BasicAttackGoal(LeapleafEntity mob) {
+			this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP));
+			this.mob = mob;
+			this.target = mob.getTarget();
+		}
 
-        this.setCrouching(compound.getBoolean("Crouching"));
-    }
+		@Override
+		public boolean isInterruptable() {
+			return mob.shouldBeStationary();
+		}
 
-    @OnlyIn(Dist.CLIENT)
-    public float getCrouchRotationPointYAddition(float partialTicks) {
-        return MathHelper.lerp(partialTicks, this.secondaryCrouchAmount, this.primaryCrouchAmount);
-    }
+		public boolean requiresUpdateEveryTick() {
+			return true;
+		}
 
-    public boolean canLeap() {
-        return this.primaryCrouchAmount == 3.0F;
-    }
+		@Override
+		public boolean canUse() {
+			target = mob.getTarget();
+			
+			return target != null && mob.distanceTo(target) <= 3.25 && animationsUseable()
+					&& mob.canSee(target);
+		}
 
-    public void setStalking(boolean isStalking) {
-        this.entityData.set(IS_STALKING, isStalking);
-    }
+		@Override
+		public boolean canContinueToUse() {
+			return target != null && !animationsUseable();
+		}
 
-    public boolean isStalking() {
-        return this.entityData.get(IS_STALKING);
-    }
+		@Override
+		public void start() {
+			mob.playSound(ModSoundEvents.LEAPLEAF_ATTACK_VOCAL.get(), ModSoundEvents.LEAPLEAF_ATTACK_FOLEY.get(), 1.25F, 1.0F, 1.25F, 1.0F);
+			mob.attackAnimationTick = mob.attackAnimationLength;
+			mob.level.broadcastEntityEvent(mob, (byte) 4);
+		}
 
-    public void setCrouching(boolean isCrouching) {
-        this.entityData.set(IS_CROUCHING, isCrouching);
-    }
+		@Override
+		public void tick() {
+			target = mob.getTarget();
 
-    public boolean isLeaping() {
-        return this.entityData.get(IS_LEAPING);
-    }
+			if (mob.attackAnimationTick == mob.attackAnimationActionPoint) {			
+				Vector3d areaDamagePos = PositionUtils.getOffsetPos(mob, -1, 0, 1.5, mob.yBodyRot);
+				AreaDamageEntity areaDamage = AreaDamageEntity.spawnAreaDamage(mob.level, areaDamagePos, mob, 15F, DamageSource.mobAttack(mob), 0.0F, 4.5F, 1.0F, 0.5F, 0, false, false, 1.0D, 0.2D, false, 0, 1);
+				mob.level.addFreshEntity(areaDamage);
+			}
+		}
 
-    public void setLeaping(boolean isLeaping) {
-        this.entityData.set(IS_LEAPING, isLeaping);
-    }
+		public boolean animationsUseable() {
+			return mob.attackAnimationTick <= 0;
+		}	
 
-    public static boolean canLeapTowardsTarget(LeapleafEntity leapleafEntity, LivingEntity targetEntity) {
-        double zDifference = targetEntity.getZ() - leapleafEntity.getZ();
-        double xDifference = targetEntity.getX() - leapleafEntity.getX();
-        double zToXRatio = zDifference / xDifference;
-        int leapDistance = 6;
-        int leapHeight = 4;
+	}
+	
+	class PrepareLeapGoal extends Goal {
 
-        for(int horizontalAddition = 0; horizontalAddition < leapDistance; ++horizontalAddition) {
-            double zAddition = zToXRatio == 0.0D ? 0.0D : zDifference * (double)((float)horizontalAddition / leapDistance);
-            double xAddition = zToXRatio == 0.0D ? xDifference * (double)((float)horizontalAddition / leapDistance) : zAddition / zToXRatio;
+		public LeapleafEntity mob;
+		@Nullable
+		public LivingEntity target;
 
-            for(int yAddition = 1; yAddition < leapHeight; ++yAddition) {
-                if (!leapleafEntity.level.getBlockState(new BlockPos(leapleafEntity.getX() + xAddition, leapleafEntity.getY() + (double)yAddition, leapleafEntity.getZ() + zAddition)).getMaterial().isReplaceable()) {
-                    return false;
-                }
-            }
-        }
+		public PrepareLeapGoal(LeapleafEntity mob) {
+			this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP));
+			this.mob = mob;
+			this.target = mob.getTarget();
+		}
 
-        return true;
-    }
+		@Override
+		public boolean isInterruptable() {
+			return mob.shouldBeStationary();
+		}
 
-    public class LookHelperController extends LookController {
-        private LookHelperController() {
-            super(LeapleafEntity.this);
-        }
+		public boolean requiresUpdateEveryTick() {
+			return true;
+		}
 
-        protected boolean resetXRotOnTick() {
-            return !LeapleafEntity.this.isStalking() && !LeapleafEntity.this.isCrouching() && !LeapleafEntity.this.isLeaping();
-        }
-    }
+		@Override
+		public boolean canUse() {
+			target = mob.getTarget();
+			
+			return target != null && mob.distanceTo(target) <= 15 && !mob.canLeap() && mob.random.nextInt(30) == 0 && animationsUseable()
+					&& mob.canSee(target) && mob.leapCooldown <= 0;
+		}
 
-    class StalkGoal extends Goal {
-        public StalkGoal() {
-            this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
-        }
+		@Override
+		public boolean canContinueToUse() {
+			return target != null && !animationsUseable();
+		}
 
-        /**
-         * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
-         * method as well.
-         */
-        public boolean canUse() {
-            if (LeapleafEntity.this.isSleeping()) {
-                return false;
-            } else {
-                LivingEntity livingentity = LeapleafEntity.this.getTarget();
-                return livingentity != null
-                        && livingentity.isAlive()
-                        && LeapleafEntity.this.distanceToSqr(livingentity) > 36.0D
-                        && !LeapleafEntity.this.isCrouching()
-                        && !LeapleafEntity.this.isStalking()
-                        && !LeapleafEntity.this.jumping;
-            }
-        }
+		@Override
+		public void start() {
+			mob.playSound(ModSoundEvents.LEAPLEAF_PREPARE_LEAP_VOCAL.get(), ModSoundEvents.LEAPLEAF_PREPARE_LEAP_FOLEY.get(), 1.25F, 1.0F, 1.25F, 1.0F);
+			mob.prepareLeapAnimationTick = mob.prepareLeapAnimationLength;
+			mob.level.broadcastEntityEvent(mob, (byte) 8);
+		}
 
-        /**
-         * Execute a one shot task or start executing a continuous task
-         */
-        public void start() {
-            //LeapleafEntity.this.setSitting(false);
-            //.this.setStuck(false);
-        }
+		@Override
+		public void tick() {
+			target = mob.getTarget();
 
-        /**
-         * Reset the task's internal state. Called when this task is interrupted by another one
-         */
-        public void stop() {
-            LivingEntity livingentity = LeapleafEntity.this.getTarget();
-            if (livingentity != null && LeapleafEntity.canLeapTowardsTarget(LeapleafEntity.this, livingentity)) {
-                LeapleafEntity.this.setStalking(true);
-                LeapleafEntity.this.setCrouching(true);
-                LeapleafEntity.this.getNavigation().stop();
-                LeapleafEntity.this.getLookControl().setLookAt(livingentity, (float)LeapleafEntity.this.getMaxHeadYRot(), (float)LeapleafEntity.this.getMaxHeadXRot());
-            } else {
-                LeapleafEntity.this.setStalking(false);
-                LeapleafEntity.this.setCrouching(false);
-            }
+			if (mob.prepareLeapAnimationTick == 1) {			
+				mob.setCanLeap(true);
+			}
+		}
 
-        }
+		public boolean animationsUseable() {
+			return mob.prepareLeapAnimationTick <= 0;
+		}	
 
-        /**
-         * Keep ticking a continuous task that has already been started
-         */
-        public void tick() {
-            LivingEntity livingentity = LeapleafEntity.this.getTarget();
-            if(livingentity != null){
-                LeapleafEntity.this.getLookControl().setLookAt(livingentity, (float)LeapleafEntity.this.getMaxHeadYRot(), (float)LeapleafEntity.this.getMaxHeadXRot());
-                if (LeapleafEntity.this.distanceToSqr(livingentity) <= 36.0D) {
-                    LeapleafEntity.this.setStalking(true);
-                    LeapleafEntity.this.setCrouching(true);
-                    LeapleafEntity.this.getNavigation().stop();
-                } else {
-                    LeapleafEntity.this.getNavigation().moveTo(livingentity, 1.5D);
-                }
-            }
-        }
-    }
+	}
+	
+	class LeapGoal extends Goal {
 
-    class LeapGoal extends net.minecraft.entity.ai.goal.JumpGoal {
-        /**
-         * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
-         * method as well.
-         */
-        public boolean canUse() {
-            if (!LeapleafEntity.this.canLeap()) {
-                return false;
-            } else {
-                LivingEntity livingentity = LeapleafEntity.this.getTarget();
-                if (livingentity != null && livingentity.isAlive()) {
-                    if (livingentity.getMotionDirection() != livingentity.getDirection()) {
-                        return false;
-                    } else {
-                        boolean canLeapTowardsTarget = LeapleafEntity.canLeapTowardsTarget(LeapleafEntity.this, livingentity);
-                        if (!canLeapTowardsTarget) {
-                            LeapleafEntity.this.getNavigation().createPath(livingentity, 0);
-                            LeapleafEntity.this.setCrouching(false);
-                            LeapleafEntity.this.setStalking(false);
-                        }
+		public LeapleafEntity mob;
+		@Nullable
+		public LivingEntity target;
+		
+		public int leapTime;
 
-                        return canLeapTowardsTarget;
-                    }
-                } else {
-                    return false;
-                }
-            }
-        }
+		public LeapGoal(LeapleafEntity mob) {
+			this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP));
+			this.mob = mob;
+			this.target = mob.getTarget();
+		}
 
-        /**
-         * Returns whether an in-progress EntityAIBase should continue executing
-         */
-        public boolean canContinueToUse() {
-            LivingEntity livingentity = LeapleafEntity.this.getTarget();
-            if (livingentity != null && livingentity.isAlive()) {
-                double d0 = LeapleafEntity.this.getDeltaMovement().y;
-                return (!(d0 * d0 < (double)0.05F) || !(Math.abs(LeapleafEntity.this.xRot) < 15.0F) || !LeapleafEntity.this.onGround);
-            } else {
-                return false;
-            }
-        }
+		@Override
+		public boolean isInterruptable() {
+			return mob.shouldBeStationary();
+		}
 
-        public boolean isInterruptable() {
-            return false;
-        }
+		public boolean requiresUpdateEveryTick() {
+			return true;
+		}
 
-        /**
-         * Execute a one shot task or start executing a continuous task
-         */
-        public void start() {
-            LeapleafEntity.this.setJumping(true);
-            LeapleafEntity.this.setLeaping(true);
-            LeapleafEntity.this.setStalking(false);
-            LivingEntity attackTarget = LeapleafEntity.this.getTarget();
-            if (attackTarget != null) {
-                LeapleafEntity.this.getLookControl().setLookAt(attackTarget, 60.0F, 30.0F);
-                Vector3d vector3d = (new Vector3d(attackTarget.getX() - LeapleafEntity.this.getX(), attackTarget.getY() - LeapleafEntity.this.getY(), attackTarget.getZ() - LeapleafEntity.this.getZ())).normalize();
-                LeapleafEntity.this.setDeltaMovement(LeapleafEntity.this.getDeltaMovement().add(vector3d.x * 0.8D, 0.9D, vector3d.z * 0.8D));
-                LeapleafEntity.this.getNavigation().stop();
-            }
-        }
+		@Override
+		public boolean canUse() {
+			target = mob.getTarget();
+			
+			return target != null && mob.distanceTo(target) <= 10 && mob.canLeap() && mob.random.nextInt(5) == 0 && animationsUseable()
+					&& mob.canSee(target);
+		}
 
-        /**
-         * Reset the task's internal state. Called when this task is interrupted by another one
-         */
-        public void stop() {
-            LeapleafEntity.this.setCrouching(false);
-            LeapleafEntity.this.primaryCrouchAmount = 0.0F;
-            LeapleafEntity.this.secondaryCrouchAmount = 0.0F;
-            LeapleafEntity.this.setStalking(false);
-            LeapleafEntity.this.setLeaping(false);
-        }
+		@Override
+		public boolean canContinueToUse() {
+			return target != null && (!animationsUseable() || mob.isLeaping() || mob.smashAnimationTick > 0);
+		}
 
-        /**
-         * Keep ticking a continuous task that has already been started
-         */
-        public void tick() {
-            LivingEntity attackTarget = LeapleafEntity.this.getTarget();
-            if (attackTarget != null) {
-                LeapleafEntity.this.getLookControl().setLookAt(attackTarget, 60.0F, 30.0F);
-            }
+		@Override
+		public void start() {
+			mob.playSound(ModSoundEvents.LEAPLEAF_LEAP_VOCAL.get(), ModSoundEvents.LEAPLEAF_LEAP_FOLEY.get(), 1.5F, 1.0F, 1.5F, 1.0F);
+			mob.leapAnimationTick = mob.leapAnimationLength;
+			mob.level.broadcastEntityEvent(mob, (byte) 9);
+		}
 
-            /*
-            Vector3d vector3d = LeapleafEntity.this.getMotion();
-            if (vector3d.y * vector3d.y < (double)0.03F && LeapleafEntity.this.rotationPitch != 0.0F) {
-                LeapleafEntity.this.rotationPitch = MathHelper.rotLerp(LeapleafEntity.this.rotationPitch, 0.0F, 0.2F);
-            } else {
-                double d0 = Math.sqrt(Entity.horizontalMag(vector3d));
-                double d1 = Math.signum(-vector3d.y) * Math.acos(d0 / vector3d.length()) * (double)(180F / (float)Math.PI);
-                LeapleafEntity.this.rotationPitch = (float)d1;
-            }
-             */
+		@Override
+		public void tick() {
+			target = mob.getTarget();
 
-            if (attackTarget != null && LeapleafEntity.this.distanceToSqr(attackTarget) <= 4.0F) {
-                LeapleafEntity.this.doHurtTarget(attackTarget);
-            }
-        }
-    }
+			if (target != null && mob.leapAnimationTick == 1) {	
+				double d0 = target.getX() - mob.getX();
+				double d1 = target.getY() - mob.getY();
+				double d2 = target.getZ() - mob.getZ();
+				mob.setDeltaMovement(d0 * 0.15D, 0.75 + MathHelper.clamp(d1 * 0.05D, 0, 10), d2 * 0.15D);
+				mob.setLeaping(true);
+				mob.lookAt(EntityAnchorArgument.Type.EYES, target.position());
+				this.leapTime = 0;
+			}
+			
+			if (mob.isLeaping()) {
+				this.leapTime++;
+			}
+			
+			if (mob.isLeaping() && mob.isOnGround() && this.leapTime > 10) {
+				mob.playSound(ModSoundEvents.LEAPLEAF_LAND.get(), 2.0F, 1.0F);
+				mob.setLeaping(false);
+				mob.smashAnimationTick = mob.smashAnimationLength;
+				mob.level.broadcastEntityEvent(mob, (byte) 11);
+			}
+			
+			if (mob.smashAnimationTick == mob.smashAnimationActionPoint) {
+				Vector3d areaDamagePos = PositionUtils.getOffsetPos(mob, -1.5, 0, 2, mob.yBodyRot);
+				AreaDamageEntity areaDamage = AreaDamageEntity.spawnAreaDamage(mob.level, areaDamagePos, mob, 25F, DamageSource.mobAttack(mob), 0.0F, 6.0F, 1.0F, 0.75F, 10, false, false, 2.0D, 0.4D, true, 120, 1);
 
-    class AttackGoal extends MeleeAttackGoal{
+				Vector3d areaDamagePos2 = PositionUtils.getOffsetPos(mob, 1.5, 0, 2, mob.yBodyRot);
+				AreaDamageEntity areaDamage2 = AreaDamageEntity.spawnAreaDamage(mob.level, areaDamagePos2, mob, 25F, DamageSource.mobAttack(mob), 0.0F, 6.0F, 1.0F, 0.75F, 10, false, false, 2.0D, 0.4D, true, 120, 1);
+				
+				areaDamage.connectedAreaDamages.add(areaDamage2);
+				areaDamage2.connectedAreaDamages.add(areaDamage);
+				
+				mob.level.addFreshEntity(areaDamage);
+				mob.level.addFreshEntity(areaDamage2);
+			}
+		}
+		
+		@Override
+		public void stop() {
+			super.stop();
+			this.leapTime = 0;
+			mob.setCanLeap(false);
+			mob.setLeaping(false);
+			mob.setTimesLeapt(mob.getTimesLeapt() + 1);
+			mob.leapCooldown = 60;
+			
+	        int leapTimesByDifficulty = mob.level.getCurrentDifficultyAt(mob.blockPosition()).getDifficulty().getId();
+	        
+	        if (mob.getTimesLeapt() >= leapTimesByDifficulty) {
+	        	mob.restTick = mob.restLength;
+	        	mob.level.broadcastEntityEvent(mob, (byte) 7);
+	        	mob.setTimesLeapt(0);
+	        	mob.playSound(ModSoundEvents.LEAPLEAF_REST_VOCAL.get(), ModSoundEvents.LEAPLEAF_REST_FOLEY.get(), 1.0F, mob.getVoicePitch(), 1.0F, mob.getVoicePitch());
+	        } else {
+	        	mob.strafeTick = mob.strafeLength;
+	        }
+		}
 
-        public AttackGoal() {
-            super(LeapleafEntity.this, 1.2F, false);
-        }
+		public boolean animationsUseable() {
+			return mob.leapAnimationTick <= 0;
+		}	
 
-        @Override
-        protected double getAttackReachSqr(LivingEntity attackTarget) {
-            float adjustedAttackerWidth = LeapleafEntity.this.getBbWidth() - 0.8F;
-            float attackerWidthSquaredTimes4 = adjustedAttackerWidth * 2.0F * adjustedAttackerWidth * 2.0F;
-            return (double)(attackerWidthSquaredTimes4 + attackTarget.getBbWidth());
-        }
+	}
+	
+	class StrafeGoal extends Goal {
 
+		public LeapleafEntity mob;
+		@Nullable
+		public LivingEntity target;
+		
+		private boolean strafingLeft;
 
+		public StrafeGoal(LeapleafEntity mob) {
+			this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP));
+			this.mob = mob;
+			this.target = mob.getTarget();
+		}
 
-        /**
-         * Execute a one shot task or start executing a continuous task
-         */
-        public void start() {
-            LeapleafEntity.this.setStalking(false);
-            super.start();
-        }
+		@Override
+		public boolean isInterruptable() {
+			return mob.shouldBeStationary();
+		}
 
-        /**
-         * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
-         * method as well.
-         */
-        public boolean canUse() {
-            return !LeapleafEntity.this.isSleeping() && !LeapleafEntity.this.isCrouching() && super.canUse();
-        }
-    }
+		public boolean requiresUpdateEveryTick() {
+			return true;
+		}
 
-    class WatchGoal extends LookAtGoal {
-        public WatchGoal(MobEntity p_i50733_2_, Class<? extends LivingEntity> p_i50733_3_, float p_i50733_4_) {
-            super(p_i50733_2_, p_i50733_3_, p_i50733_4_);
-        }
+		@Override
+		public boolean canUse() {
+			target = mob.getTarget();
+			
+			return target != null && mob.strafeTick > 0;
+		}
 
-        /**
-         * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
-         * method as well.
-         */
-        public boolean canUse() {
-            return super.canUse() && !LeapleafEntity.this.isStalking();
-        }
+		@Override
+		public boolean canContinueToUse() {
+			return target != null && mob.strafeTick > 0;
+		}
 
-        /**
-         * Returns whether an in-progress EntityAIBase should continue executing
-         */
-        public boolean canContinueToUse() {
-            return super.canContinueToUse() && !LeapleafEntity.this.isStalking();
-        }
-    }
+		@Override
+		public void tick() {
+			target = mob.getTarget();
+
+			if (target != null) {	
+				mob.lookAt(EntityAnchorArgument.Type.EYES, target.position());
+				
+				if (mob.random.nextInt(30) == 0) {
+					this.strafingLeft = !this.strafingLeft;
+				}
+				
+				if (mob.distanceTo(target) < 4) {
+					mob.setDeltaMovement(mob.getDeltaMovement().add(PositionUtils.getOffsetMotion(mob, 0, 0, -0.1, mob.yBodyRot)));
+				}
+				
+				if (this.strafingLeft) {
+					mob.setDeltaMovement(mob.getDeltaMovement().add(PositionUtils.getOffsetMotion(mob, 0.05, 0, 0, mob.yBodyRot)));
+				} else {
+					mob.setDeltaMovement(mob.getDeltaMovement().add(PositionUtils.getOffsetMotion(mob, -0.05, 0, 0, mob.yBodyRot)));
+				}
+			}
+		}
+
+	}
+	
+	class RemainStationaryGoal extends Goal {
+
+		public RemainStationaryGoal() {
+			this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK, Goal.Flag.TARGET, Goal.Flag.JUMP));
+		}
+
+		@Override
+		public boolean canUse() {
+			return LeapleafEntity.this.shouldBeStationary();
+		}
+	}
+	
 }

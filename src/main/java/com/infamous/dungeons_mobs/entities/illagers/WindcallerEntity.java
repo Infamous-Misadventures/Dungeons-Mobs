@@ -1,53 +1,87 @@
 package com.infamous.dungeons_mobs.entities.illagers;
 
-import com.infamous.dungeons_mobs.entities.summonables.TornadoEntity;
-import com.infamous.dungeons_mobs.mod.ModEntityTypes;
-import com.infamous.dungeons_mobs.mod.ModItems;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
-import net.minecraft.entity.monster.AbstractRaiderEntity;
-import net.minecraft.entity.monster.EvokerEntity;
-import net.minecraft.entity.monster.SpellcastingIllagerEntity;
-import net.minecraft.entity.passive.IronGolemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import java.util.EnumSet;
+import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.monster.AbstractIllagerEntity.ArmPose;
-import net.minecraft.entity.monster.SpellcastingIllagerEntity.CastingASpellGoal;
-import net.minecraft.entity.monster.SpellcastingIllagerEntity.SpellType;
-import net.minecraft.entity.monster.SpellcastingIllagerEntity.UseSpellGoal;
+import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
+import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
+import com.infamous.dungeons_mobs.entities.projectiles.WindcallerBlastProjectileEntity;
+import com.infamous.dungeons_mobs.entities.summonables.IceCloudEntity;
+import com.infamous.dungeons_mobs.entities.summonables.WindcallerTornadoEntity;
+import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
+import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
+import com.infamous.dungeons_mobs.mod.ModEntityTypes;
+import com.infamous.dungeons_mobs.mod.ModItems;
+import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 
-public class WindcallerEntity extends SpellcastingIllagerEntity {
+import net.minecraft.command.arguments.EntityAnchorArgument;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ILivingEntityData;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.MoverType;
+import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.goal.AvoidEntityGoal;
+import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.goal.HurtByTargetGoal;
+import net.minecraft.entity.ai.goal.LookAtGoal;
+import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
+import net.minecraft.entity.ai.goal.RandomWalkingGoal;
+import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
+import net.minecraft.entity.monster.AbstractIllagerEntity;
+import net.minecraft.entity.monster.AbstractRaiderEntity;
+import net.minecraft.entity.monster.BlazeEntity;
+import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.entity.passive.IronGolemEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.SmallFireballEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.IServerWorld;
+import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-    public double prevChasingPosX;
-    public double prevChasingPosY;
-    public double prevChasingPosZ;
-    public double chasingPosX;
-    public double chasingPosY;
-    public double chasingPosZ;
-    public float prevCameraYaw;
-    public float cameraYaw;
+public class WindcallerEntity extends AbstractIllagerEntity implements IAnimatable, SpawnArmoredMob {
 
+	public int liftAttackAnimationTick;
+	public int liftAttackAnimationLength = 25;
+	public int liftAttackAnimationActionPoint = 15;
+	
+	public int blastAttackAnimationTick;
+	public int blastAttackAnimationLength = 32;
+	public int blastAttackAnimationActionPoint = 20;
+
+    AnimationFactory factory = new AnimationFactory(this);
+
+    public int soundLoopTick;
+    
     public WindcallerEntity(World world){
         super(ModEntityTypes.WINDCALLER.get(), world);
     }
 
-    public WindcallerEntity(EntityType<? extends SpellcastingIllagerEntity> type, World world) {
+    public WindcallerEntity(EntityType<? extends WindcallerEntity> type, World world) {
         super(type, world);
     }
 
@@ -59,31 +93,147 @@ public class WindcallerEntity extends SpellcastingIllagerEntity {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new SwimGoal(this));
-        this.goalSelector.addGoal(1, new WindcallerEntity.CastingSpellGoal());
-        this.goalSelector.addGoal(2, new AvoidEntityGoal<>(this, PlayerEntity.class, 8.0F, 0.6D, 1.0D));
-        this.goalSelector.addGoal(4, new SummonTornadoGoal());
-        this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 0.6D));
+        this.goalSelector.addGoal(0, new WindcallerEntity.BlastAttackGoal(this));
+        this.goalSelector.addGoal(1, new WindcallerEntity.LiftAttackGoal(this));
+        this.goalSelector.addGoal(2, new AvoidEntityGoal<>(this, IronGolemEntity.class, 5.0F, 1.2D, 1.15D));
+        this.goalSelector.addGoal(3, new ApproachTargetGoal(this, 6, 1.1D, true));
+        this.goalSelector.addGoal(4, new LookAtTargetGoal(this));
+        this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 1.0D));
         this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
         this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, AbstractRaiderEntity.class)).setAlertOthers());
-        this.targetSelector.addGoal(2, (new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true)).setUnseenMemoryTicks(300));
-        this.targetSelector.addGoal(3, (new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, false)).setUnseenMemoryTicks(300));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, false));
+        this.targetSelector.addGoal(2, (new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true)).setUnseenMemoryTicks(600));
+        this.targetSelector.addGoal(3, (new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, false)).setUnseenMemoryTicks(600));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, false).setUnseenMemoryTicks(600));
+    }
+    
+	public void handleEntityEvent(byte p_28844_) {
+		if (p_28844_ == 4) {
+			this.liftAttackAnimationTick = liftAttackAnimationLength;
+		} else if (p_28844_ == 11) {
+			this.blastAttackAnimationTick = blastAttackAnimationLength;
+		} else {
+			super.handleEntityEvent(p_28844_);
+		}
+	}
+	
+	boolean steepDropBelow() {
+		boolean blockBeneath = false;
+		
+		for (int i = 0; i < 4; i++) {
+			if (!this.level.getBlockState(new BlockPos(this.blockPosition().getX(), this.blockPosition().getY() - i, this.blockPosition().getZ())).isAir()) {
+				blockBeneath = true;
+			}
+		}
+		
+		return !this.level.isClientSide && blockBeneath == false;
+	}
+	
+	   public boolean causeFallDamage(float p_225503_1_, float p_225503_2_) {
+		      return false;
+		   }
+
+    public void baseTick() {
+        super.baseTick();
+        this.tickDownAnimTimers();
+        
+        if (this.getTarget() != null && this.distanceTo(this.getTarget()) > 4 && ((!this.isOnGround() && steepDropBelow()) || ((this.getTarget().getY() > this.getY() + 4 || this.getY() < this.getTarget().getY() - 2) && this.distanceTo(this.getTarget()) > 4) || this.distanceTo(this.getTarget()) > 10)) {
+        	if (this.getY() < this.getTarget().getY() + 4) {
+        		this.setDeltaMovement(0.0D, 0.05D, 0.0D);
+        	} else {
+        		this.setDeltaMovement(0.0D, -0.01D, 0.0D);
+        	}
+
+			double x = this.getTarget().getX() - this.getX();
+			double y = this.getTarget().getY() - this.getY();
+			double z = this.getTarget().getZ() - this.getZ();
+			double d = Math.sqrt(x * x + y * y + z * z);
+			this.setDeltaMovement(this.getDeltaMovement()
+					.add(x / d * 0.20000000298023224D, y / d * 0.20000000298023224D, z / d * 0.20000000298023224D)
+					.scale(1.5D));
+			this.move(MoverType.SELF, this.getDeltaMovement());
+			
+			this.getNavigation().stop();
+			this.lookAt(EntityAnchorArgument.Type.EYES, new Vector3d(this.getTarget().getX(), this.getTarget().getEyeY(), this.getTarget().getZ()));
+        }
+        
+        this.soundLoopTick ++;
+        
+        if (this.soundLoopTick % 40 == 0) {
+        	this.playSound(ModSoundEvents.WINDCALLER_FLY_LOOP.get(), 0.75F, 1.0F);
+        }
+    }
+    
+    public void aiStep() {
+    	
+        if (!this.onGround && this.getDeltaMovement().y < 0.0D) {
+            this.setDeltaMovement(this.getDeltaMovement().multiply(1.0D, 0.5D, 1.0D));
+         }
+        
+        if (this.level.isClientSide) {
+            this.level.addParticle(ModParticleTypes.WIND.get(), this.getRandomX(0.1D), this.getY() + 0.05D, this.getRandomZ(0.1D), (this.random.nextDouble() - 0.5D) * 1.0D, 0.0, (this.random.nextDouble() - 0.5D) * 1.0D);
+        }
+         
+    	super.aiStep();
+    }
+    
+	public void tickDownAnimTimers() {
+		if (this.liftAttackAnimationTick > 0) {
+			this.liftAttackAnimationTick--;
+		}
+		
+		if (this.blastAttackAnimationTick > 0) {
+			this.blastAttackAnimationTick--;
+		}
+	}
+
+    @Override
+    public void registerControllers(AnimationData data) {
+        data.addAnimationController(new AnimationController(this, "controller", 2, this::predicate));
     }
 
-    public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
-        return EvokerEntity.createAttributes();
+
+    private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
+    	if (this.liftAttackAnimationTick > 0) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("windcaller_lift", true));
+    	} else if (this.blastAttackAnimationTick > 10) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("windcaller_blast", true));
+        } else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("windcaller_fly", true));
+        } else {
+        	if (this.isCelebrating()) {
+        		event.getController().setAnimation(new AnimationBuilder().addAnimation("windcaller_celebrate", true));
+        	} else {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("windcaller_idle", true));       		
+        	}
+        }
+        return PlayState.CONTINUE;
     }
 
     @Override
-    protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
+    public AnimationFactory getFactory() {
+        return factory;
+    }
+
+    @Override
+    protected void populateDefaultEquipmentSlots(DifficultyInstance p_180481_1_) {
+        super.populateDefaultEquipmentSlots(p_180481_1_);
         this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModItems.WINDCALLER_STAFF.get()));
+        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.WINDCALLER_CLOTHES.getHead().get()));
+        this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.WINDCALLER_CLOTHES.getChest().get()));
     }
 
     @Nullable
-    public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
-        this.populateDefaultEquipmentSlots(difficultyIn);
-        return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+    @Override
+    public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance p_213386_2_, SpawnReason p_213386_3_, @Nullable ILivingEntityData p_213386_4_, @Nullable CompoundNBT p_213386_5_) {
+        ILivingEntityData iLivingEntityData = super.finalizeSpawn(p_213386_1_, p_213386_2_, p_213386_3_, p_213386_4_, p_213386_5_);
+        this.populateDefaultEquipmentSlots(p_213386_2_);
+        this.populateDefaultEquipmentEnchantments(p_213386_2_);
+        return iLivingEntityData;
+    }
+
+    public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
+        return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.35D).add(Attributes.FOLLOW_RANGE, 20D).add(Attributes.MAX_HEALTH, 30.0D);
     }
 
     /**
@@ -101,179 +251,183 @@ public class WindcallerEntity extends SpellcastingIllagerEntity {
 
     @Override
     public void applyRaidBuffs(int p_213660_1_, boolean p_213660_2_) {
-
     }
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.EVOKER_AMBIENT;
+        return ModSoundEvents.WINDCALLER_IDLE.get();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.EVOKER_DEATH;
+        return ModSoundEvents.WINDCALLER_DEATH.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return SoundEvents.EVOKER_HURT;
-    }
-
-    @Override
-    protected SoundEvent getCastingSoundEvent() {
-        return SoundEvents.EVOKER_CAST_SPELL;
+        return ModSoundEvents.WINDCALLER_HURT.get();
     }
 
     @Override
     public SoundEvent getCelebrateSound() {
-        return SoundEvents.EVOKER_CELEBRATE;
+        return ModSoundEvents.WINDCALLER_BLAST_VOCAL.get();
     }
 
-    class CastingSpellGoal extends CastingASpellGoal {
-        private CastingSpellGoal() {
-        }
+	@Override
+	public ResourceLocation getArmorSet() {
+		return ModItems.WINDCALLER_CLOTHES.getArmorSet();
+	}
 
-        /**
-         * Keep ticking a continuous task that has already been started
-         */
-        public void tick() {
-            if (WindcallerEntity.this.getTarget() != null) {
-                WindcallerEntity.this.getLookControl().setLookAt(WindcallerEntity.this.getTarget(), (float) WindcallerEntity.this.getMaxHeadYRot(), (float) WindcallerEntity.this.getMaxHeadXRot());
-            }
+	class LiftAttackGoal extends Goal {
+		public WindcallerEntity mob;
+		@Nullable
+		public LivingEntity target;
+		
+		private final Predicate<Entity> TORNADO = (p_33346_) -> {
+			return p_33346_ instanceof WindcallerTornadoEntity;
+		};
+		
+		public LiftAttackGoal(WindcallerEntity mob) {
+			this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP, Goal.Flag.LOOK));
+			this.mob = mob;
+			this.target = mob.getTarget();
+		}
 
-        }
-    }
+		@Override
+		public boolean isInterruptable() {
+			return false;
+		}
 
-    class SummonTornadoGoal extends UseSpellGoal {
-        private SummonTornadoGoal() {
-        }
+		public boolean requiresUpdateEveryTick() {
+			return true;
+		}
 
-        @Override
-        public boolean canUse() {
-            LivingEntity attackTarget = WindcallerEntity.this.getTarget();
-            if(attackTarget != null){
-                boolean targetOnGround = attackTarget.isOnGround();
-                boolean targetCanBeSeen = WindcallerEntity.this.canSee(attackTarget);
-                return super.canUse() && targetOnGround && targetCanBeSeen;
-            }
-            return false;
-        }
+		@Override
+		public boolean canUse() {
+			target = mob.getTarget();
+			
+			int nearbyTornadoes = 1;
+			
+			if (target != null) {
+				nearbyTornadoes = mob.level.getEntities(mob, target.getBoundingBox().inflate(5.0D), TORNADO)
+					.size();
+			}
+			
+			return target != null && target.isOnGround() && mob.random.nextInt(30) == 0 && mob.distanceTo(target) <= 16 && mob.distanceTo(target) > 3 && nearbyTornadoes <= 0 && mob.canSee(target) && animationsUseable();
+		}
 
-        @Override
-        public boolean canContinueToUse() {
-            LivingEntity attackTarget = WindcallerEntity.this.getTarget();
-            if(attackTarget != null){
-                boolean targetOnGround = attackTarget.isOnGround();
-                boolean targetCanBeSeen = WindcallerEntity.this.canSee(attackTarget);
-                return super.canContinueToUse() && targetOnGround && targetCanBeSeen;
-            }
-            return false;
-        }
+		@Override
+		public boolean canContinueToUse() {
+			return target != null && !animationsUseable();
+		}
 
-        protected int getCastingTime() {
-            return 40;
-        }
+		@Override
+		public void start() {
+			mob.playSound(ModSoundEvents.WINDCALLER_LIFT_VOCAL.get(), 1.0F, mob.getVoicePitch());
+			mob.liftAttackAnimationTick = mob.liftAttackAnimationLength;
+			mob.level.broadcastEntityEvent(mob, (byte) 4);
+		}
 
-        protected int getCastingInterval() {
-            return 100;
-        }
+		@Override
+		public void tick() {
+			target = mob.getTarget();
 
-        protected void performSpellCasting() {
-            LivingEntity attackTarget = WindcallerEntity.this.getTarget();
-            if (attackTarget != null) {
-                summonTornado(attackTarget);
-            }
-        }
+			if (target != null) {
+				mob.getLookControl().setLookAt(target.getX(), target.getEyeY(), target.getZ());
+			}
 
-        private void summonTornado(LivingEntity livingEntity){
-            /*
-            AreaEffectCloudEntity areaEffectCloudEntity = new AreaEffectCloudEntity(WindcallerEntity.this.world, livingEntity.getPosX(), livingEntity.getPosY(), livingEntity.getPosZ());
-            areaEffectCloudEntity.setOwner(WindcallerEntity.this);
-            areaEffectCloudEntity.setParticleData(ParticleTypes.CAMPFIRE_SIGNAL_SMOKE);
-            areaEffectCloudEntity.addEffect(new EffectInstance(Effects.LEVITATION, 100,1));
-            areaEffectCloudEntity.setDuration(100);
-            WindcallerEntity.this.world.addEntity(areaEffectCloudEntity);
-             */
+			if (target != null && mob.liftAttackAnimationTick == mob.liftAttackAnimationActionPoint) {
+	            WindcallerTornadoEntity tornado = ModEntityTypes.TORNADO.get().create(mob.level);
+	            tornado.moveTo(target.blockPosition(), 0, 0);
+	            tornado.playSound(ModSoundEvents.WINDCALLER_LIFT_WIND.get(), 1.5F, 1.0F);
+	            ((ServerWorld)mob.level).addFreshEntityWithPassengers(tornado);
+			}
+		}
 
-            TornadoEntity tornadoEntity = new TornadoEntity(WindcallerEntity.this.level, WindcallerEntity.this, livingEntity);
-            tornadoEntity.addEffect(new EffectInstance(Effects.LEVITATION, 100,1));
-            tornadoEntity.setDuration(100);
-            WindcallerEntity.this.level.addFreshEntity(tornadoEntity);
-        }
+		public boolean animationsUseable() {
+			return mob.liftAttackAnimationTick <= 0;
+		}
 
+	}
+    
+    class BlastAttackGoal extends Goal {
+		public WindcallerEntity mob;
+		@Nullable
+		public LivingEntity target;
+		
+		private final Predicate<Entity> TORNADO = (p_33346_) -> {
+			return p_33346_ instanceof WindcallerTornadoEntity;
+		};
+		
+		public BlastAttackGoal(WindcallerEntity mob) {
+			this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP, Goal.Flag.LOOK));
+			this.mob = mob;
+			this.target = mob.getTarget();
+		}
 
-        protected SoundEvent getSpellPrepareSound() {
-            return SoundEvents.EVOKER_PREPARE_SUMMON;
-        }
+		@Override
+		public boolean isInterruptable() {
+			return false;
+		}
 
-        protected SpellType getSpell() {
-            return SpellType.SUMMON_VEX;
-        }
-    }
+		public boolean requiresUpdateEveryTick() {
+			return true;
+		}
 
-    @Override
-    public ArmPose getArmPose() {
-        ArmPose illagerArmPose =  super.getArmPose();
-        if(illagerArmPose == ArmPose.CROSSED){
-            return ArmPose.NEUTRAL;
-        }
-        return illagerArmPose;
-    }
+		@Override
+		public boolean canUse() {
+			target = mob.getTarget();
+			
+			int nearbyTornadoes = 1;
+			
+			if (target != null) {
+				nearbyTornadoes = mob.level.getEntities(mob, target.getBoundingBox().inflate(5.0D), TORNADO)
+					.size();
+			}
+			
+			return target != null && mob.random.nextInt(5) == 0 && (mob.distanceTo(target) <= 4 || (!target.isOnGround() && mob.random.nextInt(10) == 0 && mob.distanceTo(target) < 7.5)) && nearbyTornadoes <= 0 && mob.canSee(target) && animationsUseable();
+		}
 
-    @Override
-    public void tick() {
-        super.tick();
-        this.updateCape();
-    }
+		@Override
+		public boolean canContinueToUse() {
+			return target != null && !animationsUseable();
+		}
 
-    @Override
-    public void rideTick() {
-        super.rideTick();
-        this.prevCameraYaw = this.cameraYaw;
-        this.cameraYaw = 0.0F;
-    }
+		@Override
+		public void start() {
+			mob.playSound(ModSoundEvents.WINDCALLER_BLAST_VOCAL.get(), 1.0F, mob.getVoicePitch());
+			mob.blastAttackAnimationTick = mob.blastAttackAnimationLength;
+			mob.level.broadcastEntityEvent(mob, (byte) 11);
+		}
 
-    private void updateCape() {
-        this.prevChasingPosX = this.chasingPosX;
-        this.prevChasingPosY = this.chasingPosY;
-        this.prevChasingPosZ = this.chasingPosZ;
-        double xDifference = this.getX() - this.chasingPosX;
-        double yDifference = this.getY() - this.chasingPosY;
-        double zDifference = this.getZ() - this.chasingPosZ;
-        double maxDelta = 10.0D;
-        if (xDifference > maxDelta) {
-            this.chasingPosX = this.getX();
-            this.prevChasingPosX = this.chasingPosX;
-        }
+		@Override
+		public void tick() {
+			target = mob.getTarget();
 
-        if (zDifference > maxDelta) {
-            this.chasingPosZ = this.getZ();
-            this.prevChasingPosZ = this.chasingPosZ;
-        }
+			if (target != null) {
+				mob.getLookControl().setLookAt(target.getX(), target.getEyeY(), target.getZ());
+			}
 
-        if (yDifference > maxDelta) {
-            this.chasingPosY = this.getY();
-            this.prevChasingPosY = this.chasingPosY;
-        }
+			if (target != null && mob.blastAttackAnimationTick == mob.blastAttackAnimationActionPoint) {
+				double d1 = target.getX() - mob.getX();
+	               double d2 = target.getY(0.5D) - mob.getY(0.5D);
+	               double d3 = target.getZ() - mob.getZ();
+				WindcallerBlastProjectileEntity smallfireballentity = new WindcallerBlastProjectileEntity(mob.level, mob, d1, 0, d3);
+                smallfireballentity.setPos(smallfireballentity.getX(), mob.getY(0.25D), smallfireballentity.getZ());
+                mob.level.addFreshEntity(smallfireballentity);
+	            WindcallerTornadoEntity tornado = ModEntityTypes.TORNADO.get().create(mob.level);
+	            tornado.moveTo(mob.blockPosition(), 0, 0);
+	            tornado.playSound(ModSoundEvents.WINDCALLER_BLAST_WIND.get(), 1.5F, 1.0F);
+	            tornado.setBlast(true);
+	            mob.lookAt(EntityAnchorArgument.Type.EYES, new Vector3d(target.getX(), target.getY(), target.getZ()));
+	            tornado.yRot = -mob.yHeadRot - 90;
+	            ((ServerWorld)mob.level).addFreshEntityWithPassengers(tornado);
+			}
+		}
 
-        if (xDifference < -maxDelta) {
-            this.chasingPosX = this.getX();
-            this.prevChasingPosX = this.chasingPosX;
-        }
+		public boolean animationsUseable() {
+			return mob.blastAttackAnimationTick <= 0;
+		}
 
-        if (zDifference < -maxDelta) {
-            this.chasingPosZ = this.getZ();
-            this.prevChasingPosZ = this.chasingPosZ;
-        }
-
-        if (yDifference < -maxDelta) {
-            this.chasingPosY = this.getY();
-            this.prevChasingPosY = this.chasingPosY;
-        }
-
-        this.chasingPosX += xDifference * 0.25D;
-        this.chasingPosZ += zDifference * 0.25D;
-        this.chasingPosY += yDifference * 0.25D;
-    }
-
+	}
 }

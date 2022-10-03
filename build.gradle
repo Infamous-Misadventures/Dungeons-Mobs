@@ -7,7 +7,9 @@ buildscript {
         maven { url = 'https://repo.spongepowered.org/repository/maven-public' }
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath(group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true) { exclude group: 'org.apache.logging.log4j' }
+        classpath 'org.apache.logging.log4j:log4j-api:2.11.2'
+        classpath 'org.apache.logging.log4j:log4j-core:2.11.2'
         classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
     }
 }
@@ -16,6 +18,7 @@ apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
+apply plugin: 'org.spongepowered.mixin'
 
 version = "${mc_version}-${mod_version}"
 group = 'com.infamous.dungeons_mobs' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -120,20 +123,23 @@ dependencies {
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
-    annotationProcessor 'org.spongepowered:mixin:0.8.3:processor'
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     //Library
-//    implementation fg.deobf("dungeons_libraries:dungeons_libraries:1.16.5-0.0.8-beta")
-    implementation fg.deobf("curse.maven:dungeons_libraries-550941:3709627")
+    implementation fg.deobf("dungeons_libraries:dungeons_libraries:1.16.5-0.0.16-beta")
 //    implementation fg.deobf("mutantmore-test:mutantmore-test:11")
-    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.16.5:3.0.68')
-    runtimeOnly fg.deobf("curse.maven:blame-406201:3527148")
+    implementation fg.deobf("software.bernie.geckolib:geckolib-forge-${mc_version}:${geckolib_version}")
+    runtimeOnly fg.deobf("curse.maven:blame-406201:3440093")
     runtimeOnly fg.deobf("curse.maven:neat-238372:3182258")
+    implementation fg.deobf("curse.maven:enchantwithmob-391187:3539541")
+    runtimeOnly fg.deobf("dungeons_gear:dungeons_gear:1.16.5-3.1.16-beta")
+    runtimeOnly fg.deobf("curios:curios:forge-1.16.5-4.0.8.1")
+    
+    runtimeOnly fg.deobf("rubidium:rubidium:0.2.10")
+    runtimeOnly fg.deobf("oculus:oculus:1.2.6")
 
-    //Compat
-//    runtimeOnly fg.deobf("curse.maven:shulker_enchantments-414163:3536783")
-//    runtimeOnly fg.deobf("curse.maven:factioncraft-564470:3651920")
-
+//    runtimeOnly fg.deobf("curse.maven:dungeonsgear-401247:3889856")
+    runtimeOnly fg.deobf("curse.maven:curios-309927:3725386")
 
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"
@@ -189,7 +195,6 @@ publishing {
         }
     }
 }
-apply plugin: 'org.spongepowered.mixin'
 
 mixin {
     add sourceSets.main, "${modid}.refmap.json"

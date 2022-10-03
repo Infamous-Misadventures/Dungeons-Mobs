@@ -75,9 +75,13 @@ public abstract class ConstructEntity extends CreatureEntity {
         return false;
      }
 
-    public boolean hurt(DamageSource p_70097_1_, float p_70097_2_) {
-    	return false;
-    }
+     public boolean hurt(DamageSource p_70097_1_, float p_70097_2_) {
+     	if (p_70097_1_ == DamageSource.OUT_OF_WORLD) {
+     		return super.hurt(p_70097_1_, p_70097_2_);
+     	} else {
+     		return false;
+     	}
+     }
 
     public void faceDirection(Direction directionToFace){
 
@@ -172,4 +176,9 @@ public abstract class ConstructEntity extends CreatureEntity {
             this.handleExistence();
         }
     }
+    
+	public void spawnAreaDamage() {
+		AreaDamageEntity areaDamage = AreaDamageEntity.spawnAreaDamage(this.level, this.position(), this, 2.5F, DamageSource.mobAttack(this), 0.0F, 1.25F, 0.25F, 0.25F, 5, false, false, 0.75, 0.25, false, 0, 1);
+		this.level.addFreshEntity(areaDamage);
+	}
 }

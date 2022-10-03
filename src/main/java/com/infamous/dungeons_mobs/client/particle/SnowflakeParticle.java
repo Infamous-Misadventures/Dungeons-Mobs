@@ -11,21 +11,17 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 
-@OnlyIn(Dist.CLIENT)
 public class SnowflakeParticle extends SpriteTexturedParticle {
-    private static final Random RANDOM = new Random();
+	
+    protected SnowflakeParticle(ClientWorld level, double xCoord, double yCoord, double zCoord,
+    		IAnimatedSprite spriteSet, double xd, double yd, double zd) {
+        super(level, xCoord, yCoord, zCoord, xd, yd, zd);
 
-    private SnowflakeParticle(ClientWorld clientWorld, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeed, double ySpeed, double zSpeed) {
-        super(clientWorld, xCoordIn, yCoordIn, zCoordIn, 0.5D - RANDOM.nextDouble(), ySpeed, 0.5D - RANDOM.nextDouble());
-        this.yd *= (double)0.2F;
-        if (xSpeed == 0.0D && zSpeed == 0.0D) {
-            this.xd *= (double)0.1F;
-            this.zd *= (double)0.1F;
-        }
-
-        this.quadSize *= 0.75F;
-        this.lifetime = (int)(8.0D / (Math.random() * 0.8D + 0.2D));
+        this.quadSize *= 1.25F;
+        this.lifetime = 5 + this.random.nextInt(10);
         this.hasPhysics = false;
+        
+        this.pickSprite(spriteSet);
     }
 
     public IParticleRenderType getRenderType() {
@@ -47,12 +43,12 @@ public class SnowflakeParticle extends SpriteTexturedParticle {
                 this.zd *= 1.1D;
             }
 
-            this.xd *= (double)0.96F;
-            this.yd *= (double)0.96F;
-            this.zd *= (double)0.96F;
+            this.xd *= (double)0.75F;
+            this.yd *= (double)0.75F;
+            this.zd *= (double)0.75F;
             if (this.onGround) {
-                this.xd *= (double)0.7F;
-                this.zd *= (double)0.7F;
+                this.xd *= (double)0.6F;
+                this.zd *= (double)0.6F;
             }
 
         }
@@ -60,18 +56,16 @@ public class SnowflakeParticle extends SpriteTexturedParticle {
 
     @OnlyIn(Dist.CLIENT)
     public static class Factory implements IParticleFactory<BasicParticleType> {
-        private final IAnimatedSprite spriteSet;
+        private final IAnimatedSprite sprites;
 
-        public Factory(IAnimatedSprite sprite){
-            this.spriteSet = sprite;
+        public Factory(IAnimatedSprite spriteSet) {
+            this.sprites = spriteSet;
         }
 
-        @Nullable
-        @Override
-        public Particle createParticle(BasicParticleType typeIn, ClientWorld worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
-            SnowflakeParticle snowflakeParticle = new SnowflakeParticle(worldIn, x, y, z, xSpeed, ySpeed, zSpeed);
-            snowflakeParticle.pickSprite(this.spriteSet);
-            return snowflakeParticle;
+        public Particle createParticle(BasicParticleType particleType, ClientWorld level,
+                                       double x, double y, double z,
+                                       double dx, double dy, double dz) {
+            return new SnowflakeParticle(level, x, y, z, this.sprites, dx, dy, dz);
         }
     }
 }

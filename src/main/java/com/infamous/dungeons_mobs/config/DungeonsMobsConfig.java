@@ -1,7 +1,6 @@
 package com.infamous.dungeons_mobs.config;
 
 import com.google.common.collect.Lists;
-import cpw.mods.modlauncher.LaunchPluginHandler;
 import net.minecraftforge.common.ForgeConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -15,8 +14,6 @@ public class DungeonsMobsConfig {
         public static ForgeConfigSpec.ConfigValue<List<? extends String>> NECROMANCER_MOB_SUMMONS;
         public static ForgeConfigSpec.ConfigValue<List<? extends String>> DROWNED_NECROMANCER_MOB_SUMMONS;
 
-        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_ZOMBIE_REPLACES_ZOMBIE;
-        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_SKELETON_REPLACES_SKELETON;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_MOUNTAINEER_REPLACES_MOUNTAINEER;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_VINDICATOR_REPLACES_VINDICATOR;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_PILLAGER_REPLACES_PILLAGER;
@@ -24,8 +21,6 @@ public class DungeonsMobsConfig {
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ICY_CREEPER_REPLACES_CREEPER;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_JUNGLE_ZOMBIE_REPLACES_ZOMBIE;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_MOSSY_SKELETON_REPLACES_SKELETON;
-        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_PIGLIN_REPLACES_PIGLIN;
-        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ZOMBIFIED_ARMORED_PIGLIN_REPLACES_ZOMBIFIED_PIGLIN;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_DROWNED_REPLACES_DROWNED;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_SUNKEN_SKELETON_REPLACES_SUNKEN_SKELETON;
 
@@ -148,8 +143,6 @@ public class DungeonsMobsConfig {
 
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_BIOME_SPECIFIC_RAIDERS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_MOUNTAINEERS_IN_RAIDS;
-        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_VINDICATOR_CHEFS_IN_RAIDS;
-        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_VINDICATORS_IN_RAIDS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_MOUNTAINEERS_IN_RAIDS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ROYAL_GUARDS_IN_RAIDS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_GEOMANCERS_IN_RAIDS;
@@ -163,6 +156,8 @@ public class DungeonsMobsConfig {
 
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_STRONGER_HUSKS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_RANGED_SPIDERS;
+
+        public static ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ITEM_TAB;
 
         public Common(ForgeConfigSpec.Builder builder){
             // MOB CONFIGURATION
@@ -182,10 +177,7 @@ public class DungeonsMobsConfig {
                             "If a mob chosen from this list cannot be spawned, a zombie will be summoned instead." )
                     .defineList("necromancerMobSummons", Lists.newArrayList(
                             "minecraft:zombie",
-                            "minecraft:skeleton",
-                            "dungeons_mobs:armored_zombie",
-                            "dungeons_mobs:armored_skeleton",
-                            "dungeons_mobs:wraith"
+                            "minecraft:skeleton"
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             DROWNED_NECROMANCER_MOB_SUMMONS = builder
@@ -195,7 +187,7 @@ public class DungeonsMobsConfig {
                             "If a mob chosen from this list cannot be spawned, a drowned will be summoned instead." )
                     .defineList("drownedNecromancerMobSummons", Lists.newArrayList(
                             "minecraft:drowned",
-                            "dungeons_mobs:armored_drowned"
+                            "dungeons_mobs:sunken_skeleton"
                             ),
                             (itemRaw) -> itemRaw instanceof String);
 
@@ -219,14 +211,6 @@ public class DungeonsMobsConfig {
                     .comment("Enable Mossy Skeletons  80% of Skeleton spawns in JUNGLE biomes. \n" +
                             "If you prefer to not have them do this, disable this feature. [true / false]")
                     .define("enableMossySkeletonReplacesSkeleton", true);
-            ENABLE_ARMORED_ZOMBIE_REPLACES_ZOMBIE = builder
-                    .comment("Enable Armored Zombies replacing 10% of Zombie spawns in the biomes they can spawn in. \n" +
-                            "If you prefer to not have them do this, disable this feature. [true / false]")
-                    .define("enableArmoredZombieReplacesZombie", true);
-            ENABLE_ARMORED_SKELETON_REPLACES_SKELETON = builder
-                    .comment("Enable Armored Skeletons replacing 10% of Skeleton spawns in the biomes they can spawn in. \n" +
-                            "If you prefer to not have them do this, disable this feature. [true / false]")
-                    .define("enableArmoredSkeletonReplacesSkeleton", true);
             ENABLE_ARMORED_MOUNTAINEER_REPLACES_MOUNTAINEER = builder
                     .comment("Enable Armored Mountaineers replacing 10% of Mountaineer spawns in the biomes they can spawn in. \n" +
                             "If you prefer to not have them do this, disable this feature. [true / false]")
@@ -239,14 +223,6 @@ public class DungeonsMobsConfig {
                     .comment("Enable Armored Pillagers replacing 10% of Pillager spawns in the biomes they can spawn in. \n" +
                             "If you prefer to not have them do this, disable this feature. [true / false]")
                     .define("enableArmoredPillagerReplacesPillager", true);
-            ENABLE_ARMORED_PIGLIN_REPLACES_PIGLIN = builder
-                    .comment("Enable Armored Piglins replacing 10% of Piglins spawns in the biomes they can spawn in. \n" +
-                            "If you prefer to not have them do this, disable this feature. [true / false]")
-                    .define("enableArmoredPiglinReplacesPiglin", true);
-            ENABLE_ZOMBIFIED_ARMORED_PIGLIN_REPLACES_ZOMBIFIED_PIGLIN = builder
-                    .comment("Enable Zombified Armored Piglins replacing 10% of Zombified Piglin spawns in the biomes they can spawn in. \n" +
-                            "If you prefer to not have them do this, disable this feature. [true / false]")
-                    .define("enabledArmoredZombifiedPiglinReplacesZombifiedPiglin", true);
 
             ENABLE_ARMORED_DROWNED_REPLACES_DROWNED = builder
                     .comment("Enable Armored Drowned replacing 10% of Drowned spawns in the biomes they can spawn in. \n" +
@@ -799,12 +775,6 @@ public class DungeonsMobsConfig {
             ENABLE_MOUNTAINEERS_IN_RAIDS = builder
                     .comment("Enable the addition of Mountaineers to raids. [true / false]")
                     .define("enableMountaineersInRaids", false);
-            ENABLE_VINDICATOR_CHEFS_IN_RAIDS = builder
-                    .comment("Enable the addition of Vindicator Chefs to raids. [true / false]")
-                    .define("enableVindicatorChefsInRaids", false);
-            ENABLE_ARMORED_VINDICATORS_IN_RAIDS = builder
-                    .comment("Enable the addition of Armored Vindicators to raids. [true / false]")
-                    .define("enableArmoredVindicatorsInRaids", true);
             ENABLE_ARMORED_MOUNTAINEERS_IN_RAIDS = builder
                     .comment("Enable the addition of Armored Mountaineers to raids. [true / false]")
                     .define("enableArmoredMountaineersInRaids", false);
@@ -844,6 +814,13 @@ public class DungeonsMobsConfig {
             ENABLE_RANGED_SPIDERS = builder
                     .comment("Enables Spiders and Cave Spiders shooting webs as a ranged attack like they do in Minecraft Dungeons. [true / false]")
                     .define("enableRangedSpiders", true);
+            builder.pop();
+
+            builder.comment("Mob Items Configuration").push("mob_items_configuration");
+            ENABLE_ITEM_TAB = builder
+                    .comment("Enable armors appearing in their own tab in the creative menu. \n" +
+                            "Disabling this feature will hide them from creative tab. [true / false]")
+                    .define("enableItemTab", true);
             builder.pop();
 
         }

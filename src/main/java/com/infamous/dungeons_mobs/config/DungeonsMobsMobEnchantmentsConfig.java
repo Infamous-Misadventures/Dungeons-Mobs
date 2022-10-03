@@ -19,10 +19,10 @@ public class DungeonsMobsMobEnchantmentsConfig {
             builder.comment("Enchantments on Spawn Configuration").push("spawn_mob_enchantment_configuration");
             ENABLE_ENCHANTS_ON_SPAWN = builder
                     .comment("Enable the the spawning of enchanted mobs. [true / false]")
-                    .define("enableEnchantedMobs", true);
+                    .define("enableEnchantedMobs", false);
             ENABLE_ENCHANTS_ON_PASSIVES = builder
                     .comment("Enable the the spawning of enchanted passive mobs. [true / false]")
-                    .define("enableEnchantedPassiveMobs", true);
+                    .define("enableEnchantedPassiveMobs", false);
             ENCHANT_ON_SPAWN_EXCLUSION_ENCHANTMENTS = builder
                     .comment("Disables specific mob enchantments from appearing on mobs. Use the full name, eg: dungeons_mobs:protection. Defaults to empty list")
                     .defineList("enchantOnSpawnExclusionEnchantments", Lists.newArrayList(), o -> o instanceof String);

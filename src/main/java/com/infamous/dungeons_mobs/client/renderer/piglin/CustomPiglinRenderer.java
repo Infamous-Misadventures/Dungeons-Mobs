@@ -1,14 +1,16 @@
 package com.infamous.dungeons_mobs.client.renderer.piglin;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
-import com.infamous.dungeons_mobs.client.renderer.layer.FungusSackLayer;
-import com.infamous.dungeons_mobs.interfaces.IArmoredMob;
+import com.infamous.dungeons_mobs.client.renderer.layers.FungusSackLayer;
 import com.infamous.dungeons_mobs.interfaces.ISmartCrossbowUser;
+import com.infamous.dungeons_mobs.mod.ModItems;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.PiglinRenderer;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.HashMap;
@@ -26,12 +28,7 @@ public class CustomPiglinRenderer extends PiglinRenderer {
 
    @Override
    protected void scale(MobEntity mobEntity, MatrixStack matrixStack, float v) {
-      if(mobEntity instanceof IArmoredMob){
-         float scaleFactor = 1.2F;
-         matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
-      } else{
-         super.scale(mobEntity, matrixStack, v);
-      }
+      super.scale(mobEntity, matrixStack, v);
    }
 
    @Override
@@ -60,8 +57,11 @@ public class CustomPiglinRenderer extends PiglinRenderer {
    }
 
    private String maybeAddArmorPrefix(MobEntity mobEntity, String in) {
-      if (mobEntity instanceof IArmoredMob) {
-         return ((IArmoredMob) mobEntity).getArmorName() + "_" + in;
+      Item helmetItem = mobEntity.getItemBySlot(EquipmentSlotType.HEAD).getItem();
+      if(helmetItem.equals(ModItems.GOLD_PIGLIN_HELMET.get()) || helmetItem.equals(ModItems.CRACKED_GOLD_PIGLIN_HELMET.get())){
+         return "gold_armored_" + in;
+      }else if(helmetItem.equals(ModItems.NETHERITE_PIGLIN_HELMET.get()) || helmetItem.equals(ModItems.CRACKED_NETHERITE_PIGLIN_HELMET.get())){
+         return "netherite_armored_" + in;
       }
       return in;
    }

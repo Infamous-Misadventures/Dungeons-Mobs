@@ -1,51 +1,224 @@
 package com.infamous.dungeons_mobs.client.renderer.illager;
 
-import com.infamous.dungeons_mobs.client.models.armor.IllagerArmorModel;
 import com.infamous.dungeons_mobs.client.models.illager.WindcallerModel;
-import com.infamous.dungeons_mobs.client.renderer.layer.WindcallerCapeLayer;
+import com.infamous.dungeons_mobs.client.models.illager.WindcallerModel;
+import com.infamous.dungeons_mobs.entities.illagers.WindcallerEntity;
 import com.infamous.dungeons_mobs.entities.illagers.WindcallerEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import it.unimi.dsi.fastutil.objects.ObjectList;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.entity.layers.BipedArmorLayer;
-import net.minecraft.client.renderer.entity.layers.HeadLayer;
-import net.minecraft.client.renderer.entity.layers.HeldItemLayer;
-import net.minecraft.entity.monster.AbstractIllagerEntity;
+import net.minecraft.client.renderer.entity.model.BipedModel;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ShieldItem;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Vector3f;
+import software.bernie.example.client.DefaultBipedBoneIdents;
+import software.bernie.geckolib3.core.processor.IBone;
+import software.bernie.geckolib3.geo.render.built.GeoBone;
+import software.bernie.geckolib3.renderers.geo.ExtendedGeoEntityRenderer;
 
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
+import javax.annotation.Nullable;
 
-public class WindcallerRenderer extends MobRenderer<WindcallerEntity, WindcallerModel<WindcallerEntity>> {
+import static com.infamous.dungeons_mobs.mod.ModItems.WINDCALLER_CLOTHES;
 
-    private static final ResourceLocation WINDCALLER_TEXTURE = new ResourceLocation(MODID,"textures/entity/illager/windcaller.png");
-
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public WindcallerRenderer(EntityRendererManager renderManagerIn) {
-        super(renderManagerIn, new WindcallerModel<>(0.0F, 0.0F, 64, 64), 0.5F);
-        this.addLayer(new HeadLayer<>(this));
-        this.addLayer(new BipedArmorLayer(this, new IllagerArmorModel(0.5F), new IllagerArmorModel(1.0F)));
-        this.addLayer(new WindcallerCapeLayer(this));
-        this.addLayer(new HeldItemLayer<WindcallerEntity, WindcallerModel<WindcallerEntity>>(this) {
-            @Override
-            public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, WindcallerEntity windcallerEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-                if (windcallerEntity.isCastingSpell() || windcallerEntity.isAggressive() || windcallerEntity.getArmPose() == AbstractIllagerEntity.ArmPose.NEUTRAL) {
-                    super.render(matrixStackIn, bufferIn, packedLightIn, windcallerEntity, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
-                }
-            }
-        });
-        //this.entityModel.bipedHeadwear.showModel = true; // apparently this cost tallestred hours of his life
+public class WindcallerRenderer extends ExtendedGeoEntityRenderer<WindcallerEntity> {
+    public WindcallerRenderer(EntityRendererManager renderManager) {
+        super(renderManager, new WindcallerModel());
     }
 
     @Override
-    protected void scale(WindcallerEntity windcallerEntity, MatrixStack matrixStack, float v) {
+    protected void applyRotations(WindcallerEntity entityLiving, MatrixStack matrixStackIn, float ageInTicks,
+                                  float rotationYaw, float partialTicks) {
         float scaleFactor = 0.9375F;
-        matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
-        super.scale(windcallerEntity, matrixStack, v);
+        matrixStackIn.scale(scaleFactor, scaleFactor, scaleFactor);
+        super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
+
     }
 
     @Override
-    public ResourceLocation getTextureLocation(WindcallerEntity windcallerEntity) {
-        return WINDCALLER_TEXTURE;
+    public RenderType getRenderType(WindcallerEntity animatable, float partialTicks, MatrixStack stack,
+                                    IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn,
+                                    ResourceLocation textureLocation) {
+        return RenderType.entityTranslucent(getTextureLocation(animatable));
+    }
+
+    @Override
+    public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+        if(this.isArmorBone(bone)) {
+            bone.setCubesHidden(true);
+        }
+        super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+    }
+
+    @Override
+    protected boolean isArmorBone(GeoBone bone) {
+        return bone.getName().startsWith("armor");
+    }
+
+    @Nullable
+    @Override
+    protected ResourceLocation getTextureForBone(String s, WindcallerEntity windcallerEntity) {
+        return null;
+    }
+
+	@Override
+	protected ItemStack getHeldItemForBone(String boneName, WindcallerEntity currentEntity) {
+		switch (boneName) {
+		case DefaultBipedBoneIdents.LEFT_HAND_BONE_IDENT:
+			return currentEntity.isLeftHanded() ? mainHand : offHand;
+		case DefaultBipedBoneIdents.RIGHT_HAND_BONE_IDENT:
+			return currentEntity.isLeftHanded() ? offHand : mainHand;
+		case DefaultBipedBoneIdents.POTION_BONE_IDENT:
+			break;
+		}
+		return null;
+	}
+
+	@Override
+	protected TransformType getCameraTransformForItemAtBone(ItemStack boneItem, String boneName) {
+		switch (boneName) {
+		case DefaultBipedBoneIdents.LEFT_HAND_BONE_IDENT:
+			return TransformType.THIRD_PERSON_RIGHT_HAND;
+		case DefaultBipedBoneIdents.RIGHT_HAND_BONE_IDENT:
+			return TransformType.THIRD_PERSON_RIGHT_HAND;
+		default:
+			return TransformType.NONE;
+		}
+	}
+
+	@Override
+	protected void preRenderItem(MatrixStack stack, ItemStack item, String boneName, WindcallerEntity currentEntity, IBone bone) {
+		if(item == this.mainHand || item == this.offHand) {
+			stack.scale(1.1F, 1.1F, 1.1F);
+			stack.mulPose(Vector3f.XP.rotationDegrees(-90.0F));
+			boolean shieldFlag = item.getItem() instanceof ShieldItem;
+			if(item == this.mainHand) {
+				if(shieldFlag) {
+					stack.translate(0.0, 0.125, -0.25);
+				} else {
+					
+				}
+			} else {
+				if(shieldFlag) {
+					stack.translate(-0.15, 0.125, 0.05);
+					stack.mulPose(Vector3f.YP.rotationDegrees(90));
+				} else {
+					
+				}
+					
+				
+			}
+		}
+	}
+
+	@Override
+	protected void postRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, WindcallerEntity currentEntity, IBone bone) {
+
+	}
+    
+	@Override
+	protected BlockState getHeldBlockForBone(String boneName, WindcallerEntity currentEntity) {
+		return null;
+	}
+	
+	@Override
+	protected void preRenderBlock(MatrixStack matrixStack, BlockState block, String boneName,
+			WindcallerEntity currentEntity) {
+		
+	}
+
+	@Override
+	protected void postRenderBlock(MatrixStack matrixStack, BlockState block, String boneName,
+			WindcallerEntity currentEntity) {
+		
+	}
+
+    @Nullable
+    @Override
+    protected ItemStack getArmorForBone(String boneName, WindcallerEntity currentEntity) {
+        switch (boneName) {
+            case "armorBipedLeftFoot":
+            case "armorBipedRightFoot":
+                return boots;
+            case "armorBipedLeftLeg":
+            case "armorBipedRightLeg":
+                return leggings;
+            case "armorBipedBody":
+            case "armorBipedRightArm":
+            case "armorBipedLeftArm":
+            case "armorIllagerRightArm":
+            case "armorIllagerLeftArm":
+                return chestplate;
+            case "armorBipedHead":
+                return helmet;
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    protected EquipmentSlotType getEquipmentSlotForArmorBone(String boneName, WindcallerEntity currentEntity) {
+        switch (boneName) {
+            case "armorBipedLeftFoot":
+            case "armorBipedRightFoot":
+                return EquipmentSlotType.FEET;
+            case "armorBipedLeftLeg":
+            case "armorBipedRightLeg":
+                return EquipmentSlotType.LEGS;
+            case "armorBipedRightHand":
+                return !currentEntity.isLeftHanded() ? EquipmentSlotType.MAINHAND : EquipmentSlotType.OFFHAND;
+            case "armorBipedLeftHand":
+                return currentEntity.isLeftHanded() ? EquipmentSlotType.MAINHAND : EquipmentSlotType.OFFHAND;
+            case "armorBipedRightArm":
+            case "armorBipedLeftArm":
+            case "armorIllagerRightArm":
+            case "armorIllagerLeftArm":
+            case "armorBipedBody":
+                return EquipmentSlotType.CHEST;
+            case "armorBipedHead":
+                return EquipmentSlotType.HEAD;
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    protected ModelRenderer getArmorPartForBone(String name, BipedModel<?> armorBipedModel) {
+        switch (name) {
+            case "armorBipedLeftFoot":
+            case "armorBipedLeftLeg":
+                return armorBipedModel.leftLeg;
+            case "armorBipedRightFoot":
+            case "armorBipedRightLeg":
+                return armorBipedModel.rightLeg;
+            case "armorBipedRightArm":
+            case "armorIllagerRightArm":
+                return armorBipedModel.rightArm;
+            case "armorBipedLeftArm":
+            case "armorIllagerLeftArm":
+                return armorBipedModel.leftArm;
+            case "armorBipedBody":
+                return armorBipedModel.body;
+            case "armorBipedHead":
+                return armorBipedModel.head;
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    protected void prepareArmorPositionAndScale(GeoBone bone, ObjectList<ModelRenderer.ModelBox> cubeList, ModelRenderer sourceLimb, MatrixStack stack, boolean geoArmor, boolean modMatrixRot) {
+        super.prepareArmorPositionAndScale(bone, cubeList, sourceLimb, stack, geoArmor, modMatrixRot);
+        if (bone.getName().equals("armorBipedHead") && geoArmor) {
+            stack.translate(0, -0.125, 0); // -1 is 1 cube up, we want 1/16
+        }
     }
 }

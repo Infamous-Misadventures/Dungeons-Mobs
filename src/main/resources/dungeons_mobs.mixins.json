@@ -13,14 +13,15 @@
     "DrownedEntityMixin",
     "GoalSelectorAccessor",
     "MansionTemplateMixin",
-    "PatrolSpawnerMixin",
     "PiglinAccessor",
     "PiglinEntityMixin",
     "RaidMixin",
     "SpiderEntityMixin",
+    "TridentEntityAccessor",
     "TridentEntityMixin",
     "WitherSkeletonEntityMixin",
-    "ZombifiedPiglinEntityMixin"
+    "ZombifiedPiglinEntityMixin",
+    "ProjectileEntityMixin"
   ],
   "client": [
     "DrownedModelMixin",

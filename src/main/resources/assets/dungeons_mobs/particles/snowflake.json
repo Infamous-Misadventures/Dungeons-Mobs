@@ -1,5 +1,10 @@
 {
   "textures": [
-    "dungeons_mobs:snowflake"
+    "dungeons_mobs:snowflake_0",
+    "dungeons_mobs:snowflake_1",
+    "dungeons_mobs:snowflake_2",
+    "dungeons_mobs:snowflake_3",
+    "dungeons_mobs:snowflake_4",
+    "dungeons_mobs:snowflake_5"
   ]
 }

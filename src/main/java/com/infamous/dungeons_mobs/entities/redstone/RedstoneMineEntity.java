@@ -1,7 +1,10 @@
 package com.infamous.dungeons_mobs.entities.redstone;
 
+import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
 import com.infamous.dungeons_mobs.entities.summonables.ConstructEntity;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
+import com.infamous.dungeons_mobs.mod.ModSoundEvents;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -13,6 +16,8 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -32,7 +37,7 @@ public class RedstoneMineEntity extends Entity implements IAnimatable {
     private UUID casterUuid;
 
     //nerf
-    private float explosionRadius = 2.0F;
+    private float explosionRadius = 1.0F;
     public static final int LIFE_TIME = 250;
 
     public RedstoneMineEntity(World worldIn) {
@@ -87,7 +92,20 @@ public class RedstoneMineEntity extends Entity implements IAnimatable {
         return this.caster;
     }
 
-
+    protected float getRandomPitch() {
+        return (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F;
+     }
+    
+    @OnlyIn(Dist.CLIENT)
+    public void handleEntityEvent(byte id) {
+        if (id == 4) {
+    		for (int i = 0; i < 2; i++) {
+    			this.level.addParticle(ModParticleTypes.REDSTONE_SPARK.get(), this.getRandomX(1.1D), this.getRandomY(), this.getRandomZ(1.1D), -0.05D + this.random.nextDouble() * 0.05D, -0.05D + this.random.nextDouble() * 0.05D, -0.05D + this.random.nextDouble() * 0.05D);
+    		}
+        } else {
+            super.handleEntityEvent(id);
+        }
+    }
 
     /**
      * Called to update the entity's position/logic.
@@ -95,6 +113,12 @@ public class RedstoneMineEntity extends Entity implements IAnimatable {
 
     public void tick() {
         super.tick();
+        
+    	if (!this.level.isClientSide && this.random.nextInt(20) == 0) {
+    		this.playSound(ModSoundEvents.REDSTONE_GOLEM_SPARK.get(), 0.1F, this.getRandomPitch());
+    		this.level.broadcastEntityEvent(this, (byte) 4);
+    	}
+    	
         this.setLifeTicks(this.getLifeTicks() - 1);
         if (!this.level.isClientSide) {
             if(this.getLifeTicks() <= 0) {

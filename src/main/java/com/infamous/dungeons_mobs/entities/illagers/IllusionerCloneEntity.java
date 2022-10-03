@@ -1,242 +1,449 @@
 package com.infamous.dungeons_mobs.entities.illagers;
 
+import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
+import com.infamous.dungeons_mobs.entities.illagers.IllusionerCloneEntity;
+import com.infamous.dungeons_mobs.entities.summonables.SummonSpotEntity;
+import com.infamous.dungeons_mobs.entities.summonables.WindcallerTornadoEntity;
+import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
+import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
+import com.infamous.dungeons_mobs.mod.ModItems;
+import com.infamous.dungeons_mobs.mod.ModSoundEvents;
+import com.infamous.dungeons_mobs.utils.ModProjectileHelper;
+
+import net.minecraft.command.arguments.EntityAnchorArgument;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.monster.AbstractIllagerEntity;
 import net.minecraft.entity.monster.AbstractRaiderEntity;
-import net.minecraft.entity.monster.IllusionerEntity;
+import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.entity.monster.PillagerEntity;
+import net.minecraft.entity.monster.SpellcastingIllagerEntity;
+import net.minecraft.entity.monster.VexEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
+import net.minecraft.entity.projectile.FireworkRocketEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.BowItem;
+import net.minecraft.item.DyeColor;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.registries.ForgeRegistries;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
+import java.util.EnumSet;
 import java.util.UUID;
 
-public class IllusionerCloneEntity extends AbstractIllagerEntity implements IRangedAttackMob {
-    private LivingEntity caster;
-    private UUID casterUuid;
-    private int lifeTicks;
+public class IllusionerCloneEntity extends AbstractIllagerEntity implements IAnimatable, SpawnArmoredMob {
 
-    public IllusionerCloneEntity(World world){
-        super(ModEntityTypes.ILLUSIONER_CLONE.get(), world);
-    }
+	private static final DataParameter<Boolean> DELAYED_APPEAR = EntityDataManager.defineId(IllusionerCloneEntity.class,
+			DataSerializers.BOOLEAN);
+	
+	public int shootAnimationTick;
+	public int shootAnimationLength = 38;
+	public int shootAnimationActionPoint = 16;
 
-    public IllusionerCloneEntity(EntityType<? extends IllusionerCloneEntity> type, World worldIn) {
-        super(type, worldIn);
-        this.xpReward = 5;
-    }
+	public int appearAnimationTick;
+	public int appearAnimationLength = 20;
+	
+	public int lifeTime;
+	
+	   private MobEntity owner;
 
-    public IllusionerCloneEntity(World worldIn, LivingEntity caster, int lifeTicks) {
-        this(ModEntityTypes.ILLUSIONER_CLONE.get(), worldIn);
-        this.setCaster(caster);
-        this.lifeTicks = lifeTicks;
-    }
+	AnimationFactory factory = new AnimationFactory(this);
 
-    public void setCaster(@Nullable LivingEntity caster) {
-        this.caster = caster;
-        this.casterUuid = caster == null ? null : caster.getUUID();
-    }
+	public IllusionerCloneEntity(World world) {
+		super(ModEntityTypes.ILLUSIONER_CLONE.get(), world);
+	}
 
-    @Nullable
-    public LivingEntity getCaster() {
-        if (this.caster == null && this.casterUuid != null && this.level instanceof ServerWorld) {
-            Entity entity = ((ServerWorld)this.level).getEntity(this.casterUuid);
-            if (entity instanceof LivingEntity) {
-                this.caster = (LivingEntity)entity;
-            }
-        }
+	public IllusionerCloneEntity(EntityType<? extends IllusionerCloneEntity> type, World world) {
+		super(type, world);
+		this.xpReward = 0;
+	}
 
-        return this.caster;
-    }
+	protected void registerGoals() {
+		super.registerGoals();
+		this.goalSelector.addGoal(0, new SwimGoal(this));
+		this.goalSelector.addGoal(0, new IllusionerCloneEntity.RemainStationaryGoal());
+		this.goalSelector.addGoal(1, new IllusionerCloneEntity.ShootAttackGoal(this));
+		this.goalSelector.addGoal(2, new ApproachTargetGoal(this, 7.5, 1.0D, true));
+		this.goalSelector.addGoal(3, new LookAtTargetGoal(this));
+		this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 1.0D));
+		this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
+		this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
+		this.targetSelector.addGoal(1, new IllusionerCloneEntity.CopyOwnerTargetGoal(this));
+	}
+	
+	
+	@Override
+	protected void defineSynchedData() {
+		super.defineSynchedData();
+		
+		this.entityData.define(DELAYED_APPEAR, false);
+	}
+	
+	public boolean hasDelayedAppear() {
+		return this.entityData.get(DELAYED_APPEAR);
+	}
 
-    public int getLifeTicks() {
-        return this.lifeTicks;
-    }
+	public void setDelayedAppear(boolean attached) {
+		this.entityData.set(DELAYED_APPEAR, attached);
+	}
+	
+	@Override
+	public boolean hurt(DamageSource p_70097_1_, float p_70097_2_) {
+		if (p_70097_1_.getEntity() != null && this.isAlliedTo(p_70097_1_.getEntity()) && p_70097_1_ != DamageSource.OUT_OF_WORLD) {
+			return false;
+		} else {
+			return super.hurt(p_70097_1_, p_70097_2_);
+		}
+	}
+	
+	   public MobEntity getOwner() {
+		      return this.owner;
+		   }
+	   
+	   public void setOwner(MobEntity p_190658_1_) {
+		      this.owner = p_190658_1_;
+		   }
+	
+	@Override
+	   protected void tickDeath() {
+	      ++this.deathTime;
+	      if (this.deathTime == 1) {
+	         this.remove();
+	         for(int i = 0; i < 20; ++i) {
+	            double d0 = this.random.nextGaussian() * 0.02D;
+	            double d1 = this.random.nextGaussian() * 0.02D;
+	            double d2 = this.random.nextGaussian() * 0.02D;
+	            this.level.addParticle(ParticleTypes.POOF, this.getRandomX(1.0D), this.getRandomY(), this.getRandomZ(1.0D), d0, d1, d2);
+	         }
+	      }
 
-    public void setLifeTicks(int lifeTicksIn){
-        this.lifeTicks = lifeTicksIn;
-    }
+	   }
+	
+	public boolean shouldBeStationary() {
+		return this.appearAnimationTick > 0;
+	}
 
-    @Override
-    public void readAdditionalSaveData(CompoundNBT compound) {
-        super.readAdditionalSaveData(compound);
-        compound.putInt("LifeTicks", this.getLifeTicks());
-        if (compound.hasUUID("Owner")) {
-            this.casterUuid = compound.getUUID("Owner");
-        }
-    }
+	@Override
+	public boolean isLeftHanded() {
+		return false;
+	}
 
-    @Override
-    public void addAdditionalSaveData(CompoundNBT compound) {
-        super.addAdditionalSaveData(compound);
-        this.setLifeTicks(compound.getInt("LifeTicks"));
-        if (this.casterUuid != null) {
-            compound.putUUID("Owner", this.casterUuid);
-        }
-    }
+	public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
+		return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.3D)
+				.add(Attributes.FOLLOW_RANGE, 25.0D).add(Attributes.MAX_HEALTH, 50.0D);
+	}
 
-    protected void registerGoals() {
-        super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimGoal(this));
-        this.goalSelector.addGoal(6, new RangedBowAttackGoal<>(this, 0.5D, 20, 15.0F));
-        this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 0.6D));
-        this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
-        this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
-        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, AbstractRaiderEntity.class)).setAlertOthers());
-        this.targetSelector.addGoal(2, (new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true)).setUnseenMemoryTicks(300));
-        this.targetSelector.addGoal(3, (new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, false)).setUnseenMemoryTicks(300));
-        this.targetSelector.addGoal(3, (new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, false)).setUnseenMemoryTicks(300));
-    }
+	public void handleEntityEvent(byte p_28844_) {
+		if (p_28844_ == 4) {
+			this.shootAnimationTick = shootAnimationLength;
+		} else if (p_28844_ == 8) {
+			this.appearAnimationTick = appearAnimationLength;
+		} else if (p_28844_ == 11) {
+			for(int i = 0; i < 20; ++i) {
+	            double d0 = this.random.nextGaussian() * 0.02D;
+	            double d1 = this.random.nextGaussian() * 0.02D;
+	            double d2 = this.random.nextGaussian() * 0.02D;
+	            this.level.addParticle(ParticleTypes.POOF, this.getRandomX(1.0D), this.getRandomY(), this.getRandomZ(1.0D), d0, d1, d2);
+	         }
+		} else {
+			super.handleEntityEvent(p_28844_);
+		}
+	}
 
-    public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return IllusionerEntity.createAttributes();
-    }
+	public void baseTick() {
+		super.baseTick();
+		this.tickDownAnimTimers();
+		
+		this.lifeTime++;
+		
+		if (!this.level.isClientSide && this.hasDelayedAppear()) {
+			this.appearAnimationTick = this.appearAnimationLength;
+			this.level.broadcastEntityEvent(this, (byte) 8);
+			this.setDelayedAppear(false);
+		}
+		
+		int lifeTimeByDifficulty = this.level.getCurrentDifficultyAt(this.blockPosition()).getDifficulty().getId();
+		
+		if (!this.level.isClientSide && (this.hurtTime > 0 || ((this.lifeTime >= lifeTimeByDifficulty * 100) || this.getOwner() != null && (this.getOwner().isDeadOrDying() || this.getOwner().hurtTime > 0 || this.getOwner().getTarget() == null)))) {
+			if (this.hurtTime > 0) {
+				this.playSound(this.getDeathSound(), this.getSoundVolume(), this.getVoicePitch());
+			} else {
+				this.playSound(SoundEvents.ILLUSIONER_MIRROR_MOVE, this.getSoundVolume(), 1.0F);
+			}
+			this.remove();
+			this.level.broadcastEntityEvent(this, (byte) 11);
+		}
+		
+		if (!this.level.isClientSide && this.getOwner() != null) {
+			this.setHealth(this.getOwner().getHealth());
+		}
+	}
 
-    @Override
-    protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
-        this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.BOW));
-    }
+	public void tickDownAnimTimers() {
+		if (this.shootAnimationTick > 0) {
+			this.shootAnimationTick--;
+		}
 
-    @Override
-    public void onAddedToWorld() {
-        if(this.level.isClientSide){
-            this.spawnPoofCloud();
-        }
-        super.onAddedToWorld();
-    }
+		if (this.appearAnimationTick > 0) {
+			this.appearAnimationTick--;
+		}
+	}
 
-    @Override
-    public void onRemovedFromWorld() {
-        if(this.level.isClientSide){
-           this.spawnPoofCloud();
-        }
-        super.onRemovedFromWorld();
-    }
+	@Override
+	public void registerControllers(AnimationData data) {
+		data.addAnimationController(new AnimationController(this, "controller", 2, this::predicate));
+	}
 
-    private void spawnPoofCloud(){
-        for(int i = 0; i < 20; ++i) {
-            double d0 = this.random.nextGaussian() * 0.02D;
-            double d1 = this.random.nextGaussian() * 0.02D;
-            double d2 = this.random.nextGaussian() * 0.02D;
-            this.level.addParticle(ParticleTypes.POOF, this.getRandomX(1.0D), this.getRandomY(), this.getRandomZ(1.0D), d0, d1, d2);
-        }
-    }
+	private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
+		String suffix = "_uncrossed";
+		if(IllagerArmsUtil.armorHasCrossedArms(this, this.getItemBySlot(EquipmentSlotType.CHEST))){
+			suffix = "";
+		}
+		if (this.appearAnimationTick > 0) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_appear"+suffix, true));
+		} else if (this.shootAnimationTick > 0) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_clone_shoot"+suffix, true));
+		} else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_walk"+suffix, true));
+		} else {
+			if (this.isCelebrating()) {
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_celebrate", true));
+			} else {
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_idle"+suffix, true));
+			}
+		}
+		return PlayState.CONTINUE;
+	}
 
-    @Nullable
-    @Override
-    public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
-        this.populateDefaultEquipmentSlots(difficultyIn);
-        return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
-    }
+	@Override
+	public AnimationFactory getFactory() {
+		return factory;
+	}
 
-    /**
-     * Gets the bounding box of this Entity, adjusted to take auxiliary entities into account (e.g. the tile contained by
-     * a minecart, such as a command block).
-     */
-    @OnlyIn(Dist.CLIENT)
-    public AxisAlignedBB getBoundingBoxForCulling() {
-        return this.getBoundingBox().inflate(3.0D, 0.0D, 3.0D);
-    }
+	@Override
+	protected void populateDefaultEquipmentSlots(DifficultyInstance p_180481_1_) {
+		super.populateDefaultEquipmentSlots(p_180481_1_);
+		this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.ILLUSIONER_CLOTHES.getHead().get()));
+		this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.ILLUSIONER_CLOTHES.getChest().get()));
+		this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(ModItems.ILLUSIONER_CLOTHES.getLegs().get()));
+		this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(ModItems.ILLUSIONER_CLOTHES.getFeet().get()));
+		if (ModList.get().isLoaded("dungeons_gear")) {
+			Item SHORTBOW = ForgeRegistries.ITEMS.getValue(new ResourceLocation("dungeons_gear", "shortbow"));
 
-    /**
-     * Called frequently so the entity can update its state every tick as required. For example, zombies and skeletons
-     * use this to react to sunlight and start to burn.
-     */
-    public void aiStep() {
-        super.aiStep();
-        if(!this.level.isClientSide){
-            this.lifeTicks--;
-            if(this.lifeTicks <= 0){
-                this.remove();
-            }
-        }
-    }
+			ItemStack shortbow = new ItemStack(SHORTBOW);
+			this.setItemSlot(EquipmentSlotType.MAINHAND, shortbow);
+		} else {
+			this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.BOW));
+		}
+	}
 
-    public SoundEvent getCelebrateSound() {
-        return SoundEvents.ILLUSIONER_AMBIENT;
-    }
+	@Nullable
+	@Override
+	public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance p_213386_2_,
+			SpawnReason p_213386_3_, @Nullable ILivingEntityData p_213386_4_, @Nullable CompoundNBT p_213386_5_) {
+		ILivingEntityData iLivingEntityData = super.finalizeSpawn(p_213386_1_, p_213386_2_, p_213386_3_, p_213386_4_,
+				p_213386_5_);
+		this.populateDefaultEquipmentSlots(p_213386_2_);
+		this.populateDefaultEquipmentEnchantments(p_213386_2_);	
+		return iLivingEntityData;
+	}
 
-    /**
-     * Returns whether this Entity is on the same team as the given Entity.
-     */
-    public boolean isAlliedTo(Entity entityIn) {
-        if (super.isAlliedTo(entityIn)) {
-            return true;
-        } else if (entityIn instanceof LivingEntity && ((LivingEntity)entityIn).getMobType() == CreatureAttribute.ILLAGER) {
-            return this.getTeam() == null && entityIn.getTeam() == null;
-        } else {
-            return false;
-        }
-    }
+	/**
+	 * Returns whether this Entity is on the same team as the given Entity.
+	 */
+	public boolean isAlliedTo(Entity entityIn) {
+		if (super.isAlliedTo(entityIn)) {
+			return true;
+		} else if (entityIn instanceof LivingEntity
+				&& ((LivingEntity) entityIn).getMobType() == CreatureAttribute.ILLAGER) {
+			return this.getTeam() == null && entityIn.getTeam() == null;
+		} else {
+			return false;
+		}
+	}
 
-    protected SoundEvent getAmbientSound() {
-        return SoundEvents.ILLUSIONER_AMBIENT;
-    }
+	@Override
+	public void applyRaidBuffs(int p_213660_1_, boolean p_213660_2_) {
+	}
 
-    protected SoundEvent getDeathSound() {
-        return SoundEvents.ILLUSIONER_DEATH;
-    }
+	@Override
+	protected SoundEvent getAmbientSound() {
+		return SoundEvents.ILLUSIONER_AMBIENT;
+	}
 
-    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return SoundEvents.ILLUSIONER_HURT;
-    }
+	@Override
+	protected SoundEvent getDeathSound() {
+		return SoundEvents.ILLUSIONER_DEATH;
+	}
 
-    public void applyRaidBuffs(int p_213660_1_, boolean p_213660_2_) {
-    }
+	@Override
+	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+		return SoundEvents.ILLUSIONER_HURT;
+	}
 
-    /**
-     * Attack the specified entity using a ranged attack.
-     */
-    public void performRangedAttack(LivingEntity target, float distanceFactor) {
-        ItemStack itemstack = this.getProjectile(this.getItemInHand(ProjectileHelper.getWeaponHoldingHand(this, item -> item instanceof BowItem)));
-        AbstractArrowEntity abstractarrowentity = ProjectileHelper.getMobArrow(this, itemstack, distanceFactor);
-        if (this.getMainHandItem().getItem() instanceof net.minecraft.item.BowItem)
-            abstractarrowentity = ((net.minecraft.item.BowItem)this.getMainHandItem().getItem()).customArrow(abstractarrowentity);
-        double xDifference = target.getX() - this.getX();
-        double yDifference = target.getY(0.3333333333333333D) - abstractarrowentity.getY();
-        double zDifference = target.getZ() - this.getZ();
-        double horizontalDistance = (double) MathHelper.sqrt(xDifference * xDifference + zDifference * zDifference);
-        abstractarrowentity.shoot(xDifference, yDifference + horizontalDistance * (double)0.2F, zDifference, 1.6F, (float)(14 - this.level.getDifficulty().getId() * 4));
-        this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
-        this.level.addFreshEntity(abstractarrowentity);
-    }
+	@Override
+	public SoundEvent getCelebrateSound() {
+		return SoundEvents.ILLUSIONER_AMBIENT;
+	}
+	
+	   public void shootArrow(LivingEntity target) {
+		      {
+		    	  ItemStack itemstack = this.getProjectile(this.getItemInHand(ProjectileHelper.getWeaponHoldingHand(this, item -> item instanceof net.minecraft.item.BowItem)));
+		          AbstractArrowEntity abstractarrowentity = this.getArrow(itemstack, 0);
+		          if (this.getMainHandItem().getItem() instanceof net.minecraft.item.BowItem)
+		             abstractarrowentity = ((net.minecraft.item.BowItem)this.getMainHandItem().getItem()).customArrow(abstractarrowentity);
+		          double d0 = target.getX() - this.getX();
+		          double d1 = target.getY(0.3333333333333333D) - abstractarrowentity.getY();
+		          double d2 = target.getZ() - this.getZ();
+		          double d3 = (double)MathHelper.sqrt(d0 * d0 + d2 * d2);
+		          abstractarrowentity.shoot(d0, d1 + d3 * (double)0.2F, d2, 1.6F, (float)(14 - this.level.getDifficulty().getId() * 4));
+		          this.playSound(SoundEvents.ARROW_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+		          this.level.addFreshEntity(abstractarrowentity);
+		      }
+		   }
+	   
+	   protected AbstractArrowEntity getArrow(ItemStack p_213624_1_, float p_213624_2_) {
+		      return ProjectileHelper.getMobArrow(this, p_213624_1_, p_213624_2_);
+		   }
 
-    @OnlyIn(Dist.CLIENT)
-    public AbstractIllagerEntity.ArmPose getArmPose() {
-        if(this.isAggressive()){
-            if(this.isHolding(item -> item instanceof BowItem)){
-                return AbstractIllagerEntity.ArmPose.BOW_AND_ARROW;
-            } else{
-                return AbstractIllagerEntity.ArmPose.ATTACKING;
-            }
-        } else{
-            return ArmPose.CROSSED;
-        }
-    }
+	@Override
+	public ResourceLocation getArmorSet() {
+		return ModItems.ILLUSIONER_CLOTHES.getArmorSet();
+	}
 
-    @Override
-    public boolean canBeLeader() {
-        return false;
-    }
+	class ShootAttackGoal extends Goal {
+		public IllusionerCloneEntity mob;
+		@Nullable
+		public LivingEntity target;
+
+		public int cooldown;
+		
+		public ShootAttackGoal(IllusionerCloneEntity mob) {
+			this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP, Goal.Flag.LOOK));
+			this.mob = mob;
+			this.target = mob.getTarget();
+		}
+
+		@Override
+		public boolean isInterruptable() {
+			return mob.shouldBeStationary();
+		}
+
+		public boolean requiresUpdateEveryTick() {
+			return true;
+		}
+
+		@Override
+		public boolean canUse() {
+			target = mob.getTarget();
+
+			if (this.cooldown > 0) {
+				this.cooldown --;
+			}
+			
+			return target != null && mob.distanceTo(target) <= 12.5 && this.cooldown <= 0 && mob.canSee(target) && animationsUseable();
+		}
+
+		@Override
+		public boolean canContinueToUse() {
+			return target != null && !animationsUseable();
+		}
+
+		@Override
+		public void start() {
+			mob.shootAnimationTick = mob.shootAnimationLength;
+			mob.level.broadcastEntityEvent(mob, (byte) 4);
+		}
+
+		@Override
+		public void tick() {
+			target = mob.getTarget();
+
+			if (target != null) {
+				mob.getLookControl().setLookAt(target.getX(), target.getEyeY(), target.getZ());
+			}
+
+			if (target != null && mob.shootAnimationTick == mob.shootAnimationActionPoint) {
+	            mob.shootArrow(target);
+			}
+		}
+		
+		@Override
+			public void stop() {
+				super.stop();
+				this.cooldown = 20 + mob.random.nextInt(40);
+			}
+
+		public boolean animationsUseable() {
+			return mob.shootAnimationTick <= 0;
+		}
+
+	}
+	
+	   class CopyOwnerTargetGoal extends TargetGoal {
+		      private final EntityPredicate copyOwnerTargeting = (new EntityPredicate()).allowUnseeable().ignoreInvisibilityTesting();
+
+		      public CopyOwnerTargetGoal(CreatureEntity p_i47231_2_) {
+		         super(p_i47231_2_, false);
+		      }
+
+		      public boolean canUse() {
+		         return IllusionerCloneEntity.this.owner != null && IllusionerCloneEntity.this.owner.getTarget() != null && this.canAttack(IllusionerCloneEntity.this.owner.getTarget(), this.copyOwnerTargeting);
+		      }
+
+		      public void start() {
+		    	  IllusionerCloneEntity.this.setTarget(IllusionerCloneEntity.this.owner.getTarget());
+		         super.start();
+		      }
+		   }
+	
+	class RemainStationaryGoal extends Goal {
+
+		public RemainStationaryGoal() {
+			this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK, Goal.Flag.TARGET, Goal.Flag.JUMP));
+		}
+
+		@Override
+		public boolean canUse() {
+			return IllusionerCloneEntity.this.shouldBeStationary();
+		}
+	}
+	
 }

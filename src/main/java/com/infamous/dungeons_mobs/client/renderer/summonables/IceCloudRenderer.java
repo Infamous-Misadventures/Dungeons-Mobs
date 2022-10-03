@@ -4,43 +4,31 @@ import com.infamous.dungeons_mobs.client.models.summonables.IceCloudModel;
 import com.infamous.dungeons_mobs.entities.summonables.IceCloudEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.LightType;
+import software.bernie.geckolib3.renderers.geo.GeoProjectilesRenderer;
 
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
-
-@OnlyIn(Dist.CLIENT)
-public class IceCloudRenderer<T extends IceCloudEntity> extends EntityRenderer<T> {
-   private static final ResourceLocation ICE_CLOUD_TEXTURE = new ResourceLocation(MODID, "textures/entity/ice_cloud.png");
-
-   protected final IceCloudModel<T> iceCloudModel = new IceCloudModel<T>();
-
-   public IceCloudRenderer(EntityRendererManager renderManagerIn) {
-      super(renderManagerIn);
+public class IceCloudRenderer extends GeoProjectilesRenderer<IceCloudEntity> {
+   public IceCloudRenderer(EntityRendererManager renderManager) {
+      super(renderManager, new IceCloudModel());
    }
+   
+	@Override
+	protected int getBlockLightLevel(IceCloudEntity p_114496_, BlockPos p_114497_) {
+		return p_114496_.level.getBrightness(LightType.BLOCK, p_114497_) > 10
+				? p_114496_.level.getBrightness(LightType.BLOCK, p_114497_)
+				: 5;
+	}
 
    @Override
-   public void render(T entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
-      matrixStackIn.pushPose();
-      matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(180));
-      matrixStackIn.translate(0.0D, -1.5D, 0.0D);
-      ResourceLocation resourceLocation = this.getTextureLocation(entityIn);
-      RenderType renderType = this.iceCloudModel.renderType(resourceLocation);
-      IVertexBuilder ivertexbuilder = bufferIn.getBuffer(renderType);
-      this.iceCloudModel.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-      matrixStackIn.popPose();
-      super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
-   }
-
-   @Override
-   public ResourceLocation getTextureLocation(T entity) {
-      return ICE_CLOUD_TEXTURE;
+   public RenderType getRenderType(IceCloudEntity animatable, float partialTicks, MatrixStack stack,
+                                   IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn,
+                                   ResourceLocation textureLocation) {
+      return RenderType.entityTranslucent(getTextureLocation(animatable));
    }
 }
