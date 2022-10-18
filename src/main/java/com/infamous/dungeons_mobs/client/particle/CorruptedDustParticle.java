@@ -18,7 +18,7 @@ public class CorruptedDustParticle extends SpriteTexturedParticle {
         super(level, xCoord, yCoord, zCoord, xd, yd, zd);
 
         this.quadSize *= 2.0F;
-        this.lifetime = 5;
+        this.lifetime = 10;
         this.hasPhysics = true;
         
         this.pickSprite(spriteSet);

@@ -11,6 +11,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
@@ -44,6 +45,8 @@ public class WraithFireEntity extends Entity implements IAnimatable, IAnimationT
     public void baseTick() {
     	super.baseTick();
     	 
+    	this.lifeTime ++;
+    	
     	textureChange ++;
     	
     	this.setYBodyRot(0);
@@ -53,8 +56,24 @@ public class WraithFireEntity extends Entity implements IAnimatable, IAnimationT
     	}
     	
         if (this.random.nextInt(24) == 0 && !this.isSilent()) {
-            this.level.playLocalSound(this.getX() + 0.5D, this.getY() + 0.5D, this.getZ() + 0.5D, SoundEvents.GENERIC_BURN, this.getSoundSource(), 1.0F + this.random.nextFloat(), this.random.nextFloat() * 0.7F + 0.3F, false);
+            this.level.playLocalSound(this.getX() + 0.5D, this.getY() + 0.5D, this.getZ() + 0.5D, SoundEvents.FIRE_AMBIENT, this.getSoundSource(), 1.0F + this.random.nextFloat(), this.random.nextFloat() * 0.7F + 0.3F, false);
          }
+        
+        double particleOffsetAmount = 1.25;
+        
+        if (this.isBurning()) {
+	        for (double x = -particleOffsetAmount; x < particleOffsetAmount * 2; x = x + particleOffsetAmount) {
+	        	 for (double z = -particleOffsetAmount; z < particleOffsetAmount * 2; z = z + particleOffsetAmount) {
+	        		 if (this.random.nextInt(10) == 0) {
+	        			 this.level.addParticle(ParticleTypes.SOUL_FIRE_FLAME, this.getX() + x, this.getY(), this.getZ() + z, this.random.nextGaussian() * 0.01, 0.1, this.random.nextGaussian() * 0.01);
+	        		 }
+	        		 
+	        		 if (this.random.nextInt(5) == 0) {
+	        			 this.level.addParticle(ParticleTypes.SMOKE, this.getX() + x, this.getY(), this.getZ() + z, this.random.nextGaussian() * 0.01, 0.15, this.random.nextGaussian() * 0.01);
+	        		 }
+	             }
+	        }
+        }
     	
     	if (!this.level.isClientSide) {
     		
@@ -69,8 +88,7 @@ public class WraithFireEntity extends Entity implements IAnimatable, IAnimationT
     				this.playSound(SoundEvents.FIRE_EXTINGUISH, 1.0F, 1.0F);
     			}
     		}
-    		
-	    	this.lifeTime ++;
+   		
 	    	
 	    	if (this.lifeTime >= 82) {
 	    		this.remove();

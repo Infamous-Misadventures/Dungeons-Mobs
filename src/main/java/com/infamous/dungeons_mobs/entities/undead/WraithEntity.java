@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import com.infamous.dungeons_mobs.entities.summonables.WraithFireEntity;
 import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
+import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 import com.infamous.dungeons_mobs.utils.PositionUtils;
@@ -71,14 +72,15 @@ public class WraithEntity extends MonsterEntity implements IAnimatable {
         this.goalSelector.addGoal(3, new WraithEntity.TeleportGoal(this));
         this.goalSelector.addGoal(4, new WraithEntity.SummonFireAttackGoal(this));
         this.goalSelector.addGoal(5, new ApproachTargetGoal(this, 8, 1.2D, true));
-        this.goalSelector.addGoal(6, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
-        this.goalSelector.addGoal(7, new LookAtGoal(this, PlayerEntity.class, 8.0F));
-        this.goalSelector.addGoal(8, new LookAtGoal(this, MobEntity.class, 8.0F));
-        this.goalSelector.addGoal(9, new LookRandomlyGoal(this));
+        this.goalSelector.addGoal(6, new LookAtTargetGoal(this));
+        this.goalSelector.addGoal(7, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
+        this.goalSelector.addGoal(8, new LookAtGoal(this, PlayerEntity.class, 8.0F));
+        this.goalSelector.addGoal(9, new LookAtGoal(this, MobEntity.class, 8.0F));
+        this.goalSelector.addGoal(10, new LookRandomlyGoal(this));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, TurtleEntity.class, 10, true, false, TurtleEntity.BABY_ON_LAND_SELECTOR));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true).setUnseenMemoryTicks(300));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true).setUnseenMemoryTicks(300));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, TurtleEntity.class, 10, true, false, TurtleEntity.BABY_ON_LAND_SELECTOR).setUnseenMemoryTicks(300));
      }
     
     public boolean isSpellcasting() {
@@ -108,6 +110,10 @@ public class WraithEntity extends MonsterEntity implements IAnimatable {
             return false;
         }
     }
+    
+	   public boolean causeFallDamage(float p_225503_1_, float p_225503_2_) {
+		      return false;
+		   }
 	
     @Override
     public void baseTick() {
@@ -131,6 +137,11 @@ public class WraithEntity extends MonsterEntity implements IAnimatable {
     }
     
     public void aiStep() {
+    	
+        if (!this.onGround && this.getDeltaMovement().y < 0.0D) {
+            this.setDeltaMovement(this.getDeltaMovement().multiply(1.0D, 0.75D, 1.0D));
+         }
+        
         if (this.isAlive()) {
            boolean flag = this.isSunSensitive() && this.isSunBurnTick();
            if (flag) {
@@ -161,7 +172,7 @@ public class WraithEntity extends MonsterEntity implements IAnimatable {
     }
     
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.4D).add(Attributes.FOLLOW_RANGE, 15.0D).add(Attributes.MAX_HEALTH, 20.0D);
+        return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.4D).add(Attributes.FOLLOW_RANGE, 25.0D).add(Attributes.MAX_HEALTH, 20.0D);
     }
     
     @Override
@@ -309,9 +320,11 @@ public class WraithEntity extends MonsterEntity implements IAnimatable {
 				mob.getLookControl().setLookAt(target.getX(), target.getEyeY(), target.getZ());
 			}
 
+			int teleportRange = 20;
+			
 			if (target != null && mob.teleportAnimationTick == mob.teleportAnimationActionPoint) {
 				for (int i = 0; i < 10; i++) {
-					mob.teleport(target.getX() - 12 + mob.random.nextInt(24), target.getY(), target.getZ() - 12 + mob.random.nextInt(24));
+					mob.teleport(target.getX() - teleportRange + mob.random.nextInt(teleportRange * 2), target.getY(), target.getZ() - teleportRange + mob.random.nextInt(teleportRange * 2));
 				}
 				
 			}
