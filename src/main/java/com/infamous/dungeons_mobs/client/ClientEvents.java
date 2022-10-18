@@ -2,6 +2,8 @@ package com.infamous.dungeons_mobs.client;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
+import com.infamous.dungeons_mobs.client.particle.CorruptedDustParticle;
+import com.infamous.dungeons_mobs.client.particle.CorruptedMagicParticle;
 import com.infamous.dungeons_mobs.client.particle.DustParticle;
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
 import com.infamous.dungeons_mobs.client.particle.NecromancyParticle;
@@ -59,6 +61,7 @@ import com.infamous.dungeons_mobs.client.renderer.summonables.SimpleTrapRenderer
 import com.infamous.dungeons_mobs.client.renderer.summonables.SummonSpotRenderer;
 import com.infamous.dungeons_mobs.client.renderer.summonables.TridentStormRenderer;
 import com.infamous.dungeons_mobs.client.renderer.summonables.WindcallerTornadoRenderer;
+import com.infamous.dungeons_mobs.client.renderer.summonables.WraithFireRenderer;
 import com.infamous.dungeons_mobs.client.renderer.undead.CustomSkeletonRenderer;
 import com.infamous.dungeons_mobs.client.renderer.undead.CustomZombieRenderer;
 import com.infamous.dungeons_mobs.client.renderer.undead.NecromancerRenderer;
@@ -183,6 +186,8 @@ public class ClientEvents {
         
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SIMPLE_TRAP.get(), SimpleTrapRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.KELP_TRAP.get(), KelpTrapRenderer::new);
+        
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WRAITH_FIRE.get(), WraithFireRenderer::new);
 
         RenderTypeLookup.setRenderLayer(ModBlocks.WRAITH_FIRE_BLOCK.get(), RenderType.cutout());
 
@@ -246,6 +251,8 @@ public class ClientEvents {
         Minecraft.getInstance().particleEngine.register(ModParticleTypes.WIND.get(), WindParticle.Factory::new);
         Minecraft.getInstance().particleEngine.register(ModParticleTypes.DUST.get(), DustParticle.Factory::new);
         Minecraft.getInstance().particleEngine.register(ModParticleTypes.NECROMANCY.get(), NecromancyParticle.Factory::new);
+        Minecraft.getInstance().particleEngine.register(ModParticleTypes.CORRUPTED_MAGIC.get(), CorruptedMagicParticle.Factory::new);
+        Minecraft.getInstance().particleEngine.register(ModParticleTypes.CORRUPTED_DUST.get(), CorruptedDustParticle.Factory::new);
     }
 
     /*@SubscribeEvent

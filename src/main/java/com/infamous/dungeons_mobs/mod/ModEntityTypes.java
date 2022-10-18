@@ -56,6 +56,7 @@ import com.infamous.dungeons_mobs.entities.summonables.SimpleTrapEntity;
 import com.infamous.dungeons_mobs.entities.summonables.SummonSpotEntity;
 import com.infamous.dungeons_mobs.entities.summonables.TridentStormEntity;
 import com.infamous.dungeons_mobs.entities.summonables.WindcallerTornadoEntity;
+import com.infamous.dungeons_mobs.entities.summonables.WraithFireEntity;
 import com.infamous.dungeons_mobs.entities.undead.FrozenZombieEntity;
 import com.infamous.dungeons_mobs.entities.undead.JungleZombieEntity;
 import com.infamous.dungeons_mobs.entities.undead.MossySkeletonEntity;
@@ -226,7 +227,7 @@ public class ModEntityTypes {
                     .sized(0.6F, 1.99F)
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(MODID, "wraith").toString()),
-            0x1a1862, 0x2586d9
+            0x0a2c40, 0x82d8f8
     );
 
     // SLIME
@@ -548,6 +549,14 @@ public class ModEntityTypes {
             .sized(2.0F, 0.5F)
             .clientTrackingRange(10)
             .build(new ResourceLocation(MODID, "kelp_trap").toString())
+    );
+    
+    public static final RegistryObject<EntityType<WraithFireEntity>> WRAITH_FIRE = registerEntityWithoutEgg("wraith_fire", () ->
+    EntityType.Builder.<WraithFireEntity>of(WraithFireEntity::new, EntityClassification.MISC)
+            .fireImmune()
+            .sized(3.25F, 1.25F)
+            .clientTrackingRange(10)
+            .build(new ResourceLocation(MODID, "wraith_fire").toString())
     );
     
     public static final RegistryObject<EntityType<AreaDamageEntity>> AREA_DAMAGE = registerEntityWithoutEgg("area_damage", () ->

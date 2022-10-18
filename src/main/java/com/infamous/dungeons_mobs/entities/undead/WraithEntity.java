@@ -1,195 +1,180 @@
 package com.infamous.dungeons_mobs.entities.undead;
 
+import java.util.EnumSet;
+
 import javax.annotation.Nullable;
 
-import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
-import com.infamous.dungeons_mobs.entities.magic.MagicType;
-import com.infamous.dungeons_mobs.entities.projectiles.WraithFireballEntity;
-import com.infamous.dungeons_mobs.goals.magic.MagicAttackGoal;
-import com.infamous.dungeons_mobs.goals.magic.UseMagicGoal;
-import com.infamous.dungeons_mobs.goals.magic.UsingMagicGoal;
-import com.infamous.dungeons_mobs.interfaces.IMagicUser;
-import com.infamous.dungeons_mobs.mod.ModBlocks;
+import com.infamous.dungeons_mobs.entities.summonables.WraithFireEntity;
+import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
+import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
+import com.infamous.dungeons_mobs.utils.PositionUtils;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.FleeSunGoal;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.ai.goal.LookAtGoal;
 import net.minecraft.entity.ai.goal.LookRandomlyGoal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.ai.goal.RestrictSunGoal;
 import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
-import net.minecraft.entity.monster.EndermanEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
+import net.minecraft.entity.passive.TurtleEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class WraithEntity extends MonsterEntity implements IMagicUser, IAnimatable {
+public class WraithEntity extends MonsterEntity implements IAnimatable {
 
-	public static final DataParameter<Integer> ATTACK_TICKS = EntityDataManager.defineId(WraithEntity.class, DataSerializers.INT);
+	public int summonFireAttackAnimationTick;
+	public int summonFireAttackAnimationLength = 40;
+	public int summonFireAttackAnimationActionPoint = 20;
 	
-    // Required to make use of IMagicUser
-    private static final DataParameter<Byte> MAGIC = EntityDataManager.defineId(WraithEntity.class, DataSerializers.BYTE);
-    private int magicUseTicks;
-    private MagicType activeMagic = MagicType.NONE;
+	public int teleportAnimationTick;
+	public int teleportAnimationLength = 40;
+	public int teleportAnimationActionPoint = 18;
+
+    AnimationFactory factory = new AnimationFactory(this);
     
-	AnimationFactory factory = new AnimationFactory(this);
-
-    public WraithEntity(World worldIn) {
-        super(ModEntityTypes.WRAITH.get(), worldIn);
+    public WraithEntity(EntityType<? extends WraithEntity> type, World world) {
+        super(type, world);
     }
-
-    public WraithEntity(EntityType<? extends WraithEntity> type, World worldIn) {
-        super(type, worldIn);
-    }
-
-    public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return MonsterEntity.createMobAttributes()
-                .add(Attributes.FOLLOW_RANGE, 32.0D) // Enderman follow range
-                .add(Attributes.MOVEMENT_SPEED, (double)0.4F) // Enderman movement speed
-                //.createMutableAttribute(Attributes.ATTACK_DAMAGE, 3.0D)
-        ;
-    }
-
+    
     protected void registerGoals() {
-        this.goalSelector.addGoal(1, new UsingMagicGoal<>(this));
-        this.goalSelector.addGoal(2, new RestrictSunGoal(this));
-        this.goalSelector.addGoal(3, new FleeSunGoal(this, 1.0D));
-        this.goalSelector.addGoal(4, new UseWraithFireMagic());
-        this.goalSelector.addGoal(5, new MagicAttackGoal<>(this, 1.0D, 6.0F));
-        this.goalSelector.addGoal(6, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
-        this.goalSelector.addGoal(7, new LookAtGoal(this, PlayerEntity.class, 8.0F));
-        this.goalSelector.addGoal(7, new LookRandomlyGoal(this));
-        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)));
-        this.targetSelector.addGoal(2, (new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true)));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, false));
+        this.goalSelector.addGoal(1, new RestrictSunGoal(this));
+        this.goalSelector.addGoal(2, new FleeSunGoal(this, 1.0D));
+        this.goalSelector.addGoal(3, new WraithEntity.TeleportGoal(this));
+        this.goalSelector.addGoal(4, new WraithEntity.SummonFireAttackGoal(this));
+        this.goalSelector.addGoal(5, new ApproachTargetGoal(this, 8, 1.2D, true));
+        this.goalSelector.addGoal(6, new LookAtTargetGoal(this));
+        this.goalSelector.addGoal(7, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
+        this.goalSelector.addGoal(8, new LookAtGoal(this, PlayerEntity.class, 8.0F));
+        this.goalSelector.addGoal(9, new LookAtGoal(this, MobEntity.class, 8.0F));
+        this.goalSelector.addGoal(10, new LookRandomlyGoal(this));
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true).setUnseenMemoryTicks(300));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true).setUnseenMemoryTicks(300));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, TurtleEntity.class, 10, true, false, TurtleEntity.BABY_ON_LAND_SELECTOR).setUnseenMemoryTicks(300));
+     }
+    
+    public boolean isSpellcasting() {
+    	return this.summonFireAttackAnimationTick > 0;
     }
     
-	@Override
-	public void registerControllers(AnimationData data) {
-		data.addAnimationController(new AnimationController(this, "controller", 10, this::predicate));
-	}
-   
-	private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
-			if (this.getAttackTicks() > 0) {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("wraith_attack", true));
-			} else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
-					event.getController().setAnimation(new AnimationBuilder().addAnimation("wraith_fly", true));
-			} else {
-				    event.getController().setAnimation(new AnimationBuilder().addAnimation("wraith_idle", true));
-			}
-		return PlayState.CONTINUE;
+	public void handleEntityEvent(byte p_28844_) {
+		if (p_28844_ == 4) {
+			this.teleportAnimationTick = teleportAnimationLength;
+		} else if (p_28844_ == 11) {
+			this.summonFireAttackAnimationTick = summonFireAttackAnimationLength;
+		} else {
+			super.handleEntityEvent(p_28844_);
+		}
 	}
 	
-	@Override
-	public AnimationFactory getFactory() {
-		return factory;
-	}
-
+    /**
+     * Returns whether this Entity is on the same team as the given Entity.
+     */
+    public boolean isAlliedTo(Entity entityIn) {
+        if (super.isAlliedTo(entityIn)) {
+            return true;
+        } else if (entityIn instanceof LivingEntity
+                && ((LivingEntity) entityIn).getMobType() == CreatureAttribute.UNDEAD) {
+            return this.getTeam() == null && entityIn.getTeam() == null;
+        } else {
+            return false;
+        }
+    }
+    
+	   public boolean causeFallDamage(float p_225503_1_, float p_225503_2_) {
+		      return false;
+		   }
+	
     @Override
     public void baseTick() {
+    	super.baseTick();
     	
-        LivingEntity targetEntity = WraithEntity.this.getTarget();
-        if (targetEntity != null && this.getAttackTicks() == 5) {
-
-            if(DungeonsMobsConfig.COMMON.ENABLE_WRAITH_FIRE_SUMMON.get()){
-                summonWraithFire(targetEntity);
-            }
-            else{
-                fireWraithFireballs(targetEntity);
-            }
-        }
+    	this.tickDownAnimTimers();
     	
-		if (this.getAttackTicks() > 0) {
-			this.setAttackTicks(this.getAttackTicks() - 1);
-		}
-		
-        if (this.isAlive()) {
-            boolean canBurnFromSunlight = this.shouldBurnInDay() && this.isSunBurnTick();
-            if (canBurnFromSunlight) {
-                canBurnFromSunlight = checkSunlightBurnProtection(canBurnFromSunlight);
-                if (canBurnFromSunlight) {
-                    this.setSecondsOnFire(8);
-                }
-            }
-        }
-        /*
-        if (this.world.isRemote) {
-            this.world.addParticle(ParticleTypes.SOUL_FIRE_FLAME, this.getPosXRandom(0.5D), this.getPosYRandom() - 0.25D, this.getPosZRandom(0.5D), (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D);
-        }
-
-         */
-        super.baseTick();
-    }
-
-     public boolean causeFallDamage(float p_225503_1_, float p_225503_2_) {
-        return false;
-     }
-     
-    protected int decreaseAirSupply(int p_70682_1_) {
-    	return p_70682_1_;
+    	if (this.teleportAnimationTick > 0) {
+    		this.level.addParticle(ParticleTypes.SOUL_FIRE_FLAME, this.getRandomX(1), this.getY(), this.getRandomZ(1), this.random.nextGaussian() * 0.01, 0.1, this.random.nextGaussian() * 0.01);
+    	}
     }
     
-	   public int getAttackTicks() {
-		      return this.entityData.get(ATTACK_TICKS);
-		   }
+    public void tickDownAnimTimers() {
+    	if (this.summonFireAttackAnimationTick > 0) {
+    		this.summonFireAttackAnimationTick --;
+    	}
+    	
+    	if (this.teleportAnimationTick > 0) {
+    		this.teleportAnimationTick --;
+    	}
+    }
+    
+    public void aiStep() {
+    	
+        if (!this.onGround && this.getDeltaMovement().y < 0.0D) {
+            this.setDeltaMovement(this.getDeltaMovement().multiply(1.0D, 0.75D, 1.0D));
+         }
+        
+        if (this.isAlive()) {
+           boolean flag = this.isSunSensitive() && this.isSunBurnTick();
+           if (flag) {
+              ItemStack itemstack = this.getItemBySlot(EquipmentSlotType.HEAD);
+              if (!itemstack.isEmpty()) {
+                 if (itemstack.isDamageableItem()) {
+                    itemstack.setDamageValue(itemstack.getDamageValue() + this.random.nextInt(2));
+                    if (itemstack.getDamageValue() >= itemstack.getMaxDamage()) {
+                       this.broadcastBreakEvent(EquipmentSlotType.HEAD);
+                       this.setItemSlot(EquipmentSlotType.HEAD, ItemStack.EMPTY);
+                    }
+                 }
 
-		   public void setAttackTicks(int p_189794_1_) {	   
-		      this.entityData.set(ATTACK_TICKS, p_189794_1_);
-		   }
+                 flag = false;
+              }
 
-    private boolean checkSunlightBurnProtection(boolean canBurnFromSunlight) {
-        ItemStack itemstack = this.getItemBySlot(EquipmentSlotType.HEAD);
-        if (!itemstack.isEmpty()) {
-            if (itemstack.isDamageableItem()) {
-                itemstack.setDamageValue(itemstack.getDamageValue() + this.random.nextInt(2));
-                if (itemstack.getDamageValue() >= itemstack.getMaxDamage()) {
-                    this.broadcastBreakEvent(EquipmentSlotType.HEAD);
-                    this.setItemSlot(EquipmentSlotType.HEAD, ItemStack.EMPTY);
-                }
-            }
-
-            canBurnFromSunlight = false;
+              if (flag) {
+                 this.setSecondsOnFire(8);
+              }
+           }
         }
-        return canBurnFromSunlight;
+
+        super.aiStep();
+     }
+    
+    public boolean isSunSensitive() {
+    	return true;
     }
-
-    private boolean shouldBurnInDay() {
-        return true;
+    
+    public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
+        return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.4D).add(Attributes.FOLLOW_RANGE, 25.0D).add(Attributes.MAX_HEALTH, 20.0D);
     }
-
-
-    // BASIC MOB METHODS
-
+    
     @Override
     protected SoundEvent getAmbientSound() {
         return ModSoundEvents.WRAITH_IDLE.get();
@@ -219,26 +204,51 @@ public class WraithEntity extends MonsterEntity implements IMagicUser, IAnimatab
         return CreatureAttribute.UNDEAD;
     }
 
-    // TELEPORT METHODS - FROM ENDERMANENTITY
-    /**
-     * Try to teleport the mob to a random nearby position - keeps trying until Integer.MAX_VALUE is reached
-     */
-    private boolean teleportRandomly() {
-        if (!this.level.isClientSide() && this.isAlive()) {
-            boolean hasSuccessfullyTeleported = false;
-            int teleportAttemptCounter = 0;
-            while(!hasSuccessfullyTeleported && teleportAttemptCounter < Integer.MAX_VALUE){
-                double d0 = this.getX() + (this.random.nextDouble() - 0.5D) * 64.0D;
-                double d1 = this.getY() + (double)(this.random.nextInt(64) - 32);
-                double d2 = this.getZ() + (this.random.nextDouble() - 0.5D) * 64.0D;
-                hasSuccessfullyTeleported = this.teleport(d0, d1, d2);
-                teleportAttemptCounter++;
-            }
-        }
-        return false;
+    @Override
+    public void registerControllers(AnimationData data) {
+        data.addAnimationController(new AnimationController(this, "controller", 2, this::predicate));
     }
 
-    private boolean teleport(double p_70825_1_, double p_70825_3_, double p_70825_5_) {
+    private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
+    	if (this.summonFireAttackAnimationTick > 0) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("wraith_attack", EDefaultLoopTypes.LOOP));
+    	} else if (this.teleportAnimationTick > 10) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("wraith_teleport", EDefaultLoopTypes.LOOP));
+        } else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("wraith_fly", EDefaultLoopTypes.LOOP));
+		} else {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("wraith_idle", EDefaultLoopTypes.LOOP));
+		}
+        return PlayState.CONTINUE;
+    }
+
+    @Override
+    public AnimationFactory getFactory() {
+        return factory;
+    }
+    
+    protected boolean teleport() {
+        if (!this.level.isClientSide() && this.isAlive()) {
+           double d0 = this.getX() + (this.random.nextDouble() - 0.5D) * 64.0D;
+           double d1 = this.getY() + (double)(this.random.nextInt(64) - 32);
+           double d2 = this.getZ() + (this.random.nextDouble() - 0.5D) * 64.0D;
+           return this.teleport(d0, d1, d2);
+        } else {
+           return false;
+        }
+     }
+
+     private boolean teleportTowards(Entity p_70816_1_) {
+        Vector3d vector3d = new Vector3d(this.getX() - p_70816_1_.getX(), this.getY(0.5D) - p_70816_1_.getEyeY(), this.getZ() - p_70816_1_.getZ());
+        vector3d = vector3d.normalize();
+        double d0 = 16.0D;
+        double d1 = this.getX() + (this.random.nextDouble() - 0.5D) * 8.0D - vector3d.x * 16.0D;
+        double d2 = this.getY() + (double)(this.random.nextInt(16) - 8) - vector3d.y * 16.0D;
+        double d3 = this.getZ() + (this.random.nextDouble() - 0.5D) * 8.0D - vector3d.z * 16.0D;
+        return this.teleport(d1, d2, d3);
+     }
+
+     private boolean teleport(double p_70825_1_, double p_70825_3_, double p_70825_5_) {
         BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable(p_70825_1_, p_70825_3_, p_70825_5_);
 
         while(blockpos$mutable.getY() > 0 && !this.level.getBlockState(blockpos$mutable).getMaterial().blocksMotion()) {
@@ -251,7 +261,7 @@ public class WraithEntity extends MonsterEntity implements IMagicUser, IAnimatab
         if (flag && !flag1) {
            net.minecraftforge.event.entity.living.EntityTeleportEvent.EnderEntity event = net.minecraftforge.event.ForgeEventFactory.onEnderTeleport(this, p_70825_1_, p_70825_3_, p_70825_5_);
            if (event.isCanceled()) return false;
-           boolean flag2 = this.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
+           boolean flag2 = this.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), false);
            if (flag2 && !this.isSilent()) {
               this.level.playSound((PlayerEntity)null, this.xo, this.yo, this.zo, ModSoundEvents.WRAITH_TELEPORT.get(), this.getSoundSource(), 1.0F, 1.0F);
               this.playSound(ModSoundEvents.WRAITH_TELEPORT.get(), 1.0F, 1.0F);
@@ -263,235 +273,136 @@ public class WraithEntity extends MonsterEntity implements IMagicUser, IAnimatab
         }
      }
     
-    private void summonWraithFire(LivingEntity targetEntity) {
-        BlockPos originalWraithPosition = new BlockPos(
-                WraithEntity.this.getX() + 0.5D,
-                WraithEntity.this.getY() + 0.5D,
-                WraithEntity.this.getZ() + 0.5D );
+    class TeleportGoal extends Goal {
+		public WraithEntity mob;
+		@Nullable
+		public LivingEntity target;
+		
+		public TeleportGoal(WraithEntity mob) {
+			this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP, Goal.Flag.LOOK));
+			this.mob = mob;
+			this.target = mob.getTarget();
+		}
 
-        BlockPos originalTargetPosition = new BlockPos(
-                targetEntity.getX() + 0.5D,
-                targetEntity.getY() + 0.5D,
-                targetEntity.getZ() + 0.5D );
+		@Override
+		public boolean isInterruptable() {
+			return false;
+		}
 
-        boolean wraithTooCloseToPlayer = shouldWraithTeleportAwayFromTarget(3.0D);
+		public boolean requiresUpdateEveryTick() {
+			return true;
+		}
 
-            for(int i = 0; i < 9; i++){
-                double xshift = 0;
-                double zshift = 0;
+		@Override
+		public boolean canUse() {
+			target = mob.getTarget();
+			
+			return target != null && (mob.distanceTo(target) <= 4 || mob.distanceTo(target) >= 16) && mob.canSee(target) && animationsUseable();
+		}
 
-                // positive x shift
-                if(i == 1 || i == 2 || i == 8){
-                    xshift = 2.0D;
-                }
-                // negative x shift
-                if(i == 4 || i == 5 || i == 6){
-                    xshift = -2.0D;
-                }
-                // positive z shift
-                if(i == 2 || i == 3 || i == 4){
-                    zshift = 2.0D;
-                }
-                // negative z shift
-                if(i == 6 || i == 7 || i == 8){
-                    zshift = -2.0D;
-                }
-                World world = targetEntity.level;
-                BlockPos targetBlockPos = pickBlockPosForAttack(originalTargetPosition, originalWraithPosition, xshift, zshift , wraithTooCloseToPlayer);
+		@Override
+		public boolean canContinueToUse() {
+			return target != null && !animationsUseable();
+		}
 
-                BlockState blockstate = world.getBlockState(targetBlockPos);
-                BlockState soulFireBlockState = ModBlocks.WRAITH_FIRE_BLOCK.get().defaultBlockState();
-        		this.level.playSound(null, originalTargetPosition, ModSoundEvents.WRAITH_FIRE.get(), this.getSoundSource(), WraithEntity.this.getSoundVolume(), WraithEntity.this.getVoicePitch());
-                boolean canLightBlock = blockstate.isAir();
-                if (canLightBlock) {
-                    world.setBlock(targetBlockPos, soulFireBlockState, 11);
-                }
-            }
-    }
+		@Override
+		public void start() {
+			mob.playSound(ModSoundEvents.WRAITH_IDLE.get(), 1.0F, mob.getVoicePitch());
+			mob.teleportAnimationTick = mob.teleportAnimationLength;
+			mob.level.broadcastEntityEvent(mob, (byte) 4);
+		}
 
-    private BlockPos pickBlockPosForAttack(BlockPos originalTargetPosition, BlockPos originalWraithPosition, double xshift, double zshift, boolean wraithTooCloseToPlayer) {
-        BlockPos targetBlockPos = new BlockPos(
-                originalTargetPosition.getX() + xshift,
-                originalTargetPosition.getY(),
-                originalTargetPosition.getZ() + zshift);
+		@Override
+		public void tick() {
+			target = mob.getTarget();
 
-        if(wraithTooCloseToPlayer){
-            targetBlockPos = new BlockPos(
-                    originalWraithPosition.getX() + xshift,
-                    originalWraithPosition.getY(),
-                    originalWraithPosition.getZ() + zshift);
-        }
-        return targetBlockPos;
-    }
+			if (target != null) {
+				mob.getLookControl().setLookAt(target.getX(), target.getEyeY(), target.getZ());
+			}
 
-    private void fireWraithFireballs(LivingEntity targetEntity){
-        double squareDistanceToTarget = WraithEntity.this.distanceToSqr(targetEntity);
-        double xDifference = targetEntity.getX() - WraithEntity.this.getX();
-        double yDifference = targetEntity.getY(0.5D) - WraithEntity.this.getY(0.5D);
-        double zDifference = targetEntity.getZ() - WraithEntity.this.getZ();
-        float f = MathHelper.sqrt(MathHelper.sqrt(squareDistanceToTarget)) * 0.5F;
-        this.playSound(ModSoundEvents.WRAITH_FIRE.get(), 1.0F, 1.0F);
+			int teleportRange = 20;
+			
+			if (target != null && mob.teleportAnimationTick == mob.teleportAnimationActionPoint) {
+				for (int i = 0; i < 10; i++) {
+					mob.teleport(target.getX() - teleportRange + mob.random.nextInt(teleportRange * 2), target.getY(), target.getZ() - teleportRange + mob.random.nextInt(teleportRange * 2));
+				}
+				
+			}
+		}
 
-        for(int i = 0; i < 3; ++i) {
-            WraithFireballEntity wraithFireballEntity = new WraithFireballEntity(WraithEntity.this.level, WraithEntity.this, xDifference + WraithEntity.this.getRandom().nextGaussian() * (double)f, yDifference, zDifference + WraithEntity.this.getRandom().nextGaussian() * (double)f);
-            wraithFireballEntity.setPos(wraithFireballEntity.getX(), WraithEntity.this.getY(0.5D) + 0.5D, wraithFireballEntity.getZ());
-            WraithEntity.this.level.addFreshEntity(wraithFireballEntity);
-        }
-        shouldWraithTeleportAwayFromTarget(3.0D);
-    }
+		public boolean animationsUseable() {
+			return mob.teleportAnimationTick <= 0;
+		}
 
+	}
+    
+    class SummonFireAttackGoal extends Goal {
+		public WraithEntity mob;
+		@Nullable
+		public LivingEntity target;
+		
+		public int nextUseTime = 0;
+		
+		public SummonFireAttackGoal(WraithEntity mob) {
+			this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP, Goal.Flag.LOOK));
+			this.mob = mob;
+			this.target = mob.getTarget();
+		}
 
+		@Override
+		public boolean isInterruptable() {
+			return false;
+		}
 
+		public boolean requiresUpdateEveryTick() {
+			return true;
+		}
 
-    private boolean shouldWraithTeleportAwayFromTarget(double distanceThreshold) {
-        LivingEntity targetEntity = this.getTarget();
-        boolean wraithTooCloseToTarget = false;
-        if (targetEntity != null) {
-            wraithTooCloseToTarget = this.distanceTo(targetEntity) < distanceThreshold;
-        }
+		@Override
+		public boolean canUse() {
+			target = mob.getTarget();
+			
+			return target != null && mob.tickCount >= this.nextUseTime && mob.distanceTo(target) <= 14 && mob.canSee(target) && animationsUseable();
+		}
 
-        if(wraithTooCloseToTarget){
-            WraithEntity.this.teleportRandomly();
-        }
-        return wraithTooCloseToTarget;
-    }
+		@Override
+		public boolean canContinueToUse() {
+			return target != null && !animationsUseable();
+		}
 
-    class UseWraithFireMagic extends UseMagicGoal<WraithEntity>{
+		@Override
+		public void start() {
+			mob.playSound(ModSoundEvents.WRAITH_ATTACK.get(), 1.0F, mob.getVoicePitch());
+			mob.summonFireAttackAnimationTick = mob.summonFireAttackAnimationLength;
+			mob.level.broadcastEntityEvent(mob, (byte) 11);
+		}
 
-        UseWraithFireMagic() {
-            super(WraithEntity.this);
-        }
+		@Override
+		public void tick() {
+			target = mob.getTarget();
 
-        @Override
-        public boolean canUse() {
-            LivingEntity targetEntity = WraithEntity.this.getTarget();
-            if(targetEntity == null) return false;
-            boolean canTargetBeSeen = WraithEntity.this.canSee(targetEntity);
-            if (canTargetBeSeen && targetEntity.isAlive() && WraithEntity.this.distanceTo(targetEntity) < 16.0D) {
-            	if (super.canUse()) {
-            		WraithEntity.this.setAttackTicks(35);
-            	}
-                return super.canUse();
-            } else {
-                return false;
-            }
-        }
+			if (target != null) {
+				mob.getLookControl().setLookAt(target.getX(), target.getEyeY(), target.getZ());
+			}
 
-        @Override
-        public boolean canContinueToUse() {
-            LivingEntity targetEntity = WraithEntity.this.getTarget();
-            if(targetEntity == null) return false;
-            boolean canTargetBeSeen = WraithEntity.this.canSee(targetEntity);
-            if (canTargetBeSeen && targetEntity.isAlive()){
-                return super.canContinueToUse();
-            } else {
-                return false;
-            }
-        }
+			if (target != null && mob.summonFireAttackAnimationTick == mob.summonFireAttackAnimationActionPoint) {
+				WraithFireEntity wraithFire = ModEntityTypes.WRAITH_FIRE.get().create(mob.level);
+				wraithFire.owner = mob;
+				wraithFire.moveTo(target.position());
+				mob.level.addFreshEntity(wraithFire);
+				PositionUtils.moveToCorrectHeight(wraithFire);
+			}
+		}
+		
+		@Override
+		public void stop() {
+			super.stop();
+			this.nextUseTime = mob.tickCount + 60 + mob.random.nextInt(60);
+		}
 
-        @Override
-        protected void useMagic() {
+		public boolean animationsUseable() {
+			return mob.summonFireAttackAnimationTick <= 0;
+		}
 
-        }
-
-        
-        @Override
-        protected int getMagicUseTime() {
-            return 35;
-        }
-
-        @Override
-        protected int getMagicUseInterval() {
-            return 100;
-        }
-
-        @Nullable
-        @Override
-        protected SoundEvent getMagicPrepareSound() {
-            return ModSoundEvents.WRAITH_ATTACK.get();
-        }
-
-        @Override
-        protected MagicType getMagicType() {
-            return MagicType.WRAITH_FIRE;
-        }
-    }
-
-    // MODIFIED SPELLCASTINGILLAGER METHODS
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(MAGIC, (byte)0);
-	    this.entityData.define(ATTACK_TICKS, 0);
-    }
-
-    @Override
-    public void tick() {
-        super.tick();
-        //IMagicUser.spawnMagicParticles(this);
-
-    }
-
-    @Override
-    protected void customServerAiStep() {
-        super.customServerAiStep();
-        if (this.magicUseTicks > 0) {
-            --this.magicUseTicks;
-        }
-        
-        Vector3d vector3d = this.getDeltaMovement();
-        if (!this.onGround && vector3d.y < 0.0D) {
-            this.setDeltaMovement(vector3d.multiply(1.0D, 0.8D, 1.0D));
-         }
-    }
-
-    /**
-     * (abstract) Protected helper method to read subclass entity data from NBT.
-     */
-    @Override
-    public void readAdditionalSaveData(CompoundNBT compound) {
-        super.readAdditionalSaveData(compound);
-        this.magicUseTicks = compound.getInt("MagicUseTicks");
-    }
-
-    @Override
-    public void addAdditionalSaveData(CompoundNBT compound) {
-        super.addAdditionalSaveData(compound);
-        compound.putInt("MagicUseTicks", this.magicUseTicks);
-    }
-
-    // IMAGICUSER METHODS
-    @Override
-    public boolean isUsingMagic() {
-        if (this.level.isClientSide) {
-            return this.entityData.get(MAGIC) > 0;
-        } else {
-            return this.magicUseTicks > 0;
-        }
-    }
-    @Override
-    public int getMagicUseTicks() {
-        return this.magicUseTicks;
-    }
-
-    @Override
-    public void setMagicUseTicks(int magicUseTicksIn) {
-        this.magicUseTicks = magicUseTicksIn;
-    }
-
-    @Override
-    public MagicType getMagicType() {
-        return !this.level.isClientSide ? this.activeMagic : MagicType.getFromId(this.entityData.get(MAGIC));
-    }
-
-    @Override
-    public void setMagicType(MagicType magicType) {
-        this.activeMagic = magicType;
-        this.entityData.set(MAGIC, (byte)magicType.getId());
-    }
-
-    @Override
-    public SoundEvent getMagicSound() {
-        return null;
-    }
-
+	}
 }

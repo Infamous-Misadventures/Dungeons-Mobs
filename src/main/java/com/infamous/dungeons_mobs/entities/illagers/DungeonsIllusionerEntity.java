@@ -550,6 +550,7 @@ public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements I
 				mob.appearDelay = 11;
 				mob.level.broadcastEntityEvent(mob, (byte) 6);
 				mob.playSound(SoundEvents.ILLUSIONER_MIRROR_MOVE, 1.0F, 1.0F);
+				PositionUtils.moveToCorrectHeight(mob);
 
 				if (target instanceof MobEntity) {
 					((MobEntity)target).setTarget(null);
