@@ -46,10 +46,10 @@ public class NecromancerModel extends AnimatedGeoModel<NecromancerEntity> {
         
         IBone particles = this.getAnimationProcessor().getBone("staffParticles");
         
-        //if (particles instanceof GeoBone && (entity.shootAnimationTick > 0 || entity.summonAnimationTick > 0)) {
-        //	GeoBone particleBone = ((GeoBone)particles);
-        //	entity.level.addParticle(ModParticleTypes.NECROMANCY.get(), particleBone.getWorldPosition().x, particleBone.getWorldPosition().y, particleBone.getWorldPosition().z, 0, 0, 0);
-        //}
+        if (entity.tickCount % 1 == 0 && particles instanceof GeoBone && entity.isSpellcasting()) {
+        	GeoBone particleBone = ((GeoBone)particles);
+        	entity.level.addParticle(ModParticleTypes.NECROMANCY.get(), particleBone.getWorldPosition().x, particleBone.getWorldPosition().y, particleBone.getWorldPosition().z, 0, 0, 0);
+        }
         
         cape.setHidden(true);
 

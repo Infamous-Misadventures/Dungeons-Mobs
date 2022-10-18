@@ -2,7 +2,6 @@ package com.infamous.dungeons_mobs.client.renderer.illager;
 
 import com.infamous.dungeons_mobs.client.models.illager.DungeonsIllusionerModel;
 import com.infamous.dungeons_mobs.entities.illagers.DungeonsIllusionerEntity;
-import com.infamous.dungeons_mobs.entities.illagers.DungeonsIllusionerEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.block.BlockState;
@@ -218,4 +217,87 @@ public class DungeonsIllusionerRenderer extends ExtendedGeoEntityRenderer<Dungeo
                 return null;
         }
     }
+
+//    protected void handleArmorRenderingForBone(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn,
+//                                               int packedLightIn, int packedOverlayIn, ResourceLocation currentTexture) {
+//        final ItemStack armorForBone = this.getArmorForBone(bone.getName(), currentEntityBeingRendered);
+//        final EquipmentSlotType boneSlot = this.getEquipmentSlotForArmorBone(bone.getName(),
+//                currentEntityBeingRendered);
+//        // Armor and geo armor
+//        if (armorForBone != null && boneSlot != null) {
+//            // Geo armor
+//            if (armorForBone.getItem() instanceof ArmorItem) {
+//                final ArmorItem armorItem = (ArmorItem) armorForBone.getItem();
+//                if (armorForBone.getItem() instanceof IAnimatable) {
+//                    @SuppressWarnings("unchecked")
+//                    final GeoArmorRenderer<? extends GeoArmorItem> geoArmorRenderer = GeoArmorRenderer
+//                            .getRenderer(armorItem.getClass(), this.currentEntityBeingRendered);
+//                    final BipedModel<?> armorModel = (BipedModel<?>) geoArmorRenderer;
+//
+//                    if (armorModel != null) {
+//                        ModelRenderer sourceLimb = this.getArmorPartForBone(bone.getName(), armorModel);
+//                        if (sourceLimb != null) {
+//                            ObjectList<ModelRenderer.ModelBox> cubeList = sourceLimb.cubes;
+//                            if (cubeList != null && !cubeList.isEmpty()) {
+//                                // IMPORTANT: The first cube is used to define the armor part!!
+//                                stack.scale(-1, -1, 1);
+//                                stack.pushPose();
+//
+//                                this.prepareArmorPositionAndScale(bone, cubeList, sourceLimb, stack, true,
+//                                        boneSlot == EquipmentSlotType.CHEST);
+//
+//                                geoArmorRenderer.setCurrentItem(this.currentEntityBeingRendered, armorForBone,
+//                                        boneSlot);
+//                                //Just to be safe, it does some modelprovider stuff in there too
+//                                geoArmorRenderer.applySlot(boneSlot);
+//                                this.handleGeoArmorBoneVisibility(geoArmorRenderer, sourceLimb, armorModel, boneSlot);
+//
+//                                @SuppressWarnings("unchecked")
+//                                IVertexBuilder ivb = ItemRenderer.getArmorFoilBuffer(rtb,
+//                                        RenderType.armorCutoutNoCull(GeoArmorRenderer
+//                                                .getRenderer(armorItem.getClass(), this.currentEntityBeingRendered)
+//                                                .getTextureLocation(armorItem)),
+//                                        false, armorForBone.hasFoil());
+//
+//                                geoArmorRenderer.render(this.currentPartialTicks, stack, ivb, packedLightIn);
+//
+//                                stack.popPose();
+//
+//                                bufferIn = rtb.getBuffer(RenderType.entityTranslucent(currentTexture));
+//                            }
+//                        }
+//                    }
+//                }
+//                // Normal Armor
+//                else {
+//                    final BipedModel<?> armorModel = ForgeHooksClient.getArmorModel(currentEntityBeingRendered,
+//                            armorForBone, boneSlot, boneSlot == EquipmentSlotType.LEGS ? DEFAULT_BIPED_ARMOR_MODEL_INNER
+//                                    : DEFAULT_BIPED_ARMOR_MODEL_OUTER);
+//                    if (armorModel != null) {
+//                        ModelRenderer sourceLimb = this.getArmorPartForBone(bone.getName(), armorModel);
+//                        if (sourceLimb != null) {
+//                            ObjectList<ModelRenderer.ModelBox> cubeList = sourceLimb.cubes;
+//                            if (cubeList != null && !cubeList.isEmpty()) {
+//                                // IMPORTANT: The first cube is used to define the armor part!!
+//                                this.prepareArmorPositionAndScale(bone, cubeList, sourceLimb, stack);
+//                                stack.scale(-1, -1, 1);
+//
+//                                stack.pushPose();
+//
+//                                ResourceLocation armorResource = this.getArmorResource(currentEntityBeingRendered,
+//                                        armorForBone, boneSlot, null);
+//
+//                                this.renderArmorOfItem(armorItem, armorForBone, boneSlot, armorResource, sourceLimb,
+//                                        stack, packedLightIn, packedOverlayIn);
+//
+//                                stack.popPose();
+//
+//                                bufferIn = rtb.getBuffer(RenderType.entityTranslucent(currentTexture));
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
 }

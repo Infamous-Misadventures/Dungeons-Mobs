@@ -17,7 +17,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.math.MathHelper;
 
-import static com.infamous.dungeons_mobs.client.renderer.layers.IllagerBipedArmorLayer.armorHasCrossedArms;
+import static com.infamous.dungeons_mobs.entities.illagers.IllagerArmsUtil.armorHasCrossedArms;
 
 public class IllagerBipedModel<T extends AbstractIllagerEntity> extends BipedModel<T> {
     public ModelRenderer arms;
