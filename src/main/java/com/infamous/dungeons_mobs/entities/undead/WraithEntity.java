@@ -320,11 +320,18 @@ public class WraithEntity extends MonsterEntity implements IAnimatable {
 				mob.getLookControl().setLookAt(target.getX(), target.getEyeY(), target.getZ());
 			}
 
-			int teleportRange = 20;
+			int teleportAwayRange = 20;
+			int teleportToRange = 10;
 			
 			if (target != null && mob.teleportAnimationTick == mob.teleportAnimationActionPoint) {
-				for (int i = 0; i < 10; i++) {
-					mob.teleport(target.getX() - teleportRange + mob.random.nextInt(teleportRange * 2), target.getY(), target.getZ() - teleportRange + mob.random.nextInt(teleportRange * 2));
+				if (mob.distanceTo(target) >= 16) {
+					for (int i = 0; i < 10; i++) {
+						mob.teleport(target.getX() - teleportToRange + mob.random.nextInt(teleportToRange * 2), target.getY(), target.getZ() - teleportToRange + mob.random.nextInt(teleportToRange * 2));
+					}
+				} else {
+					for (int i = 0; i < 10; i++) {
+						mob.teleport(target.getX() - teleportAwayRange + mob.random.nextInt(teleportAwayRange * 2), target.getY(), target.getZ() - teleportAwayRange + mob.random.nextInt(teleportAwayRange * 2));
+					}
 				}
 				
 			}
@@ -381,6 +388,8 @@ public class WraithEntity extends MonsterEntity implements IAnimatable {
 		public void tick() {
 			target = mob.getTarget();
 
+			mob.getNavigation().stop();
+			
 			if (target != null) {
 				mob.getLookControl().setLookAt(target.getX(), target.getEyeY(), target.getZ());
 			}
