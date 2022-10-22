@@ -44,6 +44,7 @@ import com.infamous.dungeons_mobs.client.renderer.projectiles.CobwebProjectileRe
 import com.infamous.dungeons_mobs.client.renderer.projectiles.CustomFireballRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.DrownedNecromancerOrbRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.GeoOrbRenderer;
+import com.infamous.dungeons_mobs.client.renderer.projectiles.MageMissileRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.NecromancerOrbRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.OrbRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.PoisonQuillRenderer;
@@ -160,6 +161,8 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.QUICK_GROWING_VINE.get(), QuickGrowingVineRenderer::new);
         
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.POISON_QUILL.get(), PoisonQuillRenderer::new);
+        
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.MAGE_MISSILE.get(), MageMissileRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SQUALL_GOLEM.get(), SquallGolemRenderer::new);
 

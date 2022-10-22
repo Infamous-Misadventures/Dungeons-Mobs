@@ -380,6 +380,8 @@ public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements I
 		public void tick() {
 			target = mob.getTarget();
 
+			mob.getNavigation().stop();
+			
 			if (target != null) {
 				mob.getLookControl().setLookAt(target.getX(), target.getEyeY(), target.getZ());
 			}
@@ -450,6 +452,8 @@ public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements I
 		public void tick() {
 			target = mob.getTarget();
 
+			mob.getNavigation().stop();
+			
 			if (target != null) {
 				mob.getLookControl().setLookAt(target.getX(), target.getEyeY(), target.getZ());
 			}
@@ -488,6 +492,8 @@ public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements I
 		@Nullable
 		public LivingEntity target;
 
+		public int nextUseTime;
+		
 		private final Predicate<Entity> ILLUSIONER_CLONE = (p_33346_) -> {
 			return p_33346_ instanceof IllusionerCloneEntity && ((IllusionerCloneEntity)p_33346_).getOwner() != null && ((IllusionerCloneEntity)p_33346_).getOwner() == mob;
 		};
@@ -514,7 +520,7 @@ public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements I
 			int nearbyClones = mob.level.getEntities(mob, mob.getBoundingBox().inflate(30.0D), ILLUSIONER_CLONE)
 					.size();
 
-			return target != null && mob.random.nextInt(10) == 0 && mob.canSee(target) && nearbyClones <= 0 && animationsUseable();
+			return target != null && mob.tickCount >= this.nextUseTime && mob.random.nextInt(10) == 0 && mob.canSee(target) && nearbyClones <= 0 && animationsUseable();
 		}
 
 		@Override
@@ -533,6 +539,8 @@ public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements I
 		public void tick() {
 			target = mob.getTarget();
 
+			mob.getNavigation().stop();
+			
 			if (target != null) {
 				mob.getLookControl().setLookAt(target.getX(), target.getEyeY(), target.getZ());
 			}
@@ -576,6 +584,14 @@ public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements I
 					clone.finalizeSpawn(((ServerWorld)mob.level), mob.level.getCurrentDifficultyAt(cloneSummonSpot.blockPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData)null, (CompoundNBT)null);
 					clone.setOwner(mob);
 					clone.setHealth(mob.getHealth());
+					for (EquipmentSlotType equipmentslottype : EquipmentSlotType.values()) {
+						ItemStack itemstack = mob.getItemBySlot(equipmentslottype);
+						if (!itemstack.isEmpty()) {
+							clone.setItemSlot(equipmentslottype, itemstack.copy());
+							clone.setDropChance(equipmentslottype, mob.getEquipmentDropChance(equipmentslottype));
+							itemstack.setCount(0);
+						}
+					}
 					clone.lookAt(EntityAnchorArgument.Type.EYES, new Vector3d(mob.getX(), mob.getEyeY(), mob.getZ()));
 					clone.setDelayedAppear(true);
 					cloneSummonSpot.summonedEntity = clone;
@@ -584,6 +600,12 @@ public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements I
 			}
 		}
 
+		@Override
+		public void stop() {
+			super.stop();
+			this.nextUseTime = mob.tickCount + 60;
+		}
+		
 		public boolean animationsUseable() {
 			return mob.vanishAnimationTick <= 0;
 		}

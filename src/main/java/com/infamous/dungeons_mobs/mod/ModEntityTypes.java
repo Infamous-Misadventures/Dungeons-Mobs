@@ -36,6 +36,7 @@ import com.infamous.dungeons_mobs.entities.projectiles.CobwebProjectileEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.DrownedNecromancerOrbEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.GeoOrbEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.LaserOrbEntity;
+import com.infamous.dungeons_mobs.entities.projectiles.MageMissileEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.NecromancerOrbEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.PoisonQuillEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.SlimeballEntity;
@@ -526,6 +527,14 @@ public class ModEntityTypes {
 	            .updateInterval(1)
 	            .build(new ResourceLocation(MODID, "poison_quill").toString())
 	);
+    
+    public static final RegistryObject<EntityType<MageMissileEntity>> MAGE_MISSILE = ENTITY_TYPES.register("mage_missile", () ->
+    EntityType.Builder.<MageMissileEntity>of(MageMissileEntity::new, EntityClassification.MISC)
+            .fireImmune()
+            .sized(0.35F, 0.35F)
+            .updateInterval(1)
+            .build(new ResourceLocation(MODID, "mage_missile").toString())
+);
 
     public static final RegistryObject<EntityType<SummonSpotEntity>> SUMMON_SPOT = registerEntityWithoutEgg("summon_spot", () ->
     EntityType.Builder.<SummonSpotEntity>of(SummonSpotEntity::new, EntityClassification.MISC)
