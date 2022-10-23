@@ -75,7 +75,7 @@ public class SummonSpotEntity extends Entity implements IAnimatable {
 	}
 	
 	public int getSummonType() {
-		return MathHelper.clamp(this.entityData.get(SUMMON_TYPE), 0, 2);
+		return MathHelper.clamp(this.entityData.get(SUMMON_TYPE), 0, 3);
 	}
 
 	public void setSummonType(int attached) {
@@ -89,6 +89,8 @@ public class SummonSpotEntity extends Entity implements IAnimatable {
 			return 18;
 		} else if (this.getSummonType() == 2) {
 			return 18;
+		} else if (this.getSummonType() == 3) {
+			return 18;
 		} else {
 			return 2;
 		}
@@ -100,6 +102,8 @@ public class SummonSpotEntity extends Entity implements IAnimatable {
 		} else if (this.getSummonType() == 1) {
 			return 10;
 		} else if (this.getSummonType() == 2) {
+			return 10;
+		} else if (this.getSummonType() == 3) {
 			return 10;
 		} else {
 			return 1;
@@ -119,6 +123,8 @@ public class SummonSpotEntity extends Entity implements IAnimatable {
     		event.getController().setAnimation(new AnimationBuilder().addAnimation("wildfire_summon_spot_summon", true));    
     	} else if (this.getSummonType() == 2) {
     		event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_summon_spot_summon", true));    
+    	} else if (this.getSummonType() == 3) {
+    		event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_summon_spot_summon", true));   
     	} else {
  
     	}
