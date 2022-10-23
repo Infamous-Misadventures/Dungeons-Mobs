@@ -92,6 +92,11 @@ public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnima
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, false).setUnseenMemoryTicks(600));
     }
     
+    @Override
+    public boolean isLeftHanded() {
+    	return false;
+    }
+    
 	public void handleEntityEvent(byte p_28844_) {
 		if (p_28844_ == 4) {
 			this.summonWallsAnimationTick = summonWallsAnimationLength;

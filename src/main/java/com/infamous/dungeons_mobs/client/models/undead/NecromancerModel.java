@@ -3,8 +3,10 @@ package com.infamous.dungeons_mobs.client.models.undead;
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
 import com.infamous.dungeons_mobs.entities.undead.NecromancerEntity;
+import com.infamous.dungeons_mobs.mod.ModItems;
 
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
@@ -51,7 +53,11 @@ public class NecromancerModel extends AnimatedGeoModel<NecromancerEntity> {
         	entity.level.addParticle(ModParticleTypes.NECROMANCY.get(), particleBone.getWorldPosition().x, particleBone.getWorldPosition().y, particleBone.getWorldPosition().z, 0, 0, 0);
         }
         
-        cape.setHidden(true);
+        if (entity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ModItems.NECROMANCER_ROBES.getChest().get()) {
+        	cape.setHidden(false);
+        } else {
+        	cape.setHidden(true);
+        }
 
         EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
 
