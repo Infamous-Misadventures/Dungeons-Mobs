@@ -20,12 +20,9 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static com.infamous.dungeons_mobs.DungeonsMobs.DUNGEONS_MOBS;
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
-import static net.minecraft.item.ArmorMaterial.DIAMOND;
 
 
 public class ModItems {
@@ -54,9 +51,6 @@ public class ModItems {
     public static final RegistryObject<Item> DIAMOND_VINDICATOR_HELMET = ITEMS.register("diamond_vindicator_helmet",
             () -> new VindicatorHelmetItem(ArmorMaterial.IRON, EquipmentSlotType.HEAD, new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS), true));
 
-    public static final RegistryObject<Item> CHEF_HAT = ITEMS.register("chef_hat",
-            () -> new ChefHatItem(ArmorMaterial.LEATHER, EquipmentSlotType.HEAD, new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS)));
-
     public static final RegistryObject<Item> NETHERITE_PIGLIN_HELMET = ITEMS.register("netherite_piglin_helmet",
             () -> new PiglinHelmetItem(CustomArmorMaterial.PURE_NETHERITE, EquipmentSlotType.HEAD, new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS)));
     public static final RegistryObject<Item> CRACKED_NETHERITE_PIGLIN_HELMET = ITEMS.register("cracked_netherite_piglin_helmet",
@@ -66,6 +60,7 @@ public class ModItems {
     public static final RegistryObject<Item> CRACKED_GOLD_PIGLIN_HELMET = ITEMS.register("cracked_gold_piglin_helmet",
             () -> new PiglinHelmetItem(ArmorMaterial.GOLD, EquipmentSlotType.HEAD, new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS)));
 
+    public static final ArmorSet CHEF_ARMOR = registerArmorSet("chef_armor", "chef_helmet", "chef_chestplate", null, null);
     public static final ArmorSet DROWNED_NECROMANCER_ROBES = registerArmorSet("drowned_necromancer_armor", "drowned_necromancer_crown", "drowned_necromancer_cloak", "drowned_necromancer_belt", null);
     public static final ArmorSet GEOMANCER_CLOTHES = registerArmorSet("geomancer_clothes", "geomancer_beads", "geomancer_robes", null, null);
     public static final ArmorSet ICEOLOGER_CLOTHES = registerArmorSet("iceologer_clothes", "iceologer_hood", "iceologer_robes", "iceologer_pants", "iceologer_shoes");

@@ -54,8 +54,6 @@ public class CustomVindicatorRenderer extends MobRenderer<VindicatorEntity, Illa
             return DIAMOND_ARMORED_VINDICATOR_TEXTURE;
         }else if(entity.getItemBySlot(EquipmentSlotType.HEAD).getItem().equals(ModItems.GOLD_VINDICATOR_HELMET.get())){
             return GOLD_ARMORED_VINDICATOR_TEXTURE;
-        } else if(entity.getItemBySlot(EquipmentSlotType.HEAD).getItem().equals(ModItems.CHEF_HAT.get())){
-            return VINDICATOR_CHEF_TEXTURE;
         } else {
             return VINDICATOR_TEXTURE;
         }
