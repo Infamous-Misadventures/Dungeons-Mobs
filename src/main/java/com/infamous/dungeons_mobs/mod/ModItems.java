@@ -76,7 +76,7 @@ public class ModItems {
             () -> new WraithFireChargeItem(new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS)));
 
     // SPATULA
-    public static final RegistryObject<Item> SPATULA = ITEMS.register("spatula",
+    public static final RegistryObject<Item> WOODEN_LADLE = ITEMS.register("wooden_ladle",
             () -> new SpatulaItem(ItemTier.WOOD, 0.5F, (2.0F-4.0F), new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS)));
 
     // MOUNTAINEER AXES
