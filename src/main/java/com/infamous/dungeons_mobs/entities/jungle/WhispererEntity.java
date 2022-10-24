@@ -136,6 +136,10 @@ public class WhispererEntity extends MonsterEntity implements IAnimatable, IAqua
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
 	}
 	
+	public boolean isSpellcasting() {
+		return this.summonPQVAnimationTick > 0 || this.summonQGVAnimationTick > 0 || this.grappleAnimationTick > 0;
+	}
+	
 	public void registerWavewhispererGoals() {
         this.goalSelector.addGoal(1, new GoToWaterGoal(this, 1.25D) {
             public boolean canUse() {

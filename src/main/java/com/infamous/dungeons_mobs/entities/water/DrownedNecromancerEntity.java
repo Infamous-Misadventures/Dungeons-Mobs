@@ -129,6 +129,10 @@ public class DrownedNecromancerEntity extends DrownedEntity implements IAnimatab
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, true));
     }
+    
+    public boolean isSpellcasting() {
+    	return this.shootAnimationTick > 0 || this.rainShootAnimationTick > 0 || this.landShootAnimationTick > 0 || this.tridentStormAnimationTick > 0 || this.rainTridentStormAnimationTick > 0 || this.summonAnimationTick > 0 || this.landSummonAnimationTick > 0;
+    }
 
     /**
      * Returns whether this Entity is on the same team as the given Entity.

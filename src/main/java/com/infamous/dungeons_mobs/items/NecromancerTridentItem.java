@@ -15,7 +15,7 @@ public class NecromancerTridentItem extends AbstractNecromancerStaffItem impleme
 
     @Override
     protected ProjectileEntity createOrb(PlayerEntity playerIn, double xDifference, double yDifference, double zDifference) {
-        DrownedNecromancerOrbEntity necromancerOrb = new DrownedNecromancerOrbEntity(playerIn.level, playerIn, xDifference + (playerIn.getRandom().nextGaussian() * 1.25), yDifference + (playerIn.getRandom().nextGaussian() * 0.5), zDifference + (playerIn.getRandom().nextGaussian() * 1.25));
+        DrownedNecromancerOrbEntity necromancerOrb = new DrownedNecromancerOrbEntity(playerIn.level, playerIn, xDifference, yDifference, zDifference);
         necromancerOrb.rotateToMatchMovement();
         return necromancerOrb;
     }

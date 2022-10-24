@@ -16,4 +16,6 @@ public class ModParticleTypes {
     public static final RegistryObject<BasicParticleType> WIND = PARTICLES.register("wind", () -> new BasicParticleType(true));
     public static final RegistryObject<BasicParticleType> DUST = PARTICLES.register("dust", () -> new BasicParticleType(true));
     public static final RegistryObject<BasicParticleType> NECROMANCY = PARTICLES.register("necromancy", () -> new BasicParticleType(true));
+    public static final RegistryObject<BasicParticleType> CORRUPTED_DUST = PARTICLES.register("corrupted_dust", () -> new BasicParticleType(true));
+    public static final RegistryObject<BasicParticleType> CORRUPTED_MAGIC = PARTICLES.register("corrupted_magic", () -> new BasicParticleType(true));
 }

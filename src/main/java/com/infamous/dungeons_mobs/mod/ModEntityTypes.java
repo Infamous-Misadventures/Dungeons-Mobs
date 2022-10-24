@@ -36,6 +36,7 @@ import com.infamous.dungeons_mobs.entities.projectiles.CobwebProjectileEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.DrownedNecromancerOrbEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.GeoOrbEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.LaserOrbEntity;
+import com.infamous.dungeons_mobs.entities.projectiles.MageMissileEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.NecromancerOrbEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.PoisonQuillEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.SlimeballEntity;
@@ -56,6 +57,7 @@ import com.infamous.dungeons_mobs.entities.summonables.SimpleTrapEntity;
 import com.infamous.dungeons_mobs.entities.summonables.SummonSpotEntity;
 import com.infamous.dungeons_mobs.entities.summonables.TridentStormEntity;
 import com.infamous.dungeons_mobs.entities.summonables.WindcallerTornadoEntity;
+import com.infamous.dungeons_mobs.entities.summonables.WraithFireEntity;
 import com.infamous.dungeons_mobs.entities.undead.FrozenZombieEntity;
 import com.infamous.dungeons_mobs.entities.undead.JungleZombieEntity;
 import com.infamous.dungeons_mobs.entities.undead.MossySkeletonEntity;
@@ -226,7 +228,7 @@ public class ModEntityTypes {
                     .sized(0.6F, 1.99F)
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(MODID, "wraith").toString()),
-            0x1a1862, 0x2586d9
+            0x0a2c40, 0x82d8f8
     );
 
     // SLIME
@@ -525,6 +527,14 @@ public class ModEntityTypes {
 	            .updateInterval(1)
 	            .build(new ResourceLocation(MODID, "poison_quill").toString())
 	);
+    
+    public static final RegistryObject<EntityType<MageMissileEntity>> MAGE_MISSILE = ENTITY_TYPES.register("mage_missile", () ->
+    EntityType.Builder.<MageMissileEntity>of(MageMissileEntity::new, EntityClassification.MISC)
+            .fireImmune()
+            .sized(0.35F, 0.35F)
+            .updateInterval(1)
+            .build(new ResourceLocation(MODID, "mage_missile").toString())
+);
 
     public static final RegistryObject<EntityType<SummonSpotEntity>> SUMMON_SPOT = registerEntityWithoutEgg("summon_spot", () ->
     EntityType.Builder.<SummonSpotEntity>of(SummonSpotEntity::new, EntityClassification.MISC)
@@ -548,6 +558,14 @@ public class ModEntityTypes {
             .sized(2.0F, 0.5F)
             .clientTrackingRange(10)
             .build(new ResourceLocation(MODID, "kelp_trap").toString())
+    );
+    
+    public static final RegistryObject<EntityType<WraithFireEntity>> WRAITH_FIRE = registerEntityWithoutEgg("wraith_fire", () ->
+    EntityType.Builder.<WraithFireEntity>of(WraithFireEntity::new, EntityClassification.MISC)
+            .fireImmune()
+            .sized(3.25F, 1.25F)
+            .clientTrackingRange(10)
+            .build(new ResourceLocation(MODID, "wraith_fire").toString())
     );
     
     public static final RegistryObject<EntityType<AreaDamageEntity>> AREA_DAMAGE = registerEntityWithoutEgg("area_damage", () ->

@@ -1,56 +1,82 @@
 package com.infamous.dungeons_mobs.entities.illagers;
 
-import com.infamous.dungeons_mobs.capabilities.cloneable.CloneableHelper;
-import com.infamous.dungeons_mobs.capabilities.cloneable.ICloneable;
+import java.util.EnumSet;
+import java.util.function.Predicate;
+
+import javax.annotation.Nullable;
+
+import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
+import com.infamous.dungeons_mobs.entities.summonables.SummonSpotEntity;
+import com.infamous.dungeons_mobs.entities.summonables.WraithFireEntity;
+import com.infamous.dungeons_mobs.entities.undead.WraithEntity;
+import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
+import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
-import net.minecraft.entity.*;
+import com.infamous.dungeons_mobs.mod.ModSoundEvents;
+import com.infamous.dungeons_mobs.utils.PositionUtils;
+
+import net.minecraft.command.arguments.EntityAnchorArgument;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.IAngerable;
+import net.minecraft.entity.ILivingEntityData;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.ai.goal.AvoidEntityGoal;
+import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.goal.HurtByTargetGoal;
+import net.minecraft.entity.ai.goal.LookAtGoal;
+import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
+import net.minecraft.entity.ai.goal.RandomWalkingGoal;
+import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
+import net.minecraft.entity.monster.AbstractIllagerEntity;
 import net.minecraft.entity.monster.AbstractRaiderEntity;
 import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.monster.SpellcastingIllagerEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-import javax.annotation.Nullable;
-import java.util.EnumSet;
+public class MageEntity extends AbstractIllagerEntity implements IAnimatable, SpawnArmoredMob {
 
-public class MageEntity extends SpellcastingIllagerEntity implements IAnimatable {
+	public int attackAnimationTick;
+	public int attackAnimationLength = 50;
 
-	public static final DataParameter<Integer> LIFT_TICKS = EntityDataManager.defineId(MageEntity.class, DataSerializers.INT);
-	public static final DataParameter<Integer> DUPLICATE_TICKS = EntityDataManager.defineId(MageEntity.class, DataSerializers.INT);
-	public static final DataParameter<Boolean> ANGRY = EntityDataManager.defineId(MageEntity.class, DataSerializers.BOOLEAN);
-	
-	public int liftInterval = 0;
-	public int duplicateInterval = 0;
-	
-	AnimationFactory factory = new AnimationFactory(this);
-	
-    public MageEntity(World world){
-        super(ModEntityTypes.MAGE.get(), world);
-    }
+	public int vanishAnimationTick;
+	public int vanishAnimationLength = 23;
 
-    public MageEntity(EntityType<? extends SpellcastingIllagerEntity> type, World world) {
+	public int appearAnimationTick;
+	public int appearAnimationLength = 25;
+
+	public int appearDelay = 0;
+
+    AnimationFactory factory = new AnimationFactory(this);
+
+    public MageEntity(EntityType<? extends MageEntity> type, World world) {
         super(type, world);
     }
 
@@ -62,124 +88,128 @@ public class MageEntity extends SpellcastingIllagerEntity implements IAnimatable
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new SwimGoal(this));
-        this.goalSelector.addGoal(1, new MageEntity.CastingSpellGoal());
-        this.goalSelector.addGoal(2, new MageEntity.DuplicateGoal());
-        this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, PlayerEntity.class, 5.0F, 1.0D, 1.0D));
-        this.goalSelector.addGoal(4, new MageEntity.LiftMobGoal());
+        this.goalSelector.addGoal(0, new MageEntity.RemainStationaryGoal());
+        this.goalSelector.addGoal(1, new MageEntity.CreateIllusionsGoal(this));
+        this.goalSelector.addGoal(2, new MageEntity.LevitateTargetAttackGoal(this));
+        this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, AbstractVillagerEntity.class, 5.0F, 1.2D, 1.15D));
+        this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, PlayerEntity.class, 5.0F, 1.2D, 1.2D));
+        this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, IronGolemEntity.class, 5.0F, 1.3D, 1.15D));
+        this.goalSelector.addGoal(4, new ApproachTargetGoal(this, 14, 1.0D, true));
+        this.goalSelector.addGoal(5, new LookAtTargetGoal(this));
         this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 1.0D));
         this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
         this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, AbstractRaiderEntity.class)).setAlertOthers());
-        this.targetSelector.addGoal(2, (new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true)).setUnseenMemoryTicks(300));
-        this.targetSelector.addGoal(3, (new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, false)).setUnseenMemoryTicks(300));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, false));
+        this.targetSelector.addGoal(2, (new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true)).setUnseenMemoryTicks(600));
+        this.targetSelector.addGoal(3, (new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, false)).setUnseenMemoryTicks(600));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, false).setUnseenMemoryTicks(600));
     }
     
-    public void setTarget(@Nullable LivingEntity p_70624_1_) {
-        if (p_70624_1_ == null) {
-           this.entityData.set(ANGRY, false);
-        } else {
-           this.entityData.set(ANGRY, true);
-        }
-
-        super.setTarget(p_70624_1_); //Forge: Moved down to allow event handlers to write data manager values.
-     }
+	public boolean shouldBeStationary() {
+		return this.appearAnimationTick > 0 || this.appearDelay > 0;
+	}
     
+	public void handleEntityEvent(byte p_28844_) {
+		if (p_28844_ == 4) {
+			this.attackAnimationTick = attackAnimationLength;
+		} else if (p_28844_ == 6) {
+			this.appearDelay = 11;
+		} else if (p_28844_ == 7) {
+			for(int i = 0; i < 20; ++i) {
+	            double d0 = this.random.nextGaussian() * 0.02D;
+	            double d1 = this.random.nextGaussian() * 0.02D;
+	            double d2 = this.random.nextGaussian() * 0.02D;
+	            this.level.addParticle(ParticleTypes.POOF, this.getRandomX(1.0D), this.getRandomY(), this.getRandomZ(1.0D), d0, d1, d2);
+	         }
+		} else if (p_28844_ == 8) {
+			this.vanishAnimationTick = vanishAnimationLength;
+		} else if (p_28844_ == 9) {
+			this.appearAnimationTick = appearAnimationLength;
+		} else {
+			super.handleEntityEvent(p_28844_);
+		}
+	}
+
     public void baseTick() {
-    	super.baseTick();
-    	
-    	if (this.getTarget() != null) {
-        this.getLookControl().setLookAt(this.getTarget(), (float)this.getMaxHeadYRot(), (float)this.getMaxHeadXRot());
-    	}
-    	
-    	//this.setAngry(this.getTarget() != null);
-    	//System.out.print("\r\n" + this.isAngry());
-    	
-    	if (this.liftInterval > 0) {
-    		this.liftInterval --;
-    	}
-    	
-    	if (this.duplicateInterval > 0) {
-    		this.duplicateInterval --;
-    	}
-    	
-    	//if (this.level.isClientSide) {
-    	//	System.out.print("\r\n" + this.isAggressive());
-    	//}
-    	
-		if (this.getLiftTicks() > 0) {
-			this.setLiftTicks(this.getLiftTicks() - 1);
+        super.baseTick();
+        this.tickDownAnimTimers();
+        
+		if (this.appearDelay > 0) {
+			this.appearDelay--;
+		}
+
+		if (!this.level.isClientSide && this.appearDelay == 1) {
+			this.appearAnimationTick = appearAnimationLength;
+			this.level.broadcastEntityEvent(this, (byte) 9);
+		}
+    }
+    
+	public void tickDownAnimTimers() {
+		if (this.attackAnimationTick > 0) {
+			this.attackAnimationTick--;
 		}
 		
-		if (this.getDuplicateTicks() > 0) {
-			this.setDuplicateTicks(this.getDuplicateTicks() - 1);
+		if (this.vanishAnimationTick > 0) {
+			this.vanishAnimationTick--;
 		}
-    }
-    
-	@Override
-	public void registerControllers(AnimationData data) {
-		data.addAnimationController(new AnimationController(this, "controller", 10, this::predicate));
+		
+		if (this.appearAnimationTick > 0) {
+			this.appearAnimationTick--;
+		}
 	}
-   
-	private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
-			if (this.getDuplicateTicks() > 0) {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("mage_duplicate", true));
-			} else if (this.getLiftTicks() > 0) {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("mage_lift", true));
-			} else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
-					event.getController().setAnimation(new AnimationBuilder().addAnimation("mage_walk", true));
-			} else {
-				if (this.isAngry()) {
-				    event.getController().setAnimation(new AnimationBuilder().addAnimation("mage_idle_attacking", true));					
-				} else {
-				    event.getController().setAnimation(new AnimationBuilder().addAnimation("mage_idle", true));
-				}
-			}
-		return PlayState.CONTINUE;
-	}
-	
-	@Override
-	public AnimationFactory getFactory() {
-		return factory;
-	}
-	
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(LIFT_TICKS, 0);
-        this.entityData.define(DUPLICATE_TICKS, 0);
-        this.entityData.define(ANGRY, false);
-    }
-	
-	   public int getLiftTicks() {
-		      return this.entityData.get(LIFT_TICKS);
-		   }
 
-		   public void setLiftTicks(int p_189794_1_) {	   
-		      this.entityData.set(LIFT_TICKS, p_189794_1_);
-		   }
-		   
-		   public int getDuplicateTicks() {
-			      return this.entityData.get(DUPLICATE_TICKS);
-			   }
-
-			   public void setDuplicateTicks(int p_189794_1_) {	   
-			      this.entityData.set(DUPLICATE_TICKS, p_189794_1_);
-			   }
-			   
-			   public boolean isAngry() {
-				      return this.entityData.get(ANGRY);
-				   }
-
-				   public void setAngry(boolean p_189794_1_) {	   
-				      this.entityData.set(ANGRY, p_189794_1_);
-				   }
-
-
-    public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
-        return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.25D).add(Attributes.FOLLOW_RANGE, 20.0D).add(Attributes.MAX_HEALTH, 24.0D);
+    @Override
+    public void registerControllers(AnimationData data) {
+        data.addAnimationController(new AnimationController(this, "controller", 2, this::predicate));
     }
 
 
+    private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
+        if (this.appearAnimationTick > 0) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("mage_appear", EDefaultLoopTypes.LOOP));
+        } else if (this.vanishAnimationTick > 0) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("mage_vanish", EDefaultLoopTypes.LOOP));
+        } else if (this.attackAnimationTick > 0) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("mage_throw", EDefaultLoopTypes.LOOP));
+        } else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("mage_walk", EDefaultLoopTypes.LOOP));
+        } else {
+        	if (this.isCelebrating()) {
+        		event.getController().setAnimation(new AnimationBuilder().addAnimation("mage_celebrate", EDefaultLoopTypes.LOOP));
+        	} else {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("mage_idle", EDefaultLoopTypes.LOOP));       		
+        	}
+        }
+        return PlayState.CONTINUE;
+    }
+
+    @Override
+    public AnimationFactory getFactory() {
+        return factory;
+    }
+
+    @Override
+    protected void populateDefaultEquipmentSlots(DifficultyInstance p_180481_1_) {
+        super.populateDefaultEquipmentSlots(p_180481_1_);
+        //this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.MAGE_CLOTHES.getHead().get()));
+        //this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.MAGE_CLOTHES.getChest().get()));
+        //this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(ModItems.MAGE_CLOTHES.getLegs().get()));
+        //this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(ModItems.MAGE_CLOTHES.getFeet().get()));
+    }
+
+    @Nullable
+    @Override
+    public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance p_213386_2_, SpawnReason p_213386_3_, @Nullable ILivingEntityData p_213386_4_, @Nullable CompoundNBT p_213386_5_) {
+        ILivingEntityData iLivingEntityData = super.finalizeSpawn(p_213386_1_, p_213386_2_, p_213386_3_, p_213386_4_, p_213386_5_);
+        this.populateDefaultEquipmentSlots(p_213386_2_);
+        this.populateDefaultEquipmentEnchantments(p_213386_2_);
+        return iLivingEntityData;
+    }
+
+	public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
+		return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.25D)
+				.add(Attributes.FOLLOW_RANGE, 30.0D).add(Attributes.MAX_HEALTH, 40.0D);
+	}
 
     /**
      * Returns whether this Entity is on the same team as the given Entity.
@@ -196,292 +226,260 @@ public class MageEntity extends SpellcastingIllagerEntity implements IAnimatable
 
     @Override
     public void applyRaidBuffs(int p_213660_1_, boolean p_213660_2_) {
-
     }
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.PILLAGER_AMBIENT;
+        return SoundEvents.ILLUSIONER_AMBIENT;
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.PILLAGER_DEATH;
+        return ModSoundEvents.ILLUSIONER_DEATH.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return SoundEvents.PILLAGER_HURT;
-    }
-
-    @Override
-    protected SoundEvent getCastingSoundEvent() {
-        return SoundEvents.EVOKER_CAST_SPELL;
+        return ModSoundEvents.ENCHANTER_HURT.get();
     }
 
     @Override
     public SoundEvent getCelebrateSound() {
-        return SoundEvents.PILLAGER_CELEBRATE;
+        return SoundEvents.ILLUSIONER_AMBIENT;
     }
-
-    class CastingSpellGoal extends SpellcastingIllagerEntity.CastingASpellGoal {
-        private CastingSpellGoal() {
-        }
-
-        /**
-         * Keep ticking a continuous task that has already been started
-         */
-        public void tick() {
-            if (MageEntity.this.getTarget() != null) {
-                MageEntity.this.getLookControl().setLookAt(MageEntity.this.getTarget(), (float)MageEntity.this.getMaxHeadYRot(), (float)MageEntity.this.getMaxHeadXRot());
-            }
-
-        }
-    }
-    
-    /*class DuplicateSpellGoal extends SpellcastingIllagerEntity.UseSpellGoal {
-        private DuplicateSpellGoal() {
-        }
-
-        public boolean canUse() {
-           if (!super.canUse()) {
-              return false;
-           } else {
-              return !MageEntity.this.hasEffect(Effects.INVISIBILITY);
-           }
-        }
-        
-        @Override
-        public void start() {
-        	super.start();
-        	MageEntity.this.setDuplicateTicks(20);
-        }
-
-        protected int getCastingTime() {
-           return 20;
-        }
-
-        protected int getCastingInterval() {
-           return 1200;
-        }
-
-        protected void performSpellCasting() {
-           BlockPos blockpos = MageEntity.this.blockPosition().offset(-5 + MageEntity.this.getRandom().nextInt(10), 1, -5 + MageEntity.this.getRandom().nextInt(10));
-           MageEntity.this.moveTo(blockpos.getX(), blockpos.getY(), blockpos.getZ());
-           this.summonIllusionerClones();
-        }
-
-        private void summonIllusionerClones(){
-           int difficultyAsInt = MageEntity.this.level.getDifficulty().getId();
-           int mobsToSummon = difficultyAsInt * 2 + 1; // 3 on easy, 5 on normal, 7 on hard
-           for(int i = 0; i < mobsToSummon; ++i) {
-              BlockPos blockpos = MageEntity.this.blockPosition().offset(-5 + MageEntity.this.getRandom().nextInt(10), 1, -5 + MageEntity.this.getRandom().nextInt(10));
-              MageCloneEntity illusionerCloneEntity = new MageCloneEntity(MageEntity.this.level, MageEntity.this, 600);
-              DifficultyInstance difficultyForLocation = MageEntity.this.level.getCurrentDifficultyAt(blockpos);
-              illusionerCloneEntity.moveTo(blockpos, 0.0F, 0.0F);
-              illusionerCloneEntity.finalizeSpawn((IServerWorld) illusionerCloneEntity.level, difficultyForLocation, SpawnReason.MOB_SUMMONED, (ILivingEntityData)null, (CompoundNBT)null);
-              MageEntity.this.level.addFreshEntity(illusionerCloneEntity);
-              ICloneable cloneable = CloneableHelper.getCloneableCapability(MageEntity.this);
-              if(cloneable != null){
-                 cloneable.addClone(illusionerCloneEntity.getUUID());
-              }
-           }
-        }
-
-        @Nullable
-        protected SoundEvent getSpellPrepareSound() {
-           return SoundEvents.ILLUSIONER_PREPARE_MIRROR;
-        }
-
-        protected SpellcastingIllagerEntity.SpellType getSpell() {
-           return SpellcastingIllagerEntity.SpellType.DISAPPEAR;
-        }
-     }*/
-    
-    class LiftMobGoal extends Goal {
-	      public LiftMobGoal() {
-	         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP, Goal.Flag.LOOK));
-	      }
-
-	      public boolean canUse() {
-	         return MageEntity.this.getTarget() != null && MageEntity.this.getLiftTicks() == 0 && MageEntity.this.liftInterval == 0 && MageEntity.this.random.nextInt(20) == 0;
-	      }
-	      
-	      public boolean canContinueToUse() {
-	    	  	return MageEntity.this.hurtTime <= 0 && MageEntity.this.getTarget() != null && MageEntity.this.getLiftTicks() > 0;
-	      }
-	    
-	    public void start() {
-	    super.start();
-	    MageEntity.this.liftInterval = 100;
-	    MageEntity.this.setLiftTicks(40);
-	    MageEntity.this.playSound(SoundEvents.EVOKER_PREPARE_ATTACK, MageEntity.this.getSoundVolume(), MageEntity.this.getVoicePitch());
-	    }
-	      
-	    public void tick() {
-            MageEntity.this.getLookControl().setLookAt(MageEntity.this.getTarget(), (float)MageEntity.this.getMaxHeadYRot(), (float)MageEntity.this.getMaxHeadXRot());
-	    	LivingEntity target = MageEntity.this.getTarget();
-	    	MageEntity mob = MageEntity.this;
-	    	
-	    	mob.getNavigation().stop();
-	    	
-            if (mob.getLiftTicks() > 10) {
-            	if (target.getY() < mob.getY() + 3) {
-            		target.hurtMarked = true;
-            		target.setDeltaMovement(0, 0.5, 0);
-            	} else {
-            		target.fallDistance = 5;
-            		target.hurtMarked = true;
-            		target.setDeltaMovement(0, 0.1, 0);
-            	}
-            } else {
-            	if (!target.isOnGround()) {
-            	target.hurtMarked = true;
-            	target.setDeltaMovement(0, -0.75, 0);
-            	}
-        		//if (target.getY() == mob.getEyeY()) {
-        		//	target.hurt(DamageSource.FALL, 5.0F);
-        		//}
-            }
-	    }
-	    
-	    public void stop() {
-	    super.stop();
-	    MageEntity.this.setLiftTicks(0);
-	    }
-	   }
-    
-    class DuplicateGoal extends Goal {
-	      public DuplicateGoal() {
-	         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP, Goal.Flag.LOOK));
-	      }
-
-	      public boolean canUse() {
-	         return MageEntity.this.getTarget() != null && MageEntity.this.getDuplicateTicks() == 0 && MageEntity.this.duplicateInterval == 0;
-	      }
-	      
-	      public boolean canContinueToUse() {
-	    	  	return MageEntity.this.hurtTime <= 0 && MageEntity.this.getTarget() != null && MageEntity.this.getDuplicateTicks() > 0;
-	      }
-	      
-	      @Override
-	    public boolean isInterruptable() {
-	    	return false;
-	    }
-	    
-	    public void start() {
-	    super.start();
-	    MageEntity.this.duplicateInterval = 1200;
-	    MageEntity.this.setDuplicateTicks(20);
-	    MageEntity.this.playSound(SoundEvents.EVOKER_PREPARE_SUMMON, MageEntity.this.getSoundVolume(), MageEntity.this.getVoicePitch());
-	    }
-	      
-	    public void tick() {
-            MageEntity.this.getLookControl().setLookAt(MageEntity.this.getTarget(), (float)MageEntity.this.getMaxHeadYRot(), (float)MageEntity.this.getMaxHeadXRot());
-	    	LivingEntity target = MageEntity.this.getTarget();
-	    	MageEntity mob = MageEntity.this;
-	    	
-	    	mob.getNavigation().stop();
-	    	
-          if (mob.getDuplicateTicks() == 1) {
-              this.summonIllusionerClones();
-      	      MageEntity.this.playSound(SoundEvents.ILLUSIONER_PREPARE_MIRROR, MageEntity.this.getSoundVolume(), MageEntity.this.getVoicePitch());
-              BlockPos blockpos = MageEntity.this.blockPosition().offset(-5 + MageEntity.this.getRandom().nextInt(10), 0, -5 + MageEntity.this.getRandom().nextInt(10));
-              MageEntity.this.setPos(blockpos.getX(), blockpos.getY(), blockpos.getZ());
-           }
-	    }
-
-           private void summonIllusionerClones(){
-              int difficultyAsInt = MageEntity.this.level.getDifficulty().getId();
-              int mobsToSummon = difficultyAsInt * 2 + 1; // 3 on easy, 5 on normal, 7 on hard
-              for(int i = 0; i < mobsToSummon; ++i) {
-                 BlockPos blockpos = MageEntity.this.blockPosition().offset(-5 + MageEntity.this.getRandom().nextInt(10), 0, -5 + MageEntity.this.getRandom().nextInt(10));
-                 MageCloneEntity illusionerCloneEntity = new MageCloneEntity(MageEntity.this.level, MageEntity.this, 600);
-                 DifficultyInstance difficultyForLocation = MageEntity.this.level.getCurrentDifficultyAt(blockpos);
-                 illusionerCloneEntity.moveTo(blockpos, 0.0F, 0.0F);
-                 illusionerCloneEntity.finalizeSpawn((IServerWorld) illusionerCloneEntity.level, difficultyForLocation, SpawnReason.MOB_SUMMONED, (ILivingEntityData)null, (CompoundNBT)null);
-                 MageEntity.this.level.addFreshEntity(illusionerCloneEntity);
-                 ICloneable cloneable = CloneableHelper.getCloneableCapability(MageEntity.this);
-                 if(cloneable != null){
-                    cloneable.addClone(illusionerCloneEntity.getUUID());
-                 }
-              }
-           }
-	    
-	    public void stop() {
-	    super.stop();
-	    MageEntity.this.setDuplicateTicks(0);
-	    }
-	   }
-    
-
-    /*class LiftMobGoal extends SpellcastingIllagerEntity.UseSpellGoal {
-        private LiftMobGoal() {
-        }
-
-        protected int getCastingTime() {
-            return 50;
-        }
-
-        protected int getCastingInterval() {
-            return 200;
-        }
-        
-        @Override
-        public void start() {
-        	super.start();
-        	MageEntity.this.setLiftTicks(40);
-        }
-        
-        
-        
-        @Override
-        public void tick() {
-        	super.tick();
-            LivingEntity attackTarget = MageEntity.this.getTarget();
-            MageEntity mage = MageEntity.this;
-            System.out.print("\r\n" + "ticking LiftMobGoal");
-            if (mage.getLiftTicks() > 20) {
-            	if (attackTarget.getY() < mage.getY() + 3) {
-            		attackTarget.hurtMarked = true;
-            		attackTarget.setDeltaMovement(0, 0.5, 0);
-            	} else {
-            		attackTarget.hurtMarked = true;
-            		attackTarget.fallDistance = 10;
-            		attackTarget.setDeltaMovement(0, 0.1, 0);
-            	}
-            } else {
-        		attackTarget.hurtMarked = true;
-        		attackTarget.setDeltaMovement(0, -1.0, 0);
-        		//if (attackTarget.getY() == mage.getEyeY()) {
-        		//	attackTarget.hurt(DamageSource.FALL, 5.0F);
-        		//}
-            }
-        }
-
-        protected void performSpellCasting() {
-            LivingEntity attackTarget = MageEntity.this.getTarget();
-            //summonIceCloud(attackTarget);
-            //summonIceBlocks(attackTarget);
-        }
-
-
-        protected SoundEvent getSpellPrepareSound() {
-            return SoundEvents.EVOKER_PREPARE_ATTACK;
-        }
-
-        protected SpellcastingIllagerEntity.SpellType getSpell() {
-            return SpellcastingIllagerEntity.SpellType.SUMMON_VEX;
-        }
-    }*/
 
     @Override
-    public ArmPose getArmPose() {
-        ArmPose illagerArmPose =  super.getArmPose();
-        if(illagerArmPose == ArmPose.CROSSED){
-            return ArmPose.NEUTRAL;
-        }
-        return illagerArmPose;
+    public ResourceLocation getArmorSet() {
+        return null; //ModItems.MAGE_CLOTHES.getArmorSet();
     }
 
+    class CreateIllusionsGoal extends Goal {
+		public MageEntity mob;
+		@Nullable
+		public LivingEntity target;
+		
+		public int nextUseTime;
+
+		private final Predicate<Entity> MAGE_CLONE = (p_33346_) -> {
+			return p_33346_ instanceof MageCloneEntity && ((MageCloneEntity)p_33346_).getOwner() != null && ((MageCloneEntity)p_33346_).getOwner() == mob;
+		};
+
+		public CreateIllusionsGoal(MageEntity mob) {
+			this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP, Goal.Flag.LOOK));
+			this.mob = mob;
+			this.target = mob.getTarget();
+		}
+
+		@Override
+		public boolean isInterruptable() {
+			return mob.shouldBeStationary();
+		}
+
+		public boolean requiresUpdateEveryTick() {
+			return true;
+		}
+
+		@Override
+		public boolean canUse() {
+			target = mob.getTarget();
+
+			int nearbyClones = mob.level.getEntities(mob, mob.getBoundingBox().inflate(30.0D), MAGE_CLONE)
+					.size();
+			
+			return target != null && mob.tickCount >= this.nextUseTime && mob.random.nextInt(10) == 0 && mob.canSee(target) && nearbyClones <= 0 && animationsUseable();
+		}
+
+		@Override
+		public boolean canContinueToUse() {
+			return target != null && !animationsUseable();
+		}
+
+		@Override
+		public void start() {
+			mob.playSound(SoundEvents.ILLUSIONER_PREPARE_MIRROR, 1.0F, 1.0F);
+			mob.vanishAnimationTick = mob.vanishAnimationLength;
+			mob.level.broadcastEntityEvent(mob, (byte) 8);
+		}
+
+		@Override
+		public void tick() {
+			target = mob.getTarget();
+
+			mob.getNavigation().stop();
+			
+			if (target != null) {
+				mob.getLookControl().setLookAt(target.getX(), target.getEyeY(), target.getZ());
+			}
+
+			if (target != null && mob.vanishAnimationTick == 1) {
+				SummonSpotEntity summonSpot = ModEntityTypes.SUMMON_SPOT.get().create(mob.level);
+				summonSpot.moveTo(target.blockPosition().offset(-12.5 + mob.random.nextInt(25), 0, -12.5 + mob.random.nextInt(25)), 0.0F, 0.0F);
+				summonSpot.setSummonType(3);
+				((ServerWorld)mob.level).addFreshEntityWithPassengers(summonSpot);
+				PositionUtils.moveToCorrectHeight(summonSpot);
+
+				mob.level.broadcastEntityEvent(mob, (byte) 7);
+				mob.moveTo(summonSpot.blockPosition(), 0.0F, 0.0F);
+				mob.setYBodyRot(mob.random.nextInt(360));
+				mob.lookAt(EntityAnchorArgument.Type.EYES, new Vector3d(mob.getX(), mob.getEyeY(), mob.getZ()));
+				mob.appearDelay = 11;
+				mob.level.broadcastEntityEvent(mob, (byte) 6);
+				mob.playSound(SoundEvents.ILLUSIONER_MIRROR_MOVE, 1.0F, 1.0F);
+				PositionUtils.moveToCorrectHeight(mob);
+
+				if (target instanceof MobEntity) {
+					((MobEntity)target).setTarget(null);
+					((MobEntity)target).setLastHurtByMob(null);
+					if (target instanceof IAngerable) {
+						((IAngerable)target).stopBeingAngry();
+						((IAngerable)target).setLastHurtByMob(null);
+						((IAngerable)target).setTarget(null);
+						((IAngerable)target).setPersistentAngerTarget(null);
+					}
+				}
+
+				int clonesByDifficulty = mob.level.getCurrentDifficultyAt(mob.blockPosition()).getDifficulty().getId();
+
+				for (int i = 0; i < clonesByDifficulty * 5; i ++) {
+					SummonSpotEntity cloneSummonSpot = ModEntityTypes.SUMMON_SPOT.get().create(mob.level);
+					cloneSummonSpot.moveTo(target.blockPosition().offset(-12.5 + mob.random.nextInt(25), 0, -12.5 + mob.random.nextInt(25)), 0.0F, 0.0F);
+					cloneSummonSpot.setSummonType(3);
+					cloneSummonSpot.mobSpawnRotation = mob.random.nextInt(360);
+					((ServerWorld)mob.level).addFreshEntityWithPassengers(cloneSummonSpot);
+					PositionUtils.moveToCorrectHeight(cloneSummonSpot);
+
+					MageCloneEntity clone = ModEntityTypes.MAGE_CLONE.get().create(mob.level);
+					clone.finalizeSpawn(((ServerWorld)mob.level), mob.level.getCurrentDifficultyAt(cloneSummonSpot.blockPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData)null, (CompoundNBT)null);
+					clone.setOwner(mob);
+					clone.setHealth(mob.getHealth());
+					for (EquipmentSlotType equipmentslottype : EquipmentSlotType.values()) {
+						ItemStack itemstack = mob.getItemBySlot(equipmentslottype);
+						if (!itemstack.isEmpty()) {
+							clone.setItemSlot(equipmentslottype, itemstack.copy());
+							clone.setDropChance(equipmentslottype, mob.getEquipmentDropChance(equipmentslottype));
+							itemstack.setCount(0);
+						}
+					}
+					clone.lookAt(EntityAnchorArgument.Type.EYES, new Vector3d(mob.getX(), mob.getEyeY(), mob.getZ()));
+					clone.setDelayedAppear(true);
+					cloneSummonSpot.summonedEntity = clone;
+					cloneSummonSpot.playSound(SoundEvents.ILLUSIONER_MIRROR_MOVE, 1.0F, 1.0F);
+				}
+			}
+		}
+
+		public boolean animationsUseable() {
+			return mob.vanishAnimationTick <= 0;
+		}
+		
+		@Override
+		public void stop() {
+			super.stop();
+			this.nextUseTime = mob.tickCount + 60;
+		}
+
+	}
+    
+    class LevitateTargetAttackGoal extends Goal {
+		public MageEntity mob;
+		@Nullable
+		public LivingEntity target;
+		
+		public int nextUseTime = 0;
+		
+		public boolean slammedTarget = false;
+		
+		public LevitateTargetAttackGoal(MageEntity mob) {
+			this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP, Goal.Flag.LOOK));
+			this.mob = mob;
+			this.target = mob.getTarget();
+		}
+
+		@Override
+		public boolean isInterruptable() {
+			return mob.shouldBeStationary();
+		}
+
+		public boolean requiresUpdateEveryTick() {
+			return true;
+		}
+
+		@Override
+		public boolean canUse() {
+			target = mob.getTarget();
+			
+			return target != null && !mob.shouldBeStationary() && mob.tickCount >= this.nextUseTime && mob.distanceTo(target) <= 16 && mob.canSee(target) && animationsUseable();
+		}
+
+		@Override
+		public boolean canContinueToUse() {
+			return target != null && !mob.shouldBeStationary() && !animationsUseable();
+		}
+
+		@Override
+		public void start() {
+			this.slammedTarget = false;
+			mob.playSound(ModSoundEvents.NECROMANCER_PREPARE_SUMMON.get(), 1.0F, mob.getVoicePitch());
+			mob.attackAnimationTick = mob.attackAnimationLength;
+			mob.level.broadcastEntityEvent(mob, (byte) 4);
+		}
+
+		@Override
+		public void tick() {
+			target = mob.getTarget();
+
+			mob.getNavigation().stop();
+			
+			if (target != null) {
+				mob.getLookControl().setLookAt(target.getX(), target.getEyeY(), target.getZ());
+			}
+
+			if (target != null) {
+				target.hurtMarked = true;
+				if (mob.attackAnimationTick >= mob.attackAnimationLength - 32) {
+					if (target.getY() < mob.getY() + 7) {
+						target.push(0, 0.1, 0);
+						if (target.verticalCollision && !target.isOnGround()) {
+							target.hurt(DamageSource.FLY_INTO_WALL, 10.0F);
+						}
+					} else {			
+						target.setDeltaMovement(target.getDeltaMovement().x * 0.5, 0, target.getDeltaMovement().z * 0.5);
+					}
+				} else {
+					if (!this.slammedTarget) {
+						target.fallDistance = 0;
+						target.push(0, -0.5, 0);
+						if (target.verticalCollision) {
+							this.slammedTarget = true;
+							target.hurt(DamageSource.FLY_INTO_WALL, 10.0F);
+						}
+					}
+				}
+			}
+		}
+		
+		@Override
+		public void stop() {
+			super.stop();
+			this.slammedTarget = false;
+			this.nextUseTime = mob.tickCount + 80 + mob.random.nextInt(120);
+		}
+
+		public boolean animationsUseable() {
+			return mob.attackAnimationTick <= 0;
+		}
+
+	}
+
+	class RemainStationaryGoal extends Goal {
+
+		public RemainStationaryGoal() {
+			this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK, Goal.Flag.TARGET, Goal.Flag.JUMP));
+		}
+
+		@Override
+		public boolean canUse() {
+			return MageEntity.this.shouldBeStationary();
+		}
+	}
 }
