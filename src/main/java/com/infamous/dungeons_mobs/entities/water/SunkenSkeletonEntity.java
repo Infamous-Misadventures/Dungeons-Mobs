@@ -85,16 +85,6 @@ public class SunkenSkeletonEntity extends AbstractSkeletonEntity implements ICro
         return AbstractSkeletonEntity.createAttributes();
     }
 
-    public static boolean checkSunkenSkeletonSpawnRules(EntityType<? extends SunkenSkeletonEntity> p_223332_0_, IServerWorld serverWorld, SpawnReason spawnReason, BlockPos blockPos, Random random) {
-        Optional<RegistryKey<Biome>> biomeName = serverWorld.getBiomeName(blockPos);
-        boolean canSpawn = serverWorld.getDifficulty() != Difficulty.PEACEFUL && isDarkEnoughToSpawn(serverWorld, blockPos, random) && (spawnReason == SpawnReason.SPAWNER || serverWorld.getFluidState(blockPos).is(FluidTags.WATER));
-        if (!Objects.equals(biomeName, Optional.of(Biomes.RIVER)) && !Objects.equals(biomeName, Optional.of(Biomes.FROZEN_RIVER))) {
-            return random.nextInt(40) == 0 && IAquaticMob.isDeepEnoughToSpawn(serverWorld, blockPos) && canSpawn;
-        } else {
-            return random.nextInt(15) == 0 && canSpawn;
-        }
-    }
-
     @Override
     public boolean checkSpawnObstruction(IWorldReader worldReader) {
         return worldReader.isUnobstructed(this);
