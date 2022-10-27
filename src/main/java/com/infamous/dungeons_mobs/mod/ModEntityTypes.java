@@ -1,12 +1,5 @@
 package com.infamous.dungeons_mobs.mod;
 
-import static com.infamous.dungeons_mobs.DungeonsMobs.DUNGEONS_MOBS;
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Supplier;
-
 import com.infamous.dungeons_mobs.entities.blaze.WildfireEntity;
 import com.infamous.dungeons_mobs.entities.creepers.IcyCreeperEntity;
 import com.infamous.dungeons_mobs.entities.ender.BlastlingEntity;
@@ -14,58 +7,24 @@ import com.infamous.dungeons_mobs.entities.ender.EndersentEntity;
 import com.infamous.dungeons_mobs.entities.ender.SnarelingEntity;
 import com.infamous.dungeons_mobs.entities.ender.WatchlingEntity;
 import com.infamous.dungeons_mobs.entities.golem.SquallGolemEntity;
-import com.infamous.dungeons_mobs.entities.illagers.DungeonsIllusionerEntity;
-import com.infamous.dungeons_mobs.entities.illagers.EnchanterEntity;
-import com.infamous.dungeons_mobs.entities.illagers.GeomancerEntity;
-import com.infamous.dungeons_mobs.entities.illagers.IceologerEntity;
-import com.infamous.dungeons_mobs.entities.illagers.IllusionerCloneEntity;
-import com.infamous.dungeons_mobs.entities.illagers.MageCloneEntity;
-import com.infamous.dungeons_mobs.entities.illagers.MageEntity;
-import com.infamous.dungeons_mobs.entities.illagers.MountaineerEntity;
-import com.infamous.dungeons_mobs.entities.illagers.RoyalGuardEntity;
-import com.infamous.dungeons_mobs.entities.illagers.WindcallerEntity;
+import com.infamous.dungeons_mobs.entities.illagers.*;
 import com.infamous.dungeons_mobs.entities.jungle.LeapleafEntity;
 import com.infamous.dungeons_mobs.entities.jungle.PoisonQuillVineEntity;
 import com.infamous.dungeons_mobs.entities.jungle.QuickGrowingVineEntity;
 import com.infamous.dungeons_mobs.entities.jungle.WhispererEntity;
 import com.infamous.dungeons_mobs.entities.piglin.FungusThrowerEntity;
 import com.infamous.dungeons_mobs.entities.piglin.ZombifiedFungusThrowerEntity;
-import com.infamous.dungeons_mobs.entities.projectiles.BlastlingBulletEntity;
-import com.infamous.dungeons_mobs.entities.projectiles.BlueNethershroomEntity;
-import com.infamous.dungeons_mobs.entities.projectiles.CobwebProjectileEntity;
-import com.infamous.dungeons_mobs.entities.projectiles.DrownedNecromancerOrbEntity;
-import com.infamous.dungeons_mobs.entities.projectiles.MageMissileEntity;
-import com.infamous.dungeons_mobs.entities.projectiles.NecromancerOrbEntity;
-import com.infamous.dungeons_mobs.entities.projectiles.PoisonQuillEntity;
-import com.infamous.dungeons_mobs.entities.projectiles.SlimeballEntity;
-import com.infamous.dungeons_mobs.entities.projectiles.SnarelingGlobEntity;
-import com.infamous.dungeons_mobs.entities.projectiles.WindcallerBlastProjectileEntity;
-import com.infamous.dungeons_mobs.entities.projectiles.WraithFireballEntity;
+import com.infamous.dungeons_mobs.entities.projectiles.*;
 import com.infamous.dungeons_mobs.entities.redstone.RedstoneCubeEntity;
 import com.infamous.dungeons_mobs.entities.redstone.RedstoneGolemEntity;
 import com.infamous.dungeons_mobs.entities.redstone.RedstoneMineEntity;
 import com.infamous.dungeons_mobs.entities.slime.ConjuredSlimeEntity;
-import com.infamous.dungeons_mobs.entities.summonables.AreaDamageEntity;
-import com.infamous.dungeons_mobs.entities.summonables.GeomancerBombEntity;
-import com.infamous.dungeons_mobs.entities.summonables.GeomancerWallEntity;
-import com.infamous.dungeons_mobs.entities.summonables.IceCloudEntity;
-import com.infamous.dungeons_mobs.entities.summonables.KelpTrapEntity;
-import com.infamous.dungeons_mobs.entities.summonables.SimpleTrapEntity;
-import com.infamous.dungeons_mobs.entities.summonables.SummonSpotEntity;
-import com.infamous.dungeons_mobs.entities.summonables.TridentStormEntity;
-import com.infamous.dungeons_mobs.entities.summonables.WindcallerTornadoEntity;
-import com.infamous.dungeons_mobs.entities.summonables.WraithFireEntity;
-import com.infamous.dungeons_mobs.entities.undead.FrozenZombieEntity;
-import com.infamous.dungeons_mobs.entities.undead.JungleZombieEntity;
-import com.infamous.dungeons_mobs.entities.undead.MossySkeletonEntity;
-import com.infamous.dungeons_mobs.entities.undead.NecromancerEntity;
-import com.infamous.dungeons_mobs.entities.undead.SkeletonVanguardEntity;
-import com.infamous.dungeons_mobs.entities.undead.WraithEntity;
+import com.infamous.dungeons_mobs.entities.summonables.*;
+import com.infamous.dungeons_mobs.entities.undead.*;
 import com.infamous.dungeons_mobs.entities.water.DrownedNecromancerEntity;
 import com.infamous.dungeons_mobs.entities.water.PoisonAnemoneEntity;
 import com.infamous.dungeons_mobs.entities.water.QuickGrowingKelpEntity;
 import com.infamous.dungeons_mobs.entities.water.SunkenSkeletonEntity;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
@@ -76,6 +35,13 @@ import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Supplier;
+
+import static com.infamous.dungeons_mobs.DungeonsMobs.DUNGEONS_MOBS;
+import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
 public class ModEntityTypes {
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITIES, MODID);
@@ -408,14 +374,6 @@ public class ModEntityTypes {
 	);
 
     // Projectiles
-    public static final RegistryObject<EntityType<WraithFireballEntity>> WRAITH_FIREBALL = registerEntityWithoutEgg("wraith_fireball", () ->
-            EntityType.Builder.<WraithFireballEntity>of(WraithFireballEntity::new, EntityClassification.MISC)
-                    .sized(0.3125F, 0.3125F)
-                    .clientTrackingRange(4)
-                    .updateInterval(10)
-                    .build(new ResourceLocation(MODID, "wraith_fireball").toString())
-    );
-
     public static final RegistryObject<EntityType<SlimeballEntity>> SLIMEBALL = registerEntityWithoutEgg("slimeball", () ->
             EntityType.Builder.<SlimeballEntity>of(SlimeballEntity::new, EntityClassification.MISC)
                     .sized(0.3125F, 0.3125F)

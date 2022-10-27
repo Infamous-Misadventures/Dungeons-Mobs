@@ -84,7 +84,6 @@ public class DungeonsMobs
         ModEntityTypes.ENTITY_TYPES.register(modEventBus);
         ModEntityTypes.SPAWN_EGGS.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
-        ModBlocks.BLOCKS.register(modEventBus);
         ModRecipes.RECIPES.register(modEventBus);
         ModParticleTypes.PARTICLES.register(modEventBus);
         ModMobEnchants.MOB_ENCHANTS_DEFERRED.register(modEventBus);

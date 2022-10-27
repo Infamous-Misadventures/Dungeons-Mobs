@@ -30,11 +30,8 @@ import com.infamous.dungeons_mobs.client.renderer.water.*;
 import com.infamous.dungeons_mobs.items.armor.NecromancerArmorGear;
 import com.infamous.dungeons_mobs.items.armor.WindcallerClothesArmorGear;
 import com.infamous.dungeons_mobs.items.shield.CustomISTER;
-import com.infamous.dungeons_mobs.mod.ModBlocks;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.entity.LivingRenderer;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.DyeColor;
@@ -123,7 +120,6 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(EntityType.ZOMBIFIED_PIGLIN, manager -> new CustomPiglinRenderer(manager, true, false));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ZOMBIFIED_FUNGUS_THROWER.get(), manager -> new CustomPiglinRenderer(manager, true, true));
 
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WRAITH_FIREBALL.get(), CustomFireballRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SLIMEBALL.get(), SlimeballRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.COBWEB_PROJECTILE.get(), CobwebProjectileRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.BLUE_NETHERSHROOM.get(), BlueNethershroomRenderer::new);
@@ -144,7 +140,6 @@ public class ClientEvents {
         
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WRAITH_FIRE.get(), WraithFireRenderer::new);
 
-        RenderTypeLookup.setRenderLayer(ModBlocks.WRAITH_FIRE_BLOCK.get(), RenderType.cutout());
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WAVEWHISPERER.get(), WavewhispererRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.POISON_ANEMONE.get(), PoisonAnemoneRenderer::new);
