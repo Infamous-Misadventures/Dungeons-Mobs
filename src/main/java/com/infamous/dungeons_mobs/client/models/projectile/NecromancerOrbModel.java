@@ -2,7 +2,6 @@ package com.infamous.dungeons_mobs.client.models.projectile;
 
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
-import com.infamous.dungeons_mobs.entities.projectiles.GeoOrbEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.NecromancerOrbEntity;
 
 import net.minecraft.util.ResourceLocation;

@@ -34,14 +34,11 @@ import com.infamous.dungeons_mobs.entities.projectiles.BlastlingBulletEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.BlueNethershroomEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.CobwebProjectileEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.DrownedNecromancerOrbEntity;
-import com.infamous.dungeons_mobs.entities.projectiles.GeoOrbEntity;
-import com.infamous.dungeons_mobs.entities.projectiles.LaserOrbEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.MageMissileEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.NecromancerOrbEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.PoisonQuillEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.SlimeballEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.SnarelingGlobEntity;
-import com.infamous.dungeons_mobs.entities.projectiles.TridentFumeEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.WindcallerBlastProjectileEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.WraithFireballEntity;
 import com.infamous.dungeons_mobs.entities.redstone.RedstoneCubeEntity;
@@ -577,29 +574,6 @@ public class ModEntityTypes {
             .build(new ResourceLocation(MODID, "area_damage").toString())
     );
     
-    public static final RegistryObject<EntityType<LaserOrbEntity>> LASER_ORB = registerEntityWithoutEgg("laser_orb", () ->
-            EntityType.Builder.<LaserOrbEntity>of(LaserOrbEntity::new, EntityClassification.MISC)
-                    .sized(0.25F, 0.25F)
-                    .clientTrackingRange(4)
-                    .updateInterval(10)
-                    .build(new ResourceLocation(MODID, "laser_orb").toString())
-    );
-
-    public static final RegistryObject<EntityType<GeoOrbEntity>> GEO_ORB = ENTITY_TYPES.register("geo_orb", () ->
-            EntityType.Builder.<GeoOrbEntity>of(GeoOrbEntity::new, EntityClassification.MISC)
-                    .fireImmune()
-                    .sized(.5F, .5F)
-                    .clientTrackingRange(10)
-                    .build(new ResourceLocation(MODID, "geo_orb").toString())
-    );
-    public static final RegistryObject<EntityType<TridentFumeEntity>> TRIDENT_FUME = registerEntityWithoutEgg("trident_fume", () ->
-            EntityType.Builder.<TridentFumeEntity>of(TridentFumeEntity::new, EntityClassification.MISC)
-                    .sized(0.25F, 0.25F)
-                    .clientTrackingRange(4)
-                    .updateInterval(10)
-                    .build(new ResourceLocation(MODID, "trident_fume").toString())
-    );
-
     public static final RegistryObject<EntityType<BlastlingBulletEntity>> BLASTLING_BULLET = registerEntityWithoutEgg("blastling_bullet", () ->
     EntityType.Builder.<BlastlingBulletEntity>of(BlastlingBulletEntity::new, EntityClassification.MISC)
             .sized(0.3F, 0.3F)

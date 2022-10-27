@@ -1,8 +1,6 @@
 package com.infamous.dungeons_mobs.items;
 
-import com.infamous.dungeons_mobs.entities.projectiles.AbstractOrbEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.DrownedNecromancerOrbEntity;
-import com.infamous.dungeons_mobs.entities.projectiles.TridentFumeEntity;
 import com.infamous.dungeons_mobs.interfaces.IHasInventorySprite;
 
 import net.minecraft.entity.player.PlayerEntity;
