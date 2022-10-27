@@ -180,12 +180,12 @@ public class ModEntityTypes {
             0x348179, 0xdc6c46
     );
     
-    public static final RegistryObject<EntityType<EnchanterEntity>> ENCHANTER = registerEntity("enchanter", () ->
+    public static final RegistryObject<EntityType<EnchanterEntity>> ENCHANTER = registerEntityWithoutEgg("enchanter", () ->
     EntityType.Builder.<EnchanterEntity>of(EnchanterEntity::new, EntityClassification.MONSTER)
             .sized(0.6F, 1.95F)
             .clientTrackingRange(8)
-            .build(new ResourceLocation(MODID, "enchanter").toString()),
-            0x62162c, 0xfbd600
+            .build(new ResourceLocation(MODID, "enchanter").toString())//,
+            //0x62162c, 0xfbd600
     );
     
     public static final RegistryObject<EntityType<DungeonsIllusionerEntity>> ILLUSIONER = registerEntity("illusioner", () ->
@@ -401,13 +401,13 @@ public class ModEntityTypes {
     
     // BLAZES
     
-    public static final RegistryObject<EntityType<WildfireEntity>> WILDFIRE = registerEntityWithoutEgg("wildfire", () ->
+    public static final RegistryObject<EntityType<WildfireEntity>> WILDFIRE = registerEntity("wildfire", () ->
 	    EntityType.Builder.<WildfireEntity>of(WildfireEntity::new, EntityClassification.MONSTER)
 	            .fireImmune()
 	            .sized(0.9F, 2.25F)
 	            .clientTrackingRange(10)
-	            .build(new ResourceLocation(MODID, "wildfire").toString())/*,
-	            0x8b3401, 0xffd528*/
+	            .build(new ResourceLocation(MODID, "wildfire").toString()),
+	            0x8b3401, 0xffd528
 	);
 
     // Projectiles
