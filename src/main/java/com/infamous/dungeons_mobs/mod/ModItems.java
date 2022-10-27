@@ -71,9 +71,6 @@ public class ModItems {
     public static final ArmorSet VANGUARD_ARMOR = registerArmorSet("vanguard_armor", "vanguard_helmet", "vanguard_chestplate", "vanguard_legs", null);
     public static final ArmorSet WINDCALLER_CLOTHES = registerArmorSetWindcallerClothes("windcaller_armor", "wind_wig", "windcaller_robes", null, null);
 
-    // SOUL FIRE CHARGE
-    public static final RegistryObject<WraithFireChargeItem> WRAITH_FIRE_CHARGE = ITEMS.register("wraith_fire_charge",
-            () -> new WraithFireChargeItem(new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS)));
 
     // SPATULA
     public static final RegistryObject<Item> WOODEN_LADLE = ITEMS.register("wooden_ladle",
