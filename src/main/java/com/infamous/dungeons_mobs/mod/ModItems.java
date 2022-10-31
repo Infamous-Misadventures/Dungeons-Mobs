@@ -9,7 +9,8 @@ import com.infamous.dungeons_mobs.items.*;
 import com.infamous.dungeons_mobs.items.armor.NecromancerArmorGear;
 import com.infamous.dungeons_mobs.items.armor.WindcallerClothesArmorGear;
 import com.infamous.dungeons_mobs.items.shield.RoyalGuardShieldItem;
-import com.infamous.dungeons_mobs.items.shield.SkeletonVanguardShieldItem;
+import com.infamous.dungeons_mobs.items.shield.VanguardShieldItem;
+import com.infamous.dungeons_mobs.utils.GeneralHelper;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.DyeColor;
@@ -20,6 +21,8 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Supplier;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
@@ -30,13 +33,14 @@ public class ModItems {
 
     public static final Item.Properties ARMOR_PROPERTIES = DungeonsMobsConfig.COMMON.ENABLE_ITEM_TAB.get() ?
             new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS) : new Item.Properties();
+    public static final Map<ResourceLocation, RegistryObject<Item>> ARMORS = new HashMap<>();
 
     // SHIELD
     public static final RegistryObject<Item> ROYAL_GUARD_SHIELD = ITEMS.register("royal_guard_shield",
             () -> new RoyalGuardShieldItem(new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS).durability(336)));
 
-    public static final RegistryObject<Item> SKELETON_VANGUARD_SHIELD = ITEMS.register("skeleton_vanguard_shield",
-            () -> new SkeletonVanguardShieldItem(new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS).durability(336)));
+    public static final RegistryObject<Item> VANGUARD_SHIELD = ITEMS.register("vanguard_shield",
+            () -> new VanguardShieldItem(new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS).durability(336)));
 
     // HELMETS
     public static final RegistryObject<Item> GOLD_PILLAGER_HELMET = ITEMS.register("gold_pillager_helmet",
@@ -61,20 +65,25 @@ public class ModItems {
             () -> new PiglinHelmetItem(ArmorMaterial.GOLD, EquipmentSlotType.HEAD, new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS)));
 
     public static final ArmorSet CHEF_ARMOR = registerArmorSet("chef_armor", "chef_helmet", "chef_chestplate", null, null);
-    public static final ArmorSet DROWNED_NECROMANCER_ROBES = registerArmorSet("drowned_necromancer_armor", "drowned_necromancer_crown", "drowned_necromancer_cloak", "drowned_necromancer_belt", null);
+    public static final ArmorSet DROWNED_NECROMANCER_ROBES = registerArmorSet("drowned_necromancer_armor", "drowned_necromancer_helmet", "drowned_necromancer_chestplate", "drowned_necromancer_leggings", null);
     public static final ArmorSet GEOMANCER_CLOTHES = registerArmorSet("geomancer_armor", "geomancer_helmet", "geomancer_chestplate", null, null);
     public static final ArmorSet ICEOLOGER_CLOTHES = registerArmorSet("iceologer_armor", "iceologer_helmet", "iceologer_chestplate", "iceologer_leggings", "iceologer_boots");
     public static final ArmorSet ILLUSIONER_CLOTHES = registerArmorSet("illusioner_armor", "illusioner_helmet", "illusioner_chestplate", "illusioner_leggings", "illusioner_boots");
-    public static final ArmorSet NECROMANCER_ROBES = registerArmorSetNecromancerArmor("necromancer_armor", "necromancer_crown", "necromancer_cloak", "necromancer_belt", null, new ResourceLocation(MODID, "animations/armor/cloaked_armor.animation.json"));
+    public static final ArmorSet NECROMANCER_ROBES = registerArmorSetNecromancerArmor("necromancer_armor", "necromancer_helmet", "necromancer_chestplate", "necromancer_leggings", null, new ResourceLocation(MODID, "animations/armor/cloaked_armor.animation.json"));
     public static final ArmorSet NETHERPLATE_ARMOR = registerArmorSet("netherplate_armor", "netherplate_helmet", null, null, null);
-    public static final ArmorSet ROYAL_GUARD_ARMOR = registerArmorSet("royal_guard_armor", "royal_guard_helmet", "royal_guard_chestplate", "royal_guard_legs", "royal_guard_sabatons");
-    public static final ArmorSet VANGUARD_ARMOR = registerArmorSet("vanguard_armor", "vanguard_helmet", "vanguard_chestplate", "vanguard_legs", null);
-    public static final ArmorSet WINDCALLER_CLOTHES = registerArmorSetWindcallerClothes("windcaller_armor", "wind_wig", "windcaller_chestplate", null, null);
+    public static final ArmorSet ROYAL_GUARD_ARMOR = registerArmorSet("royal_guard_armor", "royal_guard_helmet", "royal_guard_chestplate", "royal_guard_leggings", "royal_guard_boots");
+    public static final ArmorSet VANGUARD_ARMOR = registerArmorSet("vanguard_armor", "vanguard_helmet", "vanguard_chestplate", "vanguard_leggings", null);
+    public static final ArmorSet WINDCALLER_CLOTHES = registerArmorSetWindcallerClothes("windcaller_armor", "windcaller_helmet", "windcaller_chestplate", null, null);
+    public static final ArmorSet FUNGUS_THROWER_ARMOR = registerArmorSet("fungus_thrower_armor", "fungus_thrower_helmet", "fungus_thrower_chestplate", null, null);
+    public static final ArmorSet MOUNTAINEER_ARMOR = registerArmorSet("mountaineer_armor", "mountaineer_helmet", "mountaineer_chestplate", "mountaineer_leggings", "mountaineer_boots");
+    public static final ArmorSet EXPEDITION_ARMOR = registerArmorSet("expedition_armor", "expedition_helmet", "expedition_chestplate", "expedition_leggings", null);
+    public static final ArmorSet ALPINE_ARMOR = registerArmorSet("alpine_armor", "alpine_helmet", "alpine_chestplate", "alpine_leggings", "alpine_boots");
+    public static final ArmorSet MAGE_ARMOR = registerArmorSet("mage_armor", "mage_helmet", "mage_chestplate", "mage_leggings", "mage_boots");
 
 
     // SPATULA
     public static final RegistryObject<Item> WOODEN_LADLE = ITEMS.register("wooden_ladle",
-            () -> new SpatulaItem(ItemTier.WOOD, 0.5F, (2.0F-4.0F), new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS)));
+            () -> new WoodenLadleItem(ItemTier.WOOD, 0.5F, (2.0F-4.0F), new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS)));
 
     // MOUNTAINEER AXES
     public static final RegistryObject<Item> MOUNTAINEER_AXE = ITEMS.register("mountaineer_axe",
@@ -174,6 +183,8 @@ public class ModItems {
 
     private static RegistryObject<Item> registerArmor(String armorId, Supplier<Item> itemSupplier) {
         if(armorId == null) return null;
-        return ITEMS.register(armorId, itemSupplier);
+        RegistryObject<Item> register = ITEMS.register(armorId, itemSupplier);
+        ARMORS.put(GeneralHelper.modLoc(armorId), register);
+        return register;
     }
 }

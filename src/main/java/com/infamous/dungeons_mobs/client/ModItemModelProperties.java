@@ -12,7 +12,7 @@ public class ModItemModelProperties {
                 (stack, clientWorld, livingEntity) -> {
             return livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == stack ? 1.0F : 0.0F;
         });
-        ItemModelsProperties.register(ModItems.SKELETON_VANGUARD_SHIELD.get(),
+        ItemModelsProperties.register(ModItems.VANGUARD_SHIELD.get(),
                 new ResourceLocation("blocking"),
                 (stack, clientWorld, livingEntity) -> {
                     return livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == stack ? 1.0F : 0.0F;

@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "dungeons_mobs:item/armored_mountaineer_hood"
-  }
-}

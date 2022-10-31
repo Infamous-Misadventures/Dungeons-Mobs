@@ -105,9 +105,11 @@ public class MountaineerEntity extends VindicatorEntity {
 
     @Override
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
-        if(this.getCurrentRaid() == null){
-            this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModItems.MOUNTAINEER_AXE.get()));
-        }
+        this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModItems.MOUNTAINEER_AXE.get()));
+        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.MOUNTAINEER_ARMOR.getHead().get()));
+        this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.MOUNTAINEER_ARMOR.getChest().get()));
+        this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(ModItems.MOUNTAINEER_ARMOR.getLegs().get()));
+        this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(ModItems.MOUNTAINEER_ARMOR.getFeet().get()));
     }
 
     public void applyRaidBuffs(int waveNumber, boolean bool) {

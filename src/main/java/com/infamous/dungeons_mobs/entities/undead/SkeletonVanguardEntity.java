@@ -6,17 +6,14 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
-import com.infamous.dungeons_mobs.entities.illagers.RoyalGuardEntity;
 import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
 import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
 import com.infamous.dungeons_mobs.goals.UseShieldGoal;
-import com.infamous.dungeons_mobs.goals.switchcombat.ShieldAndMeleeAttackGoal;
 import com.infamous.dungeons_mobs.interfaces.IShieldUser;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModItems;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 
-import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.EntityType;
@@ -28,14 +25,11 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.ai.goal.AvoidEntityGoal;
-import net.minecraft.entity.ai.goal.FleeSunGoal;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.ai.goal.LookAtGoal;
 import net.minecraft.entity.ai.goal.LookRandomlyGoal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.ai.goal.RestrictSunGoal;
 import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.monster.SkeletonEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
@@ -52,7 +46,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
@@ -131,7 +124,7 @@ public class SkeletonVanguardEntity extends SkeletonEntity implements IShieldUse
 			this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_SWORD));
 		}
 		//this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.SKELETON_VANGUARD_HELMET.get()));
-		this.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(ModItems.SKELETON_VANGUARD_SHIELD.get()));
+		this.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(ModItems.VANGUARD_SHIELD.get()));
 	}
 
 	@Nullable

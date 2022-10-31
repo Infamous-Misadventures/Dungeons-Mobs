@@ -1,7 +1,7 @@
 package com.infamous.dungeons_mobs.items.shield;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
-import com.infamous.dungeons_mobs.client.models.armor.SkeletonVanguardShieldModel;
+import com.infamous.dungeons_mobs.client.models.armor.VanguardShieldModel;
 import com.infamous.dungeons_mobs.items.ColoredTridentItem;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
@@ -32,7 +32,7 @@ import static com.infamous.dungeons_mobs.items.shield.ShieldTextures.*;
 public class CustomISTER extends ItemStackTileEntityRenderer {
 
 	private final ShieldModel modelShield = new ShieldModel();
-	private final SkeletonVanguardShieldModel modelVanguardShield = new SkeletonVanguardShieldModel();
+	private final VanguardShieldModel modelVanguardShield = new VanguardShieldModel();
 	private final TridentModel tridentModel = new TridentModel();
 
 	public void renderByItem(ItemStack stack, ItemCameraTransforms.TransformType transformType, MatrixStack matrixStack, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay){
@@ -53,7 +53,7 @@ public class CustomISTER extends ItemStackTileEntityRenderer {
 
 			matrixStack.popPose();
 		}
-		else if (item instanceof SkeletonVanguardShieldItem) {
+		else if (item instanceof VanguardShieldItem) {
 			matrixStack.pushPose();
 			matrixStack.scale(1.0F, -1.0F, -1.0F);
 			RenderMaterial rendermaterial = LOCATION_SKELETON_VANGUARD_SHIELD;
