@@ -15,15 +15,16 @@
     "MansionTemplateMixin",
     "PiglinAccessor",
     "PiglinEntityMixin",
+    "ProjectileEntityMixin",
     "RaidMixin",
     "SpiderEntityMixin",
     "TridentEntityAccessor",
     "TridentEntityMixin",
     "WitherSkeletonEntityMixin",
-    "ZombifiedPiglinEntityMixin",
-    "ProjectileEntityMixin"
+    "ZombifiedPiglinEntityMixin"
   ],
   "client": [
+    "BipedModelMixin",
     "DrownedModelMixin",
     "ItemRendererMixin",
     "PiglinModelMixin",

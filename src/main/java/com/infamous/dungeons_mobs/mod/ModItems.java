@@ -62,14 +62,14 @@ public class ModItems {
 
     public static final ArmorSet CHEF_ARMOR = registerArmorSet("chef_armor", "chef_helmet", "chef_chestplate", null, null);
     public static final ArmorSet DROWNED_NECROMANCER_ROBES = registerArmorSet("drowned_necromancer_armor", "drowned_necromancer_crown", "drowned_necromancer_cloak", "drowned_necromancer_belt", null);
-    public static final ArmorSet GEOMANCER_CLOTHES = registerArmorSet("geomancer_clothes", "geomancer_beads", "geomancer_robes", null, null);
-    public static final ArmorSet ICEOLOGER_CLOTHES = registerArmorSet("iceologer_clothes", "iceologer_hood", "iceologer_robes", "iceologer_pants", "iceologer_shoes");
-    public static final ArmorSet ILLUSIONER_CLOTHES = registerArmorSet("illusioner_clothes", "illusioner_hood", "illusioner_robes", "illusioner_pants", "illusioner_shoes");
+    public static final ArmorSet GEOMANCER_CLOTHES = registerArmorSet("geomancer_armor", "geomancer_helmet", "geomancer_chestplate", null, null);
+    public static final ArmorSet ICEOLOGER_CLOTHES = registerArmorSet("iceologer_armor", "iceologer_helmet", "iceologer_chestplate", "iceologer_leggings", "iceologer_boots");
+    public static final ArmorSet ILLUSIONER_CLOTHES = registerArmorSet("illusioner_armor", "illusioner_helmet", "illusioner_chestplate", "illusioner_leggings", "illusioner_boots");
     public static final ArmorSet NECROMANCER_ROBES = registerArmorSetNecromancerArmor("necromancer_armor", "necromancer_crown", "necromancer_cloak", "necromancer_belt", null, new ResourceLocation(MODID, "animations/armor/cloaked_armor.animation.json"));
     public static final ArmorSet NETHERPLATE_ARMOR = registerArmorSet("netherplate_armor", "netherplate_helmet", null, null, null);
     public static final ArmorSet ROYAL_GUARD_ARMOR = registerArmorSet("royal_guard_armor", "royal_guard_helmet", "royal_guard_chestplate", "royal_guard_legs", "royal_guard_sabatons");
     public static final ArmorSet VANGUARD_ARMOR = registerArmorSet("vanguard_armor", "vanguard_helmet", "vanguard_chestplate", "vanguard_legs", null);
-    public static final ArmorSet WINDCALLER_CLOTHES = registerArmorSetWindcallerClothes("windcaller_armor", "wind_wig", "windcaller_robes", null, null);
+    public static final ArmorSet WINDCALLER_CLOTHES = registerArmorSetWindcallerClothes("windcaller_armor", "wind_wig", "windcaller_chestplate", null, null);
 
 
     // SPATULA
