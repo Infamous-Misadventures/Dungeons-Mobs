@@ -1,5 +1,6 @@
-package com.infamous.dungeons_mobs;
+package com.infamous.dungeons_mobs.compat;
 
+import com.infamous.dungeons_mobs.DungeonsMobs;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;

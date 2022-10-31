@@ -179,6 +179,11 @@ public class EntitySpawnPlacements {
                 EntitySpawnPlacements::checkZombifiedPiglinSpawnRules);
 
 
+        EntitySpawnPlacementRegistry.register(ModEntityTypes.WILDFIRE.get(),
+                EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
+                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
+                MonsterEntity::checkAnyLightMonsterSpawnRules);
+
 
         EntitySpawnPlacementRegistry.register(ModEntityTypes.WAVEWHISPERER.get(),
                 EntitySpawnPlacementRegistry.PlacementType.IN_WATER,
@@ -202,7 +207,27 @@ public class EntitySpawnPlacements {
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                 EntitySpawnPlacements::checkAquaticMobSpawnRules);
 
+        //Enderlings
+        EntitySpawnPlacementRegistry.register(ModEntityTypes.BLASTLING.get(),
+                EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
+                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
+                MonsterEntity::checkMonsterSpawnRules);
+        EntitySpawnPlacementRegistry.register(ModEntityTypes.WATCHLING.get(),
+                EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
+                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
+                MonsterEntity::checkMonsterSpawnRules);
+        EntitySpawnPlacementRegistry.register(ModEntityTypes.SNARELING.get(),
+                EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
+                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
+                MonsterEntity::checkMonsterSpawnRules);
+        EntitySpawnPlacementRegistry.register(ModEntityTypes.ENDERSENT.get(),
+                EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
+                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
+                MonsterEntity::checkMonsterSpawnRules);
+
     }
+
+
 
     public static boolean checkAquaticMobSpawnRules(EntityType<? extends MobEntity> type, IServerWorld serverWorld, SpawnReason spawnReason, BlockPos blockPos, Random random) {
         Optional<RegistryKey<Biome>> biomeName = serverWorld.getBiomeName(blockPos);

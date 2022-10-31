@@ -141,6 +141,15 @@ public class DungeonsMobsConfig {
         public final ForgeConfigSpec.ConfigValue<Integer> POISON_ANEMONE_MIN_GROUP_SIZE;
         public final ForgeConfigSpec.ConfigValue<Integer> POISON_ANEMONE_MAX_GROUP_SIZE;
 
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> ENDERLING_BIOME_TYPES;
+        public final ForgeConfigSpec.ConfigValue<Integer> ENDERLING_SPAWN_WEIGHT;
+        public final ForgeConfigSpec.ConfigValue<Integer> ENDERLING_MIN_GROUP_SIZE;
+        public final ForgeConfigSpec.ConfigValue<Integer> ENDERLING_MAX_GROUP_SIZE;
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> ENDERSENT_BIOME_TYPES;
+        public final ForgeConfigSpec.ConfigValue<Integer> ENDERSENT_SPAWN_WEIGHT;
+        public final ForgeConfigSpec.ConfigValue<Integer> ENDERSENT_MIN_GROUP_SIZE;
+        public final ForgeConfigSpec.ConfigValue<Integer> ENDERSENT_MAX_GROUP_SIZE;
+
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_BIOME_SPECIFIC_RAIDERS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_MOUNTAINEERS_IN_RAIDS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_MOUNTAINEERS_IN_RAIDS;
@@ -740,6 +749,43 @@ public class DungeonsMobsConfig {
             POISON_ANEMONE_MAX_GROUP_SIZE = builder
                     .comment("Maximum spawn group size of Poison Anemone in the biomes they can spawn in. [default:1]")
                     .defineInRange("poisonAnemoneMaxGroupSize", 1, 0, 128);
+
+            ENDERLING_BIOME_TYPES = builder
+                    .comment("Add biome types that the Enderlings can spawn in. \n"
+                            + "Put a \"!\" before the type to prevent spawning in that biome type. \n"
+                            + "Leave this blank if you don't want them to spawn at all.")
+                    .defineList("enderlingBiomeTypes", Lists.newArrayList(
+                                    "END",
+                                    "!END_CENTER"
+                            ),
+                            (itemRaw) -> itemRaw instanceof String);
+            ENDERLING_SPAWN_WEIGHT = builder
+                    .comment("Spawn weight of Enderlings in the biomes they can spawn in. [default:5]")
+                    .defineInRange("enderlingSpawnWeight", 5, 0, 1024);
+            ENDERLING_MIN_GROUP_SIZE = builder
+                    .comment("Minimum spawn group size of Enderlings in the biomes they can spawn in. [default:1]")
+                    .defineInRange("enderlingMinGroupSize", 1, 0, 128);
+            ENDERLING_MAX_GROUP_SIZE = builder
+                    .comment("Maximum spawn group size of Enderlings in the biomes they can spawn in. [default:3]")
+                    .defineInRange("enderlingMaxGroupSize", 3, 0, 128);
+            ENDERSENT_BIOME_TYPES = builder
+                    .comment("Add biome types that the Enderlings can spawn in. \n"
+                            + "Put a \"!\" before the type to prevent spawning in that biome type. \n"
+                            + "Leave this blank if you don't want them to spawn at all.")
+                    .defineList("enderlingBiomeTypes", Lists.newArrayList(
+                                    "END",
+                                    "!END_CENTER"
+                            ),
+                            (itemRaw) -> itemRaw instanceof String);
+            ENDERSENT_SPAWN_WEIGHT = builder
+                    .comment("Spawn weight of Endersents in the biomes they can spawn in. [default:1]")
+                    .defineInRange("endersentSpawnWeight", 1, 0, 1024);
+            ENDERSENT_MIN_GROUP_SIZE = builder
+                    .comment("Minimum spawn group size of Endersents in the biomes they can spawn in. [default:1]")
+                    .defineInRange("endersentMinGroupSize", 1, 0, 128);
+            ENDERSENT_MAX_GROUP_SIZE = builder
+                    .comment("Maximum spawn group size of Endersents in the biomes they can spawn in. [default:1]")
+                    .defineInRange("endersentMaxGroupSize", 1, 0, 128);
 
             builder.pop();
 

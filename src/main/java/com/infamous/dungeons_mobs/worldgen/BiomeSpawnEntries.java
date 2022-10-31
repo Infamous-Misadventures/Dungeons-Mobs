@@ -1,5 +1,6 @@
 package com.infamous.dungeons_mobs.worldgen;
 
+import com.infamous.dungeons_mobs.compat.EnderlingsCompat;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import net.minecraft.entity.EntityClassification;
@@ -33,11 +34,14 @@ public class BiomeSpawnEntries {
     public static final BiomeDictionary.Type DELTA = BiomeDictionary.Type.getType("DELTA");
     public static final BiomeDictionary.Type SOULSAND = BiomeDictionary.Type.getType("SOULSAND");
 
+    public static final BiomeDictionary.Type END_CENTER = BiomeDictionary.Type.getType("END_CENTER");
+
     public static void addCustomTypesToBiomes(){
         BiomeDictionary.addTypes(Biomes.CRIMSON_FOREST, CRIMSON);
         BiomeDictionary.addTypes(Biomes.WARPED_FOREST, WARPED);
         BiomeDictionary.addTypes(Biomes.BASALT_DELTAS, DELTA);
         BiomeDictionary.addTypes(Biomes.SOUL_SAND_VALLEY, SOULSAND);
+        BiomeDictionary.addTypes(Biomes.THE_END, END_CENTER);
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
@@ -196,6 +200,27 @@ public class BiomeSpawnEntries {
                 DungeonsMobsConfig.COMMON.POISON_ANEMONE_MAX_GROUP_SIZE.get());*/
 
         //}
+
+        if(!EnderlingsCompat.isLoaded()) {
+            List<String> enderlingBiomeTypes = (List<String>) DungeonsMobsConfig.COMMON.ENDERLING_BIOME_TYPES.get();
+            tryAddMonsterSpawnToBiome(biomeRegistryKey, mobSpawnInfoBuilder, enderlingBiomeTypes, ModEntityTypes.BLASTLING.get(),
+                    DungeonsMobsConfig.COMMON.ENDERLING_SPAWN_WEIGHT.get(),
+                    DungeonsMobsConfig.COMMON.ENDERLING_MIN_GROUP_SIZE.get(),
+                    DungeonsMobsConfig.COMMON.ENDERLING_MAX_GROUP_SIZE.get());
+            tryAddMonsterSpawnToBiome(biomeRegistryKey, mobSpawnInfoBuilder, enderlingBiomeTypes, ModEntityTypes.SNARELING.get(),
+                    DungeonsMobsConfig.COMMON.ENDERLING_SPAWN_WEIGHT.get(),
+                    DungeonsMobsConfig.COMMON.ENDERLING_MIN_GROUP_SIZE.get(),
+                    DungeonsMobsConfig.COMMON.ENDERLING_MAX_GROUP_SIZE.get());
+            tryAddMonsterSpawnToBiome(biomeRegistryKey, mobSpawnInfoBuilder, enderlingBiomeTypes, ModEntityTypes.WATCHLING.get(),
+                    DungeonsMobsConfig.COMMON.ENDERLING_SPAWN_WEIGHT.get(),
+                    DungeonsMobsConfig.COMMON.ENDERLING_MIN_GROUP_SIZE.get(),
+                    DungeonsMobsConfig.COMMON.ENDERLING_MAX_GROUP_SIZE.get());
+            List<String> endersentBiomeTypes = (List<String>) DungeonsMobsConfig.COMMON.ENDERSENT_BIOME_TYPES.get();
+            tryAddMonsterSpawnToBiome(biomeRegistryKey, mobSpawnInfoBuilder, endersentBiomeTypes, ModEntityTypes.ENDERSENT.get(),
+                    DungeonsMobsConfig.COMMON.ENDERSENT_SPAWN_WEIGHT.get(),
+                    DungeonsMobsConfig.COMMON.ENDERSENT_MIN_GROUP_SIZE.get(),
+                    DungeonsMobsConfig.COMMON.ENDERSENT_MAX_GROUP_SIZE.get());
+        }
     }
 
     private static void replaceMonsterSpawnsWithVariants(MobSpawnInfoBuilder mobSpawnInfoBuilder, Biome.Category foundCategory) {

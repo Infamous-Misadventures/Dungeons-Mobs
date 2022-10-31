@@ -1,6 +1,6 @@
 package com.infamous.dungeons_mobs.mixin;
 
-import com.infamous.dungeons_mobs.DungeonsGearCompat;
+import com.infamous.dungeons_mobs.compat.DungeonsGearCompat;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.monster.AbstractSkeletonEntity;
 import net.minecraft.entity.monster.WitherSkeletonEntity;

@@ -1,6 +1,6 @@
 package com.infamous.dungeons_mobs.mixin;
 
-import com.infamous.dungeons_mobs.DungeonsGearCompat;
+import com.infamous.dungeons_mobs.compat.DungeonsGearCompat;
 import com.infamous.dungeons_mobs.goals.SmartZombieAttackGoal;
 import com.infamous.dungeons_mobs.interfaces.ISmartCrossbowUser;
 import net.minecraft.entity.*;
