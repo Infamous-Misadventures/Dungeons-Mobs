@@ -7,6 +7,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import com.infamous.dungeons_libraries.attribute.AttributeRegistry;
+import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
 import com.infamous.dungeons_libraries.summon.SummonHelper;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.entities.projectiles.NecromancerOrbEntity;
@@ -63,7 +64,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class NecromancerEntity extends SkeletonEntity implements IAnimatable {
+public class NecromancerEntity extends SkeletonEntity implements IAnimatable, SpawnArmoredMob {
 
     public int shootAnimationTick;
     public int shootAnimationLength = 20;
@@ -247,6 +248,11 @@ public class NecromancerEntity extends SkeletonEntity implements IAnimatable {
     @Override
     public AnimationFactory getFactory() {
         return factory;
+    }
+
+    @Override
+    public ResourceLocation getArmorSet() {
+        return ModItems.NECROMANCER_ARMOR.getArmorSet();
     }
 
     class SummonGoal extends Goal {

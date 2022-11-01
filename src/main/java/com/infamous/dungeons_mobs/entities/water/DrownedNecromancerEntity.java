@@ -8,6 +8,7 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import com.infamous.dungeons_libraries.attribute.AttributeRegistry;
+import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
 import com.infamous.dungeons_libraries.summon.SummonHelper;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.entities.projectiles.DrownedNecromancerOrbEntity;
@@ -72,7 +73,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class DrownedNecromancerEntity extends DrownedEntity implements IAnimatable {
+public class DrownedNecromancerEntity extends DrownedEntity implements IAnimatable, SpawnArmoredMob {
 
     public int landShootAnimationTick;
     public int landShootAnimationLength = 20;
@@ -298,6 +299,11 @@ public class DrownedNecromancerEntity extends DrownedEntity implements IAnimatab
     private boolean isInRain() {
         BlockPos blockpos = this.blockPosition();
         return this.level.isRainingAt(blockpos) || this.level.isRainingAt(new BlockPos((double) blockpos.getX(), this.getBoundingBox().maxY, (double) blockpos.getZ()));
+    }
+
+    @Override
+    public ResourceLocation getArmorSet() {
+        return ModItems.DROWNED_NECROMANCER_ARMOR.getArmorSet();
     }
 
     static class SwimUpGoal extends Goal {

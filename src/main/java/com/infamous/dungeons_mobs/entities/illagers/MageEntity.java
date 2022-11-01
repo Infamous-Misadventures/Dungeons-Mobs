@@ -251,7 +251,7 @@ public class MageEntity extends AbstractIllagerEntity implements IAnimatable, Sp
 
     @Override
     public ResourceLocation getArmorSet() {
-        return null; //ModItems.MAGE_CLOTHES.getArmorSet();
+        return ModItems.MAGE_ARMOR.getArmorSet();
     }
 
     class CreateIllusionsGoal extends Goal {
