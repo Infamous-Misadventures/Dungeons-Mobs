@@ -20,11 +20,8 @@ import software.bernie.geckolib3.util.RenderUtils;
 
 public class WindcallerClothesArmorGearRenderer extends ArmorGearRenderer<WindcallerClothesArmorGear> {
 
-
     @Override
-    public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn,
-                                  int packedOverlayIn, float red, float green, float blue, float alpha) {
-        stack.pushPose();
+    public void preparePositionRotationScale(GeoBone bone, MatrixStack stack) {
         RenderUtils.translate(bone, stack);
         RenderUtils.moveToPivot(bone, stack);
         EntityRenderer<? super LivingEntity> entityRenderer = Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(entityLiving);
@@ -38,28 +35,8 @@ public class WindcallerClothesArmorGearRenderer extends ArmorGearRenderer<Windca
         }
         if(entityLiving instanceof WindcallerEntity && bone.getName().contains("Head")){
             stack.scale(0.93F, 0.93F, 0.93F);
+            stack.translate(0.0D, 0.116D, 0.0D);
         }
         RenderUtils.moveBackFromPivot(bone, stack);
-
-        if (!bone.isHidden()) {
-            for (GeoCube cube : bone.childCubes) {
-                stack.pushPose();
-                if (!bone.cubesAreHidden()) {
-                    if(entityLiving instanceof SpawnArmoredMob && ((SpawnArmoredMob) entityLiving).getArmorSet() == this.currentArmorItem.getArmorSet()){
-                        renderCube(cube, stack, bufferIn, packedLightIn, LivingRenderer.getOverlayCoords(entityLiving, 0.0F), red, green, blue, alpha);
-                    }else {
-                        renderCube(cube, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-                    }
-                }
-                stack.popPose();
-            }
-        }
-        if (!bone.childBonesAreHiddenToo()) {
-            for (GeoBone childBone : bone.childBones) {
-                renderRecursively(childBone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-            }
-        }
-
-        stack.popPose();
     }
 }

@@ -8,7 +8,6 @@ import javax.annotation.Nullable;
 import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
 import com.infamous.dungeons_mobs.entities.projectiles.WindcallerBlastProjectileEntity;
-import com.infamous.dungeons_mobs.entities.summonables.IceCloudEntity;
 import com.infamous.dungeons_mobs.entities.summonables.WindcallerTornadoEntity;
 import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
 import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
@@ -37,15 +36,12 @@ import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.monster.AbstractIllagerEntity;
 import net.minecraft.entity.monster.AbstractRaiderEntity;
-import net.minecraft.entity.monster.BlazeEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.SmallFireballEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -219,8 +215,8 @@ public class WindcallerEntity extends AbstractIllagerEntity implements IAnimatab
     protected void populateDefaultEquipmentSlots(DifficultyInstance p_180481_1_) {
         super.populateDefaultEquipmentSlots(p_180481_1_);
         this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModItems.WINDCALLER_STAFF.get()));
-        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.WINDCALLER_CLOTHES.getHead().get()));
-        this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.WINDCALLER_CLOTHES.getChest().get()));
+        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.WINDCALLER_ARMOR.getHead().get()));
+        this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.WINDCALLER_ARMOR.getChest().get()));
     }
 
     @Nullable
@@ -275,7 +271,7 @@ public class WindcallerEntity extends AbstractIllagerEntity implements IAnimatab
 
 	@Override
 	public ResourceLocation getArmorSet() {
-		return ModItems.WINDCALLER_CLOTHES.getArmorSet();
+		return ModItems.WINDCALLER_ARMOR.getArmorSet();
 	}
 
 	class LiftAttackGoal extends Goal {

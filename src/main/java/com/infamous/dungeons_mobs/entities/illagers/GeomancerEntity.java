@@ -2,8 +2,6 @@ package com.infamous.dungeons_mobs.entities.illagers;
 
 import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
 import com.infamous.dungeons_mobs.entities.summonables.ConstructEntity;
-import com.infamous.dungeons_mobs.entities.summonables.WraithFireEntity;
-import com.infamous.dungeons_mobs.entities.undead.WraithEntity;
 import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
 import com.infamous.dungeons_mobs.goals.AvoidBaseEntityGoal;
 import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
@@ -11,7 +9,6 @@ import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModItems;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 import com.infamous.dungeons_mobs.utils.GeomancyHelper;
-import com.infamous.dungeons_mobs.utils.PositionUtils;
 
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -24,13 +21,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.*;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -44,8 +37,6 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import java.util.EnumSet;
 
 import javax.annotation.Nullable;
-
-import net.minecraft.entity.monster.AbstractIllagerEntity.ArmPose;
 
 public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnimatable, SpawnArmoredMob {
 
@@ -153,8 +144,8 @@ public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnima
     @Override
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
         this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModItems.GEOMANCER_STAFF.get()));
-        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.GEOMANCER_CLOTHES.getHead().get()));
-        this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.GEOMANCER_CLOTHES.getChest().get()));
+        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.GEOMANCER_ARMOR.getHead().get()));
+        this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.GEOMANCER_ARMOR.getChest().get()));
     }
 
     @Nullable
@@ -166,7 +157,7 @@ public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnima
 
     @Override
     public ResourceLocation getArmorSet() {
-        return ModItems.GEOMANCER_CLOTHES.getArmorSet();
+        return ModItems.GEOMANCER_ARMOR.getArmorSet();
     }
 
     /**

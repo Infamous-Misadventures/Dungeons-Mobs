@@ -12,6 +12,7 @@ import com.infamous.dungeons_mobs.entities.undead.WraithEntity;
 import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
 import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
+import com.infamous.dungeons_mobs.mod.ModItems;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 import com.infamous.dungeons_mobs.utils.PositionUtils;
 
@@ -191,10 +192,10 @@ public class MageEntity extends AbstractIllagerEntity implements IAnimatable, Sp
     @Override
     protected void populateDefaultEquipmentSlots(DifficultyInstance p_180481_1_) {
         super.populateDefaultEquipmentSlots(p_180481_1_);
-        //this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.MAGE_CLOTHES.getHead().get()));
-        //this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.MAGE_CLOTHES.getChest().get()));
-        //this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(ModItems.MAGE_CLOTHES.getLegs().get()));
-        //this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(ModItems.MAGE_CLOTHES.getFeet().get()));
+        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.MAGE_ARMOR.getHead().get()));
+        this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.MAGE_ARMOR.getChest().get()));
+        this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(ModItems.MAGE_ARMOR.getLegs().get()));
+        this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(ModItems.MAGE_ARMOR.getFeet().get()));
     }
 
     @Nullable

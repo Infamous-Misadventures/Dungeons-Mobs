@@ -700,28 +700,9 @@
         {
           "name": "armorBipedHead",
           "parent": "bipedHead",
-          "pivot": [
-            0,
-            26,
-            0
-          ],
+          "pivot": [0, 26, 0],
           "cubes": [
-            {
-              "origin": [
-                -4,
-                26,
-                -4
-              ],
-              "size": [
-                8,
-                8,
-                8
-              ],
-              "uv": [
-                0,
-                48
-              ]
-            }
+            {"origin": [-4, 26, -4], "size": [8, 8, 8], "uv": [0, 0]}
           ]
         }
       ]

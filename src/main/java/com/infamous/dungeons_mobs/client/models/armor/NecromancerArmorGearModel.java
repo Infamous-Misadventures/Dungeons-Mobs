@@ -3,15 +3,14 @@ package com.infamous.dungeons_mobs.client.models.armor;
 import com.infamous.dungeons_libraries.client.model.ArmorGearModel;
 import com.infamous.dungeons_libraries.items.gearconfig.ArmorGear;
 import com.infamous.dungeons_mobs.entities.undead.NecromancerEntity;
-
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.molang.MolangParser;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.resource.GeckoLibCache;
-import software.bernie.shadowed.eliotlash.molang.MolangParser;
 
 public class NecromancerArmorGearModel<T extends ArmorGear> extends ArmorGearModel<T> {
 

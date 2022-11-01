@@ -1,7 +1,7 @@
 package com.infamous.dungeons_mobs.client.models.illager;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
-
+import com.infamous.dungeons_mobs.entities.illagers.RoyalGuardEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -12,27 +12,27 @@ import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
 import software.bernie.geckolib3.resource.GeckoLibCache;
-import software.bernie.shadowed.eliotlash.molang.MolangParser;
+import software.bernie.geckolib3.core.molang.MolangParser;
 
-public class RoyalGuardModel extends AnimatedGeoModel {
+public class RoyalGuardModel extends AnimatedGeoModel<RoyalGuardEntity> {
 
     @Override
-    public ResourceLocation getAnimationFileLocation(Object entity) {
+    public ResourceLocation getAnimationFileLocation(RoyalGuardEntity entity) {
         return new ResourceLocation(DungeonsMobs.MODID, "animations/royal_guard.animation.json");
     }
 
     @Override
-    public ResourceLocation getModelLocation(Object entity) {
+    public ResourceLocation getModelLocation(RoyalGuardEntity entity) {
         return new ResourceLocation(DungeonsMobs.MODID, "geo/geo_illager.geo.json") ;
     }
 
     @Override
-    public ResourceLocation getTextureLocation(Object entity) {
+    public ResourceLocation getTextureLocation(RoyalGuardEntity entity) {
         return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/royal_guard.png");
     }
 
     @Override
-    public void setLivingAnimations(IAnimatable entity, Integer uniqueID, AnimationEvent customPredicate) {
+    public void setLivingAnimations(RoyalGuardEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
 
         LivingEntity entityIn = (LivingEntity) entity;

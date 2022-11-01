@@ -65,15 +65,15 @@ public class ModItems {
             () -> new PiglinHelmetItem(ArmorMaterial.GOLD, EquipmentSlotType.HEAD, new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS)));
 
     public static final ArmorSet CHEF_ARMOR = registerArmorSet("chef_armor", "chef_helmet", "chef_chestplate", null, null);
-    public static final ArmorSet DROWNED_NECROMANCER_ROBES = registerArmorSet("drowned_necromancer_armor", "drowned_necromancer_helmet", "drowned_necromancer_chestplate", "drowned_necromancer_leggings", null);
-    public static final ArmorSet GEOMANCER_CLOTHES = registerArmorSet("geomancer_armor", "geomancer_helmet", "geomancer_chestplate", null, null);
-    public static final ArmorSet ICEOLOGER_CLOTHES = registerArmorSet("iceologer_armor", "iceologer_helmet", "iceologer_chestplate", "iceologer_leggings", "iceologer_boots");
-    public static final ArmorSet ILLUSIONER_CLOTHES = registerArmorSet("illusioner_armor", "illusioner_helmet", "illusioner_chestplate", "illusioner_leggings", "illusioner_boots");
-    public static final ArmorSet NECROMANCER_ROBES = registerArmorSetNecromancerArmor("necromancer_armor", "necromancer_helmet", "necromancer_chestplate", "necromancer_leggings", null, new ResourceLocation(MODID, "animations/armor/cloaked_armor.animation.json"));
+    public static final ArmorSet DROWNED_NECROMANCER_ARMOR = registerArmorSet("drowned_necromancer_armor", "drowned_necromancer_helmet", "drowned_necromancer_chestplate", "drowned_necromancer_leggings", null);
+    public static final ArmorSet GEOMANCER_ARMOR = registerArmorSet("geomancer_armor", "geomancer_helmet", "geomancer_chestplate", null, null);
+    public static final ArmorSet ICEOLOGER_ARMOR = registerArmorSet("iceologer_armor", "iceologer_helmet", "iceologer_chestplate", "iceologer_leggings", "iceologer_boots");
+    public static final ArmorSet ILLUSIONER_ARMOR = registerArmorSet("illusioner_armor", "illusioner_helmet", "illusioner_chestplate", "illusioner_leggings", "illusioner_boots");
+    public static final ArmorSet NECROMANCER_ARMOR = registerArmorSetNecromancerArmor("necromancer_armor", "necromancer_helmet", "necromancer_chestplate", "necromancer_leggings", null, new ResourceLocation(MODID, "animations/armor/cloaked_armor.animation.json"));
     public static final ArmorSet NETHERPLATE_ARMOR = registerArmorSet("netherplate_armor", "netherplate_helmet", null, null, null);
     public static final ArmorSet ROYAL_GUARD_ARMOR = registerArmorSet("royal_guard_armor", "royal_guard_helmet", "royal_guard_chestplate", "royal_guard_leggings", "royal_guard_boots");
     public static final ArmorSet VANGUARD_ARMOR = registerArmorSet("vanguard_armor", "vanguard_helmet", "vanguard_chestplate", "vanguard_leggings", null);
-    public static final ArmorSet WINDCALLER_CLOTHES = registerArmorSetWindcallerClothes("windcaller_armor", "windcaller_helmet", "windcaller_chestplate", null, null);
+    public static final ArmorSet WINDCALLER_ARMOR = registerArmorSetWindcallerClothes("windcaller_armor", "windcaller_helmet", "windcaller_chestplate", null, null);
     public static final ArmorSet FUNGUS_THROWER_ARMOR = registerArmorSet("fungus_thrower_armor", "fungus_thrower_helmet", "fungus_thrower_chestplate", null, null);
     public static final ArmorSet MOUNTAINEER_ARMOR = registerArmorSet("mountaineer_armor", "mountaineer_helmet", "mountaineer_chestplate", "mountaineer_leggings", "mountaineer_boots");
     public static final ArmorSet EXPEDITION_ARMOR = registerArmorSet("expedition_armor", "expedition_helmet", "expedition_chestplate", "expedition_leggings", null);

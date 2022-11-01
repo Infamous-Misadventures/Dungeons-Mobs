@@ -6,7 +6,6 @@ import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
-import com.infamous.dungeons_mobs.entities.summonables.IceCloudEntity;
 import com.infamous.dungeons_mobs.entities.summonables.SummonSpotEntity;
 import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
 import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
@@ -37,9 +36,7 @@ import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.monster.AbstractIllagerEntity;
 import net.minecraft.entity.monster.AbstractRaiderEntity;
-import net.minecraft.entity.monster.EvokerEntity;
 import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.FireworkRocketEntity;
@@ -228,10 +225,10 @@ public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements I
 	@Override
 	protected void populateDefaultEquipmentSlots(DifficultyInstance p_180481_1_) {
 		super.populateDefaultEquipmentSlots(p_180481_1_);
-		this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.ILLUSIONER_CLOTHES.getHead().get()));
-		this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.ILLUSIONER_CLOTHES.getChest().get()));
-		this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(ModItems.ILLUSIONER_CLOTHES.getLegs().get()));
-		this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(ModItems.ILLUSIONER_CLOTHES.getFeet().get()));
+		this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.ILLUSIONER_ARMOR.getHead().get()));
+		this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.ILLUSIONER_ARMOR.getChest().get()));
+		this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(ModItems.ILLUSIONER_ARMOR.getLegs().get()));
+		this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(ModItems.ILLUSIONER_ARMOR.getFeet().get()));
 		if (ModList.get().isLoaded("dungeons_gear")) {
 			Item SHORTBOW = ForgeRegistries.ITEMS.getValue(new ResourceLocation("dungeons_gear", "shortbow"));
 
@@ -329,7 +326,7 @@ public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements I
 
 	@Override
 	public ResourceLocation getArmorSet() {
-		return ModItems.ILLUSIONER_CLOTHES.getArmorSet();
+		return ModItems.ILLUSIONER_ARMOR.getArmorSet();
 	}
 
 	class ShootAttackGoal extends Goal {

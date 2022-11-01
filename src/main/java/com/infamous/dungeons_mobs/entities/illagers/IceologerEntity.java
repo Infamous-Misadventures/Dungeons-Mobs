@@ -33,7 +33,6 @@ import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.monster.AbstractIllagerEntity;
 import net.minecraft.entity.monster.AbstractRaiderEntity;
 import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.monster.SpellcastingIllagerEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -42,7 +41,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
@@ -141,10 +139,10 @@ public class IceologerEntity extends AbstractIllagerEntity implements IAnimatabl
     @Override
     protected void populateDefaultEquipmentSlots(DifficultyInstance p_180481_1_) {
         super.populateDefaultEquipmentSlots(p_180481_1_);
-        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.ICEOLOGER_CLOTHES.getHead().get()));
-        this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.ICEOLOGER_CLOTHES.getChest().get()));
-        this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(ModItems.ICEOLOGER_CLOTHES.getLegs().get()));
-        this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(ModItems.ICEOLOGER_CLOTHES.getFeet().get()));
+        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.ICEOLOGER_ARMOR.getHead().get()));
+        this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.ICEOLOGER_ARMOR.getChest().get()));
+        this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(ModItems.ICEOLOGER_ARMOR.getLegs().get()));
+        this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(ModItems.ICEOLOGER_ARMOR.getFeet().get()));
     }
 
     @Nullable
@@ -199,7 +197,7 @@ public class IceologerEntity extends AbstractIllagerEntity implements IAnimatabl
 
     @Override
     public ResourceLocation getArmorSet() {
-        return ModItems.ICEOLOGER_CLOTHES.getArmorSet();
+        return ModItems.ICEOLOGER_ARMOR.getArmorSet();
     }
 
     class SummonIceChunkGoal extends Goal {

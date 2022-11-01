@@ -12,7 +12,7 @@ import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
 import software.bernie.geckolib3.resource.GeckoLibCache;
-import software.bernie.shadowed.eliotlash.molang.MolangParser;
+import software.bernie.geckolib3.core.molang.MolangParser;
 
 public class SkeletonVanguardModel extends AnimatedGeoModel {
 	

@@ -249,9 +249,9 @@ public class DrownedNecromancerEntity extends DrownedEntity implements IAnimatab
 
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficultyInstance) {
         this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModItems.NECROMANCER_TRIDENT.get()));
-        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.DROWNED_NECROMANCER_ROBES.getHead().get()));
-        this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.DROWNED_NECROMANCER_ROBES.getChest().get()));
-        this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(ModItems.DROWNED_NECROMANCER_ROBES.getLegs().get()));
+        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.DROWNED_NECROMANCER_ARMOR.getHead().get()));
+        this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.DROWNED_NECROMANCER_ARMOR.getChest().get()));
+        this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(ModItems.DROWNED_NECROMANCER_ARMOR.getLegs().get()));
     }
 
     @Override

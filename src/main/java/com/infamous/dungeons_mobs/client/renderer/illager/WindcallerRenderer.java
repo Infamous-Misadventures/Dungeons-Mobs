@@ -1,8 +1,6 @@
 package com.infamous.dungeons_mobs.client.renderer.illager;
 
 import com.infamous.dungeons_mobs.client.models.illager.WindcallerModel;
-import com.infamous.dungeons_mobs.client.models.illager.WindcallerModel;
-import com.infamous.dungeons_mobs.entities.illagers.WindcallerEntity;
 import com.infamous.dungeons_mobs.entities.illagers.WindcallerEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
@@ -12,7 +10,6 @@ import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.model.BipedModel;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -27,7 +24,7 @@ import software.bernie.geckolib3.renderers.geo.ExtendedGeoEntityRenderer;
 
 import javax.annotation.Nullable;
 
-import static com.infamous.dungeons_mobs.mod.ModItems.WINDCALLER_CLOTHES;
+import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
 public class WindcallerRenderer extends ExtendedGeoEntityRenderer<WindcallerEntity> {
     public WindcallerRenderer(EntityRendererManager renderManager) {
@@ -217,8 +214,8 @@ public class WindcallerRenderer extends ExtendedGeoEntityRenderer<WindcallerEnti
     @Override
     protected void prepareArmorPositionAndScale(GeoBone bone, ObjectList<ModelRenderer.ModelBox> cubeList, ModelRenderer sourceLimb, MatrixStack stack, boolean geoArmor, boolean modMatrixRot) {
         super.prepareArmorPositionAndScale(bone, cubeList, sourceLimb, stack, geoArmor, modMatrixRot);
-        if (bone.getName().equals("armorBipedHead") && geoArmor) {
-            stack.translate(0, -0.125, 0); // -1 is 1 cube up, we want 1/16
+        if (bone.getName().equals("armorBipedHead") && geoArmor && helmet.getItem().getRegistryName().getNamespace().equals(MODID)) {
+            stack.translate(0, 0.125, 0); // 1y is 1 cube up, we want 2/16
         }
     }
 }

@@ -1,5 +1,9 @@
 package com.infamous.dungeons_mobs.client;
 
+import com.infamous.dungeons_mobs.client.models.illager.DungeonsIllusionerModel;
+import com.infamous.dungeons_mobs.client.models.illager.IceologerModel;
+import com.infamous.dungeons_mobs.client.models.illager.MageModel;
+import com.infamous.dungeons_mobs.client.models.illager.RoyalGuardModel;
 import com.infamous.dungeons_mobs.client.particle.*;
 import com.infamous.dungeons_mobs.client.renderer.EmptyRenderer;
 import com.infamous.dungeons_mobs.client.renderer.armor.NecromancerArmorGearRenderer;
@@ -27,6 +31,9 @@ import com.infamous.dungeons_mobs.client.renderer.slime.ConjuredSlimeRenderer;
 import com.infamous.dungeons_mobs.client.renderer.summonables.*;
 import com.infamous.dungeons_mobs.client.renderer.undead.*;
 import com.infamous.dungeons_mobs.client.renderer.water.*;
+import com.infamous.dungeons_mobs.entities.illagers.IllusionerCloneEntity;
+import com.infamous.dungeons_mobs.entities.illagers.MageCloneEntity;
+import com.infamous.dungeons_mobs.entities.illagers.MageEntity;
 import com.infamous.dungeons_mobs.items.armor.NecromancerArmorGear;
 import com.infamous.dungeons_mobs.items.armor.WindcallerClothesArmorGear;
 import com.infamous.dungeons_mobs.items.shield.CustomISTER;
@@ -80,17 +87,17 @@ public class ClientEvents {
 
 
 
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ROYAL_GUARD.get(), RoyalGuardRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ROYAL_GUARD.get(), manager -> new DefaultIllagerRenderer<>(manager, new RoyalGuardModel(), 0.9375F*1.2F));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.MOUNTAINEER.get(), CustomVindicatorRenderer::new);
 
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ICEOLOGER.get(), IceologerRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ICEOLOGER.get(), manager -> new DefaultIllagerRenderer<>(manager, new IceologerModel()));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.GEOMANCER.get(), GeomancerRenderer::new);
 
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.MAGE.get(), MageRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.MAGE_CLONE.get(), MageCloneRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.MAGE.get(), manager -> new DefaultIllagerRenderer<MageEntity>(manager, new MageModel()));
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.MAGE_CLONE.get(), manager -> new DefaultIllagerRenderer<MageCloneEntity>(manager, new MageModel()));
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ILLUSIONER.get(), DungeonsIllusionerRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ILLUSIONER_CLONE.get(), IllusionerCloneRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ILLUSIONER_CLONE.get(), manager -> new DefaultIllagerRenderer<IllusionerCloneEntity>(manager, new DungeonsIllusionerModel()));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WINDCALLER.get(), WindcallerRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ENCHANTER.get(), EnchanterRenderer::new);

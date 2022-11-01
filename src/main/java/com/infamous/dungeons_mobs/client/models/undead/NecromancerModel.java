@@ -19,7 +19,7 @@ import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
 import software.bernie.geckolib3.resource.GeckoLibCache;
-import software.bernie.shadowed.eliotlash.molang.MolangParser;
+import software.bernie.geckolib3.core.molang.MolangParser;
 
 @OnlyIn(Dist.CLIENT)
 public class NecromancerModel extends AnimatedGeoModel<NecromancerEntity> {
@@ -53,7 +53,7 @@ public class NecromancerModel extends AnimatedGeoModel<NecromancerEntity> {
         	entity.level.addParticle(ModParticleTypes.NECROMANCY.get(), particleBone.getWorldPosition().x, particleBone.getWorldPosition().y, particleBone.getWorldPosition().z, 0, 0, 0);
         }
         
-        if (entity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ModItems.NECROMANCER_ROBES.getChest().get()) {
+        if (entity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ModItems.NECROMANCER_ARMOR.getChest().get()) {
         	cape.setHidden(false);
         } else {
         	cape.setHidden(true);

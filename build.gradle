@@ -126,9 +126,9 @@ dependencies {
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     //Library
-    implementation fg.deobf("dungeons_libraries:dungeons_libraries:1.16.5-0.0.16-beta")
+    implementation fg.deobf("dungeons_libraries:dungeons_libraries:${mc_version}-${libraries_version}")
 //    implementation fg.deobf("mutantmore-test:mutantmore-test:11")
-    implementation fg.deobf("software.bernie.geckolib:geckolib-forge-1.16.5:3.0.96")
+    implementation fg.deobf("software.bernie.geckolib:geckolib-forge-${mc_version}:${geckolib_version}")
     runtimeOnly fg.deobf("curse.maven:blame-406201:3440093")
     runtimeOnly fg.deobf("curse.maven:neat-238372:3182258")
     implementation fg.deobf("curse.maven:enchantwithmob-391187:3539541")

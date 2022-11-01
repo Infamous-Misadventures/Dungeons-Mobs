@@ -1,12 +1,9 @@
 package com.infamous.dungeons_mobs.client.renderer.illager;
 
-import javax.annotation.Nullable;
-
 import com.infamous.dungeons_mobs.client.models.illager.GeomancerModel;
 import com.infamous.dungeons_mobs.entities.illagers.GeomancerEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-
 import it.unimi.dsi.fastutil.objects.ObjectList;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -26,30 +23,35 @@ import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.geo.render.built.GeoCube;
 import software.bernie.geckolib3.renderers.geo.ExtendedGeoEntityRenderer;
+
+import javax.annotation.Nullable;
+
+import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
+
 public class GeomancerRenderer extends ExtendedGeoEntityRenderer<GeomancerEntity> {
-	public GeomancerRenderer(EntityRendererManager renderManager) {
-		super(renderManager, new GeomancerModel());
-	}
+    public GeomancerRenderer(EntityRendererManager renderManager) {
+        super(renderManager, new GeomancerModel());
+    }
 
-	@Override
-	protected void applyRotations(GeomancerEntity entityLiving, MatrixStack matrixStackIn, float ageInTicks,
-								  float rotationYaw, float partialTicks) {
-		float scaleFactor = 0.9375F;
-		matrixStackIn.scale(scaleFactor, scaleFactor, scaleFactor);
-		super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
+    @Override
+    protected void applyRotations(GeomancerEntity entityLiving, MatrixStack matrixStackIn, float ageInTicks,
+                                  float rotationYaw, float partialTicks) {
+        float scaleFactor = 0.9375F;
+        matrixStackIn.scale(scaleFactor, scaleFactor, scaleFactor);
+        super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
 
-	}
+    }
 
-	@Override
-	public RenderType getRenderType(GeomancerEntity animatable, float partialTicks, MatrixStack stack,
-									IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn,
-									ResourceLocation textureLocation) {
-		return RenderType.entityTranslucent(getTextureLocation(animatable));
-	}
+    @Override
+    public RenderType getRenderType(GeomancerEntity animatable, float partialTicks, MatrixStack stack,
+                                    IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn,
+                                    ResourceLocation textureLocation) {
+        return RenderType.entityTranslucent(getTextureLocation(animatable));
+    }
 
-	@Override
+    @Override
     public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-        if(this.isArmorBone(bone)) {
+        if (this.isArmorBone(bone)) {
             bone.setCubesHidden(true);
         }
         super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
@@ -66,77 +68,77 @@ public class GeomancerRenderer extends ExtendedGeoEntityRenderer<GeomancerEntity
         return null;
     }
 
-	@Override
-	protected ItemStack getHeldItemForBone(String boneName, GeomancerEntity currentEntity) {
-		switch (boneName) {
-		case DefaultBipedBoneIdents.LEFT_HAND_BONE_IDENT:
-			return currentEntity.isLeftHanded() ? mainHand : offHand;
-		case DefaultBipedBoneIdents.RIGHT_HAND_BONE_IDENT:
-			return currentEntity.isLeftHanded() ? offHand : mainHand;
-		case DefaultBipedBoneIdents.POTION_BONE_IDENT:
-			break;
-		}
-		return null;
-	}
+    @Override
+    protected ItemStack getHeldItemForBone(String boneName, GeomancerEntity currentEntity) {
+        switch (boneName) {
+            case DefaultBipedBoneIdents.LEFT_HAND_BONE_IDENT:
+                return currentEntity.isLeftHanded() ? mainHand : offHand;
+            case DefaultBipedBoneIdents.RIGHT_HAND_BONE_IDENT:
+                return currentEntity.isLeftHanded() ? offHand : mainHand;
+            case DefaultBipedBoneIdents.POTION_BONE_IDENT:
+                break;
+        }
+        return null;
+    }
 
-	@Override
-	protected TransformType getCameraTransformForItemAtBone(ItemStack boneItem, String boneName) {
-		switch (boneName) {
-		case DefaultBipedBoneIdents.LEFT_HAND_BONE_IDENT:
-			return TransformType.THIRD_PERSON_RIGHT_HAND;
-		case DefaultBipedBoneIdents.RIGHT_HAND_BONE_IDENT:
-			return TransformType.THIRD_PERSON_RIGHT_HAND;
-		default:
-			return TransformType.NONE;
-		}
-	}
+    @Override
+    protected TransformType getCameraTransformForItemAtBone(ItemStack boneItem, String boneName) {
+        switch (boneName) {
+            case DefaultBipedBoneIdents.LEFT_HAND_BONE_IDENT:
+                return TransformType.THIRD_PERSON_RIGHT_HAND;
+            case DefaultBipedBoneIdents.RIGHT_HAND_BONE_IDENT:
+                return TransformType.THIRD_PERSON_RIGHT_HAND;
+            default:
+                return TransformType.NONE;
+        }
+    }
 
-	@Override
-	protected void preRenderItem(MatrixStack stack, ItemStack item, String boneName, GeomancerEntity currentEntity, IBone bone) {
-		if(item == this.mainHand || item == this.offHand) {
-			stack.scale(1.1F, 1.1F, 1.1F);
-			stack.mulPose(Vector3f.XP.rotationDegrees(-90.0F));
-			boolean shieldFlag = item.getItem() instanceof ShieldItem;
-			if(item == this.mainHand) {
-				if(shieldFlag) {
-					stack.translate(0.0, 0.125, -0.25);
-				} else {
-					
-				}
-			} else {
-				if(shieldFlag) {
-					stack.translate(-0.15, 0.125, 0.05);
-					stack.mulPose(Vector3f.YP.rotationDegrees(90));
-				} else {
-					
-				}
-					
-				
-			}
-		}
-	}
+    @Override
+    protected void preRenderItem(MatrixStack stack, ItemStack item, String boneName, GeomancerEntity currentEntity, IBone bone) {
+        if (item == this.mainHand || item == this.offHand) {
+            stack.scale(1.1F, 1.1F, 1.1F);
+            stack.mulPose(Vector3f.XP.rotationDegrees(-90.0F));
+            boolean shieldFlag = item.getItem() instanceof ShieldItem;
+            if (item == this.mainHand) {
+                if (shieldFlag) {
+                    stack.translate(0.0, 0.125, -0.25);
+                } else {
 
-	@Override
-	protected void postRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, GeomancerEntity currentEntity, IBone bone) {
+                }
+            } else {
+                if (shieldFlag) {
+                    stack.translate(-0.15, 0.125, 0.05);
+                    stack.mulPose(Vector3f.YP.rotationDegrees(90));
+                } else {
 
-	}
-    
-	@Override
-	protected BlockState getHeldBlockForBone(String boneName, GeomancerEntity currentEntity) {
-		return null;
-	}
-	
-	@Override
-	protected void preRenderBlock(MatrixStack matrixStack, BlockState block, String boneName,
-			GeomancerEntity currentEntity) {
-		
-	}
+                }
 
-	@Override
-	protected void postRenderBlock(MatrixStack matrixStack, BlockState block, String boneName,
-			GeomancerEntity currentEntity) {
-		
-	}
+
+            }
+        }
+    }
+
+    @Override
+    protected void postRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, GeomancerEntity currentEntity, IBone bone) {
+
+    }
+
+    @Override
+    protected BlockState getHeldBlockForBone(String boneName, GeomancerEntity currentEntity) {
+        return null;
+    }
+
+    @Override
+    protected void preRenderBlock(MatrixStack matrixStack, BlockState block, String boneName,
+                                  GeomancerEntity currentEntity) {
+
+    }
+
+    @Override
+    protected void postRenderBlock(MatrixStack matrixStack, BlockState block, String boneName,
+                                   GeomancerEntity currentEntity) {
+
+    }
 
     @Nullable
     @Override
@@ -211,53 +213,11 @@ public class GeomancerRenderer extends ExtendedGeoEntityRenderer<GeomancerEntity
         }
     }
 
-	@Override
-	protected void prepareArmorPositionAndScale(GeoBone bone, ObjectList<ModelRenderer.ModelBox> cubeList, ModelRenderer sourceLimb, MatrixStack stack, boolean geoArmor, boolean modMatrixRot) {
-		GeoCube firstCube = (GeoCube)bone.childCubes.get(0);
-		ModelRenderer.ModelBox armorCube = (ModelRenderer.ModelBox)cubeList.get(0);
-		float targetSizeX = firstCube.size.x();
-		float targetSizeY = firstCube.size.y();
-		float targetSizeZ = firstCube.size.z();
-		float sourceSizeX = Math.abs(armorCube.maxX - armorCube.minX);
-		float sourceSizeY = Math.abs(armorCube.maxY - armorCube.minY);
-		float sourceSizeZ = Math.abs(armorCube.maxZ - armorCube.minZ);
-		float scaleX = targetSizeX / sourceSizeX;
-		float scaleY = targetSizeY / sourceSizeY;
-		float scaleZ = targetSizeZ / sourceSizeZ;
-		sourceLimb.setPos(-(bone.getPivotX() - (bone.getPivotX() * scaleX - bone.getPivotX()) / scaleX), -(bone.getPivotY() - (bone.getPivotY() * scaleY - bone.getPivotY()) / scaleY), bone.getPivotZ() - (bone.getPivotZ() * scaleZ - bone.getPivotZ()) / scaleZ);
-		if (!geoArmor) {
-			sourceLimb.xRot = -bone.getRotationX();
-			sourceLimb.yRot = -bone.getRotationY();
-			sourceLimb.zRot = bone.getRotationZ();
-		} else {
-			float xRot = -bone.getRotationX();
-			float yRot = -bone.getRotationY();
-			float zRot = bone.getRotationZ();
-
-
-			for(GeoBone tmpBone = bone.parent; tmpBone != null; tmpBone = tmpBone.parent) {
-				if(bone.getName().equals("armorBipedHead") && tmpBone.getName().equals("bipedBody")) {
-					break;
-				}
-				xRot -= tmpBone.getRotationX();
-				yRot -= tmpBone.getRotationY();
-				zRot += tmpBone.getRotationZ();
-			}
-
-			if (modMatrixRot) {
-				xRot = (float)Math.toRadians((double)xRot);
-				yRot = (float)Math.toRadians((double)yRot);
-				zRot = (float)Math.toRadians((double)zRot);
-				stack.mulPose(new Quaternion(0.0F, 0.0F, zRot, false));
-				stack.mulPose(new Quaternion(0.0F, yRot, 0.0F, false));
-				stack.mulPose(new Quaternion(xRot, 0.0F, 0.0F, false));
-			} else {
-				sourceLimb.xRot = xRot;
-				sourceLimb.yRot = yRot;
-				sourceLimb.zRot = zRot;
-			}
-		}
-
-		stack.scale(scaleX, scaleY, scaleZ);
-	}
+    @Override
+    protected void prepareArmorPositionAndScale(GeoBone bone, ObjectList<ModelRenderer.ModelBox> cubeList, ModelRenderer sourceLimb, MatrixStack stack, boolean geoArmor, boolean modMatrixRot) {
+        super.prepareArmorPositionAndScale(bone, cubeList, sourceLimb, stack, geoArmor, modMatrixRot);
+        if (bone.getName().equals("armorBipedHead") && geoArmor && helmet.getItem().getRegistryName().getNamespace().equals(MODID)) {
+            stack.translate(0, 0.125, 0); // 1y is 1 cube up, we want 2/16
+        }
+    }
 }
