@@ -5,6 +5,7 @@ import com.google.common.collect.Multimap;
 import com.infamous.dungeons_libraries.capabilities.minionmaster.IMaster;
 import com.infamous.dungeons_libraries.items.artifacts.ArtifactItem;
 import com.infamous.dungeons_libraries.items.artifacts.ArtifactUseContext;
+import com.infamous.dungeons_libraries.items.interfaces.ISoulConsumer;
 import com.infamous.dungeons_libraries.network.BreakItemMessage;
 import com.infamous.dungeons_libraries.summon.SummonHelper;
 import com.infamous.dungeons_libraries.utils.SoundHelper;
@@ -32,7 +33,7 @@ import java.util.stream.Collectors;
 import static com.infamous.dungeons_libraries.attribute.AttributeRegistry.SUMMON_CAP;
 import static com.infamous.dungeons_libraries.capabilities.minionmaster.MinionMasterHelper.getMasterCapability;
 
-public class NecromancerStaffItem extends ArtifactItem implements IHasInventorySprite {
+public class NecromancerStaffItem extends ArtifactItem implements IHasInventorySprite, ISoulConsumer {
     public NecromancerStaffItem(Properties properties) {
         super(properties);
         procOnItemUse=true;
@@ -78,8 +79,6 @@ public class NecromancerStaffItem extends ArtifactItem implements IHasInventoryS
         }
     }
 
-
-
     @Override
     public int getCooldownInSeconds() {
         return 20;
@@ -98,5 +97,10 @@ public class NecromancerStaffItem extends ArtifactItem implements IHasInventoryS
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         builder.put(SUMMON_CAP.get(), new AttributeModifier(slot_uuid, "Artifact modifier", 3, AttributeModifier.Operation.ADDITION));
         return builder.build();
+    }
+
+    @Override
+    public float getActivationCost(ItemStack stack) {
+        return 50;
     }
 }

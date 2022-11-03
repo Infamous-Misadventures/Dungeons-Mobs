@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "dungeons_mobs:geomancer_staff",
+    "dungeons_mobs:necromancer_trident",
+    "dungeons_mobs:windcaller_staff",
     "dungeons_mobs:necromancer_staff"
   ]
 }

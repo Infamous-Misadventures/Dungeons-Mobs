@@ -98,7 +98,7 @@ public class ModItems {
             () -> new MountaineerAxeItem(ItemTier.DIAMOND, 1, (1.2F-4.0F), new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS)));
 
     // ARTIFACTS
-    public static final RegistryObject<Item> WINDCALLER_STAFF = ITEMS.register("windcaller_staff",
+    public static final RegistryObject<Item> WINDCALLER_STAFF = registerArtifact("windcaller_staff",
             () -> new WindcallerStaffItem(new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS)));
 
     public static final RegistryObject<Item> GEOMANCER_STAFF = registerArtifact("geomancer_staff",
@@ -107,7 +107,7 @@ public class ModItems {
     public static final RegistryObject<Item> NECROMANCER_STAFF = registerArtifact("necromancer_staff",
             () -> new NecromancerStaffItem(new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS)));
 
-    public static final RegistryObject<Item> NECROMANCER_TRIDENT = ITEMS.register("necromancer_trident",
+    public static final RegistryObject<Item> NECROMANCER_TRIDENT = registerArtifact("necromancer_trident",
             () -> new NecromancerTridentItem(new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS)));
 
     public static final RegistryObject<Item> BLUE_NETHERSHROOM = ITEMS.register("blue_nethershroom",

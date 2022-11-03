@@ -1,37 +1,67 @@
 package com.infamous.dungeons_mobs.items;
 
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
+import com.infamous.dungeons_libraries.items.artifacts.ArtifactItem;
+import com.infamous.dungeons_libraries.items.artifacts.ArtifactUseContext;
+import com.infamous.dungeons_libraries.network.BreakItemMessage;
 import com.infamous.dungeons_mobs.entities.projectiles.WindcallerBlastProjectileEntity;
 import com.infamous.dungeons_mobs.entities.summonables.WindcallerTornadoEntity;
 import com.infamous.dungeons_mobs.interfaces.IHasInventorySprite;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
-import com.infamous.dungeons_mobs.utils.PositionUtils;
+import com.infamous.dungeons_mobs.network.NetworkHandler;
 import net.minecraft.command.arguments.EntityAnchorArgument;
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.fml.network.PacketDistributor;
 
-public class WindcallerStaffItem extends AbstractStaffItem implements IHasInventorySprite {
+import java.util.UUID;
+
+import static com.infamous.dungeons_libraries.attribute.AttributeRegistry.SUMMON_CAP;
+
+public class WindcallerStaffItem extends ArtifactItem implements IHasInventorySprite {
     public WindcallerStaffItem(Properties properties) {
         super(properties);
+        procOnItemUse=true;
+    }
+
+    public ActionResult<ItemStack> procArtifact(ArtifactUseContext itemUseContext) {
+        World world = itemUseContext.getLevel();
+        if (world.isClientSide) {
+            return ActionResult.success(itemUseContext.getItemStack());
+        } else {
+            ItemStack itemUseContextItem = itemUseContext.getItemStack();
+            PlayerEntity player = itemUseContext.getPlayer();
+            BlockPos itemUseContextPos = itemUseContext.getClickedPos();
+
+            if(player != null){
+                shoot(player, itemUseContextPos.getX(), itemUseContextPos.getY()+0.5, itemUseContextPos.getZ());
+                itemUseContextItem.hurtAndBreak(1, player, (entity) -> NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), new BreakItemMessage(entity.getId(), itemUseContextItem)));
+                ArtifactItem.putArtifactOnCooldown(player, itemUseContextItem.getItem());
+            }
+            return ActionResult.consume(itemUseContextItem);
+        }
     }
 
     @Override
-    protected void activateStaff(PlayerEntity playerIn, Entity target, ItemStack itemStack, Hand hand) {
-        shoot(playerIn, itemStack, hand, target.getX(), target.getY(0.6D), target.getZ());
+    public int getCooldownInSeconds() {
+        return 20;
     }
 
     @Override
-    protected void activateStaff(PlayerEntity playerIn, BlockPos targetPos, ItemStack itemStack, Hand hand) {
-        shoot(playerIn, itemStack, hand, targetPos.getX(), targetPos.getY(), targetPos.getZ());
+    public int getDurationInSeconds() {
+        return 0;
     }
 
-    private void shoot(PlayerEntity mob, ItemStack itemStack, Hand hand, double targetX, double targetY, double targetZ) {
+    private void shoot(PlayerEntity mob, double targetX, double targetY, double targetZ) {
         double d1 = targetX - mob.getX();
         double d2 = targetY - mob.getY(0.5D);
         double d3 = targetZ - mob.getZ();
@@ -42,11 +72,8 @@ public class WindcallerStaffItem extends AbstractStaffItem implements IHasInvent
         tornado.moveTo(mob.blockPosition(), 0, 0);
         tornado.playSound(ModSoundEvents.WINDCALLER_BLAST_WIND.get(), 1.5F, 1.0F);
         tornado.setBlast(true);
-        mob.lookAt(EntityAnchorArgument.Type.EYES, new Vector3d(targetX, targetY, targetZ));
         tornado.yRot = -mob.yHeadRot - 90;
         ((ServerWorld)mob.level).addFreshEntityWithPassengers(tornado);
-        mob.getCooldowns().addCooldown(itemStack.getItem(), 400);
-        itemStack.hurtAndBreak(1, mob, playerEntity -> playerEntity.broadcastBreakEvent(hand));
     }
 
 
