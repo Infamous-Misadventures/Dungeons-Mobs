@@ -1,20 +1,102 @@
 package com.infamous.dungeons_mobs.items;
 
-import com.infamous.dungeons_mobs.entities.projectiles.NecromancerOrbEntity;
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
+import com.infamous.dungeons_libraries.capabilities.minionmaster.IMaster;
+import com.infamous.dungeons_libraries.items.artifacts.ArtifactItem;
+import com.infamous.dungeons_libraries.items.artifacts.ArtifactUseContext;
+import com.infamous.dungeons_libraries.network.BreakItemMessage;
+import com.infamous.dungeons_libraries.summon.SummonHelper;
+import com.infamous.dungeons_libraries.utils.SoundHelper;
 import com.infamous.dungeons_mobs.interfaces.IHasInventorySprite;
+import com.infamous.dungeons_mobs.mod.ModSoundEvents;
+import com.infamous.dungeons_mobs.network.NetworkHandler;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.fml.network.PacketDistributor;
 
-public class NecromancerStaffItem extends AbstractNecromancerStaffItem implements IHasInventorySprite {
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import static com.infamous.dungeons_libraries.attribute.AttributeRegistry.SUMMON_CAP;
+import static com.infamous.dungeons_libraries.capabilities.minionmaster.MinionMasterHelper.getMasterCapability;
+
+public class NecromancerStaffItem extends ArtifactItem implements IHasInventorySprite {
     public NecromancerStaffItem(Properties properties) {
         super(properties);
+        procOnItemUse=true;
+    }
+
+    public ActionResult<ItemStack> procArtifact(ArtifactUseContext itemUseContext) {
+        World world = itemUseContext.getLevel();
+        if (world.isClientSide) {
+            return ActionResult.success(itemUseContext.getItemStack());
+        } else {
+            ItemStack itemUseContextItem = itemUseContext.getItemStack();
+            PlayerEntity itemUseContextPlayer = itemUseContext.getPlayer();
+            BlockPos itemUseContextPos = itemUseContext.getClickedPos();
+            Direction itemUseContextFace = itemUseContext.getClickedFace();
+            BlockState blockState = world.getBlockState(itemUseContextPos);
+
+            BlockPos blockPos;
+            if (blockState.getCollisionShape(world, itemUseContextPos).isEmpty()) {
+                blockPos = itemUseContextPos;
+            } else {
+                blockPos = itemUseContextPos.relative(itemUseContextFace);
+            }
+
+            if(itemUseContextPlayer != null){
+                IMaster summonerCap = getMasterCapability(itemUseContextPlayer);
+                if (summonerCap != null) {
+                    Entity summoned = SummonHelper.summonEntity(itemUseContextPlayer, itemUseContextPlayer.blockPosition(), EntityType.ZOMBIE);
+                    if(summoned != null) {
+                        SoundHelper.playCreatureSound(itemUseContextPlayer, ModSoundEvents.NECROMANCER_SUMMON.get());
+                        itemUseContextItem.hurtAndBreak(1, itemUseContextPlayer, (entity) -> NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), new BreakItemMessage(entity.getId(), itemUseContextItem)));
+                        ArtifactItem.putArtifactOnCooldown(itemUseContextPlayer, itemUseContextItem.getItem());
+                    } else{
+                        if(world instanceof ServerWorld) {
+                            List<Entity> zombieEntities = summonerCap.getSummonedMobs().stream().filter(entity -> entity.getType() == EntityType.ZOMBIE).collect(Collectors.toList());
+                            zombieEntities.forEach(entity -> {
+                                entity.teleportToWithTicket((double) blockPos.getX() + 0.5D, (double) blockPos.getY() + 0.05D, (double) blockPos.getZ() + 0.5D);
+                            });
+                        }
+                    }
+                }
+            }
+            return ActionResult.consume(itemUseContextItem);
+        }
+    }
+
+
+
+    @Override
+    public int getCooldownInSeconds() {
+        return 20;
     }
 
     @Override
-    protected ProjectileEntity createOrb(PlayerEntity playerIn, double xDifference, double yDifference, double zDifference) {
-        NecromancerOrbEntity necromancerOrb = new NecromancerOrbEntity(playerIn.level, playerIn, xDifference, yDifference, zDifference);
-        necromancerOrb.setDelayedForm(true);
-        necromancerOrb.rotateToMatchMovement();
-        return necromancerOrb;
+    public int getDurationInSeconds() {
+        return 0;
+    }
+
+    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(int slotIndex) {
+        return getAttributeModifiersForSlot(getUUIDForSlot(slotIndex));
+    }
+
+    private ImmutableMultimap<Attribute, AttributeModifier> getAttributeModifiersForSlot(UUID slot_uuid) {
+        ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
+        builder.put(SUMMON_CAP.get(), new AttributeModifier(slot_uuid, "Artifact modifier", 3, AttributeModifier.Operation.ADDITION));
+        return builder.build();
     }
 }

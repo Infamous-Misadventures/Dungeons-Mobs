@@ -31,6 +31,8 @@ import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
 
+    public static final Map<ResourceLocation, RegistryObject<Item>> ARTIFACTS = new HashMap<>();
+
     public static final Item.Properties ARMOR_PROPERTIES = DungeonsMobsConfig.COMMON.ENABLE_ITEM_TAB.get() ?
             new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS) : new Item.Properties();
     public static final Map<ResourceLocation, RegistryObject<Item>> ARMORS = new HashMap<>();
@@ -95,22 +97,23 @@ public class ModItems {
     public static final RegistryObject<Item> DIAMOND_MOUNTAINEER_AXE = ITEMS.register("diamond_mountaineer_axe",
             () -> new MountaineerAxeItem(ItemTier.DIAMOND, 1, (1.2F-4.0F), new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS)));
 
-    // STAFFS
+    // ARTIFACTS
     public static final RegistryObject<Item> WINDCALLER_STAFF = ITEMS.register("windcaller_staff",
-            () -> new WindcallerStaffItem(new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS).durability(64)));
+            () -> new WindcallerStaffItem(new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS)));
 
-    public static final RegistryObject<Item> GEOMANCER_STAFF = ITEMS.register("geomancer_staff",
-            () -> new GeomancerStaffItem(new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS).durability(64)));
+    public static final RegistryObject<Item> GEOMANCER_STAFF = registerArtifact("geomancer_staff",
+            () -> new GeomancerStaffItem(new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS)));
 
-    public static final RegistryObject<Item> NECROMANCER_STAFF = ITEMS.register("necromancer_staff",
-            () -> new NecromancerStaffItem(new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS).durability(64)));
+    public static final RegistryObject<Item> NECROMANCER_STAFF = registerArtifact("necromancer_staff",
+            () -> new NecromancerStaffItem(new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS)));
 
     public static final RegistryObject<Item> NECROMANCER_TRIDENT = ITEMS.register("necromancer_trident",
-            () -> new NecromancerTridentItem(new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS).durability(64)));
+            () -> new NecromancerTridentItem(new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS)));
 
     public static final RegistryObject<Item> BLUE_NETHERSHROOM = ITEMS.register("blue_nethershroom",
             () -> new BlueNethershroomItem(new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS).stacksTo(16)));
 
+    //TRIDENTS
     public static final RegistryObject<Item> YELLOW_TRIDENT = ITEMS.register("yellow_trident",
             () -> new ColoredTridentItem((new Item.Properties().durability(250).tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS)), DyeColor.YELLOW));
 
@@ -185,6 +188,12 @@ public class ModItems {
         if(armorId == null) return null;
         RegistryObject<Item> register = ITEMS.register(armorId, itemSupplier);
         ARMORS.put(GeneralHelper.modLoc(armorId), register);
+        return register;
+    }
+
+    private static RegistryObject<Item> registerArtifact(String meleeWeaponId, Supplier<Item> itemSupplier) {
+        RegistryObject<Item> register = ITEMS.register(meleeWeaponId, itemSupplier);
+        ARTIFACTS.put(GeneralHelper.modLoc(meleeWeaponId), register);
         return register;
     }
 }

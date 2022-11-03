@@ -16,6 +16,9 @@ public class DataGenerators {
             generator.addProvider(new ModItemModelProvider(generator, event.getExistingFileHelper()));
         }
         if (event.includeServer()) {
+            ModBlockTagsProvider modBlockTagsProvider = new ModBlockTagsProvider(generator, event.getExistingFileHelper());
+            generator.addProvider(modBlockTagsProvider);
+            generator.addProvider(new ModItemTagsProvider(generator, modBlockTagsProvider, event.getExistingFileHelper()));
         }
     }
 }
