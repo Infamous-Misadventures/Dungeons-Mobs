@@ -145,12 +145,16 @@
 
   "item.dungeons_mobs.windcaller_staff": "Windcaller Staff",
   "lore.dungeons_mobs.windcaller_staff": "The sound produced by the contact of the gale with the peculiar shape of the jade staff allows its wielder to determine the direction of the wind.",
+  "ability.dungeons_mobs.windcaller_staff": "Shoots a gust of wind that pushes back enemies.",
   "item.dungeons_mobs.geomancer_staff": "Geomancer Staff",
   "lore.dungeons_mobs.geomancer_staff": "In appearance a simple walking stick, the geomancers use this staff to send tremors down the ground, releasing its explosive power.",
+  "ability.dungeons_mobs.geomancer_staff": "Summons pillars that block the path of enemies, with a small chance to summon an explosion pillar.",
   "item.dungeons_mobs.necromancer_staff": "Necromancer Staff",
   "lore.dungeons_mobs.necromancer_staff": "Magic Catalyst of the necromancers, fashioned eons ago from the shard of a star fallen from the void, it is rumored to contain the whispers of countless souls.",
+  "abilities.dungeons_mobs.necromancer_staff": "Summons a Zombie minion that will attack enemies.",
   "item.dungeons_mobs.necromancer_trident": "Necromancer Trident",
   "lore.dungeons_mobs.necromancer_trident": "Ceremonial Trident of the the mage-priests of the Abyssal Monument, gleams with the azure glint of a sunken star, this staff grants power over the storm and the dead.",
+  "ability.dungeons_mobs.necromancer_trident": "Calls down 8 tridents around the target that causes a thunderbolt where they land.",
   "item.dungeons_mobs.yellow_trident": "Yellow Trident",
   "item.dungeons_mobs.purple_trident": "Purple Trident",
 
