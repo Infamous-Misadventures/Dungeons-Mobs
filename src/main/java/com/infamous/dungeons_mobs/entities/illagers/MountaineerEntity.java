@@ -11,6 +11,8 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ILivingEntityData;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.monster.MonsterEntity;
@@ -18,6 +20,7 @@ import net.minecraft.entity.monster.SpiderEntity;
 import net.minecraft.entity.monster.VindicatorEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -27,8 +30,11 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.raid.Raid;
+
+import javax.annotation.Nullable;
 
 public class MountaineerEntity extends VindicatorEntity {
 	
@@ -110,6 +116,17 @@ public class MountaineerEntity extends VindicatorEntity {
         this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.MOUNTAINEER_ARMOR.getChest().get()));
         this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(ModItems.MOUNTAINEER_ARMOR.getLegs().get()));
         this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(ModItems.MOUNTAINEER_ARMOR.getFeet().get()));
+    }
+
+    @Nullable
+    @Override
+    public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance p_213386_2_,
+                                           SpawnReason p_213386_3_, @Nullable ILivingEntityData p_213386_4_, @Nullable CompoundNBT p_213386_5_) {
+        ILivingEntityData iLivingEntityData = super.finalizeSpawn(p_213386_1_, p_213386_2_, p_213386_3_, p_213386_4_,
+                p_213386_5_);
+        this.populateDefaultEquipmentSlots(p_213386_2_);
+        this.populateDefaultEquipmentEnchantments(p_213386_2_);
+        return iLivingEntityData;
     }
 
     public void applyRaidBuffs(int waveNumber, boolean bool) {

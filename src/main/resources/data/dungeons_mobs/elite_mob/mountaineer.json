@@ -1,19 +1,19 @@
 {
 "configs": [{
   "headItem":  {
-    "id": "minecraft:empty",
+    "id": "dungeons_mobs:expedition_helmet",
     "Count": 1
   },
   "chestItem": {
-    "id": "minecraft:empty",
+    "id": "dungeons_mobs:expedition_chestplate",
     "Count": 1
   },
   "legsItem":  {
-    "id": "minecraft:empty",
+    "id": "dungeons_mobs:expedition_leggings",
     "Count": 1
   },
   "feetItem": {
-    "id": "minecraft:empty",
+    "id": "dungeons_mobs:expedition_boots",
     "Count": 1
   },
   "handItem":  {
@@ -27,19 +27,19 @@
   "weight": 75
 },{
   "headItem":  {
-    "id": "minecraft:empty",
+    "id": "dungeons_mobs:alpine_helmet",
     "Count": 1
   },
   "chestItem": {
-    "id": "minecraft:empty",
+    "id": "dungeons_mobs:alpine_chestplate",
     "Count": 1
   },
   "legsItem":  {
-    "id": "minecraft:empty",
+    "id": "dungeons_mobs:alpine_leggings",
     "Count": 1
   },
   "feetItem": {
-    "id": "minecraft:empty",
+    "id": "dungeons_mobs:alpine_boots",
     "Count": 1
   },
   "handItem":  {

@@ -76,7 +76,7 @@ public class ModItems {
     public static final ArmorSet WINDCALLER_ARMOR = registerArmorSetWindcallerClothes("windcaller_armor", "windcaller_helmet", "windcaller_chestplate", null, null);
     public static final ArmorSet FUNGUS_THROWER_ARMOR = registerArmorSet("fungus_thrower_armor", "fungus_thrower_helmet", "fungus_thrower_chestplate", null, null);
     public static final ArmorSet MOUNTAINEER_ARMOR = registerArmorSet("mountaineer_armor", "mountaineer_helmet", "mountaineer_chestplate", "mountaineer_leggings", "mountaineer_boots");
-    public static final ArmorSet EXPEDITION_ARMOR = registerArmorSet("expedition_armor", "expedition_helmet", "expedition_chestplate", "expedition_leggings", null);
+    public static final ArmorSet EXPEDITION_ARMOR = registerArmorSet("expedition_armor", "expedition_helmet", "expedition_chestplate", "expedition_leggings", "expedition_boots");
     public static final ArmorSet ALPINE_ARMOR = registerArmorSet("alpine_armor", "alpine_helmet", "alpine_chestplate", "alpine_leggings", "alpine_boots");
     public static final ArmorSet MAGE_ARMOR = registerArmorSet("mage_armor", "mage_helmet", "mage_chestplate", "mage_leggings", "mage_boots");
 
