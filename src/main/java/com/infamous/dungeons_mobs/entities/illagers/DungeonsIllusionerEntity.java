@@ -586,7 +586,6 @@ public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements I
 						if (!itemstack.isEmpty()) {
 							clone.setItemSlot(equipmentslottype, itemstack.copy());
 							clone.setDropChance(equipmentslottype, mob.getEquipmentDropChance(equipmentslottype));
-							itemstack.setCount(0);
 						}
 					}
 					clone.lookAt(EntityAnchorArgument.Type.EYES, new Vector3d(mob.getX(), mob.getEyeY(), mob.getZ()));
