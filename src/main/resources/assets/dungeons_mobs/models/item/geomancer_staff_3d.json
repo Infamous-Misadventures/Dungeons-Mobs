@@ -22,10 +22,10 @@
 	"gui_light": "front",
 	"display": {
 		"thirdperson_righthand": {
-			"translation": [-0.5, -18, 1]
+			"translation": [-0.5, -10, 1]
 		},
 		"thirdperson_lefthand": {
-			"translation": [0.5, -18, 1]
+			"translation": [0.5, -10, 1]
 		},
 		"firstperson_righthand": {
 			"translation": [0, -11, 0]
