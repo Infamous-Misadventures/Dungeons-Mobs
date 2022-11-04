@@ -56,7 +56,7 @@ public class CustomISTER extends ItemStackTileEntityRenderer {
 		else if (item instanceof VanguardShieldItem) {
 			matrixStack.pushPose();
 			matrixStack.scale(1.0F, -1.0F, -1.0F);
-			RenderMaterial rendermaterial = LOCATION_SKELETON_VANGUARD_SHIELD;
+			RenderMaterial rendermaterial = LOCATION_vanguard_shield;
 			IVertexBuilder ivertexbuilder = rendermaterial.sprite().wrap(ItemRenderer.getFoilBufferDirect(buffer, this.modelShield.renderType(rendermaterial.atlasLocation()), true, stack.hasFoil()));
 			//this.modelVanguardShield.getHandle().render(matrixStack, ivertexbuilder, combinedLight, combinedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);
 			this.modelVanguardShield.getPlate().render(matrixStack, ivertexbuilder, combinedLight, combinedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);

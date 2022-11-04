@@ -62,6 +62,8 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import static com.infamous.dungeons_mobs.entities.SpawnArmoredHelper.equipArmorSet;
+
 public class MageEntity extends AbstractIllagerEntity implements IAnimatable, SpawnArmoredMob {
 
 	public int attackAnimationTick;
@@ -192,10 +194,7 @@ public class MageEntity extends AbstractIllagerEntity implements IAnimatable, Sp
     @Override
     protected void populateDefaultEquipmentSlots(DifficultyInstance p_180481_1_) {
         super.populateDefaultEquipmentSlots(p_180481_1_);
-        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.MAGE_ARMOR.getHead().get()));
-        this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.MAGE_ARMOR.getChest().get()));
-        this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(ModItems.MAGE_ARMOR.getLegs().get()));
-        this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(ModItems.MAGE_ARMOR.getFeet().get()));
+		equipArmorSet(ModItems.MAGE_ARMOR, this);
     }
 
     @Nullable
@@ -357,7 +356,7 @@ public class MageEntity extends AbstractIllagerEntity implements IAnimatable, Sp
 						ItemStack itemstack = mob.getItemBySlot(equipmentslottype);
 						if (!itemstack.isEmpty()) {
 							clone.setItemSlot(equipmentslottype, itemstack.copy());
-							clone.setDropChance(equipmentslottype, mob.getEquipmentDropChance(equipmentslottype));
+							clone.setDropChance(equipmentslottype, 0.0F);
 						}
 					}
 					clone.lookAt(EntityAnchorArgument.Type.EYES, new Vector3d(mob.getX(), mob.getEyeY(), mob.getZ()));

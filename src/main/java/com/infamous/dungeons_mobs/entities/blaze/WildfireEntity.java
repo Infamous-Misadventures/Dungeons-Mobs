@@ -71,6 +71,8 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import static com.infamous.dungeons_mobs.entities.SpawnArmoredHelper.equipArmorSet;
+
 public class WildfireEntity extends MonsterEntity implements IAnimatable, SpawnArmoredMob {
 
 	private static final DataParameter<Integer> SHIELDS = EntityDataManager.defineId(WildfireEntity.class, DataSerializers.INT);
@@ -157,7 +159,7 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable, SpawnA
     @Override
     protected void populateDefaultEquipmentSlots(DifficultyInstance p_180481_1_) {
         super.populateDefaultEquipmentSlots(p_180481_1_);
-        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.NETHERPLATE_ARMOR.getHead().get()));
+		equipArmorSet(ModItems.NETHERPLATE_ARMOR, this);
     }
     
     public int getShields() {

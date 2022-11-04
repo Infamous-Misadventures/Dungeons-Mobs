@@ -64,6 +64,8 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import static com.infamous.dungeons_mobs.entities.SpawnArmoredHelper.equipArmorSet;
+
 public class NecromancerEntity extends SkeletonEntity implements IAnimatable, SpawnArmoredMob {
 
     public int shootAnimationTick;
@@ -145,9 +147,7 @@ public class NecromancerEntity extends SkeletonEntity implements IAnimatable, Sp
 
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficultyInstance) {
         this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModItems.NECROMANCER_STAFF.get()));
-        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.NECROMANCER_ARMOR.getHead().get()));
-        this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.NECROMANCER_ARMOR.getChest().get()));
-        this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(ModItems.NECROMANCER_ARMOR.getLegs().get()));
+        equipArmorSet(ModItems.NECROMANCER_ARMOR, this);
     }
 
     @Nullable

@@ -59,6 +59,8 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import static com.infamous.dungeons_mobs.entities.SpawnArmoredHelper.equipArmorSet;
+
 public class WindcallerEntity extends AbstractIllagerEntity implements IAnimatable, SpawnArmoredMob {
 
 	public int liftAttackAnimationTick;
@@ -215,8 +217,7 @@ public class WindcallerEntity extends AbstractIllagerEntity implements IAnimatab
     protected void populateDefaultEquipmentSlots(DifficultyInstance p_180481_1_) {
         super.populateDefaultEquipmentSlots(p_180481_1_);
         this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModItems.WINDCALLER_STAFF.get()));
-        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.WINDCALLER_ARMOR.getHead().get()));
-        this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.WINDCALLER_ARMOR.getChest().get()));
+		equipArmorSet(ModItems.WINDCALLER_ARMOR, this);
     }
 
     @Nullable

@@ -60,6 +60,8 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import static com.infamous.dungeons_mobs.entities.SpawnArmoredHelper.equipArmorSet;
+
 public class SkeletonVanguardEntity extends SkeletonEntity implements IShieldUser, IAnimatable, SpawnArmoredMob {
 
 	private static final UUID SPEED_MODIFIER_BLOCKING_UUID = UUID.fromString("e4c96392-42f5-4028-ac44-cad469c10d51");
@@ -110,9 +112,7 @@ public class SkeletonVanguardEntity extends SkeletonEntity implements IShieldUse
 	}
 
 	protected void populateDefaultEquipmentSlots(DifficultyInstance difficultyInstance) {
-		this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.VANGUARD_ARMOR.getHead().get()));
-		this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.VANGUARD_ARMOR.getChest().get()));
-		this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(ModItems.VANGUARD_ARMOR.getLegs().get()));
+		equipArmorSet(ModItems.VANGUARD_ARMOR, this);
 
 		if (ModList.get().isLoaded("dungeons_gear")) {
 

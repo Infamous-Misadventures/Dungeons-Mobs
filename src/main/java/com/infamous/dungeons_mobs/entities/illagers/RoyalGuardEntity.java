@@ -70,6 +70,8 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import static com.infamous.dungeons_mobs.entities.SpawnArmoredHelper.equipArmorSet;
+
 public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatable, IShieldUser, SpawnArmoredMob {
 
 	private static final UUID SPEED_MODIFIER_BLOCKING_UUID = UUID.fromString("05cd371b-0ff4-4ded-8630-b380232ed7b1");
@@ -222,10 +224,7 @@ public class RoyalGuardEntity extends AbstractIllagerEntity implements IAnimatab
 
 	@Override
 	protected void populateDefaultEquipmentSlots(DifficultyInstance difficultyInstance) {
-		this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.ROYAL_GUARD_ARMOR.getHead().get()));
-		this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.ROYAL_GUARD_ARMOR.getChest().get()));
-		this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(ModItems.ROYAL_GUARD_ARMOR.getLegs().get()));
-		this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(ModItems.ROYAL_GUARD_ARMOR.getFeet().get()));
+		equipArmorSet(ModItems.ROYAL_GUARD_ARMOR, this);
 
 		if (ModList.get().isLoaded("dungeons_gear")) {
 			Item MACE = ForgeRegistries.ITEMS.getValue(new ResourceLocation("dungeons_gear", "mace"));

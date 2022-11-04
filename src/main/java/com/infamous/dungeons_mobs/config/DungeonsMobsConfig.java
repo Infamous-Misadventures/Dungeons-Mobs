@@ -11,12 +11,10 @@ public class DungeonsMobsConfig {
     public static class Common {
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_WRAITH_FIRE_SUMMON;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ICY_CREEPER_GRIEFING;
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_MOB_ARMOR_DROPS;
         public static ForgeConfigSpec.ConfigValue<List<? extends String>> NECROMANCER_MOB_SUMMONS;
         public static ForgeConfigSpec.ConfigValue<List<? extends String>> DROWNED_NECROMANCER_MOB_SUMMONS;
 
-        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_MOUNTAINEER_REPLACES_MOUNTAINEER;
-        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_VINDICATOR_REPLACES_VINDICATOR;
-        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_PILLAGER_REPLACES_PILLAGER;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_FROZEN_ZOMBIE_REPLACES_ZOMBIE;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ICY_CREEPER_REPLACES_CREEPER;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_JUNGLE_ZOMBIE_REPLACES_ZOMBIE;
@@ -179,6 +177,10 @@ public class DungeonsMobsConfig {
                     .comment("Enable the default ability of Icy Creeper Explosions to grief the environment. \n" +
                             "If you prefer their explosions to not damage the environment, disable this feature. [true / false]")
                     .define("enablyIcyCreeperGriefing", true);
+            ENABLE_MOB_ARMOR_DROPS = builder
+                    .comment("Enable mobs to drop their armor when killed. \n" +
+                            "If you prefer mobs to not drop their armor, disable this feature. [true / false]")
+                    .define("enableMobArmorDrops", true);
             NECROMANCER_MOB_SUMMONS = builder
                     .comment("Add mobs (preferably undead) that the Necromancer can summon. \n"
                             + "To do so, enter the namespace ID of the mob, like \"minecraft:zombie\".\n" +
@@ -220,18 +222,6 @@ public class DungeonsMobsConfig {
                     .comment("Enable Mossy Skeletons  80% of Skeleton spawns in JUNGLE biomes. \n" +
                             "If you prefer to not have them do this, disable this feature. [true / false]")
                     .define("enableMossySkeletonReplacesSkeleton", true);
-            ENABLE_ARMORED_MOUNTAINEER_REPLACES_MOUNTAINEER = builder
-                    .comment("Enable Armored Mountaineers replacing 10% of Mountaineer spawns in the biomes they can spawn in. \n" +
-                            "If you prefer to not have them do this, disable this feature. [true / false]")
-                    .define("enableArmoredMountaineerReplacesMountaineer", true);
-            ENABLE_ARMORED_VINDICATOR_REPLACES_VINDICATOR = builder
-                    .comment("Enable Armored Vindicators replacing 10% of Vindicator spawns in the biomes they can spawn in. \n" +
-                            "If you prefer to not have them do this, disable this feature. [true / false]")
-                    .define("enableArmoredVindicatorReplacesVindicator", true);
-            ENABLE_ARMORED_PILLAGER_REPLACES_PILLAGER = builder
-                    .comment("Enable Armored Pillagers replacing 10% of Pillager spawns in the biomes they can spawn in. \n" +
-                            "If you prefer to not have them do this, disable this feature. [true / false]")
-                    .define("enableArmoredPillagerReplacesPillager", true);
 
             ENABLE_ARMORED_DROWNED_REPLACES_DROWNED = builder
                     .comment("Enable Armored Drowned replacing 10% of Drowned spawns in the biomes they can spawn in. \n" +

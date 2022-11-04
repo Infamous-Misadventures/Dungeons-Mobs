@@ -69,6 +69,8 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import static com.infamous.dungeons_mobs.entities.SpawnArmoredHelper.equipArmorSet;
+
 public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements IAnimatable, SpawnArmoredMob {
 
 	public int shootAnimationTick;
@@ -225,10 +227,7 @@ public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements I
 	@Override
 	protected void populateDefaultEquipmentSlots(DifficultyInstance p_180481_1_) {
 		super.populateDefaultEquipmentSlots(p_180481_1_);
-		this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.ILLUSIONER_ARMOR.getHead().get()));
-		this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.ILLUSIONER_ARMOR.getChest().get()));
-		this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(ModItems.ILLUSIONER_ARMOR.getLegs().get()));
-		this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(ModItems.ILLUSIONER_ARMOR.getFeet().get()));
+		equipArmorSet(ModItems.ILLUSIONER_ARMOR, this);
 		if (ModList.get().isLoaded("dungeons_gear")) {
 			Item SHORTBOW = ForgeRegistries.ITEMS.getValue(new ResourceLocation("dungeons_gear", "shortbow"));
 
@@ -585,7 +584,7 @@ public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements I
 						ItemStack itemstack = mob.getItemBySlot(equipmentslottype);
 						if (!itemstack.isEmpty()) {
 							clone.setItemSlot(equipmentslottype, itemstack.copy());
-							clone.setDropChance(equipmentslottype, mob.getEquipmentDropChance(equipmentslottype));
+							clone.setDropChance(equipmentslottype, 0.0F);
 						}
 					}
 					clone.lookAt(EntityAnchorArgument.Type.EYES, new Vector3d(mob.getX(), mob.getEyeY(), mob.getZ()));

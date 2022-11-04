@@ -38,6 +38,8 @@ import java.util.EnumSet;
 
 import javax.annotation.Nullable;
 
+import static com.infamous.dungeons_mobs.entities.SpawnArmoredHelper.equipArmorSet;
+
 public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnimatable, SpawnArmoredMob {
 
 	AnimationFactory factory = new AnimationFactory(this);
@@ -144,8 +146,7 @@ public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnima
     @Override
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
         this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModItems.GEOMANCER_STAFF.get()));
-        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.GEOMANCER_ARMOR.getHead().get()));
-        this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.GEOMANCER_ARMOR.getChest().get()));
+		equipArmorSet(ModItems.GEOMANCER_ARMOR, this);
     }
 
     @Nullable

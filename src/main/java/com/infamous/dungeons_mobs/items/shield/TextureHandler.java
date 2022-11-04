@@ -22,7 +22,7 @@ public class TextureHandler {
 		if (event.getMap().location().equals(AtlasTexture.LOCATION_BLOCKS)) {
 			event.addSprite(ShieldTextures.LOCATION_ROYAL_GUARD_SHIELD_BASE.texture());
 			event.addSprite(ShieldTextures.LOCATION_ROYAL_GUARD_SHIELD_NO_PATTERN.texture());
-			event.addSprite(ShieldTextures.LOCATION_SKELETON_VANGUARD_SHIELD.texture());
+			event.addSprite(ShieldTextures.LOCATION_vanguard_shield.texture());
 		}
 	}
 
