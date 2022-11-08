@@ -1,24 +1,27 @@
 package com.infamous.dungeons_mobs.client.renderer.armor;
 
 import com.infamous.dungeons_libraries.client.renderer.ArmorGearRenderer;
-import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
 import com.infamous.dungeons_libraries.items.materials.armor.ArmorMaterialBaseType;
 import com.infamous.dungeons_libraries.items.materials.armor.DungeonsArmorMaterial;
+import com.infamous.dungeons_mobs.client.models.armor.WindcallerArmorGearModel;
 import com.infamous.dungeons_mobs.entities.illagers.WindcallerEntity;
-import com.infamous.dungeons_mobs.items.armor.WindcallerClothesArmorGear;
+import com.infamous.dungeons_mobs.items.armor.WindcallerArmorGear;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.LivingRenderer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.IArmorMaterial;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
-import software.bernie.geckolib3.geo.render.built.GeoCube;
+import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 import software.bernie.geckolib3.util.RenderUtils;
 
-public class WindcallerClothesArmorGearRenderer extends ArmorGearRenderer<WindcallerClothesArmorGear> {
+public class WindcallerArmorGearRenderer extends ArmorGearRenderer<WindcallerArmorGear> {
+
+    public WindcallerArmorGearRenderer() {
+        super(new WindcallerArmorGearModel<>());
+    }
 
     @Override
     public void preparePositionRotationScale(GeoBone bone, MatrixStack stack) {
@@ -38,5 +41,15 @@ public class WindcallerClothesArmorGearRenderer extends ArmorGearRenderer<Windca
             stack.translate(0.0D, 0.116D, 0.0D);
         }
         RenderUtils.moveBackFromPivot(bone, stack);
+    }
+
+    @Override
+    public void render(float partialTicks, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn) {
+
+        AnimatedGeoModel<WindcallerArmorGear> geoModelProvider = getGeoModelProvider();
+        if(geoModelProvider instanceof WindcallerArmorGearModel){
+            ((WindcallerArmorGearModel<WindcallerArmorGear>) geoModelProvider).setWearer(this.entityLiving);
+        }
+        super.render(partialTicks, stack, bufferIn, packedLightIn);
     }
 }

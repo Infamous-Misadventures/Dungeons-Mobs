@@ -4,6 +4,7 @@ import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.entities.illagers.WindcallerEntity;
 
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
@@ -34,6 +35,13 @@ public class WindcallerModel extends AnimatedGeoModel<WindcallerEntity> {
 		LivingEntity entityIn = (LivingEntity) entity;
 
 		IBone head = this.getAnimationProcessor().getBone("bipedHead");
+
+		IBone cape = this.getAnimationProcessor().getBone("bipedCape");
+		if (entity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == entity.getArmorSet().getChest().get()) {
+			cape.setHidden(false);
+		} else {
+			cape.setHidden(true);
+		}
 
 		EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
 

@@ -6,6 +6,7 @@ import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
+import com.infamous.dungeons_libraries.items.gearconfig.ArmorSet;
 import com.infamous.dungeons_mobs.entities.summonables.SummonSpotEntity;
 import com.infamous.dungeons_mobs.entities.summonables.WraithFireEntity;
 import com.infamous.dungeons_mobs.entities.undead.WraithEntity;
@@ -249,8 +250,8 @@ public class MageEntity extends AbstractIllagerEntity implements IAnimatable, Sp
     }
 
     @Override
-    public ResourceLocation getArmorSet() {
-        return ModItems.MAGE_ARMOR.getArmorSet();
+    public ArmorSet getArmorSet() {
+        return ModItems.MAGE_ARMOR;
     }
 
     class CreateIllusionsGoal extends Goal {

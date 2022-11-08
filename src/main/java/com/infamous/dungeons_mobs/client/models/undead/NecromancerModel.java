@@ -53,7 +53,7 @@ public class NecromancerModel extends AnimatedGeoModel<NecromancerEntity> {
         	entity.level.addParticle(ModParticleTypes.NECROMANCY.get(), particleBone.getWorldPosition().x, particleBone.getWorldPosition().y, particleBone.getWorldPosition().z, 0, 0, 0);
         }
         
-        if (entity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ModItems.NECROMANCER_ARMOR.getChest().get()) {
+        if (entity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == entity.getArmorSet().getChest().get()) {
         	cape.setHidden(false);
         } else {
         	cape.setHidden(true);

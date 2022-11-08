@@ -6,8 +6,7 @@ import com.infamous.dungeons_mobs.client.models.illager.MageModel;
 import com.infamous.dungeons_mobs.client.models.illager.RoyalGuardModel;
 import com.infamous.dungeons_mobs.client.particle.*;
 import com.infamous.dungeons_mobs.client.renderer.EmptyRenderer;
-import com.infamous.dungeons_mobs.client.renderer.armor.NecromancerArmorGearRenderer;
-import com.infamous.dungeons_mobs.client.renderer.armor.WindcallerClothesArmorGearRenderer;
+import com.infamous.dungeons_mobs.client.renderer.armor.*;
 import com.infamous.dungeons_mobs.client.renderer.blaze.WildfireRenderer;
 import com.infamous.dungeons_mobs.client.renderer.creeper.IcyCreeperRenderer;
 import com.infamous.dungeons_mobs.client.renderer.ender.BlastlingRenderer;
@@ -34,8 +33,7 @@ import com.infamous.dungeons_mobs.client.renderer.water.*;
 import com.infamous.dungeons_mobs.entities.illagers.IllusionerCloneEntity;
 import com.infamous.dungeons_mobs.entities.illagers.MageCloneEntity;
 import com.infamous.dungeons_mobs.entities.illagers.MageEntity;
-import com.infamous.dungeons_mobs.items.armor.NecromancerArmorGear;
-import com.infamous.dungeons_mobs.items.armor.WindcallerClothesArmorGear;
+import com.infamous.dungeons_mobs.items.armor.*;
 import com.infamous.dungeons_mobs.items.shield.CustomISTER;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import net.minecraft.client.Minecraft;
@@ -170,8 +168,11 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WILDFIRE.get(), WildfireRenderer::new);
 
 
-        GeoArmorRenderer.registerArmorRenderer(WindcallerClothesArmorGear.class, WindcallerClothesArmorGearRenderer::new);
+        GeoArmorRenderer.registerArmorRenderer(WindcallerArmorGear.class, WindcallerArmorGearRenderer::new);
+        GeoArmorRenderer.registerArmorRenderer(MageArmorGear.class, MageArmorGearRenderer::new);
+        GeoArmorRenderer.registerArmorRenderer(IceologerArmorGear.class, IceologerArmorGearRenderer::new);
         GeoArmorRenderer.registerArmorRenderer(NecromancerArmorGear.class, NecromancerArmorGearRenderer::new);
+        GeoArmorRenderer.registerArmorRenderer(DrownedNecromancerArmorGear.class, DrownedNecromancerArmorGearRenderer::new);
     }
 
     @SubscribeEvent

@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 
 import com.infamous.dungeons_libraries.attribute.AttributeRegistry;
 import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
+import com.infamous.dungeons_libraries.items.gearconfig.ArmorSet;
 import com.infamous.dungeons_libraries.summon.SummonHelper;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.entities.projectiles.NecromancerOrbEntity;
@@ -251,8 +252,8 @@ public class NecromancerEntity extends SkeletonEntity implements IAnimatable, Sp
     }
 
     @Override
-    public ResourceLocation getArmorSet() {
-        return ModItems.NECROMANCER_ARMOR.getArmorSet();
+    public ArmorSet getArmorSet() {
+        return ModItems.NECROMANCER_ARMOR;
     }
 
     class SummonGoal extends Goal {

@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 
 import com.infamous.dungeons_libraries.attribute.AttributeRegistry;
 import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
+import com.infamous.dungeons_libraries.items.gearconfig.ArmorSet;
 import com.infamous.dungeons_libraries.summon.SummonHelper;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.entities.projectiles.DrownedNecromancerOrbEntity;
@@ -302,8 +303,8 @@ public class DrownedNecromancerEntity extends DrownedEntity implements IAnimatab
     }
 
     @Override
-    public ResourceLocation getArmorSet() {
-        return ModItems.DROWNED_NECROMANCER_ARMOR.getArmorSet();
+    public ArmorSet getArmorSet() {
+        return ModItems.DROWNED_NECROMANCER_ARMOR;
     }
 
     static class SwimUpGoal extends Goal {

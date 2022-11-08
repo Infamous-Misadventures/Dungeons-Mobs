@@ -40,7 +40,7 @@
           ]
         },
         {
-          "name": "bipedCape",
+          "name": "armorCloak",
           "parent": "armorBody",
           "pivot": [
             0,

@@ -1,24 +1,22 @@
 package com.infamous.dungeons_mobs.client.renderer.armor;
 
 import com.infamous.dungeons_libraries.client.renderer.ArmorGearRenderer;
-import com.infamous.dungeons_mobs.client.models.armor.NecromancerArmorGearModel;
-import com.infamous.dungeons_mobs.items.armor.NecromancerArmorGear;
+import com.infamous.dungeons_mobs.client.models.armor.DrownedNecromancerArmorGearModel;
+import com.infamous.dungeons_mobs.items.armor.DrownedNecromancerArmorGear;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-
 import net.minecraft.inventory.EquipmentSlotType;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 import software.bernie.geckolib3.util.GeoUtils;
 
-public class NecromancerArmorGearRenderer extends ArmorGearRenderer<NecromancerArmorGear> {
+public class DrownedNecromancerArmorGearRenderer extends ArmorGearRenderer<DrownedNecromancerArmorGear> {
 
 	public String hoodBone = "armorHood";
-	public String leggingsBodyBone = "armorLeggingsTop";
-	
-    public NecromancerArmorGearRenderer() {
-        super(new NecromancerArmorGearModel<>());
+
+    public DrownedNecromancerArmorGearRenderer() {
+        super(new DrownedNecromancerArmorGearModel<>());
     }
 
 	@Override
@@ -31,14 +29,6 @@ public class NecromancerArmorGearRenderer extends ArmorGearRenderer<NecromancerA
 			hoodBone.setPositionY(-this.head.y);
 			hoodBone.setPositionZ(this.head.z);
 		}
-		
-//		if (this.leggingsBodyBone != null) {
-//			IBone leggingsBodyBone = this.getGeoModelProvider().getBone(this.leggingsBodyBone);
-//			GeoUtils.copyRotations(this.body, leggingsBodyBone);
-//			leggingsBodyBone.setPositionX(this.body.x);
-//			leggingsBodyBone.setPositionY(-this.body.y);
-//			leggingsBodyBone.setPositionZ(this.body.z);
-//		}
 	}
 	
 	@SuppressWarnings("incomplete-switch")
@@ -68,9 +58,9 @@ public class NecromancerArmorGearRenderer extends ArmorGearRenderer<NecromancerA
     @Override
     public void render(float partialTicks, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn) {
 
-        AnimatedGeoModel<NecromancerArmorGear> geoModelProvider = getGeoModelProvider();
-        if(geoModelProvider instanceof NecromancerArmorGearModel){
-            ((NecromancerArmorGearModel<NecromancerArmorGear>) geoModelProvider).setWearer(this.entityLiving);
+        AnimatedGeoModel<DrownedNecromancerArmorGear> geoModelProvider = getGeoModelProvider();
+        if(geoModelProvider instanceof DrownedNecromancerArmorGearModel){
+            ((DrownedNecromancerArmorGearModel<DrownedNecromancerArmorGear>) geoModelProvider).setWearer(this.entityLiving);
         }
         super.render(partialTicks, stack, bufferIn, packedLightIn);
     }

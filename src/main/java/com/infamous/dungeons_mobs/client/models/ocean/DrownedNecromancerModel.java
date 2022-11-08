@@ -8,6 +8,7 @@ import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
 import com.infamous.dungeons_mobs.entities.water.DrownedNecromancerEntity;
 
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -54,9 +55,13 @@ public class DrownedNecromancerModel extends AnimatedGeoModel<DrownedNecromancer
         	GeoBone particleBone = ((GeoBone)particles);
         	entity.level.addParticle(entity.isInWaterOrBubble() ? ParticleTypes.BUBBLE_COLUMN_UP : ModParticleTypes.NECROMANCY.get(), particleBone.getWorldPosition().x, particleBone.getWorldPosition().y, particleBone.getWorldPosition().z, 0, 0, 0);
         }
-        
-        cape.setHidden(true);
 
+        if (entity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == entity.getArmorSet().getChest().get()) {
+            cape.setHidden(false);
+        } else {
+            cape.setHidden(true);
+        }
+        
         EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
 
         if (extraData.headPitch != 0 || extraData.netHeadYaw != 0) {

@@ -6,8 +6,7 @@ import com.infamous.dungeons_libraries.items.gearconfig.ArmorSet;
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.items.*;
-import com.infamous.dungeons_mobs.items.armor.NecromancerArmorGear;
-import com.infamous.dungeons_mobs.items.armor.WindcallerClothesArmorGear;
+import com.infamous.dungeons_mobs.items.armor.*;
 import com.infamous.dungeons_mobs.items.shield.RoyalGuardShieldItem;
 import com.infamous.dungeons_mobs.items.shield.VanguardShieldItem;
 import com.infamous.dungeons_mobs.utils.GeneralHelper;
@@ -67,20 +66,20 @@ public class ModItems {
             () -> new PiglinHelmetItem(ArmorMaterial.GOLD, EquipmentSlotType.HEAD, new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS)));
 
     public static final ArmorSet CHEF_ARMOR = registerArmorSet("chef_armor", "chef_helmet", "chef_chestplate", null, null);
-    public static final ArmorSet DROWNED_NECROMANCER_ARMOR = registerArmorSet("drowned_necromancer_armor", "drowned_necromancer_helmet", "drowned_necromancer_chestplate", "drowned_necromancer_leggings", null);
+    public static final ArmorSet DROWNED_NECROMANCER_ARMOR = registerArmorSetDrownedNecromancer("drowned_necromancer_armor", "drowned_necromancer_helmet", "drowned_necromancer_chestplate", "drowned_necromancer_leggings", null);
     public static final ArmorSet GEOMANCER_ARMOR = registerArmorSet("geomancer_armor", "geomancer_helmet", "geomancer_chestplate", null, null);
-    public static final ArmorSet ICEOLOGER_ARMOR = registerArmorSet("iceologer_armor", "iceologer_helmet", "iceologer_chestplate", "iceologer_leggings", "iceologer_boots");
+    public static final ArmorSet ICEOLOGER_ARMOR = registerArmorSetIceologer("iceologer_armor", "iceologer_helmet", "iceologer_chestplate", "iceologer_leggings", "iceologer_boots");
     public static final ArmorSet ILLUSIONER_ARMOR = registerArmorSet("illusioner_armor", "illusioner_helmet", "illusioner_chestplate", "illusioner_leggings", "illusioner_boots");
-    public static final ArmorSet NECROMANCER_ARMOR = registerArmorSetNecromancerArmor("necromancer_armor", "necromancer_helmet", "necromancer_chestplate", "necromancer_leggings", null, new ResourceLocation(MODID, "animations/armor/cloaked_armor.animation.json"));
+    public static final ArmorSet NECROMANCER_ARMOR = registerArmorSetNecromancerArmor("necromancer_armor", "necromancer_helmet", "necromancer_chestplate", "necromancer_leggings", null);
     public static final ArmorSet NETHERPLATE_ARMOR = registerArmorSet("netherplate_armor", "netherplate_helmet", null, null, null);
     public static final ArmorSet ROYAL_GUARD_ARMOR = registerArmorSet("royal_guard_armor", "royal_guard_helmet", "royal_guard_chestplate", "royal_guard_leggings", "royal_guard_boots");
     public static final ArmorSet VANGUARD_ARMOR = registerArmorSet("vanguard_armor", "vanguard_helmet", "vanguard_chestplate", "vanguard_leggings", null);
-    public static final ArmorSet WINDCALLER_ARMOR = registerArmorSetWindcallerClothes("windcaller_armor", "windcaller_helmet", "windcaller_chestplate", null, null);
+    public static final ArmorSet WINDCALLER_ARMOR = registerArmorSetWindcaller("windcaller_armor", "windcaller_helmet", "windcaller_chestplate", null, null);
     public static final ArmorSet FUNGUS_THROWER_ARMOR = registerArmorSet("fungus_thrower_armor", "fungus_thrower_helmet", "fungus_thrower_chestplate", null, null);
     public static final ArmorSet MOUNTAINEER_ARMOR = registerArmorSet("mountaineer_armor", "mountaineer_helmet", "mountaineer_chestplate", "mountaineer_leggings", "mountaineer_boots");
     public static final ArmorSet EXPEDITION_ARMOR = registerArmorSet("expedition_armor", "expedition_helmet", "expedition_chestplate", "expedition_leggings", "expedition_boots");
     public static final ArmorSet ALPINE_ARMOR = registerArmorSet("alpine_armor", "alpine_helmet", "alpine_chestplate", "alpine_leggings", "alpine_boots");
-    public static final ArmorSet MAGE_ARMOR = registerArmorSet("mage_armor", "mage_helmet", "mage_chestplate", "mage_leggings", "mage_boots");
+    public static final ArmorSet MAGE_ARMOR = registerArmorSetMage("mage_armor", "mage_helmet", "mage_chestplate", "mage_leggings", "mage_boots");
 
 
     // SPATULA
@@ -153,34 +152,73 @@ public class ModItems {
         return registerArmorSet(armorSetId, helmetId, chestId, legsId, bootsId, false);
     }
 
-    private static ArmorSet registerArmorSetWindcallerClothes(String armorSetId, String helmetId, String chestId, String legsId, String bootsId) {
-        return registerArmorSetWindcallerClothes(armorSetId, helmetId, chestId, legsId, bootsId, false);
-    }
-
-    private static ArmorSet registerArmorSetWindcallerClothes(String armorSetId, String helmetId, String chestId, String legsId, String bootsId, boolean animated) {
+    private static ArmorSet registerArmorSetMage(String armorSetId, String helmetId, String chestId, String legsId, String bootsId) {
         ResourceLocation armorSet = new ResourceLocation(MODID, armorSetId);
         ResourceLocation modelLocation = new ResourceLocation(MODID, "geo/armor/"+armorSetId+".geo.json");
         ResourceLocation textureLocation = new ResourceLocation(MODID, "textures/models/armor/"+armorSetId+".png");
-        ResourceLocation animationFileLocation = animated ? new ResourceLocation(MODID, "animations/armor/" + armorSetId + ".animation.json") : new ResourceLocation(DungeonsLibraries.MODID, "animations/armor/armor_default.animation.json");
+        ResourceLocation animationFileLocation = new ResourceLocation(MODID, "animations/armor/cloaked_armor.animation.json");
         return new ArmorSet(
                 armorSet,
-                registerArmor(helmetId, () -> new WindcallerClothesArmorGear(EquipmentSlotType.HEAD, ARMOR_PROPERTIES, armorSet, modelLocation, textureLocation, animationFileLocation)),
-                registerArmor(chestId, () -> new WindcallerClothesArmorGear(EquipmentSlotType.CHEST, ARMOR_PROPERTIES, armorSet, modelLocation, textureLocation, animationFileLocation)),
-                registerArmor(legsId, () -> new WindcallerClothesArmorGear(EquipmentSlotType.LEGS, ARMOR_PROPERTIES, armorSet, modelLocation, textureLocation, animationFileLocation)),
-                registerArmor(bootsId, () -> new WindcallerClothesArmorGear(EquipmentSlotType.FEET, ARMOR_PROPERTIES, armorSet, modelLocation, textureLocation, animationFileLocation))
+                registerArmor(helmetId, () -> new MageArmorGear(EquipmentSlotType.HEAD, ARMOR_PROPERTIES, armorSet, modelLocation, textureLocation, animationFileLocation)),
+                registerArmor(chestId, () -> new MageArmorGear(EquipmentSlotType.CHEST, ARMOR_PROPERTIES, armorSet, modelLocation, textureLocation, animationFileLocation)),
+                registerArmor(legsId, () -> new MageArmorGear(EquipmentSlotType.LEGS, ARMOR_PROPERTIES, armorSet, modelLocation, textureLocation, animationFileLocation)),
+                registerArmor(bootsId, () -> new MageArmorGear(EquipmentSlotType.FEET, ARMOR_PROPERTIES, armorSet, modelLocation, textureLocation, animationFileLocation))
         );
     }
 
-    private static ArmorSet registerArmorSetNecromancerArmor(String armorSetId, String helmetId, String chestId, String legsId, String bootsId, ResourceLocation animationFileLocation) {
+    private static ArmorSet registerArmorSetWindcaller(String armorSetId, String helmetId, String chestId, String legsId, String bootsId) {
         ResourceLocation armorSet = new ResourceLocation(MODID, armorSetId);
         ResourceLocation modelLocation = new ResourceLocation(MODID, "geo/armor/"+armorSetId+".geo.json");
         ResourceLocation textureLocation = new ResourceLocation(MODID, "textures/models/armor/"+armorSetId+".png");
+        ResourceLocation animationFileLocation = new ResourceLocation(MODID, "animations/armor/cloaked_armor.animation.json");
+        return new ArmorSet(
+                armorSet,
+                registerArmor(helmetId, () -> new WindcallerArmorGear(EquipmentSlotType.HEAD, ARMOR_PROPERTIES, armorSet, modelLocation, textureLocation, animationFileLocation)),
+                registerArmor(chestId, () -> new WindcallerArmorGear(EquipmentSlotType.CHEST, ARMOR_PROPERTIES, armorSet, modelLocation, textureLocation, animationFileLocation)),
+                registerArmor(legsId, () -> new WindcallerArmorGear(EquipmentSlotType.LEGS, ARMOR_PROPERTIES, armorSet, modelLocation, textureLocation, animationFileLocation)),
+                registerArmor(bootsId, () -> new WindcallerArmorGear(EquipmentSlotType.FEET, ARMOR_PROPERTIES, armorSet, modelLocation, textureLocation, animationFileLocation))
+        );
+    }
+
+    private static ArmorSet registerArmorSetIceologer(String armorSetId, String helmetId, String chestId, String legsId, String bootsId) {
+        ResourceLocation armorSet = new ResourceLocation(MODID, armorSetId);
+        ResourceLocation modelLocation = new ResourceLocation(MODID, "geo/armor/"+armorSetId+".geo.json");
+        ResourceLocation textureLocation = new ResourceLocation(MODID, "textures/models/armor/"+armorSetId+".png");
+        ResourceLocation animationFileLocation = new ResourceLocation(MODID, "animations/armor/cloaked_armor.animation.json");
+        return new ArmorSet(
+                armorSet,
+                registerArmor(helmetId, () -> new IceologerArmorGear(EquipmentSlotType.HEAD, ARMOR_PROPERTIES, armorSet, modelLocation, textureLocation, animationFileLocation)),
+                registerArmor(chestId, () -> new IceologerArmorGear(EquipmentSlotType.CHEST, ARMOR_PROPERTIES, armorSet, modelLocation, textureLocation, animationFileLocation)),
+                registerArmor(legsId, () -> new IceologerArmorGear(EquipmentSlotType.LEGS, ARMOR_PROPERTIES, armorSet, modelLocation, textureLocation, animationFileLocation)),
+                registerArmor(bootsId, () -> new IceologerArmorGear(EquipmentSlotType.FEET, ARMOR_PROPERTIES, armorSet, modelLocation, textureLocation, animationFileLocation))
+        );
+    }
+
+    private static ArmorSet registerArmorSetDrownedNecromancer(String armorSetId, String helmetId, String chestId, String legsId, String bootsId) {
+        ResourceLocation armorSet = new ResourceLocation(MODID, armorSetId);
+        ResourceLocation modelLocation = new ResourceLocation(MODID, "geo/armor/"+armorSetId+".geo.json");
+        ResourceLocation textureLocation = new ResourceLocation(MODID, "textures/models/armor/"+armorSetId+".png");
+        ResourceLocation animationFileLocation = new ResourceLocation(MODID, "animations/armor/cloaked_armor.animation.json");
+        return new ArmorSet(
+                armorSet,
+                registerArmor(helmetId, () -> new DrownedNecromancerArmorGear(EquipmentSlotType.HEAD, ARMOR_PROPERTIES, armorSet, modelLocation, textureLocation, animationFileLocation)),
+                registerArmor(chestId, () -> new DrownedNecromancerArmorGear(EquipmentSlotType.CHEST, ARMOR_PROPERTIES, armorSet, modelLocation, textureLocation, animationFileLocation)),
+                registerArmor(legsId, () -> new DrownedNecromancerArmorGear(EquipmentSlotType.LEGS, ARMOR_PROPERTIES, armorSet, modelLocation, textureLocation, animationFileLocation)),
+                null
+        );
+    }
+
+    private static ArmorSet registerArmorSetNecromancerArmor(String armorSetId, String helmetId, String chestId, String legsId, String bootsId) {
+        ResourceLocation armorSet = new ResourceLocation(MODID, armorSetId);
+        ResourceLocation modelLocation = new ResourceLocation(MODID, "geo/armor/"+armorSetId+".geo.json");
+        ResourceLocation textureLocation = new ResourceLocation(MODID, "textures/models/armor/"+armorSetId+".png");
+        ResourceLocation animationFileLocation = new ResourceLocation(MODID, "animations/armor/cloaked_armor.animation.json");
         return new ArmorSet(
                 armorSet,
                 registerArmor(helmetId, () -> new NecromancerArmorGear(EquipmentSlotType.HEAD, ARMOR_PROPERTIES, armorSet, modelLocation, textureLocation, animationFileLocation)),
                 registerArmor(chestId, () -> new NecromancerArmorGear(EquipmentSlotType.CHEST, ARMOR_PROPERTIES, armorSet, modelLocation, textureLocation, animationFileLocation)),
                 registerArmor(legsId, () -> new NecromancerArmorGear(EquipmentSlotType.LEGS, ARMOR_PROPERTIES, armorSet, modelLocation, textureLocation, animationFileLocation)),
-                registerArmor(bootsId, () -> new NecromancerArmorGear(EquipmentSlotType.FEET, ARMOR_PROPERTIES, armorSet, modelLocation, textureLocation, animationFileLocation))
+                null
         );
     }
 

@@ -6,6 +6,7 @@ import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
+import com.infamous.dungeons_libraries.items.gearconfig.ArmorSet;
 import com.infamous.dungeons_mobs.entities.summonables.SummonSpotEntity;
 import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
 import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
@@ -324,8 +325,8 @@ public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements I
 		   }
 
 	@Override
-	public ResourceLocation getArmorSet() {
-		return ModItems.ILLUSIONER_ARMOR.getArmorSet();
+	public ArmorSet getArmorSet() {
+		return ModItems.ILLUSIONER_ARMOR;
 	}
 
 	class ShootAttackGoal extends Goal {

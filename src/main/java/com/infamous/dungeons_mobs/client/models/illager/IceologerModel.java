@@ -4,6 +4,7 @@ import com.infamous.dungeons_mobs.DungeonsMobs;
 
 import com.infamous.dungeons_mobs.entities.illagers.IceologerEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
@@ -36,12 +37,17 @@ public class IceologerModel extends AnimatedGeoModel<IceologerEntity> {
     public void setLivingAnimations(IceologerEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
 
-        LivingEntity entityIn = (LivingEntity) entity;
-
         IBone head = this.getAnimationProcessor().getBone("bipedHead");
         IBone illagerArms = this.getAnimationProcessor().getBone("illagerArms");
         
         illagerArms.setHidden(true);
+
+        IBone cape = this.getAnimationProcessor().getBone("bipedCape");
+        if (entity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == entity.getArmorSet().getChest().get()) {
+            cape.setHidden(false);
+        } else {
+            cape.setHidden(true);
+        }
 
         EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
         if (extraData.headPitch != 0 || extraData.netHeadYaw != 0) {

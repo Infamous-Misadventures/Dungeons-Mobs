@@ -5,9 +5,11 @@ import java.util.EnumSet;
 import javax.annotation.Nullable;
 
 import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
+import com.infamous.dungeons_libraries.items.gearconfig.ArmorSet;
 import com.infamous.dungeons_mobs.entities.projectiles.MageMissileEntity;
 import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
 import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
+import com.infamous.dungeons_mobs.mod.ModItems;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 import com.infamous.dungeons_mobs.utils.PositionUtils;
 
@@ -36,7 +38,6 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.vector.Vector3d;
@@ -273,8 +274,8 @@ public class MageCloneEntity extends AbstractIllagerEntity implements IAnimatabl
     }
 
 	@Override
-	public ResourceLocation getArmorSet() {
-		return null; //ModItems.MAGE_CLOTHES.getArmorSet();
+	public ArmorSet getArmorSet() {
+		return ModItems.MAGE_ARMOR;
 	}
 	
 	class ShootAttackGoal extends Goal {

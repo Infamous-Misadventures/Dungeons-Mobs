@@ -3,6 +3,8 @@ package com.infamous.dungeons_mobs.entities.illagers;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
+import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
+import com.infamous.dungeons_libraries.items.gearconfig.ArmorSet;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModItems;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
@@ -36,7 +38,7 @@ import net.minecraft.world.raid.Raid;
 
 import javax.annotation.Nullable;
 
-public class MountaineerEntity extends VindicatorEntity {
+public class MountaineerEntity extends VindicatorEntity implements SpawnArmoredMob {
 	
 	   private static final DataParameter<Byte> DATA_FLAGS_ID = EntityDataManager.defineId(MountaineerEntity.class, DataSerializers.BYTE);
 	   
@@ -162,5 +164,10 @@ public class MountaineerEntity extends VindicatorEntity {
     @Override
     public boolean canBeLeader() {
         return false;
+    }
+
+    @Override
+    public ArmorSet getArmorSet() {
+        return ModItems.MOUNTAINEER_ARMOR;
     }
 }

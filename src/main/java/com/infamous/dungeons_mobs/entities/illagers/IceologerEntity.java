@@ -196,8 +196,8 @@ public class IceologerEntity extends AbstractIllagerEntity implements IAnimatabl
     }
 
     @Override
-    public ResourceLocation getArmorSet() {
-        return ModItems.ICEOLOGER_ARMOR.getArmorSet();
+    public ArmorSet getArmorSet() {
+        return ModItems.ICEOLOGER_ARMOR;
     }
 
     class SummonIceChunkGoal extends Goal {

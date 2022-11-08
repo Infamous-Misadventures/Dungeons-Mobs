@@ -6,6 +6,7 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
+import com.infamous.dungeons_libraries.items.gearconfig.ArmorSet;
 import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
 import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
 import com.infamous.dungeons_mobs.goals.UseShieldGoal;
@@ -301,8 +302,8 @@ public class SkeletonVanguardEntity extends SkeletonEntity implements IShieldUse
 	}
 
 	@Override
-	public ResourceLocation getArmorSet() {
-		return ModItems.VANGUARD_ARMOR.getArmorSet();
+	public ArmorSet getArmorSet() {
+		return ModItems.VANGUARD_ARMOR;
 	}
 
 	class BasicAttackGoal extends Goal {

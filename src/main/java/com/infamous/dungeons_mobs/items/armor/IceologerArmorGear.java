@@ -4,9 +4,9 @@ import com.infamous.dungeons_libraries.items.gearconfig.ArmorGear;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.util.ResourceLocation;
 
-public class WindcallerClothesArmorGear extends ArmorGear {
+public class IceologerArmorGear extends ArmorGear {
 
-    public WindcallerClothesArmorGear(EquipmentSlotType slotType, Properties properties, ResourceLocation armorSet, ResourceLocation modelLocation, ResourceLocation textureLocation, ResourceLocation animationFileLocation) {
+    public IceologerArmorGear(EquipmentSlotType slotType, Properties properties, ResourceLocation armorSet, ResourceLocation modelLocation, ResourceLocation textureLocation, ResourceLocation animationFileLocation) {
         super(slotType, properties, armorSet, modelLocation, textureLocation, animationFileLocation);
     }
 }

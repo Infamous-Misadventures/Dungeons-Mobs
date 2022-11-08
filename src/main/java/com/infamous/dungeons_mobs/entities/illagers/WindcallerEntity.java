@@ -6,6 +6,7 @@ import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
+import com.infamous.dungeons_libraries.items.gearconfig.ArmorSet;
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
 import com.infamous.dungeons_mobs.entities.projectiles.WindcallerBlastProjectileEntity;
 import com.infamous.dungeons_mobs.entities.summonables.WindcallerTornadoEntity;
@@ -43,7 +44,6 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
@@ -271,8 +271,8 @@ public class WindcallerEntity extends AbstractIllagerEntity implements IAnimatab
     }
 
 	@Override
-	public ResourceLocation getArmorSet() {
-		return ModItems.WINDCALLER_ARMOR.getArmorSet();
+	public ArmorSet getArmorSet() {
+		return ModItems.WINDCALLER_ARMOR;
 	}
 
 	class LiftAttackGoal extends Goal {
