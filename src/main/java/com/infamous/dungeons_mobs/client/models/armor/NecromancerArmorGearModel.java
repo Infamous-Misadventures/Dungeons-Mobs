@@ -44,6 +44,6 @@ public class NecromancerArmorGearModel<T extends ArmorGear> extends ArmorGearMod
         MolangParser parser = GeckoLibCache.getInstance().parser;
         Vector3d velocity = wearer.getDeltaMovement();
         float groundSpeed = MathHelper.sqrt((float) ((velocity.x * velocity.x) + (velocity.z * velocity.z)));
-        parser.setValue("query.ground_speed", groundSpeed * 13);
+        parser.setValue("query.ground_speed", () -> groundSpeed * 13);
     }
 }

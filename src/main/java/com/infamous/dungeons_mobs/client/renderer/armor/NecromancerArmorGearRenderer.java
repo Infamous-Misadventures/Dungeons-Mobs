@@ -32,13 +32,13 @@ public class NecromancerArmorGearRenderer extends ArmorGearRenderer<NecromancerA
 			hoodBone.setPositionZ(this.head.z);
 		}
 		
-		if (this.leggingsBodyBone != null) {
-			IBone leggingsBodyBone = this.getGeoModelProvider().getBone(this.leggingsBodyBone);
-			GeoUtils.copyRotations(this.body, leggingsBodyBone);
-			leggingsBodyBone.setPositionX(this.body.x);
-			leggingsBodyBone.setPositionY(-this.body.y);
-			leggingsBodyBone.setPositionZ(this.body.z);
-		}
+//		if (this.leggingsBodyBone != null) {
+//			IBone leggingsBodyBone = this.getGeoModelProvider().getBone(this.leggingsBodyBone);
+//			GeoUtils.copyRotations(this.body, leggingsBodyBone);
+//			leggingsBodyBone.setPositionX(this.body.x);
+//			leggingsBodyBone.setPositionY(-this.body.y);
+//			leggingsBodyBone.setPositionZ(this.body.z);
+//		}
 	}
 	
 	@SuppressWarnings("incomplete-switch")
@@ -53,14 +53,14 @@ public class NecromancerArmorGearRenderer extends ArmorGearRenderer<NecromancerA
 
 		switch (slot) {
 		case HEAD:
-			break;
-		case CHEST:
 			if (hoodBone != null)
 				hoodBone.setHidden(false);
 			break;
-		case LEGS:
+		case CHEST:
 			if (leggingsBodyBone != null)
 				leggingsBodyBone.setHidden(false);
+			break;
+		case LEGS:
 			break;
 		case FEET:
 			break;
