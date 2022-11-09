@@ -37,10 +37,10 @@ public class DungeonsMobsConfig {
         public final ForgeConfigSpec.ConfigValue<Integer> NECROMANCER_MIN_GROUP_SIZE;
         public final ForgeConfigSpec.ConfigValue<Integer> NECROMANCER_MAX_GROUP_SIZE;
 
-        public final ForgeConfigSpec.ConfigValue<List<? extends String>> SKELETON_HORSEMAN_BIOME_TYPES;
-        public final ForgeConfigSpec.ConfigValue<Integer> SKELETON_HORSEMAN_SPAWN_WEIGHT;
-        public final ForgeConfigSpec.ConfigValue<Integer> SKELETON_HORSEMAN_MIN_GROUP_SIZE;
-        public final ForgeConfigSpec.ConfigValue<Integer> SKELETON_HORSEMAN_MAX_GROUP_SIZE;
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> SKELETON_VANGUARD_BIOME_TYPES;
+        public final ForgeConfigSpec.ConfigValue<Integer> SKELETON_VANGUARD_SPAWN_WEIGHT;
+        public final ForgeConfigSpec.ConfigValue<Integer> SKELETON_VANGUARD_MIN_GROUP_SIZE;
+        public final ForgeConfigSpec.ConfigValue<Integer> SKELETON_VANGUARD_MAX_GROUP_SIZE;
 
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> MOUNTAINEER_BIOME_TYPES;
         public final ForgeConfigSpec.ConfigValue<Integer> MOUNTAINEER_SPAWN_WEIGHT;
@@ -148,6 +148,22 @@ public class DungeonsMobsConfig {
         public final ForgeConfigSpec.ConfigValue<Integer> ENDERSENT_MIN_GROUP_SIZE;
         public final ForgeConfigSpec.ConfigValue<Integer> ENDERSENT_MAX_GROUP_SIZE;
 
+        public final ForgeConfigSpec.ConfigValue<Integer> WILDFIRE_SPAWN_WEIGHT;
+        public final ForgeConfigSpec.ConfigValue<Integer> WILDFIRE_MIN_GROUP_SIZE;
+        public final ForgeConfigSpec.ConfigValue<Integer> WILDFIRE_MAX_GROUP_SIZE;
+
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_OUTPOST_VANILLA_VINDICATOR;
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_OUTPOST_VANILLA_EVOKER;
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_OUTPOST_DUNGEONS_MOBS_MELEE;
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_OUTPOST_DUNGEONS_MOBS_CASTER;
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_MANSION_VANILLA;
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_MANSION_DUNGEONS_MOBS;
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_BASTION_VANILLA;
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_BASTION_DUNGEONS_MOBS;
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_NETHER_FORTRESS_DUNGEONS_MOBS;
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_DESERT_PYRAMID_DUNGEONS_MOBS;
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_JUNGLE_TEMPLE_DUNGEONS_MOBS;
+
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_BIOME_SPECIFIC_RAIDERS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_MOUNTAINEERS_IN_RAIDS;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_MOUNTAINEERS_IN_RAIDS;
@@ -224,12 +240,12 @@ public class DungeonsMobsConfig {
                     .define("enableMossySkeletonReplacesSkeleton", true);
 
             ENABLE_ARMORED_DROWNED_REPLACES_DROWNED = builder
-                    .comment("Enable Armored Drowned replacing 10% of Drowned spawns in the biomes they can spawn in. \n" +
+                    .comment("Enable Armored Drowned replacing 10% of Drowned spawns in the locations they can spawn in. \n" +
                             "If you prefer to not have them do this, disable this feature. [true / false]")
                     .define("enabledArmoredDrownedReplacesDrowned", true);
 
             ENABLE_ARMORED_SUNKEN_SKELETON_REPLACES_SUNKEN_SKELETON = builder
-                    .comment("Enable Armored Sunken Skeletons replacing 10% of Sunken Skeleton spawns in the biomes they can spawn in. \n" +
+                    .comment("Enable Armored Sunken Skeletons replacing 10% of Sunken Skeleton spawns in the locations they can spawn in. \n" +
                             "If you prefer to not have them do this, disable this feature. [true / false]")
                     .define("enableArmoredSunkenSkeletonReplacesSunkenSkeleton", true);
 
@@ -245,13 +261,13 @@ public class DungeonsMobsConfig {
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             ICEOLOGER_SPAWN_WEIGHT = builder
-                    .comment("Spawn weight of Iceologers in the biomes they can spawn in. [default:5]")
+                    .comment("Spawn weight of Iceologers in the locations they can spawn in. [default:5]")
                     .defineInRange("iceologerSpawnWeight", 5, 0, 1024);
             ICEOLOGER_MIN_GROUP_SIZE = builder
-                    .comment("Minimum spawn group size of Iceologers in the biomes they can spawn in. [default:1]")
+                    .comment("Minimum spawn group size of Iceologers in the locations they can spawn in. [default:1]")
                     .defineInRange("iceologerMinGroupSize", 1, 0, 128);
             ICEOLOGER_MAX_GROUP_SIZE = builder
-                    .comment("Maximum spawn group size of Iceologers in the biomes they can spawn in. [default:1]")
+                    .comment("Maximum spawn group size of Iceologers in the locations they can spawn in. [default:1]")
                     .defineInRange("iceologerMaxGroupSize", 1, 0, 128);
 
             WRAITH_BIOME_TYPES = builder
@@ -266,13 +282,13 @@ public class DungeonsMobsConfig {
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             WRAITH_SPAWN_WEIGHT = builder
-                    .comment("Spawn weight of Wraiths in the biomes they can spawn in. [default:5]")
+                    .comment("Spawn weight of Wraiths in the locations they can spawn in. [default:5]")
                     .defineInRange("wraithSpawnWeight", 5, 0, 1024);
             WRAITH_MIN_GROUP_SIZE = builder
-                    .comment("Minimum spawn group size of Wraiths in the biomes they can spawn in. [default:1]")
+                    .comment("Minimum spawn group size of Wraiths in the locations they can spawn in. [default:1]")
                     .defineInRange("wraithMinGroupSize", 1, 0, 128);
             WRAITH_MAX_GROUP_SIZE = builder
-                    .comment("Maximum spawn group size of Wraiths in the biomes they can spawn in. [default:1]")
+                    .comment("Maximum spawn group size of Wraiths in the locations they can spawn in. [default:1]")
                     .defineInRange("wraithMaxGroupSize", 1, 0, 128);
 
             NECROMANCER_BIOME_TYPES = builder
@@ -287,35 +303,36 @@ public class DungeonsMobsConfig {
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             NECROMANCER_SPAWN_WEIGHT = builder
-                    .comment("Spawn weight of Necromancers in the biomes they can spawn in. [default:5]")
+                    .comment("Spawn weight of Necromancers in the locations they can spawn in. [default:5]")
                     .defineInRange("necromancerSpawnWeight", 5, 0, 1024);
             NECROMANCER_MIN_GROUP_SIZE = builder
-                    .comment("Minimum spawn group size of Necromancers in the biomes they can spawn in. [default:1]")
+                    .comment("Minimum spawn group size of Necromancers in the locations they can spawn in. [default:1]")
                     .defineInRange("necromancerMinGroupSize", 1, 0, 128);
             NECROMANCER_MAX_GROUP_SIZE = builder
-                    .comment("Maximum spawn group size of Necromancers in the biomes they can spawn in. [default:1]")
+                    .comment("Maximum spawn group size of Necromancers in the locations they can spawn in. [default:1]")
                     .defineInRange("necromancerMaxGroupSize", 1, 0, 128);
 
-            SKELETON_HORSEMAN_BIOME_TYPES = builder
-                    .comment("Add biome types that the Skeleton Horseman can spawn in. \n"
+            SKELETON_VANGUARD_BIOME_TYPES = builder
+                    .comment("Add biome types that the Skeleton Vanguard can spawn in. \n"
                             + "Put a \"!\" before the type to prevent spawning in that biome type. \n"
                             + "Leave this blank if you don't want them to spawn at all.")
-                    .defineList("skeletonHorsemanBiomeTypes", Lists.newArrayList(
+                    .defineList("skeletonVanguardBiomeTypes", Lists.newArrayList(
                             "OVERWORLD",
+                                    "DESERT",
                             "!MUSHROOM",
                             "!NETHER",
                             "!END"
                             ),
                             (itemRaw) -> itemRaw instanceof String);
-            SKELETON_HORSEMAN_SPAWN_WEIGHT = builder
-                    .comment("Spawn weight of Skeleton Horsemen in the biomes they can spawn in. [default:1]")
-                    .defineInRange("skeletonHorsemanSpawnWeight", 1, 0, 1024);
-            SKELETON_HORSEMAN_MIN_GROUP_SIZE = builder
-                    .comment("Minimum spawn group size of Skeleton Horsemen in the biomes they can spawn in. [default:1]")
-                    .defineInRange("skeletonHorsemanMinGroupSize", 1, 0, 32);
-            SKELETON_HORSEMAN_MAX_GROUP_SIZE = builder
-                    .comment("Maximum spawn group size of Skeleton Horsemen in the biomes they can spawn in. [default:1]")
-                    .defineInRange("skeletonHorsemanMaxGroupSize", 1, 0, 32);
+            SKELETON_VANGUARD_SPAWN_WEIGHT = builder
+                    .comment("Spawn weight of Skeleton Vanguard in the locations they can spawn in. [default:1]")
+                    .defineInRange("skeletonVanguardSpawnWeight", 1, 0, 1024);
+            SKELETON_VANGUARD_MIN_GROUP_SIZE = builder
+                    .comment("Minimum spawn group size of Skeleton Vanguard in the locations they can spawn in. [default:1]")
+                    .defineInRange("skeletonVanguardMinGroupSize", 1, 0, 32);
+            SKELETON_VANGUARD_MAX_GROUP_SIZE = builder
+                    .comment("Maximum spawn group size of Skeleton Vanguard in the locations they can spawn in. [default:1]")
+                    .defineInRange("skeletonVanguardMaxGroupSize", 1, 0, 32);
 
             MOUNTAINEER_BIOME_TYPES = builder
                     .comment("Add biome types that the Mountaineer can spawn in. \n"
@@ -333,14 +350,14 @@ public class DungeonsMobsConfig {
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             MOUNTAINEER_SPAWN_WEIGHT = builder
-                    .comment("Spawn weight of Mountaineers in the biomes they can spawn in. [default:5]")
+                    .comment("Spawn weight of Mountaineers in the locations they can spawn in. [default:5]")
                     .defineInRange("mountaineerSpawnWeight", 5, 0, 1024);
             MOUNTAINEER_MIN_GROUP_SIZE = builder
-                    .comment("Minimum spawn group size of Mountaineers in the biomes they can spawn in. [default:1]")
+                    .comment("Minimum spawn group size of Mountaineers in the locations they can spawn in. [default:1]")
                     .defineInRange("mountaineerMinGroupSize", 1, 0, 32);
             MOUNTAINEER_MAX_GROUP_SIZE = builder
-                    .comment("Maximum spawn group size of Mountaineers in the biomes they can spawn in. [default:4]")
-                    .defineInRange("mountaineerMaxGroupSize", 4, 0, 32);
+                    .comment("Maximum spawn group size of Mountaineers in the locations they can spawn in. [default:4]")
+                    .defineInRange("mountaineerMaxGroupSize", 1, 0, 32);
 
             WINDCALLER_BIOME_TYPES = builder
                     .comment("Add biome types that the Windcaller can spawn in. \n"
@@ -358,13 +375,13 @@ public class DungeonsMobsConfig {
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             WINDCALLER_SPAWN_WEIGHT = builder
-                    .comment("Spawn weight of Windcallers in the biomes they can spawn in. [default:5]")
+                    .comment("Spawn weight of Windcallers in the locations they can spawn in. [default:5]")
                     .defineInRange("windcallerSpawnWeight", 5, 0, 1024);
             WINDCALLER_MIN_GROUP_SIZE = builder
-                    .comment("Minimum spawn group size of Windcallers in the biomes they can spawn in. [default:1]")
+                    .comment("Minimum spawn group size of Windcallers in the locations they can spawn in. [default:1]")
                     .defineInRange("windcallerMinGroupSize", 1, 0, 128);
             WINDCALLER_MAX_GROUP_SIZE = builder
-                    .comment("Maximum spawn group size of Windcallers in the biomes they can spawn in. [default:1]")
+                    .comment("Maximum spawn group size of Windcallers in the locations they can spawn in. [default:1]")
                     .defineInRange("windcallerMaxGroupSize", 1, 0, 128);
 
             GEOMANCER_BIOME_TYPES = builder
@@ -379,13 +396,13 @@ public class DungeonsMobsConfig {
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             GEOMANCER_SPAWN_WEIGHT = builder
-                    .comment("Spawn weight of Geomancers in the biomes they can spawn in. [default:5]")
+                    .comment("Spawn weight of Geomancers in the locations they can spawn in. [default:5]")
                     .defineInRange("geomancerSpawnWeight", 5, 0, 1024);
             GEOMANCER_MIN_GROUP_SIZE = builder
-                    .comment("Minimum spawn group size of Geomancers in the biomes they can spawn in. [default:1]")
+                    .comment("Minimum spawn group size of Geomancers in the locations they can spawn in. [default:1]")
                     .defineInRange("geomancerMinGroupSize", 1, 0, 128);
             GEOMANCER_MAX_GROUP_SIZE = builder
-                    .comment("Maximum spawn group size of Geomancers in the biomes they can spawn in. [default:1]")
+                    .comment("Maximum spawn group size of Geomancers in the locations they can spawn in. [default:1]")
                     .defineInRange("geomancerMaxGroupSize", 1, 0, 128);
 
             ILLUSIONER_BIOME_TYPES = builder
@@ -405,13 +422,13 @@ public class DungeonsMobsConfig {
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             ILLUSIONER_SPAWN_WEIGHT = builder
-                    .comment("Spawn weight of Illusioners in the biomes they can spawn in. [default:1]")
+                    .comment("Spawn weight of Illusioners in the locations they can spawn in. [default:1]")
                     .defineInRange("illusionerSpawnWeight", 1, 0, 1024);
             ILLUSIONER_MIN_GROUP_SIZE = builder
-                    .comment("Minimum spawn group size of Illusioners in the biomes they can spawn in. [default:1]")
+                    .comment("Minimum spawn group size of Illusioners in the locations they can spawn in. [default:1]")
                     .defineInRange("illusionerMinGroupSize", 1, 0, 128);
             ILLUSIONER_MAX_GROUP_SIZE = builder
-                    .comment("Maximum spawn group size of Illusioners in the biomes they can spawn in. [default:1]")
+                    .comment("Maximum spawn group size of Illusioners in the locations they can spawn in. [default:1]")
                     .defineInRange("illusionerMaxGroupSize", 1, 0, 128);
 
             VINDICATOR_BIOME_TYPES = builder
@@ -426,14 +443,14 @@ public class DungeonsMobsConfig {
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             VINDICATOR_SPAWN_WEIGHT = builder
-                    .comment("Spawn weight of Vindicators in the biomes they can spawn in. [default:5]")
+                    .comment("Spawn weight of Vindicators in the locations they can spawn in. [default:5]")
                     .defineInRange("vindicatorSpawnWeight", 5, 0, 1024);
             VINDICATOR_MIN_GROUP_SIZE = builder
-                    .comment("Minimum spawn group size of Vindicators in the biomes they can spawn in. [default:1]")
+                    .comment("Minimum spawn group size of Vindicators in the locations they can spawn in. [default:1]")
                     .defineInRange("vindicatorMinGroupSize", 1, 0, 128);
             VINDICATOR_MAX_GROUP_SIZE = builder
-                    .comment("Maximum spawn group size of Vindicators in the biomes they can spawn in. [default:4]")
-                    .defineInRange("vindicatorMaxGroupSize", 4, 0, 128);
+                    .comment("Maximum spawn group size of Vindicators in the locations they can spawn in. [default:4]")
+                    .defineInRange("vindicatorMaxGroupSize", 1, 0, 128);
 
             EVOKER_BIOME_TYPES = builder
                     .comment("Add biome types that the Evoker can spawn in. \n"
@@ -447,13 +464,13 @@ public class DungeonsMobsConfig {
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             EVOKER_SPAWN_WEIGHT = builder
-                    .comment("Spawn weight of Evokers in the biomes they can spawn in. [default:1]")
+                    .comment("Spawn weight of Evokers in the locations they can spawn in. [default:1]")
                     .defineInRange("evokerSpawnWeight", 1, 0, 1024);
             EVOKER_MIN_GROUP_SIZE = builder
-                    .comment("Minimum spawn group size of Evokers in the biomes they can spawn in. [default:1]")
+                    .comment("Minimum spawn group size of Evokers in the locations they can spawn in. [default:1]")
                     .defineInRange("evokerMinGroupSize", 1, 0, 128);
             EVOKER_MAX_GROUP_SIZE = builder
-                    .comment("Maximum spawn group size of Evokers in the biomes they can spawn in. [default:1]")
+                    .comment("Maximum spawn group size of Evokers in the locations they can spawn in. [default:1]")
                     .defineInRange("evokerMaxGroupSize", 1, 0, 128);
 
             PILLAGER_BIOME_TYPES = builder
@@ -468,14 +485,14 @@ public class DungeonsMobsConfig {
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             PILLAGER_SPAWN_WEIGHT = builder
-                    .comment("Spawn weight of Pillagers in the biomes they can spawn in. [default:5]")
+                    .comment("Spawn weight of Pillagers in the locations they can spawn in. [default:5]")
                     .defineInRange("pillagerSpawnWeight", 5, 0, 1024);
             PILLAGER_MIN_GROUP_SIZE = builder
-                    .comment("Minimum spawn group size of Pillagers in the biomes they can spawn in. [default:1]")
+                    .comment("Minimum spawn group size of Pillagers in the locations they can spawn in. [default:1]")
                     .defineInRange("pillagerMinGroupSize", 1, 0, 128);
             PILLAGER_MAX_GROUP_SIZE = builder
-                    .comment("Maximum spawn group size of Pillagers in the biomes they can spawn in. [default:4]")
-                    .defineInRange("pillagerMaxGroupSize", 4, 0, 128);
+                    .comment("Maximum spawn group size of Pillagers in the locations they can spawn in. [default:4]")
+                    .defineInRange("pillagerMaxGroupSize", 1, 0, 128);
 
             WHISPERER_BIOME_TYPES = builder
                     .comment("Add biome types that the Whisperer can spawn in. \n"
@@ -489,13 +506,13 @@ public class DungeonsMobsConfig {
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             WHISPERER_SPAWN_WEIGHT = builder
-                    .comment("Spawn weight of Whisperers in the biomes they can spawn in. [default:5]")
+                    .comment("Spawn weight of Whisperers in the locations they can spawn in. [default:5]")
                     .defineInRange("whispererSpawnWeight", 5, 0, 1024);
             WHISPERER_MIN_GROUP_SIZE = builder
-                    .comment("Minimum spawn group size of Whisperers in the biomes they can spawn in. [default:1]")
+                    .comment("Minimum spawn group size of Whisperers in the locations they can spawn in. [default:1]")
                     .defineInRange("whispererMinGroupSize", 1, 0, 128);
             WHISPERER_MAX_GROUP_SIZE = builder
-                    .comment("Maximum spawn group size of Whisperers in the biomes they can spawn in. [default:4]")
+                    .comment("Maximum spawn group size of Whisperers in the locations they can spawn in. [default:4]")
                     .defineInRange("whispererMaxGroupSize", 1, 0, 128);
 
             LEAPLEAF_BIOME_TYPES = builder
@@ -510,13 +527,13 @@ public class DungeonsMobsConfig {
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             LEAPLEAF_SPAWN_WEIGHT = builder
-                    .comment("Spawn weight of Leapleafs in the biomes they can spawn in. [default:5]")
+                    .comment("Spawn weight of Leapleafs in the locations they can spawn in. [default:5]")
                     .defineInRange("leapleafSpawnWeight", 5, 0, 1024);
             LEAPLEAF_MIN_GROUP_SIZE = builder
-                    .comment("Minimum spawn group size of Leapleafs in the biomes they can spawn in. [default:1]")
+                    .comment("Minimum spawn group size of Leapleafs in the locations they can spawn in. [default:1]")
                     .defineInRange("leapleafMinGroupSize", 1, 0, 128);
             LEAPLEAF_MAX_GROUP_SIZE = builder
-                    .comment("Maximum spawn group size of Leapleafs in the biomes they can spawn in. [default:4]")
+                    .comment("Maximum spawn group size of Leapleafs in the locations they can spawn in. [default:4]")
                     .defineInRange("leapleafMaxGroupSize", 4, 0, 128);
 
             QUICK_GROWING_VINE_BIOME_TYPES = builder
@@ -531,13 +548,13 @@ public class DungeonsMobsConfig {
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             QUICK_GROWING_VINE_SPAWN_WEIGHT = builder
-                    .comment("Spawn weight of Quick-Growing Vines in the biomes they can spawn in. [default:5]")
+                    .comment("Spawn weight of Quick-Growing Vines in the locations they can spawn in. [default:5]")
                     .defineInRange("quickGrowingVineSpawnWeight", 5, 0, 1024);
             QUICK_GROWING_VINE_MIN_GROUP_SIZE = builder
-                    .comment("Minimum spawn group size of Quick-Growing Vines in the biomes they can spawn in. [default:1]")
+                    .comment("Minimum spawn group size of Quick-Growing Vines in the locations they can spawn in. [default:1]")
                     .defineInRange("quickGrowingVineMinGroupSize", 1, 0, 128);
             QUICK_GROWING_VINE_MAX_GROUP_SIZE = builder
-                    .comment("Maximum spawn group size of Quick-Growing Vines in the biomes they can spawn in. [default:1]")
+                    .comment("Maximum spawn group size of Quick-Growing Vines in the locations they can spawn in. [default:1]")
                     .defineInRange("quickGrowingVineMaxGroupSize", 1, 0, 128);
 
             POISON_QUILL_VINE_BIOME_TYPES = builder
@@ -552,13 +569,13 @@ public class DungeonsMobsConfig {
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             POISON_QUILL_VINE_SPAWN_WEIGHT = builder
-                    .comment("Spawn weight of Poison-Quill Vines in the biomes they can spawn in. [default:5]")
+                    .comment("Spawn weight of Poison-Quill Vines in the locations they can spawn in. [default:5]")
                     .defineInRange("poisonQuillVineSpawnWeight", 5, 0, 1024);
             POISON_QUILL_VINE_MIN_GROUP_SIZE = builder
-                    .comment("Minimum spawn group size of Poison-Quill Vines in the biomes they can spawn in. [default:1]")
+                    .comment("Minimum spawn group size of Poison-Quill Vines in the locations they can spawn in. [default:1]")
                     .defineInRange("poisonQuillVineMinGroupSize", 1, 0, 128);
             POISON_QUILL_VINE_MAX_GROUP_SIZE = builder
-                    .comment("Maximum spawn group size of Poison-Quill Vines in the biomes they can spawn in. [default:1]")
+                    .comment("Maximum spawn group size of Poison-Quill Vines in the locations they can spawn in. [default:1]")
                     .defineInRange("poisonQuillVineMaxGroupSize", 1, 0, 128);
 
             FUNGUS_THROWER_BIOME_TYPES = builder
@@ -576,13 +593,13 @@ public class DungeonsMobsConfig {
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             FUNGUS_THROWER_SPAWN_WEIGHT = builder
-                    .comment("Spawn weight of Fungus Throwers in the biomes they can spawn in. [default:5]")
+                    .comment("Spawn weight of Fungus Throwers in the locations they can spawn in. [default:5]")
                     .defineInRange("fungusThrowerSpawnWeight", 5, 0, 1024);
             FUNGUS_THROWER_MIN_GROUP_SIZE = builder
-                    .comment("Minimum spawn group size of Fungus Throwers in the biomes they can spawn in. [default:3]")
+                    .comment("Minimum spawn group size of Fungus Throwers in the locations they can spawn in. [default:3]")
                     .defineInRange("fungusThrowerMinGroupSize", 3, 0, 128);
             FUNGUS_THROWER_MAX_GROUP_SIZE = builder
-                    .comment("Maximum spawn group size of Fungus Throwers in the biomes they can spawn in. [default:4]")
+                    .comment("Maximum spawn group size of Fungus Throwers in the locations they can spawn in. [default:4]")
                     .defineInRange("fungusThrowerMaxGroupSize", 4, 0, 128);
 
             ZOMBIFIED_FUNGUS_THROWER_BIOME_TYPES = builder
@@ -600,13 +617,13 @@ public class DungeonsMobsConfig {
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             ZOMBIFIED_FUNGUS_THROWER_SPAWN_WEIGHT = builder
-                    .comment("Spawn weight of Zombified Fungus Throwers in the biomes they can spawn in. [default:5]")
+                    .comment("Spawn weight of Zombified Fungus Throwers in the locations they can spawn in. [default:5]")
                     .defineInRange("zombifiedFungusThrowerSpawnWeight", 5, 0, 1024);
             ZOMBIFIED_FUNGUS_THROWER_MIN_GROUP_SIZE = builder
-                    .comment("Minimum spawn group size of Zombified Fungus Throwers in the biomes they can spawn in. [default:3]")
+                    .comment("Minimum spawn group size of Zombified Fungus Throwers in the locations they can spawn in. [default:3]")
                     .defineInRange("zombifiedFungusThrowerMinGroupSize", 3, 0, 128);
             ZOMBIFIED_FUNGUS_THROWER_MAX_GROUP_SIZE = builder
-                    .comment("Maximum spawn group size of Zombified Fungus Throwers in the biomes they can spawn in. [default:4]")
+                    .comment("Maximum spawn group size of Zombified Fungus Throwers in the locations they can spawn in. [default:4]")
                     .defineInRange("zombifiedFungusThrowerMaxGroupSize", 4, 0, 128);
 
 
@@ -625,13 +642,13 @@ public class DungeonsMobsConfig {
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             WITHER_SKELETON_SPAWN_WEIGHT = builder
-                    .comment("Spawn weight of Wither Skeletons in the biomes they can spawn in. [default:5]")
+                    .comment("Spawn weight of Wither Skeletons in the locations they can spawn in. [default:5]")
                     .defineInRange("witherSkeletonSpawnWeight", 5, 0, 1024);
             WITHER_SKELETON_MIN_GROUP_SIZE = builder
-                    .comment("Minimum spawn group size of Wither Skeletons in the biomes they can spawn in. [default:1]")
+                    .comment("Minimum spawn group size of Wither Skeletons in the locations they can spawn in. [default:1]")
                     .defineInRange("witherSkeletonMinGroupSize", 1, 0, 128);
             WITHER_SKELETON_MAX_GROUP_SIZE = builder
-                    .comment("Maximum spawn group size of Wither Skeletons in the biomes they can spawn in. [default:4]")
+                    .comment("Maximum spawn group size of Wither Skeletons in the locations they can spawn in. [default:4]")
                     .defineInRange("witherSkeletonMaxGroupSize", 4, 0, 128);
 
             SUNKEN_SKELETON_BIOME_TYPES = builder
@@ -646,13 +663,13 @@ public class DungeonsMobsConfig {
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             SUNKEN_SKELETON_SPAWN_WEIGHT = builder
-                    .comment("Spawn weight of Sunken Skeletons in the biomes they can spawn in. [default:5]")
+                    .comment("Spawn weight of Sunken Skeletons in the locations they can spawn in. [default:5]")
                     .defineInRange("sunkenSkeletonSpawnWeight", 5, 0, 1024);
             SUNKEN_SKELETON_MIN_GROUP_SIZE = builder
-                    .comment("Minimum spawn group size of Sunken Skeletons in the biomes they can spawn in. [default:1]")
+                    .comment("Minimum spawn group size of Sunken Skeletons in the locations they can spawn in. [default:1]")
                     .defineInRange("sunkenSkeletonMinGroupSize", 1, 0, 128);
             SUNKEN_SKELETON_MAX_GROUP_SIZE = builder
-                    .comment("Maximum spawn group size of Sunken Skeletons in the biomes they can spawn in. [default:4]")
+                    .comment("Maximum spawn group size of Sunken Skeletons in the locations they can spawn in. [default:4]")
                     .defineInRange("sunkenSkeletonMaxGroupSize", 1, 0, 128);
 
             DROWNED_NECROMANCER_BIOME_TYPES = builder
@@ -667,13 +684,13 @@ public class DungeonsMobsConfig {
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             DROWNED_NECROMANCER_SPAWN_WEIGHT = builder
-                    .comment("Spawn weight of Drowned Necromancers in the biomes they can spawn in. [default:5]")
+                    .comment("Spawn weight of Drowned Necromancers in the locations they can spawn in. [default:5]")
                     .defineInRange("drownedNecromancerSpawnWeight", 5, 0, 1024);
             DROWNED_NECROMANCER_MIN_GROUP_SIZE = builder
-                    .comment("Minimum spawn group size of Drowned Necromancers in the biomes they can spawn in. [default:1]")
+                    .comment("Minimum spawn group size of Drowned Necromancers in the locations they can spawn in. [default:1]")
                     .defineInRange("drownedNecromancerMinGroupSize", 1, 0, 128);
             DROWNED_NECROMANCER_MAX_GROUP_SIZE = builder
-                    .comment("Maximum spawn group size of Drowned Necromancers in the biomes they can spawn in. [default:4]")
+                    .comment("Maximum spawn group size of Drowned Necromancers in the locations they can spawn in. [default:4]")
                     .defineInRange("drownedNecromancerMaxGroupSize", 1, 0, 128);
 
 
@@ -689,13 +706,13 @@ public class DungeonsMobsConfig {
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             WAVEWHISPERER_SPAWN_WEIGHT = builder
-                    .comment("Spawn weight of Wavehisperers in the biomes they can spawn in. [default:5]")
+                    .comment("Spawn weight of Wavehisperers in the locations they can spawn in. [default:5]")
                     .defineInRange("wavewhispererSpawnWeight", 5, 0, 1024);
             WAVEWHISPERER_MIN_GROUP_SIZE = builder
-                    .comment("Minimum spawn group size of Wavehisperers in the biomes they can spawn in. [default:1]")
+                    .comment("Minimum spawn group size of Wavehisperers in the locations they can spawn in. [default:1]")
                     .defineInRange("wavewhispererMinGroupSize", 1, 0, 128);
             WAVEWHISPERER_MAX_GROUP_SIZE = builder
-                    .comment("Maximum spawn group size of Wavehisperers in the biomes they can spawn in. [default:4]")
+                    .comment("Maximum spawn group size of Wavehisperers in the locations they can spawn in. [default:4]")
                     .defineInRange("wavewhispererMaxGroupSize", 1, 0, 128);
 
             QUICK_GROWING_ANEMONE_BIOME_TYPES = builder
@@ -710,13 +727,13 @@ public class DungeonsMobsConfig {
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             QUICK_GROWING_ANEMONE_SPAWN_WEIGHT = builder
-                    .comment("Spawn weight of Quick-Growing Anemone in the biomes they can spawn in. [default:5]")
+                    .comment("Spawn weight of Quick-Growing Anemone in the locations they can spawn in. [default:5]")
                     .defineInRange("quickGrowingAnemoneSpawnWeight", 5, 0, 1024);
             QUICK_GROWING_ANEMONE_MIN_GROUP_SIZE = builder
-                    .comment("Minimum spawn group size of Quick-Growing Anemone in the biomes they can spawn in. [default:1]")
+                    .comment("Minimum spawn group size of Quick-Growing Anemone in the locations they can spawn in. [default:1]")
                     .defineInRange("quickGrowingAnemoneMinGroupSize", 1, 0, 128);
             QUICK_GROWING_ANEMONE_MAX_GROUP_SIZE = builder
-                    .comment("Maximum spawn group size of Quick-Growing Anemone in the biomes they can spawn in. [default:1]")
+                    .comment("Maximum spawn group size of Quick-Growing Anemone in the locations they can spawn in. [default:1]")
                     .defineInRange("quickGrowingAnemoneMaxGroupSize", 1, 0, 128);
 
             POISON_ANEMONE_BIOME_TYPES = builder
@@ -731,13 +748,13 @@ public class DungeonsMobsConfig {
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             POISON_ANEMONE_SPAWN_WEIGHT = builder
-                    .comment("Spawn weight of Poison Anemone in the biomes they can spawn in. [default:5]")
+                    .comment("Spawn weight of Poison Anemone in the locations they can spawn in. [default:5]")
                     .defineInRange("poisonAnemoneSpawnWeight", 5, 0, 1024);
             POISON_ANEMONE_MIN_GROUP_SIZE = builder
-                    .comment("Minimum spawn group size of Poison Anemone in the biomes they can spawn in. [default:1]")
+                    .comment("Minimum spawn group size of Poison Anemone in the locations they can spawn in. [default:1]")
                     .defineInRange("poisonAnemoneMinGroupSize", 1, 0, 128);
             POISON_ANEMONE_MAX_GROUP_SIZE = builder
-                    .comment("Maximum spawn group size of Poison Anemone in the biomes they can spawn in. [default:1]")
+                    .comment("Maximum spawn group size of Poison Anemone in the locations they can spawn in. [default:1]")
                     .defineInRange("poisonAnemoneMaxGroupSize", 1, 0, 128);
 
             ENDERLING_BIOME_TYPES = builder
@@ -750,13 +767,13 @@ public class DungeonsMobsConfig {
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             ENDERLING_SPAWN_WEIGHT = builder
-                    .comment("Spawn weight of Enderlings in the biomes they can spawn in. [default:5]")
+                    .comment("Spawn weight of Enderlings in the locations they can spawn in. [default:5]")
                     .defineInRange("enderlingSpawnWeight", 5, 0, 1024);
             ENDERLING_MIN_GROUP_SIZE = builder
-                    .comment("Minimum spawn group size of Enderlings in the biomes they can spawn in. [default:1]")
+                    .comment("Minimum spawn group size of Enderlings in the locations they can spawn in. [default:1]")
                     .defineInRange("enderlingMinGroupSize", 1, 0, 128);
             ENDERLING_MAX_GROUP_SIZE = builder
-                    .comment("Maximum spawn group size of Enderlings in the biomes they can spawn in. [default:3]")
+                    .comment("Maximum spawn group size of Enderlings in the locations they can spawn in. [default:3]")
                     .defineInRange("enderlingMaxGroupSize", 3, 0, 128);
             ENDERSENT_BIOME_TYPES = builder
                     .comment("Add biome types that the Enderlings can spawn in. \n"
@@ -768,14 +785,62 @@ public class DungeonsMobsConfig {
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             ENDERSENT_SPAWN_WEIGHT = builder
-                    .comment("Spawn weight of Endersents in the biomes they can spawn in. [default:1]")
+                    .comment("Spawn weight of Endersents in the locations they can spawn in. [default:1]")
                     .defineInRange("endersentSpawnWeight", 1, 0, 1024);
             ENDERSENT_MIN_GROUP_SIZE = builder
-                    .comment("Minimum spawn group size of Endersents in the biomes they can spawn in. [default:1]")
+                    .comment("Minimum spawn group size of Endersents in the locations they can spawn in. [default:1]")
                     .defineInRange("endersentMinGroupSize", 1, 0, 128);
             ENDERSENT_MAX_GROUP_SIZE = builder
-                    .comment("Maximum spawn group size of Endersents in the biomes they can spawn in. [default:1]")
+                    .comment("Maximum spawn group size of Endersents in the locations they can spawn in. [default:1]")
                     .defineInRange("endersentMaxGroupSize", 1, 0, 128);
+
+            WILDFIRE_SPAWN_WEIGHT = builder
+                    .comment("Spawn weight of wildfires in the locations they can spawn in. [default:1]")
+                    .defineInRange("wildfireSpawnWeight", 1, 0, 1024);
+            WILDFIRE_MIN_GROUP_SIZE = builder
+                    .comment("Minimum spawn group size of Wildfires in the locations they can spawn in. [default:1]")
+                    .defineInRange("wildfireMinGroupSize", 1, 0, 128);
+            WILDFIRE_MAX_GROUP_SIZE = builder
+                    .comment("Maximum spawn group size of Wildfires in the locations they can spawn in. [default:1]")
+                    .defineInRange("wildfireMaxGroupSize", 1, 0, 128);
+
+            builder.pop();
+
+            //STRUCTURE SPAWN CONFIGURATION
+            builder.comment("Structure Spawn Configuration").push("structure_spawn_configuration");
+            ENABLE_OUTPOST_VANILLA_VINDICATOR = builder
+                    .comment("Enables logic for allowing vindicators to spawn in Outposts. Defaults to true [true / false]")
+                    .define("enableOutpostVanillaVindicator", true);
+            ENABLE_OUTPOST_VANILLA_EVOKER = builder
+                    .comment("Enables logic for allowing evokers to spawn in Outposts. Defaults to false [true / false]")
+                    .define("enableOutpostVanillaEvoker", false);
+            ENABLE_OUTPOST_DUNGEONS_MOBS_MELEE = builder
+                    .comment("Enables logic for allowing melee Dungeons Mobs to spawn in Outposts. Defaults to true [true / false]")
+                    .define("enableOutpostDungeonsMobsMelee", true);
+            ENABLE_OUTPOST_DUNGEONS_MOBS_CASTER = builder
+                    .comment("Enables logic for allowing caster Dungeons Mobs to spawn in Outposts. Defaults to false [true / false]")
+                    .define("enableOutpostDungeonsMobsCaster", false);
+            ENABLE_MANSION_VANILLA = builder
+                    .comment("Enables logic for allowing vanilla mobs to spawn in Mansions. Defaults to true [true / false]")
+                    .define("enableMansionVanilla", true);
+            ENABLE_MANSION_DUNGEONS_MOBS = builder
+                    .comment("Enables logic for allowing Dungeons Mobs to spawn in Mansions. Defaults to true [true / false]")
+                    .define("enableMansionDungeonsMobs", true);
+            ENABLE_BASTION_VANILLA = builder
+                    .comment("Enables logic for allowing vanilla mobs to spawn in Bastions. Defaults to true [true / false]")
+                    .define("enableBastionVanilla", true);
+            ENABLE_BASTION_DUNGEONS_MOBS = builder
+                    .comment("Enables logic for allowing Dungeons Mobs to spawn in Bastions. Defaults to true [true / false]")
+                    .define("enableBastionDungeonsMobs", true);
+            ENABLE_NETHER_FORTRESS_DUNGEONS_MOBS = builder
+                    .comment("Enables logic for allowing Dungeons Mobs to spawn in Nether Fortresses. Defaults to true [true / false]")
+                    .define("enableNetherFortressDungeonsMobs", true);
+            ENABLE_DESERT_PYRAMID_DUNGEONS_MOBS = builder
+                    .comment("Enables logic for allowing Dungeons Mobs to spawn in Desert Pyramids. Defaults to true [true / false]")
+                    .define("enableDesertPyramidDungeonsMobs", true);
+            ENABLE_JUNGLE_TEMPLE_DUNGEONS_MOBS = builder
+                    .comment("Enables logic for allowing Dungeons Mobs to spawn in Jungle Temples. Defaults to true [true / false]")
+                    .define("enableJungleTempleDungeonsMobs", true);
 
             builder.pop();
 

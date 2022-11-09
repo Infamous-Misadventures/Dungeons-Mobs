@@ -28,10 +28,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Difficulty;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.*;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.gen.Heightmap;
@@ -263,17 +260,21 @@ public class EntitySpawnPlacements {
 
     public static boolean canJungleMobSpawn(EntityType<? extends MonsterEntity> entityType, IServerWorld world, SpawnReason spawnReason, BlockPos blockPos, Random rand) {
         return MonsterEntity.checkMonsterSpawnRules(entityType, world, spawnReason, blockPos, rand)
-                && (spawnReason == SpawnReason.SPAWNER || world.canSeeSky(blockPos));
+                && (spawnReason == SpawnReason.SPAWNER || canSeeSkyLight(world, blockPos));
     }
 
     public static boolean canIllagerSpawn(EntityType<? extends AbstractIllagerEntity> entityType, IServerWorld world, SpawnReason spawnReason, BlockPos blockPos, Random rand) {
         return MonsterEntity.checkMonsterSpawnRules(entityType, world, spawnReason, blockPos, rand)
-                && (spawnReason == SpawnReason.SPAWNER || world.canSeeSky(blockPos));
+                && (spawnReason == SpawnReason.SPAWNER || canSeeSkyLight(world, blockPos));
     }
 
     public static boolean canRaiderSpawn(EntityType<? extends AbstractRaiderEntity> entityType, IServerWorld world, SpawnReason spawnReason, BlockPos blockPos, Random rand) {
         return MonsterEntity.checkMonsterSpawnRules(entityType, world, spawnReason, blockPos, rand)
-                && (spawnReason == SpawnReason.SPAWNER || world.canSeeSky(blockPos));
+                && (spawnReason == SpawnReason.SPAWNER || canSeeSkyLight(world, blockPos));
+    }
+
+    private static boolean canSeeSkyLight(IServerWorld world, BlockPos blockPos) {
+        return world.getBrightness(LightType.SKY, blockPos) > 4;
     }
 
 }
