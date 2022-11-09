@@ -52,6 +52,7 @@ public class StructureSpawnEntries {
                 event.addEntitySpawn(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(ModEntityTypes.WINDCALLER.get(), config.WINDCALLER_SPAWN_WEIGHT.get(), config.WINDCALLER_MIN_GROUP_SIZE.get(), config.WINDCALLER_MAX_GROUP_SIZE.get()));
                 event.addEntitySpawn(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(ModEntityTypes.ILLUSIONER.get(), config.ILLUSIONER_SPAWN_WEIGHT.get(), config.ILLUSIONER_MIN_GROUP_SIZE.get(), config.ILLUSIONER_MAX_GROUP_SIZE.get()));
                 event.addEntitySpawn(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(ModEntityTypes.MOUNTAINEER.get(), config.MOUNTAINEER_SPAWN_WEIGHT.get(), config.MOUNTAINEER_MIN_GROUP_SIZE.get(), config.MOUNTAINEER_MAX_GROUP_SIZE.get()));
+                event.addEntitySpawn(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(ModEntityTypes.ROYAL_GUARD.get(), config.ROYAL_GUARD_SPAWN_WEIGHT.get(), config.ROYAL_GUARD_MIN_GROUP_SIZE.get(), config.ROYAL_GUARD_MAX_GROUP_SIZE.get()));
             }
         }
         if(event.getStructure().equals(PILLAGER_OUTPOST)){

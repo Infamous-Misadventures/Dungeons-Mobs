@@ -77,6 +77,11 @@ public class DungeonsMobsConfig {
         public final ForgeConfigSpec.ConfigValue<Integer> PILLAGER_MIN_GROUP_SIZE;
         public final ForgeConfigSpec.ConfigValue<Integer> PILLAGER_MAX_GROUP_SIZE;
 
+//        public final ForgeConfigSpec.ConfigValue<List<? extends String>> ROYAL_GUARD_BIOME_TYPES;
+        public final ForgeConfigSpec.ConfigValue<Integer> ROYAL_GUARD_SPAWN_WEIGHT;
+        public final ForgeConfigSpec.ConfigValue<Integer> ROYAL_GUARD_MIN_GROUP_SIZE;
+        public final ForgeConfigSpec.ConfigValue<Integer> ROYAL_GUARD_MAX_GROUP_SIZE;
+
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> WHISPERER_BIOME_TYPES;
         public final ForgeConfigSpec.ConfigValue<Integer> WHISPERER_SPAWN_WEIGHT;
         public final ForgeConfigSpec.ConfigValue<Integer> WHISPERER_MIN_GROUP_SIZE;
@@ -356,8 +361,8 @@ public class DungeonsMobsConfig {
                     .comment("Minimum spawn group size of Mountaineers in the locations they can spawn in. [default:1]")
                     .defineInRange("mountaineerMinGroupSize", 1, 0, 32);
             MOUNTAINEER_MAX_GROUP_SIZE = builder
-                    .comment("Maximum spawn group size of Mountaineers in the locations they can spawn in. [default:4]")
-                    .defineInRange("mountaineerMaxGroupSize", 1, 0, 32);
+                    .comment("Maximum spawn group size of Mountaineers in the locations they can spawn in. [default:1]")
+                    .defineInRange("mountaineerMaxGroupSize", 2, 0, 32);
 
             WINDCALLER_BIOME_TYPES = builder
                     .comment("Add biome types that the Windcaller can spawn in. \n"
@@ -449,8 +454,8 @@ public class DungeonsMobsConfig {
                     .comment("Minimum spawn group size of Vindicators in the locations they can spawn in. [default:1]")
                     .defineInRange("vindicatorMinGroupSize", 1, 0, 128);
             VINDICATOR_MAX_GROUP_SIZE = builder
-                    .comment("Maximum spawn group size of Vindicators in the locations they can spawn in. [default:4]")
-                    .defineInRange("vindicatorMaxGroupSize", 1, 0, 128);
+                    .comment("Maximum spawn group size of Vindicators in the locations they can spawn in. [default:1]")
+                    .defineInRange("vindicatorMaxGroupSize", 2, 0, 128);
 
             EVOKER_BIOME_TYPES = builder
                     .comment("Add biome types that the Evoker can spawn in. \n"
@@ -491,8 +496,29 @@ public class DungeonsMobsConfig {
                     .comment("Minimum spawn group size of Pillagers in the locations they can spawn in. [default:1]")
                     .defineInRange("pillagerMinGroupSize", 1, 0, 128);
             PILLAGER_MAX_GROUP_SIZE = builder
-                    .comment("Maximum spawn group size of Pillagers in the locations they can spawn in. [default:4]")
-                    .defineInRange("pillagerMaxGroupSize", 1, 0, 128);
+                    .comment("Maximum spawn group size of Pillagers in the locations they can spawn in. [default:1]")
+                    .defineInRange("pillagerMaxGroupSize", 3, 0, 128);
+            /*ROYAL_GUARD_BIOME_TYPES = builder
+                    .comment("Add biome types that the Royal Guard can spawn in. \n"
+                            + "Put a \"!\" before the type to prevent spawning in that biome type. \n"
+                            + "Leave this blank if you don't want them to spawn at all.")
+                    .defineList("royalGuardBiomeTypes", Lists.newArrayList(
+                            "SPOOKY",
+                            "!MUSHROOM",
+                            "!NETHER",
+                            "!END"
+                            ),
+                            (itemRaw) -> itemRaw instanceof String);*/
+            ROYAL_GUARD_SPAWN_WEIGHT = builder
+                    .comment("Spawn weight of Royal Guards in the locations they can spawn in. [default:10]")
+                    .defineInRange("royalGuardSpawnWeight", 10, 0, 1024);
+            ROYAL_GUARD_MIN_GROUP_SIZE = builder
+                    .comment("Minimum spawn group size of Royal Guards in the locations they can spawn in. [default:1]")
+                    .defineInRange("royalGuardMinGroupSize", 1, 0, 128);
+            ROYAL_GUARD_MAX_GROUP_SIZE = builder
+                    .comment("Maximum spawn group size of Royal Guards in the locations they can spawn in. [default:1]")
+                    .defineInRange("royalGuardMaxGroupSize", 2, 0, 128);
+
 
             WHISPERER_BIOME_TYPES = builder
                     .comment("Add biome types that the Whisperer can spawn in. \n"
