@@ -18,7 +18,7 @@ import static com.infamous.dungeons_mobs.DungeonsMobs.PROXY;
 import static com.infamous.dungeons_mobs.mobenchants.NewMobEnchantUtils.executeIfPresentWithLevel;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchants.CHILLING;
 
-@Mod.EventBusSubscriber(modid = DungeonsMobs.MODID)
+//@Mod.EventBusSubscriber(modid = DungeonsMobs.MODID)
 public class ChillingMobEnchant extends MobEnchant {
 
     public ChillingMobEnchant(Properties properties) {

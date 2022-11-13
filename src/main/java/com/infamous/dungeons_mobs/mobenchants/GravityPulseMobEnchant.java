@@ -18,7 +18,7 @@ import static com.infamous.dungeons_mobs.DungeonsMobs.PROXY;
 import static com.infamous.dungeons_mobs.mobenchants.NewMobEnchantUtils.executeIfPresentWithLevel;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchants.GRAVITY_PULSE;
 
-@Mod.EventBusSubscriber(modid = DungeonsMobs.MODID)
+//@Mod.EventBusSubscriber(modid = DungeonsMobs.MODID)
 public class GravityPulseMobEnchant extends MobEnchant {
 
     public static final double PULL_IN_SPEED_FACTOR = 0.1;

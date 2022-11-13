@@ -21,10 +21,6 @@ public class NetworkHandler {
     }
 
     public static void init() {
-        INSTANCE.messageBuilder(MobEnchantmentMessage.class, 0)
-                .encoder(MobEnchantmentMessage::encode).decoder(MobEnchantmentMessage::decode)
-                .consumer(MobEnchantmentMessage::onPacketReceived)
-                .add();
         INSTANCE.messageBuilder(AncientMessage.class, 0)
                 .encoder(AncientMessage::encode).decoder(AncientMessage::decode)
                 .consumer(AncientMessage::onPacketReceived)

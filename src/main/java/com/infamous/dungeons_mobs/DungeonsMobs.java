@@ -19,6 +19,7 @@ import com.infamous.dungeons_mobs.capabilities.teamable.Teamable;
 import com.infamous.dungeons_mobs.capabilities.teamable.TeamableStorage;
 import com.infamous.dungeons_mobs.client.ModItemModelProperties;
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
+import com.infamous.dungeons_mobs.compat.EnchantWithMobCompat;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.items.GroupDungeonsMobs;
 import com.infamous.dungeons_mobs.items.GroupDungeonsMobsItems;
@@ -63,7 +64,6 @@ public class DungeonsMobs
     public DungeonsMobs() {
         // Register the setup method for modloading
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, DungeonsMobsConfig.COMMON_SPEC, "dungeons-mobs-common.toml");
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, DungeonsMobsConfig.ENCHANTS_SPEC, "dungeons-mobs-mob-enchantments-common.toml");
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         // Register the doClientStuff method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
@@ -86,7 +86,10 @@ public class DungeonsMobs
         ModItems.ITEMS.register(modEventBus);
         ModRecipes.RECIPES.register(modEventBus);
         ModParticleTypes.PARTICLES.register(modEventBus);
-        ModMobEnchants.MOB_ENCHANTS_DEFERRED.register(modEventBus);
+        if(EnchantWithMobCompat.isLoaded()) {
+            ModMobEnchants.MOB_ENCHANTS_DEFERRED.register(modEventBus);
+            EnchantWithMobCompat.initMobEnchants(modEventBus);
+        }
         ModDataSerializers.DATA_SERIALIZERS.register(modEventBus);
         PROXY = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 

@@ -17,7 +17,7 @@ import static com.infamous.dungeons_mobs.DungeonsMobs.PROXY;
 import static com.infamous.dungeons_mobs.mobenchants.NewMobEnchantUtils.executeIfPresentWithLevel;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchants.BURNING;
 
-@Mod.EventBusSubscriber(modid = DungeonsMobs.MODID)
+//@Mod.EventBusSubscriber(modid = DungeonsMobs.MODID)
 public class BurningMobEnchant extends MobEnchant {
 
     public BurningMobEnchant(Properties properties) {

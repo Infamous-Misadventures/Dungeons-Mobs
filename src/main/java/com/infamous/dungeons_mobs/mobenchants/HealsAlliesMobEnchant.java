@@ -12,7 +12,7 @@ import static com.infamous.dungeons_libraries.utils.AreaOfEffectHelper.getCanHea
 import static com.infamous.dungeons_mobs.mobenchants.NewMobEnchantUtils.executeIfPresentWithLevel;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchants.HEALS_ALLIES;
 
-@Mod.EventBusSubscriber(modid = DungeonsMobs.MODID)
+//@Mod.EventBusSubscriber(modid = DungeonsMobs.MODID)
 public class HealsAlliesMobEnchant extends MobEnchant {
 
     private static float HEAL_PERCENTAGE = 0.10F;

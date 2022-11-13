@@ -19,8 +19,6 @@ import com.infamous.dungeons_mobs.client.renderer.jungle.LeapleafRenderer;
 import com.infamous.dungeons_mobs.client.renderer.jungle.PoisonQuillVineRenderer;
 import com.infamous.dungeons_mobs.client.renderer.jungle.QuickGrowingVineRenderer;
 import com.infamous.dungeons_mobs.client.renderer.jungle.WhispererRenderer;
-import com.infamous.dungeons_mobs.client.renderer.layers.GeoMobEnchantmentGlintLayer;
-import com.infamous.dungeons_mobs.client.renderer.layers.MobEnchantmentGlintLayer;
 import com.infamous.dungeons_mobs.client.renderer.piglin.CustomPiglinRenderer;
 import com.infamous.dungeons_mobs.client.renderer.projectiles.*;
 import com.infamous.dungeons_mobs.client.renderer.redstone.RedstoneCubeRenderer;
@@ -37,7 +35,6 @@ import com.infamous.dungeons_mobs.items.armor.*;
 import com.infamous.dungeons_mobs.items.shield.CustomISTER;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.LivingRenderer;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.DyeColor;
 import net.minecraftforge.api.distmarker.Dist;
@@ -49,9 +46,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
-import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
@@ -98,7 +93,7 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ILLUSIONER_CLONE.get(), manager -> new DefaultIllagerRenderer<IllusionerCloneEntity>(manager, new DungeonsIllusionerModel()));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WINDCALLER.get(), WindcallerRenderer::new);
 
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ENCHANTER.get(), EnchanterRenderer::new);
+//        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ENCHANTER.get(), EnchanterRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ICY_CREEPER.get(), IcyCreeperRenderer::new);
 
@@ -175,24 +170,6 @@ public class ClientEvents {
         GeoArmorRenderer.registerArmorRenderer(DrownedNecromancerArmorGear.class, DrownedNecromancerArmorGearRenderer::new);
     }
 
-    @SubscribeEvent
-    public static void onClientSetupComplete(final FMLLoadCompleteEvent event) {
-        Minecraft.getInstance().getEntityRenderDispatcher().renderers.values().forEach(r -> {
-            if (r instanceof LivingRenderer) {
-                ((LivingRenderer) r).addLayer(new MobEnchantmentGlintLayer((LivingRenderer) r));
-            } else if (r instanceof GeoEntityRenderer) {
-                ((GeoEntityRenderer) r).addLayer(new GeoMobEnchantmentGlintLayer((GeoEntityRenderer) r));
-            }
-        });
-
-        Minecraft.getInstance().getEntityRenderDispatcher().getSkinMap().values().forEach((r) -> {
-            if (r instanceof LivingRenderer) {
-                r.addLayer(new MobEnchantmentGlintLayer(r));
-            }
-
-        });
-    }
-
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onParticleFactory(ParticleFactoryRegisterEvent event) {
         Minecraft.getInstance().particleEngine.register(ModParticleTypes.SNOWFLAKE.get(), SnowflakeParticle.Factory::new);
@@ -203,21 +180,4 @@ public class ClientEvents {
         Minecraft.getInstance().particleEngine.register(ModParticleTypes.CORRUPTED_MAGIC.get(), CorruptedMagicParticle.Factory::new);
         Minecraft.getInstance().particleEngine.register(ModParticleTypes.CORRUPTED_DUST.get(), CorruptedDustParticle.Factory::new);
     }
-
-    /*@SubscribeEvent
-    public static void onRenderNamePlateEvent(RenderNameplateEvent event){
-        Entity entity = event.getEntity();
-        IFormattableTextComponent copy = event.getContent().copy();
-        StringBuilder enchantmentString = new StringBuilder();
-        getEnchantableCapabilityLazy(entity).ifPresent(cap -> {
-            if(cap.hasEnchantment()){
-                enchantmentString.append(" (");
-                enchantmentString.append(cap.getEnchantments().stream().map(mobEnchantment -> mobEnchantment.getRegistryName().getPath()).collect(Collectors.joining(", ")));
-                enchantmentString.append(")");
-                event.setResult(Event.Result.ALLOW);
-            }
-        });
-        copy.append(enchantmentString.toString());
-        event.setContent(copy);
-    }*/
 }

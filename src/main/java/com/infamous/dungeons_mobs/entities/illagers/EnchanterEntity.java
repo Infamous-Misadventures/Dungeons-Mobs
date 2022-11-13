@@ -52,7 +52,7 @@ public class EnchanterEntity extends SpellcastingIllagerEntity implements IAnima
     private List<MonsterEntity> enchantmentTargets = new ArrayList<>();
 
     public EnchanterEntity(World world) {
-        super(ModEntityTypes.ENCHANTER.get(), world);
+        super(ModEntityTypes.GEOMANCER.get(), world);
     }
 
     public EnchanterEntity(EntityType<? extends SpellcastingIllagerEntity> type, World world) {

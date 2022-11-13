@@ -143,13 +143,13 @@ public class ModEntityTypes {
             0x348179, 0xdc6c46
     );
     
-    public static final RegistryObject<EntityType<EnchanterEntity>> ENCHANTER = registerEntityWithoutEgg("enchanter", () ->
-    EntityType.Builder.<EnchanterEntity>of(EnchanterEntity::new, EntityClassification.MONSTER)
-            .sized(0.6F, 1.95F)
-            .clientTrackingRange(8)
-            .build(new ResourceLocation(MODID, "enchanter").toString())//,
-            //0x62162c, 0xfbd600
-    );
+//    public static final RegistryObject<EntityType<EnchanterEntity>> ENCHANTER = registerEntityWithoutEgg("enchanter", () ->
+//    EntityType.Builder.<EnchanterEntity>of(EnchanterEntity::new, EntityClassification.MONSTER)
+//            .sized(0.6F, 1.95F)
+//            .clientTrackingRange(8)
+//            .build(new ResourceLocation(MODID, "enchanter").toString())//,
+//            //0x62162c, 0xfbd600
+//    );
     
     public static final RegistryObject<EntityType<DungeonsIllusionerEntity>> ILLUSIONER = registerEntity("illusioner", () ->
             EntityType.Builder.<DungeonsIllusionerEntity>of(DungeonsIllusionerEntity::new, EntityClassification.MONSTER)

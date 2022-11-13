@@ -956,15 +956,9 @@ public class DungeonsMobsConfig {
     public static final ForgeConfigSpec COMMON_SPEC;
     public static final Common COMMON;
 
-    public static final ForgeConfigSpec ENCHANTS_SPEC;
-    public static final DungeonsMobsMobEnchantmentsConfig.MobEnchantmentsConfig ENCHANTS;
-
     static {
         final Pair<Common, ForgeConfigSpec> commonSpecPair = new ForgeConfigSpec.Builder().configure(Common::new);
         COMMON_SPEC = commonSpecPair.getRight();
         COMMON = commonSpecPair.getLeft();
-        final Pair<DungeonsMobsMobEnchantmentsConfig.MobEnchantmentsConfig, ForgeConfigSpec> enchantsSpecPair = new ForgeConfigSpec.Builder().configure(DungeonsMobsMobEnchantmentsConfig.MobEnchantmentsConfig::new);
-        ENCHANTS_SPEC = enchantsSpecPair.getRight();
-        ENCHANTS = enchantsSpecPair.getLeft();
     }
 }

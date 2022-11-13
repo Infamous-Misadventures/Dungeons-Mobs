@@ -13,7 +13,7 @@ import net.minecraftforge.fml.common.Mod;
 import static com.infamous.dungeons_mobs.mobenchants.NewMobEnchantUtils.executeIfPresentWithLevel;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchants.ECHO;
 
-@Mod.EventBusSubscriber(modid = DungeonsMobs.MODID)
+//@Mod.EventBusSubscriber(modid = DungeonsMobs.MODID)
 public class EchoMobEnchant extends MobEnchant {
 
     private static float ECHO_CHANCE = 0.25f;

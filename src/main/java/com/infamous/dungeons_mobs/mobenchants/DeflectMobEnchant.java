@@ -17,7 +17,7 @@ import net.minecraftforge.fml.common.Mod;
 import static com.infamous.dungeons_mobs.mobenchants.NewMobEnchantUtils.executeIfPresentWithLevel;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchants.DEFLECT;
 
-@Mod.EventBusSubscriber(modid = DungeonsMobs.MODID)
+//@Mod.EventBusSubscriber(modid = DungeonsMobs.MODID)
 public class DeflectMobEnchant extends MobEnchant {
 
     public DeflectMobEnchant(Properties properties) {
