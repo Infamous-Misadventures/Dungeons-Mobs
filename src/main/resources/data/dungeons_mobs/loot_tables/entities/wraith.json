@@ -23,7 +23,7 @@
               }
             }
           ],
-          "name": "dungeons_mobs:wraith_fire_charge"
+          "name": "minecraft:fire_charge"
         }
       ],
       "conditions": [
