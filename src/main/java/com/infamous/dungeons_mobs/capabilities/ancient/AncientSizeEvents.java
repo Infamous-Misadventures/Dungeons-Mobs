@@ -19,27 +19,25 @@ public class AncientSizeEvents {
     public static void onEntityEventSize(EntityEvent.Size event) {
         Entity entity = event.getEntity();
 
-        AncientHelper.getAncientCapabilityLazy(entity).ifPresent(cap -> {
-            if (cap.isAncient()) {
-                float totalWidth = event.getNewSize().width * 1.2F;
-                float totalHeight = event.getNewSize().height * 1.2F;
-                event.setNewEyeHeight(event.getNewEyeHeight() * 1.2F);
-                event.setNewSize(EntitySize.fixed(totalWidth, totalHeight));
-            }
-        });
+        IAncient cap = AncientHelper.getAncientCapability(entity);
+        if (cap.isAncient()) {
+            float totalWidth = event.getNewSize().width * 1.2F;
+            float totalHeight = event.getNewSize().height * 1.2F;
+            event.setNewEyeHeight(event.getNewEyeHeight() * 1.2F);
+            event.setNewSize(EntitySize.fixed(totalWidth, totalHeight));
+        }
     }
 
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public static void onRenderLivingEventPre(RenderLivingEvent.Pre<LivingEntity, EntityModel<LivingEntity>> event) {
         final LivingEntity entity = event.getEntity();
-        AncientHelper.getAncientCapabilityLazy(entity).ifPresent(cap -> {
-            if (cap.isAncient()) {
-                event.getMatrixStack().pushPose();
-                    event.getMatrixStack().scale(1.1F, 1.1F, 1.1F);
+        IAncient cap = AncientHelper.getAncientCapability(entity);
+        if (cap.isAncient()) {
+            event.getMatrixStack().pushPose();
+                event.getMatrixStack().scale(1.1F, 1.1F, 1.1F);
 
-            }
-        });
+        }
 
     }
 
@@ -47,11 +45,10 @@ public class AncientSizeEvents {
     @OnlyIn(Dist.CLIENT)
     public static void onRenderLivingEventPost(RenderLivingEvent.Post<LivingEntity, EntityModel<LivingEntity>> event) {
         final LivingEntity entity = event.getEntity();
-        AncientHelper.getAncientCapabilityLazy(entity).ifPresent(cap -> {
-            if (cap.isAncient()) {
-                event.getMatrixStack().popPose();
-            }
-        });
+        IAncient cap = AncientHelper.getAncientCapability(entity);
+        if (cap.isAncient()) {
+            event.getMatrixStack().popPose();
+        }
 
     }
 }

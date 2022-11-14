@@ -19,14 +19,10 @@ import java.lang.reflect.Method;
 
 public class ConvertibleHelper {
 
-    @Nullable
     public static IConvertible getConvertibleCapability(Entity entity)
     {
         LazyOptional<IConvertible> lazyCap = entity.getCapability(ConvertibleProvider.CONVERTIBLE_CAPABILITY);
-        if (lazyCap.isPresent()) {
-            return lazyCap.orElseThrow(() -> new IllegalStateException("Couldn't get the convertible capability from the Entity!"));
-        }
-        return null;
+        return lazyCap.orElse(new Convertible());
     }
 
     public static void onDrownedAndConvertedTo(MobEntity original, MobEntity convertedTo){

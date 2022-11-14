@@ -7,14 +7,10 @@ import javax.annotation.Nullable;
 
 public class TeamableHelper {
 
-    @Nullable
     public static ITeamable getTeamableCapability(MobEntity mob)
     {
         LazyOptional<ITeamable> lazyCap = mob.getCapability(TeamableProvider.TEAMABLE_CAPABILITY);
-        if (lazyCap.isPresent()) {
-            return lazyCap.orElseThrow(() -> new IllegalStateException("Couldn't get the teamable capability from the Entity!"));
-        }
-        return null;
+        return lazyCap.orElse(new Teamable());
     }
 
     public static void makeTeammates(MobEntity mob, MobEntity teammate){

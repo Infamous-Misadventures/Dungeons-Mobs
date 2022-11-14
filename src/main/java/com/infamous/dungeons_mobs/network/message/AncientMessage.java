@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.network.message;
 
 import com.infamous.dungeons_mobs.capabilities.ancient.AncientHelper;
+import com.infamous.dungeons_mobs.capabilities.ancient.IAncient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -32,10 +33,9 @@ public class AncientMessage {
             context.enqueueWork(() -> {
                 Entity entity = Minecraft.getInstance().player.level.getEntity(message.entityId);
                 if (entity instanceof LivingEntity) {
-                    AncientHelper.getAncientCapabilityLazy(entity).ifPresent(ancientCap -> {
-                        ancientCap.setAncient(message.ancient);
-                        entity.refreshDimensions();
-                    });
+                    IAncient cap = AncientHelper.getAncientCapability(entity);
+                    cap.setAncient(message.ancient);
+                    entity.refreshDimensions();
                 }
             });
         }

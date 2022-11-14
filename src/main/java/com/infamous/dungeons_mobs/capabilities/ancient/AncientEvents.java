@@ -27,9 +27,10 @@ public class AncientEvents {
         PlayerEntity player = event.getPlayer();
         Entity target = event.getTarget();
         if (player instanceof ServerPlayerEntity) {
-            AncientHelper.getAncientCapabilityLazy(target).ifPresent(cap -> {
+            IAncient cap = AncientHelper.getAncientCapability(target);
+            if(cap.isAncient()) {
                 NetworkHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), new AncientMessage(target.getId(), cap.isAncient()));
-            });
+            }
         }
     }
 
@@ -37,31 +38,29 @@ public class AncientEvents {
     public static void onLivingUpdate(LivingEvent.LivingUpdateEvent event){
         LivingEntity entityLiving = event.getEntityLiving();
         if(!entityLiving.level.isClientSide) {
-            AncientHelper.getAncientCapabilityLazy(entityLiving).ifPresent(cap -> {
-                if(cap.isAncient() &&  cap.getBossInfo() != null){
-                    List<ServerPlayerEntity> nearbyEntities = entityLiving.level.getNearbyEntities(ServerPlayerEntity.class, new EntityPredicate().range(20.0D).allowInvulnerable().allowNonAttackable().ignoreInvisibilityTesting(), entityLiving, entityLiving.getBoundingBox().inflate(20D, 10D, 20D));
-                    nearbyEntities.forEach(playerEntity ->
-                        cap.getBossInfo().addPlayer(playerEntity)
-                    );
-                    ArrayList<ServerPlayerEntity> trackingPlayers = new ArrayList<>(cap.getBossInfo().getPlayers());
-                    List<ServerPlayerEntity> furtherEntities = entityLiving.level.getNearbyEntities(ServerPlayerEntity.class, new EntityPredicate().range(50.0D).allowInvulnerable().allowNonAttackable().ignoreInvisibilityTesting(), entityLiving, entityLiving.getBoundingBox().inflate(50D, 20D, 50D));
-                    trackingPlayers.forEach(playerEntity -> {
-                        if(!furtherEntities.contains(playerEntity)){
-                            cap.getBossInfo().removePlayer(playerEntity);
-                        }
-                    });
-                }
-            });
+            IAncient cap = AncientHelper.getAncientCapability(entityLiving);
+            if(cap.isAncient() &&  cap.getBossInfo() != null){
+                List<ServerPlayerEntity> nearbyEntities = entityLiving.level.getNearbyEntities(ServerPlayerEntity.class, new EntityPredicate().range(20.0D).allowInvulnerable().allowNonAttackable().ignoreInvisibilityTesting(), entityLiving, entityLiving.getBoundingBox().inflate(20D, 10D, 20D));
+                nearbyEntities.forEach(playerEntity ->
+                    cap.getBossInfo().addPlayer(playerEntity)
+                );
+                ArrayList<ServerPlayerEntity> trackingPlayers = new ArrayList<>(cap.getBossInfo().getPlayers());
+                List<ServerPlayerEntity> furtherEntities = entityLiving.level.getNearbyEntities(ServerPlayerEntity.class, new EntityPredicate().range(50.0D).allowInvulnerable().allowNonAttackable().ignoreInvisibilityTesting(), entityLiving, entityLiving.getBoundingBox().inflate(50D, 20D, 50D));
+                trackingPlayers.forEach(playerEntity -> {
+                    if(!furtherEntities.contains(playerEntity)){
+                        cap.getBossInfo().removePlayer(playerEntity);
+                    }
+                });
+            }
         }
     }
 
     @SubscribeEvent
     public static void onLivingUpdateEvent(LivingEvent.LivingUpdateEvent event){
         LivingEntity livingEntity = event.getEntityLiving();
-        AncientHelper.getAncientCapabilityLazy(livingEntity).ifPresent(cap -> {
-            if(cap.isAncient() && cap.getBossInfo() != null) {
-                cap.getBossInfo().setPercent(livingEntity.getHealth() / livingEntity.getMaxHealth());
-            }
-        });
+        IAncient cap = AncientHelper.getAncientCapability(livingEntity);
+        if(cap.isAncient() && cap.getBossInfo() != null) {
+            cap.getBossInfo().setPercent(livingEntity.getHealth() / livingEntity.getMaxHealth());
+        }
     }
 }
