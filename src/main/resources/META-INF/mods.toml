@@ -45,6 +45,12 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed mollis lacinia magn
     versionRange="[3.0.103,)"
     ordering="NONE"
     side="CLIENT"
+[[dependencies.dungeons_gear]]
+    modId="curios"
+    mandatory=true
+    versionRange="[1.16.5-4.0.5.3,)"
+    ordering="NONE"
+    side="BOTH"
 [[dependencies.dungeons_mobs]] #optional
     # the modid of the dependency
     modId="dungeons_libraries" #mandatory
