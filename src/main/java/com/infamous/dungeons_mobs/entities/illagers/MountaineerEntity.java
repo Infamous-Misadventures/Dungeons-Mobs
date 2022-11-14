@@ -35,10 +35,17 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.raid.Raid;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
 
-public class MountaineerEntity extends VindicatorEntity implements SpawnArmoredMob {
+public class MountaineerEntity extends VindicatorEntity implements SpawnArmoredMob, IAnimatable {
 	
 	   private static final DataParameter<Byte> DATA_FLAGS_ID = EntityDataManager.defineId(MountaineerEntity.class, DataSerializers.BYTE);
 	   
@@ -169,5 +176,26 @@ public class MountaineerEntity extends VindicatorEntity implements SpawnArmoredM
     @Override
     public ArmorSet getArmorSet() {
         return ModItems.MOUNTAINEER_ARMOR;
+    }
+
+    private AnimationFactory factory = new AnimationFactory(this);
+    
+    @Override
+    public void registerControllers(AnimationData data) {
+        data.addAnimationController(new AnimationController(this, "controller", 2, this::predicate));
+    }
+
+    private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
+        if (this.isCelebrating()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("iceologer_celebrate", true));
+        } else {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("iceologer_idle", true));
+        }
+        return PlayState.CONTINUE;
+    }
+
+    @Override
+    public AnimationFactory getFactory() {
+        return factory;
     }
 }

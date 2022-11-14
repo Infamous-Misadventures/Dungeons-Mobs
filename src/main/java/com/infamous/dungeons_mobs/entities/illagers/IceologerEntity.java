@@ -118,7 +118,6 @@ public class IceologerEntity extends AbstractIllagerEntity implements IAnimatabl
         data.addAnimationController(new AnimationController(this, "controller", 2, this::predicate));
     }
 
-
     private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
         if (this.summonAnimationTick > 0) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("iceologer_summon", true));
