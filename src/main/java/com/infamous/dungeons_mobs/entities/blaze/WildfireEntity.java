@@ -72,6 +72,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import static com.infamous.dungeons_libraries.attribute.AttributeRegistry.SUMMON_CAP;
 import static com.infamous.dungeons_mobs.entities.SpawnArmoredHelper.equipArmorSet;
 
 public class WildfireEntity extends MonsterEntity implements IAnimatable, SpawnArmoredMob {
@@ -217,7 +218,7 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable, SpawnA
      }
     
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.2D).add(Attributes.FOLLOW_RANGE, 24D).add(Attributes.MAX_HEALTH, 50.0D).add(Attributes.KNOCKBACK_RESISTANCE, 0.5D);
+        return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.2D).add(Attributes.FOLLOW_RANGE, 24D).add(Attributes.MAX_HEALTH, 50.0D).add(Attributes.KNOCKBACK_RESISTANCE, 0.5D).add(SUMMON_CAP.get(), 6D);
     }
     
 	public void handleEntityEvent(byte p_28844_) {
