@@ -66,7 +66,7 @@ public class WindcallerStaffItem extends ArtifactItem implements IHasInventorySp
         double d2 = targetY - mob.getY(0.5D);
         double d3 = targetZ - mob.getZ();
         WindcallerBlastProjectileEntity smallfireballentity = new WindcallerBlastProjectileEntity(mob.level, mob, d1, 0, d3);
-        smallfireballentity.setPos(smallfireballentity.getX(), mob.getY(0.25D), smallfireballentity.getZ());
+        smallfireballentity.setPos(mob.getX(), mob.getY(0.25D), mob.getZ());
         mob.level.addFreshEntity(smallfireballentity);
         WindcallerTornadoEntity tornado = ModEntityTypes.TORNADO.get().create(mob.level);
         tornado.moveTo(mob.blockPosition(), 0, 0);

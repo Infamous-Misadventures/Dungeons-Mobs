@@ -410,13 +410,13 @@ public class WindcallerEntity extends AbstractIllagerEntity implements IAnimatab
 	               double d2 = target.getY(0.5D) - mob.getY(0.5D);
 	               double d3 = target.getZ() - mob.getZ();
 				WindcallerBlastProjectileEntity smallfireballentity = new WindcallerBlastProjectileEntity(mob.level, mob, d1, 0, d3);
-                smallfireballentity.setPos(smallfireballentity.getX(), mob.getY(0.25D), smallfireballentity.getZ());
+                smallfireballentity.setPos(mob.getX(), mob.getY(0.25D), mob.getZ());
                 mob.level.addFreshEntity(smallfireballentity);
 	            WindcallerTornadoEntity tornado = ModEntityTypes.TORNADO.get().create(mob.level);
 	            tornado.moveTo(mob.blockPosition(), 0, 0);
 	            tornado.playSound(ModSoundEvents.WINDCALLER_BLAST_WIND.get(), 1.5F, 1.0F);
 	            tornado.setBlast(true);
-	            mob.lookAt(EntityAnchorArgument.Type.EYES, new Vector3d(target.getX(), target.getY(), target.getZ()));
+//	            mob.lookAt(EntityAnchorArgument.Type.EYES, new Vector3d(target.getX(), target.getY(), target.getZ()));
 	            tornado.yRot = -mob.yHeadRot - 90;
 	            ((ServerWorld)mob.level).addFreshEntityWithPassengers(tornado);
 			}
