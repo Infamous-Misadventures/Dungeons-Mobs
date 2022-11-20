@@ -1,38 +1,36 @@
 package com.infamous.dungeons_mobs.client.renderer.undead;
 
-import javax.annotation.Nullable;
-
 import com.infamous.dungeons_mobs.client.models.undead.SkeletonVanguardModel;
 import com.infamous.dungeons_mobs.entities.undead.SkeletonVanguardEntity;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-
-import it.unimi.dsi.fastutil.objects.ObjectList;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Vector3f;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.model.BipedModel;
-import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ShieldItem;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ShieldItem;
+import net.minecraft.world.level.block.state.BlockState;
 import software.bernie.example.client.DefaultBipedBoneIdents;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
-import software.bernie.geckolib3.geo.render.built.GeoCube;
+import software.bernie.geckolib3.item.GeoArmorItem;
 import software.bernie.geckolib3.renderers.geo.ExtendedGeoEntityRenderer;
+import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
+
+import javax.annotation.Nullable;
 public class SkeletonVanguardRenderer extends ExtendedGeoEntityRenderer<SkeletonVanguardEntity> {
-    public SkeletonVanguardRenderer(EntityRendererManager renderManager) {
+    public SkeletonVanguardRenderer(EntityRendererProvider.Context renderManager) {
         super(renderManager, new SkeletonVanguardModel());
     }
 
     @Override
-    protected void applyRotations(SkeletonVanguardEntity entityLiving, MatrixStack matrixStackIn, float ageInTicks,
+    protected void applyRotations(SkeletonVanguardEntity entityLiving, PoseStack matrixStackIn, float ageInTicks,
                                   float rotationYaw, float partialTicks) {
         float scaleFactor = 1.0F;
         matrixStackIn.scale(scaleFactor, scaleFactor, scaleFactor);
@@ -41,14 +39,14 @@ public class SkeletonVanguardRenderer extends ExtendedGeoEntityRenderer<Skeleton
     }
 
     @Override
-    public RenderType getRenderType(SkeletonVanguardEntity animatable, float partialTicks, MatrixStack stack,
-                                    IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn,
+    public RenderType getRenderType(SkeletonVanguardEntity animatable, float partialTicks, PoseStack stack,
+                                    MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn,
                                     ResourceLocation textureLocation) {
         return RenderType.entityTranslucent(getTextureLocation(animatable));
     }
 
     @Override
-    public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+    public void renderRecursively(GeoBone bone, PoseStack stack, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
         if(this.isArmorBone(bone)) {
             bone.setCubesHidden(true);
         }
@@ -92,7 +90,7 @@ public class SkeletonVanguardRenderer extends ExtendedGeoEntityRenderer<Skeleton
 	}
 
 	@Override
-	protected void preRenderItem(MatrixStack stack, ItemStack item, String boneName, SkeletonVanguardEntity currentEntity, IBone bone) {
+	protected void preRenderItem(PoseStack stack, ItemStack item, String boneName, SkeletonVanguardEntity currentEntity, IBone bone) {
 		if(item == this.mainHand || item == this.offHand) {
 			stack.scale(1.1F, 1.1F, 1.1F);
 			stack.mulPose(Vector3f.XP.rotationDegrees(-90.0F));
@@ -117,7 +115,7 @@ public class SkeletonVanguardRenderer extends ExtendedGeoEntityRenderer<Skeleton
 	}
 
 	@Override
-	protected void postRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, SkeletonVanguardEntity currentEntity, IBone bone) {
+	protected void postRenderItem(PoseStack matrixStack, ItemStack item, String boneName, SkeletonVanguardEntity currentEntity, IBone bone) {
 
 	}
     
@@ -127,13 +125,13 @@ public class SkeletonVanguardRenderer extends ExtendedGeoEntityRenderer<Skeleton
 	}
 	
 	@Override
-	protected void preRenderBlock(MatrixStack matrixStack, BlockState block, String boneName,
+	protected void preRenderBlock(PoseStack matrixStack, BlockState block, String boneName,
 			SkeletonVanguardEntity currentEntity) {
 		
 	}
 
 	@Override
-	protected void postRenderBlock(MatrixStack matrixStack, BlockState block, String boneName,
+	protected void postRenderBlock(PoseStack matrixStack, BlockState block, String boneName,
 			SkeletonVanguardEntity currentEntity) {
 		
 	}
@@ -141,67 +139,69 @@ public class SkeletonVanguardRenderer extends ExtendedGeoEntityRenderer<Skeleton
     @Nullable
     @Override
     protected ItemStack getArmorForBone(String boneName, SkeletonVanguardEntity currentEntity) {
-        switch (boneName) {
-            case "armorBipedLeftFoot":
-            case "armorBipedRightFoot":
-                return boots;
-            case "armorBipedLeftLeg":
-            case "armorBipedRightLeg":
-                return leggings;
-            case "armorBipedBody":
-            case "armorBipedRightArm":
-            case "armorBipedLeftArm":
-                return chestplate;
-            case "armorBipedHead":
-                return helmet;
-            default:
-                return null;
-        }
+        return switch (boneName) {
+            case "armorBipedLeftFoot", "armorBipedRightFoot" -> currentEntity.getItemBySlot(EquipmentSlot.FEET);
+            case "armorBipedLeftLeg", "armorBipedRightLeg" -> currentEntity.getItemBySlot(EquipmentSlot.LEGS);
+            case "armorBipedBody", "armorBipedRightArm", "armorBipedLeftArm" -> currentEntity.getItemBySlot(EquipmentSlot.CHEST);
+            case "armorBipedHead" -> currentEntity.getItemBySlot(EquipmentSlot.HEAD);
+            default -> null;
+        };
     }
 
     @Override
-    protected EquipmentSlotType getEquipmentSlotForArmorBone(String boneName, SkeletonVanguardEntity currentEntity) {
-        switch (boneName) {
-            case "armorBipedLeftFoot":
-            case "armorBipedRightFoot":
-                return EquipmentSlotType.FEET;
-            case "armorBipedLeftLeg":
-            case "armorBipedRightLeg":
-                return EquipmentSlotType.LEGS;
-            case "armorBipedRightHand":
-                return !currentEntity.isLeftHanded() ? EquipmentSlotType.MAINHAND : EquipmentSlotType.OFFHAND;
-            case "armorBipedLeftHand":
-                return currentEntity.isLeftHanded() ? EquipmentSlotType.MAINHAND : EquipmentSlotType.OFFHAND;
-            case "armorBipedRightArm":
-            case "armorBipedLeftArm":
-            case "armorBipedBody":
-                return EquipmentSlotType.CHEST;
-            case "armorBipedHead":
-                return EquipmentSlotType.HEAD;
-            default:
-                return null;
-        }
+    protected EquipmentSlot getEquipmentSlotForArmorBone(String boneName, SkeletonVanguardEntity currentEntity) {
+        return switch (boneName) {
+            case "armorBipedLeftFoot", "armorBipedRightFoot" -> EquipmentSlot.FEET;
+            case "armorBipedLeftLeg", "armorBipedRightLeg" -> EquipmentSlot.LEGS;
+            case "armorBipedRightHand" -> !currentEntity.isLeftHanded() ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
+            case "armorBipedLeftHand" -> currentEntity.isLeftHanded() ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
+            case "armorBipedRightArm", "armorBipedLeftArm", "armorBipedBody" -> EquipmentSlot.CHEST;
+            case "armorBipedHead" -> EquipmentSlot.HEAD;
+            default -> null;
+        };
     }
 
     @Override
-    protected ModelRenderer getArmorPartForBone(String name, BipedModel<?> armorBipedModel) {
-        switch (name) {
-            case "armorBipedLeftFoot":
-            case "armorBipedLeftLeg":
-                return armorBipedModel.leftLeg;
-            case "armorBipedRightFoot":
-            case "armorBipedRightLeg":
-                return armorBipedModel.rightLeg;
-            case "armorBipedRightArm":
-                return armorBipedModel.rightArm;
-            case "armorBipedLeftArm":
-                return armorBipedModel.leftArm;
-            case "armorBipedBody":
-                return armorBipedModel.body;
-            case "armorBipedHead":
-                return armorBipedModel.head;
-            default:
-                return null;
+    protected ModelPart getArmorPartForBone(String name, HumanoidModel<?> armorBipedModel) {
+        return switch (name) {
+            case "armorBipedLeftFoot", "armorBipedLeftLeg" -> armorBipedModel.leftLeg;
+            case "armorBipedRightFoot", "armorBipedRightLeg" -> armorBipedModel.rightLeg;
+            case "armorBipedRightArm" -> armorBipedModel.rightArm;
+            case "armorBipedLeftArm" -> armorBipedModel.leftArm;
+            case "armorBipedBody" -> armorBipedModel.body;
+            case "armorBipedHead" -> armorBipedModel.head;
+            default -> null;
+        };
+    }
+
+    @Override
+    protected void setLimbBoneVisible(GeoArmorRenderer<? extends GeoArmorItem> armorRenderer,
+                                      ModelPart limb, HumanoidModel<?> armorModel, EquipmentSlot slot) {
+        if (limb == armorModel.head || limb == armorModel.hat) {
+            armorRenderer.getGeoModelProvider().getBone(armorRenderer.headBone).setHidden(false);
+        }
+        else if (limb == armorModel.body) {
+            armorRenderer.getGeoModelProvider().getBone(armorRenderer.bodyBone).setHidden(false);
+            armorRenderer.getGeoModelProvider().getBone(armorRenderer.leftArmBone).setHidden(true);
+            armorRenderer.getGeoModelProvider().getBone(armorRenderer.rightArmBone).setHidden(true);
+        }
+        else if (limb == armorModel.leftArm) {
+            armorRenderer.getGeoModelProvider().getBone(armorRenderer.bodyBone).setHidden(true);
+            armorRenderer.getGeoModelProvider().getBone(armorRenderer.leftArmBone).setHidden(false);
+            armorRenderer.getGeoModelProvider().getBone(armorRenderer.rightArmBone).setHidden(true);
+        }
+        else if (limb == armorModel.leftLeg) {
+            armorRenderer.getGeoModelProvider().getBone((slot == EquipmentSlot.FEET ? armorRenderer.leftBootBone : armorRenderer.leftLegBone)).setHidden(false);
+            armorRenderer.getGeoModelProvider().getBone((slot == EquipmentSlot.FEET ? armorRenderer.rightBootBone : armorRenderer.rightLegBone)).setHidden(false);
+        }
+        else if (limb == armorModel.rightArm) {
+            armorRenderer.getGeoModelProvider().getBone(armorRenderer.bodyBone).setHidden(true);
+            armorRenderer.getGeoModelProvider().getBone(armorRenderer.leftArmBone).setHidden(true);
+            armorRenderer.getGeoModelProvider().getBone(armorRenderer.rightArmBone).setHidden(false);
+        }
+        else if (limb == armorModel.rightLeg) {
+            armorRenderer.getGeoModelProvider().getBone((slot == EquipmentSlot.FEET ? armorRenderer.rightBootBone : armorRenderer.rightLegBone)).setHidden(false);
+            armorRenderer.getGeoModelProvider().getBone((slot == EquipmentSlot.FEET ? armorRenderer.leftBootBone : armorRenderer.leftLegBone)).setHidden(true);
         }
     }
 }

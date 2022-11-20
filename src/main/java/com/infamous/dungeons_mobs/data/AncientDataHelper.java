@@ -1,11 +1,11 @@
 package com.infamous.dungeons_mobs.data;
 
-import com.infamous.dungeons_libraries.capabilities.enchantable.EnchantableHelper;
-import com.infamous.dungeons_libraries.capabilities.enchantable.IEnchantable;
+import com.baguchan.enchantwithmob.EnchantWithMob;
+import com.baguchan.enchantwithmob.capability.MobEnchantCapability;
+import com.infamous.dungeons_libraries.data.util.MergeableCodecDataManager;
 import com.infamous.dungeons_mobs.DungeonsMobs;
-import com.infamous.dungeons_mobs.data.util.MergeableCodecDataManager;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -56,9 +56,9 @@ public class AncientDataHelper {
     public static String getAncientName(LivingEntity entity){
         Set<String> adjectives = new HashSet<>();
         Set<String> nouns = new HashSet<>();
-        IEnchantable enchantCap = EnchantableHelper.getEnchantableCapability(entity);
-        enchantCap.getEnchantments().forEach(mobEnchantment -> {
-            MobEnchantmentAncientData mobEnchantmentAncientData = getMobEnchantmentAncientData(mobEnchantment.getRegistryName());
+        MobEnchantCapability enchantCap = entity.getCapability(EnchantWithMob.MOB_ENCHANT_CAP).orElse(new MobEnchantCapability());
+        enchantCap.getMobEnchants().forEach(mobEnchantment -> {
+            MobEnchantmentAncientData mobEnchantmentAncientData = getMobEnchantmentAncientData(mobEnchantment.getMobEnchant().getRegistryName());
             adjectives.addAll(mobEnchantmentAncientData.getAdjectives());
             nouns.addAll(mobEnchantmentAncientData.getNouns());
         });

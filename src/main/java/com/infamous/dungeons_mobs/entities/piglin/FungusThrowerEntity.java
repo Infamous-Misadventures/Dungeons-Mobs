@@ -8,30 +8,30 @@ import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModItems;
 import com.infamous.dungeons_mobs.utils.PiglinHelper;
 import com.mojang.serialization.Dynamic;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.brain.Brain;
-import net.minecraft.entity.monster.piglin.PiglinEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ShootableItem;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.ai.Brain;
+import net.minecraft.world.entity.monster.piglin.Piglin;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ProjectileWeaponItem;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 
 import javax.annotation.Nullable;
 
-public class FungusThrowerEntity extends PiglinEntity {
+public class FungusThrowerEntity extends Piglin {
 
-    public FungusThrowerEntity(EntityType<? extends FungusThrowerEntity> entityType, World world) {
+    public FungusThrowerEntity(EntityType<? extends FungusThrowerEntity> entityType, Level world) {
         super(entityType, world);
     }
 
     @Override
-    public boolean canFireProjectileWeapon(ShootableItem shootableItem) {
+    public boolean canFireProjectileWeapon(ProjectileWeaponItem shootableItem) {
         return super.canFireProjectileWeapon(shootableItem) || shootableItem instanceof BlueNethershroomItem;
     }
 
@@ -45,21 +45,21 @@ public class FungusThrowerEntity extends PiglinEntity {
 
     @Nullable
     @Override
-    public ILivingEntityData finalizeSpawn(IServerWorld serverWorld, DifficultyInstance difficultyInstance, SpawnReason spawnReason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT compoundNBT) {
-        ILivingEntityData spawnData = super.finalizeSpawn(serverWorld, difficultyInstance, spawnReason, spawnDataIn, compoundNBT);
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverWorld, DifficultyInstance difficultyInstance, MobSpawnType spawnReason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag compoundNBT) {
+        SpawnGroupData spawnData = super.finalizeSpawn(serverWorld, difficultyInstance, spawnReason, spawnDataIn, compoundNBT);
         if(this instanceof ISmartCrossbowUser && ((ISmartCrossbowUser) this).isCrossbowUser()){
             ((ISmartCrossbowUser) this).setCrossbowUser(false);
         }
-        if(spawnReason != SpawnReason.STRUCTURE){
+        if(spawnReason != MobSpawnType.STRUCTURE){
             if(this.isAdult()){
-                this.setItemSlot(EquipmentSlotType.MAINHAND, ModItems.BLUE_NETHERSHROOM.get().getDefaultInstance());
+                this.setItemSlot(EquipmentSlot.MAINHAND, ModItems.BLUE_NETHERSHROOM.get().getDefaultInstance());
             }
         }
         return spawnData;
     }
 
     @Override
-    protected void finishConversion(ServerWorld serverWorld) {
+    protected void finishConversion(ServerLevel serverWorld) {
         PiglinHelper.stopAdmiringItem(this);
         ((PiglinAccessor)this).getInventory().removeAllItems().forEach(this::spawnAtLocation);
         PiglinHelper.zombify(ModEntityTypes.ZOMBIFIED_FUNGUS_THROWER.get(), this);

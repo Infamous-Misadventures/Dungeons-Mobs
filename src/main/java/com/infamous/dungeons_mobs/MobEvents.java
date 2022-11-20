@@ -1,24 +1,10 @@
 package com.infamous.dungeons_mobs;
 
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
-
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
-
-import com.infamous.dungeons_mobs.capabilities.ancient.AncientProvider;
-import com.infamous.dungeons_mobs.capabilities.cloneable.CloneableProvider;
+import com.infamous.dungeons_libraries.utils.AbilityHelper;
+import com.infamous.dungeons_mobs.capabilities.convertible.Convertible;
 import com.infamous.dungeons_mobs.capabilities.convertible.ConvertibleHelper;
-import com.infamous.dungeons_mobs.capabilities.convertible.ConvertibleProvider;
-import com.infamous.dungeons_mobs.capabilities.convertible.IConvertible;
-import com.infamous.dungeons_mobs.capabilities.properties.MobPropsProvider;
-import com.infamous.dungeons_mobs.capabilities.teamable.TeamableHelper;
-import com.infamous.dungeons_mobs.capabilities.teamable.TeamableProvider;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.entities.creepers.IcyCreeperEntity;
-import com.infamous.dungeons_mobs.entities.illagers.DungeonsIllusionerEntity;
 import com.infamous.dungeons_mobs.entities.illagers.IllusionerCloneEntity;
 import com.infamous.dungeons_mobs.entities.summonables.ConstructEntity;
 import com.infamous.dungeons_mobs.entities.undead.FrozenZombieEntity;
@@ -27,102 +13,72 @@ import com.infamous.dungeons_mobs.interfaces.IHasItemStackData;
 import com.infamous.dungeons_mobs.mixin.GoalSelectorAccessor;
 import com.infamous.dungeons_mobs.mixin.TridentEntityAccessor;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.IAngerable;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.goal.RangedAttackGoal;
-import net.minecraft.entity.item.ArmorStandEntity;
-import net.minecraft.entity.monster.DrownedEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.entity.projectile.SnowballEntity;
-import net.minecraft.entity.projectile.TridentEntity;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.World;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
+import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.entity.monster.Drowned;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Snowball;
+import net.minecraft.world.entity.projectile.ThrownTrident;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.EntityMobGriefingEvent;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
+import net.minecraftforge.event.entity.living.LivingChangeTargetEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.*;
+
+import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
+
 @Mod.EventBusSubscriber(modid = MODID)
 public class MobEvents {
-    private static ArmorStandEntity DUMMY_TARGET;
+    private static ArmorStand DUMMY_TARGET;
 
     public static Random random = new Random();
     
     @SubscribeEvent
-    public static void onSetAttackTarget(LivingSetAttackTargetEvent event){
+    public static void onSetAttackTarget(LivingChangeTargetEvent event){
         LivingEntity attacker = event.getEntityLiving();
-        World level = attacker.level;
-        LivingEntity target = event.getTarget();
-        if(attacker instanceof MobEntity && target instanceof MobEntity){
-            if(TeamableHelper.areTeammates((MobEntity) attacker, (MobEntity)target)){
+        Level level = attacker.level;
+        LivingEntity target = event.getNewTarget();
+        if(attacker instanceof Mob && target instanceof Mob){
+            if(AbilityHelper.isAlly(attacker, target)){
                 createDummyTarget(level);
-                if(attacker instanceof IAngerable)
+                if(attacker instanceof NeutralMob)
                 {
-                    ((IAngerable) attacker).setPersistentAngerTarget((UUID)null);
-                    ((IAngerable) attacker).setRemainingPersistentAngerTime(0);
+                    ((NeutralMob) attacker).setPersistentAngerTarget((UUID)null);
+                    ((NeutralMob) attacker).setRemainingPersistentAngerTime(0);
                 }
-                ((MobEntity) attacker).setTarget(DUMMY_TARGET);
+                ((Mob) attacker).setTarget(DUMMY_TARGET);
                 attacker.setLastHurtByMob(DUMMY_TARGET);
             }
         }
     }
 
-    private static void createDummyTarget(World level) {
+    private static void createDummyTarget(Level level) {
         if(DUMMY_TARGET == null){
             DUMMY_TARGET = EntityType.ARMOR_STAND.create(level);
             if (DUMMY_TARGET != null) {
-                DUMMY_TARGET.remove();
+                DUMMY_TARGET.remove(Entity.RemovalReason.DISCARDED);
             }
         }
-    }
-
-
-    @SubscribeEvent
-    public static void onAttachEntityCapabilities(AttachCapabilitiesEvent<Entity> event) {
-        if (isCloneableEntity(event.getObject())) {
-            event.addCapability(new ResourceLocation(DungeonsMobs.MODID, "cloneable"), new CloneableProvider());
-        }
-        if(event.getObject() instanceof MobEntity && ConvertibleHelper.convertsInWater(((MobEntity) event.getObject()))){
-            event.addCapability(new ResourceLocation(DungeonsMobs.MODID, "convertible"), new ConvertibleProvider());
-        }
-        if(event.getObject() instanceof MobEntity){
-            event.addCapability(new ResourceLocation(MODID, "teammable"), new TeamableProvider());
-        }
-        if (event.getObject() instanceof LivingEntity) {
-            event.addCapability(new ResourceLocation(DungeonsMobs.MODID, "dungeons_mobs_mob_props"), new MobPropsProvider());
-        }
-        if (event.getObject() instanceof LivingEntity) {
-            event.addCapability(new ResourceLocation(DungeonsMobs.MODID, "ancient"), new AncientProvider());
-        }
-    }
-
-    private static boolean isCloneableEntity(Entity object) {
-        if(object instanceof DungeonsIllusionerEntity){
-            return true;
-        }
-        return false;
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -136,12 +92,12 @@ public class MobEvents {
 //            CreatureEntity creatureEntity = (CreatureEntity) event.getEntity();
 //            creatureEntity.goalSelector.addGoal(3, new AvoidEntityGoal<>(creatureEntity, VineEntity.class, 8.0F, 0.6D, 1.0D));
 //        }
-        if(event.getEntity() instanceof DrownedEntity){
-            DrownedEntity drownedEntity = (DrownedEntity) event.getEntity();
+        if(event.getEntity() instanceof Drowned){
+            Drowned drownedEntity = (Drowned) event.getEntity();
             ((GoalSelectorAccessor)drownedEntity.goalSelector).getAvailableGoals().removeIf(pg -> pg.getPriority() == 2 && pg.getGoal() instanceof RangedAttackGoal);
             drownedEntity.goalSelector.addGoal(2, new SmartTridentAttackGoal(drownedEntity, 1.0D, 40, 10.0F));
         }
-        if(event.getEntity() instanceof TridentEntity){
+        if(event.getEntity() instanceof ThrownTrident){
             ((IHasItemStackData)event.getEntity()).setDataItem(((TridentEntityAccessor) event.getEntity()).getTridentItem());
         }
     }
@@ -149,10 +105,10 @@ public class MobEvents {
     @SubscribeEvent
     public static void onLivingUpdate(LivingEvent.LivingUpdateEvent event){
         LivingEntity livingEntity = event.getEntityLiving();
-        if(livingEntity instanceof MobEntity && ConvertibleHelper.convertsInWater((MobEntity)livingEntity)){
-            MobEntity mob = (MobEntity) livingEntity;
+        if(livingEntity instanceof Mob && ConvertibleHelper.convertsInWater((Mob)livingEntity)){
+            Mob mob = (Mob) livingEntity;
             if (!mob.level.isClientSide && mob.isAlive() && !mob.isNoAi()) {
-                IConvertible convertibleCap = ConvertibleHelper.getConvertibleCapability(mob);
+                Convertible convertibleCap = ConvertibleHelper.getConvertibleCapability(mob);
                 if(convertibleCap == null) return;
 
                 convertibleCap.setCanConvert(mob.isEyeInFluid(FluidTags.WATER));
@@ -160,7 +116,7 @@ public class MobEvents {
                 if (convertibleCap.isConverting()) {
                     convertibleCap.tickConversionTime();
 
-                    EntityType<? extends MobEntity> convertToType = ConvertibleHelper.getDrowningConvertTo(mob);
+                    EntityType<? extends Mob> convertToType = ConvertibleHelper.getDrowningConvertTo(mob);
 
                     if (convertibleCap.getConversionTime() < 0 && net.minecraftforge.event.ForgeEventFactory.canLivingConvert(mob, convertToType, convertibleCap::setConversionTime)) {
                         convertibleCap.doConversion(mob, convertToType, ConvertibleHelper::onDrownedAndConvertedTo);
@@ -181,16 +137,16 @@ public class MobEvents {
 
     @SubscribeEvent
     public static void onSnowballHitPlayer(ProjectileImpactEvent event){
-        if(event.getEntity() instanceof SnowballEntity){
-            SnowballEntity snowballEntity = (SnowballEntity)event.getEntity();
+        if(event.getEntity() instanceof Snowball){
+            Snowball snowballEntity = (Snowball)event.getEntity();
             Entity shooter = snowballEntity.getOwner();
             if(shooter instanceof FrozenZombieEntity){
             	snowballEntity.playSound(ModSoundEvents.FROZEN_ZOMBIE_SNOWBALL_LAND.get(), 1.0F, 1.0F);
-                RayTraceResult rayTraceResult = event.getRayTraceResult();
-                if(rayTraceResult instanceof EntityRayTraceResult){
-                    EntityRayTraceResult entityRayTraceResult = (EntityRayTraceResult)rayTraceResult;
-                    if(entityRayTraceResult.getEntity() instanceof PlayerEntity){
-                        PlayerEntity playerEntity = (PlayerEntity) entityRayTraceResult.getEntity();
+                HitResult rayTraceResult = event.getRayTraceResult();
+                if(rayTraceResult instanceof EntityHitResult){
+                    EntityHitResult entityRayTraceResult = (EntityHitResult)rayTraceResult;
+                    if(entityRayTraceResult.getEntity() instanceof Player){
+                        Player playerEntity = (Player) entityRayTraceResult.getEntity();
                         playerEntity.hurt(DamageSource.thrown(snowballEntity, shooter), 2.0F);
                             int i = 0;
                             if (event.getEntity().level.getDifficulty() == Difficulty.NORMAL) {
@@ -200,7 +156,7 @@ public class MobEvents {
                             }
 
                             if (i > 0) {
-                                ((LivingEntity)playerEntity).addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, i * 20, 1));
+                                ((LivingEntity)playerEntity).addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, i * 20, 1));
                             }
                     }
                 }
@@ -211,9 +167,9 @@ public class MobEvents {
 
     @SubscribeEvent
     public static void onSnowballDamageMob(LivingHurtEvent event){
-        if(event.getSource().getDirectEntity() instanceof SnowballEntity){
+        if(event.getSource().getDirectEntity() instanceof Snowball){
             if(event.getSource().getEntity() instanceof FrozenZombieEntity){
-                if(!(event.getEntityLiving() instanceof PlayerEntity)){
+                if(!(event.getEntityLiving() instanceof Player)){
                     event.setAmount(event.getAmount() + 2.0F);
                         int i = 0;
                         if (event.getEntityLiving().level.getDifficulty() == Difficulty.NORMAL) {
@@ -223,7 +179,7 @@ public class MobEvents {
                         }
 
                         if (i > 0) {
-                            event.getEntityLiving().addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, i * 20, 1));
+                            event.getEntityLiving().addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, i * 20, 1));
                         }
                 }
             }
@@ -232,13 +188,13 @@ public class MobEvents {
     
     @SubscribeEvent
     public static void onIllusionerCloneArrowHit(ProjectileImpactEvent event){
-        if(event.getEntity() instanceof AbstractArrowEntity){
-        	AbstractArrowEntity arrowEntity = (AbstractArrowEntity)event.getEntity();
+        if(event.getEntity() instanceof AbstractArrow){
+        	AbstractArrow arrowEntity = (AbstractArrow)event.getEntity();
             Entity shooter = arrowEntity.getOwner();
             if(shooter instanceof IllusionerCloneEntity){
             	arrowEntity.playSound(ModSoundEvents.ILLUSIONER_CLONE_ARROW_HIT.get(), 1.0F, 1.0F);   
             	if (!arrowEntity.level.isClientSide) {
-            		arrowEntity.remove();
+            		arrowEntity.remove(Entity.RemovalReason.DISCARDED);
             	} else {
             		for(int i = 0; i < 2; ++i) {
         	            double d0 = random.nextGaussian() * 0.02D;
@@ -255,7 +211,7 @@ public class MobEvents {
     public static void onIceCreeperExplosion(EntityMobGriefingEvent event){
         if(event.getEntity() instanceof IcyCreeperEntity){
             IcyCreeperEntity iceCreeperEntity = (IcyCreeperEntity)event.getEntity();
-            iceCreeperEntity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 600));
+            iceCreeperEntity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 600));
         }
     }
 
@@ -270,7 +226,7 @@ public class MobEvents {
             for(Entity entity : entityList){
                 if(entity instanceof LivingEntity){
                     LivingEntity livingEntity = (LivingEntity)entity;
-                    livingEntity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 600));
+                    livingEntity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 600));
                 }
             }
         }

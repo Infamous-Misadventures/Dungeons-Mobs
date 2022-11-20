@@ -1,7 +1,7 @@
 package com.infamous.dungeons_mobs.interfaces;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 
 public interface IHasItemStackData {
 
@@ -9,13 +9,13 @@ public interface IHasItemStackData {
 
     void setDataItem(ItemStack dataItem);
 
-    default void writeDataItem(CompoundNBT tag, String key){
+    default void writeDataItem(CompoundTag tag, String key){
         ItemStack itemStack = this.getDataItem();
         if (!itemStack.isEmpty()) {
-            tag.put(key, itemStack.save(new CompoundNBT()));
+            tag.put(key, itemStack.save(new CompoundTag()));
         }
     }
-    default void readDataItem(CompoundNBT tag, String key){
+    default void readDataItem(CompoundTag tag, String key){
         ItemStack itemstack = ItemStack.of(tag.getCompound(key));
         this.setDataItem(itemstack);
     }

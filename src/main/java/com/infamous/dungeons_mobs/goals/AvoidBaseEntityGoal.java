@@ -1,33 +1,33 @@
 package com.infamous.dungeons_mobs.goals;
 
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.util.DefaultRandomPos;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+
+import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.function.Predicate;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.PathNavigator;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.vector.Vector3d;
-
-import javax.annotation.Nullable;
 
 public class AvoidBaseEntityGoal<T extends Entity> extends Goal {
-   private final CreatureEntity hostCreature;
+   private final PathfinderMob hostCreature;
    private final double farSpeed;
    private final double nearSpeed;
    private T avoidTarget;
    private final float avoidDistance;
    private Path path;
-   private final PathNavigator navigation;
+   private final PathNavigation navigation;
    /** Class of entity this behavior seeks to avoid */
    private final Class<T> classToAvoid;
 
-   public AvoidBaseEntityGoal(CreatureEntity entityIn, Class<T> avoidClass, float distance, double farSpeedIn, double nearSpeedIn) {
+   public AvoidBaseEntityGoal(PathfinderMob entityIn, Class<T> avoidClass, float distance, double farSpeedIn, double nearSpeedIn) {
       this.hostCreature = entityIn;
       this.classToAvoid = avoidClass;
       this.avoidDistance = distance;
@@ -42,11 +42,11 @@ public class AvoidBaseEntityGoal<T extends Entity> extends Goal {
     * method as well.
     */
    public boolean canUse() {
-      this.avoidTarget = this.getNearestEntity(this.classToAvoid, this.hostCreature, this.hostCreature.getX(), this.hostCreature.getY(), this.hostCreature.getZ(), this.hostCreature.getBoundingBox().inflate((double)this.avoidDistance, 3.0D, (double)this.avoidDistance));
+      this.avoidTarget = this.getNearestEntity(this.classToAvoid, this.hostCreature, this.hostCreature.getX(), this.hostCreature.getY(), this.hostCreature.getZ(), this.hostCreature.getBoundingBox().inflate(this.avoidDistance, 3.0D, this.avoidDistance));
       if (this.avoidTarget == null) {
          return false;
       } else {
-         Vector3d vector3d = RandomPositionGenerator.getPosAvoid(this.hostCreature, 16, 7, this.avoidTarget.position());
+         Vec3 vector3d = DefaultRandomPos.getPosAway(this.hostCreature, 16, 7, this.avoidTarget.position());
          if (vector3d == null) {
             return false;
          } else if (this.avoidTarget.distanceToSqr(vector3d.x, vector3d.y, vector3d.z) < this.avoidTarget.distanceToSqr(this.hostCreature)) {
@@ -94,8 +94,8 @@ public class AvoidBaseEntityGoal<T extends Entity> extends Goal {
 
 
    @Nullable
-   private <T extends Entity> T getNearestEntity(Class<? extends T> entityClass, LivingEntity livingEntity, double xPos, double yPos, double zPos, AxisAlignedBB axisAlignedBB) {
-      return this.getClosestEntity(livingEntity.level.getLoadedEntitiesOfClass(entityClass, axisAlignedBB, (Predicate<? super T>)null), livingEntity, xPos, yPos, zPos);
+   private <T extends Entity> T getNearestEntity(Class<? extends T> entityClass, LivingEntity livingEntity, double xPos, double yPos, double zPos, AABB axisAlignedBB) {
+      return this.getClosestEntity(livingEntity.level.getEntitiesOfClass(entityClass, axisAlignedBB, null), livingEntity, xPos, yPos, zPos);
    }
 
 
@@ -131,7 +131,7 @@ public class AvoidBaseEntityGoal<T extends Entity> extends Goal {
                return false;
             }
 
-            return !(detector instanceof MobEntity) || ((MobEntity) detector).getSensing().canSee(target);
+            return !(detector instanceof Mob) || ((Mob) detector).getSensing().hasLineOfSight(target);
          }
 
          return true;

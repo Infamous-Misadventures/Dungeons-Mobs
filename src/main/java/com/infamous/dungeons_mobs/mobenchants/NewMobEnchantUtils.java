@@ -2,7 +2,7 @@ package com.infamous.dungeons_mobs.mobenchants;
 
 import com.baguchan.enchantwithmob.EnchantWithMob;
 import com.baguchan.enchantwithmob.mobenchant.MobEnchant;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 
 import java.util.function.Consumer;
 

@@ -1,16 +1,14 @@
 package com.infamous.dungeons_mobs.mobenchants;
 
 import com.baguchan.enchantwithmob.mobenchant.MobEnchant;
-import com.infamous.dungeons_mobs.DungeonsMobs;
-import com.infamous.dungeons_mobs.capabilities.properties.IMobProps;
+import com.infamous.dungeons_mobs.capabilities.properties.MobProps;
 import com.infamous.dungeons_mobs.capabilities.properties.MobPropsHelper;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
 import static com.infamous.dungeons_libraries.utils.AreaOfEffectHelper.applyToNearbyEntities;
 import static com.infamous.dungeons_libraries.utils.AreaOfEffectHelper.getCanApplyToEnemyPredicate;
@@ -18,7 +16,6 @@ import static com.infamous.dungeons_mobs.DungeonsMobs.PROXY;
 import static com.infamous.dungeons_mobs.mobenchants.NewMobEnchantUtils.executeIfPresentWithLevel;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchants.CHILLING;
 
-//@Mod.EventBusSubscriber(modid = DungeonsMobs.MODID)
 public class ChillingMobEnchant extends MobEnchant {
 
     public ChillingMobEnchant(Properties properties) {
@@ -30,7 +27,7 @@ public class ChillingMobEnchant extends MobEnchant {
         LivingEntity entity = (LivingEntity) event.getEntity();
 
         executeIfPresentWithLevel(entity, CHILLING.get(), (level) -> {
-            IMobProps comboCap = MobPropsHelper.getMobPropsCapability(entity);
+            MobProps comboCap = MobPropsHelper.getMobPropsCapability(entity);
             if(comboCap == null) return;
             int freezeNearbyTimer = comboCap.getFreezeNearbyTimer();
             if(freezeNearbyTimer <= 0){
@@ -50,8 +47,8 @@ public class ChillingMobEnchant extends MobEnchant {
     }
 
     private static void freezeEnemy(int amplifier, LivingEntity nearbyEntity, int durationInSeconds) {
-        EffectInstance slowness = new EffectInstance(Effects.MOVEMENT_SLOWDOWN, durationInSeconds * 20, amplifier);
-        EffectInstance fatigue = new EffectInstance(Effects.DIG_SLOWDOWN, durationInSeconds * 20, Math.max(0, amplifier * 2 - 1));
+        MobEffectInstance slowness = new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, durationInSeconds * 20, amplifier);
+        MobEffectInstance fatigue = new MobEffectInstance(MobEffects.DIG_SLOWDOWN, durationInSeconds * 20, Math.max(0, amplifier * 2 - 1));
         nearbyEntity.addEffect(slowness);
         nearbyEntity.addEffect(fatigue);
         PROXY.spawnParticles(nearbyEntity, ParticleTypes.ITEM_SNOWBALL);

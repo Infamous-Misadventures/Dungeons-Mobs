@@ -2,34 +2,34 @@ package com.infamous.dungeons_mobs.client.renderer.redstone;
 
 import com.infamous.dungeons_mobs.client.models.redstone.RedstoneCubeModel;
 import com.infamous.dungeons_mobs.entities.redstone.RedstoneCubeEntity;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
+import static com.infamous.dungeons_mobs.client.models.geom.ModModelLayers.REDSTONE_CUBE;
 
 @OnlyIn(Dist.CLIENT)
 public class RedstoneCubeRenderer extends MobRenderer<RedstoneCubeEntity, RedstoneCubeModel<RedstoneCubeEntity>> {
    private static final ResourceLocation REDSTONE_CUBE_TEXTURE = new ResourceLocation(MODID, "textures/entity/redstone/redstone_cube.png");
 
-   public RedstoneCubeRenderer(EntityRendererManager renderManagerIn) {
-      super(renderManagerIn, new RedstoneCubeModel<>(0), 0.25F);
+   public RedstoneCubeRenderer(EntityRendererProvider.Context renderContext) {
+      super(renderContext, new RedstoneCubeModel<>(renderContext.bakeLayer(REDSTONE_CUBE)), 0.25F);
    }
 
-   public void render(RedstoneCubeEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+   public void render(RedstoneCubeEntity entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
       this.shadowRadius = 0.5F;
       super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
    }
 
    @Override
-   protected void setupRotations(RedstoneCubeEntity redstoneCubeEntity, MatrixStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks) {
+   protected void setupRotations(RedstoneCubeEntity redstoneCubeEntity, PoseStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks) {
       super.setupRotations(redstoneCubeEntity, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
       if (redstoneCubeEntity.isRolling()) {
          float rotationPerTick = 360.0F / 20.0F;
@@ -38,15 +38,15 @@ public class RedstoneCubeRenderer extends MobRenderer<RedstoneCubeEntity, Redsto
       }
    }
 
-   private void rollCube(MatrixStack matrixStackIn, float rotationAmount) {
-      Vector3d offset = new Vector3d(0.0, 0.5, 0);
+   private void rollCube(PoseStack matrixStackIn, float rotationAmount) {
+      Vec3 offset = new Vec3(0.0, 0.5, 0);
       matrixStackIn.translate(offset.x, offset.y, offset.z);
       matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(rotationAmount)); // Forward roll
       matrixStackIn.translate(-offset.x, -offset.y, -offset.z);
    }
 
-   protected void scale(RedstoneCubeEntity redstoneCubeEntity, MatrixStack matrixStackIn, float partialTickTime) {
-      matrixStackIn.translate(0.0D, (double)0.001F, 0.0D);
+   protected void scale(RedstoneCubeEntity redstoneCubeEntity, PoseStack matrixStackIn, float partialTickTime) {
+      matrixStackIn.translate(0.0D, 0.001F, 0.0D);
       float sizeScaleFactor = 2.0F; // Big slimes have a size of 2
       //float f2 = MathHelper.lerp(partialTickTime, redstoneCubeEntity.prevSquishFactor, redstoneCubeEntity.squishFactor) / (sizeScaleFactor * 0.5F + 1.0F);
       //float f3 = 1.0F / (f2 + 1.0F);

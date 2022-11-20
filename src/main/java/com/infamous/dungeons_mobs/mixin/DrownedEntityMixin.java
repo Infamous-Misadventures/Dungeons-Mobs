@@ -1,25 +1,25 @@
 package com.infamous.dungeons_mobs.mixin;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.monster.DrownedEntity;
-import net.minecraft.entity.monster.ZombieEntity;
-import net.minecraft.entity.projectile.ProjectileHelper;
-import net.minecraft.entity.projectile.TridentEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.TridentItem;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.Drowned;
+import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.entity.projectile.ThrownTrident;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.TridentItem;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(DrownedEntity.class)
-public abstract class DrownedEntityMixin extends ZombieEntity {
+@Mixin(Drowned.class)
+public abstract class DrownedEntityMixin extends Zombie {
 
-    public DrownedEntityMixin(EntityType<? extends ZombieEntity> entityType, World world) {
+    public DrownedEntityMixin(EntityType<? extends Zombie> entityType, Level world) {
         super(entityType, world);
     }
 
@@ -39,9 +39,9 @@ public abstract class DrownedEntityMixin extends ZombieEntity {
     }
 
     @ModifyVariable(at = @At("STORE"), method = "performRangedAttack")
-    private TridentEntity createTrident(TridentEntity original){
-        Hand tridentHoldingHand = ProjectileHelper.getWeaponHoldingHand(this, item -> item instanceof TridentItem);
+    private ThrownTrident createTrident(ThrownTrident original){
+        InteractionHand tridentHoldingHand = ProjectileUtil.getWeaponHoldingHand(this, item -> item instanceof TridentItem);
         ItemStack tridentStack = this.getItemInHand(tridentHoldingHand);
-        return new TridentEntity(this.level, this, tridentStack);
+        return new ThrownTrident(this.level, this, tridentStack);
     }
 }

@@ -1,15 +1,27 @@
 package com.infamous.dungeons_mobs.capabilities.properties;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
 import net.minecraftforge.common.util.LazyOptional;
 
-import javax.annotation.Nullable;
+import static com.infamous.dungeons_mobs.capabilities.ModCapabilities.MOB_PROPS_CAPABILITY;
 
 public class MobPropsHelper {
 
-    public static IMobProps getMobPropsCapability(Entity entity)
+    public static LazyOptional<MobProps> getMobPropsCapabilityLazy(Entity entity)
     {
-        LazyOptional<IMobProps> lazyCap = entity.getCapability(MobPropsProvider.MOB_PROPS_CAPABILITY);
-        return lazyCap.orElse(new MobProps());
+        if(MOB_PROPS_CAPABILITY == null) {
+            return LazyOptional.empty();
+        }
+        LazyOptional<MobProps> lazyCap = entity.getCapability(MOB_PROPS_CAPABILITY);
+        return lazyCap;
+    }
+
+    public static MobProps getMobPropsCapability(Entity entity)
+    {
+        LazyOptional<MobProps> lazyCap = entity.getCapability(MOB_PROPS_CAPABILITY);
+        if (lazyCap.isPresent()) {
+            return lazyCap.orElseThrow(() -> new IllegalStateException("Couldn't get the MobProps capability from the Entity!"));
+        }
+        return null;
     }
 }

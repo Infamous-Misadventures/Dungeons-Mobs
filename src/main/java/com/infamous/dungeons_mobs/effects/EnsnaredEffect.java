@@ -1,12 +1,12 @@
 package com.infamous.dungeons_mobs.effects;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectType;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.entity.LivingEntity;
 
-public class EnsnaredEffect extends Effect {
+public class EnsnaredEffect extends MobEffect {
 	
-	   public EnsnaredEffect(EffectType typeIn, int liquidColourIn) {
+	   public EnsnaredEffect(MobEffectCategory typeIn, int liquidColourIn) {
 		   super(typeIn, liquidColourIn);
 	   }
 

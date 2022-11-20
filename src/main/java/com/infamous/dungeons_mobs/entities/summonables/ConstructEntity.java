@@ -1,32 +1,32 @@
 package com.infamous.dungeons_mobs.entities.summonables;
 
-import net.minecraft.entity.*;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
 
 @SuppressWarnings("EntityConstructor")
-public abstract class ConstructEntity extends CreatureEntity {
-    public static final DataParameter<Integer> LIFE_TICKS = EntityDataManager.defineId(ConstructEntity.class, DataSerializers.INT);
+public abstract class ConstructEntity extends PathfinderMob {
+    public static final EntityDataAccessor<Integer> LIFE_TICKS = SynchedEntityData.defineId(ConstructEntity.class, EntityDataSerializers.INT);
     public Direction directionToFace = null;
     private LivingEntity caster;
     private UUID casterUuid;
 
-    protected ConstructEntity(EntityType<? extends ConstructEntity> entityTypeIn, World worldIn) {
+    protected ConstructEntity(EntityType<? extends ConstructEntity> entityTypeIn, Level worldIn) {
         super(entityTypeIn, worldIn);
     }
 
-    protected ConstructEntity(EntityType<? extends ConstructEntity> entityTypeIn, World worldIn, double x, double y, double z, LivingEntity casterIn, int lifeTicksIn) {
+    protected ConstructEntity(EntityType<? extends ConstructEntity> entityTypeIn, Level worldIn, double x, double y, double z, LivingEntity casterIn, int lifeTicksIn) {
         this(entityTypeIn, worldIn);
         this.setLifeTicks(lifeTicksIn);
         this.setCaster(casterIn);
@@ -39,8 +39,8 @@ public abstract class ConstructEntity extends CreatureEntity {
 
     @Nullable
     public LivingEntity getCaster() {
-        if (this.caster == null && this.casterUuid != null && this.level instanceof ServerWorld) {
-            Entity entity = ((ServerWorld) this.level).getEntity(this.casterUuid);
+        if (this.caster == null && this.casterUuid != null && this.level instanceof ServerLevel) {
+            Entity entity = ((ServerLevel) this.level).getEntity(this.casterUuid);
             if (entity instanceof LivingEntity) {
                 this.caster = (LivingEntity) entity;
             }
@@ -60,7 +60,7 @@ public abstract class ConstructEntity extends CreatureEntity {
     }
 
     @Override
-    public void move(MoverType p_213315_1_, Vector3d p_213315_2_) {
+    public void move(MoverType p_213315_1_, Vec3 p_213315_2_) {
 
     }
 
@@ -104,7 +104,7 @@ public abstract class ConstructEntity extends CreatureEntity {
             rotationAmount = 180.0F;
         }
 
-        this.yRot = rotationAmount;
+        this.setYRot(rotationAmount);
     }
 
 
@@ -121,7 +121,7 @@ public abstract class ConstructEntity extends CreatureEntity {
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundNBT compound) {
+    public void readAdditionalSaveData(CompoundTag compound) {
         this.setLifeTicks(compound.getInt("LifeTicks"));
         if (compound.hasUUID("Owner")) {
             this.casterUuid = compound.getUUID("Owner");
@@ -131,7 +131,7 @@ public abstract class ConstructEntity extends CreatureEntity {
 
 
     @Override
-    public void addAdditionalSaveData(CompoundNBT compound) {
+    public void addAdditionalSaveData(CompoundTag compound) {
         compound.putInt("LifeTicks", this.getLifeTicks());
         if (this.casterUuid != null) {
             compound.putUUID("Owner", this.casterUuid);
@@ -156,7 +156,7 @@ public abstract class ConstructEntity extends CreatureEntity {
     }
 
     public void handleExpiration() {
-        this.remove();
+        this.remove(RemovalReason.DISCARDED);
     }
 
     /**
@@ -173,7 +173,7 @@ public abstract class ConstructEntity extends CreatureEntity {
             List<Entity> v = this.level.getEntities(this, this.getBoundingBox());
             for (Entity entity : v) {
                 if (entity != this && entity instanceof ConstructEntity) {
-                    this.remove();
+                    this.remove(RemovalReason.DISCARDED);
                     break;
                 }
             }

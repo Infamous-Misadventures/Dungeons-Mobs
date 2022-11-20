@@ -1,59 +1,42 @@
 package com.infamous.dungeons_mobs.entities.jungle;
 
-import java.util.EnumSet;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import com.infamous.dungeons_mobs.entities.summonables.KelpTrapEntity;
 import com.infamous.dungeons_mobs.entities.summonables.SimpleTrapEntity;
-import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
-import com.infamous.dungeons_mobs.goals.AquaticMoveHelperController;
-import com.infamous.dungeons_mobs.goals.GoToWaterGoal;
-import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
-import com.infamous.dungeons_mobs.goals.SwimUpGoal;
+import com.infamous.dungeons_mobs.goals.*;
 import com.infamous.dungeons_mobs.interfaces.IAquaticMob;
-import com.infamous.dungeons_mobs.interfaces.ITrapsTarget;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 import com.infamous.dungeons_mobs.tags.CustomTags;
 import com.infamous.dungeons_mobs.utils.GeomancyHelper;
 import com.infamous.dungeons_mobs.utils.PositionUtils;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityPredicate;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.AvoidEntityGoal;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.HurtByTargetGoal;
-import net.minecraft.entity.ai.goal.LookAtGoal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.ai.goal.RandomWalkingGoal;
-import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.monster.SpiderEntity;
-import net.minecraft.entity.passive.IronGolemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.ClimberPathNavigator;
-import net.minecraft.pathfinding.GroundPathNavigator;
-import net.minecraft.pathfinding.PathNavigator;
-import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.pathfinding.SwimmerPathNavigator;
+import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.navigation.WallClimberNavigation;
+import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -61,12 +44,18 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
-public class WhispererEntity extends MonsterEntity implements IAnimatable, IAquaticMob {
+import javax.annotation.Nullable;
+import java.util.EnumSet;
+
+import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
+
+public class WhispererEntity extends Monster implements IAnimatable, IAquaticMob {
 	
-	private static final DataParameter<Byte> DATA_FLAGS_ID = EntityDataManager.defineId(WhispererEntity.class, DataSerializers.BYTE);
+	private static final EntityDataAccessor<Byte> DATA_FLAGS_ID = SynchedEntityData.defineId(WhispererEntity.class, EntityDataSerializers.BYTE);
 	   
-	AnimationFactory factory = new AnimationFactory(this);
+	AnimationFactory factory = GeckoLibUtil.createFactory(this);
 	
 	public int summonQGVAnimationTick;
 	public int summonQGVAnimationLength = 40;
@@ -89,20 +78,20 @@ public class WhispererEntity extends MonsterEntity implements IAnimatable, IAqua
 	
 	public int underwaterAttackAnimationActionPoint = 16;
 	
-    protected final SwimmerPathNavigator waterNavigation;
-	protected final GroundPathNavigator groundNavigation;
-	protected final GroundPathNavigator climberNavigation;
+    protected final WaterBoundPathNavigation waterNavigation;
+	protected final GroundPathNavigation groundNavigation;
+	protected final GroundPathNavigation climberNavigation;
 	
-	public WhispererEntity(EntityType<? extends WhispererEntity> type, World world) {
+	public WhispererEntity(EntityType<? extends WhispererEntity> type, Level world) {
 		super(type, world);
 		this.maxUpStep = 1.0F;
 		if (this.isWavewhisperer()) {
 		    this.moveControl = new AquaticMoveHelperController<>(this);
-		    this.setPathfindingMalus(PathNodeType.WATER, 0.0F);
+		    this.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
 		}
-	    this.waterNavigation = new SwimmerPathNavigator(this, world);
-		this.groundNavigation = new GroundPathNavigator(this, world);
-		this.climberNavigation = new ClimberPathNavigator(this, world);
+	    this.waterNavigation = new WaterBoundPathNavigation(this, world);
+		this.groundNavigation = new GroundPathNavigation(this, world);
+		this.climberNavigation = new WallClimberNavigation(this, world);
 		if (!this.isWavewhisperer()) {
 			//this.setNavigation(this.climberNavigation);
 		}
@@ -119,21 +108,21 @@ public class WhispererEntity extends MonsterEntity implements IAnimatable, IAqua
 	}
 	
 	public void registerWhispererGoals() {
-		this.goalSelector.addGoal(0, new SwimGoal(this));
+		this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new WhispererEntity.BasicAttackGoal(this));
         this.goalSelector.addGoal(2, new WhispererEntity.GrappleGoal(this));
 		this.goalSelector.addGoal(3, new WhispererEntity.SummonPQVAttackGoal(this));
 		this.goalSelector.addGoal(4, new WhispererEntity.SummonQGVGoal(this));
-		this.goalSelector.addGoal(5, new AvoidEntityGoal<>(this, IronGolemEntity.class, 4.0F, 1.0D, 1.0D));
-		this.goalSelector.addGoal(5, new AvoidEntityGoal<>(this, PlayerEntity.class, 4.0F, 1.0D, 1.0D));
+		this.goalSelector.addGoal(5, new AvoidEntityGoal<>(this, IronGolem.class, 4.0F, 1.0D, 1.0D));
+		this.goalSelector.addGoal(5, new AvoidEntityGoal<>(this, Player.class, 4.0F, 1.0D, 1.0D));
 		this.goalSelector.addGoal(6, new ApproachTargetGoal(this, 7, 1.1D, true));
 		this.goalSelector.addGoal(7, new LookAtTargetGoal(this));
-		this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 0.8D));
-		this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
-		this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
+		this.goalSelector.addGoal(8, new RandomStrollGoal(this, 0.8D));
+		this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
+		this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 8.0F));
 		this.targetSelector.addGoal(0, new HurtByTargetGoal(this));
-		this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
-		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
+		this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true));
+		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));
 	}
 	
 	public boolean isSpellcasting() {
@@ -146,7 +135,7 @@ public class WhispererEntity extends MonsterEntity implements IAnimatable, IAqua
                 if (this.mob.isInWater()) {
                     return false;
                 } else {
-                    Vector3d vector3d = this.getWaterPos();
+                    Vec3 vector3d = this.getWaterPos();
                     if (vector3d == null) {
                         return false;
                     } else {
@@ -162,17 +151,17 @@ public class WhispererEntity extends MonsterEntity implements IAnimatable, IAqua
         this.goalSelector.addGoal(2, new WhispererEntity.GrappleGoal(this));
 		this.goalSelector.addGoal(3, new WhispererEntity.SummonPQVAttackGoal(this));
 		this.goalSelector.addGoal(4, new WhispererEntity.SummonQGVGoal(this));
-		this.goalSelector.addGoal(5, new AvoidEntityGoal<>(this, IronGolemEntity.class, 4.0F, 1.0D, 1.0D));
-		this.goalSelector.addGoal(5, new AvoidEntityGoal<>(this, PlayerEntity.class, 4.0F, 1.0D, 1.0D));
+		this.goalSelector.addGoal(5, new AvoidEntityGoal<>(this, IronGolem.class, 4.0F, 1.0D, 1.0D));
+		this.goalSelector.addGoal(5, new AvoidEntityGoal<>(this, Player.class, 4.0F, 1.0D, 1.0D));
 		this.goalSelector.addGoal(6, new ApproachTargetGoal(this, 7, 1.1D, true));
 		this.goalSelector.addGoal(7, new LookAtTargetGoal(this));
         this.goalSelector.addGoal(8, new SwimUpGoal<>(this, 1.2D, this.level.getSeaLevel()));
-		this.goalSelector.addGoal(9, new RandomWalkingGoal(this, 0.8D));
-		this.goalSelector.addGoal(10, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
-		this.goalSelector.addGoal(11, new LookAtGoal(this, MobEntity.class, 8.0F));
+		this.goalSelector.addGoal(9, new RandomStrollGoal(this, 0.8D));
+		this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
+		this.goalSelector.addGoal(11, new LookAtPlayerGoal(this, Mob.class, 8.0F));
 		this.targetSelector.addGoal(0, new HurtByTargetGoal(this));
-		this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
-		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
+		this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true));
+		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));
 	}
 
     protected void defineSynchedData() {
@@ -223,8 +212,8 @@ public class WhispererEntity extends MonsterEntity implements IAnimatable, IAqua
 		return this.isWavewhisperer() ? p_70682_1_ : super.decreaseAirSupply(p_70682_1_);
 	}
 	   
-	public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-		return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.3D).add(Attributes.ATTACK_DAMAGE, 6.0D)
+	public static AttributeSupplier.Builder setCustomAttributes() {
+		return Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.3D).add(Attributes.ATTACK_DAMAGE, 6.0D)
 				.add(Attributes.FOLLOW_RANGE, 17.5D).add(Attributes.MAX_HEALTH, 30.0D).add(Attributes.ARMOR, 5.0D).add(Attributes.KNOCKBACK_RESISTANCE, 0.25D);
 	}
 	
@@ -252,10 +241,10 @@ public class WhispererEntity extends MonsterEntity implements IAnimatable, IAqua
 	public void playSound(SoundEvent vocalSound, SoundEvent foleySound, float vocalVolume, float vocalPitch, float foleyVolume, float foleyPitch) {
 		if (!this.isSilent()) {
 			if (vocalSound != null) {
-	         this.level.playSound((PlayerEntity)null, this.getX(), this.getY(), this.getZ(), vocalSound, this.getSoundSource(), vocalVolume, vocalPitch);
+	         this.level.playSound((Player)null, this.getX(), this.getY(), this.getZ(), vocalSound, this.getSoundSource(), vocalVolume, vocalPitch);
 			}
 			if (foleySound != null) {
-	         this.level.playSound((PlayerEntity)null, this.getX(), this.getY(), this.getZ(), foleySound, this.getSoundSource(), foleyVolume, foleyPitch);
+	         this.level.playSound((Player)null, this.getX(), this.getY(), this.getZ(), foleySound, this.getSoundSource(), foleyVolume, foleyPitch);
 			}
 	    }
 	}
@@ -360,7 +349,7 @@ public class WhispererEntity extends MonsterEntity implements IAnimatable, IAqua
 	}
 	
 	@Override
-	public boolean causeFallDamage(float p_225503_1_, float p_225503_2_) {
+	public boolean causeFallDamage(float p_225503_1_, float p_225503_2_, DamageSource p_147189_) {
 		return false;
 	}
 
@@ -371,42 +360,42 @@ public class WhispererEntity extends MonsterEntity implements IAnimatable, IAqua
 
 	private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
 		if (this.attackAnimationTick > 0) {
-			if (this.fluidOnEyes == FluidTags.WATER && this.isWavewhisperer()) {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("wavewhisperer_attack", true));
+			if (this.isEyeInFluid(FluidTags.WATER) && this.isWavewhisperer()) {
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("wavewhisperer_attack", LOOP));
 			} else {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("whisperer_attack", true));
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("whisperer_attack", LOOP));
 			}
 		} else if (this.summonPQVAnimationTick > 0) {
-			if (this.fluidOnEyes == FluidTags.WATER && this.isWavewhisperer()) {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("wavewhisperer_summon_pa", true));
+			if (this.isEyeInFluid(FluidTags.WATER) && this.isWavewhisperer()) {
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("wavewhisperer_summon_pa", LOOP));
 			} else {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("whisperer_summon_pqv", true));
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("whisperer_summon_pqv", LOOP));
 			}
 		} else if (this.summonQGVAnimationTick > 0) {
-			if (this.fluidOnEyes == FluidTags.WATER && this.isWavewhisperer()) {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("wavewhisperer_summon_qgk", true));
+			if (this.isEyeInFluid(FluidTags.WATER) && this.isWavewhisperer()) {
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("wavewhisperer_summon_qgk", LOOP));
 			} else {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("whisperer_summon_qgv", true));
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("whisperer_summon_qgv", LOOP));
 			}
 		} else if (this.grappleAnimationTick > 0) {
-			if (this.fluidOnEyes == FluidTags.WATER && this.isWavewhisperer()) {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("wavewhisperer_grapple", true));
+			if (this.isEyeInFluid(FluidTags.WATER) && this.isWavewhisperer()) {
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("wavewhisperer_grapple", LOOP));
 			} else {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("whisperer_grapple", true));
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("whisperer_grapple", LOOP));
 			}
 		} else if (this.isClimbing()) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("whisperer_climb", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("whisperer_climb", LOOP));
 		} else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
-			if (this.fluidOnEyes == FluidTags.WATER && this.isWavewhisperer()) {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("wavewhisperer_swim", true));
+			if (this.isEyeInFluid(FluidTags.WATER) && this.isWavewhisperer()) {
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("wavewhisperer_swim", LOOP));
 			} else {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("whisperer_walk", true));
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("whisperer_walk", LOOP));
 			}
 		} else {
 			if (this.isInWater() && this.isWavewhisperer()) {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("wavewhisperer_idle", true));
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("wavewhisperer_idle", LOOP));
 			} else {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("whisperer_idle", true));
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("whisperer_idle", LOOP));
 			}
 		}
 		return PlayState.CONTINUE;
@@ -433,7 +422,7 @@ public class WhispererEntity extends MonsterEntity implements IAnimatable, IAqua
 	    }
 
 	    @Override
-	    public void travel(Vector3d travelVec) {
+	    public void travel(Vec3 travelVec) {
 	    	if (this.isWavewhisperer()) {
 	    		this.checkAquaticTravel(this, travelVec);
 	    	} else {
@@ -442,7 +431,7 @@ public class WhispererEntity extends MonsterEntity implements IAnimatable, IAqua
 	    }
 
 	    @Override
-	    public void normalTravel(Vector3d travelVec) {
+	    public void normalTravel(Vec3 travelVec) {
 	        super.travel(travelVec);
 	    }
 
@@ -461,17 +450,17 @@ public class WhispererEntity extends MonsterEntity implements IAnimatable, IAqua
 	    }
 
 	    @Override
-	    public void setNavigation(PathNavigator navigation) {
+	    public void setNavigation(PathNavigation navigation) {
 	        this.navigation = navigation;
 	    }
 
 	    @Override
-	    public GroundPathNavigator getGroundNavigation() {
+	    public GroundPathNavigation getGroundNavigation() {
 	        return this.groundNavigation;
 	    }
 
 	    @Override
-	    public SwimmerPathNavigator getWaterNavigation() {
+	    public WaterBoundPathNavigation getWaterNavigation() {
 	        return this.waterNavigation;
 	    }
 
@@ -481,7 +470,7 @@ public class WhispererEntity extends MonsterEntity implements IAnimatable, IAqua
 	    }
 	    
 	    @Override
-	    public <T extends MobEntity & IAquaticMob> boolean wantsToSwim(T aquaticMob) {
+	    public <T extends Mob & IAquaticMob> boolean wantsToSwim(T aquaticMob) {
 	    	return this.isWavewhisperer() ? this.getTarget() != null : false;
 	    }
 	    
@@ -519,7 +508,7 @@ public class WhispererEntity extends MonsterEntity implements IAnimatable, IAqua
 			public boolean canUse() {
 				target = mob.getTarget();
 				return target != null && mob.distanceTo(target) <= 3 && animationsUseable()
-						&& mob.canSee(target) && mob.canUseGoals() && mob.random.nextInt(20) == 0;
+						&& mob.hasLineOfSight(target) && mob.canUseGoals() && mob.random.nextInt(20) == 0;
 			}
 
 			@Override
@@ -585,7 +574,7 @@ public class WhispererEntity extends MonsterEntity implements IAnimatable, IAqua
 			public boolean canUse() {
 				target = mob.getTarget();
 				return target != null && mob.distanceTo(target) <= 15 && animationsUseable()
-						&& mob.canSee(target) && mob.canUseGoals() && mob.tickCount >= this.nextUseTime;
+						&& mob.hasLineOfSight(target) && mob.canUseGoals() && mob.tickCount >= this.nextUseTime;
 			}
 
 			@Override
@@ -655,7 +644,7 @@ public class WhispererEntity extends MonsterEntity implements IAnimatable, IAqua
 			public boolean canUse() {
 				target = mob.getTarget();
 				return target != null && mob.distanceTo(target) <= 12.5 && animationsUseable()
-						&& mob.canSee(target) && mob.canUseGoals() && mob.tickCount >= this.nextUseTime;
+						&& mob.hasLineOfSight(target) && mob.canUseGoals() && mob.tickCount >= this.nextUseTime;
 			}
 
 			@Override
@@ -725,7 +714,7 @@ public class WhispererEntity extends MonsterEntity implements IAnimatable, IAqua
 			public boolean canUse() {
 				target = mob.getTarget();
 				return target != null && mob.distanceTo(target) <= 15 && animationsUseable()
-						&& mob.canSee(target) && mob.canUseGoals() && mob.tickCount >= this.nextUseTime;
+						&& mob.hasLineOfSight(target) && mob.canUseGoals() && mob.tickCount >= this.nextUseTime;
 			}
 
 			@Override

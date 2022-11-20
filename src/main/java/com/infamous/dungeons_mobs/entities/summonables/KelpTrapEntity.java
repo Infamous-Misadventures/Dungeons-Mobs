@@ -1,24 +1,18 @@
 package com.infamous.dungeons_mobs.entities.summonables;
 
-import java.util.List;
-
-import com.infamous.dungeons_mobs.interfaces.ITrapsTarget;
 import com.infamous.dungeons_mobs.tags.CustomTags;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.projectile.ShulkerBulletEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.ParticleTypes;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -26,13 +20,18 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
+
+import java.util.List;
+
+import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
 public class KelpTrapEntity extends AbstractTrapEntity {
 		
-	private static final DataParameter<Boolean> PULLING = EntityDataManager.defineId(KelpTrapEntity.class,
-			DataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> PULLING = SynchedEntityData.defineId(KelpTrapEntity.class,
+			EntityDataSerializers.BOOLEAN);
 	
-	AnimationFactory factory = new AnimationFactory(this);
+	AnimationFactory factory = GeckoLibUtil.createFactory(this);
 	
 	public int ensnareAnimationTick;
 	public int ensnareAnimationLength = 5;
@@ -41,7 +40,7 @@ public class KelpTrapEntity extends AbstractTrapEntity {
 	
 	public int bubbleAudioInterval;
 	
-    public KelpTrapEntity(EntityType<? extends KelpTrapEntity> entityTypeIn, World worldIn) {
+    public KelpTrapEntity(EntityType<? extends KelpTrapEntity> entityTypeIn, Level worldIn) {
         super(entityTypeIn, worldIn);
     }
 
@@ -53,16 +52,16 @@ public class KelpTrapEntity extends AbstractTrapEntity {
 
     private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
     		if (this.ensnareAnimationTick > 0) {
-    			event.getController().setAnimation(new AnimationBuilder().addAnimation("kelp_trap_ensnare", true)); 
+    			event.getController().setAnimation(new AnimationBuilder().addAnimation("kelp_trap_ensnare", LOOP)); 
     		} else if (this.spawnAnimationTick > 0) {
-        		event.getController().setAnimation(new AnimationBuilder().addAnimation("kelp_trap_spawn", true)); 
+        		event.getController().setAnimation(new AnimationBuilder().addAnimation("kelp_trap_spawn", LOOP)); 
     		} else if (this.decayAnimationTick > 0) {
-    			event.getController().setAnimation(new AnimationBuilder().addAnimation("vine_trap_decay", true)); 
+    			event.getController().setAnimation(new AnimationBuilder().addAnimation("vine_trap_decay", LOOP)); 
     		} else {
     			if (this.isPulling()) {
-    				event.getController().setAnimation(new AnimationBuilder().addAnimation("kelp_trap_idle_pulling", true)); 
+    				event.getController().setAnimation(new AnimationBuilder().addAnimation("kelp_trap_idle_pulling", LOOP)); 
     			} else {
-    				event.getController().setAnimation(new AnimationBuilder().addAnimation("vine_trap_idle", true)); 
+    				event.getController().setAnimation(new AnimationBuilder().addAnimation("vine_trap_idle", LOOP)); 
     			}
     		}    
         return PlayState.CONTINUE;
@@ -94,12 +93,12 @@ public class KelpTrapEntity extends AbstractTrapEntity {
 	}
 
 	@Override
-	protected void readAdditionalSaveData(CompoundNBT p_70037_1_) {
+	protected void readAdditionalSaveData(CompoundTag p_70037_1_) {
 		this.setPulling(p_70037_1_.getBoolean("Pulling"));
 	}
 
 	@Override
-	protected void addAdditionalSaveData(CompoundNBT p_213281_1_) {
+	protected void addAdditionalSaveData(CompoundTag p_213281_1_) {
 		p_213281_1_.putBoolean("Pulling", this.isPulling());
 	}
 	
@@ -123,9 +122,9 @@ public class KelpTrapEntity extends AbstractTrapEntity {
 		
 		if (!this.level.isClientSide && this.isPulling()) {
 			List<Entity> list = this.level.getEntities(this,
-					this.getBoundingBox().inflate(0, this.waterBlocksAbove(), 0), null);
+					this.getBoundingBox().inflate(0, this.waterBlocksAbove(), 0), Entity::isAlive);
 			for (int i = 0; i < this.waterBlocksAbove(); i++) {
-				((ServerWorld)this.level).sendParticles(ParticleTypes.CURRENT_DOWN, this.getRandomX(0.25), this.getY() + i + 0.8D, this.getRandomZ(0.25) - 0.5D, 1, 0.0D, 0.0D, 0.0D, 0.0D);
+				((ServerLevel)this.level).sendParticles(ParticleTypes.CURRENT_DOWN, this.getRandomX(0.25), this.getY() + i + 0.8D, this.getRandomZ(0.25) - 0.5D, 1, 0.0D, 0.0D, 0.0D, 0.0D);
 			}
 			if (!list.isEmpty()) {
 				for (Entity entity : list) {
@@ -203,7 +202,7 @@ public class KelpTrapEntity extends AbstractTrapEntity {
     		}
     		
     		if (this.decayAnimationTick == 2) {
-    			this.remove();
+    			this.remove(RemovalReason.DISCARDED);
     		}
 		}
 	}	

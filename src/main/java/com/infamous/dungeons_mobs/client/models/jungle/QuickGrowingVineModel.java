@@ -2,8 +2,7 @@ package com.infamous.dungeons_mobs.client.models.jungle;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.entities.jungle.AbstractVineEntity;
-
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 public class QuickGrowingVineModel extends AbstractVineModel {
 	@Override

@@ -1,35 +1,35 @@
 package com.infamous.dungeons_mobs.entities.projectiles;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.AbstractFireballEntity;
-import net.minecraft.network.IPacket;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.Fireball;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.HitResult;
+import net.minecraftforge.network.NetworkHooks;
 
-public abstract class AbstractOrbEntity extends AbstractFireballEntity {
+public abstract class AbstractOrbEntity extends Fireball {
 
-    protected AbstractOrbEntity(EntityType<? extends AbstractOrbEntity> entityType, World world) {
+    protected AbstractOrbEntity(EntityType<? extends AbstractOrbEntity> entityType, Level world) {
         super(entityType, world);
     }
 
-    protected AbstractOrbEntity(EntityType<? extends AbstractOrbEntity> entityType, World worldIn, LivingEntity shooter, double accelX, double accelY, double accelZ) {
+    protected AbstractOrbEntity(EntityType<? extends AbstractOrbEntity> entityType, Level worldIn, LivingEntity shooter, double accelX, double accelY, double accelZ) {
         super(entityType, shooter, accelX, accelY, accelZ, worldIn);
     }
 
-    protected AbstractOrbEntity(EntityType<? extends AbstractOrbEntity> entityType, World worldIn, double x, double y, double z, double accelX, double accelY, double accelZ) {
+    protected AbstractOrbEntity(EntityType<? extends AbstractOrbEntity> entityType, Level worldIn, double x, double y, double z, double accelX, double accelY, double accelZ) {
         super(entityType, x, y, z, accelX, accelY, accelZ, worldIn);
     }
 
     /**
      * Called when this EntityFireball hits a block or entity.
      */
-    protected void onHit(RayTraceResult result) {
+    protected void onHit(HitResult result) {
         super.onHit(result);
         if (!this.level.isClientSide) {
-            this.remove();
+            this.remove(RemovalReason.DISCARDED);
         }
 
     }
@@ -49,7 +49,7 @@ public abstract class AbstractOrbEntity extends AbstractFireballEntity {
     }
 
     @Override
-    public IPacket<?> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 

@@ -1,40 +1,39 @@
 package com.infamous.dungeons_mobs.entities.undead;
 
+import com.infamous.dungeons_mobs.mod.ModSoundEvents;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
+
 import java.util.Random;
 
-import com.infamous.dungeons_mobs.mod.ModSoundEvents;
+public class JungleZombieEntity extends Zombie {
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.monster.ZombieEntity;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Difficulty;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
-
-public class JungleZombieEntity extends ZombieEntity {
-
-    public JungleZombieEntity(World worldIn) {
+    public JungleZombieEntity(Level worldIn) {
         super(worldIn);
     }
 
-    public JungleZombieEntity(EntityType<? extends JungleZombieEntity> p_i48549_1_, World p_i48549_2_) {
+    public JungleZombieEntity(EntityType<? extends JungleZombieEntity> p_i48549_1_, Level p_i48549_2_) {
         super(p_i48549_1_, p_i48549_2_);
     }
 
-    public static boolean canJungleZombieSpawn(EntityType<JungleZombieEntity> entityType, IServerWorld iWorld, SpawnReason spawnReason, BlockPos blockPos, Random rand) {
-        return checkMonsterSpawnRules(entityType, iWorld, spawnReason, blockPos, rand) && (spawnReason == SpawnReason.SPAWNER || iWorld.canSeeSky(blockPos));
+    public static boolean canJungleZombieSpawn(EntityType<JungleZombieEntity> entityType, ServerLevelAccessor iWorld, MobSpawnType spawnReason, BlockPos blockPos, Random rand) {
+        return checkMonsterSpawnRules(entityType, iWorld, spawnReason, blockPos, rand) && (spawnReason == MobSpawnType.SPAWNER || iWorld.canSeeSky(blockPos));
     }
 
-    public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return ZombieEntity.createAttributes();
+    public static AttributeSupplier.Builder setCustomAttributes() {
+        return Zombie.createAttributes();
     }
     
     protected boolean isSunSensitive() {
@@ -73,7 +72,7 @@ public class JungleZombieEntity extends ZombieEntity {
                 }
 
                 if (i > 0) {
-                    ((LivingEntity)targetEntity).addEffect(new EffectInstance(Effects.POISON, i * 20, 0));
+                    ((LivingEntity)targetEntity).addEffect(new MobEffectInstance(MobEffects.POISON, i * 20, 0));
                 }
             }
 

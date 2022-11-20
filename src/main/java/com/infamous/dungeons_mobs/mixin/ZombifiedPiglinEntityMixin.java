@@ -3,26 +3,26 @@ package com.infamous.dungeons_mobs.mixin;
 import com.infamous.dungeons_mobs.compat.DungeonsGearCompat;
 import com.infamous.dungeons_mobs.goals.SmartZombieAttackGoal;
 import com.infamous.dungeons_mobs.interfaces.ISmartCrossbowUser;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.GoalSelector;
-import net.minecraft.entity.ai.goal.RangedCrossbowAttackGoal;
-import net.minecraft.entity.ai.goal.ZombieAttackGoal;
-import net.minecraft.entity.monster.ZombieEntity;
-import net.minecraft.entity.monster.ZombifiedPiglinEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.CrossbowItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.ShootableItem;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.GoalSelector;
+import net.minecraft.world.entity.ai.goal.RangedCrossbowAttackGoal;
+import net.minecraft.world.entity.ai.goal.ZombieAttackGoal;
+import net.minecraft.world.entity.monster.CrossbowAttackMob;
+import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.monster.ZombifiedPiglin;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.CrossbowItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.ProjectileWeaponItem;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -31,19 +31,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import javax.annotation.Nullable;
 
-@Mixin(ZombifiedPiglinEntity.class)
-public abstract class ZombifiedPiglinEntityMixin extends ZombieEntity implements ISmartCrossbowUser, ICrossbowUser {
-    private static final DataParameter<Boolean> DATA_IS_CROSSBOW_USER = EntityDataManager.defineId(ZombifiedPiglinEntity.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> DATA_IS_CHARGING_CROSSBOW = EntityDataManager.defineId(ZombifiedPiglinEntity.class, DataSerializers.BOOLEAN);
+@Mixin(ZombifiedPiglin.class)
+public abstract class ZombifiedPiglinEntityMixin extends Zombie implements ISmartCrossbowUser, CrossbowAttackMob {
+    private static final EntityDataAccessor<Boolean> DATA_IS_CROSSBOW_USER = SynchedEntityData.defineId(ZombifiedPiglin.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> DATA_IS_CHARGING_CROSSBOW = SynchedEntityData.defineId(ZombifiedPiglin.class, EntityDataSerializers.BOOLEAN);
 
-    public ZombifiedPiglinEntityMixin(EntityType<? extends ZombieEntity> entityType, World world) {
+    public ZombifiedPiglinEntityMixin(EntityType<? extends Zombie> entityType, Level world) {
         super(entityType, world);
     }
 
-    @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ai/goal/GoalSelector;addGoal(ILnet/minecraft/entity/ai/goal/Goal;)V"), method = "addBehaviourGoals")
+    @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/goal/GoalSelector;addGoal(ILnet/minecraft/world/entity/ai/goal/Goal;)V"), method = "addBehaviourGoals")
     private void addCustomGoal(GoalSelector goalSelector, int priority, Goal originalGoal){
         if(goalSelector == this.goalSelector && priority == 2 && originalGoal instanceof ZombieAttackGoal){
-            goalSelector.addGoal(priority, (Goal)(Object)new SmartZombieAttackGoal(this, 1.0D, false));
+            goalSelector.addGoal(priority, (Goal) new SmartZombieAttackGoal(this, 1.0D, false));
             goalSelector.addGoal(priority, new RangedCrossbowAttackGoal<>(this, 1.0D, 8.0F));
         } else{
             goalSelector.addGoal(priority, originalGoal);
@@ -52,24 +52,24 @@ public abstract class ZombifiedPiglinEntityMixin extends ZombieEntity implements
 
     @Inject(at = @At("TAIL"), method = "populateDefaultEquipmentSlots", cancellable = true)
     private void spawnWeapon(DifficultyInstance p_180481_1_, CallbackInfo ci){
-        this.setItemSlot(EquipmentSlotType.MAINHAND, this.createSpawnWeapon());
+        this.setItemSlot(EquipmentSlot.MAINHAND, this.createSpawnWeapon());
     }
 
     @Inject(at = @At("TAIL"), method = "readAdditionalSaveData")
-    private void readAdditional(CompoundNBT compoundNBT, CallbackInfo ci){
+    private void readAdditional(CompoundTag compoundNBT, CallbackInfo ci){
         this.readCrossbowUserNBT(compoundNBT);
     }
 
     @Inject(at = @At("TAIL"), method = "addAdditionalSaveData")
-    private void writeAdditional(CompoundNBT compoundNBT, CallbackInfo ci){
+    private void writeAdditional(CompoundTag compoundNBT, CallbackInfo ci){
         this.writeCrossbowUserNBT(compoundNBT);
     }
 
     @Nullable
     @Override
-    public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance p_213386_2_, SpawnReason p_213386_3_, @Nullable ILivingEntityData p_213386_4_, @Nullable CompoundNBT p_213386_5_) {
-        ILivingEntityData spawnData = super.finalizeSpawn(p_213386_1_, p_213386_2_, p_213386_3_, p_213386_4_, p_213386_5_);
-        this.setCrossbowUser(this.isHolding(item -> item instanceof CrossbowItem));
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor p_213386_1_, DifficultyInstance p_213386_2_, MobSpawnType p_213386_3_, @Nullable SpawnGroupData p_213386_4_, @Nullable CompoundTag p_213386_5_) {
+        SpawnGroupData spawnData = super.finalizeSpawn(p_213386_1_, p_213386_2_, p_213386_3_, p_213386_4_, p_213386_5_);
+        this.setCrossbowUser(this.isHolding(itemStack -> itemStack.getItem() instanceof CrossbowItem));
         return spawnData;
     }
 
@@ -81,7 +81,7 @@ public abstract class ZombifiedPiglinEntityMixin extends ZombieEntity implements
     }
 
     @Override
-    public boolean canFireProjectileWeapon(ShootableItem shootableItem) {
+    public boolean canFireProjectileWeapon(ProjectileWeaponItem shootableItem) {
         return shootableItem instanceof CrossbowItem;
     }
 
@@ -113,7 +113,7 @@ public abstract class ZombifiedPiglinEntityMixin extends ZombieEntity implements
     }
 
     @Override
-    public void shootCrossbowProjectile(LivingEntity target, ItemStack weapon, ProjectileEntity projectile, float inaccuracy) {
+    public void shootCrossbowProjectile(LivingEntity target, ItemStack weapon, Projectile projectile, float inaccuracy) {
         this.shootCrossbowProjectile(this, target, projectile, inaccuracy, 1.6F);
     }
 

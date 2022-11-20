@@ -1,9 +1,7 @@
 package com.infamous.dungeons_mobs.interfaces;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-
-import net.minecraft.client.renderer.entity.model.IHasArm;
-import net.minecraft.util.HandSide;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib3.core.processor.IBone;
@@ -11,9 +9,9 @@ import software.bernie.geckolib3.core.processor.IBone;
 @OnlyIn(Dist.CLIENT)
 public interface IHasGeoArm {
 	
-	IBone getArm(HandSide p_191216_1_);
+	IBone getArm(HumanoidArm p_191216_1_);
 	
-	void translateToHand(HandSide p_225599_1_, MatrixStack p_225599_2_);
+	void translateToHand(HumanoidArm p_225599_1_, PoseStack p_225599_2_);
 	
-	void translateAndRotate(IBone bone, MatrixStack p_228307_1_);
+	void translateAndRotate(IBone bone, PoseStack p_228307_1_);
 }

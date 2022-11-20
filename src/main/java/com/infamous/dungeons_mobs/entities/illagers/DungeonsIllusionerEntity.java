@@ -1,10 +1,5 @@
 package com.infamous.dungeons_mobs.entities.illagers;
 
-import java.util.EnumSet;
-import java.util.function.Predicate;
-
-import javax.annotation.Nullable;
-
 import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
 import com.infamous.dungeons_libraries.items.gearconfig.ArmorSet;
 import com.infamous.dungeons_mobs.entities.summonables.SummonSpotEntity;
@@ -15,51 +10,41 @@ import com.infamous.dungeons_mobs.mod.ModItems;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 import com.infamous.dungeons_mobs.utils.ModProjectileHelper;
 import com.infamous.dungeons_mobs.utils.PositionUtils;
-
-import net.minecraft.command.arguments.EntityAnchorArgument;
-import net.minecraft.entity.AreaEffectCloudEntity;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.IAngerable;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.HurtByTargetGoal;
-import net.minecraft.entity.ai.goal.LookAtGoal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.ai.goal.RandomWalkingGoal;
-import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
-import net.minecraft.entity.monster.AbstractIllagerEntity;
-import net.minecraft.entity.monster.AbstractRaiderEntity;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.passive.IronGolemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.FireworkRocketEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.monster.AbstractIllager;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.FireworkRocketEntity;
+import net.minecraft.world.entity.raid.Raider;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -69,10 +54,16 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
+
+import javax.annotation.Nullable;
+import java.util.EnumSet;
+import java.util.function.Predicate;
 
 import static com.infamous.dungeons_mobs.entities.SpawnArmoredHelper.equipArmorSet;
+import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
-public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements IAnimatable, SpawnArmoredMob {
+public class DungeonsIllusionerEntity extends AbstractIllager implements IAnimatable, SpawnArmoredMob {
 
 	public int shootAnimationTick;
 	public int shootAnimationLength = 35;
@@ -90,35 +81,35 @@ public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements I
 
 	public int appearDelay = 0;
 
-	AnimationFactory factory = new AnimationFactory(this);
+	AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
-	public DungeonsIllusionerEntity(World world) {
+	public DungeonsIllusionerEntity(Level world) {
 		super(ModEntityTypes.ILLUSIONER.get(), world);
 	}
 
-	public DungeonsIllusionerEntity(EntityType<? extends DungeonsIllusionerEntity> type, World world) {
+	public DungeonsIllusionerEntity(EntityType<? extends DungeonsIllusionerEntity> type, Level world) {
 		super(type, world);
 	}
 
 	protected void registerGoals() {
 		super.registerGoals();
-		this.goalSelector.addGoal(0, new SwimGoal(this));
+		this.goalSelector.addGoal(0, new FloatGoal(this));
 		this.goalSelector.addGoal(0, new DungeonsIllusionerEntity.RemainStationaryGoal());
 		this.goalSelector.addGoal(1, new DungeonsIllusionerEntity.CreateIllusionsGoal(this));
 		this.goalSelector.addGoal(2, new DungeonsIllusionerEntity.BlindAttackGoal(this));
 		this.goalSelector.addGoal(3, new DungeonsIllusionerEntity.ShootAttackGoal(this));
 		this.goalSelector.addGoal(4, new ApproachTargetGoal(this, 7.5, 1.0D, true));
 		this.goalSelector.addGoal(5, new LookAtTargetGoal(this));
-		this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 1.0D));
-		this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
-		this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
-		this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, AbstractRaiderEntity.class)).setAlertOthers());
+		this.goalSelector.addGoal(8, new RandomStrollGoal(this, 1.0D));
+		this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
+		this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 8.0F));
+		this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, Raider.class)).setAlertOthers());
 		this.targetSelector.addGoal(2,
-				(new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true)).setUnseenMemoryTicks(600));
-		this.targetSelector.addGoal(4, (new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, false))
+				(new NearestAttackableTargetGoal<>(this, Player.class, true)).setUnseenMemoryTicks(600));
+		this.targetSelector.addGoal(4, (new NearestAttackableTargetGoal<>(this, AbstractVillager.class, false))
 				.setUnseenMemoryTicks(600));
 		this.targetSelector.addGoal(3,
-				new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, false).setUnseenMemoryTicks(600));
+				new NearestAttackableTargetGoal<>(this, IronGolem.class, false).setUnseenMemoryTicks(600));
 	}
 
 	public boolean shouldBeStationary() {
@@ -130,8 +121,8 @@ public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements I
 		return true;
 	}
 
-	public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-		return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.3D)
+	public static AttributeSupplier.Builder setCustomAttributes() {
+		return Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.3D)
 				.add(Attributes.FOLLOW_RANGE, 25.0D).add(Attributes.MAX_HEALTH, 50.0D);
 	}
 
@@ -197,24 +188,24 @@ public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements I
 
 	private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
 		String suffix = "_uncrossed";
-		if(IllagerArmsUtil.armorHasCrossedArms(this, this.getItemBySlot(EquipmentSlotType.CHEST))){
+		if(IllagerArmsUtil.armorHasCrossedArms(this, this.getItemBySlot(EquipmentSlot.CHEST))){
 			suffix = "";
 		}
 		if (this.appearAnimationTick > 0) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_appear"+suffix, true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_appear"+suffix, LOOP));
 		} else if (this.vanishAnimationTick > 0) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_vanish"+suffix, true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_vanish"+suffix, LOOP));
 		} else if (this.shootAnimationTick > 0) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_shoot"+suffix, true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_shoot"+suffix, LOOP));
 		} else if (this.blindAnimationTick > 0) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_blind"+suffix, true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_blind"+suffix, LOOP));
 		} else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_walk"+suffix, true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_walk"+suffix, LOOP));
 		} else {
 			if (this.isCelebrating()) {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_celebrate", true));
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_celebrate", LOOP));
 			} else {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_idle"+suffix, true));
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_idle"+suffix, LOOP));
 			}
 		}
 		return PlayState.CONTINUE;
@@ -233,17 +224,17 @@ public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements I
 			Item SHORTBOW = ForgeRegistries.ITEMS.getValue(new ResourceLocation("dungeons_gear", "shortbow"));
 
 			ItemStack shortbow = new ItemStack(SHORTBOW);
-			this.setItemSlot(EquipmentSlotType.MAINHAND, shortbow);
+			this.setItemSlot(EquipmentSlot.MAINHAND, shortbow);
 		} else {
-			this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.BOW));
+			this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
 		}
 	}
 
 	@Nullable
 	@Override
-	public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance p_213386_2_,
-			SpawnReason p_213386_3_, @Nullable ILivingEntityData p_213386_4_, @Nullable CompoundNBT p_213386_5_) {
-		ILivingEntityData iLivingEntityData = super.finalizeSpawn(p_213386_1_, p_213386_2_, p_213386_3_, p_213386_4_,
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor p_213386_1_, DifficultyInstance p_213386_2_,
+			MobSpawnType p_213386_3_, @Nullable SpawnGroupData p_213386_4_, @Nullable CompoundTag p_213386_5_) {
+		SpawnGroupData iLivingEntityData = super.finalizeSpawn(p_213386_1_, p_213386_2_, p_213386_3_, p_213386_4_,
 				p_213386_5_);
 		this.populateDefaultEquipmentSlots(p_213386_2_);
 		this.populateDefaultEquipmentEnchantments(p_213386_2_);
@@ -257,7 +248,7 @@ public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements I
 		if (super.isAlliedTo(entityIn)) {
 			return true;
 		} else if (entityIn instanceof LivingEntity
-				&& ((LivingEntity) entityIn).getMobType() == CreatureAttribute.ILLAGER) {
+				&& ((LivingEntity) entityIn).getMobType() == MobType.ILLAGER) {
 			return this.getTeam() == null && entityIn.getTeam() == null;
 		} else {
 			return false;
@@ -312,13 +303,13 @@ public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements I
 		   }
 
 	   private void spawnBlindingCloud(BlockPos pos) {
-		         AreaEffectCloudEntity areaeffectcloudentity = new AreaEffectCloudEntity(this.level, pos.getX(), pos.getY(), pos.getZ());
+		         AreaEffectCloud areaeffectcloudentity = new AreaEffectCloud(this.level, pos.getX(), pos.getY(), pos.getZ());
 		         areaeffectcloudentity.setRadius(3.0F);
 		         areaeffectcloudentity.setRadiusOnUse(-0.5F);
 		         areaeffectcloudentity.setWaitTime(10);
 		         areaeffectcloudentity.setRadiusPerTick(-areaeffectcloudentity.getRadius() / (float)areaeffectcloudentity.getDuration());
 
-		         areaeffectcloudentity.addEffect(new EffectInstance(Effects.BLINDNESS, 100));
+		         areaeffectcloudentity.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 100));
 
 		         this.level.addFreshEntity(areaeffectcloudentity);
 
@@ -359,7 +350,7 @@ public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements I
 				this.cooldown --;
 			}
 
-			return target != null && mob.distanceTo(target) <= 12.5 && this.cooldown <= 0 && mob.canSee(target) && animationsUseable();
+			return target != null && mob.distanceTo(target) <= 12.5 && this.cooldown <= 0 && mob.hasLineOfSight(target) && animationsUseable();
 		}
 
 		@Override
@@ -430,7 +421,7 @@ public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements I
 				this.cooldown --;
 			}
 
-			return target != null && mob.random.nextInt(30) == 0 && mob.distanceTo(target) <= 10 && this.cooldown <= 0 && mob.canSee(target) && animationsUseable();
+			return target != null && mob.random.nextInt(30) == 0 && mob.distanceTo(target) <= 10 && this.cooldown <= 0 && mob.hasLineOfSight(target) && animationsUseable();
 		}
 
 		@Override
@@ -459,14 +450,14 @@ public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements I
 				mob.playSound(SoundEvents.ILLUSIONER_CAST_SPELL, 1.0F, 1.0F);
 	            mob.spawnBlindingCloud(target.blockPosition());
 
-				if (target instanceof MobEntity) {
-					((MobEntity)target).setTarget(null);
-					((MobEntity)target).setLastHurtByMob(null);
-					if (target instanceof IAngerable) {
-						((IAngerable)target).stopBeingAngry();
-						((IAngerable)target).setLastHurtByMob(null);
-						((IAngerable)target).setTarget(null);
-						((IAngerable)target).setPersistentAngerTarget(null);
+				if (target instanceof Mob) {
+					((Mob)target).setTarget(null);
+					((Mob)target).setLastHurtByMob(null);
+					if (target instanceof NeutralMob) {
+						((NeutralMob)target).stopBeingAngry();
+						((NeutralMob)target).setLastHurtByMob(null);
+						((NeutralMob)target).setTarget(null);
+						((NeutralMob)target).setPersistentAngerTarget(null);
 					}
 				}
 			}
@@ -517,7 +508,7 @@ public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements I
 			int nearbyClones = mob.level.getEntities(mob, mob.getBoundingBox().inflate(30.0D), ILLUSIONER_CLONE)
 					.size();
 
-			return target != null && mob.tickCount >= this.nextUseTime && mob.random.nextInt(10) == 0 && mob.canSee(target) && nearbyClones <= 0 && animationsUseable();
+			return target != null && mob.tickCount >= this.nextUseTime && mob.random.nextInt(10) == 0 && mob.hasLineOfSight(target) && nearbyClones <= 0 && animationsUseable();
 		}
 
 		@Override
@@ -545,26 +536,26 @@ public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements I
 			if (target != null && mob.vanishAnimationTick == 1) {
 				SummonSpotEntity summonSpot = ModEntityTypes.SUMMON_SPOT.get().create(mob.level);
 				summonSpot.moveTo(target.blockPosition().offset(-12.5 + mob.random.nextInt(25), 0, -12.5 + mob.random.nextInt(25)), 0.0F, 0.0F);
-				((ServerWorld)mob.level).addFreshEntityWithPassengers(summonSpot);
+				((ServerLevel)mob.level).addFreshEntityWithPassengers(summonSpot);
 				PositionUtils.moveToCorrectHeight(summonSpot);
 
 				mob.level.broadcastEntityEvent(mob, (byte) 7);
 				mob.moveTo(summonSpot.blockPosition(), 0.0F, 0.0F);
 				mob.setYBodyRot(mob.random.nextInt(360));
-				mob.lookAt(EntityAnchorArgument.Type.EYES, new Vector3d(mob.getX(), mob.getEyeY(), mob.getZ()));
+				mob.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(mob.getX(), mob.getEyeY(), mob.getZ()));
 				mob.appearDelay = 11;
 				mob.level.broadcastEntityEvent(mob, (byte) 6);
 				mob.playSound(SoundEvents.ILLUSIONER_MIRROR_MOVE, 1.0F, 1.0F);
 				PositionUtils.moveToCorrectHeight(mob);
 
-				if (target instanceof MobEntity) {
-					((MobEntity)target).setTarget(null);
-					((MobEntity)target).setLastHurtByMob(null);
-					if (target instanceof IAngerable) {
-						((IAngerable)target).stopBeingAngry();
-						((IAngerable)target).setLastHurtByMob(null);
-						((IAngerable)target).setTarget(null);
-						((IAngerable)target).setPersistentAngerTarget(null);
+				if (target instanceof Mob) {
+					((Mob)target).setTarget(null);
+					((Mob)target).setLastHurtByMob(null);
+					if (target instanceof NeutralMob) {
+						((NeutralMob)target).stopBeingAngry();
+						((NeutralMob)target).setLastHurtByMob(null);
+						((NeutralMob)target).setTarget(null);
+						((NeutralMob)target).setPersistentAngerTarget(null);
 					}
 				}
 
@@ -574,21 +565,21 @@ public class DungeonsIllusionerEntity extends AbstractIllagerEntity implements I
 					SummonSpotEntity cloneSummonSpot = ModEntityTypes.SUMMON_SPOT.get().create(mob.level);
 					cloneSummonSpot.moveTo(target.blockPosition().offset(-12.5 + mob.random.nextInt(25), 0, -12.5 + mob.random.nextInt(25)), 0.0F, 0.0F);
 					cloneSummonSpot.mobSpawnRotation = mob.random.nextInt(360);
-					((ServerWorld)mob.level).addFreshEntityWithPassengers(cloneSummonSpot);
+					((ServerLevel)mob.level).addFreshEntityWithPassengers(cloneSummonSpot);
 					PositionUtils.moveToCorrectHeight(cloneSummonSpot);
 
 					IllusionerCloneEntity clone = ModEntityTypes.ILLUSIONER_CLONE.get().create(mob.level);
-					clone.finalizeSpawn(((ServerWorld)mob.level), mob.level.getCurrentDifficultyAt(cloneSummonSpot.blockPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData)null, (CompoundNBT)null);
+					clone.finalizeSpawn(((ServerLevel)mob.level), mob.level.getCurrentDifficultyAt(cloneSummonSpot.blockPosition()), MobSpawnType.MOB_SUMMONED, (SpawnGroupData)null, (CompoundTag)null);
 					clone.setOwner(mob);
 					clone.setHealth(mob.getHealth());
-					for (EquipmentSlotType equipmentslottype : EquipmentSlotType.values()) {
+					for (EquipmentSlot equipmentslottype : EquipmentSlot.values()) {
 						ItemStack itemstack = mob.getItemBySlot(equipmentslottype);
 						if (!itemstack.isEmpty()) {
 							clone.setItemSlot(equipmentslottype, itemstack.copy());
 							clone.setDropChance(equipmentslottype, 0.0F);
 						}
 					}
-					clone.lookAt(EntityAnchorArgument.Type.EYES, new Vector3d(mob.getX(), mob.getEyeY(), mob.getZ()));
+					clone.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(mob.getX(), mob.getEyeY(), mob.getZ()));
 					clone.setDelayedAppear(true);
 					cloneSummonSpot.summonedEntity = clone;
 					cloneSummonSpot.playSound(SoundEvents.ILLUSIONER_MIRROR_MOVE, 1.0F, 1.0F);

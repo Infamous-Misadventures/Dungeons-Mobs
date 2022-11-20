@@ -1,39 +1,38 @@
 package com.infamous.dungeons_mobs.entities.creepers;
 
-import java.util.Collection;
-import java.util.Random;
-
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.AreaEffectCloud;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 
-import net.minecraft.entity.AreaEffectCloudEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.monster.CreeperEntity;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
+import java.util.Collection;
+import java.util.Random;
 
 
-public class IcyCreeperEntity extends CreeperEntity {
+public class IcyCreeperEntity extends Creeper {
 
 	   private int oldSwell;
 	   private int swell;
 	   private int maxSwell = 30;
 	   private int explosionRadius = 3;
 	   
-    public IcyCreeperEntity(World worldIn) {
+    public IcyCreeperEntity(Level worldIn) {
         super(ModEntityTypes.ICY_CREEPER.get(), worldIn);
     }
 
-    public static boolean canIcyCreeperSpawn(EntityType<IcyCreeperEntity> entityType, IServerWorld iWorld, SpawnReason spawnReason, BlockPos blockPos, Random rand) {
-        return checkMonsterSpawnRules(entityType, iWorld, spawnReason, blockPos, rand) && (spawnReason == SpawnReason.SPAWNER || iWorld.canSeeSky(blockPos));
+    public static boolean canIcyCreeperSpawn(EntityType<IcyCreeperEntity> entityType, ServerLevelAccessor iWorld, MobSpawnType spawnReason, BlockPos blockPos, Random rand) {
+        return checkMonsterSpawnRules(entityType, iWorld, spawnReason, blockPos, rand) && (spawnReason == MobSpawnType.SPAWNER || iWorld.canSeeSky(blockPos));
     }
 
     @Override
@@ -44,12 +43,12 @@ public class IcyCreeperEntity extends CreeperEntity {
         super.aiStep();
     }
 
-    public IcyCreeperEntity(EntityType<? extends CreeperEntity> type, World worldIn) {
+    public IcyCreeperEntity(EntityType<? extends Creeper> type, Level worldIn) {
         super(type, worldIn);
     }
 
-    public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
-        return CreeperEntity.createAttributes();
+    public static AttributeSupplier.Builder setCustomAttributes(){
+        return Creeper.createAttributes();
     }
     
     public void tick() {
@@ -80,12 +79,12 @@ public class IcyCreeperEntity extends CreeperEntity {
     
     private void explodeCreeper() {
         if (!this.level.isClientSide) {
-           Explosion.Mode explosion$mode = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this) ? Explosion.Mode.DESTROY : Explosion.Mode.NONE;
+           Explosion.BlockInteraction explosion$mode = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this) ? Explosion.BlockInteraction.DESTROY : Explosion.BlockInteraction.NONE;
            float f = this.isPowered() ? 2.0F : 1.0F;
            this.dead = true;
            this.level.explode(this, this.getX(), this.getY(), this.getZ(), (float)this.explosionRadius * f, explosion$mode);
            this.playSound(ModSoundEvents.ICY_CREEPER_EXPLODE.get(), 2.0F, 1.0F);
-           this.remove();
+           this.remove(RemovalReason.DISCARDED);
            this.spawnLingeringCloud();
         }
         
@@ -106,17 +105,17 @@ public class IcyCreeperEntity extends CreeperEntity {
      }
 
      private void spawnLingeringCloud() {
-        Collection<EffectInstance> collection = this.getActiveEffects();
+        Collection<MobEffectInstance> collection = this.getActiveEffects();
         if (!collection.isEmpty()) {
-           AreaEffectCloudEntity areaeffectcloudentity = new AreaEffectCloudEntity(this.level, this.getX(), this.getY(), this.getZ());
+           AreaEffectCloud areaeffectcloudentity = new AreaEffectCloud(this.level, this.getX(), this.getY(), this.getZ());
            areaeffectcloudentity.setRadius(2.5F);
            areaeffectcloudentity.setRadiusOnUse(-0.5F);
            areaeffectcloudentity.setWaitTime(10);
            areaeffectcloudentity.setDuration(areaeffectcloudentity.getDuration() / 2);
            areaeffectcloudentity.setRadiusPerTick(-areaeffectcloudentity.getRadius() / (float)areaeffectcloudentity.getDuration());
 
-           for(EffectInstance effectinstance : collection) {
-              areaeffectcloudentity.addEffect(new EffectInstance(effectinstance));
+           for(MobEffectInstance effectinstance : collection) {
+              areaeffectcloudentity.addEffect(new MobEffectInstance(effectinstance));
            }
 
            this.level.addFreshEntity(areaeffectcloudentity);

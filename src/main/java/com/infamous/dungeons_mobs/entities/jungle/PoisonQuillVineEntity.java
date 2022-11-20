@@ -1,35 +1,26 @@
 package com.infamous.dungeons_mobs.entities.jungle;
 
-import javax.annotation.Nullable;
-
 import com.infamous.dungeons_mobs.entities.projectiles.PoisonQuillEntity;
 import com.infamous.dungeons_mobs.entities.summonables.AreaDamageEntity;
 import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 import com.infamous.dungeons_mobs.utils.PositionUtils;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.controller.BodyController;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.HurtByTargetGoal;
-import net.minecraft.entity.ai.goal.LookAtGoal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.passive.IronGolemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.BodyRotationControl;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -37,10 +28,15 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
+
+import javax.annotation.Nullable;
+
+import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
 public class PoisonQuillVineEntity extends AbstractVineEntity {
 
-	AnimationFactory factory = new AnimationFactory(this);
+	AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
 	public int delayedBehaviourTime;
 	
@@ -50,7 +46,7 @@ public class PoisonQuillVineEntity extends AbstractVineEntity {
 	
 	public boolean open;
 	
-	public PoisonQuillVineEntity(EntityType<? extends PoisonQuillVineEntity> p_i50147_1_, World p_i50147_2_) {
+	public PoisonQuillVineEntity(EntityType<? extends PoisonQuillVineEntity> p_i50147_1_, Level p_i50147_2_) {
 		super(p_i50147_1_, p_i50147_2_);
 	}
 	
@@ -61,23 +57,23 @@ public class PoisonQuillVineEntity extends AbstractVineEntity {
 		this.goalSelector.addGoal(0, new PoisonQuillVineEntity.CloseGoal());
 		this.goalSelector.addGoal(1, new PoisonQuillVineEntity.ShootAttackGoal(this));
 		this.goalSelector.addGoal(6, new LookAtTargetGoal(this));
-		this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
-		this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
+		this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
+		this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 8.0F));
 		this.targetSelector.addGoal(0, new HurtByTargetGoal(this));
-		this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
-		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
+		this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true));
+		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));
 	}
 	
-	   protected float getStandingEyeHeight(Pose p_213348_1_, EntitySize p_213348_2_) {
+	   protected float getStandingEyeHeight(Pose p_213348_1_, EntityDimensions p_213348_2_) {
 		      return this.isOut() ? this.getBbHeight() - 0.75F : super.getStandingEyeHeight(p_213348_1_, p_213348_2_);
 		   }
 	
-	   protected BodyController createBodyControl() {
+	   protected BodyRotationControl createBodyControl() {
 		      return new PoisonQuillVineEntity.BodyHelperController(this);
 		   }
 	   
-	   class BodyHelperController extends BodyController {
-		      public BodyHelperController(MobEntity p_i50612_2_) {
+	   class BodyHelperController extends BodyRotationControl {
+		      public BodyHelperController(Mob p_i50612_2_) {
 		         super(p_i50612_2_);
 		      }
 
@@ -94,8 +90,8 @@ public class PoisonQuillVineEntity extends AbstractVineEntity {
 		   }
 
 
-	public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
-		return MonsterEntity.createMonsterAttributes()
+	public static AttributeSupplier.Builder setCustomAttributes(){
+		return Monster.createMonsterAttributes()
 				.add(Attributes.MAX_HEALTH, 25.0D)
 				.add(Attributes.FOLLOW_RANGE, 25.0D);
 	}
@@ -112,22 +108,22 @@ public class PoisonQuillVineEntity extends AbstractVineEntity {
 
 	private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
 		if (this.deathTime > 0) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("poison_quill_vine_retract", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("poison_quill_vine_retract", LOOP));
 		} else if (this.burstAnimationTick > 0) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("poison_quill_vine_burst", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("poison_quill_vine_burst", LOOP));
 		} else if (this.retractAnimationTick > 0) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("poison_quill_vine_retract", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("poison_quill_vine_retract", LOOP));
 		} else if (this.shootAnimationTick > 0) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("poison_quill_vine_shoot", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("poison_quill_vine_shoot", LOOP));
 		} else {
 			if (this.isOut() || this.burstAnimationTick > 0) {
 				if (this.open) {
-					event.getController().setAnimation(new AnimationBuilder().addAnimation("poison_quill_vine_idle_open", true));
+					event.getController().setAnimation(new AnimationBuilder().addAnimation("poison_quill_vine_idle_open", LOOP));
 				} else {
-					event.getController().setAnimation(new AnimationBuilder().addAnimation("poison_quill_vine_idle", true));
+					event.getController().setAnimation(new AnimationBuilder().addAnimation("poison_quill_vine_idle", LOOP));
 				}
 			} else {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("poison_quill_vine_idle_underground", true));
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("poison_quill_vine_idle_underground", LOOP));
 			}
 		}
 		return PlayState.CONTINUE;
@@ -221,7 +217,7 @@ public class PoisonQuillVineEntity extends AbstractVineEntity {
 	}
 	
     public int getLengthInSegments() {
-        return MathHelper.clamp(this.entityData.get(LENGTH), 2, 26);
+        return Mth.clamp(this.entityData.get(LENGTH), 2, 26);
     }
 
 	@Override
@@ -291,7 +287,7 @@ public class PoisonQuillVineEntity extends AbstractVineEntity {
 		float f = (float)(this.getX() - p_70032_1_.getX());
 		float f1 = (float)(this.getEyeY() - p_70032_1_.getY());
 		float f2 = (float)(this.getZ() - p_70032_1_.getZ());
-		return MathHelper.sqrt(f * f + f1 * f1 + f2 * f2);
+		return Mth.sqrt(f * f + f1 * f1 + f2 * f2);
 	}
     
 	class OpenGoal extends Goal {
@@ -358,7 +354,7 @@ public class PoisonQuillVineEntity extends AbstractVineEntity {
 		@Override
 		public boolean canUse() {
 			target = mob.getTarget();
-			return mob.open && mob.delayedBehaviourTime <= 0 && target != null && mob.distanceTo(target) <= 12.5 && mob.canSee(target) && animationsUseable();
+			return mob.open && mob.delayedBehaviourTime <= 0 && target != null && mob.distanceTo(target) <= 12.5 && mob.hasLineOfSight(target) && animationsUseable();
 		}
 
 		@Override
@@ -379,7 +375,7 @@ public class PoisonQuillVineEntity extends AbstractVineEntity {
 			this.mob.getNavigation().stop();
 
 			if (target != null && mob.shootAnimationTick == mob.shootAnimationActionPoint) {
-				Vector3d pos = PositionUtils.getOffsetPos(mob, 0, mob.getStandingEyeHeight(mob.getPose(), mob.getDimensions(mob.getPose())), 1.0, yHeadRot);
+				Vec3 pos = PositionUtils.getOffsetPos(mob, 0, mob.getStandingEyeHeight(mob.getPose(), mob.getDimensions(mob.getPose())), 1.0, yHeadRot);
 				double d1 = target.getX() - pos.x;
 				double d2 = target.getY(0.6D) - pos.y;
 				double d3 = target.getZ() - pos.z;

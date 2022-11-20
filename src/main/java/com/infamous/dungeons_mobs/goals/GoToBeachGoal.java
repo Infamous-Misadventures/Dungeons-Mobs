@@ -1,13 +1,12 @@
 package com.infamous.dungeons_mobs.goals;
 
 import com.infamous.dungeons_mobs.interfaces.IAquaticMob;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.goal.MoveToBlockGoal;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.goal.MoveToBlockGoal;
+import net.minecraft.world.level.LevelReader;
 
-public class GoToBeachGoal<T extends CreatureEntity & IAquaticMob> extends MoveToBlockGoal {
+public class GoToBeachGoal<T extends PathfinderMob & IAquaticMob> extends MoveToBlockGoal {
     private final T aquaticMob;
 
     public GoToBeachGoal(T p_i48911_1_, double p_i48911_2_) {
@@ -23,7 +22,7 @@ public class GoToBeachGoal<T extends CreatureEntity & IAquaticMob> extends MoveT
         return super.canContinueToUse();
     }
 
-    protected boolean isValidTarget(IWorldReader worldReader, BlockPos blockPos) {
+    protected boolean isValidTarget(LevelReader worldReader, BlockPos blockPos) {
         BlockPos blockpos = blockPos.above();
         return worldReader.isEmptyBlock(blockpos) && worldReader.isEmptyBlock(blockpos.above()) && worldReader.getBlockState(blockPos).entityCanStandOn(worldReader, blockPos, this.aquaticMob);
     }

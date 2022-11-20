@@ -1,12 +1,17 @@
 package com.infamous.dungeons_mobs.capabilities.ancient;
 
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.BossInfo;
-import net.minecraft.world.server.ServerBossInfo;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.server.level.ServerBossEvent;
+import net.minecraft.world.BossEvent;
+import net.minecraftforge.common.util.INBTSerializable;
 
-public class Ancient implements IAncient {
+import static com.infamous.dungeons_mobs.capabilities.ModCapabilities.ANCIENT_CAPABILITY;
+
+public class Ancient implements INBTSerializable<CompoundTag> {
     private boolean ancient = false;
-    private ServerBossInfo bossInfo = null;
+    private ServerBossEvent bossInfo = null;
 
 
     public boolean isAncient() {
@@ -17,12 +22,33 @@ public class Ancient implements IAncient {
         this.ancient = ancient;
     }
 
-    public boolean initiateBossBar(ITextComponent displayName) {
-        bossInfo = new ServerBossInfo(displayName, BossInfo.Color.YELLOW, BossInfo.Overlay.PROGRESS);
+    public boolean initiateBossBar(Component displayName) {
+        bossInfo = new ServerBossEvent(displayName, BossEvent.BossBarColor.YELLOW, BossEvent.BossBarOverlay.PROGRESS);
         return true;
     }
 
-    public ServerBossInfo getBossInfo() {
+    public ServerBossEvent getBossInfo() {
         return bossInfo;
+    }
+
+    @Override
+    public CompoundTag serializeNBT() {
+        if (ANCIENT_CAPABILITY == null) {
+            return new CompoundTag();
+        }
+        CompoundTag tag = new CompoundTag();
+        tag.putBoolean("ancient", this.isAncient());
+        if(this.getBossInfo() != null) {
+            tag.putString("displayName", this.getBossInfo().getName().getString());
+        }
+        return tag;
+    }
+
+    @Override
+    public void deserializeNBT(CompoundTag tag) {
+        this.setAncient(tag.getBoolean("ancient"));
+        if(tag.contains("displayName")) {
+            this.initiateBossBar(new TextComponent(tag.getString("displayName")));
+        }
     }
 }

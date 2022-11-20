@@ -1,20 +1,22 @@
 package com.infamous.dungeons_mobs.goals.switchcombat;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.*;
-import net.minecraft.util.Hand;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.item.EggItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ProjectileWeaponItem;
+import net.minecraft.world.item.SnowballItem;
 
 public class SwitchCombatItemGoal extends Goal
     {
-        private MobEntity hostMob;
+        private final Mob hostMob;
         private LivingEntity target;
-        private double minDistance;
-        private double maxDistance;
+        private final double minDistance;
+        private final double maxDistance;
 
-        public SwitchCombatItemGoal(MobEntity mobEntity, double minDistance, double maxDistance) {
+        public SwitchCombatItemGoal(Mob mobEntity, double minDistance, double maxDistance) {
             this.hostMob = mobEntity;
             this.minDistance = minDistance;
             this.maxDistance = maxDistance;
@@ -23,14 +25,14 @@ public class SwitchCombatItemGoal extends Goal
 
         private boolean hasRangedItemInMainhand()
         {
-            return this.hostMob.getMainHandItem().getItem() instanceof ShootableItem
+            return this.hostMob.getMainHandItem().getItem() instanceof ProjectileWeaponItem
                     || this.hostMob.getMainHandItem().getItem() instanceof SnowballItem
                     || this.hostMob.getMainHandItem().getItem() instanceof EggItem;
         }
 
         private boolean hasRangedItemInOffhand()
         {
-            return this.hostMob.getOffhandItem().getItem() instanceof ShootableItem
+            return this.hostMob.getOffhandItem().getItem() instanceof ProjectileWeaponItem
                     || this.hostMob.getOffhandItem().getItem() instanceof SnowballItem
                     || this.hostMob.getMainHandItem().getItem() instanceof EggItem;
         }
@@ -38,8 +40,8 @@ public class SwitchCombatItemGoal extends Goal
         private void swapWeapons(){
             ItemStack mainhand = this.hostMob.getMainHandItem();
             ItemStack offhand = this.hostMob.getOffhandItem();
-            this.hostMob.setItemSlot(EquipmentSlotType.OFFHAND, mainhand);
-            this.hostMob.setItemSlot(EquipmentSlotType.MAINHAND, offhand);
+            this.hostMob.setItemSlot(EquipmentSlot.OFFHAND, mainhand);
+            this.hostMob.setItemSlot(EquipmentSlot.MAINHAND, offhand);
         }
 
         /**
@@ -61,15 +63,10 @@ public class SwitchCombatItemGoal extends Goal
             {
                 // check if we are close to the target and have a ranged item in mainhand and do not have one in offhand,
                 // or if we are far from the target and we do not have a ranged item in our mainhand but do have one in our offhand
-                if((
+                return (
                         (this.hostMob.distanceTo(this.target) < minDistance && hasRangedItemInMainhand() && !hasRangedItemInOffhand())
-                            || (this.hostMob.distanceTo(this.target) > maxDistance && !hasRangedItemInMainhand()) && hasRangedItemInOffhand())
-                        && this.hostMob.canSee(this.target))
-                {
-                    return true;
-                }
-
-                return false;
+                                || (this.hostMob.distanceTo(this.target) > maxDistance && !hasRangedItemInMainhand()) && hasRangedItemInOffhand())
+                        && this.hostMob.hasLineOfSight(this.target);
             }
         }
 

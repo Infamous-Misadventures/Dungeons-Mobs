@@ -1,15 +1,15 @@
 package com.infamous.dungeons_mobs.goals;
 
 import com.infamous.dungeons_mobs.utils.ModProjectileHelper;
-import net.minecraft.entity.IRangedAttackMob;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.item.BowItem;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.RangedAttackMob;
+import net.minecraft.world.item.BowItem;
 
 import java.util.EnumSet;
 
-public class ModdedRangedBowAttackGoal<T extends MonsterEntity & IRangedAttackMob> extends Goal {
+public class ModdedRangedBowAttackGoal<T extends Monster & RangedAttackMob> extends Goal {
    private final T entity;
    private final double moveSpeedAmp;
    private int attackCooldown;
@@ -42,7 +42,7 @@ public class ModdedRangedBowAttackGoal<T extends MonsterEntity & IRangedAttackMo
 
 
     private boolean isBowInMainhand() {
-        return this.entity.isHolding(item -> item instanceof BowItem);
+        return this.entity.isHolding(itemStack -> itemStack.getItem() instanceof BowItem);
     }
 
    /**
@@ -78,7 +78,7 @@ public class ModdedRangedBowAttackGoal<T extends MonsterEntity & IRangedAttackMo
       LivingEntity livingentity = this.entity.getTarget();
       if (livingentity != null) {
          double d0 = this.entity.distanceToSqr(livingentity.getX(), livingentity.getY(), livingentity.getZ());
-         boolean flag = this.entity.getSensing().canSee(livingentity);
+         boolean flag = this.entity.getSensing().hasLineOfSight(livingentity);
          boolean flag1 = this.seeTime > 0;
          if (flag != flag1) {
             this.seeTime = 0;

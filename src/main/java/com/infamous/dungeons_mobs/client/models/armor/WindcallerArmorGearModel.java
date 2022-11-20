@@ -1,11 +1,11 @@
 package com.infamous.dungeons_mobs.client.models.armor;
 
-import com.infamous.dungeons_libraries.client.model.ArmorGearModel;
+import com.infamous.dungeons_libraries.client.renderer.gearconfig.ArmorGearModel;
 import com.infamous.dungeons_libraries.items.gearconfig.ArmorGear;
 import com.infamous.dungeons_mobs.entities.illagers.WindcallerEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.molang.MolangParser;
@@ -25,16 +25,12 @@ public class WindcallerArmorGearModel<T extends ArmorGear> extends ArmorGearMode
     }
     
     @Override
-    public void setLivingAnimations(T entity, Integer uniqueID, AnimationEvent customPredicate) {
-    	super.setLivingAnimations(entity, uniqueID, customPredicate);
+    public void setCustomAnimations(T entity, int uniqueID, AnimationEvent customPredicate) {
+    	super.setCustomAnimations(entity, uniqueID, customPredicate);
     	
         IBone cloak = this.getAnimationProcessor().getBone("armorCloak");
-        
-    	if (this.getWearer() != null && this.getWearer() instanceof WindcallerEntity) {
-    		cloak.setHidden(true);
-    	} else {
-    		cloak.setHidden(false);
-    	}
+
+        cloak.setHidden(this.getWearer() != null && this.getWearer() instanceof WindcallerEntity);
     }
 
     @Override
@@ -42,8 +38,8 @@ public class WindcallerArmorGearModel<T extends ArmorGear> extends ArmorGearMode
         super.setMolangQueries(animatable, currentTick);
 
         MolangParser parser = GeckoLibCache.getInstance().parser;
-        Vector3d velocity = wearer.getDeltaMovement();
-        float groundSpeed = MathHelper.sqrt((float) ((velocity.x * velocity.x) + (velocity.z * velocity.z)));
+        Vec3 velocity = wearer.getDeltaMovement();
+        float groundSpeed = Mth.sqrt((float) ((velocity.x * velocity.x) + (velocity.z * velocity.z)));
         parser.setValue("query.ground_speed", () -> groundSpeed * 13);
     }
 }

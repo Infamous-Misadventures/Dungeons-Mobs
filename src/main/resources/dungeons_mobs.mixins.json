@@ -1,8 +1,8 @@
 {
   "required": true,
   "package": "com.infamous.dungeons_mobs.mixin",
-  "compatibilityLevel": "JAVA_8",
-  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_17",
+  "minVersion": "0.8.4",
   "refmap": "dungeons_mobs.refmap.json",
   "mixins": [
     "AbstractArrowEntityMixin",
@@ -10,7 +10,6 @@
     "ArrowAccessor",
     "BrainAccessor",
     "CropsBlockMixin",
-    "DrownedEntityMixin",
     "GoalSelectorAccessor",
     "MansionTemplateMixin",
     "PiglinAccessor",
@@ -24,7 +23,6 @@
     "ZombifiedPiglinEntityMixin"
   ],
   "client": [
-    "BipedModelMixin",
     "DrownedModelMixin",
     "ItemRendererMixin",
     "PiglinModelMixin",

@@ -3,8 +3,8 @@ package com.infamous.dungeons_mobs.mod;
 import com.baguchan.enchantwithmob.mobenchant.MobEnchant;
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.mobenchants.*;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
 
 public class ModMobEnchants {
     public static final DeferredRegister<MobEnchant> MOB_ENCHANTS_DEFERRED = DeferredRegister.create(MobEnchant.class, DungeonsMobs.MODID);

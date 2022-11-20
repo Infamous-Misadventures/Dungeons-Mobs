@@ -1,17 +1,14 @@
 package com.infamous.dungeons_mobs.entities.summonables;
 
-import java.util.List;
-
 import com.infamous.dungeons_mobs.mod.ModDamageSources;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
@@ -20,15 +17,20 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
+
+import java.util.List;
+
+import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
 public class TridentStormEntity extends Entity implements IAnimatable, IAnimationTickable {
 
-	AnimationFactory factory = new AnimationFactory(this);
+	AnimationFactory factory = GeckoLibUtil.createFactory(this);
 	
 	public int lifeTime;
 	public Entity owner;
 	
-    public TridentStormEntity(EntityType<? extends TridentStormEntity> entityTypeIn, World worldIn) {
+    public TridentStormEntity(EntityType<? extends TridentStormEntity> entityTypeIn, Level worldIn) {
         super(entityTypeIn, worldIn);
     }
 
@@ -43,7 +45,7 @@ public class TridentStormEntity extends Entity implements IAnimatable, IAnimatio
 	}
 
     private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
-    	event.getController().setAnimation(new AnimationBuilder().addAnimation("trident_storm_strike", true));       
+    	event.getController().setAnimation(new AnimationBuilder().addAnimation("trident_storm_strike", LOOP));       
         return PlayState.CONTINUE;
     }
 
@@ -58,7 +60,7 @@ public class TridentStormEntity extends Entity implements IAnimatable, IAnimatio
     	
     	this.refreshDimensions();
     	
-			List<Entity> list = this.level.getEntities(this, this.getBoundingBox(), null);
+			List<Entity> list = this.level.getEntities(this, this.getBoundingBox(), Entity::isAlive);
 			if (!list.isEmpty() && !this.level.isClientSide) {
 				for (Entity entity : list) {
 					if(entity instanceof LivingEntity){
@@ -84,7 +86,7 @@ public class TridentStormEntity extends Entity implements IAnimatable, IAnimatio
     	}
     			
     	if (this.lifeTime >= 500 && !this.level.isClientSide) {
-    		this.remove();
+    		this.remove(RemovalReason.DISCARDED);
     	}
     }
 
@@ -94,17 +96,17 @@ public class TridentStormEntity extends Entity implements IAnimatable, IAnimatio
 	}
 
 	@Override
-	protected void readAdditionalSaveData(CompoundNBT p_70037_1_) {
+	protected void readAdditionalSaveData(CompoundTag p_70037_1_) {
 		
 	}
 
 	@Override
-	protected void addAdditionalSaveData(CompoundNBT p_213281_1_) {
+	protected void addAdditionalSaveData(CompoundTag p_213281_1_) {
 		
 	}
 
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 }

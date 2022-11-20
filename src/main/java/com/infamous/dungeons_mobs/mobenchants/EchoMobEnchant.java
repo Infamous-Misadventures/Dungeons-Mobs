@@ -1,19 +1,16 @@
 package com.infamous.dungeons_mobs.mobenchants;
 
 import com.baguchan.enchantwithmob.mobenchant.MobEnchant;
-import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.utils.EchoDamageSource;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.DamageSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
 import static com.infamous.dungeons_mobs.mobenchants.NewMobEnchantUtils.executeIfPresentWithLevel;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchants.ECHO;
 
-//@Mod.EventBusSubscriber(modid = DungeonsMobs.MODID)
 public class EchoMobEnchant extends MobEnchant {
 
     private static float ECHO_CHANCE = 0.25f;

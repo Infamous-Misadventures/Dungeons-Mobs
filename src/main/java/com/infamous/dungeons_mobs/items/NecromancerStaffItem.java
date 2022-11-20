@@ -2,7 +2,7 @@ package com.infamous.dungeons_mobs.items;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import com.infamous.dungeons_libraries.capabilities.minionmaster.IMaster;
+import com.infamous.dungeons_libraries.capabilities.minionmaster.Master;
 import com.infamous.dungeons_libraries.items.artifacts.ArtifactItem;
 import com.infamous.dungeons_libraries.items.artifacts.ArtifactUseContext;
 import com.infamous.dungeons_libraries.items.interfaces.ISoulConsumer;
@@ -12,19 +12,19 @@ import com.infamous.dungeons_libraries.utils.SoundHelper;
 import com.infamous.dungeons_mobs.interfaces.IHasInventorySprite;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 import com.infamous.dungeons_mobs.network.NetworkHandler;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.network.PacketDistributor;
 
 import java.util.List;
 import java.util.UUID;
@@ -39,13 +39,13 @@ public class NecromancerStaffItem extends ArtifactItem implements IHasInventoryS
         procOnItemUse=true;
     }
 
-    public ActionResult<ItemStack> procArtifact(ArtifactUseContext itemUseContext) {
-        World world = itemUseContext.getLevel();
+    public InteractionResultHolder<ItemStack> procArtifact(ArtifactUseContext itemUseContext) {
+        Level world = itemUseContext.getLevel();
         if (world.isClientSide || itemUseContext.isHitMiss()) {
-            return ActionResult.success(itemUseContext.getItemStack());
+            return InteractionResultHolder.success(itemUseContext.getItemStack());
         } else {
             ItemStack itemUseContextItem = itemUseContext.getItemStack();
-            PlayerEntity itemUseContextPlayer = itemUseContext.getPlayer();
+            Player itemUseContextPlayer = itemUseContext.getPlayer();
             BlockPos itemUseContextPos = itemUseContext.getClickedPos();
             Direction itemUseContextFace = itemUseContext.getClickedFace();
             BlockState blockState = world.getBlockState(itemUseContextPos);
@@ -58,7 +58,7 @@ public class NecromancerStaffItem extends ArtifactItem implements IHasInventoryS
             }
 
             if(itemUseContextPlayer != null){
-                IMaster summonerCap = getMasterCapability(itemUseContextPlayer);
+                Master summonerCap = getMasterCapability(itemUseContextPlayer);
                 if (summonerCap != null) {
                     Entity summoned = SummonHelper.summonEntity(itemUseContextPlayer, itemUseContextPlayer.blockPosition(), EntityType.ZOMBIE);
                     if(summoned != null) {
@@ -66,7 +66,7 @@ public class NecromancerStaffItem extends ArtifactItem implements IHasInventoryS
                         itemUseContextItem.hurtAndBreak(1, itemUseContextPlayer, (entity) -> NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), new BreakItemMessage(entity.getId(), itemUseContextItem)));
                         ArtifactItem.putArtifactOnCooldown(itemUseContextPlayer, itemUseContextItem.getItem());
                     } else{
-                        if(world instanceof ServerWorld) {
+                        if(world instanceof ServerLevel) {
                             List<Entity> zombieEntities = summonerCap.getSummonedMobs().stream().filter(entity -> entity.getType() == EntityType.ZOMBIE).collect(Collectors.toList());
                             zombieEntities.forEach(entity -> {
                                 entity.teleportToWithTicket((double) blockPos.getX() + 0.5D, (double) blockPos.getY() + 0.05D, (double) blockPos.getZ() + 0.5D);
@@ -75,7 +75,7 @@ public class NecromancerStaffItem extends ArtifactItem implements IHasInventoryS
                     }
                 }
             }
-            return ActionResult.consume(itemUseContextItem);
+            return InteractionResultHolder.consume(itemUseContextItem);
         }
     }
 

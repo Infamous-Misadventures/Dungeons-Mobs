@@ -1,7 +1,5 @@
 package com.infamous.dungeons_mobs.items;
 
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
 import com.infamous.dungeons_libraries.items.artifacts.ArtifactItem;
 import com.infamous.dungeons_libraries.items.artifacts.ArtifactUseContext;
 import com.infamous.dungeons_libraries.network.BreakItemMessage;
@@ -11,21 +9,13 @@ import com.infamous.dungeons_mobs.interfaces.IHasInventorySprite;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 import com.infamous.dungeons_mobs.network.NetworkHandler;
-import net.minecraft.command.arguments.EntityAnchorArgument;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.fml.network.PacketDistributor;
-
-import java.util.UUID;
-
-import static com.infamous.dungeons_libraries.attribute.AttributeRegistry.SUMMON_CAP;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.network.PacketDistributor;
 
 public class WindcallerStaffItem extends ArtifactItem implements IHasInventorySprite {
     public WindcallerStaffItem(Properties properties) {
@@ -33,13 +23,13 @@ public class WindcallerStaffItem extends ArtifactItem implements IHasInventorySp
         procOnItemUse=true;
     }
 
-    public ActionResult<ItemStack> procArtifact(ArtifactUseContext itemUseContext) {
-        World world = itemUseContext.getLevel();
+    public InteractionResultHolder<ItemStack> procArtifact(ArtifactUseContext itemUseContext) {
+        Level world = itemUseContext.getLevel();
         if (world.isClientSide) {
-            return ActionResult.success(itemUseContext.getItemStack());
+            return InteractionResultHolder.success(itemUseContext.getItemStack());
         } else {
             ItemStack itemUseContextItem = itemUseContext.getItemStack();
-            PlayerEntity player = itemUseContext.getPlayer();
+            Player player = itemUseContext.getPlayer();
             BlockPos itemUseContextPos = itemUseContext.getClickedPos();
 
             if(player != null){
@@ -47,7 +37,7 @@ public class WindcallerStaffItem extends ArtifactItem implements IHasInventorySp
                 itemUseContextItem.hurtAndBreak(1, player, (entity) -> NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), new BreakItemMessage(entity.getId(), itemUseContextItem)));
                 ArtifactItem.putArtifactOnCooldown(player, itemUseContextItem.getItem());
             }
-            return ActionResult.consume(itemUseContextItem);
+            return InteractionResultHolder.consume(itemUseContextItem);
         }
     }
 
@@ -61,7 +51,7 @@ public class WindcallerStaffItem extends ArtifactItem implements IHasInventorySp
         return 0;
     }
 
-    private void shoot(PlayerEntity mob, double targetX, double targetY, double targetZ) {
+    private void shoot(Player mob, double targetX, double targetY, double targetZ) {
         double d1 = targetX - mob.getX();
         double d2 = targetY - mob.getY(0.5D);
         double d3 = targetZ - mob.getZ();
@@ -72,8 +62,8 @@ public class WindcallerStaffItem extends ArtifactItem implements IHasInventorySp
         tornado.moveTo(mob.blockPosition(), 0, 0);
         tornado.playSound(ModSoundEvents.WINDCALLER_BLAST_WIND.get(), 1.5F, 1.0F);
         tornado.setBlast(true);
-        tornado.yRot = -mob.yHeadRot - 90;
-        ((ServerWorld)mob.level).addFreshEntityWithPassengers(tornado);
+        tornado.setYRot(-mob.yHeadRot - 90);
+        ((ServerLevel)mob.level).addFreshEntityWithPassengers(tornado);
     }
 
 

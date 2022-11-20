@@ -1,10 +1,7 @@
 package com.infamous.dungeons_mobs.entities.blaze;
 
-import java.util.EnumSet;
-import java.util.function.Predicate;
-
-import javax.annotation.Nullable;
-
+import com.infamous.dungeons_libraries.capabilities.minionmaster.Master;
+import com.infamous.dungeons_libraries.capabilities.minionmaster.MinionMasterHelper;
 import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
 import com.infamous.dungeons_libraries.items.gearconfig.ArmorSet;
 import com.infamous.dungeons_libraries.summon.SummonHelper;
@@ -15,70 +12,65 @@ import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModItems;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 import com.infamous.dungeons_mobs.utils.PositionUtils;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.command.arguments.EntityAnchorArgument;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityPredicate;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.MoverType;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.AvoidEntityGoal;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.HurtByTargetGoal;
-import net.minecraft.entity.ai.goal.LookAtGoal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.ai.goal.RandomWalkingGoal;
-import net.minecraft.entity.monster.AbstractIllagerEntity;
-import net.minecraft.entity.monster.AbstractRaiderEntity;
-import net.minecraft.entity.monster.BlazeEntity;
-import net.minecraft.entity.monster.EvokerEntity;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.SmallFireballEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.scoreboard.Scoreboard;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.monster.AbstractIllager;
+import net.minecraft.world.entity.monster.Blaze;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.SmallFireball;
+import net.minecraft.world.entity.raid.Raider;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.scores.Scoreboard;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
+
+import javax.annotation.Nullable;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.function.Predicate;
 
 import static com.infamous.dungeons_libraries.attribute.AttributeRegistry.SUMMON_CAP;
 import static com.infamous.dungeons_mobs.entities.SpawnArmoredHelper.equipArmorSet;
 
-public class WildfireEntity extends MonsterEntity implements IAnimatable, SpawnArmoredMob {
+public class WildfireEntity extends Monster implements IAnimatable, SpawnArmoredMob {
 
-	private static final DataParameter<Integer> SHIELDS = EntityDataManager.defineId(WildfireEntity.class, DataSerializers.INT);
-	private static final DataParameter<Float> SHIELD_HEALTH = EntityDataManager.defineId(WildfireEntity.class, DataSerializers.FLOAT);
+	private static final EntityDataAccessor<Integer> SHIELDS = SynchedEntityData.defineId(WildfireEntity.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Float> SHIELD_HEALTH = SynchedEntityData.defineId(WildfireEntity.class, EntityDataSerializers.FLOAT);
 	   
 	public int shootAnimationTick;
 	public int shootAnimationLength = 12;
@@ -98,18 +90,18 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable, SpawnA
 	public int regenerateShieldTime = 150;
 	public float individualShieldHealth = 15.0F;
 	
-    AnimationFactory factory = new AnimationFactory(this);
+    AnimationFactory factory = GeckoLibUtil.createFactory(this);
     
     private static final Predicate<Entity> NO_BLAZE_AND_ALIVE = (p_213685_0_) -> {
-        return p_213685_0_.isAlive() && !(p_213685_0_ instanceof BlazeEntity) && !(p_213685_0_ instanceof WildfireEntity);
+        return p_213685_0_.isAlive() && !(p_213685_0_ instanceof Blaze) && !(p_213685_0_ instanceof WildfireEntity);
      };
     
-    public WildfireEntity(EntityType<? extends WildfireEntity> type, World world) {
+    public WildfireEntity(EntityType<? extends WildfireEntity> type, Level world) {
         super(type, world);
-        this.setPathfindingMalus(PathNodeType.WATER, -1.0F);
-        this.setPathfindingMalus(PathNodeType.LAVA, 8.0F);
-        this.setPathfindingMalus(PathNodeType.DANGER_FIRE, 0.0F);
-        this.setPathfindingMalus(PathNodeType.DAMAGE_FIRE, 0.0F);
+        this.setPathfindingMalus(BlockPathTypes.WATER, -1.0F);
+        this.setPathfindingMalus(BlockPathTypes.LAVA, 8.0F);
+        this.setPathfindingMalus(BlockPathTypes.DANGER_FIRE, 0.0F);
+        this.setPathfindingMalus(BlockPathTypes.DAMAGE_FIRE, 0.0F);
         this.xpReward = 25;
     }
     
@@ -120,17 +112,17 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable, SpawnA
         this.goalSelector.addGoal(3, new WildfireEntity.ShootAttackGoal(this));
         this.goalSelector.addGoal(4, new ApproachTargetGoal(this, 10, 1.2D, true));
         this.goalSelector.addGoal(5, new LookAtTargetGoal(this));
-        this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 1.0D));
-        this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
-        this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
-        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, AbstractRaiderEntity.class)).setAlertOthers());
-        this.targetSelector.addGoal(2, (new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true)).setUnseenMemoryTicks(600));
+        this.goalSelector.addGoal(8, new RandomStrollGoal(this, 1.0D));
+        this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
+        this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 8.0F));
+        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, Raider.class)).setAlertOthers());
+        this.targetSelector.addGoal(2, (new NearestAttackableTargetGoal<>(this, Player.class, true)).setUnseenMemoryTicks(600));
     }
     
     private void shockwave() {
         if (this.isAlive()) {
            for(Entity entity : this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(5.0D), NO_BLAZE_AND_ALIVE)) {
-              if (!(entity instanceof AbstractIllagerEntity)) {
+              if (!(entity instanceof AbstractIllager)) {
                  entity.hurt(DamageSource.mobAttack(this), 7.0F);
                  entity.setSecondsOnFire(3);
               }
@@ -149,8 +141,8 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable, SpawnA
      }
     
     @Override
-    public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance p_213386_2_,
-    		SpawnReason p_213386_3_, ILivingEntityData p_213386_4_, CompoundNBT p_213386_5_) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor p_213386_1_, DifficultyInstance p_213386_2_,
+    		MobSpawnType p_213386_3_, SpawnGroupData p_213386_4_, CompoundTag p_213386_5_) {
     	this.setShieldHealth(individualShieldHealth * 4);
     	this.setShields(4);
         this.populateDefaultEquipmentSlots(p_213386_2_);
@@ -165,7 +157,7 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable, SpawnA
     }
     
     public int getShields() {
-        return MathHelper.clamp(this.entityData.get(SHIELDS), 0, 4);
+        return Mth.clamp(this.entityData.get(SHIELDS), 0, 4);
      }
 
      public void setShields(int p_191997_1_) {
@@ -186,13 +178,13 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable, SpawnA
         this.entityData.define(SHIELD_HEALTH, 0.0F);
      }
 
-     public void addAdditionalSaveData(CompoundNBT p_213281_1_) {
+     public void addAdditionalSaveData(CompoundTag p_213281_1_) {
         super.addAdditionalSaveData(p_213281_1_);
         p_213281_1_.putInt("Shields", this.getShields());
         p_213281_1_.putFloat("ShieldHealth", this.getShieldHealth());
      }
 
-     public void readAdditionalSaveData(CompoundNBT p_70037_1_) {
+     public void readAdditionalSaveData(CompoundTag p_70037_1_) {
         super.readAdditionalSaveData(p_70037_1_);
         this.setShields(p_70037_1_.getInt("Shields"));
         this.setShieldHealth(p_70037_1_.getFloat("ShieldHealth"));
@@ -217,8 +209,8 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable, SpawnA
         this.playSound(ModSoundEvents.WILDFIRE_MOVE.get(), 0.15F, 1.0F);
      }
     
-    public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.2D).add(Attributes.FOLLOW_RANGE, 24D).add(Attributes.MAX_HEALTH, 50.0D).add(Attributes.KNOCKBACK_RESISTANCE, 0.5D).add(SUMMON_CAP.get(), 6D);
+    public static AttributeSupplier.Builder setCustomAttributes() {
+        return Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.2D).add(Attributes.FOLLOW_RANGE, 24D).add(Attributes.MAX_HEALTH, 50.0D).add(Attributes.KNOCKBACK_RESISTANCE, 0.5D).add(SUMMON_CAP.get(), 6D);
     }
     
 	public void handleEntityEvent(byte p_28844_) {
@@ -310,7 +302,7 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable, SpawnA
 					.scale(0.4D));
 			this.move(MoverType.SELF, this.getDeltaMovement());
 			
-			this.lookAt(EntityAnchorArgument.Type.EYES, new Vector3d(this.getTarget().getX(), this.getTarget().getEyeY(), this.getTarget().getZ()));
+			this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(this.getTarget().getX(), this.getTarget().getEyeY(), this.getTarget().getZ()));
         }
         
         	this.soundLoopTick ++;
@@ -370,13 +362,13 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable, SpawnA
 
     private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
         if (this.shockwaveAnimationTick > 0) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("wildfire_shockwave", true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("wildfire_shockwave", ILoopType.EDefaultLoopTypes.LOOP));
         } else if (this.summonAnimationTick > 0) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("wildfire_summon", true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("wildfire_summon", ILoopType.EDefaultLoopTypes.LOOP));
         } else if (this.shootAnimationTick > 0) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("wildfire_shoot", true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("wildfire_shoot", ILoopType.EDefaultLoopTypes.LOOP));
         } else {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("wildfire_idle", true));       		
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("wildfire_idle", ILoopType.EDefaultLoopTypes.LOOP));
         }
         return PlayState.CONTINUE;
     }
@@ -399,7 +391,7 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable, SpawnA
 		public int blazeSummonRange = 5;
 		public int closeBlazeSummonRange = 2;
 		
-	      private final EntityPredicate blazeCountTargeting = (new EntityPredicate()).range(30.0D).ignoreInvisibilityTesting().allowInvulnerable().allowSameTeam();
+	      private final TargetingConditions blazeCountTargeting = TargetingConditions.forNonCombat().range(30.0D).ignoreInvisibilityTesting();
 	      
 		public SummonBlazesGoal(WildfireEntity mob) {
 			this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP, Goal.Flag.LOOK));
@@ -419,9 +411,11 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable, SpawnA
 		@Override
 		public boolean canUse() {
 			target = mob.getTarget();
-			int nearbyBlazes = mob.level.getNearbyEntities(BlazeEntity.class, blazeCountTargeting, mob, mob.getBoundingBox().inflate(30.0D)).size();
-			
-			return target != null && mob.random.nextInt((80 * (nearbyBlazes + 1))) == 0 && nearbyBlazes < 3 && mob.canSee(target) && animationsUseable();
+			Master master = MinionMasterHelper.getMasterCapability(mob);
+			List<Entity> summons = master.getSummonedMobs();
+			AttributeInstance attribute = mob.getAttribute(SUMMON_CAP.get());
+
+			return target != null && mob.random.nextInt((80 * (summons.size() + 1))) == 0 && attribute != null && master.getSummonedMobsCost() < attribute.getValue() && mob.hasLineOfSight(target) && animationsUseable();
 		}
 
 		@Override
@@ -461,26 +455,26 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable, SpawnA
 	            	if (blazeSummonSpot.isInWall() || !canSee(blazeSummonSpot, target)) {
 	            		summonPos = mob.blockPosition();
 	            	}
-					((ServerWorld)mob.level).addFreshEntityWithPassengers(blazeSummonSpot);
+					((ServerLevel)mob.level).addFreshEntityWithPassengers(blazeSummonSpot);
 					PositionUtils.moveToCorrectHeight(blazeSummonSpot);
 
 					EntityType<?> entityType = EntityType.BLAZE;
 
-					MobEntity summonedMob = null;
+					Mob summonedMob = null;
 
 					Entity entity = SummonHelper.summonEntity(mob, blazeSummonSpot.blockPosition(), entityType);
 
 					if (entity == null) {
-						blazeSummonSpot.remove();
+						blazeSummonSpot.remove(RemovalReason.DISCARDED);
 						return;
 					}
 
-					if (entity instanceof MobEntity) {
-						summonedMob = ((MobEntity) entity);
+					if (entity instanceof Mob) {
+						summonedMob = ((Mob) entity);
 					}
 
 					summonedMob.setTarget(target);
-					summonedMob.finalizeSpawn(((ServerWorld) mob.level), mob.level.getCurrentDifficultyAt(summonPos), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
+					summonedMob.finalizeSpawn(((ServerLevel) mob.level), mob.level.getCurrentDifficultyAt(summonPos), MobSpawnType.MOB_SUMMONED, null, null);
 					blazeSummonSpot.playSound(ModSoundEvents.NECROMANCER_SUMMON.get(), 1.0F, 1.0F);
 					if (mob.getTeam() != null) {
 						Scoreboard scoreboard = mob.level.getScoreboard();
@@ -496,10 +490,10 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable, SpawnA
 		}
 		
 		   public boolean canSee(Entity entitySeeing, Entity p_70685_1_) {
-			      Vector3d vector3d = new Vector3d(entitySeeing.getX(), entitySeeing.getEyeY(), entitySeeing.getZ());
-			      Vector3d vector3d1 = new Vector3d(p_70685_1_.getX(), p_70685_1_.getEyeY(), p_70685_1_.getZ());
+			      Vec3 vector3d = new Vec3(entitySeeing.getX(), entitySeeing.getEyeY(), entitySeeing.getZ());
+			      Vec3 vector3d1 = new Vec3(p_70685_1_.getX(), p_70685_1_.getEyeY(), p_70685_1_.getZ());
 			      if (p_70685_1_.level != entitySeeing.level || vector3d1.distanceToSqr(vector3d) > 128.0D * 128.0D) return false; //Forge Backport MC-209819
-			      return entitySeeing.level.clip(new RayTraceContext(vector3d, vector3d1, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, entitySeeing)).getType() == RayTraceResult.Type.MISS;
+			      return entitySeeing.level.clip(new ClipContext(vector3d, vector3d1, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entitySeeing)).getType() == HitResult.Type.MISS;
 			   }
 
 	}
@@ -527,7 +521,7 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable, SpawnA
 		@Override
 		public boolean canUse() {
 			target = mob.getTarget();
-			return target != null && mob.isOnGround() && mob.random.nextInt(20) == 0 && mob.distanceTo(target) < 4 && mob.canSee(target) && animationsUseable();
+			return target != null && mob.isOnGround() && mob.random.nextInt(20) == 0 && mob.distanceTo(target) < 4 && mob.hasLineOfSight(target) && animationsUseable();
 		}
 
 		@Override
@@ -584,7 +578,7 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable, SpawnA
 		@Override
 		public boolean canUse() {
 			target = mob.getTarget();
-			return target != null && mob.random.nextInt(15) == 0 && mob.distanceTo(target) > 4 && mob.distanceTo(target) < 13 && mob.canSee(target) && animationsUseable();
+			return target != null && mob.random.nextInt(15) == 0 && mob.distanceTo(target) > 4 && mob.distanceTo(target) < 13 && mob.hasLineOfSight(target) && animationsUseable();
 		}
 
 		@Override
@@ -610,7 +604,7 @@ public class WildfireEntity extends MonsterEntity implements IAnimatable, SpawnA
 	               double d1 = target.getX() - mob.getX();
 	               double d2 = target.getY(0.5D) - mob.getY(0.75D);
 	               double d3 = target.getZ() - mob.getZ();
-                SmallFireballEntity smallfireballentity = new SmallFireballEntity(mob.level, mob, d1, d2, d3);
+                SmallFireball smallfireballentity = new SmallFireball(mob.level, mob, d1, d2, d3);
                 smallfireballentity.setPos(smallfireballentity.getX(), mob.getY(0.5D) + 0.5D, smallfireballentity.getZ());
                 mob.level.addFreshEntity(smallfireballentity);
                 mob.playSound(ModSoundEvents.WILDFIRE_SHOOT.get(), 1.0F, 1.0F);

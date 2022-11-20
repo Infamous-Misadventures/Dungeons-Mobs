@@ -2,17 +2,17 @@ package com.infamous.dungeons_mobs.mixin;
 
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.interfaces.BiomeSpecificRaider;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.monster.AbstractRaiderEntity;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.raid.Raid;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.raid.Raid;
+import net.minecraft.world.entity.raid.Raider;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -23,23 +23,22 @@ import java.util.Set;
 
 @Mixin(Raid.class)
 public class RaidMixin {
-
-    private static final String RAID_WAVE_MEMBER_TYPE_FIELD = "field_221285_g";
+    private static final String RAID_WAVE_MEMBER_TYPE_FIELD = "f_37815_";
     @Shadow
     @Final
-    private ServerWorld level;
+    private ServerLevel level;
 
     @ModifyVariable(at = @At(value = "STORE", ordinal = 0), method = "spawnGroup")
-    private AbstractRaiderEntity spawnNextWave(AbstractRaiderEntity abstractRaiderEntity, BlockPos blockPos){
+    private Raider spawnNextWave(Raider abstractRaiderEntity, BlockPos blockPos){
 
         if(!DungeonsMobsConfig.COMMON.ENABLE_BIOME_SPECIFIC_RAIDERS.get()){
             return abstractRaiderEntity;
         }
 
-        Biome raidBiome = level.getBiome(blockPos);
-        ResourceLocation biomeRegistryName = raidBiome.getRegistryName();
+        Holder<Biome> raidBiome = level.getBiome(blockPos);
+        ResourceLocation biomeRegistryName = raidBiome.value().getRegistryName();
         if (biomeRegistryName != null) {
-            RegistryKey<Biome> biomeRegistryKey = RegistryKey.create(Registry.BIOME_REGISTRY, biomeRegistryName);
+            ResourceKey<Biome> biomeRegistryKey = ResourceKey.create(Registry.BIOME_REGISTRY, biomeRegistryName);
 
             // the name of the current raid's biome
             Set<BiomeDictionary.Type> raidBiomeTypes = BiomeDictionary.getTypes(biomeRegistryKey);
@@ -48,9 +47,9 @@ public class RaidMixin {
                 // the raider type that is to be spawned by default
                 EntityType<?> originalRaiderType = abstractRaiderEntity != null ? abstractRaiderEntity.getType() : null;
                 // the current iterated biome specific raider type
-                EntityType<? extends AbstractRaiderEntity> currentBiomeSpecificRaiderType = currentBiomeSpecificRaider.getType();
+                EntityType<? extends Raider> currentBiomeSpecificRaiderType = currentBiomeSpecificRaider.getType();
                 // the type the current iterated biome specific raider type is equivalent to
-                EntityType<? extends AbstractRaiderEntity> equivalentType = currentBiomeSpecificRaider.getEquivalentType();
+                EntityType<? extends Raider> equivalentType = currentBiomeSpecificRaider.getEquivalentType();
                 // the allowed string values a biome name can contain to spawn the current iterated biome specific raider type
                 Set<BiomeDictionary.Type> biomeTypeSet = currentBiomeSpecificRaider.getBiomeTypeSet();
 
@@ -79,8 +78,8 @@ public class RaidMixin {
                 // check if the biome specific raider is contained in the raid wave member values
                 // in order to determine if the raider type to spawn should be replaced with the current iterated biome specific raider type
                 boolean raiderFoundInWaveMembers = false;
-                for(Raid.WaveMember waveMember : Raid.WaveMember.values()){
-                    EntityType<? extends AbstractRaiderEntity> waveMemberType = ObfuscationReflectionHelper.getPrivateValue(Raid.WaveMember.class, waveMember, RAID_WAVE_MEMBER_TYPE_FIELD);
+                for(Raid.RaiderType waveMember : Raid.RaiderType.values()){
+                    EntityType<? extends Raider> waveMemberType = waveMember.entityType;
                     if(waveMemberType != null && waveMemberType == currentBiomeSpecificRaiderType){
                         raiderFoundInWaveMembers = true;
                         break;

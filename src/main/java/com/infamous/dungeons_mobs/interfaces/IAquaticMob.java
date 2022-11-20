@@ -1,21 +1,21 @@
 package com.infamous.dungeons_mobs.interfaces;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.MoverType;
-import net.minecraft.pathfinding.GroundPathNavigator;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.PathNavigator;
-import net.minecraft.pathfinding.SwimmerPathNavigator;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.IWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 
 public interface IAquaticMob {
 
-    static boolean isDeepEnoughToSpawn(IWorld world, BlockPos blockPos) {
+    static boolean isDeepEnoughToSpawn(LevelAccessor world, BlockPos blockPos) {
         return blockPos.getY() < world.getSeaLevel() - 5;
     }
 
@@ -29,7 +29,7 @@ public interface IAquaticMob {
         }
     }
 
-    default <T extends MobEntity & IAquaticMob> boolean wantsToSwim(T aquaticMob){
+    default <T extends Mob & IAquaticMob> boolean wantsToSwim(T aquaticMob){
         if(aquaticMob != this) throw new IllegalArgumentException("Supplied aquaticMob is not this instance!");
 
         if (this.isSearchingForLand()) {
@@ -42,7 +42,7 @@ public interface IAquaticMob {
 
     void setSearchingForLand(boolean searchingForLand);
 
-    default <T extends MobEntity & IAquaticMob> boolean closeToNextPos(T aquaticMob) {
+    default <T extends Mob & IAquaticMob> boolean closeToNextPos(T aquaticMob) {
         if(aquaticMob != this) throw new IllegalArgumentException("Supplied aquaticMob is not this instance!");
 
         Path path = aquaticMob.getNavigation().getPath();
@@ -54,7 +54,7 @@ public interface IAquaticMob {
         return false;
     }
 
-    default <T extends MobEntity & IAquaticMob> void updateNavigation(T aquaticMob) {
+    default <T extends Mob & IAquaticMob> void updateNavigation(T aquaticMob) {
         if(aquaticMob != this) throw new IllegalArgumentException("Supplied aquaticMob is not this instance!");
 
         if (!aquaticMob.level.isClientSide) {
@@ -68,7 +68,7 @@ public interface IAquaticMob {
         }
     }
 
-    default <T extends MobEntity & IAquaticMob> void checkAquaticTravel(T aquaticMob, Vector3d travelVec) {
+    default <T extends Mob & IAquaticMob> void checkAquaticTravel(T aquaticMob, Vec3 travelVec) {
         if(aquaticMob != this) throw new IllegalArgumentException("Supplied aquaticMob is not this instance!");
 
         if (aquaticMob.isEffectiveAi() && aquaticMob.isInWater() && this.wantsToSwim(aquaticMob)) {
@@ -80,13 +80,13 @@ public interface IAquaticMob {
         }
     }
 
-    void normalTravel(Vector3d travelVec);
+    void normalTravel(Vec3 travelVec);
 
     boolean isSearchingForLand();
 
-    void setNavigation(PathNavigator navigation);
+    void setNavigation(PathNavigation navigation);
 
-    GroundPathNavigator getGroundNavigation();
+    GroundPathNavigation getGroundNavigation();
 
-    SwimmerPathNavigator getWaterNavigation();
+    WaterBoundPathNavigation getWaterNavigation();
 }

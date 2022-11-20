@@ -2,21 +2,6 @@ package com.infamous.dungeons_mobs;
 
 import com.infamous.dungeons_libraries.client.ClientProxy;
 import com.infamous.dungeons_libraries.network.CommonProxy;
-import com.infamous.dungeons_mobs.capabilities.ancient.Ancient;
-import com.infamous.dungeons_mobs.capabilities.ancient.AncientStorage;
-import com.infamous.dungeons_mobs.capabilities.ancient.IAncient;
-import com.infamous.dungeons_mobs.capabilities.cloneable.Cloneable;
-import com.infamous.dungeons_mobs.capabilities.cloneable.CloneableStorage;
-import com.infamous.dungeons_mobs.capabilities.cloneable.ICloneable;
-import com.infamous.dungeons_mobs.capabilities.convertible.Convertible;
-import com.infamous.dungeons_mobs.capabilities.convertible.ConvertibleStorage;
-import com.infamous.dungeons_mobs.capabilities.convertible.IConvertible;
-import com.infamous.dungeons_mobs.capabilities.properties.IMobProps;
-import com.infamous.dungeons_mobs.capabilities.properties.MobProps;
-import com.infamous.dungeons_mobs.capabilities.properties.MobPropsStorage;
-import com.infamous.dungeons_mobs.capabilities.teamable.ITeamable;
-import com.infamous.dungeons_mobs.capabilities.teamable.Teamable;
-import com.infamous.dungeons_mobs.capabilities.teamable.TeamableStorage;
 import com.infamous.dungeons_mobs.client.ModItemModelProperties;
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
 import com.infamous.dungeons_mobs.compat.EnchantWithMobCompat;
@@ -31,11 +16,10 @@ import com.infamous.dungeons_mobs.worldgen.BiomeSpawnEntries;
 import com.infamous.dungeons_mobs.worldgen.EntitySpawnPlacements;
 import com.infamous.dungeons_mobs.worldgen.RaidEntries;
 import com.infamous.dungeons_mobs.worldgen.SensorMapModifier;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.ItemGroup;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -56,8 +40,8 @@ public class DungeonsMobs
     // Directly reference a log4j logger.
     public static final Logger LOGGER = LogManager.getLogger();
     public static final String MODID = "dungeons_mobs";
-    public static final ItemGroup DUNGEONS_MOBS = new GroupDungeonsMobs("dungeonsMobs");
-    public static final ItemGroup DUNGEONS_MOBS_ITEMS = new GroupDungeonsMobsItems("dungeonsMobsItems");
+    public static final CreativeModeTab DUNGEONS_MOBS = new GroupDungeonsMobs("dungeonsMobs");
+    public static final CreativeModeTab DUNGEONS_MOBS_ITEMS = new GroupDungeonsMobsItems("dungeonsMobsItems");
 
     public static CommonProxy PROXY;
 
@@ -102,11 +86,6 @@ public class DungeonsMobs
         event.enqueueWork(RaidEntries::initWaveMemberEntries);
         event.enqueueWork(SensorMapModifier::replaceSensorMaps);
         event.enqueueWork(BiomeSpawnEntries::addCustomTypesToBiomes);
-        CapabilityManager.INSTANCE.register(ICloneable.class, new CloneableStorage(), Cloneable::new);
-        CapabilityManager.INSTANCE.register(IConvertible.class, new ConvertibleStorage(), Convertible::new);
-        CapabilityManager.INSTANCE.register(ITeamable.class, new TeamableStorage(), Teamable::new);
-        CapabilityManager.INSTANCE.register(IMobProps.class, new MobPropsStorage(), MobProps::new);
-        CapabilityManager.INSTANCE.register(IAncient.class, new AncientStorage(), Ancient::new);
         event.enqueueWork(NetworkHandler::init);
     }
 
@@ -119,7 +98,7 @@ public class DungeonsMobs
 
     private void onLoadComplete(final FMLLoadCompleteEvent event){
         if(DungeonsMobsConfig.COMMON.ENABLE_STRONGER_HUSKS.get()){
-            EntityType.HUSK.dimensions = EntitySize.scalable(0.6F * 1.2F, 1.95F * 1.2F);
+            EntityType.HUSK.dimensions = EntityDimensions.scalable(0.6F * 1.2F, 1.95F * 1.2F);
         }
     }
 }

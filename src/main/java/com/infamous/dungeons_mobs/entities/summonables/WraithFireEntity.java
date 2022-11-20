@@ -1,22 +1,18 @@
 package com.infamous.dungeons_mobs.entities.summonables;
 
-import java.util.List;
-
-import com.infamous.dungeons_mobs.interfaces.ITrapsTarget;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
@@ -26,18 +22,21 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
+
+import java.util.List;
 
 public class WraithFireEntity extends Entity implements IAnimatable, IAnimationTickable {
 
 	public int lifeTime;
 	
-    AnimationFactory factory = new AnimationFactory(this);
+    AnimationFactory factory = GeckoLibUtil.createFactory(this);
     
     public Entity owner;
     
 	public int textureChange = 0;
 	
-    public WraithFireEntity(EntityType<? extends WraithFireEntity> type, World world) {
+    public WraithFireEntity(EntityType<? extends WraithFireEntity> type, Level world) {
         super(type, world);
     }
     
@@ -78,20 +77,20 @@ public class WraithFireEntity extends Entity implements IAnimatable, IAnimationT
     	if (!this.level.isClientSide) {
     		
     		if (this.isInWaterOrBubble()) {
-    			this.remove();
+    			this.remove(RemovalReason.DISCARDED);
     			this.playSound(SoundEvents.FIRE_EXTINGUISH, 1.0F, 1.0F);
     		}
     		
     		if (this.isInRain()) {
     			if (this.random.nextInt(40) == 0) {
-    				this.remove();
+    				this.remove(RemovalReason.DISCARDED);
     				this.playSound(SoundEvents.FIRE_EXTINGUISH, 1.0F, 1.0F);
     			}
     		}
    		
 	    	
 	    	if (this.lifeTime >= 82) {
-	    		this.remove();
+	    		this.remove(RemovalReason.DISCARDED);
 	    	}
 	    	
 	    	if (this.isBurning()) {
@@ -143,21 +142,21 @@ public class WraithFireEntity extends Entity implements IAnimatable, IAnimationT
 	}
 
 	@Override
-	protected void readAdditionalSaveData(CompoundNBT p_70037_1_) {
+	protected void readAdditionalSaveData(CompoundTag p_70037_1_) {
 		
 	}
 
 	@Override
-	protected void addAdditionalSaveData(CompoundNBT p_213281_1_) {
+	protected void addAdditionalSaveData(CompoundTag p_213281_1_) {
 		
 	}
 
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
     
 	public boolean canHarmEntity(Entity target) {
-		return this.owner != null && this.owner instanceof MobEntity ? ((MobEntity)this.owner).getTarget() == target : !target.fireImmune();
+		return this.owner != null && this.owner instanceof Mob ? ((Mob)this.owner).getTarget() == target : !target.fireImmune();
 	}
 }

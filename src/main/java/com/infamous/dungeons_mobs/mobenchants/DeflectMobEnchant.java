@@ -1,23 +1,20 @@
 package com.infamous.dungeons_mobs.mobenchants;
 
 import com.baguchan.enchantwithmob.mobenchant.MobEnchant;
-import com.infamous.dungeons_mobs.DungeonsMobs;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.entity.projectile.ShulkerBulletEntity;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.ShulkerBullet;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
 import static com.infamous.dungeons_mobs.mobenchants.NewMobEnchantUtils.executeIfPresentWithLevel;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchants.DEFLECT;
 
-//@Mod.EventBusSubscriber(modid = DungeonsMobs.MODID)
 public class DeflectMobEnchant extends MobEnchant {
 
     public DeflectMobEnchant(Properties properties) {
@@ -27,12 +24,12 @@ public class DeflectMobEnchant extends MobEnchant {
     @SubscribeEvent
     public static void onDeflectImpact(ProjectileImpactEvent event){
         Entity entity = event.getEntity();
-        if(entity instanceof ProjectileEntity) {
-            ProjectileEntity projectile = (ProjectileEntity) entity;
-            RayTraceResult rayTraceResult = event.getRayTraceResult();
+        if(entity instanceof Projectile) {
+            Projectile projectile = (Projectile) entity;
+            HitResult rayTraceResult = event.getRayTraceResult();
             if(!projectileHitLivingEntity(rayTraceResult)) return;
             if (!shooterIsLiving(projectile)) return;
-            LivingEntity victim = (LivingEntity) ((EntityRayTraceResult) rayTraceResult).getEntity();
+            LivingEntity victim = (LivingEntity) ((EntityHitResult) rayTraceResult).getEntity();
             if (victimIsOwner(projectile, victim)) {
                 event.setCanceled(true);
                 return;
@@ -51,9 +48,9 @@ public class DeflectMobEnchant extends MobEnchant {
         }
     }
 
-    private static void deflectProjectile(ProjectileEntity projectile, LivingEntity victim) {
-        if(projectile instanceof ShulkerBulletEntity){
-            ((ShulkerBulletEntity) projectile).finalTarget = projectile.getOwner();
+    private static void deflectProjectile(Projectile projectile, LivingEntity victim) {
+        if(projectile instanceof ShulkerBullet){
+            ((ShulkerBullet) projectile).finalTarget = projectile.getOwner();
     /*    } if(projectile instanceof DamagingProjectileEntity){
             DamagingProjectileEntity damagingProjectileEntity = (DamagingProjectileEntity) projectile;
             double x0 = projectile.getOwner().getX() - victim.getX();
@@ -70,24 +67,24 @@ public class DeflectMobEnchant extends MobEnchant {
                 damagingProjectileEntity.zPower = z1 / speed * 0.1D;
             }*/
         } else {
-            Vector3d deltaMovement = projectile.getDeltaMovement();
-            double speed = (double) MathHelper.sqrt(deltaMovement.x * deltaMovement.x + deltaMovement.y * deltaMovement.y + deltaMovement.z * deltaMovement.z);
+            Vec3 deltaMovement = projectile.getDeltaMovement();
+            double speed = (double) Mth.sqrt((float) (deltaMovement.x * deltaMovement.x + deltaMovement.y * deltaMovement.y + deltaMovement.z * deltaMovement.z));
             speed = speed < 1.0E-4D ? 0.0D : speed;
             double d0 = projectile.getOwner().getX() - victim.getX();
             double d1 = projectile.getOwner().getY(0.3333333333333333D) - projectile.getY();
             double d2 = projectile.getOwner().getZ() - victim.getZ();
-            double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
+            double d3 = (double) Mth.sqrt((float) (d0 * d0 + d2 * d2));
             projectile.shoot(d0, d1 + d3 * (double) 0.2F, d2, (float) speed, (float) (14 - victim.level.getDifficulty().getId() * 4));
         }
     }
 
-    private static boolean victimIsOwner(ProjectileEntity projectile, LivingEntity victim) {
+    private static boolean victimIsOwner(Projectile projectile, LivingEntity victim) {
         return victim.equals(projectile.getOwner());
     }
 
-    public static boolean projectileHitLivingEntity(RayTraceResult rayTraceResult) {
-        if(rayTraceResult instanceof EntityRayTraceResult){
-            EntityRayTraceResult entityRayTraceResult = (EntityRayTraceResult)rayTraceResult;
+    public static boolean projectileHitLivingEntity(HitResult rayTraceResult) {
+        if(rayTraceResult instanceof EntityHitResult){
+            EntityHitResult entityRayTraceResult = (EntityHitResult)rayTraceResult;
             if(entityRayTraceResult.getEntity() instanceof LivingEntity){
                 return true;
             } else{
@@ -98,7 +95,7 @@ public class DeflectMobEnchant extends MobEnchant {
         }
     }
 
-    public static boolean shooterIsLiving(ProjectileEntity projectile) {
+    public static boolean shooterIsLiving(Projectile projectile) {
         return projectile.getOwner() != null && projectile.getOwner() instanceof LivingEntity;
     }
 }

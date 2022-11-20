@@ -1,19 +1,18 @@
 package com.infamous.dungeons_mobs.items;
 
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.IArmorMaterial;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.LazyValue;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.LazyLoadedValue;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.Tags;
 
 import java.util.function.Supplier;
 
-public enum CustomArmorMaterial implements IArmorMaterial {
+public enum CustomArmorMaterial implements ArmorMaterial {
     PURE_NETHERITE("pure_netherite", 15, new int[]{2, 5, 6, 2}, 9, SoundEvents.ARMOR_EQUIP_NETHERITE, 0.0F, 0.0F, () -> {
         return Ingredient.of(Tags.Items.INGOTS_NETHERITE);
     });
@@ -26,9 +25,9 @@ public enum CustomArmorMaterial implements IArmorMaterial {
     private final SoundEvent sound;
     private final float toughness;
     private final float knockbackResistance;
-    private final LazyValue<Ingredient> repairIngredient;
+    private final LazyLoadedValue<Ingredient> repairIngredient;
 
-    private CustomArmorMaterial(String p_i231593_3_, int p_i231593_4_, int[] p_i231593_5_, int p_i231593_6_, SoundEvent p_i231593_7_, float p_i231593_8_, float p_i231593_9_, Supplier<Ingredient> p_i231593_10_) {
+    CustomArmorMaterial(String p_i231593_3_, int p_i231593_4_, int[] p_i231593_5_, int p_i231593_6_, SoundEvent p_i231593_7_, float p_i231593_8_, float p_i231593_9_, Supplier<Ingredient> p_i231593_10_) {
         this.name = p_i231593_3_;
         this.durabilityMultiplier = p_i231593_4_;
         this.slotProtections = p_i231593_5_;
@@ -36,14 +35,14 @@ public enum CustomArmorMaterial implements IArmorMaterial {
         this.sound = p_i231593_7_;
         this.toughness = p_i231593_8_;
         this.knockbackResistance = p_i231593_9_;
-        this.repairIngredient = new LazyValue<>(p_i231593_10_);
+        this.repairIngredient = new LazyLoadedValue<>(p_i231593_10_);
     }
 
-    public int getDurabilityForSlot(EquipmentSlotType p_200896_1_) {
+    public int getDurabilityForSlot(EquipmentSlot p_200896_1_) {
         return HEALTH_PER_SLOT[p_200896_1_.getIndex()] * this.durabilityMultiplier;
     }
 
-    public int getDefenseForSlot(EquipmentSlotType p_200902_1_) {
+    public int getDefenseForSlot(EquipmentSlot p_200902_1_) {
         return this.slotProtections[p_200902_1_.getIndex()];
     }
 

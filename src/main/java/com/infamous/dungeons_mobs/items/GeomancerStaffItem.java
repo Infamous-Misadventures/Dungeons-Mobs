@@ -7,22 +7,21 @@ import com.infamous.dungeons_mobs.interfaces.IHasInventorySprite;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.network.NetworkHandler;
 import com.infamous.dungeons_mobs.utils.GeomancyHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraft.Util;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.network.PacketDistributor;
 
 public class GeomancerStaffItem extends ArtifactItem implements IHasInventorySprite {
     public GeomancerStaffItem(Properties properties) {
         super(properties);
     }
 
-    public ActionResult<ItemStack> procArtifact(ArtifactUseContext c) {
-        PlayerEntity playerIn = c.getPlayer();
+    public InteractionResultHolder<ItemStack> procArtifact(ArtifactUseContext c) {
+        Player playerIn = c.getPlayer();
         ItemStack itemstack = c.getItemStack();
 
         if(playerIn.getRandom().nextFloat() < 0.25F){
@@ -34,7 +33,7 @@ public class GeomancerStaffItem extends ArtifactItem implements IHasInventorySpr
         }
         itemstack.hurtAndBreak(1, playerIn, (entity) -> NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), new BreakItemMessage(entity.getId(), itemstack)));
         ArtifactItem.putArtifactOnCooldown(playerIn, itemstack.getItem());
-        return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
+        return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemstack);
     }
 
     @Override

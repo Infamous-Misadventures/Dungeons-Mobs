@@ -1,46 +1,32 @@
 package com.infamous.dungeons_mobs.entities.undead;
 
-import java.util.EnumSet;
-
-import javax.annotation.Nullable;
-
 import com.infamous.dungeons_mobs.entities.summonables.WraithFireEntity;
 import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
 import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 import com.infamous.dungeons_mobs.utils.PositionUtils;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.FleeSunGoal;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.HurtByTargetGoal;
-import net.minecraft.entity.ai.goal.LookAtGoal;
-import net.minecraft.entity.ai.goal.LookRandomlyGoal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.ai.goal.RestrictSunGoal;
-import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.passive.IronGolemEntity;
-import net.minecraft.entity.passive.TurtleEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.particles.ParticleTypes;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.animal.Turtle;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.event.entity.EntityTeleportEvent;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -49,8 +35,12 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
-public class WraithEntity extends MonsterEntity implements IAnimatable {
+import javax.annotation.Nullable;
+import java.util.EnumSet;
+
+public class WraithEntity extends Monster implements IAnimatable {
 
 	public int summonFireAttackAnimationTick;
 	public int summonFireAttackAnimationLength = 40;
@@ -60,9 +50,9 @@ public class WraithEntity extends MonsterEntity implements IAnimatable {
 	public int teleportAnimationLength = 40;
 	public int teleportAnimationActionPoint = 18;
 
-    AnimationFactory factory = new AnimationFactory(this);
+    AnimationFactory factory = GeckoLibUtil.createFactory(this);
     
-    public WraithEntity(EntityType<? extends WraithEntity> type, World world) {
+    public WraithEntity(EntityType<? extends WraithEntity> type, Level world) {
         super(type, world);
     }
     
@@ -73,14 +63,14 @@ public class WraithEntity extends MonsterEntity implements IAnimatable {
         this.goalSelector.addGoal(4, new WraithEntity.SummonFireAttackGoal(this));
         this.goalSelector.addGoal(5, new ApproachTargetGoal(this, 8, 1.2D, true));
         this.goalSelector.addGoal(6, new LookAtTargetGoal(this));
-        this.goalSelector.addGoal(7, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
-        this.goalSelector.addGoal(8, new LookAtGoal(this, PlayerEntity.class, 8.0F));
-        this.goalSelector.addGoal(9, new LookAtGoal(this, MobEntity.class, 8.0F));
-        this.goalSelector.addGoal(10, new LookRandomlyGoal(this));
+        this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D));
+        this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Mob.class, 8.0F));
+        this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true).setUnseenMemoryTicks(300));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true).setUnseenMemoryTicks(300));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, TurtleEntity.class, 10, true, false, TurtleEntity.BABY_ON_LAND_SELECTOR).setUnseenMemoryTicks(300));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true).setUnseenMemoryTicks(300));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true).setUnseenMemoryTicks(300));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Turtle.class, 10, true, false, Turtle.BABY_ON_LAND_SELECTOR).setUnseenMemoryTicks(300));
      }
     
     public boolean isSpellcasting() {
@@ -104,7 +94,7 @@ public class WraithEntity extends MonsterEntity implements IAnimatable {
         if (super.isAlliedTo(entityIn)) {
             return true;
         } else if (entityIn instanceof LivingEntity
-                && ((LivingEntity) entityIn).getMobType() == CreatureAttribute.UNDEAD) {
+                && ((LivingEntity) entityIn).getMobType() == MobType.UNDEAD) {
             return this.getTeam() == null && entityIn.getTeam() == null;
         } else {
             return false;
@@ -145,13 +135,13 @@ public class WraithEntity extends MonsterEntity implements IAnimatable {
         if (this.isAlive()) {
            boolean flag = this.isSunSensitive() && this.isSunBurnTick();
            if (flag) {
-              ItemStack itemstack = this.getItemBySlot(EquipmentSlotType.HEAD);
+              ItemStack itemstack = this.getItemBySlot(EquipmentSlot.HEAD);
               if (!itemstack.isEmpty()) {
                  if (itemstack.isDamageableItem()) {
                     itemstack.setDamageValue(itemstack.getDamageValue() + this.random.nextInt(2));
                     if (itemstack.getDamageValue() >= itemstack.getMaxDamage()) {
-                       this.broadcastBreakEvent(EquipmentSlotType.HEAD);
-                       this.setItemSlot(EquipmentSlotType.HEAD, ItemStack.EMPTY);
+                       this.broadcastBreakEvent(EquipmentSlot.HEAD);
+                       this.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
                     }
                  }
 
@@ -171,8 +161,8 @@ public class WraithEntity extends MonsterEntity implements IAnimatable {
     	return true;
     }
     
-    public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.4D).add(Attributes.FOLLOW_RANGE, 25.0D).add(Attributes.MAX_HEALTH, 20.0D);
+    public static AttributeSupplier.Builder setCustomAttributes() {
+        return Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.4D).add(Attributes.FOLLOW_RANGE, 25.0D).add(Attributes.MAX_HEALTH, 20.0D);
     }
     
     @Override
@@ -200,8 +190,8 @@ public class WraithEntity extends MonsterEntity implements IAnimatable {
     }
 
     @Override
-    public CreatureAttribute getMobType() {
-        return CreatureAttribute.UNDEAD;
+    public MobType getMobType() {
+        return MobType.UNDEAD;
     }
 
     @Override
@@ -239,7 +229,7 @@ public class WraithEntity extends MonsterEntity implements IAnimatable {
      }
 
      private boolean teleportTowards(Entity p_70816_1_) {
-        Vector3d vector3d = new Vector3d(this.getX() - p_70816_1_.getX(), this.getY(0.5D) - p_70816_1_.getEyeY(), this.getZ() - p_70816_1_.getZ());
+        Vec3 vector3d = new Vec3(this.getX() - p_70816_1_.getX(), this.getY(0.5D) - p_70816_1_.getEyeY(), this.getZ() - p_70816_1_.getZ());
         vector3d = vector3d.normalize();
         double d0 = 16.0D;
         double d1 = this.getX() + (this.random.nextDouble() - 0.5D) * 8.0D - vector3d.x * 16.0D;
@@ -249,7 +239,7 @@ public class WraithEntity extends MonsterEntity implements IAnimatable {
      }
 
      private boolean teleport(double p_70825_1_, double p_70825_3_, double p_70825_5_) {
-        BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable(p_70825_1_, p_70825_3_, p_70825_5_);
+        BlockPos.MutableBlockPos blockpos$mutable = new BlockPos.MutableBlockPos(p_70825_1_, p_70825_3_, p_70825_5_);
 
         while(blockpos$mutable.getY() > 0 && !this.level.getBlockState(blockpos$mutable).getMaterial().blocksMotion()) {
            blockpos$mutable.move(Direction.DOWN);
@@ -259,11 +249,11 @@ public class WraithEntity extends MonsterEntity implements IAnimatable {
         boolean flag = blockstate.getMaterial().blocksMotion();
         boolean flag1 = blockstate.getFluidState().is(FluidTags.WATER);
         if (flag && !flag1) {
-           net.minecraftforge.event.entity.living.EntityTeleportEvent.EnderEntity event = net.minecraftforge.event.ForgeEventFactory.onEnderTeleport(this, p_70825_1_, p_70825_3_, p_70825_5_);
+           EntityTeleportEvent.EnderEntity event = net.minecraftforge.event.ForgeEventFactory.onEnderTeleport(this, p_70825_1_, p_70825_3_, p_70825_5_);
            if (event.isCanceled()) return false;
            boolean flag2 = this.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), false);
            if (flag2 && !this.isSilent()) {
-              this.level.playSound((PlayerEntity)null, this.xo, this.yo, this.zo, ModSoundEvents.WRAITH_TELEPORT.get(), this.getSoundSource(), 1.0F, 1.0F);
+              this.level.playSound((Player)null, this.xo, this.yo, this.zo, ModSoundEvents.WRAITH_TELEPORT.get(), this.getSoundSource(), 1.0F, 1.0F);
               this.playSound(ModSoundEvents.WRAITH_TELEPORT.get(), 1.0F, 1.0F);
            }
 
@@ -297,7 +287,7 @@ public class WraithEntity extends MonsterEntity implements IAnimatable {
 		public boolean canUse() {
 			target = mob.getTarget();
 			
-			return target != null && (mob.distanceTo(target) <= 4 || mob.distanceTo(target) >= 16) && mob.canSee(target) && animationsUseable();
+			return target != null && (mob.distanceTo(target) <= 4 || mob.distanceTo(target) >= 16) && mob.hasLineOfSight(target) && animationsUseable();
 		}
 
 		@Override
@@ -369,7 +359,7 @@ public class WraithEntity extends MonsterEntity implements IAnimatable {
 		public boolean canUse() {
 			target = mob.getTarget();
 			
-			return target != null && mob.tickCount >= this.nextUseTime && mob.distanceTo(target) <= 14 && mob.canSee(target) && animationsUseable();
+			return target != null && mob.tickCount >= this.nextUseTime && mob.distanceTo(target) <= 14 && mob.hasLineOfSight(target) && animationsUseable();
 		}
 
 		@Override

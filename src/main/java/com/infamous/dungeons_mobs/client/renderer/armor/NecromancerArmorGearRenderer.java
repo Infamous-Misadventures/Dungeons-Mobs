@@ -1,12 +1,11 @@
 package com.infamous.dungeons_mobs.client.renderer.armor;
 
-import com.infamous.dungeons_libraries.client.renderer.ArmorGearRenderer;
+import com.infamous.dungeons_libraries.client.renderer.gearconfig.ArmorGearRenderer;
 import com.infamous.dungeons_mobs.client.models.armor.NecromancerArmorGearModel;
 import com.infamous.dungeons_mobs.items.armor.NecromancerArmorGear;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-
-import net.minecraft.inventory.EquipmentSlotType;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.world.entity.EquipmentSlot;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
@@ -43,7 +42,7 @@ public class NecromancerArmorGearRenderer extends ArmorGearRenderer<NecromancerA
 	
 	@SuppressWarnings("incomplete-switch")
 	@Override
-	public GeoArmorRenderer applySlot(EquipmentSlotType slot) {
+	public GeoArmorRenderer applySlot(EquipmentSlot slot) {
 		super.applySlot(slot);
 		
 		this.getGeoModelProvider().getModel(this.getGeoModelProvider().getModelLocation(currentArmorItem));
@@ -66,7 +65,7 @@ public class NecromancerArmorGearRenderer extends ArmorGearRenderer<NecromancerA
 	}
 	
     @Override
-    public void render(float partialTicks, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn) {
+    public void render(float partialTicks, PoseStack stack, VertexConsumer bufferIn, int packedLightIn) {
 
         AnimatedGeoModel<NecromancerArmorGear> geoModelProvider = getGeoModelProvider();
         if(geoModelProvider instanceof NecromancerArmorGearModel){

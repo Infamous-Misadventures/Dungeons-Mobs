@@ -1,17 +1,14 @@
 package com.infamous.dungeons_mobs.client.models.jungle;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.processor.IBone;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
-import software.bernie.geckolib3.model.provider.data.EntityModelData;
-import software.bernie.geckolib3.resource.GeckoLibCache;
 import software.bernie.geckolib3.core.molang.MolangParser;
+import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib3.resource.GeckoLibCache;
 
 public class LeapleafModel extends AnimatedGeoModel {
 
@@ -36,9 +33,9 @@ public class LeapleafModel extends AnimatedGeoModel {
 			
 			MolangParser parser = GeckoLibCache.getInstance().parser;
 			LivingEntity livingEntity = (LivingEntity) animatable;
-			Vector3d velocity = livingEntity.getDeltaMovement();
-			float groundSpeed = MathHelper.sqrt((float) ((velocity.x * velocity.x) + (velocity.z * velocity.z)));
-			parser.setValue("query.ground_speed", groundSpeed * 17.5);
+			Vec3 velocity = livingEntity.getDeltaMovement();
+			float groundSpeed = Mth.sqrt((float) ((velocity.x * velocity.x) + (velocity.z * velocity.z)));
+			parser.setValue("query.ground_speed", () -> groundSpeed * 17.5);
 		}
 }
 

@@ -5,22 +5,24 @@ import com.baguchan.enchantwithmob.capability.MobEnchantCapability;
 import com.infamous.dungeons_libraries.utils.AreaOfEffectHelper;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
-import net.minecraft.entity.monster.AbstractRaiderEntity;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.monster.SpellcastingIllagerEntity;
-import net.minecraft.entity.passive.IronGolemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.world.World;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.SpellcasterIllager;
+import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.raid.Raider;
+import net.minecraft.world.level.Level;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -28,6 +30,7 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -39,28 +42,29 @@ import java.util.stream.Collectors;
 import static com.baguchan.enchantwithmob.registry.MobEnchants.PROTECTION;
 import static com.baguchan.enchantwithmob.registry.MobEnchants.STRONG;
 import static com.infamous.dungeons_mobs.network.datasync.ModDataSerializers.UUID_LIST;
+import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
-public class EnchanterEntity extends SpellcastingIllagerEntity implements IAnimatable {
+public class EnchanterEntity extends SpellcasterIllager implements IAnimatable {
 
-    public static final DataParameter<Integer> ATTACK_TICKS = EntityDataManager.defineId(EnchanterEntity.class, DataSerializers.INT);
-    public static final DataParameter<Integer> ENCHANT_TICKS = EntityDataManager.defineId(EnchanterEntity.class, DataSerializers.INT);
-    public static final DataParameter<List<UUID>> ENCHANTMENT_TARGETS = EntityDataManager.defineId(EnchanterEntity.class, UUID_LIST);
+    public static final EntityDataAccessor<Integer> ATTACK_TICKS = SynchedEntityData.defineId(EnchanterEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> ENCHANT_TICKS = SynchedEntityData.defineId(EnchanterEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<List<UUID>> ENCHANTMENT_TARGETS = SynchedEntityData.defineId(EnchanterEntity.class, UUID_LIST);
 
-    AnimationFactory factory = new AnimationFactory(this);
+    AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
-    private MonsterEntity enchantmentTarget;
-    private List<MonsterEntity> enchantmentTargets = new ArrayList<>();
+    private Monster enchantmentTarget;
+    private List<Monster> enchantmentTargets = new ArrayList<>();
 
-    public EnchanterEntity(World world) {
+    public EnchanterEntity(Level world) {
         super(ModEntityTypes.GEOMANCER.get(), world);
     }
 
-    public EnchanterEntity(EntityType<? extends SpellcastingIllagerEntity> type, World world) {
+    public EnchanterEntity(EntityType<? extends SpellcasterIllager> type, Level world) {
         super(type, world);
     }
 
-    public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return MonsterEntity.createMonsterAttributes().add(Attributes.ATTACK_DAMAGE, 8.0D).add(Attributes.MOVEMENT_SPEED, 0.2D).add(Attributes.FOLLOW_RANGE, 20.0D).add(Attributes.MAX_HEALTH, 14.0D);
+    public static AttributeSupplier.Builder setCustomAttributes() {
+        return Monster.createMonsterAttributes().add(Attributes.ATTACK_DAMAGE, 8.0D).add(Attributes.MOVEMENT_SPEED, 0.2D).add(Attributes.FOLLOW_RANGE, 20.0D).add(Attributes.MAX_HEALTH, 14.0D);
     }
 
     protected void defineSynchedData() {
@@ -86,12 +90,12 @@ public class EnchanterEntity extends SpellcastingIllagerEntity implements IAnima
         this.entityData.set(ENCHANT_TICKS, p_189794_1_);
     }
 
-    public void addEnchantmentTarget(MonsterEntity monsterEntity){
+    public void addEnchantmentTarget(Monster monsterEntity){
         enchantmentTargets.add(monsterEntity);
         this.entityData.set(ENCHANTMENT_TARGETS, enchantmentTargets.stream().map(Entity::getUUID).collect(Collectors.toList()));
     }
 
-    public void setEnchantmentTargets(List<MonsterEntity> monsterEntities){
+    public void setEnchantmentTargets(List<Monster> monsterEntities){
         enchantmentTargets = monsterEntities;
         this.entityData.set(ENCHANTMENT_TARGETS, enchantmentTargets.stream().map(Entity::getUUID).collect(Collectors.toList()));
     }
@@ -104,25 +108,25 @@ public class EnchanterEntity extends SpellcastingIllagerEntity implements IAnima
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new EnchanterEntity.AttackingGoal());
-        this.goalSelector.addGoal(0, new SwimGoal(this));
+        this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new EnchanterEntity.CastingSpellGoal());
-        this.goalSelector.addGoal(2, new AvoidEntityGoal<>(this, PlayerEntity.class, 8.0F, 1.0D, 1.0D));
+        this.goalSelector.addGoal(2, new AvoidEntityGoal<>(this, Player.class, 8.0F, 1.0D, 1.0D));
         this.goalSelector.addGoal(4, new EnchanterEntity.EnchantSpellGoal());
-        this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 1.0D));
-        this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
-        this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
-        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, AbstractRaiderEntity.class)).setAlertOthers());
-        this.targetSelector.addGoal(2, (new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true)).setUnseenMemoryTicks(300));
-        this.targetSelector.addGoal(3, (new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, false)).setUnseenMemoryTicks(300));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, false));
+        this.goalSelector.addGoal(8, new RandomStrollGoal(this, 1.0D));
+        this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
+        this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 8.0F));
+        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, Raider.class)).setAlertOthers());
+        this.targetSelector.addGoal(2, (new NearestAttackableTargetGoal<>(this, Player.class, true)).setUnseenMemoryTicks(300));
+        this.targetSelector.addGoal(3, (new NearestAttackableTargetGoal<>(this, AbstractVillager.class, false)).setUnseenMemoryTicks(300));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, false));
     }
 
     @Nullable
-    private MonsterEntity getEnchantmentTarget() {
+    private Monster getEnchantmentTarget() {
         return this.enchantmentTarget;
     }
 
-    private void setEnchantmentTarget(@Nullable MonsterEntity p_190748_1_) {
+    private void setEnchantmentTarget(@Nullable Monster p_190748_1_) {
         this.enchantmentTarget = p_190748_1_;
     }
 
@@ -146,26 +150,26 @@ public class EnchanterEntity extends SpellcastingIllagerEntity implements IAnima
             this.setEnchantTicks(this.getEnchantTicks() - 1);
         }
 
-        List<MonsterEntity> validEnchantmentTargets = this.enchantmentTargets.stream().filter(this::isValidEnchantmentTarget).collect(Collectors.toList());
+        List<Monster> validEnchantmentTargets = this.enchantmentTargets.stream().filter(this::isValidEnchantmentTarget).collect(Collectors.toList());
         this.enchantmentTargets.stream().filter(monsterEntity -> !validEnchantmentTargets.contains(monsterEntity)).filter(LivingEntity::isAlive).forEach(this::clearEntityMobEnchantments);
         setEnchantmentTargets(validEnchantmentTargets);
     }
 
     @Override
-    public void remove(boolean keepData) {
-        super.remove(keepData);
+    public void remove(RemovalReason removalReason) {
+        super.remove(removalReason);
         this.enchantmentTargets.forEach(this::clearEntityMobEnchantments);
         this.setEnchantmentTargets(new ArrayList<>());
     }
 
-    private void clearEntityMobEnchantments(MonsterEntity entity) {
+    private void clearEntityMobEnchantments(Monster entity) {
         entity.getCapability(EnchantWithMob.MOB_ENCHANT_CAP).ifPresent(enchantableCapability ->{
             enchantableCapability.removeAllMobEnchant(entity);
             entity.refreshDimensions();
         });
     }
 
-    private boolean isValidEnchantmentTarget(MonsterEntity monsterEntity) {
+    private boolean isValidEnchantmentTarget(Monster monsterEntity) {
         return monsterEntity.isAlive() && monsterEntity.distanceTo(this) <= 30;
     }
 
@@ -176,13 +180,13 @@ public class EnchanterEntity extends SpellcastingIllagerEntity implements IAnima
 
     private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
         if (this.getEnchantTicks() > 0) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("enchanter_enchant", true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("enchanter_enchant", LOOP));
         } else if (this.getAttackTicks() > 0) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("enchanter_attack", true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("enchanter_attack", LOOP));
         } else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("enchanter_walk", true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("enchanter_walk", LOOP));
         } else {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("enchanter_idle", true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("enchanter_idle", LOOP));
         }
         return PlayState.CONTINUE;
     }
@@ -198,7 +202,7 @@ public class EnchanterEntity extends SpellcastingIllagerEntity implements IAnima
     public boolean isAlliedTo(Entity entityIn) {
         if (super.isAlliedTo(entityIn)) {
             return true;
-        } else if (entityIn instanceof LivingEntity && ((LivingEntity) entityIn).getMobType() == CreatureAttribute.ILLAGER) {
+        } else if (entityIn instanceof LivingEntity && ((LivingEntity) entityIn).getMobType() == MobType.ILLAGER) {
             return this.getTeam() == null && entityIn.getTeam() == null;
         } else {
             return false;
@@ -236,15 +240,15 @@ public class EnchanterEntity extends SpellcastingIllagerEntity implements IAnima
     }
 
     @Override
-    public ArmPose getArmPose() {
-        ArmPose illagerArmPose = super.getArmPose();
-        if (illagerArmPose == ArmPose.CROSSED) {
-            return ArmPose.NEUTRAL;
+    public IllagerArmPose getArmPose() {
+        IllagerArmPose illagerArmPose = super.getArmPose();
+        if (illagerArmPose == IllagerArmPose.CROSSED) {
+            return IllagerArmPose.NEUTRAL;
         }
         return illagerArmPose;
     }
 
-    class CastingSpellGoal extends SpellcastingIllagerEntity.CastingASpellGoal {
+    class CastingSpellGoal extends SpellcasterIllager.SpellcasterCastingSpellGoal {
         private CastingSpellGoal() {
         }
 
@@ -256,8 +260,8 @@ public class EnchanterEntity extends SpellcastingIllagerEntity implements IAnima
         }
     }
 
-    public class EnchantSpellGoal extends SpellcastingIllagerEntity.UseSpellGoal {
-//        private final EntityPredicate wololoTargeting = (new EntityPredicate()).range(16.0D).allowInvulnerable().selector();
+    public class EnchantSpellGoal extends SpellcasterIllager.SpellcasterUseSpellGoal {
+//        private final EntityPredicate wololoTargeting = (new EntityPredicate()).range(16.0D).selector();
 
         public boolean canUse() {
             if (EnchanterEntity.this.getTarget() == null) {
@@ -272,7 +276,7 @@ public class EnchanterEntity extends SpellcastingIllagerEntity implements IAnima
                 List<LivingEntity> list = AreaOfEffectHelper.getNearbyEnemies(EnchanterEntity.this, 16, EnchanterEntity.this.level, livingEntity -> {
                     if(livingEntity.getCapability(EnchantWithMob.MOB_ENCHANT_CAP).isPresent()) {
                         MobEnchantCapability mobEnchantCapability = livingEntity.getCapability(EnchantWithMob.MOB_ENCHANT_CAP).resolve().get();
-                        return !mobEnchantCapability.hasEnchant() && livingEntity instanceof MonsterEntity;
+                        return !mobEnchantCapability.hasEnchant() && livingEntity instanceof Monster;
                     }else{
                         return false;
                     }
@@ -280,7 +284,7 @@ public class EnchanterEntity extends SpellcastingIllagerEntity implements IAnima
                 if (list.isEmpty()) {
                     return false;
                 } else {
-                    EnchanterEntity.this.setEnchantmentTarget((MonsterEntity) list.get(EnchanterEntity.this.random.nextInt(list.size())));
+                    EnchanterEntity.this.setEnchantmentTarget((Monster) list.get(EnchanterEntity.this.random.nextInt(list.size())));
                     EnchanterEntity.this.setEnchantTicks(45);
                     return true;
                 }
@@ -293,15 +297,15 @@ public class EnchanterEntity extends SpellcastingIllagerEntity implements IAnima
 
         public void stop() {
             super.stop();
-            EnchanterEntity.this.setEnchantmentTarget((MonsterEntity) null);
+            EnchanterEntity.this.setEnchantmentTarget((Monster) null);
         }
 
         protected void performSpellCasting() {
-            MonsterEntity selectedMonsterEntity = EnchanterEntity.this.getEnchantmentTarget();
+            Monster selectedMonsterEntity = EnchanterEntity.this.getEnchantmentTarget();
             if (selectedMonsterEntity != null && selectedMonsterEntity.isAlive()) {
                 selectedMonsterEntity.getCapability(EnchantWithMob.MOB_ENCHANT_CAP).ifPresent(cap -> {
-                    cap.addMobEnchant(selectedMonsterEntity, STRONG, 2);
-                    cap.addMobEnchant(selectedMonsterEntity, PROTECTION, 2);
+                    cap.addMobEnchant(selectedMonsterEntity, STRONG.get(), 2);
+                    cap.addMobEnchant(selectedMonsterEntity, PROTECTION.get(), 2);
                     selectedMonsterEntity.refreshDimensions();
                 });
                 EnchanterEntity.this.addEnchantmentTarget(selectedMonsterEntity);
@@ -324,8 +328,8 @@ public class EnchanterEntity extends SpellcastingIllagerEntity implements IAnima
             return ModSoundEvents.ENCHANTER_SPELL.get();
         }
 
-        protected SpellcastingIllagerEntity.SpellType getSpell() {
-            return SpellcastingIllagerEntity.SpellType.NONE;
+        protected SpellcasterIllager.IllagerSpell getSpell() {
+            return SpellcasterIllager.IllagerSpell.NONE;
         }
     }
 

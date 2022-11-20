@@ -1,13 +1,13 @@
 package com.infamous.dungeons_mobs.goals.magic;
 
 import com.infamous.dungeons_mobs.interfaces.IMagicUser;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.monster.Monster;
 
 import java.util.EnumSet;
 
-public class MagicAttackGoal<T extends MonsterEntity & IMagicUser> extends Goal {
+public class MagicAttackGoal<T extends Monster & IMagicUser> extends Goal {
    private final T magicUserMob;
    private final double moveSpeedAmp;
    private final float maxAttackDistanceSquared;
@@ -61,7 +61,7 @@ public class MagicAttackGoal<T extends MonsterEntity & IMagicUser> extends Goal 
       LivingEntity livingentity = this.magicUserMob.getTarget();
       if (livingentity != null) {
          double squareDistanceToTarget = this.magicUserMob.distanceToSqr(livingentity.getX(), livingentity.getY(), livingentity.getZ());
-         boolean flag = this.magicUserMob.getSensing().canSee(livingentity);
+         boolean flag = this.magicUserMob.getSensing().hasLineOfSight(livingentity);
          boolean flag1 = this.seeTime > 0;
          if (flag != flag1) {
             this.seeTime = 0;

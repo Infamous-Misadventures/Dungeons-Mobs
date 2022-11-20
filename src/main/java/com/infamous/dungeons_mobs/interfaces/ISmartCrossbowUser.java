@@ -1,6 +1,6 @@
 package com.infamous.dungeons_mobs.interfaces;
 
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 
 public interface ISmartCrossbowUser{
 
@@ -8,11 +8,11 @@ public interface ISmartCrossbowUser{
 
     void setCrossbowUser(boolean crossbowUser);
 
-    default void writeCrossbowUserNBT(CompoundNBT compoundNBT){
+    default void writeCrossbowUserNBT(CompoundTag compoundNBT){
         compoundNBT.putBoolean("CrossbowUser", this.isCrossbowUser());
     }
 
-    default void readCrossbowUserNBT(CompoundNBT compoundNBT){
+    default void readCrossbowUserNBT(CompoundTag compoundNBT){
         this.setCrossbowUser(compoundNBT.getBoolean("CrossbowUser"));
     }
 

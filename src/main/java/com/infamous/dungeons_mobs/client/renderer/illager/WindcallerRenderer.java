@@ -2,37 +2,37 @@ package com.infamous.dungeons_mobs.client.renderer.illager;
 
 import com.infamous.dungeons_mobs.client.models.illager.WindcallerModel;
 import com.infamous.dungeons_mobs.entities.illagers.WindcallerEntity;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import it.unimi.dsi.fastutil.objects.ObjectList;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Vector3f;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.model.BipedModel;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ShieldItem;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ShieldItem;
+import net.minecraft.world.level.block.state.BlockState;
 import software.bernie.example.client.DefaultBipedBoneIdents;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.renderers.geo.ExtendedGeoEntityRenderer;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
 public class WindcallerRenderer extends ExtendedGeoEntityRenderer<WindcallerEntity> {
-    public WindcallerRenderer(EntityRendererManager renderManager) {
+    public WindcallerRenderer(EntityRendererProvider.Context renderManager) {
         super(renderManager, new WindcallerModel());
     }
 
     @Override
-    protected void applyRotations(WindcallerEntity entityLiving, MatrixStack matrixStackIn, float ageInTicks,
+    protected void applyRotations(WindcallerEntity entityLiving, PoseStack matrixStackIn, float ageInTicks,
                                   float rotationYaw, float partialTicks) {
         float scaleFactor = 0.9375F;
         matrixStackIn.scale(scaleFactor, scaleFactor, scaleFactor);
@@ -41,14 +41,14 @@ public class WindcallerRenderer extends ExtendedGeoEntityRenderer<WindcallerEnti
     }
 
     @Override
-    public RenderType getRenderType(WindcallerEntity animatable, float partialTicks, MatrixStack stack,
-                                    IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn,
+    public RenderType getRenderType(WindcallerEntity animatable, float partialTicks, PoseStack stack,
+                                    MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn,
                                     ResourceLocation textureLocation) {
         return RenderType.entityTranslucent(getTextureLocation(animatable));
     }
 
     @Override
-    public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+    public void renderRecursively(GeoBone bone, PoseStack stack, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
         if(this.isArmorBone(bone)) {
             bone.setCubesHidden(true);
         }
@@ -92,7 +92,7 @@ public class WindcallerRenderer extends ExtendedGeoEntityRenderer<WindcallerEnti
 	}
 
 	@Override
-	protected void preRenderItem(MatrixStack stack, ItemStack item, String boneName, WindcallerEntity currentEntity, IBone bone) {
+	protected void preRenderItem(PoseStack stack, ItemStack item, String boneName, WindcallerEntity currentEntity, IBone bone) {
 		if(item == this.mainHand || item == this.offHand) {
 			stack.scale(1.1F, 1.1F, 1.1F);
 			stack.mulPose(Vector3f.XP.rotationDegrees(-90.0F));
@@ -117,7 +117,7 @@ public class WindcallerRenderer extends ExtendedGeoEntityRenderer<WindcallerEnti
 	}
 
 	@Override
-	protected void postRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, WindcallerEntity currentEntity, IBone bone) {
+	protected void postRenderItem(PoseStack matrixStack, ItemStack item, String boneName, WindcallerEntity currentEntity, IBone bone) {
 
 	}
     
@@ -127,13 +127,13 @@ public class WindcallerRenderer extends ExtendedGeoEntityRenderer<WindcallerEnti
 	}
 	
 	@Override
-	protected void preRenderBlock(MatrixStack matrixStack, BlockState block, String boneName,
+	protected void preRenderBlock(PoseStack matrixStack, BlockState block, String boneName,
 			WindcallerEntity currentEntity) {
 		
 	}
 
 	@Override
-	protected void postRenderBlock(MatrixStack matrixStack, BlockState block, String boneName,
+	protected void postRenderBlock(PoseStack matrixStack, BlockState block, String boneName,
 			WindcallerEntity currentEntity) {
 		
 	}
@@ -162,33 +162,33 @@ public class WindcallerRenderer extends ExtendedGeoEntityRenderer<WindcallerEnti
     }
 
     @Override
-    protected EquipmentSlotType getEquipmentSlotForArmorBone(String boneName, WindcallerEntity currentEntity) {
+    protected EquipmentSlot getEquipmentSlotForArmorBone(String boneName, WindcallerEntity currentEntity) {
         switch (boneName) {
             case "armorBipedLeftFoot":
             case "armorBipedRightFoot":
-                return EquipmentSlotType.FEET;
+                return EquipmentSlot.FEET;
             case "armorBipedLeftLeg":
             case "armorBipedRightLeg":
-                return EquipmentSlotType.LEGS;
+                return EquipmentSlot.LEGS;
             case "armorBipedRightHand":
-                return !currentEntity.isLeftHanded() ? EquipmentSlotType.MAINHAND : EquipmentSlotType.OFFHAND;
+                return !currentEntity.isLeftHanded() ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
             case "armorBipedLeftHand":
-                return currentEntity.isLeftHanded() ? EquipmentSlotType.MAINHAND : EquipmentSlotType.OFFHAND;
+                return currentEntity.isLeftHanded() ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
             case "armorBipedRightArm":
             case "armorBipedLeftArm":
             case "armorIllagerRightArm":
             case "armorIllagerLeftArm":
             case "armorBipedBody":
-                return EquipmentSlotType.CHEST;
+                return EquipmentSlot.CHEST;
             case "armorBipedHead":
-                return EquipmentSlotType.HEAD;
+                return EquipmentSlot.HEAD;
             default:
                 return null;
         }
     }
 
     @Override
-    protected ModelRenderer getArmorPartForBone(String name, BipedModel<?> armorBipedModel) {
+    protected ModelPart getArmorPartForBone(String name, HumanoidModel<?> armorBipedModel) {
         switch (name) {
             case "armorBipedLeftFoot":
             case "armorBipedLeftLeg":
@@ -212,7 +212,7 @@ public class WindcallerRenderer extends ExtendedGeoEntityRenderer<WindcallerEnti
     }
 
     @Override
-    protected void prepareArmorPositionAndScale(GeoBone bone, ObjectList<ModelRenderer.ModelBox> cubeList, ModelRenderer sourceLimb, MatrixStack stack, boolean geoArmor, boolean modMatrixRot) {
+    protected void prepareArmorPositionAndScale(GeoBone bone, List<ModelPart.Cube> cubeList, ModelPart sourceLimb, PoseStack stack, boolean geoArmor, boolean modMatrixRot) {
         super.prepareArmorPositionAndScale(bone, cubeList, sourceLimb, stack, geoArmor, modMatrixRot);
         if (bone.getName().equals("armorBipedHead") && geoArmor && helmet.getItem().getRegistryName().getNamespace().equals(MODID)) {
             stack.translate(0, 0.125, 0); // 1y is 1 cube up, we want 2/16

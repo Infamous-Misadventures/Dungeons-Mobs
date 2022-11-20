@@ -1,19 +1,14 @@
 package com.infamous.dungeons_mobs.entities.jungle;
 
-import com.infamous.dungeons_mobs.entities.projectiles.DrownedNecromancerOrbEntity;
 import com.infamous.dungeons_mobs.entities.summonables.AreaDamageEntity;
-import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
-
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.world.World;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.level.Level;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -21,18 +16,21 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
+
+import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
 public class QuickGrowingVineEntity extends AbstractVineEntity {
 
-	AnimationFactory factory = new AnimationFactory(this);
+	AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
-	public QuickGrowingVineEntity(EntityType<? extends QuickGrowingVineEntity> p_i50147_1_, World p_i50147_2_) {
+	public QuickGrowingVineEntity(EntityType<? extends QuickGrowingVineEntity> p_i50147_1_, Level p_i50147_2_) {
 		super(p_i50147_1_, p_i50147_2_);
 	}
 
 
-	public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
-		return MonsterEntity.createMonsterAttributes()
+	public static AttributeSupplier.Builder setCustomAttributes(){
+		return Monster.createMonsterAttributes()
 				.add(Attributes.MAX_HEALTH, 15.0D);
 	}
 
@@ -48,16 +46,16 @@ public class QuickGrowingVineEntity extends AbstractVineEntity {
 
 	private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
 		if (this.deathTime > 0) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("quick_growing_vine_retract", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("quick_growing_vine_retract", LOOP));
 		} else if (this.burstAnimationTick > 0) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("quick_growing_vine_burst", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("quick_growing_vine_burst", LOOP));
 		} else if (this.retractAnimationTick > 0) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("quick_growing_vine_retract", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("quick_growing_vine_retract", LOOP));
 		} else {
 			if (this.isOut() || this.burstAnimationTick > 0) {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("quick_growing_vine_idle", true));
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("quick_growing_vine_idle", LOOP));
 			} else {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("quick_growing_vine_idle_underground", true));
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("quick_growing_vine_idle_underground", LOOP));
 			}
 		}
 		return PlayState.CONTINUE;

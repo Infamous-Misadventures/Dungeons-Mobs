@@ -1,20 +1,17 @@
 package com.infamous.dungeons_mobs.goals.switchcombat;
 
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.IRangedAttackMob;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.item.EggItem;
-import net.minecraft.item.ShootableItem;
-import net.minecraft.item.SnowballItem;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.monster.RangedAttackMob;
+import net.minecraft.world.item.EggItem;
+import net.minecraft.world.item.SnowballItem;
 
 import java.util.EnumSet;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
-
-public class ThrowAndMeleeAttackGoal<T extends CreatureEntity & IRangedAttackMob> extends MeleeAttackGoal
+public class ThrowAndMeleeAttackGoal<T extends PathfinderMob & RangedAttackMob> extends MeleeAttackGoal
 {
 	public final T hostCreature;
 	private int rangedAttackTime;
@@ -91,8 +88,8 @@ public class ThrowAndMeleeAttackGoal<T extends CreatureEntity & IRangedAttackMob
 	{
 		LivingEntity attackTarget = this.hostCreature.getTarget();
 		if (hasThrowableItemInMainhand() && attackTarget != null) {
-			double hostDistanceSq = this.hostCreature.distanceToSqr(attackTarget.getX(), attackTarget.getY(), attackTarget.getZ());
-			boolean canSee = this.hostCreature.getSensing().canSee(attackTarget);
+			float hostDistanceSq = (float) this.hostCreature.distanceToSqr(attackTarget.getX(), attackTarget.getY(), attackTarget.getZ());
+			boolean canSee = this.hostCreature.getSensing().hasLineOfSight(attackTarget);
 			if (canSee) {
 				++this.seeTime;
 			} else {
@@ -112,17 +109,17 @@ public class ThrowAndMeleeAttackGoal<T extends CreatureEntity & IRangedAttackMob
 					return;
 				}
 
-				distanceOverAttackRadius = MathHelper.sqrt(hostDistanceSq) / this.attackRadius;
-				float clampedDistanceOverAttackRadius = MathHelper.clamp(distanceOverAttackRadius, 0.1F, 1.0F);
+				distanceOverAttackRadius = Mth.sqrt(hostDistanceSq) / this.attackRadius;
+				float clampedDistanceOverAttackRadius = Mth.clamp(distanceOverAttackRadius, 0.1F, 1.0F);
 
 				// Used to animate snowball or egg throwing
-				if(this.hasThrowableItemInMainhand()) this.hostCreature.swing(Hand.MAIN_HAND);
+				if(this.hasThrowableItemInMainhand()) this.hostCreature.swing(InteractionHand.MAIN_HAND);
 
 				this.hostCreature.performRangedAttack(attackTarget, clampedDistanceOverAttackRadius);
-				this.rangedAttackTime = MathHelper.floor(distanceOverAttackRadius * (float)(this.maxRangedAttackTime - this.attackIntervalMin) + (float)this.attackIntervalMin);
+				this.rangedAttackTime = Mth.floor(distanceOverAttackRadius * (float)(this.maxRangedAttackTime - this.attackIntervalMin) + (float)this.attackIntervalMin);
 			} else if (this.rangedAttackTime < 0) {
-				distanceOverAttackRadius = MathHelper.sqrt(hostDistanceSq) / this.attackRadius;
-				this.rangedAttackTime = MathHelper.floor(distanceOverAttackRadius * (float)(this.maxRangedAttackTime - this.attackIntervalMin) + (float)this.attackIntervalMin);
+				distanceOverAttackRadius = Mth.sqrt(hostDistanceSq) / this.attackRadius;
+				this.rangedAttackTime = Mth.floor(distanceOverAttackRadius * (float)(this.maxRangedAttackTime - this.attackIntervalMin) + (float)this.attackIntervalMin);
 			}
 		}
 		else if(attackTarget != null)

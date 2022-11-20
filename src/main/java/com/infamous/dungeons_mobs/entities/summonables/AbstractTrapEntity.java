@@ -1,21 +1,20 @@
 package com.infamous.dungeons_mobs.entities.summonables;
 
-import java.util.List;
-
 import com.google.common.collect.Lists;
 import com.infamous.dungeons_mobs.interfaces.ITrapsTarget;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
+
+import java.util.List;
 
 public abstract class AbstractTrapEntity extends Entity implements IAnimatable {
 	
@@ -29,9 +28,9 @@ public abstract class AbstractTrapEntity extends Entity implements IAnimatable {
 	public boolean isTrappingMob;
 	
 	public List<Entity> trappedEntities = Lists.newArrayList();
-	public List<Vector3d> trappedEntityPositions = Lists.newArrayList();
+	public List<Vec3> trappedEntityPositions = Lists.newArrayList();
 	
-    public AbstractTrapEntity(EntityType<? extends AbstractTrapEntity> entityTypeIn, World worldIn) {
+    public AbstractTrapEntity(EntityType<? extends AbstractTrapEntity> entityTypeIn, Level worldIn) {
         super(entityTypeIn, worldIn);
     }
     
@@ -53,7 +52,7 @@ public abstract class AbstractTrapEntity extends Entity implements IAnimatable {
     		}
     		
     		if (this.decayAnimationTick == 2) {
-    			this.remove();
+    			this.remove(RemovalReason.DISCARDED);
     		}
     	}
     }
@@ -62,7 +61,7 @@ public abstract class AbstractTrapEntity extends Entity implements IAnimatable {
     	if (!this.level.isClientSide) {   
     		boolean isTrapping = false;
     		if (this.canTrap()) {
-    	    	List<Entity> list = this.level.getEntities(this, this.getBoundingBox(), null);
+    	    	List<Entity> list = this.level.getEntities(this, this.getBoundingBox(), Entity::isAlive);
     			if (!list.isEmpty()) {
     				for (Entity entity : list) {
     					if (entity instanceof LivingEntity && this.canTrapEntity(((LivingEntity)entity))) {
@@ -71,7 +70,7 @@ public abstract class AbstractTrapEntity extends Entity implements IAnimatable {
 	    						trappedEntityPositions.add(entity.position());
 	    					}
 	    					
-	    			    	if (this.owner != null && this.owner instanceof MobEntity && ((MobEntity)this.owner).getTarget() != null && ((MobEntity)this.owner).getTarget().isAlive() && ((MobEntity)this.owner).getTarget() == entity && this.owner instanceof ITrapsTarget) {
+	    			    	if (this.owner != null && this.owner instanceof Mob && ((Mob)this.owner).getTarget() != null && ((Mob)this.owner).getTarget().isAlive() && ((Mob)this.owner).getTarget() == entity && this.owner instanceof ITrapsTarget) {
 	    			    		((ITrapsTarget)this.owner).setTargetTrapped(true, true);
 	    			    	}
 	    			    	
@@ -83,7 +82,7 @@ public abstract class AbstractTrapEntity extends Entity implements IAnimatable {
     		
     		for (Entity entity : trappedEntities) {
 					int entityIndex = trappedEntities.indexOf(entity);
-					Vector3d entityTrappedPosition = trappedEntityPositions.get(entityIndex);
+					Vec3 entityTrappedPosition = trappedEntityPositions.get(entityIndex);
 					entity.fallDistance = 0;
 					if (this.distanceBetweenVector3ds(entity.position(), entityTrappedPosition) > 0.1) {
 						entity.teleportTo(entityTrappedPosition.x, entityTrappedPosition.y, entityTrappedPosition.z);
@@ -94,11 +93,11 @@ public abstract class AbstractTrapEntity extends Entity implements IAnimatable {
     	}
     }
     
-    public float distanceBetweenVector3ds(Vector3d position, Vector3d positionToGetDistanceTo) {
+    public float distanceBetweenVector3ds(Vec3 position, Vec3 positionToGetDistanceTo) {
         float f = (float)(position.x - positionToGetDistanceTo.x);
         float f1 = (float)(position.y - positionToGetDistanceTo.y);
         float f2 = (float)(position.z - positionToGetDistanceTo.z);
-        return MathHelper.sqrt(f * f + f1 * f1 + f2 * f2);
+        return Mth.sqrt(f * f + f1 * f1 + f2 * f2);
      }
     
     public void tickDownAnimTimers() {
@@ -143,17 +142,17 @@ public abstract class AbstractTrapEntity extends Entity implements IAnimatable {
 	}
 
 	@Override
-	protected void readAdditionalSaveData(CompoundNBT p_70037_1_) {
+	protected void readAdditionalSaveData(CompoundTag p_70037_1_) {
 		
 	}
 
 	@Override
-	protected void addAdditionalSaveData(CompoundNBT p_213281_1_) {
+	protected void addAdditionalSaveData(CompoundTag p_213281_1_) {
 		
 	}
 
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
     

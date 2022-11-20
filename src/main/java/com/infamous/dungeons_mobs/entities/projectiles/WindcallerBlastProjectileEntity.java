@@ -1,50 +1,38 @@
 package com.infamous.dungeons_mobs.entities.projectiles;
 
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
-import com.infamous.dungeons_mobs.entities.illagers.WindcallerEntity;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraftforge.network.NetworkHooks;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.DamagingProjectileEntity;
-import net.minecraft.entity.projectile.ProjectileHelper;
-import net.minecraft.entity.projectile.SmallFireballEntity;
-import net.minecraft.entity.projectile.WitherSkullEntity;
-import net.minecraft.network.IPacket;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
-
-public class WindcallerBlastProjectileEntity extends DamagingProjectileEntity {
+public class WindcallerBlastProjectileEntity extends AbstractHurtingProjectile {
 
     public int lifeTime;
 
-    public WindcallerBlastProjectileEntity(World world) {
+    public WindcallerBlastProjectileEntity(Level world) {
         super(ModEntityTypes.WINDCALLER_BLAST_PROJECTILE.get(), world);
         this.setNoGravity(true);
     }
 
-    public WindcallerBlastProjectileEntity(EntityType<? extends WindcallerBlastProjectileEntity> type, World world) {
+    public WindcallerBlastProjectileEntity(EntityType<? extends WindcallerBlastProjectileEntity> type, Level world) {
         super(type, world);
         this.setNoGravity(true);
     }
 
-    public WindcallerBlastProjectileEntity(World p_i1771_1_, LivingEntity p_i1771_2_, double p_i1771_3_, double p_i1771_5_, double p_i1771_7_) {
+    public WindcallerBlastProjectileEntity(Level p_i1771_1_, LivingEntity p_i1771_2_, double p_i1771_3_, double p_i1771_5_, double p_i1771_7_) {
         super(ModEntityTypes.WINDCALLER_BLAST_PROJECTILE.get(), p_i1771_2_, p_i1771_3_, p_i1771_5_, p_i1771_7_, p_i1771_1_);
         this.setNoGravity(true);
     }
 
-    public WindcallerBlastProjectileEntity(World p_i1772_1_, double p_i1772_2_, double p_i1772_4_, double p_i1772_6_, double p_i1772_8_, double p_i1772_10_, double p_i1772_12_) {
+    public WindcallerBlastProjectileEntity(Level p_i1772_1_, double p_i1772_2_, double p_i1772_4_, double p_i1772_6_, double p_i1772_8_, double p_i1772_10_, double p_i1772_12_) {
         super(ModEntityTypes.WINDCALLER_BLAST_PROJECTILE.get(), p_i1772_2_, p_i1772_4_, p_i1772_6_, p_i1772_8_, p_i1772_10_, p_i1772_12_, p_i1772_1_);
         this.setNoGravity(true);
     }
@@ -56,7 +44,7 @@ public class WindcallerBlastProjectileEntity extends DamagingProjectileEntity {
         this.lifeTime++;
 
         if (!this.level.isClientSide && this.lifeTime > 10) {
-            this.remove();
+            this.remove(RemovalReason.DISCARDED);
         }
     }
 
@@ -88,12 +76,12 @@ public class WindcallerBlastProjectileEntity extends DamagingProjectileEntity {
     }
 
     @Override
-    protected IParticleData getTrailParticle() {
+    protected ParticleOptions getTrailParticle() {
         return ModParticleTypes.WIND.get();
     }
 
     @Override
-    protected void onHitEntity(EntityRayTraceResult p_213868_1_) {
+    protected void onHitEntity(EntityHitResult p_213868_1_) {
         super.onHitEntity(p_213868_1_);
         Entity entity = p_213868_1_.getEntity();
 
@@ -132,7 +120,7 @@ public class WindcallerBlastProjectileEntity extends DamagingProjectileEntity {
     }
 
     @Override
-    public IPacket<?> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 }

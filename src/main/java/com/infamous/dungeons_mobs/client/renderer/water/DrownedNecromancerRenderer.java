@@ -1,41 +1,40 @@
 package com.infamous.dungeons_mobs.client.renderer.water;
 
-import javax.annotation.Nullable;
-
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.client.models.ocean.DrownedNecromancerModel;
 import com.infamous.dungeons_mobs.client.renderer.layers.PulsatingGlowLayer;
 import com.infamous.dungeons_mobs.entities.water.DrownedNecromancerEntity;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Vector3f;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.model.BipedModel;
-import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ShieldItem;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ShieldItem;
+import net.minecraft.world.level.block.state.BlockState;
 import software.bernie.example.client.DefaultBipedBoneIdents;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.renderers.geo.ExtendedGeoEntityRenderer;
 
+import javax.annotation.Nullable;
+
 public class DrownedNecromancerRenderer extends ExtendedGeoEntityRenderer<DrownedNecromancerEntity> {
 	
     @SuppressWarnings("unchecked")
-	public DrownedNecromancerRenderer(EntityRendererManager renderManager) {
+	public DrownedNecromancerRenderer(EntityRendererProvider.Context renderManager) {
         super(renderManager, new DrownedNecromancerModel());
         this.addLayer(new PulsatingGlowLayer(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/ocean/drowned_necromancer_eyes.png"), 0.2F, 0.5F, 1.0F));
     }
 
     @Override
-    protected void applyRotations(DrownedNecromancerEntity entityLiving, MatrixStack matrixStackIn, float ageInTicks,
+    protected void applyRotations(DrownedNecromancerEntity entityLiving, PoseStack matrixStackIn, float ageInTicks,
                                   float rotationYaw, float partialTicks) {
         float scaleFactor = 1.5F;
         matrixStackIn.scale(scaleFactor, scaleFactor, scaleFactor);
@@ -44,14 +43,14 @@ public class DrownedNecromancerRenderer extends ExtendedGeoEntityRenderer<Drowne
     }
 
     @Override
-    public RenderType getRenderType(DrownedNecromancerEntity animatable, float partialTicks, MatrixStack stack,
-                                    IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn,
+    public RenderType getRenderType(DrownedNecromancerEntity animatable, float partialTicks, PoseStack stack,
+                                    MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn,
                                     ResourceLocation textureLocation) {
         return RenderType.entityTranslucent(getTextureLocation(animatable));
     }
     
     @Override
-    public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+    public void renderRecursively(GeoBone bone, PoseStack stack, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
         if(this.isArmorBone(bone)) {
             bone.setCubesHidden(true);
         }
@@ -95,7 +94,7 @@ public class DrownedNecromancerRenderer extends ExtendedGeoEntityRenderer<Drowne
 	}
 
 	@Override
-	protected void preRenderItem(MatrixStack stack, ItemStack item, String boneName, DrownedNecromancerEntity currentEntity, IBone bone) {
+	protected void preRenderItem(PoseStack stack, ItemStack item, String boneName, DrownedNecromancerEntity currentEntity, IBone bone) {
 		if(item == this.mainHand || item == this.offHand) {
 			stack.scale(1.1F, 1.1F, 1.1F);
 			stack.mulPose(Vector3f.XP.rotationDegrees(-90.0F));
@@ -120,7 +119,7 @@ public class DrownedNecromancerRenderer extends ExtendedGeoEntityRenderer<Drowne
 	}
 
 	@Override
-	protected void postRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, DrownedNecromancerEntity currentEntity, IBone bone) {
+	protected void postRenderItem(PoseStack matrixStack, ItemStack item, String boneName, DrownedNecromancerEntity currentEntity, IBone bone) {
 
 	}
     
@@ -130,13 +129,13 @@ public class DrownedNecromancerRenderer extends ExtendedGeoEntityRenderer<Drowne
 	}
 	
 	@Override
-	protected void preRenderBlock(MatrixStack matrixStack, BlockState block, String boneName,
+	protected void preRenderBlock(PoseStack matrixStack, BlockState block, String boneName,
 			DrownedNecromancerEntity currentEntity) {
 		
 	}
 
 	@Override
-	protected void postRenderBlock(MatrixStack matrixStack, BlockState block, String boneName,
+	protected void postRenderBlock(PoseStack matrixStack, BlockState block, String boneName,
 			DrownedNecromancerEntity currentEntity) {
 		
 	}
@@ -165,33 +164,33 @@ public class DrownedNecromancerRenderer extends ExtendedGeoEntityRenderer<Drowne
     }
 
     @Override
-    protected EquipmentSlotType getEquipmentSlotForArmorBone(String boneName, DrownedNecromancerEntity currentEntity) {
+    protected EquipmentSlot getEquipmentSlotForArmorBone(String boneName, DrownedNecromancerEntity currentEntity) {
         switch (boneName) {
             case "armorBipedLeftFoot":
             case "armorBipedRightFoot":
-                return EquipmentSlotType.FEET;
+                return EquipmentSlot.FEET;
             case "armorBipedLeftLeg":
             case "armorBipedRightLeg":
-                return EquipmentSlotType.LEGS;
+                return EquipmentSlot.LEGS;
             case "armorBipedRightHand":
-                return !currentEntity.isLeftHanded() ? EquipmentSlotType.MAINHAND : EquipmentSlotType.OFFHAND;
+                return !currentEntity.isLeftHanded() ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
             case "armorBipedLeftHand":
-                return currentEntity.isLeftHanded() ? EquipmentSlotType.MAINHAND : EquipmentSlotType.OFFHAND;
+                return currentEntity.isLeftHanded() ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
             case "armorBipedRightArm":
             case "armorBipedLeftArm":
             case "armorIllagerRightArm":
             case "armorIllagerLeftArm":
             case "armorBipedBody":
-                return EquipmentSlotType.CHEST;
+                return EquipmentSlot.CHEST;
             case "armorBipedHead":
-                return EquipmentSlotType.HEAD;
+                return EquipmentSlot.HEAD;
             default:
                 return null;
         }
     }
 
     @Override
-    protected ModelRenderer getArmorPartForBone(String name, BipedModel<?> armorBipedModel) {
+    protected ModelPart getArmorPartForBone(String name, HumanoidModel<?> armorBipedModel) {
         switch (name) {
             case "armorBipedLeftFoot":
             case "armorBipedLeftLeg":

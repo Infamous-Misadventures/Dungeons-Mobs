@@ -10,22 +10,27 @@ import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModItems;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 import com.infamous.dungeons_mobs.utils.GeomancyHelper;
-
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
-import net.minecraft.entity.monster.*;
-import net.minecraft.entity.passive.IronGolemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.*;
+import net.minecraft.Util;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.monster.Evoker;
+import net.minecraft.world.entity.monster.SpellcasterIllager;
+import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.raid.Raider;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -34,16 +39,16 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
-
-import java.util.EnumSet;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
+import java.util.EnumSet;
 
 import static com.infamous.dungeons_mobs.entities.SpawnArmoredHelper.equipArmorSet;
 
-public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnimatable, SpawnArmoredMob {
+public class GeomancerEntity extends SpellcasterIllager implements IAnimatable, SpawnArmoredMob {
 
-	AnimationFactory factory = new AnimationFactory(this);
+	AnimationFactory factory = GeckoLibUtil.createFactory(this);
 	
 	public int summonBombsAttackAnimationTick;
 	public int summonBombsAttackAnimationLength = 35;
@@ -53,12 +58,12 @@ public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnima
 	public int summonWallsAnimationLength = 35;
 	public int summonWallsAnimationActionPoint = 20;
 
-    public GeomancerEntity(EntityType<? extends SpellcastingIllagerEntity> type, World world) {
+    public GeomancerEntity(EntityType<? extends SpellcasterIllager> type, Level world) {
         super(type, world);
     }
 
-    public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
-        return EvokerEntity.createAttributes().add(Attributes.MOVEMENT_SPEED, 0.25D).add(Attributes.FOLLOW_RANGE, 30.0D);
+    public static AttributeSupplier.Builder setCustomAttributes(){
+        return Evoker.createAttributes().add(Attributes.MOVEMENT_SPEED, 0.25D).add(Attributes.FOLLOW_RANGE, 30.0D);
     }
 
     @Override
@@ -68,22 +73,22 @@ public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnima
 
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimGoal(this));
+        this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(0, new GeomancerEntity.SummonPillarsGoal(this));
         // Custom goal to avoid Geomancer constructs
         this.goalSelector.addGoal(1, new AvoidBaseEntityGoal<>(this, ConstructEntity.class, 5.0F, 1.0D, 1.0D));
-        this.goalSelector.addGoal(2, new AvoidEntityGoal<>(this, AbstractVillagerEntity.class, 3.0F, 1.2D, 1.15D));
-        this.goalSelector.addGoal(2, new AvoidEntityGoal<>(this, PlayerEntity.class, 3.0F, 1.2D, 1.2D));
-        this.goalSelector.addGoal(2, new AvoidEntityGoal<>(this, IronGolemEntity.class, 3.0F, 1.3D, 1.15D));
+        this.goalSelector.addGoal(2, new AvoidEntityGoal<>(this, AbstractVillager.class, 3.0F, 1.2D, 1.15D));
+        this.goalSelector.addGoal(2, new AvoidEntityGoal<>(this, Player.class, 3.0F, 1.2D, 1.2D));
+        this.goalSelector.addGoal(2, new AvoidEntityGoal<>(this, IronGolem.class, 3.0F, 1.3D, 1.15D));
         this.goalSelector.addGoal(3, new ApproachTargetGoal(this, 15, 1.0D, true));
         this.goalSelector.addGoal(4, new LookAtTargetGoal(this));
-        this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 1.0D));
-        this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
-        this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
-        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, AbstractRaiderEntity.class)).setAlertOthers());
-        this.targetSelector.addGoal(2, (new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true)).setUnseenMemoryTicks(600));
-        this.targetSelector.addGoal(3, (new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, false)).setUnseenMemoryTicks(600));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, false).setUnseenMemoryTicks(600));
+        this.goalSelector.addGoal(8, new RandomStrollGoal(this, 1.0D));
+        this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
+        this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 8.0F));
+        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, Raider.class)).setAlertOthers());
+        this.targetSelector.addGoal(2, (new NearestAttackableTargetGoal<>(this, Player.class, true)).setUnseenMemoryTicks(600));
+        this.targetSelector.addGoal(3, (new NearestAttackableTargetGoal<>(this, AbstractVillager.class, false)).setUnseenMemoryTicks(600));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, false).setUnseenMemoryTicks(600));
     }
     
     @Override
@@ -146,12 +151,12 @@ public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnima
 
     @Override
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
-        this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModItems.GEOMANCER_STAFF.get()));
+        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.GEOMANCER_STAFF.get()));
 		equipArmorSet(ModItems.GEOMANCER_ARMOR, this);
     }
 
     @Nullable
-    public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
         this.populateDefaultEquipmentSlots(difficultyIn);
         this.populateDefaultEquipmentEnchantments(difficultyIn);
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
@@ -168,7 +173,7 @@ public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnima
     public boolean isAlliedTo(Entity entityIn) {
         if (super.isAlliedTo(entityIn)) {
             return true;
-        } else if (entityIn instanceof LivingEntity && ((LivingEntity)entityIn).getMobType() == CreatureAttribute.ILLAGER) {
+        } else if (entityIn instanceof LivingEntity && ((LivingEntity)entityIn).getMobType() == MobType.ILLAGER) {
             return this.getTeam() == null && entityIn.getTeam() == null;
         } else {
             return false;
@@ -206,10 +211,10 @@ public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnima
     }
 
     @Override
-    public ArmPose getArmPose() {
-        ArmPose illagerArmPose =  super.getArmPose();
-        if(illagerArmPose == ArmPose.CROSSED){
-            return ArmPose.NEUTRAL;
+    public IllagerArmPose getArmPose() {
+        IllagerArmPose illagerArmPose =  super.getArmPose();
+        if(illagerArmPose == IllagerArmPose.CROSSED){
+            return IllagerArmPose.NEUTRAL;
         }
         return illagerArmPose;
     }
@@ -240,7 +245,7 @@ public class GeomancerEntity extends SpellcastingIllagerEntity implements IAnima
 		public boolean canUse() {
 			target = mob.getTarget();
 			
-			return target != null && mob.tickCount >= this.nextUseTime && mob.distanceTo(target) <= 20 && mob.canSee(target) && animationsUseable();
+			return target != null && mob.tickCount >= this.nextUseTime && mob.distanceTo(target) <= 20 && mob.hasLineOfSight(target) && animationsUseable();
 		}
 
 		@Override

@@ -3,24 +3,19 @@ package com.infamous.dungeons_mobs.entities.projectiles;
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
-
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.world.World;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -28,11 +23,14 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
+
+import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
 public class NecromancerOrbEntity extends StraightMovingProjectileEntity implements IAnimatable {
 
-	private static final DataParameter<Boolean> DELAYED_FORM = EntityDataManager.defineId(NecromancerOrbEntity.class,
-			DataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> DELAYED_FORM = SynchedEntityData.defineId(NecromancerOrbEntity.class,
+			EntityDataSerializers.BOOLEAN);
 	
 	public int formAnimationTick;
 	public int formAnimationLength = 20;
@@ -41,26 +39,35 @@ public class NecromancerOrbEntity extends StraightMovingProjectileEntity impleme
 
 	public int textureChange = 0;
 
-	AnimationFactory factory = new AnimationFactory(this);
-		   
-	public NecromancerOrbEntity(World worldIn) {
+	AnimationFactory factory = GeckoLibUtil.createFactory(this);
+
+	public NecromancerOrbEntity(Level worldIn) {
 		super(ModEntityTypes.NECROMANCER_ORB.get(), worldIn);
 	}
 
-	public NecromancerOrbEntity(EntityType<? extends NecromancerOrbEntity> p_i50147_1_, World p_i50147_2_) {
+	public NecromancerOrbEntity(EntityType<? extends NecromancerOrbEntity> p_i50147_1_, Level p_i50147_2_) {
 		super(p_i50147_1_, p_i50147_2_);
 	}
 
-	public NecromancerOrbEntity(World p_i1794_1_, LivingEntity p_i1794_2_, double p_i1794_3_, double p_i1794_5_,
-			double p_i1794_7_) {
+	public NecromancerOrbEntity(Level p_i1794_1_, LivingEntity p_i1794_2_, double p_i1794_3_, double p_i1794_5_,
+								double p_i1794_7_) {
 		super(ModEntityTypes.NECROMANCER_ORB.get(), p_i1794_2_, p_i1794_3_, p_i1794_5_, p_i1794_7_, p_i1794_1_);
 	}
 
-	@OnlyIn(Dist.CLIENT)
-	public NecromancerOrbEntity(World p_i1795_1_, double p_i1795_2_, double p_i1795_4_, double p_i1795_6_,
-			double p_i1795_8_, double p_i1795_10_, double p_i1795_12_) {
+	public NecromancerOrbEntity(EntityType<? extends NecromancerOrbEntity> necromancerOrbEntityType, Level p_i1795_1_, double p_i1795_2_, double p_i1795_4_, double p_i1795_6_,
+								double p_i1795_8_, double p_i1795_10_, double p_i1795_12_) {
+		super(necromancerOrbEntityType, p_i1795_2_, p_i1795_4_, p_i1795_6_, p_i1795_8_, p_i1795_10_,
+				p_i1795_12_, p_i1795_1_);
+	}
+
+	public NecromancerOrbEntity(Level p_i1795_1_, double p_i1795_2_, double p_i1795_4_, double p_i1795_6_,
+								double p_i1795_8_, double p_i1795_10_, double p_i1795_12_) {
 		super(ModEntityTypes.NECROMANCER_ORB.get(), p_i1795_2_, p_i1795_4_, p_i1795_6_, p_i1795_8_, p_i1795_10_,
 				p_i1795_12_, p_i1795_1_);
+	}
+
+	public NecromancerOrbEntity(EntityType<? extends NecromancerOrbEntity> necromancerOrbEntityType, LivingEntity p_i1794_2_, double p_i1794_3_, double p_i1794_5_, double p_i1794_7_, Level p_i1794_1_) {
+		super(necromancerOrbEntityType, p_i1794_2_, p_i1794_3_, p_i1794_5_, p_i1794_7_, p_i1794_1_);
 	}
 	
 	public void handleEntityEvent(byte p_28844_) {
@@ -74,7 +81,7 @@ public class NecromancerOrbEntity extends StraightMovingProjectileEntity impleme
 	}
 	
 	@Override
-	protected IParticleData getTrailParticle() {
+	protected ParticleOptions getTrailParticle() {
 		return ModParticleTypes.NECROMANCY.get();
 	}
 	
@@ -101,8 +108,8 @@ public class NecromancerOrbEntity extends StraightMovingProjectileEntity impleme
 	}
 	
 	@Override
-	protected boolean isMovementNoisy() {
-		return false;
+	protected MovementEmission getMovementEmission() {
+        return MovementEmission.NONE;
 	}
 
 	@Override
@@ -129,7 +136,7 @@ public class NecromancerOrbEntity extends StraightMovingProjectileEntity impleme
 		}
 
 		if (!this.level.isClientSide && this.vanishAnimationTick == 2) {
-			this.remove();
+			this.remove(RemovalReason.DISCARDED);
 		}
 	}
 
@@ -150,11 +157,11 @@ public class NecromancerOrbEntity extends StraightMovingProjectileEntity impleme
 
 	private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
 		if (this.vanishAnimationTick > 0) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("necromancer_orb_vanish", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("necromancer_orb_vanish", LOOP));
 		} else if (this.formAnimationTick > 0) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("necromancer_orb_form", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("necromancer_orb_form", LOOP));
 		} else {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("necromancer_orb_idle", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("necromancer_orb_idle", LOOP));
 		}
 		return PlayState.CONTINUE;
 	}
@@ -182,12 +189,12 @@ public class NecromancerOrbEntity extends StraightMovingProjectileEntity impleme
 		return false;
 	}
 
-	protected void onHitEntity(EntityRayTraceResult p_213868_1_) {
+	protected void onHitEntity(EntityHitResult p_213868_1_) {
 		super.onHitEntity(p_213868_1_);
 	}
 	
 	public void onHitEntity(Entity entity) {
-		if (entity instanceof MobEntity && ((MobEntity)entity).getMobType() == CreatureAttribute.UNDEAD) {
+		if (entity instanceof Mob && ((Mob)entity).getMobType() == MobType.UNDEAD) {
 			
 		} else if (!this.level.isClientSide) {
 			super.onHitEntity(entity);
@@ -228,7 +235,7 @@ public class NecromancerOrbEntity extends StraightMovingProjectileEntity impleme
 	}
 	
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 

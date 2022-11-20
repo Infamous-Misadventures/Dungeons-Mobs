@@ -1,12 +1,11 @@
 package com.infamous.dungeons_mobs.entities.jungle;
 
 import com.infamous.dungeons_mobs.tags.CustomTags;
-
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.Pose;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.util.DamageSource;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.Pose;
 import net.minecraftforge.entity.PartEntity;
 
 public class VinePartEntity extends PartEntity<AbstractVineEntity> {
@@ -24,10 +23,10 @@ public class VinePartEntity extends PartEntity<AbstractVineEntity> {
 	protected void defineSynchedData() {
 	}
 
-	protected void readAdditionalSaveData(CompoundNBT p_70037_1_) {
+	protected void readAdditionalSaveData(CompoundTag p_70037_1_) {
 	}
 
-	protected void addAdditionalSaveData(CompoundNBT p_213281_1_) {
+	protected void addAdditionalSaveData(CompoundTag p_213281_1_) {
 	}
 
 	public boolean isPickable() {
@@ -59,29 +58,29 @@ public class VinePartEntity extends PartEntity<AbstractVineEntity> {
 		return parentMob.isOut();
 	}
 
-	public EntitySize getSizeForSegment() {
-		EntitySize size = EntitySize.scalable(0, 0);
+	public EntityDimensions getSizeForSegment() {
+		EntityDimensions size = EntityDimensions.scalable(0, 0);
 
 		if(this.segmentNumber < 27 - parentMob.getLengthInSegments()) {
 			return size;
 		}
 
 		if (this.segmentNumber == 26) {
-			size = EntitySize.scalable(0.25F, this.isPoisonQuill() ? 1.625F : 1.375F);
+			size = EntityDimensions.scalable(0.25F, this.isPoisonQuill() ? 1.625F : 1.375F);
 		} else if (this.segmentNumber == 25) {
-			size = EntitySize.scalable(0.5F, this.isPoisonQuill() ? 2.0F : 1.375F);
+			size = EntityDimensions.scalable(0.5F, this.isPoisonQuill() ? 2.0F : 1.375F);
 		} else if (this.segmentNumber >= 23 && this.segmentNumber <= 24) {
-			size = EntitySize.scalable(0.75F, this.isPoisonQuill() && this.segmentNumber == 24 ? 2.0F : 1.375F);
+			size = EntityDimensions.scalable(0.75F, this.isPoisonQuill() && this.segmentNumber == 24 ? 2.0F : 1.375F);
 		} else if (this.segmentNumber >= 20 && this.segmentNumber <= 22) {
-			size = EntitySize.scalable(1.0F, 1.375F);
+			size = EntityDimensions.scalable(1.0F, 1.375F);
 		} else if (this.segmentNumber >= 16 && this.segmentNumber <= 19) {
-			size = EntitySize.scalable(1.25F, 1.375F);
+			size = EntityDimensions.scalable(1.25F, 1.375F);
 		} else if (this.segmentNumber >= 11 && this.segmentNumber <= 15) {
-			size = EntitySize.scalable(1.5F, 1.375F);
+			size = EntityDimensions.scalable(1.5F, 1.375F);
 		} else if (this.segmentNumber >= 5 && this.segmentNumber <= 10) {
-			size = EntitySize.scalable(1.75F, 1.375F);
+			size = EntityDimensions.scalable(1.75F, 1.375F);
 		} else if (this.segmentNumber >= 1 && this.segmentNumber <= 4) {
-			size = EntitySize.scalable(2.0F, 1.375F);
+			size = EntityDimensions.scalable(2.0F, 1.375F);
 		}
 		return size;
 	}
@@ -91,11 +90,11 @@ public class VinePartEntity extends PartEntity<AbstractVineEntity> {
 		return ((1.375F * (this.segmentNumber - 1)) - (1.375F * 26) + this.parentMob.getLengthInBlocks()) + extraHeight;
 	}
 
-	public EntitySize getDimensions(Pose p_213305_1_) {
+	public EntityDimensions getDimensions(Pose p_213305_1_) {
 		return this.getSizeForSegment();
 	}
 
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		throw new UnsupportedOperationException();
 	}
 }

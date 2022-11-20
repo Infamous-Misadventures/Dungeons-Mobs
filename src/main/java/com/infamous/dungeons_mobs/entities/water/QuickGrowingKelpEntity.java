@@ -3,15 +3,14 @@ package com.infamous.dungeons_mobs.entities.water;
 import com.infamous.dungeons_mobs.entities.jungle.QuickGrowingVineEntity;
 import com.infamous.dungeons_mobs.entities.summonables.AreaDamageEntity;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
-
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.world.World;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.Level;
 
 public class QuickGrowingKelpEntity extends QuickGrowingVineEntity {
 
-	public QuickGrowingKelpEntity(EntityType<? extends QuickGrowingKelpEntity> p_i50147_1_, World p_i50147_2_) {
+	public QuickGrowingKelpEntity(EntityType<? extends QuickGrowingKelpEntity> p_i50147_1_, Level p_i50147_2_) {
 		super(p_i50147_1_, p_i50147_2_);
 	}
 	

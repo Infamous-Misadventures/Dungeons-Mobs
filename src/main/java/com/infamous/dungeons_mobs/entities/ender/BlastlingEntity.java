@@ -1,45 +1,29 @@
 package com.infamous.dungeons_mobs.entities.ender;
 
-import java.util.EnumSet;
-import java.util.function.Predicate;
-
 import com.infamous.dungeons_mobs.entities.projectiles.BlastlingBulletEntity;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntityPredicate;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.IRangedAttackMob;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.HurtByTargetGoal;
-import net.minecraft.entity.ai.goal.LookAtGoal;
-import net.minecraft.entity.ai.goal.LookRandomlyGoal;
-import net.minecraft.entity.ai.goal.RangedAttackGoal;
-import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
-import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
-import net.minecraft.entity.monster.AbstractRaiderEntity;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.passive.IronGolemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.PathNavigator;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityPredicates;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.ai.util.DefaultRandomPos;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.RangedAttackMob;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -47,39 +31,45 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
-public class BlastlingEntity extends AbstractEnderlingEntity implements IAnimatable, IRangedAttackMob {
+import java.util.EnumSet;
+import java.util.function.Predicate;
+
+import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
+
+public class BlastlingEntity extends AbstractEnderlingEntity implements IAnimatable, RangedAttackMob {
 	
-	public static final DataParameter<Integer> SHOOT_TIME = EntityDataManager.defineId(BlastlingEntity.class, DataSerializers.INT);
+	public static final EntityDataAccessor<Integer> SHOOT_TIME = SynchedEntityData.defineId(BlastlingEntity.class, EntityDataSerializers.INT);
 	
-	AnimationFactory factory = new AnimationFactory(this);
+	AnimationFactory factory = GeckoLibUtil.createFactory(this);
 	
 	public float flameTicks;
 
-	public BlastlingEntity(EntityType<? extends BlastlingEntity> p_i50210_1_, World p_i50210_2_) {
+	public BlastlingEntity(EntityType<? extends BlastlingEntity> p_i50210_1_, Level p_i50210_2_) {
 		super(p_i50210_1_, p_i50210_2_);
 	}
 	
 	   protected void registerGoals() {
-		      this.goalSelector.addGoal(0, new SwimGoal(this));
+		      this.goalSelector.addGoal(0, new FloatGoal(this));
 		      this.goalSelector.addGoal(0, new RangedAttackGoal(this, 1.15D, 20, 10.0F));
 		      this.goalSelector.addGoal(0, new BlastlingEntity.AvoidEntityGoal<>(this, 5, 1.0D, 1.0D));
-		      this.goalSelector.addGoal(7, new WaterAvoidingRandomWalkingGoal(this, 1.0D, 0.0F));
-		      this.goalSelector.addGoal(8, new LookAtGoal(this, PlayerEntity.class, 8.0F));
-		      this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
+		      this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D, 0.0F));
+		      this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
+		      this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
 		      this.targetSelector.addGoal(1, new AbstractEnderlingEntity.FindPlayerGoal(this, null));
 		      this.targetSelector.addGoal(2, new HurtByTargetGoal(this, AbstractEnderlingEntity.class).setAlertOthers().setUnseenMemoryTicks(500));
-		      this.targetSelector.addGoal(1, new EnderlingTargetGoal<>(this, PlayerEntity.class, true).setUnseenMemoryTicks(500));
+		      this.targetSelector.addGoal(1, new EnderlingTargetGoal<>(this, Player.class, true).setUnseenMemoryTicks(500));
 
 		      //this.targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, AbstractEndermanVariant.class, true, false));
 		   }
 	   
-	   public CreatureAttribute getMobType() {
-		      return CreatureAttribute.UNDEAD;
+	   public MobType getMobType() {
+		      return MobType.UNDEAD;
 		   }
 	   
-	   public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-		      return MonsterEntity.createMonsterAttributes().add(Attributes.MAX_HEALTH, 30.0D).add(Attributes.MOVEMENT_SPEED, (double)0.225F).add(Attributes.ATTACK_DAMAGE, 7.0D).add(Attributes.FOLLOW_RANGE, 32.0D);
+	   public static AttributeSupplier.Builder setCustomAttributes() {
+		      return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 30.0D).add(Attributes.MOVEMENT_SPEED, 0.225F).add(Attributes.ATTACK_DAMAGE, 7.0D).add(Attributes.FOLLOW_RANGE, 32.0D);
 		   }
 	   
 	protected SoundEvent getAmbientSound() {
@@ -144,7 +134,7 @@ public class BlastlingEntity extends AbstractEnderlingEntity implements IAnimata
 	   
 	   private double getHeadX(boolean p_82214_1_) {
 		         float f = (this.yBodyRot + (float)(180 * (p_82214_1_ ? 0 : 0.75))) * ((float)Math.PI / 180F);
-		         float f1 = MathHelper.cos(f);
+		         float f1 = Mth.cos(f);
 		         return this.getX() + (double)f1 * 1.3D;
 		   }
 
@@ -154,7 +144,7 @@ public class BlastlingEntity extends AbstractEnderlingEntity implements IAnimata
 
 		   private double getHeadZ(boolean p_82213_1_) {
 		         float f = (this.yBodyRot + (float)(180 * (p_82213_1_ ? 0 : 0.75))) * ((float)Math.PI / 180F);
-		         float f1 = MathHelper.sin(f);
+		         float f1 = Mth.sin(f);
 		         return this.getZ() + (double)f1 * 1.3D;
 		   }
 	
@@ -182,12 +172,12 @@ public class BlastlingEntity extends AbstractEnderlingEntity implements IAnimata
 	   
 		private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
 			if (this.getShootTime() > 0) {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("blastling_shoot", true));
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("blastling_shoot", LOOP));
 			} else {
 				if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
-						event.getController().setAnimation(new AnimationBuilder().addAnimation("blastling_walk", true));
+						event.getController().setAnimation(new AnimationBuilder().addAnimation("blastling_walk", LOOP));
 				} else {
-					    event.getController().setAnimation(new AnimationBuilder().addAnimation("blastling_idle", true));
+					    event.getController().setAnimation(new AnimationBuilder().addAnimation("blastling_idle", LOOP));
 				}
 			}
 			return PlayState.CONTINUE;
@@ -199,24 +189,24 @@ public class BlastlingEntity extends AbstractEnderlingEntity implements IAnimata
 		}
 
 		public class AvoidEntityGoal<T extends LivingEntity> extends Goal {
-			   protected final CreatureEntity mob;
+			   protected final PathfinderMob mob;
 			   private final double walkSpeedModifier;
 			   private final double sprintSpeedModifier;
 			   protected LivingEntity toAvoid;
 			   protected final float maxDist;
 			   protected Path path;
-			   protected final PathNavigator pathNav;
+			   protected final PathNavigation pathNav;
 			   protected final Predicate<LivingEntity> avoidPredicate;
 			   protected final Predicate<LivingEntity> predicateOnAvoidEntity;
-			   private final EntityPredicate avoidEntityTargeting;
+			   private final TargetingConditions avoidEntityTargeting;
 
-			   public AvoidEntityGoal(CreatureEntity p_i46404_1_, float p_i46404_3_, double p_i46404_4_, double p_i46404_6_) {
+			   public AvoidEntityGoal(PathfinderMob p_i46404_1_, float p_i46404_3_, double p_i46404_4_, double p_i46404_6_) {
 			      this(p_i46404_1_, (p_200828_0_) -> {
 			         return true;
-			      }, p_i46404_3_, p_i46404_4_, p_i46404_6_, EntityPredicates.NO_CREATIVE_OR_SPECTATOR::test);
+			      }, p_i46404_3_, p_i46404_4_, p_i46404_6_, EntitySelector.NO_CREATIVE_OR_SPECTATOR::test);
 			   }
 
-			   public AvoidEntityGoal(CreatureEntity p_i48859_1_, Predicate<LivingEntity> p_i48859_3_, float p_i48859_4_, double p_i48859_5_, double p_i48859_7_, Predicate<LivingEntity> p_i48859_9_) {
+			   public AvoidEntityGoal(PathfinderMob p_i48859_1_, Predicate<LivingEntity> p_i48859_3_, float p_i48859_4_, double p_i48859_5_, double p_i48859_7_, Predicate<LivingEntity> p_i48859_9_) {
 			      this.mob = p_i48859_1_;
 			      this.avoidPredicate = p_i48859_3_;
 			      this.maxDist = p_i48859_4_;
@@ -225,10 +215,10 @@ public class BlastlingEntity extends AbstractEnderlingEntity implements IAnimata
 			      this.predicateOnAvoidEntity = p_i48859_9_;
 			      this.pathNav = p_i48859_1_.getNavigation();
 			      this.setFlags(EnumSet.of(Goal.Flag.MOVE));
-			      this.avoidEntityTargeting = (new EntityPredicate()).range((double)p_i48859_4_).selector(p_i48859_9_.and(p_i48859_3_));
+			      this.avoidEntityTargeting = TargetingConditions.forCombat().range(p_i48859_4_).selector(p_i48859_9_.and(p_i48859_3_));
 			   }
 
-			   public AvoidEntityGoal(CreatureEntity p_i48860_1_, float p_i48860_3_, double p_i48860_4_, double p_i48860_6_, Predicate<LivingEntity> p_i48860_8_) {
+			   public AvoidEntityGoal(PathfinderMob p_i48860_1_, float p_i48860_3_, double p_i48860_4_, double p_i48860_6_, Predicate<LivingEntity> p_i48860_8_) {
 			      this(p_i48860_1_, (p_203782_0_) -> {
 			         return true;
 			      }, p_i48860_3_, p_i48860_4_, p_i48860_6_, p_i48860_8_);
@@ -239,7 +229,7 @@ public class BlastlingEntity extends AbstractEnderlingEntity implements IAnimata
 			      if (this.toAvoid == null || this.mob.distanceTo(this.toAvoid) > this.maxDist) {
 			         return false;
 			      } else {
-			         Vector3d vector3d = RandomPositionGenerator.getPosAvoid(this.mob, 16, 7, this.toAvoid.position());
+			         Vec3 vector3d = DefaultRandomPos.getPosAway(this.mob, 16, 7, this.toAvoid.position());
 			         if (vector3d == null) {
 			            return false;
 			         } else if (this.toAvoid.distanceToSqr(vector3d.x, vector3d.y, vector3d.z) < this.toAvoid.distanceToSqr(this.mob)) {

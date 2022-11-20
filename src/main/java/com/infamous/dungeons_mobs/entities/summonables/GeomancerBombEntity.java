@@ -1,16 +1,13 @@
 package com.infamous.dungeons_mobs.entities.summonables;
 
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.monster.HuskEntity;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.monster.ZombieEntity;
-import net.minecraft.network.IPacket;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -18,22 +15,26 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
+
+import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
+import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.PLAY_ONCE;
 
 public class GeomancerBombEntity extends ConstructEntity implements IAnimatable {
 	
-	AnimationFactory factory = new AnimationFactory(this);
+	AnimationFactory factory = GeckoLibUtil.createFactory(this);
 	
     private float explosionRadius = 3.0F;
 
-    public GeomancerBombEntity(World worldIn){
+    public GeomancerBombEntity(Level worldIn){
         super(ModEntityTypes.GEOMANCER_BOMB.get(), worldIn);
     }
 
-    public GeomancerBombEntity(World worldIn, double x, double y, double z, LivingEntity casterIn, int lifeTicksIn) {
+    public GeomancerBombEntity(Level worldIn, double x, double y, double z, LivingEntity casterIn, int lifeTicksIn) {
         super(ModEntityTypes.GEOMANCER_BOMB.get(), worldIn, x, y, z, casterIn, lifeTicksIn);
     }
 
-    public GeomancerBombEntity(EntityType<? extends GeomancerBombEntity> explodingPillarEntityEntityType, World world) {
+    public GeomancerBombEntity(EntityType<? extends GeomancerBombEntity> explodingPillarEntityEntityType, Level world) {
         super(explodingPillarEntityEntityType, world);
     }
 
@@ -46,11 +47,11 @@ public class GeomancerBombEntity extends ConstructEntity implements IAnimatable 
     }
 
     private void explode() {
-        this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), this.explosionRadius, Explosion.Mode.NONE);
+        this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), this.explosionRadius, Explosion.BlockInteraction.NONE);
     }
     
-    public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return MonsterEntity.createMonsterAttributes().add(Attributes.FOLLOW_RANGE, 0.0D).add(Attributes.MOVEMENT_SPEED, 0.0D).add(Attributes.ATTACK_DAMAGE, 0.0D);
+    public static AttributeSupplier.Builder setCustomAttributes() {
+        return Monster.createMonsterAttributes().add(Attributes.FOLLOW_RANGE, 0.0D).add(Attributes.MOVEMENT_SPEED, 0.0D).add(Attributes.ATTACK_DAMAGE, 0.0D);
     }
     
     @Override
@@ -60,9 +61,9 @@ public class GeomancerBombEntity extends ConstructEntity implements IAnimatable 
    
 	private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
 		if (this.getLifeTicks() > 75) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("geomancer_pillar_appear", false));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("geomancer_pillar_appear", PLAY_ONCE));
 		} else {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("geomancer_pillar_idle", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("geomancer_pillar_idle", LOOP));
 		}
 		return PlayState.CONTINUE;
 	}

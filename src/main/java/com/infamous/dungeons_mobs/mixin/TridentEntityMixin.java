@@ -1,17 +1,17 @@
 package com.infamous.dungeons_mobs.mixin;
 
 import com.infamous.dungeons_mobs.interfaces.IHasItemStackData;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.entity.projectile.TridentEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.ThrownTrident;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,16 +19,16 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(TridentEntity.class)
-public abstract class TridentEntityMixin extends AbstractArrowEntity  implements IHasItemStackData {
-    private static final DataParameter<ItemStack> DATA_ITEM_STACK = EntityDataManager.defineId(TridentEntity.class, DataSerializers.ITEM_STACK);
+@Mixin(ThrownTrident.class)
+public abstract class TridentEntityMixin extends AbstractArrow  implements IHasItemStackData {
+    private static final EntityDataAccessor<ItemStack> DATA_ITEM_STACK = SynchedEntityData.defineId(ThrownTrident.class, EntityDataSerializers.ITEM_STACK);
 
-    protected TridentEntityMixin(EntityType<? extends AbstractArrowEntity> p_i48546_1_, World p_i48546_2_) {
+    protected TridentEntityMixin(EntityType<? extends AbstractArrow> p_i48546_1_, Level p_i48546_2_) {
         super(p_i48546_1_, p_i48546_2_);
     }
 
-    @Inject(at = @At("RETURN"), method = "<init>(Lnet/minecraft/world/World;Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/item/ItemStack;)V")
-    private void constructWithItemStack(World p_i48790_1_, LivingEntity p_i48790_2_, ItemStack stack, CallbackInfo ci){
+    @Inject(at = @At("RETURN"), method = "Lnet/minecraft/world/entity/projectile/ThrownTrident;<init>(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;)V")
+    private void constructWithItemStack(Level p_i48790_1_, LivingEntity p_i48790_2_, ItemStack stack, CallbackInfo ci){
         this.setDataItem(stack.copy());
     }
 
@@ -43,12 +43,12 @@ public abstract class TridentEntityMixin extends AbstractArrowEntity  implements
     }
 
     @Inject(at = @At("TAIL"), method = "addAdditionalSaveData")
-    private void writeItemStackDataToTag(CompoundNBT tag, CallbackInfo ci){
+    private void writeItemStackDataToTag(CompoundTag tag, CallbackInfo ci){
         this.writeDataItem(tag, "Trident");
     }
 
     @Inject(at = @At("TAIL"), method = "readAdditionalSaveData")
-    private void readItemStackDataFromTag(CompoundNBT tag, CallbackInfo ci){
+    private void readItemStackDataFromTag(CompoundTag tag, CallbackInfo ci){
         this.readDataItem(tag, "Trident");
     }
 

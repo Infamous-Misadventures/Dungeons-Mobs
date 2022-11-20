@@ -1,16 +1,14 @@
 package com.infamous.dungeons_mobs.capabilities.ancient;
 
-import net.minecraft.entity.Entity;
-import net.minecraftforge.common.util.LazyOptional;
+import net.minecraft.world.entity.Entity;
 
-import javax.annotation.Nullable;
+import static com.infamous.dungeons_mobs.capabilities.ModCapabilities.ANCIENT_CAPABILITY;
+
 
 public class AncientHelper {
 
-    public static IAncient getAncientCapability(Entity entity)
+    public static Ancient getAncientCapability(Entity entity)
     {
-        LazyOptional<IAncient> lazyCap = entity.getCapability(AncientProvider.MOB_PROPS_CAPABILITY);
-        return lazyCap.orElse(new Ancient());
+        return entity.getCapability(ANCIENT_CAPABILITY).orElse(new Ancient());
     }
-
 }

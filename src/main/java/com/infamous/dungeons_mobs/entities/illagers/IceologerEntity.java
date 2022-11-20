@@ -1,10 +1,5 @@
 package com.infamous.dungeons_mobs.entities.illagers;
 
-import java.util.EnumSet;
-import java.util.function.Predicate;
-
-import javax.annotation.Nullable;
-
 import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
 import com.infamous.dungeons_libraries.items.gearconfig.ArmorSet;
 import com.infamous.dungeons_mobs.entities.summonables.IceCloudEntity;
@@ -13,38 +8,24 @@ import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModItems;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
-
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.AvoidEntityGoal;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.HurtByTargetGoal;
-import net.minecraft.entity.ai.goal.LookAtGoal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.ai.goal.RandomWalkingGoal;
-import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
-import net.minecraft.entity.monster.AbstractIllagerEntity;
-import net.minecraft.entity.monster.AbstractRaiderEntity;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.passive.IronGolemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.monster.AbstractIllager;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.raid.Raider;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -52,22 +33,28 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
+
+import javax.annotation.Nullable;
+import java.util.EnumSet;
+import java.util.function.Predicate;
 
 import static com.infamous.dungeons_mobs.entities.SpawnArmoredHelper.equipArmorSet;
+import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
-public class IceologerEntity extends AbstractIllagerEntity implements IAnimatable, SpawnArmoredMob {
+public class IceologerEntity extends AbstractIllager implements IAnimatable, SpawnArmoredMob {
 
 	public int summonAnimationTick;
 	public int summonAnimationLength = 60;
 	public int summonAnimationActionPoint = 40;
 
-    AnimationFactory factory = new AnimationFactory(this);
+    AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
-    public IceologerEntity(World world){
+    public IceologerEntity(Level world){
         super(ModEntityTypes.ICEOLOGER.get(), world);
     }
 
-    public IceologerEntity(EntityType<? extends IceologerEntity> type, World world) {
+    public IceologerEntity(EntityType<? extends IceologerEntity> type, Level world) {
         super(type, world);
     }
 
@@ -78,20 +65,20 @@ public class IceologerEntity extends AbstractIllagerEntity implements IAnimatabl
 
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimGoal(this));
+        this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(0, new IceologerEntity.SummonIceChunkGoal(this));
-        this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, AbstractVillagerEntity.class, 3.0F, 1.2D, 1.15D));
-        this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, PlayerEntity.class, 3.0F, 1.2D, 1.2D));
-        this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, IronGolemEntity.class, 3.0F, 1.3D, 1.15D));
+        this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, AbstractVillager.class, 3.0F, 1.2D, 1.15D));
+        this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, Player.class, 3.0F, 1.2D, 1.2D));
+        this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, IronGolem.class, 3.0F, 1.3D, 1.15D));
         this.goalSelector.addGoal(2, new ApproachTargetGoal(this, 10, 1.0D, true));
         this.goalSelector.addGoal(3, new LookAtTargetGoal(this));
-        this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 1.0D));
-        this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
-        this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
-        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, AbstractRaiderEntity.class)).setAlertOthers());
-        this.targetSelector.addGoal(2, (new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true)).setUnseenMemoryTicks(600));
-        this.targetSelector.addGoal(3, (new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, false)).setUnseenMemoryTicks(600));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, false).setUnseenMemoryTicks(600));
+        this.goalSelector.addGoal(8, new RandomStrollGoal(this, 1.0D));
+        this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
+        this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 8.0F));
+        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, Raider.class)).setAlertOthers());
+        this.targetSelector.addGoal(2, (new NearestAttackableTargetGoal<>(this, Player.class, true)).setUnseenMemoryTicks(600));
+        this.targetSelector.addGoal(3, (new NearestAttackableTargetGoal<>(this, AbstractVillager.class, false)).setUnseenMemoryTicks(600));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, false).setUnseenMemoryTicks(600));
     }
     
 	public void handleEntityEvent(byte p_28844_) {
@@ -120,14 +107,14 @@ public class IceologerEntity extends AbstractIllagerEntity implements IAnimatabl
 
     private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
         if (this.summonAnimationTick > 0) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("iceologer_summon", true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("iceologer_summon", LOOP));
         } else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("iceologer_walk", true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("iceologer_walk", LOOP));
         } else {
         	if (this.isCelebrating()) {
-        		event.getController().setAnimation(new AnimationBuilder().addAnimation("iceologer_celebrate", true));
+        		event.getController().setAnimation(new AnimationBuilder().addAnimation("iceologer_celebrate", LOOP));
         	} else {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("iceologer_idle", true));       		
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("iceologer_idle", LOOP));
         	}
         }
         return PlayState.CONTINUE;
@@ -146,15 +133,15 @@ public class IceologerEntity extends AbstractIllagerEntity implements IAnimatabl
 
     @Nullable
     @Override
-    public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance p_213386_2_, SpawnReason p_213386_3_, @Nullable ILivingEntityData p_213386_4_, @Nullable CompoundNBT p_213386_5_) {
-        ILivingEntityData iLivingEntityData = super.finalizeSpawn(p_213386_1_, p_213386_2_, p_213386_3_, p_213386_4_, p_213386_5_);
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor p_213386_1_, DifficultyInstance p_213386_2_, MobSpawnType p_213386_3_, @Nullable SpawnGroupData p_213386_4_, @Nullable CompoundTag p_213386_5_) {
+        SpawnGroupData iLivingEntityData = super.finalizeSpawn(p_213386_1_, p_213386_2_, p_213386_3_, p_213386_4_, p_213386_5_);
         this.populateDefaultEquipmentSlots(p_213386_2_);
         this.populateDefaultEquipmentEnchantments(p_213386_2_);
         return iLivingEntityData;
     }
 
-    public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.25D).add(Attributes.FOLLOW_RANGE, 18D).add(Attributes.MAX_HEALTH, 20.0D);
+    public static AttributeSupplier.Builder setCustomAttributes() {
+        return Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.25D).add(Attributes.FOLLOW_RANGE, 18D).add(Attributes.MAX_HEALTH, 20.0D);
     }
 
     /**
@@ -163,7 +150,7 @@ public class IceologerEntity extends AbstractIllagerEntity implements IAnimatabl
     public boolean isAlliedTo(Entity entityIn) {
         if (super.isAlliedTo(entityIn)) {
             return true;
-        } else if (entityIn instanceof LivingEntity && ((LivingEntity)entityIn).getMobType() == CreatureAttribute.ILLAGER) {
+        } else if (entityIn instanceof LivingEntity && ((LivingEntity)entityIn).getMobType() == MobType.ILLAGER) {
             return this.getTeam() == null && entityIn.getTeam() == null;
         } else {
             return false;
@@ -229,7 +216,7 @@ public class IceologerEntity extends AbstractIllagerEntity implements IAnimatabl
 			int nearbyChunks = mob.level.getEntities(mob, mob.getBoundingBox().inflate(20.0D), ICE_CHUNK)
 					.size();
 			
-			return target != null && mob.random.nextInt(20) == 0 && mob.distanceTo(target) <= 12 && nearbyChunks <= 0 && mob.canSee(target) && animationsUseable();
+			return target != null && mob.random.nextInt(20) == 0 && mob.distanceTo(target) <= 12 && nearbyChunks <= 0 && mob.hasLineOfSight(target) && animationsUseable();
 		}
 
 		@Override

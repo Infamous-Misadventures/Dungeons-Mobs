@@ -6,28 +6,30 @@ import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
 import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModItems;
-
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.monster.AbstractIllagerEntity;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.entity.projectile.ProjectileHelper;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.TargetGoal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.monster.AbstractIllager;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -35,14 +37,17 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-public class IllusionerCloneEntity extends AbstractIllagerEntity implements IAnimatable, SpawnArmoredMob {
+import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
-	private static final DataParameter<Boolean> DELAYED_APPEAR = EntityDataManager.defineId(IllusionerCloneEntity.class,
-			DataSerializers.BOOLEAN);
+public class IllusionerCloneEntity extends AbstractIllager implements IAnimatable, SpawnArmoredMob {
+
+	private static final EntityDataAccessor<Boolean> DELAYED_APPEAR = SynchedEntityData.defineId(IllusionerCloneEntity.class,
+			EntityDataSerializers.BOOLEAN);
 	
 	public int shootAnimationTick;
 	public int shootAnimationLength = 38;
@@ -53,29 +58,29 @@ public class IllusionerCloneEntity extends AbstractIllagerEntity implements IAni
 	
 	public int lifeTime;
 	
-	   private MobEntity owner;
+	   private Mob owner;
 
-	AnimationFactory factory = new AnimationFactory(this);
+	AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
-	public IllusionerCloneEntity(World world) {
+	public IllusionerCloneEntity(Level world) {
 		super(ModEntityTypes.ILLUSIONER_CLONE.get(), world);
 	}
 
-	public IllusionerCloneEntity(EntityType<? extends IllusionerCloneEntity> type, World world) {
+	public IllusionerCloneEntity(EntityType<? extends IllusionerCloneEntity> type, Level world) {
 		super(type, world);
 		this.xpReward = 0;
 	}
 
 	protected void registerGoals() {
 		super.registerGoals();
-		this.goalSelector.addGoal(0, new SwimGoal(this));
+		this.goalSelector.addGoal(0, new FloatGoal(this));
 		this.goalSelector.addGoal(0, new IllusionerCloneEntity.RemainStationaryGoal());
 		this.goalSelector.addGoal(1, new IllusionerCloneEntity.ShootAttackGoal(this));
 		this.goalSelector.addGoal(2, new ApproachTargetGoal(this, 7.5, 1.0D, true));
 		this.goalSelector.addGoal(3, new LookAtTargetGoal(this));
-		this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 1.0D));
-		this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
-		this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
+		this.goalSelector.addGoal(8, new RandomStrollGoal(this, 1.0D));
+		this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
+		this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 8.0F));
 		this.targetSelector.addGoal(1, new IllusionerCloneEntity.CopyOwnerTargetGoal(this));
 	}
 	
@@ -104,11 +109,11 @@ public class IllusionerCloneEntity extends AbstractIllagerEntity implements IAni
 		}
 	}
 	
-	   public MobEntity getOwner() {
+	   public Mob getOwner() {
 		      return this.owner;
 		   }
 	   
-	   public void setOwner(MobEntity p_190658_1_) {
+	   public void setOwner(Mob p_190658_1_) {
 		      this.owner = p_190658_1_;
 		   }
 	
@@ -116,7 +121,7 @@ public class IllusionerCloneEntity extends AbstractIllagerEntity implements IAni
 	   protected void tickDeath() {
 	      ++this.deathTime;
 	      if (this.deathTime == 1) {
-	         this.remove();
+	         this.remove(RemovalReason.DISCARDED);
 	         for(int i = 0; i < 20; ++i) {
 	            double d0 = this.random.nextGaussian() * 0.02D;
 	            double d1 = this.random.nextGaussian() * 0.02D;
@@ -136,8 +141,8 @@ public class IllusionerCloneEntity extends AbstractIllagerEntity implements IAni
 		return false;
 	}
 
-	public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-		return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.3D)
+	public static AttributeSupplier.Builder setCustomAttributes() {
+		return Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.3D)
 				.add(Attributes.FOLLOW_RANGE, 25.0D).add(Attributes.MAX_HEALTH, 50.0D);
 	}
 
@@ -178,7 +183,7 @@ public class IllusionerCloneEntity extends AbstractIllagerEntity implements IAni
 			} else {
 				this.playSound(SoundEvents.ILLUSIONER_MIRROR_MOVE, this.getSoundVolume(), 1.0F);
 			}
-			this.remove();
+			this.remove(RemovalReason.DISCARDED);
 			this.level.broadcastEntityEvent(this, (byte) 11);
 		}
 		
@@ -204,7 +209,7 @@ public class IllusionerCloneEntity extends AbstractIllagerEntity implements IAni
 
 	private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
 		String suffix = "_uncrossed";
-		if(IllagerArmsUtil.armorHasCrossedArms(this, this.getItemBySlot(EquipmentSlotType.CHEST))){
+		if(IllagerArmsUtil.armorHasCrossedArms(this, this.getItemBySlot(EquipmentSlot.CHEST))){
 			suffix = "";
 		}
 		if (this.appearAnimationTick > 0) {
@@ -215,7 +220,7 @@ public class IllusionerCloneEntity extends AbstractIllagerEntity implements IAni
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_walk"+suffix, true));
 		} else {
 			if (this.isCelebrating()) {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_celebrate", true));
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_celebrate", LOOP));
 			} else {
 				event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_idle"+suffix, true));
 			}
@@ -235,7 +240,7 @@ public class IllusionerCloneEntity extends AbstractIllagerEntity implements IAni
 		if (super.isAlliedTo(entityIn)) {
 			return true;
 		} else if (entityIn instanceof LivingEntity
-				&& ((LivingEntity) entityIn).getMobType() == CreatureAttribute.ILLAGER) {
+				&& ((LivingEntity) entityIn).getMobType() == MobType.ILLAGER) {
 			return this.getTeam() == null && entityIn.getTeam() == null;
 		} else {
 			return false;
@@ -268,22 +273,22 @@ public class IllusionerCloneEntity extends AbstractIllagerEntity implements IAni
 	
 	   public void shootArrow(LivingEntity target) {
 		      {
-		    	  ItemStack itemstack = this.getProjectile(this.getItemInHand(ProjectileHelper.getWeaponHoldingHand(this, item -> item instanceof net.minecraft.item.BowItem)));
-		          AbstractArrowEntity abstractarrowentity = this.getArrow(itemstack, 0);
-		          if (this.getMainHandItem().getItem() instanceof net.minecraft.item.BowItem)
-		             abstractarrowentity = ((net.minecraft.item.BowItem)this.getMainHandItem().getItem()).customArrow(abstractarrowentity);
+		    	  ItemStack itemstack = this.getProjectile(this.getItemInHand(ProjectileUtil.getWeaponHoldingHand(this, item -> item instanceof net.minecraft.world.item.BowItem)));
+		          AbstractArrow abstractarrowentity = this.getArrow(itemstack, 0);
+		          if (this.getMainHandItem().getItem() instanceof net.minecraft.world.item.BowItem)
+		             abstractarrowentity = ((net.minecraft.world.item.BowItem)this.getMainHandItem().getItem()).customArrow(abstractarrowentity);
 		          double d0 = target.getX() - this.getX();
 		          double d1 = target.getY(0.3333333333333333D) - abstractarrowentity.getY();
 		          double d2 = target.getZ() - this.getZ();
-		          double d3 = (double)MathHelper.sqrt(d0 * d0 + d2 * d2);
+		          double d3 = (double)Mth.sqrt((float) (d0 * d0 + d2 * d2));
 		          abstractarrowentity.shoot(d0, d1 + d3 * (double)0.2F, d2, 1.6F, (float)(14 - this.level.getDifficulty().getId() * 4));
 		          this.playSound(SoundEvents.ARROW_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
 		          this.level.addFreshEntity(abstractarrowentity);
 		      }
 		   }
 	   
-	   protected AbstractArrowEntity getArrow(ItemStack p_213624_1_, float p_213624_2_) {
-		      return ProjectileHelper.getMobArrow(this, p_213624_1_, p_213624_2_);
+	   protected AbstractArrow getArrow(ItemStack p_213624_1_, float p_213624_2_) {
+		      return ProjectileUtil.getMobArrow(this, p_213624_1_, p_213624_2_);
 		   }
 
 	@Override
@@ -321,7 +326,7 @@ public class IllusionerCloneEntity extends AbstractIllagerEntity implements IAni
 				this.cooldown --;
 			}
 			
-			return target != null && mob.distanceTo(target) <= 12.5 && this.cooldown <= 0 && mob.canSee(target) && animationsUseable();
+			return target != null && mob.distanceTo(target) <= 12.5 && this.cooldown <= 0 && mob.hasLineOfSight(target) && animationsUseable();
 		}
 
 		@Override
@@ -363,9 +368,9 @@ public class IllusionerCloneEntity extends AbstractIllagerEntity implements IAni
 	}
 	
 	   class CopyOwnerTargetGoal extends TargetGoal {
-		      private final EntityPredicate copyOwnerTargeting = (new EntityPredicate()).allowUnseeable().ignoreInvisibilityTesting();
+		      private final TargetingConditions copyOwnerTargeting = TargetingConditions.forCombat().ignoreInvisibilityTesting();
 
-		      public CopyOwnerTargetGoal(CreatureEntity p_i47231_2_) {
+		      public CopyOwnerTargetGoal(PathfinderMob p_i47231_2_) {
 		         super(p_i47231_2_, false);
 		      }
 

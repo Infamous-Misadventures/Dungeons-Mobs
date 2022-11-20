@@ -1,11 +1,10 @@
 package com.infamous.dungeons_mobs.goals;
 
 import com.infamous.dungeons_mobs.interfaces.IWebShooter;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.goal.RangedAttackGoal;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 
-public class RangedWebAttackGoal<T extends MobEntity & IWebShooter> extends SimpleRangedAttackGoal<T> {
+public class RangedWebAttackGoal<T extends Mob & IWebShooter> extends SimpleRangedAttackGoal<T> {
     private final T webShooter;
 
     public RangedWebAttackGoal(T attacker, double movespeed, int maxAttackTime, float maxAttackDistanceIn) {

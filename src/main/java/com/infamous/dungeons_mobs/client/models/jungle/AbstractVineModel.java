@@ -11,26 +11,18 @@ import software.bernie.geckolib3.resource.GeckoLibCache;
 public abstract class AbstractVineModel extends AnimatedGeoModel<AbstractVineEntity> {
 
 	@Override
-	public void setLivingAnimations(AbstractVineEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
-		super.setLivingAnimations(entity, uniqueID, customPredicate);
+	public void setCustomAnimations(AbstractVineEntity entity, int uniqueID, AnimationEvent customPredicate) {
+		super.setCustomAnimations(entity, uniqueID, customPredicate);
 
 		IBone everything = this.getAnimationProcessor().getBone("everything");
 
-		if (entity.tickCount <= entity.getAnimationTransitionTime()) {
-			everything.setHidden(true);
-		} else {
-			everything.setHidden(false);
-		}
+		everything.setHidden(entity.tickCount <= entity.getAnimationTransitionTime());
 
 		for (int i = 1; i < 26; i++) {
 			IBone part = this.getAnimationProcessor().getBone("part" + i);
 			int partsToShow = 26 - entity.getLengthInSegments();
 			if (part != null) {
-				if (i >= partsToShow) {
-					part.setHidden(false);
-				} else {
-					part.setHidden(true);
-				}
+				part.setHidden(i < partsToShow);
 			}
 		}
 
@@ -42,6 +34,6 @@ public abstract class AbstractVineModel extends AnimatedGeoModel<AbstractVineEnt
 
 		MolangParser parser = GeckoLibCache.getInstance().parser;
 		AbstractVineEntity vine = (AbstractVineEntity) animatable;
-		parser.setValue("query.vine_length", vine.getLengthInSegments());
+		parser.setValue("query.vine_length", vine::getLengthInSegments);
 	}
 }

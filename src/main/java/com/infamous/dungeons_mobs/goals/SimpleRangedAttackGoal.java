@@ -1,19 +1,20 @@
 package com.infamous.dungeons_mobs.goals;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.item.Item;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.EnumSet;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
-public class SimpleRangedAttackGoal<T extends MobEntity> extends Goal {
+public class SimpleRangedAttackGoal<T extends Mob> extends Goal {
     protected final T mob;
     protected final BiConsumer<T, LivingEntity> performRangedAttack;
-    protected final Predicate<Item> weaponPredicate;
+    protected final Predicate<ItemStack> weaponPredicate;
     protected LivingEntity target;
     protected int attackTime = -1;
     protected final double speedModifier;
@@ -23,11 +24,11 @@ public class SimpleRangedAttackGoal<T extends MobEntity> extends Goal {
     protected final float attackRadius;
     protected final float attackRadiusSqr;
 
-    public SimpleRangedAttackGoal(T p_i1649_1_, Predicate<Item> weaponPredicate, BiConsumer<T, LivingEntity> performRangedAttack, double speedModifier, int attackInterval, float attackRadius) {
+    public SimpleRangedAttackGoal(T p_i1649_1_, Predicate<ItemStack> weaponPredicate, BiConsumer<T, LivingEntity> performRangedAttack, double speedModifier, int attackInterval, float attackRadius) {
         this(p_i1649_1_, weaponPredicate, performRangedAttack, speedModifier, attackInterval, attackInterval, attackRadius);
     }
 
-    public SimpleRangedAttackGoal(T p_i1650_1_, Predicate<Item> weaponPredicate, BiConsumer<T, LivingEntity> performRangedAttack, double speedModifier, int attackIntervalMin, int attackIntervalMax, float attackRadius) {
+    public SimpleRangedAttackGoal(T p_i1650_1_, Predicate<ItemStack> weaponPredicate, BiConsumer<T, LivingEntity> performRangedAttack, double speedModifier, int attackIntervalMin, int attackIntervalMax, float attackRadius) {
         this.mob = p_i1650_1_;
         this.weaponPredicate = weaponPredicate;
         this.performRangedAttack = performRangedAttack;
@@ -67,7 +68,7 @@ public class SimpleRangedAttackGoal<T extends MobEntity> extends Goal {
 
     public void tick() {
         double d0 = this.mob.distanceToSqr(this.target.getX(), this.target.getY(), this.target.getZ());
-        boolean flag = this.mob.getSensing().canSee(this.target);
+        boolean flag = this.mob.getSensing().hasLineOfSight(this.target);
         if (flag) {
             ++this.seeTime;
         } else {
@@ -86,13 +87,13 @@ public class SimpleRangedAttackGoal<T extends MobEntity> extends Goal {
                 return;
             }
 
-            float f = MathHelper.sqrt(d0) / this.attackRadius;
-            float lvt_5_1_ = MathHelper.clamp(f, 0.1F, 1.0F);
+            float f = Mth.sqrt((float) d0) / this.attackRadius;
+            float lvt_5_1_ = Mth.clamp(f, 0.1F, 1.0F);
             this.performRangedAttack.accept(this.mob, this.target);
-            this.attackTime = MathHelper.floor(f * (float)(this.attackIntervalMax - this.attackIntervalMin) + (float)this.attackIntervalMin);
+            this.attackTime = Mth.floor(f * (float)(this.attackIntervalMax - this.attackIntervalMin) + (float)this.attackIntervalMin);
         } else if (this.attackTime < 0) {
-            float f2 = MathHelper.sqrt(d0) / this.attackRadius;
-            this.attackTime = MathHelper.floor(f2 * (float)(this.attackIntervalMax - this.attackIntervalMin) + (float)this.attackIntervalMin);
+            float f2 = Mth.sqrt((float) d0) / this.attackRadius;
+            this.attackTime = Mth.floor(f2 * (float)(this.attackIntervalMax - this.attackIntervalMin) + (float)this.attackIntervalMin);
         }
 
     }

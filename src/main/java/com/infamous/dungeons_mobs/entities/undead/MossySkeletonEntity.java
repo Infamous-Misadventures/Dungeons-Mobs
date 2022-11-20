@@ -1,46 +1,44 @@
 package com.infamous.dungeons_mobs.entities.undead;
 
-import java.util.Random;
-
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.monster.AbstractSkeletonEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.entity.projectile.ArrowEntity;
-import net.minecraft.entity.projectile.ProjectileHelper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.monster.AbstractSkeleton;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Arrow;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 
-public class MossySkeletonEntity extends AbstractSkeletonEntity {
-    public MossySkeletonEntity(World worldIn) {
+import java.util.Random;
+
+public class MossySkeletonEntity extends AbstractSkeleton {
+    public MossySkeletonEntity(Level worldIn) {
         super(ModEntityTypes.MOSSY_SKELETON.get(), worldIn);
     }
 
-    public MossySkeletonEntity(EntityType<? extends MossySkeletonEntity> entityType, World world) {
+    public MossySkeletonEntity(EntityType<? extends MossySkeletonEntity> entityType, Level world) {
         super(entityType, world);
     }
 
-    public static boolean canMossySkeletonSpawn(EntityType<MossySkeletonEntity> entityType, IServerWorld iWorld, SpawnReason spawnReason, BlockPos blockPos, Random rand) {
-        return checkMonsterSpawnRules(entityType, iWorld, spawnReason, blockPos, rand) && (spawnReason == SpawnReason.SPAWNER || iWorld.canSeeSky(blockPos));
+    public static boolean canMossySkeletonSpawn(EntityType<MossySkeletonEntity> entityType, ServerLevelAccessor iWorld, MobSpawnType spawnReason, BlockPos blockPos, Random rand) {
+        return checkMonsterSpawnRules(entityType, iWorld, spawnReason, blockPos, rand) && (spawnReason == MobSpawnType.SPAWNER || iWorld.canSeeSky(blockPos));
     }
 
-    public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return AbstractSkeletonEntity.createAttributes();
+    public static AttributeSupplier.Builder setCustomAttributes() {
+        return AbstractSkeleton.createAttributes();
     }
     
     @Override
@@ -70,14 +68,14 @@ public class MossySkeletonEntity extends AbstractSkeletonEntity {
     
     @Override
     public void performRangedAttack(LivingEntity p_82196_1_, float p_82196_2_) {
-        ItemStack itemstack = this.getProjectile(this.getItemInHand(ProjectileHelper.getWeaponHoldingHand(this, item -> item instanceof net.minecraft.item.BowItem)));
-        AbstractArrowEntity abstractarrowentity = this.getArrow(itemstack, p_82196_2_);
-        if (this.getMainHandItem().getItem() instanceof net.minecraft.item.BowItem)
-           abstractarrowentity = ((net.minecraft.item.BowItem)this.getMainHandItem().getItem()).customArrow(abstractarrowentity);
+        ItemStack itemstack = this.getProjectile(this.getItemInHand(ProjectileUtil.getWeaponHoldingHand(this, item -> item instanceof net.minecraft.world.item.BowItem)));
+        AbstractArrow abstractarrowentity = this.getArrow(itemstack, p_82196_2_);
+        if (this.getMainHandItem().getItem() instanceof net.minecraft.world.item.BowItem)
+           abstractarrowentity = ((net.minecraft.world.item.BowItem)this.getMainHandItem().getItem()).customArrow(abstractarrowentity);
         double d0 = p_82196_1_.getX() - this.getX();
         double d1 = p_82196_1_.getY(0.3333333333333333D) - abstractarrowentity.getY();
         double d2 = p_82196_1_.getZ() - this.getZ();
-        double d3 = (double)MathHelper.sqrt(d0 * d0 + d2 * d2);
+        double d3 = (double)Mth.sqrt((float) (d0 * d0 + d2 * d2));
         abstractarrowentity.shoot(d0, d1 + d3 * (double)0.2F, d2, 1.6F, (float)(14 - this.level.getDifficulty().getId() * 4));
         this.playSound(ModSoundEvents.MOSSY_SKELETON_SHOOT.get(), 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
         this.level.addFreshEntity(abstractarrowentity);
@@ -96,7 +94,7 @@ public class MossySkeletonEntity extends AbstractSkeletonEntity {
                 }
 
                 if (i > 0) {
-                    ((LivingEntity)targetEntity).addEffect(new EffectInstance(Effects.POISON, i * 20, 0));
+                    ((LivingEntity)targetEntity).addEffect(new MobEffectInstance(MobEffects.POISON, i * 20, 0));
                 }
             }
 
@@ -106,16 +104,16 @@ public class MossySkeletonEntity extends AbstractSkeletonEntity {
         }
     }
 
-    protected AbstractArrowEntity getArrow(ItemStack stack, float damageMultiplier) {
-        AbstractArrowEntity abstractArrowEntity = super.getArrow(stack, damageMultiplier);
+    protected AbstractArrow getArrow(ItemStack stack, float damageMultiplier) {
+        AbstractArrow abstractArrowEntity = super.getArrow(stack, damageMultiplier);
         int i = 0;
         if (this.level.getDifficulty() == Difficulty.NORMAL) {
             i = 4;
         } else if (this.level.getDifficulty() == Difficulty.HARD) {
             i = 8;
         }
-        if (abstractArrowEntity instanceof ArrowEntity && i > 0) {
-            ((ArrowEntity)abstractArrowEntity).addEffect(new EffectInstance(Effects.POISON, i * 20));
+        if (abstractArrowEntity instanceof Arrow && i > 0) {
+            ((Arrow)abstractArrowEntity).addEffect(new MobEffectInstance(MobEffects.POISON, i * 20));
         }
 
         return abstractArrowEntity;

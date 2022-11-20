@@ -1,10 +1,5 @@
 package com.infamous.dungeons_mobs.entities.undead;
 
-import java.util.EnumSet;
-import java.util.UUID;
-
-import javax.annotation.Nullable;
-
 import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
 import com.infamous.dungeons_libraries.items.gearconfig.ArmorSet;
 import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
@@ -14,43 +9,36 @@ import com.infamous.dungeons_mobs.interfaces.IShieldUser;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModItems;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
-
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.HurtByTargetGoal;
-import net.minecraft.entity.ai.goal.LookAtGoal;
-import net.minecraft.entity.ai.goal.LookRandomlyGoal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
-import net.minecraft.entity.monster.SkeletonEntity;
-import net.minecraft.entity.passive.IronGolemEntity;
-import net.minecraft.entity.passive.TurtleEntity;
-import net.minecraft.entity.passive.WolfEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.animal.Turtle;
+import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.monster.Skeleton;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -60,16 +48,22 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
+
+import javax.annotation.Nullable;
+import java.util.EnumSet;
+import java.util.UUID;
 
 import static com.infamous.dungeons_mobs.entities.SpawnArmoredHelper.equipArmorSet;
+import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
-public class SkeletonVanguardEntity extends SkeletonEntity implements IShieldUser, IAnimatable, SpawnArmoredMob {
+public class SkeletonVanguardEntity extends Skeleton implements IShieldUser, IAnimatable, SpawnArmoredMob {
 
 	private static final UUID SPEED_MODIFIER_BLOCKING_UUID = UUID.fromString("e4c96392-42f5-4028-ac44-cad469c10d51");
 	private static final AttributeModifier SPEED_MODIFIER_BLOCKING = new AttributeModifier(SPEED_MODIFIER_BLOCKING_UUID,
 			"Blocking speed decrease", -0.05D, AttributeModifier.Operation.ADDITION);
 
-	AnimationFactory factory = new AnimationFactory(this);
+	AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
 	private int shieldCooldownTime;
 
@@ -77,11 +71,11 @@ public class SkeletonVanguardEntity extends SkeletonEntity implements IShieldUse
 	public int attackAnimationLength = 22;
 	public int attackAnimationActionPoint = 10;
 
-	public SkeletonVanguardEntity(World worldIn) {
+	public SkeletonVanguardEntity(Level worldIn) {
 		super(ModEntityTypes.SKELETON_VANGUARD.get(), worldIn);
 	}
 
-	public SkeletonVanguardEntity(EntityType<? extends SkeletonVanguardEntity> p_i48555_1_, World p_i48555_2_) {
+	public SkeletonVanguardEntity(EntityType<? extends SkeletonVanguardEntity> p_i48555_1_, Level p_i48555_2_) {
 		super(p_i48555_1_, p_i48555_2_);
 		this.shieldCooldownTime = 0;
 	}
@@ -92,15 +86,15 @@ public class SkeletonVanguardEntity extends SkeletonEntity implements IShieldUse
 		this.goalSelector.addGoal(1, new SkeletonVanguardEntity.BasicAttackGoal(this));
 		this.goalSelector.addGoal(2, new ApproachTargetGoal(this, 0, 1.0D, true));
         this.goalSelector.addGoal(3, new LookAtTargetGoal(this));
-		this.goalSelector.addGoal(5, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
-		this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 8.0F));
-		this.goalSelector.addGoal(6, new LookRandomlyGoal(this));
+		this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1.0D));
+		this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
+		this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
 		this.targetSelector.addGoal(0, new HurtByTargetGoal(this));
-		this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
-		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, WolfEntity.class, true));
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, TurtleEntity.class, 10, true, false,
-				TurtleEntity.BABY_ON_LAND_SELECTOR));
+		this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true));
+		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));
+		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Wolf.class, true));
+		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Turtle.class, 10, true, false,
+				Turtle.BABY_ON_LAND_SELECTOR));
 	}
 	
 	@Override
@@ -108,8 +102,8 @@ public class SkeletonVanguardEntity extends SkeletonEntity implements IShieldUse
 		return false;
 	}
 
-	public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-		return SkeletonEntity.createAttributes().add(Attributes.FOLLOW_RANGE, 26.0D).add(Attributes.ARMOR, 6.0D).add(Attributes.ATTACK_KNOCKBACK, 1.5D).add(Attributes.KNOCKBACK_RESISTANCE, 0.3D);
+	public static AttributeSupplier.Builder setCustomAttributes() {
+		return Skeleton.createAttributes().add(Attributes.FOLLOW_RANGE, 26.0D).add(Attributes.ARMOR, 6.0D).add(Attributes.ATTACK_KNOCKBACK, 1.5D).add(Attributes.KNOCKBACK_RESISTANCE, 0.3D);
 	}
 
 	protected void populateDefaultEquipmentSlots(DifficultyInstance difficultyInstance) {
@@ -120,18 +114,18 @@ public class SkeletonVanguardEntity extends SkeletonEntity implements IShieldUse
 			Item GLAIVE = ForgeRegistries.ITEMS.getValue(new ResourceLocation("dungeons_gear", "glaive"));
 			ItemStack glaive = new ItemStack(GLAIVE);
 
-			this.setItemSlot(EquipmentSlotType.MAINHAND, glaive);
+			this.setItemSlot(EquipmentSlot.MAINHAND, glaive);
 		} else {
-			this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_SWORD));
+			this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
 		}
 		//this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.SKELETON_VANGUARD_HELMET.get()));
-		this.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(ModItems.VANGUARD_SHIELD.get()));
+		this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ModItems.VANGUARD_SHIELD.get()));
 	}
 
 	@Nullable
-	public ILivingEntityData finalizeSpawn(IServerWorld world, DifficultyInstance difficultyInstance,
-			SpawnReason spawnReason, @Nullable ILivingEntityData livingEntityDataIn,
-			@Nullable CompoundNBT compoundNBT) {
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficultyInstance,
+			MobSpawnType spawnReason, @Nullable SpawnGroupData livingEntityDataIn,
+			@Nullable CompoundTag compoundNBT) {
 		livingEntityDataIn = super.finalizeSpawn(world, difficultyInstance, spawnReason, livingEntityDataIn,
 				compoundNBT);
 
@@ -169,7 +163,7 @@ public class SkeletonVanguardEntity extends SkeletonEntity implements IShieldUse
 
 	public void baseTick() {
 		super.baseTick();
-		ModifiableAttributeInstance modifiableattributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
+		AttributeInstance modifiableattributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
 
 		if (this.isBlocking()) {
 			if (!modifiableattributeinstance.hasModifier(SPEED_MODIFIER_BLOCKING)) {
@@ -195,19 +189,19 @@ public class SkeletonVanguardEntity extends SkeletonEntity implements IShieldUse
 
 	private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
 		if (this.attackAnimationTick > 0) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("skeleton_vanguard_attack", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("skeleton_vanguard_attack", LOOP));
 		} else if (this.isBlocking()) {
 			if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
 				event.getController()
-						.setAnimation(new AnimationBuilder().addAnimation("skeleton_vanguard_new_walk_blocking", true));
+						.setAnimation(new AnimationBuilder().addAnimation("skeleton_vanguard_new_walk_blocking", LOOP));
 			} else {
 				event.getController()
-						.setAnimation(new AnimationBuilder().addAnimation("skeleton_vanguard_new_blocking", true));
+						.setAnimation(new AnimationBuilder().addAnimation("skeleton_vanguard_new_blocking", LOOP));
 			}
 		} else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("skeleton_vanguard_new_walk", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("skeleton_vanguard_new_walk", LOOP));
 		} else {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("skeleton_vanguard_new_idle", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("skeleton_vanguard_new_idle", LOOP));
 		}
 		return PlayState.CONTINUE;
 	}
@@ -250,19 +244,19 @@ public class SkeletonVanguardEntity extends SkeletonEntity implements IShieldUse
 
 	@Override
 	protected void hurtCurrentlyUsedShield(float amount) {
-		if (this.useItem.isShield(this)) {
+		if (this.useItem.canPerformAction(net.minecraftforge.common.ToolActions.SHIELD_BLOCK)) {
 			if (amount >= 3.0F) {
-				int i = 1 + MathHelper.floor(amount);
-				Hand hand = this.getUsedItemHand();
+				int i = 1 + Mth.floor(amount);
+				InteractionHand hand = this.getUsedItemHand();
 				this.useItem.hurtAndBreak(i, this, (skeletonVanguardEntity) -> {
 					skeletonVanguardEntity.broadcastBreakEvent(hand);
 					// Forge would have called onPlayerDestroyItem here
 				});
 				if (this.useItem.isEmpty()) {
-					if (hand == Hand.MAIN_HAND) {
-						this.setItemSlot(EquipmentSlotType.MAINHAND, ItemStack.EMPTY);
+					if (hand == InteractionHand.MAIN_HAND) {
+						this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
 					} else {
-						this.setItemSlot(EquipmentSlotType.OFFHAND, ItemStack.EMPTY);
+						this.setItemSlot(EquipmentSlot.OFFHAND, ItemStack.EMPTY);
 					}
 
 					this.useItem = ItemStack.EMPTY;
@@ -331,7 +325,7 @@ public class SkeletonVanguardEntity extends SkeletonEntity implements IShieldUse
 		public boolean canUse() {
 			target = mob.getTarget();
 			return target != null && !mob.isBlocking() && mob.distanceTo(target) <= 3.5 && animationsUseable()
-					&& mob.canSee(target);
+					&& mob.hasLineOfSight(target);
 		}
 
 		@Override
@@ -362,12 +356,12 @@ public class SkeletonVanguardEntity extends SkeletonEntity implements IShieldUse
 		@Override
 		public void stop() {
 			if (target != null && !isShieldDisabled(mob) && shouldBlockForTarget(target)
-					&& mob.getOffhandItem().getItem().isShield(mob.getOffhandItem(), mob) && mob.random.nextInt(4) == 0) {
-				mob.startUsingItem(Hand.OFF_HAND);
+					&& mob.getOffhandItem().canPerformAction(net.minecraftforge.common.ToolActions.SHIELD_BLOCK) && mob.random.nextInt(4) == 0) {
+				mob.startUsingItem(InteractionHand.OFF_HAND);
 			}
 		}
 
-		public boolean isShieldDisabled(CreatureEntity shieldUser) {
+		public boolean isShieldDisabled(PathfinderMob shieldUser) {
 			if (shieldUser instanceof IShieldUser && ((IShieldUser) shieldUser).isShieldDisabled()) {
 				return true;
 			} else {
@@ -376,7 +370,7 @@ public class SkeletonVanguardEntity extends SkeletonEntity implements IShieldUse
 		}
 
 		public boolean shouldBlockForTarget(LivingEntity target) {
-			if (target instanceof MobEntity && ((MobEntity) target).getTarget() != mob) {
+			if (target instanceof Mob && ((Mob) target).getTarget() != mob) {
 				return false;
 			} else {
 				return true;
@@ -390,8 +384,8 @@ public class SkeletonVanguardEntity extends SkeletonEntity implements IShieldUse
 	}
 
 	public static void disableShield(LivingEntity livingEntity, int ticks) {
-		if (livingEntity instanceof PlayerEntity && livingEntity.isBlocking()) {
-			((PlayerEntity) livingEntity).getCooldowns()
+		if (livingEntity instanceof Player && livingEntity.isBlocking()) {
+			((Player) livingEntity).getCooldowns()
 					.addCooldown(livingEntity.getItemInHand(livingEntity.getUsedItemHand()).getItem(), ticks);
 			livingEntity.stopUsingItem();
 			livingEntity.level.broadcastEntityEvent(livingEntity, (byte) 30);

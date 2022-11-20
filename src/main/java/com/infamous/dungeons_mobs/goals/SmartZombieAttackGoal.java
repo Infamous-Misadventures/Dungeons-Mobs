@@ -1,12 +1,12 @@
 package com.infamous.dungeons_mobs.goals;
 
-import net.minecraft.entity.ai.goal.ZombieAttackGoal;
-import net.minecraft.entity.monster.ZombieEntity;
-import net.minecraft.item.ShootableItem;
+import net.minecraft.world.entity.ai.goal.ZombieAttackGoal;
+import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.item.ProjectileWeaponItem;
 
 public class SmartZombieAttackGoal extends ZombieAttackGoal {
 
-    public SmartZombieAttackGoal(ZombieEntity zombieIn, double speedModIn, boolean shouldCommit) {
+    public SmartZombieAttackGoal(Zombie zombieIn, double speedModIn, boolean shouldCommit) {
         super(zombieIn, speedModIn, shouldCommit);
     }
 
@@ -21,7 +21,7 @@ public class SmartZombieAttackGoal extends ZombieAttackGoal {
     }
 
     private boolean isHoldingUsableProjectileWeapon() {
-        return this.mob.isHolding((item) -> item instanceof ShootableItem
-                && this.mob.canFireProjectileWeapon((ShootableItem)item));
+        return this.mob.isHolding((itemStack) -> itemStack.getItem() instanceof ProjectileWeaponItem
+                && this.mob.canFireProjectileWeapon((ProjectileWeaponItem)itemStack.getItem()));
     }
 }

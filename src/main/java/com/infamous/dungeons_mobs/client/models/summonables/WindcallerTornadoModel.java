@@ -5,9 +5,7 @@ package com.infamous.dungeons_mobs.client.models.summonables;// Made with Blockb
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.entities.summonables.WindcallerTornadoEntity;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
@@ -32,15 +30,15 @@ public class WindcallerTornadoModel extends AnimatedGeoModel {
 	}
 	
 	@Override
-	public void setLivingAnimations(IAnimatable entity, Integer uniqueID, AnimationEvent customPredicate) {
-		super.setLivingAnimations(entity, uniqueID, customPredicate);
+	public void setCustomAnimations(IAnimatable entity, int uniqueID, AnimationEvent customPredicate) {
+		super.setCustomAnimations(entity, uniqueID, customPredicate);
 
 		IBone everything = this.getAnimationProcessor().getBone("everything");
 
 		EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
 
 		if (((WindcallerTornadoEntity)entity).isBlast() && (extraData.headPitch != 0 || extraData.netHeadYaw != 0)) {
-			//everything.setRotationX(((Entity)entity).xRot);
+			//everything.setRotationX(((Entity)entity).getXRot());
 			//everything.setRotationY(((Entity)entity).yRot);
 		}
 	}

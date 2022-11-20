@@ -1,10 +1,5 @@
 package com.infamous.dungeons_mobs.entities.illagers;
 
-import java.util.EnumSet;
-import java.util.function.Predicate;
-
-import javax.annotation.Nullable;
-
 import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
 import com.infamous.dungeons_libraries.items.gearconfig.ArmorSet;
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
@@ -15,42 +10,29 @@ import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModItems;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
-
-import net.minecraft.command.arguments.EntityAnchorArgument;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.MoverType;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.AvoidEntityGoal;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.HurtByTargetGoal;
-import net.minecraft.entity.ai.goal.LookAtGoal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.ai.goal.RandomWalkingGoal;
-import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
-import net.minecraft.entity.monster.AbstractIllagerEntity;
-import net.minecraft.entity.monster.AbstractRaiderEntity;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.passive.IronGolemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.monster.AbstractIllager;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.raid.Raider;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -58,10 +40,16 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
+
+import javax.annotation.Nullable;
+import java.util.EnumSet;
+import java.util.function.Predicate;
 
 import static com.infamous.dungeons_mobs.entities.SpawnArmoredHelper.equipArmorSet;
+import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
-public class WindcallerEntity extends AbstractIllagerEntity implements IAnimatable, SpawnArmoredMob {
+public class WindcallerEntity extends AbstractIllager implements IAnimatable, SpawnArmoredMob {
 
 	public int liftAttackAnimationTick;
 	public int liftAttackAnimationLength = 25;
@@ -71,15 +59,15 @@ public class WindcallerEntity extends AbstractIllagerEntity implements IAnimatab
 	public int blastAttackAnimationLength = 32;
 	public int blastAttackAnimationActionPoint = 20;
 
-    AnimationFactory factory = new AnimationFactory(this);
+    AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     public int soundLoopTick;
     
-    public WindcallerEntity(World world){
+    public WindcallerEntity(Level world){
         super(ModEntityTypes.WINDCALLER.get(), world);
     }
 
-    public WindcallerEntity(EntityType<? extends WindcallerEntity> type, World world) {
+    public WindcallerEntity(EntityType<? extends WindcallerEntity> type, Level world) {
         super(type, world);
     }
 
@@ -90,19 +78,19 @@ public class WindcallerEntity extends AbstractIllagerEntity implements IAnimatab
 
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimGoal(this));
+        this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(0, new WindcallerEntity.BlastAttackGoal(this));
         this.goalSelector.addGoal(1, new WindcallerEntity.LiftAttackGoal(this));
-        this.goalSelector.addGoal(2, new AvoidEntityGoal<>(this, IronGolemEntity.class, 5.0F, 1.2D, 1.15D));
+        this.goalSelector.addGoal(2, new AvoidEntityGoal<>(this, IronGolem.class, 5.0F, 1.2D, 1.15D));
         this.goalSelector.addGoal(3, new ApproachTargetGoal(this, 6, 1.1D, true));
         this.goalSelector.addGoal(4, new LookAtTargetGoal(this));
-        this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 1.0D));
-        this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
-        this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
-        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, AbstractRaiderEntity.class)).setAlertOthers());
-        this.targetSelector.addGoal(2, (new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true)).setUnseenMemoryTicks(600));
-        this.targetSelector.addGoal(3, (new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, false)).setUnseenMemoryTicks(600));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, false).setUnseenMemoryTicks(600));
+        this.goalSelector.addGoal(8, new RandomStrollGoal(this, 1.0D));
+        this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
+        this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 8.0F));
+        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, Raider.class)).setAlertOthers());
+        this.targetSelector.addGoal(2, (new NearestAttackableTargetGoal<>(this, Player.class, true)).setUnseenMemoryTicks(600));
+        this.targetSelector.addGoal(3, (new NearestAttackableTargetGoal<>(this, AbstractVillager.class, false)).setUnseenMemoryTicks(600));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, false).setUnseenMemoryTicks(600));
     }
     
 	public void handleEntityEvent(byte p_28844_) {
@@ -152,7 +140,7 @@ public class WindcallerEntity extends AbstractIllagerEntity implements IAnimatab
 			this.move(MoverType.SELF, this.getDeltaMovement());
 			
 			this.getNavigation().stop();
-			this.lookAt(EntityAnchorArgument.Type.EYES, new Vector3d(this.getTarget().getX(), this.getTarget().getEyeY(), this.getTarget().getZ()));
+			this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(this.getTarget().getX(), this.getTarget().getEyeY(), this.getTarget().getZ()));
         }
         
         this.soundLoopTick ++;
@@ -193,16 +181,16 @@ public class WindcallerEntity extends AbstractIllagerEntity implements IAnimatab
 
     private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
     	if (this.liftAttackAnimationTick > 0) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("windcaller_lift", true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("windcaller_lift", LOOP));
     	} else if (this.blastAttackAnimationTick > 10) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("windcaller_blast", true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("windcaller_blast", LOOP));
         } else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("windcaller_fly", true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("windcaller_fly", LOOP));
         } else {
         	if (this.isCelebrating()) {
-        		event.getController().setAnimation(new AnimationBuilder().addAnimation("windcaller_celebrate", true));
+        		event.getController().setAnimation(new AnimationBuilder().addAnimation("windcaller_celebrate", LOOP));
         	} else {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("windcaller_idle", true));       		
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("windcaller_idle", LOOP));       		
         	}
         }
         return PlayState.CONTINUE;
@@ -216,21 +204,21 @@ public class WindcallerEntity extends AbstractIllagerEntity implements IAnimatab
     @Override
     protected void populateDefaultEquipmentSlots(DifficultyInstance p_180481_1_) {
         super.populateDefaultEquipmentSlots(p_180481_1_);
-        this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModItems.WINDCALLER_STAFF.get()));
+        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.WINDCALLER_STAFF.get()));
 		equipArmorSet(ModItems.WINDCALLER_ARMOR, this);
     }
 
     @Nullable
     @Override
-    public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance p_213386_2_, SpawnReason p_213386_3_, @Nullable ILivingEntityData p_213386_4_, @Nullable CompoundNBT p_213386_5_) {
-        ILivingEntityData iLivingEntityData = super.finalizeSpawn(p_213386_1_, p_213386_2_, p_213386_3_, p_213386_4_, p_213386_5_);
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor p_213386_1_, DifficultyInstance p_213386_2_, MobSpawnType p_213386_3_, @Nullable SpawnGroupData p_213386_4_, @Nullable CompoundTag p_213386_5_) {
+        SpawnGroupData iLivingEntityData = super.finalizeSpawn(p_213386_1_, p_213386_2_, p_213386_3_, p_213386_4_, p_213386_5_);
         this.populateDefaultEquipmentSlots(p_213386_2_);
         this.populateDefaultEquipmentEnchantments(p_213386_2_);
         return iLivingEntityData;
     }
 
-    public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.35D).add(Attributes.FOLLOW_RANGE, 20D).add(Attributes.MAX_HEALTH, 30.0D);
+    public static AttributeSupplier.Builder setCustomAttributes() {
+        return Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.35D).add(Attributes.FOLLOW_RANGE, 20D).add(Attributes.MAX_HEALTH, 30.0D);
     }
 
     /**
@@ -239,7 +227,7 @@ public class WindcallerEntity extends AbstractIllagerEntity implements IAnimatab
     public boolean isAlliedTo(Entity entityIn) {
         if (super.isAlliedTo(entityIn)) {
             return true;
-        } else if (entityIn instanceof LivingEntity && ((LivingEntity)entityIn).getMobType() == CreatureAttribute.ILLAGER) {
+        } else if (entityIn instanceof LivingEntity && ((LivingEntity)entityIn).getMobType() == MobType.ILLAGER) {
             return this.getTeam() == null && entityIn.getTeam() == null;
         } else {
             return false;
@@ -310,7 +298,7 @@ public class WindcallerEntity extends AbstractIllagerEntity implements IAnimatab
 					.size();
 			}
 			
-			return target != null && target.isOnGround() && mob.random.nextInt(30) == 0 && mob.distanceTo(target) <= 16 && mob.distanceTo(target) > 3 && nearbyTornadoes <= 0 && mob.canSee(target) && animationsUseable();
+			return target != null && target.isOnGround() && mob.random.nextInt(30) == 0 && mob.distanceTo(target) <= 16 && mob.distanceTo(target) > 3 && nearbyTornadoes <= 0 && mob.hasLineOfSight(target) && animationsUseable();
 		}
 
 		@Override
@@ -337,7 +325,7 @@ public class WindcallerEntity extends AbstractIllagerEntity implements IAnimatab
 	            WindcallerTornadoEntity tornado = ModEntityTypes.TORNADO.get().create(mob.level);
 	            tornado.moveTo(target.blockPosition(), 0, 0);
 	            tornado.playSound(ModSoundEvents.WINDCALLER_LIFT_WIND.get(), 1.5F, 1.0F);
-	            ((ServerWorld)mob.level).addFreshEntityWithPassengers(tornado);
+	            ((ServerLevel)mob.level).addFreshEntityWithPassengers(tornado);
 			}
 		}
 
@@ -382,7 +370,7 @@ public class WindcallerEntity extends AbstractIllagerEntity implements IAnimatab
 					.size();
 			}
 			
-			return target != null && mob.random.nextInt(5) == 0 && (mob.distanceTo(target) <= 4 || (!target.isOnGround() && mob.random.nextInt(10) == 0 && mob.distanceTo(target) < 7.5)) && nearbyTornadoes <= 0 && mob.canSee(target) && animationsUseable();
+			return target != null && mob.random.nextInt(5) == 0 && (mob.distanceTo(target) <= 4 || (!target.isOnGround() && mob.random.nextInt(10) == 0 && mob.distanceTo(target) < 7.5)) && nearbyTornadoes <= 0 && mob.hasLineOfSight(target) && animationsUseable();
 		}
 
 		@Override
@@ -417,8 +405,8 @@ public class WindcallerEntity extends AbstractIllagerEntity implements IAnimatab
 	            tornado.playSound(ModSoundEvents.WINDCALLER_BLAST_WIND.get(), 1.5F, 1.0F);
 	            tornado.setBlast(true);
 //	            mob.lookAt(EntityAnchorArgument.Type.EYES, new Vector3d(target.getX(), target.getY(), target.getZ()));
-	            tornado.yRot = -mob.yHeadRot - 90;
-	            ((ServerWorld)mob.level).addFreshEntityWithPassengers(tornado);
+				tornado.setYRot(-mob.yHeadRot - 90);
+	            ((ServerLevel)mob.level).addFreshEntityWithPassengers(tornado);
 			}
 		}
 

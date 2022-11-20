@@ -10,7 +10,7 @@ buildscript {
         classpath(group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true) { exclude group: 'org.apache.logging.log4j' }
         classpath 'org.apache.logging.log4j:log4j-api:2.11.2'
         classpath 'org.apache.logging.log4j:log4j-core:2.11.2'
-        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
+        classpath 'org.spongepowered:mixingradle:0.7.+'
     }
 }
 
@@ -19,12 +19,17 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
+apply from: 'https://raw.githubusercontent.com/SizableShrimp/Forge-Class-Remapper/main/classremapper.gradle'
 
 version = "${mc_version}-${mod_version}"
 group = 'com.infamous.dungeons_mobs' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "${modid}"
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+mixin {
+    add sourceSets.main, "dungeons_mobs.refmap.json"
+}
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
@@ -35,7 +40,7 @@ minecraft {
     // Simply re-run your setup task after changing the mappings to update your workspace.
     mappings channel: "official", version:"${mc_version}"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
-    
+
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     // Default run configurations.
@@ -109,10 +114,9 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
-    maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
-    maven {
-        url "https://www.cursemaven.com"
-    }
+    maven { url = "https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/" }
+    maven { url = "https://www.cursemaven.com" }
+    maven { url = "https://maven.theillusivec4.top/" }
     flatDir {
         dirs 'mods'
     }
@@ -128,18 +132,18 @@ dependencies {
     //Library
     implementation fg.deobf("dungeons_libraries:dungeons_libraries:${mc_version}-${libraries_version}")
 //    implementation fg.deobf("mutantmore-test:mutantmore-test:11")
-    implementation fg.deobf("software.bernie.geckolib:geckolib-forge-${mc_version}:${geckolib_version}")
-    runtimeOnly fg.deobf("curse.maven:blame-406201:3440093")
-    runtimeOnly fg.deobf("curse.maven:neat-238372:3182258")
-    compileOnly fg.deobf("curse.maven:enchantwithmob-391187:3539541")
-    runtimeOnly fg.deobf("dungeons_gear:dungeons_gear:1.16.5-3.1.17-beta")
-//    implementation fg.deobf("curios:curios:forge-1.16.5-4.0.8.1")
-    
-    runtimeOnly fg.deobf("rubidium:rubidium:0.2.10")
-    runtimeOnly fg.deobf("oculus:oculus:1.2.6")
+    implementation fg.deobf("software.bernie.geckolib:geckolib-forge-1.18:${geckolib_version}")
+    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")
+    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}:api")
+//    runtimeOnly fg.deobf("curse.maven:blame-406201:3440093")
+//    runtimeOnly fg.deobf("curse.maven:neat-238372:3182258")
+    implementation fg.deobf("curse.maven:enchantwithmob-391187:3819280")
+    runtimeOnly fg.deobf("dungeons_gear:dungeons_gear:1.18.2-4.0.0-alpha")
+
+//    runtimeOnly fg.deobf("rubidium:rubidium:0.2.10")
+//    runtimeOnly fg.deobf("oculus:oculus:1.2.6")
 
 //    runtimeOnly fg.deobf("curse.maven:dungeonsgear-401247:3889856")
-    implementation fg.deobf("curse.maven:curios-309927:3725386")
 
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"
@@ -165,21 +169,21 @@ dependencies {
 jar {
     manifest {
         attributes([
-            "Specification-Title": "Dungeons Mobs",
-            "Specification-Vendor": "Infamous Mods",
-            "Specification-Version": "1", // We are version 1 of ourselves
-            "Implementation-Title": project.name,
-            "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"Infamous Mods",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-            "MixinConfigs": "dungeons_mobs.mixins.json"
+                "Specification-Title": "Dungeons Mobs",
+                "Specification-Vendor": "Infamous Mods",
+                "Specification-Version": "1", // We are version 1 of ourselves
+                "Implementation-Title": project.name,
+                "Implementation-Version": "${version}",
+                "Implementation-Vendor" :"Infamous Mods",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                "MixinConfigs": "dungeons_mobs.mixins.json"
         ])
     }
 }
 
 // Example configuration to allow publishing using the maven-publish task
 // This is the preferred method to reobfuscate your jar file
-jar.finalizedBy('reobfJar') 
+jar.finalizedBy('reobfJar')
 // However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
 //publish.dependsOn('reobfJar')
 
@@ -194,8 +198,4 @@ publishing {
             url "file:///${project.projectDir}/mcmodsrepo"
         }
     }
-}
-
-mixin {
-    add sourceSets.main, "${modid}.refmap.json"
 }

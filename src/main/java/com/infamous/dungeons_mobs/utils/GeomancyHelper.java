@@ -3,18 +3,17 @@ package com.infamous.dungeons_mobs.utils;
 import com.infamous.dungeons_mobs.entities.jungle.AbstractVineEntity;
 import com.infamous.dungeons_mobs.entities.summonables.ConstructEntity;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class GeomancyHelper {
     private static final int[] CONFIG_1_NORTH_ROW = new int[]{2, 3, 4, 5, 6};
@@ -106,7 +105,7 @@ public class GeomancyHelper {
            }
 
            targetPos = targetPos.below();
-        } while(targetPos.getY() >= MathHelper.floor(targetPos.getY()) - 1);
+        } while(targetPos.getY() >= Mth.floor(targetPos.getY()) - 1);
         
         // verify that the construct will be summoned on valid ground
         if(flag && canAllowBlockEntitySpawn(casterEntity, targetPos)){
@@ -144,7 +143,7 @@ public class GeomancyHelper {
            }
 
            targetPos = targetPos.below();
-        } while(targetPos.getY() >= MathHelper.floor(targetPos.getY()) - 1);
+        } while(targetPos.getY() >= Mth.floor(targetPos.getY()) - 1);
         
         // verify that the construct will be summoned on valid ground
         if(flag && canAllowBlockEntitySpawn(casterEntity, targetPos)){
@@ -176,8 +175,8 @@ public class GeomancyHelper {
             	double vineLength = targetEntity.getY() - vineEntity.getY();
             	vineEntity.setLengthInBlocks((float)vineLength + 3 + vineEntity.getRandom().nextInt(6));
                 casterEntity.level.addFreshEntity(vineEntity);
-                if (casterEntity instanceof MobEntity) {
-                	vineEntity.setTarget(((MobEntity)casterEntity).getTarget());
+                if (casterEntity instanceof Mob) {
+                	vineEntity.setTarget(((Mob)casterEntity).getTarget());
                 }
             }
         }
@@ -225,7 +224,7 @@ public class GeomancyHelper {
            }
 
            targetPos = targetPos.below();
-        } while(targetPos.getY() >= MathHelper.floor(targetPos.getY()) - 1);
+        } while(targetPos.getY() >= Mth.floor(targetPos.getY()) - 1);
         
         // verify that the construct will be summoned on valid ground
         if(flag && canAllowBlockEntitySpawn(casterEntity, targetPos)){
@@ -264,7 +263,7 @@ public class GeomancyHelper {
            }
 
            targetPos = targetPos.below();
-        } while(targetPos.getY() >= MathHelper.floor(targetPos.getY()) - 1);
+        } while(targetPos.getY() >= Mth.floor(targetPos.getY()) - 1);
         
         // verify that the construct will be summoned on valid ground
         if(flag && canAllowBlockEntitySpawn(casterEntity, targetPos)){

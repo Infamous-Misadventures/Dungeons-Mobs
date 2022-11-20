@@ -4,45 +4,47 @@ import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModItems;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 import com.infamous.dungeons_mobs.utils.PotionHelper;
-import net.minecraft.entity.*;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ProjectileItemEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionUtils;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.AreaEffectCloud;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.ItemSupplier;
+import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
 @OnlyIn(
    value = Dist.CLIENT,
-   _interface = IRendersAsItem.class
+   _interface = ItemSupplier.class
 )
-public class BlueNethershroomEntity extends ProjectileItemEntity implements IRendersAsItem {
+public class BlueNethershroomEntity extends ThrowableItemProjectile implements ItemSupplier {
 
    public static final int LIGHT_BLUE_HEX_COLOR_CODE = 0x00e0ff;
 
-   public BlueNethershroomEntity(EntityType<? extends BlueNethershroomEntity> entityType, World world) {
+   public BlueNethershroomEntity(EntityType<? extends BlueNethershroomEntity> entityType, Level world) {
       super(entityType, world);
    }
 
-   public BlueNethershroomEntity(World world, LivingEntity shooter) {
+   public BlueNethershroomEntity(Level world, LivingEntity shooter) {
       super(ModEntityTypes.BLUE_NETHERSHROOM.get(), shooter, world);
    }
 
-   public BlueNethershroomEntity(World world, double x, double y, double z) {
+   public BlueNethershroomEntity(Level world, double x, double y, double z) {
       super(ModEntityTypes.BLUE_NETHERSHROOM.get(), x, y, z, world);
    }
 
@@ -58,23 +60,23 @@ public class BlueNethershroomEntity extends ProjectileItemEntity implements IRen
       return 0.05F;
    }
 
-   protected void onHit(RayTraceResult rtr) {
+   protected void onHit(HitResult rtr) {
       super.onHit(rtr);
       ItemStack itemstack = this.getItem();
       Potion potion = PotionUtils.getPotion(itemstack);
-      List<EffectInstance> list = PotionUtils.getMobEffects(itemstack);
+      List<MobEffectInstance> list = PotionUtils.getMobEffects(itemstack);
       if (!list.isEmpty()) {
          if(!this.level.isClientSide){
             Entity target = null;
-            if(rtr instanceof EntityRayTraceResult){
-               target = ((EntityRayTraceResult) rtr).getEntity();
+            if(rtr instanceof EntityHitResult){
+               target = ((EntityHitResult) rtr).getEntity();
             }
             this.makeAreaOfEffectCloud(target, itemstack, potion);
-            this.remove();
+            this.remove(RemovalReason.DISCARDED);
          } else{
             BlockPos blockPos = this.blockPosition();
             int color = PotionUtils.getColor(potion);
-            CompoundNBT tag = itemstack.getTag();
+            CompoundTag tag = itemstack.getTag();
             if (tag != null && tag.contains("CustomPotionColor", 99)) {
                color = tag.getInt("CustomPotionColor");
             }
@@ -84,7 +86,7 @@ public class BlueNethershroomEntity extends ProjectileItemEntity implements IRen
    }
 
    private void makeAreaOfEffectCloud(@Nullable Entity target, ItemStack itemStack, Potion potion) {
-      AreaEffectCloudEntity aoeCloud = new AreaEffectCloudEntity(this.level,
+      AreaEffectCloud aoeCloud = new AreaEffectCloud(this.level,
               target != null ? target.getX() : this.getX(),
               target != null ? target.getY() : this.getY(),
               target != null ? target.getZ() : this.getZ());
@@ -99,11 +101,11 @@ public class BlueNethershroomEntity extends ProjectileItemEntity implements IRen
       aoeCloud.setRadiusPerTick(-aoeCloud.getRadius() / (float)aoeCloud.getDuration());
       aoeCloud.setPotion(potion);
 
-      for(EffectInstance effectinstance : PotionUtils.getCustomEffects(itemStack)) {
-         aoeCloud.addEffect(new EffectInstance(effectinstance));
+      for(MobEffectInstance effectinstance : PotionUtils.getCustomEffects(itemStack)) {
+         aoeCloud.addEffect(new MobEffectInstance(effectinstance));
       }
 
-      CompoundNBT compoundnbt = itemStack.getTag();
+      CompoundTag compoundnbt = itemStack.getTag();
       if (compoundnbt != null && compoundnbt.contains("CustomPotionColor", 99)) {
          aoeCloud.setFixedColor(compoundnbt.getInt("CustomPotionColor"));
       }
@@ -112,7 +114,7 @@ public class BlueNethershroomEntity extends ProjectileItemEntity implements IRen
    }
 
    @Override
-   public IPacket<?> getAddEntityPacket() {
+   public Packet<?> getAddEntityPacket() {
       return NetworkHooks.getEntitySpawningPacket(this);
    }
 }

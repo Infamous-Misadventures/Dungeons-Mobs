@@ -1,30 +1,30 @@
 package com.infamous.dungeons_mobs.client;
 
 import com.infamous.dungeons_mobs.mod.ModItems;
-import net.minecraft.item.ItemModelsProperties;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.resources.ResourceLocation;
 
 public class ModItemModelProperties {
 
     public ModItemModelProperties(){
-        ItemModelsProperties.register(ModItems.ROYAL_GUARD_SHIELD.get(),
+        ItemProperties.register(ModItems.ROYAL_GUARD_SHIELD.get(),
                 new ResourceLocation("blocking"),
-                (stack, clientWorld, livingEntity) -> {
-            return livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == stack ? 1.0F : 0.0F;
-        });
-        ItemModelsProperties.register(ModItems.VANGUARD_SHIELD.get(),
-                new ResourceLocation("blocking"),
-                (stack, clientWorld, livingEntity) -> {
+                (stack, clientWorld, livingEntity, i) -> {
                     return livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == stack ? 1.0F : 0.0F;
                 });
-        ItemModelsProperties.register(ModItems.YELLOW_TRIDENT.get(),
-                new ResourceLocation("throwing"),
-                (stack, clientWorld, livingEntity) -> {
+        ItemProperties.register(ModItems.VANGUARD_SHIELD.get(),
+                new ResourceLocation("blocking"),
+                (stack, clientWorld, livingEntity, i) -> {
                     return livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == stack ? 1.0F : 0.0F;
                 });
-        ItemModelsProperties.register(ModItems.PURPLE_TRIDENT.get(),
+        ItemProperties.register(ModItems.YELLOW_TRIDENT.get(),
                 new ResourceLocation("throwing"),
-                (stack, clientWorld, livingEntity) -> {
+                (stack, clientWorld, livingEntity, i) -> {
+                    return livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == stack ? 1.0F : 0.0F;
+                });
+        ItemProperties.register(ModItems.PURPLE_TRIDENT.get(),
+                new ResourceLocation("throwing"),
+                (stack, clientWorld, livingEntity, i) -> {
                     return livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == stack ? 1.0F : 0.0F;
                 });
     }

@@ -2,7 +2,7 @@ package com.infamous.dungeons_mobs.datagen;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.client.model.generators.ModelProvider;

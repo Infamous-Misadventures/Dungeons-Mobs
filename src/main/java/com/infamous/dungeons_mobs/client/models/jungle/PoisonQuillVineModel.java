@@ -1,12 +1,8 @@
 package com.infamous.dungeons_mobs.client.models.jungle;
 
-import javax.annotation.Nullable;
-
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.entities.jungle.AbstractVineEntity;
-
-import net.minecraft.entity.monster.ShulkerEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
@@ -28,8 +24,8 @@ public class PoisonQuillVineModel extends AbstractVineModel {
 	}
 	
 	@Override
-	public void setLivingAnimations(AbstractVineEntity entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
-		super.setLivingAnimations(entity, uniqueID, customPredicate);
+	public void setCustomAnimations(AbstractVineEntity entity, int uniqueID, AnimationEvent customPredicate) {
+		super.setCustomAnimations(entity, uniqueID, customPredicate);
 
 		IBone head = this.getAnimationProcessor().getBone("head");
 		IBone headRotator = this.getAnimationProcessor().getBone("headRotator");

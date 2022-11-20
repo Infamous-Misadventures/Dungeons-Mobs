@@ -3,24 +3,23 @@ package com.infamous.dungeons_mobs.worldgen;
 import com.infamous.dungeons_mobs.compat.EnderlingsCompat;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.Biomes;
-import net.minecraft.world.biome.MobSpawnInfo;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.world.MobSpawnInfoBuilder;
+import net.minecraftforge.common.world.MobSpawnSettingsBuilder;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -48,21 +47,21 @@ public class BiomeSpawnEntries {
     public static void onBiomeLoadingEvent(BiomeLoadingEvent event){
         ResourceLocation biomeRegistryName = event.getName();
         if (biomeRegistryName != null) {
-            RegistryKey<Biome> biomeRegistryKey = RegistryKey.create(Registry.BIOME_REGISTRY, biomeRegistryName);
-            MobSpawnInfoBuilder mobSpawnInfoBuilder = event.getSpawns();
+            ResourceKey<Biome> biomeRegistryKey = ResourceKey.create(Registry.BIOME_REGISTRY, biomeRegistryName);
+            MobSpawnSettingsBuilder mobSpawnInfoBuilder = event.getSpawns();
             addMonsterSpawnsToBiome(biomeRegistryKey, mobSpawnInfoBuilder);
         }
     }
 
     @SubscribeEvent(priority = EventPriority.NORMAL)
     public static void onBiomeLoadingEventForVariants(BiomeLoadingEvent event){
-        Biome.Category biomeCategory = event.getCategory();
-        MobSpawnInfoBuilder mobSpawnInfoBuilder = event.getSpawns();
+        Biome.BiomeCategory biomeCategory = event.getCategory();
+        MobSpawnSettingsBuilder mobSpawnInfoBuilder = event.getSpawns();
         replaceMonsterSpawnsWithVariants(mobSpawnInfoBuilder, biomeCategory);
     }
 
     @SuppressWarnings("unchecked")
-    private static void addMonsterSpawnsToBiome(RegistryKey<Biome> biomeRegistryKey, MobSpawnInfoBuilder mobSpawnInfoBuilder){
+    private static void addMonsterSpawnsToBiome(ResourceKey<Biome> biomeRegistryKey, MobSpawnSettingsBuilder mobSpawnInfoBuilder){
         //for(int i = 0; i < 1; i++){
             List<String> iceologerBiomeTypes = (List<String>) DungeonsMobsConfig.COMMON.ICEOLOGER_BIOME_TYPES.get();
             tryAddMonsterSpawnToBiome(biomeRegistryKey, mobSpawnInfoBuilder, iceologerBiomeTypes,
@@ -223,22 +222,22 @@ public class BiomeSpawnEntries {
         }
     }
 
-    private static void replaceMonsterSpawnsWithVariants(MobSpawnInfoBuilder mobSpawnInfoBuilder, Biome.Category foundCategory) {
+    private static void replaceMonsterSpawnsWithVariants(MobSpawnSettingsBuilder mobSpawnInfoBuilder, Biome.BiomeCategory foundCategory) {
         if(DungeonsMobsConfig.COMMON.ENABLE_JUNGLE_ZOMBIE_REPLACES_ZOMBIE.get()){
-            handleVariantReplacementWithCategoryCheck(mobSpawnInfoBuilder, foundCategory, Biome.Category.JUNGLE, EntityType.ZOMBIE, ModEntityTypes.JUNGLE_ZOMBIE.get(), 0.8);
+            handleVariantReplacementWithCategoryCheck(mobSpawnInfoBuilder, foundCategory, Biome.BiomeCategory.JUNGLE, EntityType.ZOMBIE, ModEntityTypes.JUNGLE_ZOMBIE.get(), 0.8);
         }
         if(DungeonsMobsConfig.COMMON.ENABLE_MOSSY_SKELETON_REPLACES_SKELETON.get()){
-            handleVariantReplacementWithCategoryCheck(mobSpawnInfoBuilder, foundCategory, Biome.Category.JUNGLE, EntityType.SKELETON, ModEntityTypes.MOSSY_SKELETON.get(), 0.8);
+            handleVariantReplacementWithCategoryCheck(mobSpawnInfoBuilder, foundCategory, Biome.BiomeCategory.JUNGLE, EntityType.SKELETON, ModEntityTypes.MOSSY_SKELETON.get(), 0.8);
         }
         if(DungeonsMobsConfig.COMMON.ENABLE_FROZEN_ZOMBIE_REPLACES_ZOMBIE.get()){
-            handleVariantReplacementWithCategoryCheck(mobSpawnInfoBuilder, foundCategory, Biome.Category.ICY, EntityType.ZOMBIE, ModEntityTypes.FROZEN_ZOMBIE.get(), 0.8);
+            handleVariantReplacementWithCategoryCheck(mobSpawnInfoBuilder, foundCategory, Biome.BiomeCategory.ICY, EntityType.ZOMBIE, ModEntityTypes.FROZEN_ZOMBIE.get(), 0.8);
         }
         if(DungeonsMobsConfig.COMMON.ENABLE_ICY_CREEPER_REPLACES_CREEPER.get()){
-            handleVariantReplacementWithCategoryCheck(mobSpawnInfoBuilder, foundCategory, Biome.Category.ICY, EntityType.CREEPER, ModEntityTypes.ICY_CREEPER.get(), 0.8);
+            handleVariantReplacementWithCategoryCheck(mobSpawnInfoBuilder, foundCategory, Biome.BiomeCategory.ICY, EntityType.CREEPER, ModEntityTypes.ICY_CREEPER.get(), 0.8);
         }
     }
 
-    private static void tryAddMonsterSpawnToBiome(RegistryKey<Biome> biomeRegistryKey, MobSpawnInfoBuilder mobSpawnInfoBuilder, List<String> configuredBiomeTypes, EntityType entityType, int spawnWeight, int minGroupSize, int maxGroupSize) {
+    private static void tryAddMonsterSpawnToBiome(ResourceKey<Biome> biomeRegistryKey, MobSpawnSettingsBuilder mobSpawnInfoBuilder, List<String> configuredBiomeTypes, EntityType entityType, int spawnWeight, int minGroupSize, int maxGroupSize) {
         if(configuredBiomeTypes.isEmpty()) return;
 
         List<String> disallowedBiomeTypes = new ArrayList<>();
@@ -261,38 +260,38 @@ public class BiomeSpawnEntries {
             }
         }
         if(containsAllowedType && !containsDisallowedType){
-            MobSpawnInfo.Spawners monsterSpawnEntry = new MobSpawnInfo.Spawners(entityType, spawnWeight, minGroupSize, maxGroupSize);
-            mobSpawnInfoBuilder.getSpawner(EntityClassification.MONSTER).add(monsterSpawnEntry);
+            MobSpawnSettings.SpawnerData monsterSpawnEntry = new MobSpawnSettings.SpawnerData(entityType, spawnWeight, minGroupSize, maxGroupSize);
+            mobSpawnInfoBuilder.getSpawner(MobCategory.MONSTER).add(monsterSpawnEntry);
         }
     }
 
-    private static void handleVariantReplacementWithCategoryCheck(MobSpawnInfoBuilder mobSpawnInfoBuilder, Biome.Category foundCategory, Biome.Category requiredCategory, EntityType typeToReplace, EntityType typeReplaceBy, double retainAmount) {
+    private static void handleVariantReplacementWithCategoryCheck(MobSpawnSettingsBuilder mobSpawnInfoBuilder, Biome.BiomeCategory foundCategory, Biome.BiomeCategory requiredCategory, EntityType typeToReplace, EntityType typeReplaceBy, double retainAmount) {
         if(foundCategory == requiredCategory){
             handleVariantReplacement(mobSpawnInfoBuilder, typeToReplace, typeReplaceBy, retainAmount);
         }
     }
 
-    private static void handleVariantReplacement(MobSpawnInfoBuilder mobSpawnInfoBuilder, EntityType typeToReplace, EntityType typeReplaceBy, double retainAmount) {
-        retainAmount = MathHelper.clamp(retainAmount, 0 , 1);
-        double replaceAmount = MathHelper.clamp(1 - retainAmount, 0 , 1);
+    private static void handleVariantReplacement(MobSpawnSettingsBuilder mobSpawnInfoBuilder, EntityType typeToReplace, EntityType typeReplaceBy, double retainAmount) {
+        retainAmount = Mth.clamp(retainAmount, 0 , 1);
+        double replaceAmount = Mth.clamp(1 - retainAmount, 0 , 1);
 
-        List<MobSpawnInfo.Spawners> monsterSpawnList = mobSpawnInfoBuilder.getSpawner(EntityClassification.MONSTER);
+        List<MobSpawnSettings.SpawnerData> monsterSpawnList = mobSpawnInfoBuilder.getSpawner(MobCategory.MONSTER);
         for(int i = 0; i < monsterSpawnList.size(); i++) {
-            MobSpawnInfo.Spawners spawnListEntry = monsterSpawnList.get(i);
-            int weight = spawnListEntry.weight;
+            MobSpawnSettings.SpawnerData spawnListEntry = monsterSpawnList.get(i);
+            int weight = spawnListEntry.getWeight().asInt();
             int minGroupCount = spawnListEntry.minCount;
             int maxGroupCount = spawnListEntry.maxCount;
             EntityType<?> entityType = spawnListEntry.type;
             if (entityType == typeToReplace) {
-                MobSpawnInfo.SpawnCosts spawnCosts = mobSpawnInfoBuilder.getCost(typeToReplace);
+                MobSpawnSettings.MobSpawnCost spawnCosts = mobSpawnInfoBuilder.getCost(typeToReplace);
                 if(spawnCosts != null){
                     double maxSpawnCost = spawnCosts.getEnergyBudget();
                     double entitySpawnCost = spawnCosts.getCharge();
                     mobSpawnInfoBuilder.addMobCharge(typeToReplace, maxSpawnCost * retainAmount, entitySpawnCost * retainAmount);
                     mobSpawnInfoBuilder.addMobCharge(typeReplaceBy, maxSpawnCost * replaceAmount, entitySpawnCost * replaceAmount);
                 }
-                MobSpawnInfo.Spawners typeReplaceByEntry = new MobSpawnInfo.Spawners(typeReplaceBy, (int) (weight * replaceAmount), minGroupCount, maxGroupCount);
-                MobSpawnInfo.Spawners typeToReplaceEntry = new MobSpawnInfo.Spawners(typeToReplace, (int) (weight * retainAmount), minGroupCount, maxGroupCount);
+                MobSpawnSettings.SpawnerData typeReplaceByEntry = new MobSpawnSettings.SpawnerData(typeReplaceBy, (int) (weight * replaceAmount), minGroupCount, maxGroupCount);
+                MobSpawnSettings.SpawnerData typeToReplaceEntry = new MobSpawnSettings.SpawnerData(typeToReplace, (int) (weight * retainAmount), minGroupCount, maxGroupCount);
                 monsterSpawnList.set(i, typeToReplaceEntry);
                 monsterSpawnList.add(typeReplaceByEntry);
             }

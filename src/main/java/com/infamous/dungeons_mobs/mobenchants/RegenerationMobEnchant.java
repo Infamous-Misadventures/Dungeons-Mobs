@@ -1,18 +1,15 @@
 package com.infamous.dungeons_mobs.mobenchants;
 
 import com.baguchan.enchantwithmob.mobenchant.MobEnchant;
-import com.infamous.dungeons_mobs.DungeonsMobs;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.particles.ParticleTypes;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.PROXY;
 import static com.infamous.dungeons_mobs.mobenchants.NewMobEnchantUtils.executeIfPresentWithLevel;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchants.REGENERATION;
 
-//@Mod.EventBusSubscriber(modid = DungeonsMobs.MODID)
 public class RegenerationMobEnchant extends MobEnchant {
 
     public RegenerationMobEnchant(Properties properties) {

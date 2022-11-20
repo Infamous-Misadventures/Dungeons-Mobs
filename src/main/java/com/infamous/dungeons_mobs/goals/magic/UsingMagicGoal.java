@@ -1,14 +1,14 @@
 package com.infamous.dungeons_mobs.goals.magic;
 
-import com.infamous.dungeons_mobs.interfaces.IMagicUser;
 import com.infamous.dungeons_mobs.entities.magic.MagicType;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.goal.Goal;
+import com.infamous.dungeons_mobs.interfaces.IMagicUser;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.Goal;
 
 import java.util.EnumSet;
 
-public class UsingMagicGoal<T extends MobEntity & IMagicUser> extends Goal {
-    private T hostMobEntity;
+public class UsingMagicGoal<T extends Mob & IMagicUser> extends Goal {
+    private final T hostMobEntity;
 
       public UsingMagicGoal(T magicUserMob) {
           this.hostMobEntity = magicUserMob;

@@ -1,24 +1,24 @@
 package com.infamous.dungeons_mobs.items;
 
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.IArmorMaterial;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.crafting.Ingredient;
 
-public class CosmeticArmorMaterial implements IArmorMaterial {
+public class CosmeticArmorMaterial implements ArmorMaterial {
 
-    public static final IArmorMaterial INSTANCE = new CosmeticArmorMaterial();
+    public static final ArmorMaterial INSTANCE = new CosmeticArmorMaterial();
     private static final int[] HEALTH_PER_SLOT = new int[]{13, 15, 16, 11};
 
     @Override
-    public int getDurabilityForSlot(EquipmentSlotType p_200896_1_) {
+    public int getDurabilityForSlot(EquipmentSlot p_200896_1_) {
         return HEALTH_PER_SLOT[p_200896_1_.getIndex()] * 5;
     }
 
     @Override
-    public int getDefenseForSlot(EquipmentSlotType p_200902_1_) {
+    public int getDefenseForSlot(EquipmentSlot p_200902_1_) {
         return 0;
     }
 

@@ -2,17 +2,12 @@ package com.infamous.dungeons_mobs.entities.summonables;
 
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
-
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.monster.HuskEntity;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.monster.ZombieEntity;
-import net.minecraft.network.IPacket;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.level.Level;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -20,25 +15,28 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
+
+import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.*;
 
 public class GeomancerWallEntity extends ConstructEntity implements IAnimatable {
 
-	AnimationFactory factory = new AnimationFactory(this);
+	AnimationFactory factory = GeckoLibUtil.createFactory(this);
 	
-    public GeomancerWallEntity(World world) {
+    public GeomancerWallEntity(Level world) {
         super(ModEntityTypes.GEOMANCER_WALL.get(), world);
     }
 
-    public GeomancerWallEntity(EntityType<? extends GeomancerWallEntity> entityType, World world) {
+    public GeomancerWallEntity(EntityType<? extends GeomancerWallEntity> entityType, Level world) {
         super(entityType, world);
     }
 
-    public GeomancerWallEntity(World worldIn, double x, double y, double z, LivingEntity casterIn, int lifeTicksIn) {
+    public GeomancerWallEntity(Level worldIn, double x, double y, double z, LivingEntity casterIn, int lifeTicksIn) {
         super(ModEntityTypes.GEOMANCER_WALL.get(), worldIn, x, y, z, casterIn, lifeTicksIn);
     }
     
-    public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return MonsterEntity.createMonsterAttributes().add(Attributes.FOLLOW_RANGE, 0.0D).add(Attributes.MOVEMENT_SPEED, 0.0D).add(Attributes.ATTACK_DAMAGE, 0.0D);
+    public static AttributeSupplier.Builder setCustomAttributes() {
+        return Monster.createMonsterAttributes().add(Attributes.FOLLOW_RANGE, 0.0D).add(Attributes.MOVEMENT_SPEED, 0.0D).add(Attributes.ATTACK_DAMAGE, 0.0D);
     }
     
     @Override
@@ -61,11 +59,11 @@ public class GeomancerWallEntity extends ConstructEntity implements IAnimatable 
 	private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
 		if (this.getLifeTicks() <= 100) {
 			if (this.getLifeTicks() < 40) {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("geomancer_pillar_disappear", false));
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("geomancer_pillar_disappear", HOLD_ON_LAST_FRAME));
 			} else if (this.getLifeTicks() > 75) {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("geomancer_pillar_appear", false));
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("geomancer_pillar_appear", PLAY_ONCE));
 			} else {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("geomancer_pillar_idle", true));
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("geomancer_pillar_idle", LOOP));
 			}
 		}
 		return PlayState.CONTINUE;

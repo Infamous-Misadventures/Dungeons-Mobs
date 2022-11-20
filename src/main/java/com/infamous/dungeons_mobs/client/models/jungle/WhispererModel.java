@@ -1,24 +1,20 @@
 package com.infamous.dungeons_mobs.client.models.jungle;
 
-import javax.annotation.Nullable;
-
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
 import com.infamous.dungeons_mobs.entities.jungle.WhispererEntity;
-
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.molang.MolangParser;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
 import software.bernie.geckolib3.resource.GeckoLibCache;
-import software.bernie.geckolib3.core.molang.MolangParser;
 
 public class WhispererModel<T extends WhispererEntity> extends AnimatedGeoModel<T> {
 
@@ -38,8 +34,8 @@ public class WhispererModel<T extends WhispererEntity> extends AnimatedGeoModel<
 	}
 
 	@Override
-	public void setLivingAnimations(T entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
-		super.setLivingAnimations(entity, uniqueID, customPredicate);
+	public void setCustomAnimations(T entity, int uniqueID, AnimationEvent customPredicate) {
+		super.setCustomAnimations(entity, uniqueID, customPredicate);
 
 		IBone head = this.getAnimationProcessor().getBone("jaw");
 		IBone cape = this.getAnimationProcessor().getBone("bipedCape");
@@ -77,8 +73,8 @@ public class WhispererModel<T extends WhispererEntity> extends AnimatedGeoModel<
 		
 		MolangParser parser = GeckoLibCache.getInstance().parser;
 		LivingEntity livingEntity = (LivingEntity) animatable;
-		Vector3d velocity = livingEntity.getDeltaMovement();
-		float groundSpeed = MathHelper.sqrt((float) ((velocity.x * velocity.x) + (velocity.z * velocity.z)));
-		parser.setValue("query.ground_speed", groundSpeed * 12.5);
+		Vec3 velocity = livingEntity.getDeltaMovement();
+		float groundSpeed = Mth.sqrt((float) ((velocity.x * velocity.x) + (velocity.z * velocity.z)));
+		parser.setValue("query.ground_speed", () -> groundSpeed * 12.5);
 	}
 }

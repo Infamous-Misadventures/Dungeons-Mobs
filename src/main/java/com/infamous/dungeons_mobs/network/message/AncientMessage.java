@@ -1,26 +1,26 @@
 package com.infamous.dungeons_mobs.network.message;
 
+import com.infamous.dungeons_mobs.capabilities.ancient.Ancient;
 import com.infamous.dungeons_mobs.capabilities.ancient.AncientHelper;
-import com.infamous.dungeons_mobs.capabilities.ancient.IAncient;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
 public class AncientMessage {
-    private int entityId;
-    private boolean ancient;
+    private final int entityId;
+    private final boolean ancient;
 
     public AncientMessage(int entityId, boolean ancient) {
         this.entityId = entityId;
         this.ancient = ancient;
     }
 
-    public static AncientMessage decode(PacketBuffer buffer) {
+    public static AncientMessage decode(FriendlyByteBuf buffer) {
         int entityId = buffer.readInt();
         boolean ancient = buffer.readBoolean();
 
@@ -33,7 +33,7 @@ public class AncientMessage {
             context.enqueueWork(() -> {
                 Entity entity = Minecraft.getInstance().player.level.getEntity(message.entityId);
                 if (entity instanceof LivingEntity) {
-                    IAncient cap = AncientHelper.getAncientCapability(entity);
+                    Ancient cap = AncientHelper.getAncientCapability(entity);
                     cap.setAncient(message.ancient);
                     entity.refreshDimensions();
                 }
@@ -42,7 +42,7 @@ public class AncientMessage {
         return true;
     }
 
-    public void encode(PacketBuffer buffer) {
+    public void encode(FriendlyByteBuf buffer) {
         buffer.writeInt(this.entityId);
         buffer.writeBoolean(ancient);
     }

@@ -1,20 +1,16 @@
 package com.infamous.dungeons_mobs.client.particle;
 
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.particles.BasicParticleType;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-import java.util.Random;
 
-
-public class SnowflakeParticle extends SpriteTexturedParticle {
+public class SnowflakeParticle extends TextureSheetParticle {
 	
-    protected SnowflakeParticle(ClientWorld level, double xCoord, double yCoord, double zCoord,
-    		IAnimatedSprite spriteSet, double xd, double yd, double zd) {
+    protected SnowflakeParticle(ClientLevel level, double xCoord, double yCoord, double zCoord,
+    		SpriteSet spriteSet, double xd, double yd, double zd) {
         super(level, xCoord, yCoord, zCoord, xd, yd, zd);
 
         this.quadSize *= 1.25F;
@@ -24,8 +20,8 @@ public class SnowflakeParticle extends SpriteTexturedParticle {
         this.pickSprite(spriteSet);
     }
 
-    public IParticleRenderType getRenderType() {
-        return IParticleRenderType.PARTICLE_SHEET_OPAQUE;
+    public ParticleRenderType getRenderType() {
+        return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
     }
 
 
@@ -43,26 +39,26 @@ public class SnowflakeParticle extends SpriteTexturedParticle {
                 this.zd *= 1.1D;
             }
 
-            this.xd *= (double)0.75F;
-            this.yd *= (double)0.75F;
-            this.zd *= (double)0.75F;
+            this.xd *= 0.75F;
+            this.yd *= 0.75F;
+            this.zd *= 0.75F;
             if (this.onGround) {
-                this.xd *= (double)0.6F;
-                this.zd *= (double)0.6F;
+                this.xd *= 0.6F;
+                this.zd *= 0.6F;
             }
 
         }
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static class Factory implements IParticleFactory<BasicParticleType> {
-        private final IAnimatedSprite sprites;
+    public static class Factory implements ParticleProvider<SimpleParticleType> {
+        private final SpriteSet sprites;
 
-        public Factory(IAnimatedSprite spriteSet) {
+        public Factory(SpriteSet spriteSet) {
             this.sprites = spriteSet;
         }
 
-        public Particle createParticle(BasicParticleType particleType, ClientWorld level,
+        public Particle createParticle(SimpleParticleType particleType, ClientLevel level,
                                        double x, double y, double z,
                                        double dx, double dy, double dz) {
             return new SnowflakeParticle(level, x, y, z, this.sprites, dx, dy, dz);

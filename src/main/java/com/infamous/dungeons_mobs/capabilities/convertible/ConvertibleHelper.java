@@ -4,46 +4,45 @@ import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.entities.water.SunkenSkeletonEntity;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.tags.CustomTags;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.monster.AbstractSkeletonEntity;
-import net.minecraft.entity.monster.ZombieEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.monster.AbstractSkeleton;
+import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
-import javax.annotation.Nullable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import static com.infamous.dungeons_mobs.capabilities.ModCapabilities.CONVERTIBLE_CAPABILITY;
+
 public class ConvertibleHelper {
 
-    public static IConvertible getConvertibleCapability(Entity entity)
+    public static Convertible getConvertibleCapability(Entity entity)
     {
-        LazyOptional<IConvertible> lazyCap = entity.getCapability(ConvertibleProvider.CONVERTIBLE_CAPABILITY);
-        return lazyCap.orElse(new Convertible());
+        return entity.getCapability(CONVERTIBLE_CAPABILITY).orElse(new Convertible());
     }
 
-    public static void onDrownedAndConvertedTo(MobEntity original, MobEntity convertedTo){
-        if(original instanceof AbstractSkeletonEntity && convertedTo instanceof SunkenSkeletonEntity){
+    public static void onDrownedAndConvertedTo(Mob original, Mob convertedTo){
+        if(original instanceof AbstractSkeleton && convertedTo instanceof SunkenSkeletonEntity){
             if (!original.isSilent()) {
-                original.level.levelEvent((PlayerEntity)null, 1040, original.blockPosition(), 0);
+                original.level.levelEvent((Player)null, 1040, original.blockPosition(), 0);
             }
             DungeonsMobs.LOGGER.info("Converted {} to {}", original, convertedTo);
         }
 
-        if(original instanceof ZombieEntity && convertedTo instanceof ZombieEntity){
-            ZombieEntity originalZombie = (ZombieEntity) original;
-            ZombieEntity convertedToZombie = (ZombieEntity) convertedTo;
+        if(original instanceof Zombie && convertedTo instanceof Zombie){
+            Zombie originalZombie = (Zombie) original;
+            Zombie convertedToZombie = (Zombie) convertedTo;
             handleZombieAttributes(convertedToZombie);
             setZombieCanBreakDoors(originalZombie, convertedToZombie);
         }
         net.minecraftforge.event.ForgeEventFactory.onLivingConvert(original, convertedTo);
     }
 
-    private static void setZombieCanBreakDoors(ZombieEntity originalZombie, ZombieEntity convertedToZombie) {
-        Method supportsBreakDoorGoalMethod = ObfuscationReflectionHelper.findMethod(ZombieEntity.class, "func_204900_dz");
+    private static void setZombieCanBreakDoors(Zombie originalZombie, Zombie convertedToZombie) {
+        Method supportsBreakDoorGoalMethod = ObfuscationReflectionHelper.findMethod(Zombie.class, "func_204900_dz");
         try {
             convertedToZombie.setCanBreakDoors((Boolean)supportsBreakDoorGoalMethod.invoke(convertedToZombie) && originalZombie.canBreakDoors());
         } catch (IllegalAccessException | InvocationTargetException e) {
@@ -51,8 +50,8 @@ public class ConvertibleHelper {
         }
     }
 
-    private static void handleZombieAttributes(ZombieEntity convertedToZombie) {
-        Method handleAttributesMethod = ObfuscationReflectionHelper.findMethod(ZombieEntity.class, "func_207304_a", Float.class);
+    private static void handleZombieAttributes(Zombie convertedToZombie) {
+        Method handleAttributesMethod = ObfuscationReflectionHelper.findMethod(Zombie.class, "func_207304_a", Float.class);
         try {
             handleAttributesMethod.invoke(convertedToZombie, convertedToZombie.level.getCurrentDifficultyAt(convertedToZombie.blockPosition()).getSpecialMultiplier());
         } catch (IllegalAccessException | InvocationTargetException e) {
@@ -60,16 +59,16 @@ public class ConvertibleHelper {
         }
     }
 
-    public static EntityType<? extends MobEntity> getDrowningConvertTo(MobEntity mob) {
+    public static EntityType<? extends Mob> getDrowningConvertTo(Mob mob) {
         // default, we will keep converting the mob to itself if it doesn't have an appropriate conversion
-        EntityType<? extends MobEntity> convertToType = (EntityType<? extends MobEntity>) mob.getType();
-        if(mob instanceof AbstractSkeletonEntity){
+        EntityType<? extends Mob> convertToType = (EntityType<? extends Mob>) mob.getType();
+        if(mob instanceof AbstractSkeleton){
             convertToType = ModEntityTypes.SUNKEN_SKELETON.get();
         }
         return convertToType;
     }
 
-    public static boolean convertsInWater(MobEntity mobEntity) {
+    public static boolean convertsInWater(Mob mobEntity) {
         return mobEntity.getType().is(CustomTags.CONVERTS_IN_WATER);
     }
 }

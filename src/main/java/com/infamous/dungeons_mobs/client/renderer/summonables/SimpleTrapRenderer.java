@@ -2,23 +2,22 @@ package com.infamous.dungeons_mobs.client.renderer.summonables;
 
 import com.infamous.dungeons_mobs.client.models.summonables.SimpleTrapModel;
 import com.infamous.dungeons_mobs.entities.summonables.SimpleTrapEntity;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.renderers.geo.GeoProjectilesRenderer;
 
 public class SimpleTrapRenderer extends GeoProjectilesRenderer<SimpleTrapEntity> {
-   public SimpleTrapRenderer(EntityRendererManager renderManager) {
+   public SimpleTrapRenderer(EntityRendererProvider.Context renderManager) {
       super(renderManager, new SimpleTrapModel<SimpleTrapEntity>());
    }
    
 	@Override
-	public void renderEarly(SimpleTrapEntity animatable, MatrixStack stackIn, float partialTicks,
-			IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn,
+	public void renderEarly(SimpleTrapEntity animatable, PoseStack stackIn, float partialTicks,
+			MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn, int packedOverlayIn,
 			float red, float green, float blue, float alpha) {
 		float scaleFactor = 2.0F;
 		if (animatable.lifeTime <= 1) {
@@ -30,8 +29,8 @@ public class SimpleTrapRenderer extends GeoProjectilesRenderer<SimpleTrapEntity>
 	}
 
    @Override
-   public RenderType getRenderType(SimpleTrapEntity animatable, float partialTicks, MatrixStack stack,
-                                   IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn,
+   public RenderType getRenderType(SimpleTrapEntity animatable, float partialTicks, PoseStack stack,
+                                   MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn,
                                    ResourceLocation textureLocation) {
       return RenderType.entityTranslucent(getTextureLocation(animatable));
    }

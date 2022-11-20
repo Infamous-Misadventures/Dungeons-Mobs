@@ -1,13 +1,13 @@
 package com.infamous.dungeons_mobs.mixin;
 
-import net.minecraft.entity.monster.piglin.PiglinEntity;
-import net.minecraft.inventory.Inventory;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.monster.piglin.Piglin;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(PiglinEntity.class)
+@Mixin(Piglin.class)
 public interface PiglinAccessor {
 
     @Accessor
-    Inventory getInventory();
+    SimpleContainer getInventory();
 }

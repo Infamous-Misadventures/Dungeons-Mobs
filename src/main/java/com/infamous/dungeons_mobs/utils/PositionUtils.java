@@ -1,28 +1,27 @@
 package com.infamous.dungeons_mobs.utils;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class PositionUtils {
 
-	public static Vector3d getOffsetPos(Entity entity, double offsetX, double offsetY, double offsetZ, float rotation) {
-        Vector3d vector3d = (new Vector3d(offsetZ, offsetY, offsetX).yRot(-rotation * ((float)Math.PI / 180F) - ((float)Math.PI / 2F)));
+	public static Vec3 getOffsetPos(Entity entity, double offsetX, double offsetY, double offsetZ, float rotation) {
+        Vec3 vector3d = (new Vec3(offsetZ, offsetY, offsetX).yRot(-rotation * ((float)Math.PI / 180F) - ((float)Math.PI / 2F)));
         return entity.position().add(vector3d.x, vector3d.y, vector3d.z);
 	}
 	
 	public static BlockPos getOffsetBlockPos(Entity entity, double offsetX, double offsetY, double offsetZ, float rotation) {
-        Vector3d vector3d = (new Vector3d(offsetZ, offsetY, offsetX).yRot(-rotation * ((float)Math.PI / 180F) - ((float)Math.PI / 2F)));
+        Vec3 vector3d = (new Vec3(offsetZ, offsetY, offsetX).yRot(-rotation * ((float)Math.PI / 180F) - ((float)Math.PI / 2F)));
         return entity.blockPosition().offset(vector3d.x, vector3d.y, vector3d.z);
 	}
 	
-	public static Vector3d getOffsetMotion(Entity entity, double offsetX, double offsetY, double offsetZ, float rotation) {
-        Vector3d vector3d = (new Vector3d(offsetZ, offsetY, offsetX).yRot(-rotation * ((float)Math.PI / 180F) - ((float)Math.PI / 2F)));
+	public static Vec3 getOffsetMotion(Entity entity, double offsetX, double offsetY, double offsetZ, float rotation) {
+        Vec3 vector3d = (new Vec3(offsetZ, offsetY, offsetX).yRot(-rotation * ((float)Math.PI / 180F) - ((float)Math.PI / 2F)));
         return vector3d;
 	}
 	
@@ -48,7 +47,7 @@ public class PositionUtils {
            }
 
            blockpos = blockpos.below();
-        } while(blockpos.getY() >= MathHelper.floor(blockpos.getY()) - 1);
+        } while(blockpos.getY() >= Mth.floor(blockpos.getY()) - 1);
 
         if (flag) {
         	entity.setPos(blockpos.getX(), blockpos.getY() + d0, blockpos.getZ());

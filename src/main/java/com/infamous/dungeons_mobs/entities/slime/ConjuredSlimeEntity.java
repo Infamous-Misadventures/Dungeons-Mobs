@@ -2,34 +2,35 @@ package com.infamous.dungeons_mobs.entities.slime;
 
 import com.infamous.dungeons_mobs.entities.projectiles.SlimeballEntity;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.controller.MovementController;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.monster.SlimeEntity;
-import net.minecraft.entity.passive.IronGolemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.control.MoveControl;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.RangedAttackMob;
+import net.minecraft.world.entity.monster.Slime;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 
 import java.util.EnumSet;
 
-public class ConjuredSlimeEntity extends SlimeEntity implements IRangedAttackMob {
+public class ConjuredSlimeEntity extends Slime implements RangedAttackMob {
 
-    public ConjuredSlimeEntity(World worldIn) {
+    public ConjuredSlimeEntity(Level worldIn) {
         super(ModEntityTypes.CONJURED_SLIME.get(), worldIn);
     }
 
-    public ConjuredSlimeEntity(EntityType<? extends ConjuredSlimeEntity> type, World worldIn) {
+    public ConjuredSlimeEntity(EntityType<? extends ConjuredSlimeEntity> type, Level worldIn) {
         super(type, worldIn);
         this.moveControl = new ConjuredSlimeEntity.MoveHelperController(this);
     }
 
-    public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return MonsterEntity.createMonsterAttributes();
+    public static AttributeSupplier.Builder setCustomAttributes() {
+        return Monster.createMonsterAttributes();
     }
 
     protected void registerGoals() {
@@ -37,8 +38,8 @@ public class ConjuredSlimeEntity extends SlimeEntity implements IRangedAttackMob
         this.goalSelector.addGoal(2, new ImmobileRangedAttackGoal( 40, 10.0F));
         this.goalSelector.addGoal(3, new ConjuredSlimeEntity.FaceRandomGoal(this));
         //this.goalSelector.addGoal(5, new ConjuredSlimeEntity.HopGoal(this));
-        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, 10, true, false, this::canSlimeReach));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
+        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, this::canSlimeReach));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));
     }
 
     private boolean canSlimeReach(LivingEntity target){
@@ -59,9 +60,9 @@ public class ConjuredSlimeEntity extends SlimeEntity implements IRangedAttackMob
                 if (!entityIn.noPhysics && !this.noPhysics) {
                     double d0 = entityIn.getX() - this.getX();
                     double d1 = entityIn.getZ() - this.getZ();
-                    double d2 = MathHelper.absMax(d0, d1);
+                    double d2 = Mth.absMax(d0, d1);
                     if (d2 >= (double)0.01F) {
-                        d2 = (double)MathHelper.sqrt(d2);
+                        d2 = (double)Mth.sqrt((float) d2);
                         d0 = d0 / d2;
                         d1 = d1 / d2;
                         double d3 = 1.0D / d2;
@@ -73,8 +74,8 @@ public class ConjuredSlimeEntity extends SlimeEntity implements IRangedAttackMob
                         d1 = d1 * d3;
                         d0 = d0 * (double)0.05F;
                         d1 = d1 * (double)0.05F;
-                        d0 = d0 * (double)(1.0F - this.pushthrough);
-                        d1 = d1 * (double)(1.0F - this.pushthrough);
+                        d0 *= 0.5D;
+                        d1 *= 0.5D;
                         if (!this.isVehicle()) {
                             this.push(-d0, 0.0D, -d1);
                         }
@@ -92,7 +93,7 @@ public class ConjuredSlimeEntity extends SlimeEntity implements IRangedAttackMob
     /**
      * Called by a player entity when they collide with an entity
      */
-    public void playerTouch(PlayerEntity entityIn) {
+    public void playerTouch(Player entityIn) {
         // NO-OP
     }
 
@@ -100,7 +101,7 @@ public class ConjuredSlimeEntity extends SlimeEntity implements IRangedAttackMob
         // NO-OP
     }
 
-    protected float getStandingEyeHeight(Pose poseIn, EntitySize sizeIn) {
+    protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
         return 0.625F * sizeIn.height;
     }
 
@@ -124,7 +125,7 @@ public class ConjuredSlimeEntity extends SlimeEntity implements IRangedAttackMob
         double xDifference = target.getX() - this.getX();
         double yDifference = target.getY(0.5D) - this.getY(0.5D);
         double zDifference = target.getZ() - this.getZ();
-        float euclidDist = MathHelper.sqrt(xDifference * xDifference + yDifference * yDifference + zDifference * zDifference);
+        float euclidDist = Mth.sqrt((float)(xDifference * xDifference + yDifference * yDifference + zDifference * zDifference));
 
         SlimeballEntity slimeballEntity = new SlimeballEntity(this.level,
                 this,
@@ -167,8 +168,8 @@ public class ConjuredSlimeEntity extends SlimeEntity implements IRangedAttackMob
             } else if (!livingentity.isAlive()) {
                 return false;
             } else {
-                return (!(livingentity instanceof PlayerEntity)
-                        || !((PlayerEntity) livingentity).abilities.invulnerable)
+                return (!(livingentity instanceof Player)
+                        || !((Player) livingentity).getAbilities().invulnerable)
                         && ConjuredSlimeEntity.this.getMoveControl() instanceof MoveHelperController;
             }
         }
@@ -196,7 +197,7 @@ public class ConjuredSlimeEntity extends SlimeEntity implements IRangedAttackMob
                 return false;
             } else if (!livingentity.isAlive()) {
                 return false;
-            } else if (livingentity instanceof PlayerEntity && ((PlayerEntity)livingentity).abilities.invulnerable) {
+            } else if (livingentity instanceof Player && ((Player)livingentity).getAbilities().invulnerable) {
                 return false;
             } else {
                 return --this.growTieredTimer > 0;
@@ -212,7 +213,7 @@ public class ConjuredSlimeEntity extends SlimeEntity implements IRangedAttackMob
 
                 // HANDLE SEE TIME
                 double distanceSqToTarget = ConjuredSlimeEntity.this.distanceToSqr(attackTarget.getX(), attackTarget.getY(), attackTarget.getZ());
-                boolean canSeeTarget = ConjuredSlimeEntity.this.getSensing().canSee(attackTarget);
+                boolean canSeeTarget = ConjuredSlimeEntity.this.getSensing().hasLineOfSight(attackTarget);
                 if (canSeeTarget) {
                     ++this.seeTime;
                 } else {
@@ -222,7 +223,7 @@ public class ConjuredSlimeEntity extends SlimeEntity implements IRangedAttackMob
                 // FACE THE TARGET
                 ConjuredSlimeEntity.this.lookAt(ConjuredSlimeEntity.this.getTarget(), 10.0F, 10.0F);
                 ((ConjuredSlimeEntity.MoveHelperController)ConjuredSlimeEntity.this.getMoveControl())
-                        .setDirection(ConjuredSlimeEntity.this.yRot);
+                        .setDirection(ConjuredSlimeEntity.this.getYRot());
 
                 // ATTACK WITH RANGED ATTACK OR TICK DOWN RANGED ATTACK TIME
                 if (--this.rangedAttackTime == 0) {
@@ -230,13 +231,13 @@ public class ConjuredSlimeEntity extends SlimeEntity implements IRangedAttackMob
                         return;
                     }
 
-                    float f = MathHelper.sqrt(distanceSqToTarget) / this.attackRadius;
-                    float clamp = MathHelper.clamp(f, 0.1F, 1.0F);
+                    float f = Mth.sqrt((float) distanceSqToTarget) / this.attackRadius;
+                    float clamp = Mth.clamp(f, 0.1F, 1.0F);
                     ConjuredSlimeEntity.this.performRangedAttack(attackTarget, clamp);
-                    this.rangedAttackTime = MathHelper.floor(f * (float)(this.maxRangedAttackTime - this.minRangedAttackInterval) + (float)this.minRangedAttackInterval);
+                    this.rangedAttackTime = Mth.floor(f * (float)(this.maxRangedAttackTime - this.minRangedAttackInterval) + (float)this.minRangedAttackInterval);
                 } else if (this.rangedAttackTime < 0) {
-                    float f2 = MathHelper.sqrt(distanceSqToTarget) / this.attackRadius;
-                    this.rangedAttackTime = MathHelper.floor(f2 * (float)(this.maxRangedAttackTime - this.minRangedAttackInterval) + (float)this.minRangedAttackInterval);
+                    float f2 = Mth.sqrt((float) distanceSqToTarget) / this.attackRadius;
+                    this.rangedAttackTime = Mth.floor(f2 * (float)(this.maxRangedAttackTime - this.minRangedAttackInterval) + (float)this.minRangedAttackInterval);
                 }
 
             }}
@@ -261,7 +262,7 @@ public class ConjuredSlimeEntity extends SlimeEntity implements IRangedAttackMob
                     && (this.slime.onGround
                     || this.slime.isInWater()
                     || this.slime.isInLava()
-                    || this.slime.hasEffect(Effects.LEVITATION))
+                    || this.slime.hasEffect(MobEffects.LEVITATION))
                     && this.slime.getMoveControl() instanceof ConjuredSlimeEntity.MoveHelperController;
         }
 
@@ -279,14 +280,14 @@ public class ConjuredSlimeEntity extends SlimeEntity implements IRangedAttackMob
         }
     }
 
-    static class MoveHelperController extends MovementController {
+    static class MoveHelperController extends MoveControl {
         private float yRot;
         private final ConjuredSlimeEntity slime;
 
         public MoveHelperController(ConjuredSlimeEntity slimeIn) {
             super(slimeIn);
             this.slime = slimeIn;
-            this.yRot = 180.0F * slimeIn.yRot / (float)Math.PI;
+            this.yRot = 180.0F * slimeIn.getYRot() / (float)Math.PI;
         }
 
         public void setDirection(float yRotIn) {
@@ -294,9 +295,9 @@ public class ConjuredSlimeEntity extends SlimeEntity implements IRangedAttackMob
         }
 
         public void tick() {
-            this.mob.yRot = this.rotlerp(this.mob.yRot, this.yRot, 90.0F);
-            this.mob.yHeadRot = this.mob.yRot;
-            this.mob.yBodyRot = this.mob.yRot;
+            this.mob.setYRot(this.rotlerp(this.mob.getYRot(), this.yRot, 90.0F));
+            this.mob.yHeadRot = this.mob.getYRot();
+            this.mob.yBodyRot = this.mob.getYRot();
         }
     }
 }

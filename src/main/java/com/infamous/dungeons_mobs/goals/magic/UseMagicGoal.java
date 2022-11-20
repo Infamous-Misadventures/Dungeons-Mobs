@@ -1,18 +1,18 @@
 package com.infamous.dungeons_mobs.goals.magic;
 
-import com.infamous.dungeons_mobs.interfaces.IMagicUser;
 import com.infamous.dungeons_mobs.entities.magic.MagicType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.util.SoundEvent;
+import com.infamous.dungeons_mobs.interfaces.IMagicUser;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.Goal;
 
 import javax.annotation.Nullable;
 
-public abstract class UseMagicGoal<T extends MobEntity & IMagicUser> extends Goal {
+public abstract class UseMagicGoal<T extends Mob & IMagicUser> extends Goal {
     private int magicWarmup;
     private int magicCooldown;
-    private T hostMobEntity;
+    private final T hostMobEntity;
 
     protected UseMagicGoal(T magicUserMob) {
         this.hostMobEntity = magicUserMob;

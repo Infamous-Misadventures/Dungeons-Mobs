@@ -1,28 +1,24 @@
 package com.infamous.dungeons_mobs.entities.ender;
 
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.HurtByTargetGoal;
-import net.minecraft.entity.ai.goal.LookAtGoal;
-import net.minecraft.entity.ai.goal.LookRandomlyGoal;
-import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
-import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
-import net.minecraft.entity.monster.AbstractRaiderEntity;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.passive.IronGolemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -30,35 +26,38 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
+
+import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
 public class WatchlingEntity extends AbstractEnderlingEntity implements IAnimatable {
 	
-	AnimationFactory factory = new AnimationFactory(this);
+	AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
-	public WatchlingEntity(EntityType<? extends WatchlingEntity> p_i50210_1_, World p_i50210_2_) {
+	public WatchlingEntity(EntityType<? extends WatchlingEntity> p_i50210_1_, Level p_i50210_2_) {
 		super(p_i50210_1_, p_i50210_2_);
 	}
 	
 	   protected void registerGoals() {
-		      this.goalSelector.addGoal(0, new SwimGoal(this));
+		      this.goalSelector.addGoal(0, new FloatGoal(this));
 		      this.goalSelector.addGoal(2, new AbstractEnderlingEntity.AttackGoal(1.5D));
-		      this.goalSelector.addGoal(7, new WaterAvoidingRandomWalkingGoal(this, 1.0D, 0.0F));
-		      this.goalSelector.addGoal(8, new LookAtGoal(this, PlayerEntity.class, 8.0F));
-		      this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
+		      this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D, 0.0F));
+		      this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
+		      this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
 		      this.targetSelector.addGoal(1, new AbstractEnderlingEntity.FindPlayerGoal(this, null));
 		      this.targetSelector.addGoal(2, new HurtByTargetGoal(this, AbstractEnderlingEntity.class).setAlertOthers().setUnseenMemoryTicks(500));
-		      this.targetSelector.addGoal(1, new EnderlingTargetGoal<>(this, PlayerEntity.class, true).setUnseenMemoryTicks(500));
+		      this.targetSelector.addGoal(1, new EnderlingTargetGoal<>(this, Player.class, true).setUnseenMemoryTicks(500));
 		      
 		      
 		      //this.targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, AbstractEndermanVariant.class, true, false));
 		   }
 	   
-	   public CreatureAttribute getMobType() {
-		      return CreatureAttribute.UNDEAD;
+	   public MobType getMobType() {
+		      return MobType.UNDEAD;
 		   }
 	   
-	   public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-		      return MonsterEntity.createMonsterAttributes().add(Attributes.MAX_HEALTH, 30.0D).add(Attributes.MOVEMENT_SPEED, (double)0.225F).add(Attributes.ATTACK_DAMAGE, 7.0D).add(Attributes.FOLLOW_RANGE, 32.0D);
+	   public static AttributeSupplier.Builder setCustomAttributes() {
+		      return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 30.0D).add(Attributes.MOVEMENT_SPEED, 0.225F).add(Attributes.ATTACK_DAMAGE, 7.0D).add(Attributes.FOLLOW_RANGE, 32.0D);
 		   }
 	   
 		protected SoundEvent getAmbientSound() {
@@ -110,15 +109,15 @@ public class WatchlingEntity extends AbstractEnderlingEntity implements IAnimata
 	   
 		private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
 			if (this.isAttacking() > 0) {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("watchling_attack", true));
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("watchling_attack", LOOP));
 			} else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
 				if (this.isRunning() > 0) {
-					event.getController().setAnimation(new AnimationBuilder().addAnimation("watchling_run", true));					
+					event.getController().setAnimation(new AnimationBuilder().addAnimation("watchling_run", LOOP));					
 				} else {
-					event.getController().setAnimation(new AnimationBuilder().addAnimation("watchling_walk", true));
+					event.getController().setAnimation(new AnimationBuilder().addAnimation("watchling_walk", LOOP));
 				}
 			} else {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("watchling_idle", true));
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("watchling_idle", LOOP));
 			}
 			return PlayState.CONTINUE;
 		}

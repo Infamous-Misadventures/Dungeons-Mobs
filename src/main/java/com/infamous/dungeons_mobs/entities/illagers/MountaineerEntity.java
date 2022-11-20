@@ -1,40 +1,36 @@
 package com.infamous.dungeons_mobs.entities.illagers;
 
-import java.util.Map;
-
 import com.google.common.collect.Maps;
 import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
 import com.infamous.dungeons_libraries.items.gearconfig.ArmorSet;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModItems;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
-
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.monster.SpiderEntity;
-import net.minecraft.entity.monster.VindicatorEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.ClimberPathNavigator;
-import net.minecraft.pathfinding.PathNavigator;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
-import net.minecraft.world.raid.Raid;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.navigation.WallClimberNavigation;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.Vindicator;
+import net.minecraft.world.entity.raid.Raid;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -42,23 +38,28 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
+import java.util.Map;
 
-public class MountaineerEntity extends VindicatorEntity implements SpawnArmoredMob, IAnimatable {
+import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
+
+
+public class MountaineerEntity extends Vindicator implements SpawnArmoredMob, IAnimatable {
 	
-	   private static final DataParameter<Byte> DATA_FLAGS_ID = EntityDataManager.defineId(MountaineerEntity.class, DataSerializers.BYTE);
+	   private static final EntityDataAccessor<Byte> DATA_FLAGS_ID = SynchedEntityData.defineId(MountaineerEntity.class, EntityDataSerializers.BYTE);
 	   
-    public MountaineerEntity(World worldIn){
+    public MountaineerEntity(Level worldIn){
         super(ModEntityTypes.MOUNTAINEER.get(), worldIn);
     }
 
-    public MountaineerEntity(EntityType<? extends MountaineerEntity> entityType, World world) {
+    public MountaineerEntity(EntityType<? extends MountaineerEntity> entityType, Level world) {
         super(entityType, world);
     }
     
-    protected PathNavigator createNavigation(World p_175447_1_) {
-        return new ClimberPathNavigator(this, p_175447_1_);
+    protected PathNavigation createNavigation(Level p_175447_1_) {
+        return new WallClimberNavigation(this, p_175447_1_);
      }
 
      protected void defineSynchedData() {
@@ -114,24 +115,24 @@ public class MountaineerEntity extends VindicatorEntity implements SpawnArmoredM
      }
 
 
-    public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, (double)0.3F).add(Attributes.FOLLOW_RANGE, 16.0D).add(Attributes.MAX_HEALTH, 28.0D).add(Attributes.ATTACK_DAMAGE, 6.0D);
+    public static AttributeSupplier.Builder setCustomAttributes() {
+        return Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, (double)0.3F).add(Attributes.FOLLOW_RANGE, 16.0D).add(Attributes.MAX_HEALTH, 28.0D).add(Attributes.ATTACK_DAMAGE, 6.0D);
     }
 
     @Override
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
-        this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModItems.MOUNTAINEER_AXE.get()));
-        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.MOUNTAINEER_ARMOR.getHead().get()));
-        this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.MOUNTAINEER_ARMOR.getChest().get()));
-        this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(ModItems.MOUNTAINEER_ARMOR.getLegs().get()));
-        this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(ModItems.MOUNTAINEER_ARMOR.getFeet().get()));
+        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.MOUNTAINEER_AXE.get()));
+        this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(ModItems.MOUNTAINEER_ARMOR.getHead().get()));
+        this.setItemSlot(EquipmentSlot.CHEST, new ItemStack(ModItems.MOUNTAINEER_ARMOR.getChest().get()));
+        this.setItemSlot(EquipmentSlot.LEGS, new ItemStack(ModItems.MOUNTAINEER_ARMOR.getLegs().get()));
+        this.setItemSlot(EquipmentSlot.FEET, new ItemStack(ModItems.MOUNTAINEER_ARMOR.getFeet().get()));
     }
 
     @Nullable
     @Override
-    public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance p_213386_2_,
-                                           SpawnReason p_213386_3_, @Nullable ILivingEntityData p_213386_4_, @Nullable CompoundNBT p_213386_5_) {
-        ILivingEntityData iLivingEntityData = super.finalizeSpawn(p_213386_1_, p_213386_2_, p_213386_3_, p_213386_4_,
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor p_213386_1_, DifficultyInstance p_213386_2_,
+                                           MobSpawnType p_213386_3_, @Nullable SpawnGroupData p_213386_4_, @Nullable CompoundTag p_213386_5_) {
+        SpawnGroupData iLivingEntityData = super.finalizeSpawn(p_213386_1_, p_213386_2_, p_213386_3_, p_213386_4_,
                 p_213386_5_);
         this.populateDefaultEquipmentSlots(p_213386_2_);
         this.populateDefaultEquipmentEnchantments(p_213386_2_);
@@ -156,14 +157,14 @@ public class MountaineerEntity extends VindicatorEntity implements SpawnArmoredM
             EnchantmentHelper.setEnchantments(map, itemStack);
         }
 
-        this.setItemSlot(EquipmentSlotType.MAINHAND, itemStack);
+        this.setItemSlot(EquipmentSlot.MAINHAND, itemStack);
     }
 
     @Override
-    public ArmPose getArmPose() {
-        ArmPose illagerArmPose =  super.getArmPose();
-        if(illagerArmPose == ArmPose.CROSSED){
-            return ArmPose.NEUTRAL;
+    public IllagerArmPose getArmPose() {
+        IllagerArmPose illagerArmPose =  super.getArmPose();
+        if(illagerArmPose == IllagerArmPose.CROSSED){
+            return IllagerArmPose.NEUTRAL;
         }
         return illagerArmPose;
     }
@@ -178,7 +179,7 @@ public class MountaineerEntity extends VindicatorEntity implements SpawnArmoredM
         return ModItems.MOUNTAINEER_ARMOR;
     }
 
-    private AnimationFactory factory = new AnimationFactory(this);
+    private AnimationFactory factory = GeckoLibUtil.createFactory(this);
     
     @Override
     public void registerControllers(AnimationData data) {
@@ -187,9 +188,9 @@ public class MountaineerEntity extends VindicatorEntity implements SpawnArmoredM
 
     private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
         if (this.isCelebrating()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("iceologer_celebrate", true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("iceologer_celebrate", LOOP));
         } else {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("iceologer_idle", true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("iceologer_idle", LOOP));
         }
         return PlayState.CONTINUE;
     }

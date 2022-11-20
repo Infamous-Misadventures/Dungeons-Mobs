@@ -2,13 +2,13 @@ package com.infamous.dungeons_mobs.goals.switchcombat;
 
 import com.infamous.dungeons_mobs.interfaces.IShieldUser;
 import com.infamous.dungeons_mobs.tags.CustomTags;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.util.Hand;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 
-public class ShieldAndMeleeAttackGoal<T extends CreatureEntity & IShieldUser> extends MeleeAttackGoal {
+public class ShieldAndMeleeAttackGoal<T extends PathfinderMob & IShieldUser> extends MeleeAttackGoal {
     private final T hostCreature;
     private final int maxCloseQuartersShieldUseTime;
     private final int attackWindowTime;
@@ -26,12 +26,12 @@ public class ShieldAndMeleeAttackGoal<T extends CreatureEntity & IShieldUser> ex
     }
 
     private boolean hasShieldInOffhand(){
-        return this.hostCreature.getOffhandItem().isShield(this.hostCreature); // using the Forge ItemStack-sensitive version
+        return this.hostCreature.getOffhandItem().canPerformAction(net.minecraftforge.common.ToolActions.SHIELD_BLOCK); // using the Forge ItemStack-sensitive version
     }
 
     private void useShield(){
         if(this.hasShieldInOffhand() && !this.hostCreature.isShieldDisabled()){
-            this.hostCreature.startUsingItem(Hand.OFF_HAND);
+            this.hostCreature.startUsingItem(InteractionHand.OFF_HAND);
         }
     }
 
@@ -91,7 +91,7 @@ public class ShieldAndMeleeAttackGoal<T extends CreatureEntity & IShieldUser> ex
             double hostDistanceSq = this.hostCreature.distanceToSqr(attackTarget.getX(), attackTarget.getY(), attackTarget.getZ());
             double detectRange = this.hostCreature.getAttributeValue(Attributes.FOLLOW_RANGE);
             double detectRangeSq = detectRange * detectRange;
-            boolean canSee = this.hostCreature.getSensing().canSee(attackTarget);
+            boolean canSee = this.hostCreature.getSensing().hasLineOfSight(attackTarget);
             if (canSee) {
                 ++this.seeTime;
             } else {

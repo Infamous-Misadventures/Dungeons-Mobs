@@ -1,20 +1,16 @@
 package com.infamous.dungeons_mobs.client.particle;
 
-import net.minecraft.client.particle.IAnimatedSprite;
-import net.minecraft.client.particle.IParticleFactory;
-import net.minecraft.client.particle.IParticleRenderType;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.SpriteTexturedParticle;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.particles.BasicParticleType;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.particle.*;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class RedstoneSparkParticle extends SpriteTexturedParticle {
-	private final IAnimatedSprite sprites;
+public class RedstoneSparkParticle extends TextureSheetParticle {
+	private final SpriteSet sprites;
 	
-    protected RedstoneSparkParticle(ClientWorld level, double xCoord, double yCoord, double zCoord,
-    		IAnimatedSprite spriteSet, double xd, double yd, double zd) {
+    protected RedstoneSparkParticle(ClientLevel level, double xCoord, double yCoord, double zCoord,
+    		SpriteSet spriteSet, double xd, double yd, double zd) {
         super(level, xCoord, yCoord, zCoord, xd, yd, zd);
 
         this.sprites = spriteSet;
@@ -47,12 +43,12 @@ public class RedstoneSparkParticle extends SpriteTexturedParticle {
                 this.zd *= 1.1D;
             }
 
-            this.xd *= (double)0.96F;
-            this.yd *= (double)0.96F;
-            this.zd *= (double)0.96F;
+            this.xd *= 0.96F;
+            this.yd *= 0.96F;
+            this.zd *= 0.96F;
             if (this.onGround) {
-                this.xd *= (double)0.7F;
-                this.zd *= (double)0.7F;
+                this.xd *= 0.7F;
+                this.zd *= 0.7F;
             }
 
         }
@@ -68,19 +64,19 @@ public class RedstoneSparkParticle extends SpriteTexturedParticle {
      }
     
     @Override
-    public IParticleRenderType getRenderType() {
-        return IParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+    public ParticleRenderType getRenderType() {
+        return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static class Factory implements IParticleFactory<BasicParticleType> {
-        private final IAnimatedSprite sprites;
+    public static class Factory implements ParticleProvider<SimpleParticleType> {
+        private final SpriteSet sprites;
 
-        public Factory(IAnimatedSprite spriteSet) {
+        public Factory(SpriteSet spriteSet) {
             this.sprites = spriteSet;
         }
 
-        public Particle createParticle(BasicParticleType particleType, ClientWorld level,
+        public Particle createParticle(SimpleParticleType particleType, ClientLevel level,
                                        double x, double y, double z,
                                        double dx, double dy, double dz) {
             return new RedstoneSparkParticle(level, x, y, z, this.sprites, dx, dy, dz);

@@ -1,59 +1,52 @@
 package com.infamous.dungeons_mobs.entities.undead;
 
-import java.util.Random;
-
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
-import com.infamous.dungeons_mobs.entities.illagers.DungeonsIllusionerEntity;
 import com.infamous.dungeons_mobs.goals.switchcombat.SwitchCombatItemGoal;
 import com.infamous.dungeons_mobs.goals.switchcombat.ThrowAndMeleeAttackGoal;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
-
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.IRangedAttackMob;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.goal.HurtByTargetGoal;
-import net.minecraft.entity.ai.goal.MoveThroughVillageGoal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
-import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
-import net.minecraft.entity.monster.ZombieEntity;
-import net.minecraft.entity.monster.ZombifiedPiglinEntity;
-import net.minecraft.entity.passive.IronGolemEntity;
-import net.minecraft.entity.passive.TurtleEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.SnowballEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.EggItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.SnowballItem;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.goal.MoveThroughVillageGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.animal.Turtle;
+import net.minecraft.world.entity.monster.RangedAttackMob;
+import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.monster.ZombifiedPiglin;
+import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Snowball;
+import net.minecraft.world.item.EggItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.SnowballItem;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 
-public class FrozenZombieEntity extends ZombieEntity implements IRangedAttackMob {
-    public FrozenZombieEntity(World worldIn) {
+import java.util.Random;
+
+public class FrozenZombieEntity extends Zombie implements RangedAttackMob {
+    public FrozenZombieEntity(Level worldIn) {
         super(worldIn);
     }
 
-    public FrozenZombieEntity(EntityType<? extends FrozenZombieEntity> p_i48549_1_, World p_i48549_2_) {
+    public FrozenZombieEntity(EntityType<? extends FrozenZombieEntity> p_i48549_1_, Level p_i48549_2_) {
         super(p_i48549_1_, p_i48549_2_);
     }
 
-    public static boolean canFrozenZombieSpawn(EntityType<FrozenZombieEntity> entityType, IServerWorld iWorld, SpawnReason spawnReason, BlockPos blockPos, Random rand) {
-        return checkMonsterSpawnRules(entityType, iWorld, spawnReason, blockPos, rand) && (spawnReason == SpawnReason.SPAWNER || iWorld.canSeeSky(blockPos));
+    public static boolean canFrozenZombieSpawn(EntityType<FrozenZombieEntity> entityType, ServerLevelAccessor iWorld, MobSpawnType spawnReason, BlockPos blockPos, Random rand) {
+        return checkMonsterSpawnRules(entityType, iWorld, spawnReason, blockPos, rand) && (spawnReason == MobSpawnType.SPAWNER || iWorld.canSeeSky(blockPos));
     }
 
     @Override
@@ -61,12 +54,12 @@ public class FrozenZombieEntity extends ZombieEntity implements IRangedAttackMob
         this.goalSelector.addGoal(2, new FrozenZombieAttackGoal(this, 1.0D, 20, 15.0F, false));
         this.goalSelector.addGoal(3, new SwitchCombatItemGoal(this, 6.0D, 6.0D));
         this.goalSelector.addGoal(6, new MoveThroughVillageGoal(this, 1.0D, true, 4, this::canBreakDoors));
-        this.goalSelector.addGoal(7, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
-        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setAlertOthers(ZombifiedPiglinEntity.class));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, false));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
-        this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, TurtleEntity.class, 10, true, false, TurtleEntity.BABY_ON_LAND_SELECTOR));
+        this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D));
+        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setAlertOthers(ZombifiedPiglin.class));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, AbstractVillager.class, false));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));
+        this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Turtle.class, 10, true, false, Turtle.BABY_ON_LAND_SELECTOR));
     }
     
     protected SoundEvent getAmbientSound() {
@@ -81,8 +74,8 @@ public class FrozenZombieEntity extends ZombieEntity implements IRangedAttackMob
         return ModSoundEvents.FROZEN_ZOMBIE_DEATH.get();
      }
 
-    public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return ZombieEntity.createAttributes();
+    public static AttributeSupplier.Builder setCustomAttributes() {
+        return Zombie.createAttributes();
     }
     
 	/**
@@ -92,7 +85,7 @@ public class FrozenZombieEntity extends ZombieEntity implements IRangedAttackMob
 		if (super.isAlliedTo(entityIn)) {
 			return true;
 		} else if (entityIn instanceof LivingEntity
-				&& ((LivingEntity)entityIn) instanceof ZombieEntity) {
+				&& ((LivingEntity)entityIn) instanceof Zombie) {
 			return this.getTeam() == null && entityIn.getTeam() == null;
 		} else {
 			return false;
@@ -101,7 +94,7 @@ public class FrozenZombieEntity extends ZombieEntity implements IRangedAttackMob
 
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficultyInstance) {
         super.populateDefaultEquipmentSlots(difficultyInstance);
-        this.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(Items.SNOWBALL));
+        this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.SNOWBALL));
     }
 
     @Override
@@ -124,7 +117,7 @@ public class FrozenZombieEntity extends ZombieEntity implements IRangedAttackMob
                 }
 
                 if (i > 0) {
-                    ((LivingEntity)targetEntity).addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, i * 20, 0));
+                    ((LivingEntity)targetEntity).addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, i * 20, 0));
                 }
             }
 
@@ -136,12 +129,12 @@ public class FrozenZombieEntity extends ZombieEntity implements IRangedAttackMob
 
     @Override
     public void performRangedAttack(LivingEntity livingEntity, float v) {
-        SnowballEntity snowballentity = new SnowballEntity(this.level, this);
+        Snowball snowballentity = new Snowball(this.level, this);
         double adjustedEyeY = livingEntity.getEyeY() - 1.100000023841858D;
         double xDifference = livingEntity.getX() - this.getX();
         double yDifference = adjustedEyeY - snowballentity.getY();
         double zDifference = livingEntity.getZ() - this.getZ();
-        float adjustedHorizontalDistance = MathHelper.sqrt(xDifference * xDifference + zDifference * zDifference) * 0.2F;
+        float adjustedHorizontalDistance = Mth.sqrt((float) (xDifference * xDifference + zDifference * zDifference)) * 0.2F;
         snowballentity.shoot(xDifference, yDifference + (double)adjustedHorizontalDistance, zDifference, 1.6F, 7.5F);
         this.playSound(SoundEvents.SNOW_GOLEM_SHOOT, 1.0F, 0.4F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
         this.level.addFreshEntity(snowballentity);
@@ -159,7 +152,7 @@ public class FrozenZombieEntity extends ZombieEntity implements IRangedAttackMob
         @Override
     	public boolean hasThrowableItemInMainhand(){
     		return (this.zombie.getMainHandItem().getItem() instanceof SnowballItem
-    				| this.zombie.getMainHandItem().getItem() instanceof EggItem) && zombie.getTarget() != null && !zombie.getTarget().hasEffect(Effects.MOVEMENT_SLOWDOWN);
+    				| this.zombie.getMainHandItem().getItem() instanceof EggItem) && zombie.getTarget() != null && !zombie.getTarget().hasEffect(MobEffects.MOVEMENT_SLOWDOWN);
     	}
 
         public void start() {

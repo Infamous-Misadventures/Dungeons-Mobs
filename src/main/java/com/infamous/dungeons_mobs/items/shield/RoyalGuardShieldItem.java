@@ -1,18 +1,23 @@
 package com.infamous.dungeons_mobs.items.shield;
 
-import net.minecraft.block.DispenserBlock;
-import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ShieldItem;
+import com.infamous.dungeons_mobs.items.shield.bewlr.RoyalGuardShieldBEWLR;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ShieldItem;
+import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraftforge.client.IItemRenderProperties;
+import net.minecraftforge.common.util.NonNullLazy;
 
 import javax.annotation.Nullable;
 import java.util.concurrent.Callable;
+import java.util.function.Consumer;
 
 public class RoyalGuardShieldItem extends ShieldItem {
     public RoyalGuardShieldItem(Properties builder) {
-        super(builder.setISTER(RoyalGuardShieldItem::getISTER));
+        super(builder);
         DispenserBlock.registerBehavior(this, ArmorItem.DISPENSE_ITEM_BEHAVIOR);
     }
 
@@ -23,13 +28,23 @@ public class RoyalGuardShieldItem extends ShieldItem {
         return false;
     }
 
-    //@OnlyIn(Dist.CLIENT)
-    private static Callable<ItemStackTileEntityRenderer> getISTER() {
-        return CustomISTER::new;
+    @Override
+    public boolean canPerformAction(ItemStack stack, net.minecraftforge.common.ToolAction toolAction) {
+        return net.minecraftforge.common.ToolActions.DEFAULT_SHIELD_ACTIONS.contains(toolAction);
     }
 
     @Override
-    public boolean isShield(ItemStack stack, @Nullable LivingEntity entity) {
-        return true;
+    public void initializeClient(Consumer<IItemRenderProperties> consumer)
+    {
+        consumer.accept(new IItemRenderProperties()
+        {
+            static final NonNullLazy<BlockEntityWithoutLevelRenderer> renderer = NonNullLazy.of(() -> new RoyalGuardShieldBEWLR(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels()));
+
+            @Override
+            public BlockEntityWithoutLevelRenderer getItemStackRenderer()
+            {
+                return renderer.get();
+            }
+        });
     }
 }

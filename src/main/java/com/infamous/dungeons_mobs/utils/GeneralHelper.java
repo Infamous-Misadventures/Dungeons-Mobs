@@ -1,6 +1,6 @@
 package com.infamous.dungeons_mobs.utils;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 

@@ -1,11 +1,10 @@
 package com.infamous.dungeons_mobs.items;
 
 import com.infamous.dungeons_mobs.mod.ModItems;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 
-public class GroupDungeonsMobsItems extends ItemGroup {
+public class GroupDungeonsMobsItems extends CreativeModeTab {
 
     public GroupDungeonsMobsItems(String groupName) {
         super(groupName);

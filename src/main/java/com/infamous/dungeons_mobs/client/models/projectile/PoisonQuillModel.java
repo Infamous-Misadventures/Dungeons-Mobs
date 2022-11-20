@@ -3,8 +3,7 @@ package com.infamous.dungeons_mobs.client.models.projectile;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.entities.projectiles.PoisonQuillEntity;
-
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
@@ -27,8 +26,8 @@ public class PoisonQuillModel extends AnimatedGeoModel<PoisonQuillEntity> {
 	}
 
 	@Override
-	public void setLivingAnimations(PoisonQuillEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
-		super.setLivingAnimations(entity, uniqueID, customPredicate);
+	public void setCustomAnimations(PoisonQuillEntity entity, int uniqueID, AnimationEvent customPredicate) {
+		super.setCustomAnimations(entity, uniqueID, customPredicate);
 		IBone everything = this.getAnimationProcessor().getBone("everything");
 
 		everything.setRotationY(-1.5708F);

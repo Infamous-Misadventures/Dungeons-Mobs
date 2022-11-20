@@ -1,17 +1,18 @@
 package com.infamous.dungeons_mobs.items;
 
 import com.google.common.collect.ImmutableSet;
-import net.minecraft.block.Block;
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.ToolItem;
+import net.minecraft.world.item.DiggerItem;
+import net.minecraft.world.item.ShovelItem;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.level.block.Block;
 
 import java.util.Set;
 
-public class WoodenLadleItem extends ToolItem {
+public class WoodenLadleItem extends ShovelItem {
     private static final Set<Block> EFFECTIVE_ON = ImmutableSet.of();
 
-    public WoodenLadleItem(IItemTier tier, float attackDamageIn, float attackSpeedIn, Properties builderIn) {
-        super(attackDamageIn, attackSpeedIn, tier, EFFECTIVE_ON, builderIn);
+    public WoodenLadleItem(Tier p_43114_, float p_43115_, float p_43116_, Properties p_43117_) {
+        super(p_43114_, p_43115_, p_43116_, p_43117_);
     }
 
 }

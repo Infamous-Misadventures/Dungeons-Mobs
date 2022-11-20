@@ -1,68 +1,64 @@
 package com.infamous.dungeons_mobs.entities.ender;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.TargetGoal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.event.entity.EntityTeleportEvent;
+import software.bernie.geckolib3.core.IAnimatable;
+
+import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.function.Predicate;
 
-import javax.annotation.Nullable;
+public abstract class AbstractEnderlingEntity extends Monster implements IAnimatable {
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityPredicate;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.ai.goal.TargetGoal;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.tags.FluidTags;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biomes;
-import software.bernie.geckolib3.core.IAnimatable;
+	public static final EntityDataAccessor<Integer> ATTACKING = SynchedEntityData.defineId(AbstractEnderlingEntity.class,
+			EntityDataSerializers.INT);
 
-public abstract class AbstractEnderlingEntity extends MonsterEntity implements IAnimatable {
+	public static final EntityDataAccessor<Integer> RUNNING = SynchedEntityData.defineId(AbstractEnderlingEntity.class,
+			EntityDataSerializers.INT);
 
-	public static final DataParameter<Integer> ATTACKING = EntityDataManager.defineId(AbstractEnderlingEntity.class,
-			DataSerializers.INT);
+	private static final EntityDataAccessor<Boolean> DATA_STARED_AT = SynchedEntityData
+			.defineId(AbstractEnderlingEntity.class, EntityDataSerializers.BOOLEAN);
 
-	public static final DataParameter<Integer> RUNNING = EntityDataManager.defineId(AbstractEnderlingEntity.class,
-			DataSerializers.INT);
+	private final TargetingConditions followPredicate = TargetingConditions.forCombat().range(50.0D)
+			.ignoreInvisibilityTesting();
 
-	private static final DataParameter<Boolean> DATA_STARED_AT = EntityDataManager
-			.defineId(AbstractEnderlingEntity.class, DataSerializers.BOOLEAN);
-
-	private final EntityPredicate followPredicate = (new EntityPredicate()).range(50.0D).allowUnseeable()
-			.ignoreInvisibilityTesting().allowInvulnerable().allowSameTeam();
-
-	protected AbstractEnderlingEntity(EntityType<? extends AbstractEnderlingEntity> p_i48553_1_, World p_i48553_2_) {
+	protected AbstractEnderlingEntity(EntityType<? extends AbstractEnderlingEntity> p_i48553_1_, Level p_i48553_2_) {
 		super(p_i48553_1_, p_i48553_2_);
 		this.maxUpStep = 1.0F;
-		this.setPathfindingMalus(PathNodeType.WATER, -1.0F);
+		this.setPathfindingMalus(BlockPathTypes.WATER, -1.0F);
 	}
 
-	public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-		return MonsterEntity.createMonsterAttributes().add(Attributes.MAX_HEALTH, 30.0D)
+	public static AttributeSupplier.Builder setCustomAttributes() {
+		return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 30.0D)
 				.add(Attributes.MOVEMENT_SPEED, (double) 0.3F).add(Attributes.ATTACK_DAMAGE, 7.0D)
 				.add(Attributes.FOLLOW_RANGE, 32.0D);
 	}
@@ -92,18 +88,18 @@ public abstract class AbstractEnderlingEntity extends MonsterEntity implements I
 		this.entityData.set(DATA_STARED_AT, true);
 	}
 
-	private boolean isLookingAtMe(PlayerEntity p_70821_1_) {
-		ItemStack itemstack = p_70821_1_.inventory.armor.get(3);
+	private boolean isLookingAtMe(Player p_70821_1_) {
+		ItemStack itemstack = p_70821_1_.getInventory().armor.get(3);
 		if (itemstack.getItem() == Blocks.CARVED_PUMPKIN.asItem()) {
 			return false;
 		} else {
-			Vector3d vector3d = p_70821_1_.getViewVector(1.0F).normalize();
-			Vector3d vector3d1 = new Vector3d(this.getX() - p_70821_1_.getX(), this.getEyeY() - p_70821_1_.getEyeY(),
+			Vec3 vector3d = p_70821_1_.getViewVector(1.0F).normalize();
+			Vec3 vector3d1 = new Vec3(this.getX() - p_70821_1_.getX(), this.getEyeY() - p_70821_1_.getEyeY(),
 					this.getZ() - p_70821_1_.getZ());
 			double d0 = vector3d1.length();
 			vector3d1 = vector3d1.normalize();
 			double d1 = vector3d.dot(vector3d1);
-			return d1 > 1.0D - 0.025D / d0 ? p_70821_1_.canSee(this) : false;
+			return d1 > 1.0D - 0.025D / d0 ? p_70821_1_.hasLineOfSight(this) : false;
 		}
 	}
 
@@ -115,11 +111,10 @@ public abstract class AbstractEnderlingEntity extends MonsterEntity implements I
 	// }
 
 	@SuppressWarnings("unchecked")
-	public boolean checkSpawnRules(IWorld p_213380_1_, SpawnReason p_213380_2_) {
-		return (p_213380_2_ == SpawnReason.NATURAL
-				&& this.level.getBiomeName(this.blockPosition()).get() == Biomes.THE_END) ? false
-						: super.checkMobSpawnRules(((EntityType<? extends MobEntity>) this.getType()), p_213380_1_,
-								p_213380_2_, this.blockPosition(), this.random);
+	public boolean checkSpawnRules(LevelAccessor p_213380_1_, MobSpawnType p_213380_2_) {
+		return (p_213380_2_ != MobSpawnType.NATURAL
+				|| !this.level.getBiome(this.blockPosition()).is(Biomes.THE_END)) && super.checkMobSpawnRules(((EntityType<? extends Mob>) this.getType()), p_213380_1_,
+				p_213380_2_, this.blockPosition(), this.random);
 	}
 
 	public void baseTick() {
@@ -197,7 +192,7 @@ public abstract class AbstractEnderlingEntity extends MonsterEntity implements I
 	}
 
 	private boolean teleportTowards(Entity p_70816_1_) {
-		Vector3d vector3d = new Vector3d(this.getX() - p_70816_1_.getX(), this.getY(0.5D) - p_70816_1_.getEyeY(),
+		Vec3 vector3d = new Vec3(this.getX() - p_70816_1_.getX(), this.getY(0.5D) - p_70816_1_.getEyeY(),
 				this.getZ() - p_70816_1_.getZ());
 		vector3d = vector3d.normalize();
 		double d0 = 16.0D;
@@ -208,7 +203,7 @@ public abstract class AbstractEnderlingEntity extends MonsterEntity implements I
 	}
 
 	protected boolean teleport(double p_70825_1_, double p_70825_3_, double p_70825_5_) {
-		BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable(p_70825_1_, p_70825_3_, p_70825_5_);
+		BlockPos.MutableBlockPos blockpos$mutable = new BlockPos.MutableBlockPos(p_70825_1_, p_70825_3_, p_70825_5_);
 
 		while (blockpos$mutable.getY() > 0
 				&& !this.level.getBlockState(blockpos$mutable).getMaterial().blocksMotion()) {
@@ -219,13 +214,13 @@ public abstract class AbstractEnderlingEntity extends MonsterEntity implements I
 		boolean flag = blockstate.getMaterial().blocksMotion();
 		boolean flag1 = blockstate.getFluidState().is(FluidTags.WATER);
 		if (flag && !flag1) {
-			net.minecraftforge.event.entity.living.EntityTeleportEvent.EnderEntity event = net.minecraftforge.event.ForgeEventFactory
+			EntityTeleportEvent.EnderEntity event = net.minecraftforge.event.ForgeEventFactory
 					.onEnderTeleport(this, p_70825_1_, p_70825_3_, p_70825_5_);
 			if (event.isCanceled())
 				return false;
 			boolean flag2 = this.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
 			if (!this.isSilent()) {
-				this.level.playSound((PlayerEntity) null, this.xo, this.yo, this.zo, SoundEvents.ENDERMAN_TELEPORT,
+				this.level.playSound((Player) null, this.xo, this.yo, this.zo, SoundEvents.ENDERMAN_TELEPORT,
 						this.getSoundSource(), 1.0F, 1.0F);
 				this.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
 			}
@@ -263,8 +258,8 @@ public abstract class AbstractEnderlingEntity extends MonsterEntity implements I
 
 	class AttackGoal extends MeleeAttackGoal {
 
-		public final EntityPredicate slimePredicate = (new EntityPredicate()).range(20.0D).allowUnseeable()
-				.ignoreInvisibilityTesting().allowInvulnerable().allowSameTeam();
+		public final TargetingConditions slimePredicate = TargetingConditions.forCombat().range(20.0D)
+				.ignoreInvisibilityTesting();
 
 		public AttackGoal(double speed) {
 			super(AbstractEnderlingEntity.this, speed, true);
@@ -307,24 +302,24 @@ public abstract class AbstractEnderlingEntity extends MonsterEntity implements I
 		protected final Class<T> targetType;
 		protected final int randomInterval;
 		protected LivingEntity target;
-		protected EntityPredicate targetConditions;
+		protected TargetingConditions targetConditions;
 
-		public EnderlingTargetGoal(MobEntity p_i50313_1_, Class<T> p_i50313_2_, boolean p_i50313_3_) {
+		public EnderlingTargetGoal(Mob p_i50313_1_, Class<T> p_i50313_2_, boolean p_i50313_3_) {
 			this(p_i50313_1_, p_i50313_2_, p_i50313_3_, false);
 		}
 
-		public EnderlingTargetGoal(MobEntity p_i50314_1_, Class<T> p_i50314_2_, boolean p_i50314_3_,
+		public EnderlingTargetGoal(Mob p_i50314_1_, Class<T> p_i50314_2_, boolean p_i50314_3_,
 				boolean p_i50314_4_) {
 			this(p_i50314_1_, p_i50314_2_, 10, p_i50314_3_, p_i50314_4_, (Predicate<LivingEntity>) null);
 		}
 
-		public EnderlingTargetGoal(MobEntity p_i50315_1_, Class<T> p_i50315_2_, int p_i50315_3_, boolean p_i50315_4_,
+		public EnderlingTargetGoal(Mob p_i50315_1_, Class<T> p_i50315_2_, int p_i50315_3_, boolean p_i50315_4_,
 				boolean p_i50315_5_, @Nullable Predicate<LivingEntity> p_i50315_6_) {
 			super(p_i50315_1_, p_i50315_4_, p_i50315_5_);
 			this.targetType = p_i50315_2_;
 			this.randomInterval = p_i50315_3_;
 			this.setFlags(EnumSet.of(Goal.Flag.TARGET));
-			this.targetConditions = (new EntityPredicate()).range(this.getFollowDistance()).selector(p_i50315_6_);
+			this.targetConditions = TargetingConditions.forCombat().range(this.getFollowDistance()).selector(p_i50315_6_);
 		}
 
 		public boolean canUse() {
@@ -336,13 +331,13 @@ public abstract class AbstractEnderlingEntity extends MonsterEntity implements I
 			}
 		}
 
-		protected AxisAlignedBB getTargetSearchArea(double p_188511_1_) {
+		protected AABB getTargetSearchArea(double p_188511_1_) {
 			return this.mob.getBoundingBox().inflate(p_188511_1_, 4.0D, p_188511_1_);
 		}
 
 		protected void findTarget() {
-			if (this.targetType != PlayerEntity.class && this.targetType != ServerPlayerEntity.class) {
-				this.target = this.mob.level.getNearestLoadedEntity(this.targetType, this.targetConditions, this.mob,
+			if (this.targetType != Player.class && this.targetType != ServerPlayer.class) {
+				this.target = this.mob.level.getNearestEntity(this.targetType, this.targetConditions, this.mob,
 						this.mob.getX(), this.mob.getEyeY(), this.mob.getZ(),
 						this.getTargetSearchArea(this.getFollowDistance()));
 			} else {
@@ -362,20 +357,20 @@ public abstract class AbstractEnderlingEntity extends MonsterEntity implements I
 		}
 	}
 
-	static class FindPlayerGoal extends NearestAttackableTargetGoal<PlayerEntity> {
+	static class FindPlayerGoal extends NearestAttackableTargetGoal<Player> {
 		private final AbstractEnderlingEntity enderman;
-		private PlayerEntity pendingTarget;
+		private Player pendingTarget;
 		private int aggroTime;
 		private int teleportTime;
-		private final EntityPredicate startAggroTargetConditions;
-		private final EntityPredicate continueAggroTargetConditions = (new EntityPredicate()).allowUnseeable();
+		private final TargetingConditions startAggroTargetConditions;
+		private final TargetingConditions continueAggroTargetConditions = TargetingConditions.forCombat();
 
 		public FindPlayerGoal(AbstractEnderlingEntity p_i241912_1_, @Nullable Predicate<LivingEntity> p_i241912_2_) {
-			super(p_i241912_1_, PlayerEntity.class, 10, false, false, p_i241912_2_);
+			super(p_i241912_1_, Player.class, 10, false, false, p_i241912_2_);
 			this.enderman = p_i241912_1_;
-			this.startAggroTargetConditions = (new EntityPredicate()).range(this.getFollowDistance())
+			this.startAggroTargetConditions = TargetingConditions.forCombat().range(this.getFollowDistance())
 					.selector((p_220790_1_) -> {
-						return p_i241912_1_.isLookingAtMe((PlayerEntity) p_220790_1_);
+						return p_i241912_1_.isLookingAtMe((Player) p_220790_1_);
 					});
 		}
 
@@ -411,7 +406,7 @@ public abstract class AbstractEnderlingEntity extends MonsterEntity implements I
 
 		public void tick() {
 			if (this.enderman.getTarget() == null) {
-				super.setTarget((LivingEntity) null);
+				super.setTarget(null);
 			}
 
 			if (this.pendingTarget != null) {
@@ -422,7 +417,7 @@ public abstract class AbstractEnderlingEntity extends MonsterEntity implements I
 				}
 			} else {
 				if (this.target != null && !this.enderman.isPassenger()) {
-					if (this.enderman.isLookingAtMe((PlayerEntity) this.target)) {
+					if (this.enderman.isLookingAtMe((Player) this.target)) {
 						if (this.target.distanceToSqr(this.enderman) < 16.0D) {
 							this.enderman.teleport();
 						}

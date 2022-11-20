@@ -1,22 +1,26 @@
 package com.infamous.dungeons_mobs.client.models.armor;
 
-import com.infamous.dungeons_mobs.client.models.illager.IllagerBipedModel;
-import net.minecraft.client.renderer.entity.model.BipedModel;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.monster.AbstractIllagerEntity;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.world.entity.monster.AbstractIllager;
 
 // Borrowed from tallestred / seymourimadeit's IllagersWearArmor mod
-public class IllagerArmorModel<T extends AbstractIllagerEntity> extends BipedModel<T> {
-
-    public IllagerArmorModel(float modelSize) {
-        this(modelSize, 0.0F, 64, 32);
+public class IllagerArmorModel<T extends AbstractIllager> extends HumanoidModel<T> {
+    public IllagerArmorModel(ModelPart part) {
+        super(part);
     }
 
-    public IllagerArmorModel(float modelSize, float yOffset, int textureWidthIn, int textureHeightIn) {
-        super(modelSize, yOffset, textureWidthIn, textureHeightIn);
-        this.head = new ModelRenderer(this, 0, 0);
-        this.head.addBox(-4.0F, -10.0F, -4.0F, 8.0F, 8.0F, 8.0F, modelSize);
-        this.head.setPos(0.0F, 0.0F, 0.0F);
+    public static LayerDefinition createOuterArmorLayer() {
+        MeshDefinition meshdefinition = HumanoidModel.createMesh(new CubeDeformation(1.0F), 0.0F);
+        PartDefinition partdefinition = meshdefinition.getRoot();
+        partdefinition.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -10.0F, -4.0F,
+                8.0F, 8.0F, 8.0F, new CubeDeformation(1.0F)), PartPose.offset(0.0F, 1.0F, 0.0F));
+        return LayerDefinition.create(meshdefinition, 64, 32);
+    }
+    public static LayerDefinition createInnerArmorLayer() {
+        MeshDefinition meshdefinition = HumanoidModel.createMesh(new CubeDeformation(0.5F), 0.0F);
+        return LayerDefinition.create(meshdefinition, 64, 32);
     }
 }

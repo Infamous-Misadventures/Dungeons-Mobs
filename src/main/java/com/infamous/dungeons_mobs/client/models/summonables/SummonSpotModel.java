@@ -3,8 +3,7 @@ package com.infamous.dungeons_mobs.client.models.summonables;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.entities.summonables.SummonSpotEntity;
-
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 public class SummonSpotModel<T extends SummonSpotEntity> extends AnimatedGeoModel<T> {

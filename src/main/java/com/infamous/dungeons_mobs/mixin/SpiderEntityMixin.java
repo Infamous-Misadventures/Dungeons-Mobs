@@ -1,42 +1,40 @@
 package com.infamous.dungeons_mobs.mixin;
 
-import java.util.List;
-
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.goals.RangedWebAttackGoal;
 import com.infamous.dungeons_mobs.interfaces.ITrapsTarget;
 import com.infamous.dungeons_mobs.interfaces.IWebShooter;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LeapAtTargetGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.Spider;
+import net.minecraft.world.level.Level;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import net.minecraft.entity.EntityPredicate;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.LeapAtTargetGoal;
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.monster.SpiderEntity;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.world.World;
+import java.util.List;
 
-@Mixin(SpiderEntity.class)
-public abstract class SpiderEntityMixin extends MonsterEntity implements IWebShooter {
+@Mixin(Spider.class)
+public abstract class SpiderEntityMixin extends Monster implements IWebShooter {
 
-    private static final DataParameter<Boolean> WEBSHOOTING = EntityDataManager.defineId(SpiderEntity.class, DataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> WEBSHOOTING = SynchedEntityData.defineId(Spider.class, EntityDataSerializers.BOOLEAN);
     private RangedWebAttackGoal<?> rangedWebAttackGoal;
     private LeapAtTargetGoal leapAtTargetGoal;
     private MeleeAttackGoal meleeAttackGoal;
     
     public int targetTrappedCounter = 0;
 
-    protected SpiderEntityMixin(EntityType<? extends MonsterEntity> type, World worldIn) {
+    protected SpiderEntityMixin(EntityType<? extends Monster> type, Level worldIn) {
         super(type, worldIn);
     }
 
@@ -93,10 +91,10 @@ public abstract class SpiderEntityMixin extends MonsterEntity implements IWebSho
                 if(this.leapAtTargetGoal != null){
                     this.goalSelector.removeGoal(this.leapAtTargetGoal);
                 }
-                this.goalSelector.addGoal(4, (Goal)(Object)this.rangedWebAttackGoal);
+                this.goalSelector.addGoal(4, (Goal) this.rangedWebAttackGoal);
             } else{
                 //DungeonsMobs.LOGGER.debug("Changing Spider {} to melee AI!", this);
-                this.goalSelector.removeGoal((Goal)(Object)this.rangedWebAttackGoal);
+                this.goalSelector.removeGoal((Goal) this.rangedWebAttackGoal);
                 if(this.leapAtTargetGoal != null){
                     this.goalSelector.addGoal(3, this.leapAtTargetGoal);
                 }
@@ -115,12 +113,12 @@ public abstract class SpiderEntityMixin extends MonsterEntity implements IWebSho
     
     @Override
     public void setTargetTrapped(boolean trapped, boolean notifyOthers) {
-    	EntityPredicate spiderTargeting = (new EntityPredicate()).range(10.0D).ignoreInvisibilityTesting().allowInvulnerable().allowSameTeam();
+    	TargetingConditions spiderTargeting = TargetingConditions.forCombat().range(10.0D).ignoreInvisibilityTesting();
     	
     	if (notifyOthers) {
-	    	List<SpiderEntity> spiders = this.level.getNearbyEntities(SpiderEntity.class, spiderTargeting, this, this.getBoundingBox().inflate(10.0D));
+	    	List<Spider> spiders = this.level.getNearbyEntities(Spider.class, spiderTargeting, this, this.getBoundingBox().inflate(10.0D));
 	    	
-	    	for(SpiderEntity spider : spiders) {
+	    	for(Spider spider : spiders) {
 	    		if (spider instanceof ITrapsTarget && this.getTarget() != null && spider.getTarget() != null && spider.getTarget() == this.getTarget()) {
 	    			((ITrapsTarget)spider).setTargetTrapped(trapped, false);
 	    		}

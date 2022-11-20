@@ -1,20 +1,11 @@
 package com.infamous.dungeons_mobs.client.renderer.layers;
 
-import java.util.List;
-
-import com.infamous.dungeons_mobs.DungeonsMobs;
-import com.infamous.dungeons_mobs.entities.ender.BlastlingEntity;
-import com.infamous.dungeons_mobs.entities.redstone.RedstoneGolemEntity;
-import com.infamous.dungeons_mobs.entities.summonables.GeomancerBombEntity;
-import com.mojang.blaze3d.matrix.MatrixStack;
-
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -40,16 +31,16 @@ public class PulsatingGlowLayer<T extends LivingEntity & IAnimatable> extends Ge
 	}
 
 		@Override
-		public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn,
+		public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn,
 				T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
 				float ageInTicks, float netHeadYaw, float headPitch) {
 			
-		      GeoModelProvider<T> geomodel = (GeoModelProvider<T>)this.getEntityModel();
+		      GeoModelProvider<T> geomodel = this.getEntityModel();
 		      
 		      // original speed: 0.045F
 		      // original amount: 0.25F
 		      
-		      float glow = Math.max(minimumPulseAmount, MathHelper.cos(ageInTicks * pulseSpeed) * pulseAmount);
+		      float glow = Math.max(minimumPulseAmount, Mth.cos(ageInTicks * pulseSpeed) * pulseAmount);
 			  renderModel(geomodel, textureLocation, matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, 1.0F, glow, glow, glow);    
 		   }
 		

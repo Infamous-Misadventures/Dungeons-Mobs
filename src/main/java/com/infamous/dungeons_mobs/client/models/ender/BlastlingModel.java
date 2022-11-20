@@ -2,9 +2,8 @@ package com.infamous.dungeons_mobs.client.models.ender;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.entities.ender.BlastlingEntity;
-
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
@@ -29,8 +28,8 @@ public class BlastlingModel extends AnimatedGeoModel {
 		}
 
 		@Override
-		public void setLivingAnimations(IAnimatable entity, Integer uniqueID, AnimationEvent customPredicate) {
-			super.setLivingAnimations(entity, uniqueID, customPredicate);
+		public void setCustomAnimations(IAnimatable entity, int uniqueID, AnimationEvent customPredicate) {
+			super.setCustomAnimations(entity, uniqueID, customPredicate);
 			IBone head = this.getAnimationProcessor().getBone("head");
 
 			LivingEntity entityIn = (LivingEntity) entity;

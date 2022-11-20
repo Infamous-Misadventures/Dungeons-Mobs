@@ -1,51 +1,37 @@
 package com.infamous.dungeons_mobs.entities.jungle;
 
-import java.util.Random;
-import java.util.function.Predicate;
-
 import com.infamous.dungeons_mobs.tags.CustomTags;
-
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.monster.ZombieEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.Difficulty;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib3.core.IAnimatable;
 
-public abstract class AbstractVineEntity extends CreatureEntity implements IMob, IAnimatable {
+import java.util.function.Predicate;
 
-    public static final DataParameter<Integer> LENGTH = EntityDataManager.defineId(AbstractVineEntity.class, DataSerializers.INT);
+public abstract class AbstractVineEntity extends PathfinderMob implements Enemy, IAnimatable {
+
+    public static final EntityDataAccessor<Integer> LENGTH = SynchedEntityData.defineId(AbstractVineEntity.class, EntityDataSerializers.INT);
     
-    public static final DataParameter<Boolean> VANISHES = EntityDataManager.defineId(AbstractVineEntity.class, DataSerializers.BOOLEAN);
-    public static final DataParameter<Integer> STAY_TIME = EntityDataManager.defineId(AbstractVineEntity.class, DataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> VANISHES = SynchedEntityData.defineId(AbstractVineEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<Integer> STAY_TIME = SynchedEntityData.defineId(AbstractVineEntity.class, EntityDataSerializers.INT);
     
-    public static final DataParameter<Boolean> ALWAYS_OUT = EntityDataManager.defineId(AbstractVineEntity.class, DataSerializers.BOOLEAN);
-    public static final DataParameter<Boolean> SHOULD_RETRACT = EntityDataManager.defineId(AbstractVineEntity.class, DataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<Boolean> ALWAYS_OUT = SynchedEntityData.defineId(AbstractVineEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<Boolean> SHOULD_RETRACT = SynchedEntityData.defineId(AbstractVineEntity.class, EntityDataSerializers.BOOLEAN);
     
-    public static final DataParameter<Float> DETECTION_DISTANCE = EntityDataManager.defineId(AbstractVineEntity.class, DataSerializers.FLOAT);
+    public static final EntityDataAccessor<Float> DETECTION_DISTANCE = SynchedEntityData.defineId(AbstractVineEntity.class, EntityDataSerializers.FLOAT);
     
-    public static final DataParameter<Boolean> OUT = EntityDataManager.defineId(AbstractVineEntity.class, DataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<Boolean> OUT = SynchedEntityData.defineId(AbstractVineEntity.class, EntityDataSerializers.BOOLEAN);
     
     public int lifeTime;
     
@@ -58,7 +44,7 @@ public abstract class AbstractVineEntity extends CreatureEntity implements IMob,
 	   
 	public VinePartEntity[] subEntities = new VinePartEntity[27];
     
-	protected AbstractVineEntity(EntityType<? extends AbstractVineEntity> entityType, World level) {
+	protected AbstractVineEntity(EntityType<? extends AbstractVineEntity> entityType, Level level) {
 		super(entityType, level);
         int adjustedLength = 27;
 
@@ -78,7 +64,7 @@ public abstract class AbstractVineEntity extends CreatureEntity implements IMob,
 
     protected void movePart(VinePartEntity part, double dX, double dY, double dZ)
     {
-    	Vector3d lastPos = new Vector3d(part.getX(), part.getY(), part.getZ());
+    	Vec3 lastPos = new Vec3(part.getX(), part.getY(), part.getZ());
 
         part.setPos(this.getX() + dX, this.getY() + dY, this.getZ() + dZ);
 
@@ -129,7 +115,7 @@ public abstract class AbstractVineEntity extends CreatureEntity implements IMob,
 	   protected void tickDeath() {
 		      ++this.deathTime;
 		      if (this.deathTime == this.getRetractAnimationLength()) {
-		    	  this.remove();
+		    	  this.remove(RemovalReason.KILLED);
 		      }
 		}
 
@@ -145,7 +131,7 @@ public abstract class AbstractVineEntity extends CreatureEntity implements IMob,
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundNBT compound) {
+    public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setLengthInSegments(compound.getInt("Length"));
         this.setVanishes(compound.getBoolean("Vanishes"));
@@ -158,7 +144,7 @@ public abstract class AbstractVineEntity extends CreatureEntity implements IMob,
 
 
     @Override
-    public void addAdditionalSaveData(CompoundNBT compound) {
+    public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("Length", this.getLengthInSegments());
         compound.putBoolean("Vanishes", this.getVanishes());
@@ -170,7 +156,7 @@ public abstract class AbstractVineEntity extends CreatureEntity implements IMob,
     }
     
     public int getLengthInSegments() {
-        return MathHelper.clamp(this.entityData.get(LENGTH), 1, 26);
+        return Mth.clamp(this.entityData.get(LENGTH), 1, 26);
     }
     
     public float getLengthInPixels() {
@@ -278,10 +264,10 @@ public abstract class AbstractVineEntity extends CreatureEntity implements IMob,
 	public void playSound(SoundEvent vocalSound, SoundEvent foleySound, float vocalVolume, float vocalPitch, float foleyVolume, float foleyPitch) {
 		if (!this.isSilent()) {
 			if (vocalSound != null) {
-	         this.level.playSound((PlayerEntity)null, this.getX(), this.getY(), this.getZ(), vocalSound, this.getSoundSource(), vocalVolume, vocalPitch);
+	         this.level.playSound((Player)null, this.getX(), this.getY(), this.getZ(), vocalSound, this.getSoundSource(), vocalVolume, vocalPitch);
 			}
 			if (foleySound != null) {
-	         this.level.playSound((PlayerEntity)null, this.getX(), this.getY(), this.getZ(), foleySound, this.getSoundSource(), foleyVolume, foleyPitch);
+	         this.level.playSound((Player)null, this.getX(), this.getY(), this.getZ(), foleySound, this.getSoundSource(), foleyVolume, foleyPitch);
 			}
 	    }
 	}
@@ -318,7 +304,7 @@ public abstract class AbstractVineEntity extends CreatureEntity implements IMob,
     }
     
     public boolean shouldBurstFor(Entity entity) {
-    	return entity instanceof LivingEntity && !entity.getType().is(CustomTags.PLANT_MOBS) && entity.isAlive() && !entity.isSpectator() && !(entity instanceof PlayerEntity && ((PlayerEntity)entity).isCreative());
+    	return entity instanceof LivingEntity && !entity.getType().is(CustomTags.PLANT_MOBS) && entity.isAlive() && !entity.isSpectator() && !(entity instanceof Player && ((Player)entity).isCreative());
     }
    
     @Override
@@ -337,8 +323,8 @@ public abstract class AbstractVineEntity extends CreatureEntity implements IMob,
     }
 
     @Override
-    protected boolean isMovementNoisy() {
-        return false;
+    protected MovementEmission getMovementEmission() {
+        return MovementEmission.NONE;
     }
 
      public boolean isPushable() {
@@ -354,8 +340,7 @@ public abstract class AbstractVineEntity extends CreatureEntity implements IMob,
     }
 
     @Override
-    public void knockback(float strength, double ratioX, double ratioZ) {
-
+    public void knockback(double p_147241_, double p_147242_, double p_147243_) {
     }
     
     @Override
@@ -385,8 +370,8 @@ public abstract class AbstractVineEntity extends CreatureEntity implements IMob,
     }
     
     @Override
-    public EntitySize getDimensions(Pose p_213305_1_) {
-    	return !this.isOut() ? EntitySize.scalable(1.0F, 0.1F) : EntitySize.scalable(1.5F, ((float)this.getLengthInBlocks()) + this.getExtraHitboxY());
+    public EntityDimensions getDimensions(Pose p_213305_1_) {
+    	return !this.isOut() ? EntityDimensions.scalable(1.0F, 0.1F) : EntityDimensions.scalable(1.5F, ((float)this.getLengthInBlocks()) + this.getExtraHitboxY());
     }
     
 	public void refreshDimensions() {
@@ -410,8 +395,8 @@ public abstract class AbstractVineEntity extends CreatureEntity implements IMob,
 	}
 	
 	@Override
-	public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance p_213386_2_,
-			SpawnReason p_213386_3_, ILivingEntityData p_213386_4_, CompoundNBT p_213386_5_) {
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor p_213386_1_, DifficultyInstance p_213386_2_,
+			MobSpawnType p_213386_3_, SpawnGroupData p_213386_4_, CompoundTag p_213386_5_) {
 		this.setDefaultFeatures();
 		return super.finalizeSpawn(p_213386_1_, p_213386_2_, p_213386_3_, p_213386_4_, p_213386_5_);
 	}
@@ -458,7 +443,7 @@ public abstract class AbstractVineEntity extends CreatureEntity implements IMob,
 					this.retract();
 				}
 				if (this.retractAnimationTick == 1) {
-					this.remove();
+					this.remove(RemovalReason.DISCARDED);
 				}
 			}
 		}

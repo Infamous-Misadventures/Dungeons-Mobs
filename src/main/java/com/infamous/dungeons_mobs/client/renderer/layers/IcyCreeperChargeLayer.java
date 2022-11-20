@@ -1,23 +1,22 @@
 package com.infamous.dungeons_mobs.client.renderer.layers;
 
-import com.infamous.dungeons_mobs.client.models.creeper.IcyCreeperModel;
 import com.infamous.dungeons_mobs.entities.creepers.IcyCreeperEntity;
-
-import net.minecraft.client.renderer.entity.IEntityRenderer;
-import net.minecraft.client.renderer.entity.layers.EnergyLayer;
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.entity.monster.CreeperEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.model.CreeperModel;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
+import net.minecraft.client.renderer.entity.layers.EnergySwirlLayer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class IcyCreeperChargeLayer extends EnergyLayer<IcyCreeperEntity, IcyCreeperModel<IcyCreeperEntity>> {
+public class IcyCreeperChargeLayer extends EnergySwirlLayer<IcyCreeperEntity, CreeperModel<IcyCreeperEntity>> {
    private static final ResourceLocation POWER_LOCATION = new ResourceLocation("textures/entity/creeper/creeper_armor.png");
-   private final EntityModel<IcyCreeperEntity> model = new IcyCreeperModel<>(1.5F);
+   private final EntityModel<IcyCreeperEntity> model;
 
-   public IcyCreeperChargeLayer(IEntityRenderer<IcyCreeperEntity, IcyCreeperModel<IcyCreeperEntity>> p_i50947_1_) {
+   public IcyCreeperChargeLayer(RenderLayerParent<IcyCreeperEntity, CreeperModel<IcyCreeperEntity>> p_i50947_1_, CreeperModel<IcyCreeperEntity> model) {
       super(p_i50947_1_);
+      this.model = model;
    }
 
    protected float xOffset(float p_225634_1_) {

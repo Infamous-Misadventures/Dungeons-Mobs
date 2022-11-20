@@ -3,56 +3,52 @@ package com.infamous.dungeons_mobs.entities.projectiles;
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
-
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.network.IPacket;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.world.World;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 public class DrownedNecromancerOrbEntity extends StraightMovingProjectileEntity implements IAnimatable {
 	
 	public int textureChange = 0;
 
-	AnimationFactory factory = new AnimationFactory(this);
+	AnimationFactory factory = GeckoLibUtil.createFactory(this);
 		   
-	public DrownedNecromancerOrbEntity(World worldIn) {
+	public DrownedNecromancerOrbEntity(Level worldIn) {
 		super(ModEntityTypes.DROWNED_NECROMANCER_ORB.get(), worldIn);
 	}
 
-	public DrownedNecromancerOrbEntity(EntityType<? extends DrownedNecromancerOrbEntity> p_i50147_1_, World p_i50147_2_) {
+	public DrownedNecromancerOrbEntity(EntityType<? extends DrownedNecromancerOrbEntity> p_i50147_1_, Level p_i50147_2_) {
 		super(p_i50147_1_, p_i50147_2_);
 	}
 
-	public DrownedNecromancerOrbEntity(World p_i1794_1_, LivingEntity p_i1794_2_, double p_i1794_3_, double p_i1794_5_,
+	public DrownedNecromancerOrbEntity(Level p_i1794_1_, LivingEntity p_i1794_2_, double p_i1794_3_, double p_i1794_5_,
 			double p_i1794_7_) {
 		super(ModEntityTypes.DROWNED_NECROMANCER_ORB.get(), p_i1794_2_, p_i1794_3_, p_i1794_5_, p_i1794_7_, p_i1794_1_);
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public DrownedNecromancerOrbEntity(World p_i1795_1_, double p_i1795_2_, double p_i1795_4_, double p_i1795_6_,
+	public DrownedNecromancerOrbEntity(Level p_i1795_1_, double p_i1795_2_, double p_i1795_4_, double p_i1795_6_,
 			double p_i1795_8_, double p_i1795_10_, double p_i1795_12_) {
 		super(ModEntityTypes.DROWNED_NECROMANCER_ORB.get(), p_i1795_2_, p_i1795_4_, p_i1795_6_, p_i1795_8_, p_i1795_10_,
 				p_i1795_12_, p_i1795_1_);
 	}
 	
 	@Override
-	protected IParticleData getTrailParticle() {
+	protected ParticleOptions getTrailParticle() {
 		return ModParticleTypes.NECROMANCY.get();
 	}
 	
@@ -72,8 +68,8 @@ public class DrownedNecromancerOrbEntity extends StraightMovingProjectileEntity 
 	}
 	
 	@Override
-	protected boolean isMovementNoisy() {
-		return false;
+	protected MovementEmission getMovementEmission() {
+        return MovementEmission.NONE;
 	}
 
 	@Override
@@ -86,7 +82,7 @@ public class DrownedNecromancerOrbEntity extends StraightMovingProjectileEntity 
 		
 		if (!this.level.isClientSide && !this.isInWaterRainOrBubble()) {
 			this.playSound(ModSoundEvents.DROWNED_NECROMANCER_STEAM_MISSILE_IMPACT.get(), 1.0F, 1.0F);
-			this.remove();
+			this.remove(RemovalReason.DISCARDED);
 		}
 	}
 
@@ -108,12 +104,12 @@ public class DrownedNecromancerOrbEntity extends StraightMovingProjectileEntity 
 		return false;
 	}
 
-	protected void onHitEntity(EntityRayTraceResult p_213868_1_) {
+	protected void onHitEntity(EntityHitResult p_213868_1_) {
 		super.onHitEntity(p_213868_1_);
 	}
 	
 	public void onHitEntity(Entity entity) {
-		if (entity instanceof MobEntity && ((MobEntity)entity).getMobType() == CreatureAttribute.UNDEAD) {
+		if (entity instanceof Mob && ((Mob)entity).getMobType() == MobType.UNDEAD) {
 			
 		} else if (!this.level.isClientSide) {
 			super.onHitEntity(entity);
@@ -136,7 +132,7 @@ public class DrownedNecromancerOrbEntity extends StraightMovingProjectileEntity 
 	    	entity.setDeltaMovement(entity.getDeltaMovement().add(this.getDeltaMovement().scale(2.0D)));
 			
 			this.playSound(ModSoundEvents.DROWNED_NECROMANCER_STEAM_MISSILE_IMPACT.get(), 1.0F, 1.0F);
-			this.remove();
+			this.remove(RemovalReason.DISCARDED);
 		}
 	}
 
@@ -153,7 +149,7 @@ public class DrownedNecromancerOrbEntity extends StraightMovingProjectileEntity 
 	}
 	
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 	

@@ -2,14 +2,7 @@ package com.infamous.dungeons_mobs.client.models.illager;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.entities.illagers.EnchanterEntity;
-import com.infamous.dungeons_mobs.entities.undead.WraithEntity;
-import com.infamous.dungeons_mobs.interfaces.IHasGeoArm;
-import com.mojang.blaze3d.matrix.MatrixStack;
-
-import net.minecraft.client.renderer.model.Model;
-import net.minecraft.util.HandSide;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
@@ -35,8 +28,8 @@ public class EnchanterModel extends AnimatedGeoModel {
 		}
 
 		@Override
-		public void setLivingAnimations(IAnimatable entity, Integer uniqueID, AnimationEvent customPredicate) {
-			super.setLivingAnimations(entity, uniqueID, customPredicate);
+		public void setCustomAnimations(IAnimatable entity, int uniqueID, AnimationEvent customPredicate) {
+			super.setCustomAnimations(entity, uniqueID, customPredicate);
 			
 			EnchanterEntity entityIn = (EnchanterEntity) entity;
 			

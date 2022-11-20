@@ -1,9 +1,5 @@
 package com.infamous.dungeons_mobs.entities.illagers;
 
-import java.util.EnumSet;
-
-import javax.annotation.Nullable;
-
 import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
 import com.infamous.dungeons_libraries.items.gearconfig.ArmorSet;
 import com.infamous.dungeons_mobs.entities.projectiles.MageMissileEntity;
@@ -12,36 +8,26 @@ import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
 import com.infamous.dungeons_mobs.mod.ModItems;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 import com.infamous.dungeons_mobs.utils.PositionUtils;
-
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityPredicate;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.AvoidEntityGoal;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.LookAtGoal;
-import net.minecraft.entity.ai.goal.RandomWalkingGoal;
-import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.entity.ai.goal.TargetGoal;
-import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
-import net.minecraft.entity.monster.AbstractIllagerEntity;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.passive.IronGolemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.TargetGoal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.monster.AbstractIllager;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -50,11 +36,15 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
-public class MageCloneEntity extends AbstractIllagerEntity implements IAnimatable, SpawnArmoredMob {
+import javax.annotation.Nullable;
+import java.util.EnumSet;
 
-	private static final DataParameter<Boolean> DELAYED_APPEAR = EntityDataManager.defineId(MageCloneEntity.class,
-			DataSerializers.BOOLEAN);
+public class MageCloneEntity extends AbstractIllager implements IAnimatable, SpawnArmoredMob {
+
+	private static final EntityDataAccessor<Boolean> DELAYED_APPEAR = SynchedEntityData.defineId(MageCloneEntity.class,
+			EntityDataSerializers.BOOLEAN);
 	
 	public int shootAnimationTick;
 	public int shootAnimationLength = 40;
@@ -65,28 +55,28 @@ public class MageCloneEntity extends AbstractIllagerEntity implements IAnimatabl
 	
 	public int lifeTime;
 	
-	   private MobEntity owner;
+	   private Mob owner;
 
-	AnimationFactory factory = new AnimationFactory(this);
+	AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
-	public MageCloneEntity(EntityType<? extends MageCloneEntity> type, World world) {
+	public MageCloneEntity(EntityType<? extends MageCloneEntity> type, Level world) {
 		super(type, world);
 		this.xpReward = 0;
 	}
 	
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimGoal(this));
+        this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(0, new MageCloneEntity.RemainStationaryGoal());
         this.goalSelector.addGoal(1, new MageCloneEntity.ShootAttackGoal(this));
-        this.goalSelector.addGoal(2, new AvoidEntityGoal<>(this, AbstractVillagerEntity.class, 5.0F, 1.2D, 1.15D));
-        this.goalSelector.addGoal(2, new AvoidEntityGoal<>(this, PlayerEntity.class, 5.0F, 1.2D, 1.2D));
-        this.goalSelector.addGoal(2, new AvoidEntityGoal<>(this, IronGolemEntity.class, 5.0F, 1.3D, 1.15D));
+        this.goalSelector.addGoal(2, new AvoidEntityGoal<>(this, AbstractVillager.class, 5.0F, 1.2D, 1.15D));
+        this.goalSelector.addGoal(2, new AvoidEntityGoal<>(this, Player.class, 5.0F, 1.2D, 1.2D));
+        this.goalSelector.addGoal(2, new AvoidEntityGoal<>(this, IronGolem.class, 5.0F, 1.3D, 1.15D));
         this.goalSelector.addGoal(3, new ApproachTargetGoal(this, 14, 1.0D, true));
         this.goalSelector.addGoal(4, new LookAtTargetGoal(this));
-        this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 1.0D));
-        this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
-        this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
+        this.goalSelector.addGoal(8, new RandomStrollGoal(this, 1.0D));
+        this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
+        this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 8.0F));
 		this.targetSelector.addGoal(1, new MageCloneEntity.CopyOwnerTargetGoal(this));
     }
 	
@@ -115,11 +105,11 @@ public class MageCloneEntity extends AbstractIllagerEntity implements IAnimatabl
 		}
 	}
 	
-	   public MobEntity getOwner() {
+	   public Mob getOwner() {
 		      return this.owner;
 		   }
 	   
-	   public void setOwner(MobEntity p_190658_1_) {
+	   public void setOwner(Mob p_190658_1_) {
 		      this.owner = p_190658_1_;
 		   }
 	
@@ -127,7 +117,7 @@ public class MageCloneEntity extends AbstractIllagerEntity implements IAnimatabl
 	   protected void tickDeath() {
 	      ++this.deathTime;
 	      if (this.deathTime == 1) {
-	         this.remove();
+	         this.remove(RemovalReason.DISCARDED);
 	         for(int i = 0; i < 20; ++i) {
 	            double d0 = this.random.nextGaussian() * 0.02D;
 	            double d1 = this.random.nextGaussian() * 0.02D;
@@ -147,8 +137,8 @@ public class MageCloneEntity extends AbstractIllagerEntity implements IAnimatabl
 		return false;
 	}
 
-	public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-		return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.25D)
+	public static AttributeSupplier.Builder setCustomAttributes() {
+		return Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.25D)
 				.add(Attributes.FOLLOW_RANGE, 30.0D).add(Attributes.MAX_HEALTH, 40.0D);
 	}
 
@@ -189,7 +179,7 @@ public class MageCloneEntity extends AbstractIllagerEntity implements IAnimatabl
 			} else {
 				this.playSound(SoundEvents.ILLUSIONER_MIRROR_MOVE, this.getSoundVolume(), 1.0F);
 			}
-			this.remove();
+			this.remove(RemovalReason.DISCARDED);
 			this.level.broadcastEntityEvent(this, (byte) 11);
 		}
 		
@@ -242,7 +232,7 @@ public class MageCloneEntity extends AbstractIllagerEntity implements IAnimatabl
 		if (super.isAlliedTo(entityIn)) {
 			return true;
 		} else if (entityIn instanceof LivingEntity
-				&& ((LivingEntity) entityIn).getMobType() == CreatureAttribute.ILLAGER) {
+				&& ((LivingEntity) entityIn).getMobType() == MobType.ILLAGER) {
 			return this.getTeam() == null && entityIn.getTeam() == null;
 		} else {
 			return false;
@@ -301,7 +291,7 @@ public class MageCloneEntity extends AbstractIllagerEntity implements IAnimatabl
         @Override
         public boolean canUse() {
             target = mob.getTarget();
-            return target != null && !mob.shouldBeStationary() && mob.distanceTo(target) <= 16 && mob.distanceTo(target) > 5 && mob.canSee(target) && animationsUseable();
+            return target != null && !mob.shouldBeStationary() && mob.distanceTo(target) <= 16 && mob.distanceTo(target) > 5 && mob.hasLineOfSight(target) && animationsUseable();
         }
 
         @Override
@@ -322,7 +312,7 @@ public class MageCloneEntity extends AbstractIllagerEntity implements IAnimatabl
             this.mob.getNavigation().stop();
 
             if (target != null && mob.shootAnimationTick == mob.shootAnimationActionPoint) {
-                Vector3d pos = PositionUtils.getOffsetPos(mob, 0.3, 1.5, 0.5, mob.yBodyRot);
+                Vec3 pos = PositionUtils.getOffsetPos(mob, 0.3, 1.5, 0.5, mob.yBodyRot);
                 double d1 = target.getX() - pos.x;
                 double d2 = target.getY(0.6D) - pos.y;
                 double d3 = target.getZ() - pos.z;
@@ -342,9 +332,9 @@ public class MageCloneEntity extends AbstractIllagerEntity implements IAnimatabl
     }
 	
 	   class CopyOwnerTargetGoal extends TargetGoal {
-		      private final EntityPredicate copyOwnerTargeting = (new EntityPredicate()).allowUnseeable().ignoreInvisibilityTesting();
+		      private final TargetingConditions copyOwnerTargeting = TargetingConditions.forCombat().ignoreInvisibilityTesting();
 
-		      public CopyOwnerTargetGoal(CreatureEntity p_i47231_2_) {
+		      public CopyOwnerTargetGoal(PathfinderMob p_i47231_2_) {
 		         super(p_i47231_2_, false);
 		      }
 

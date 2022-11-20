@@ -1,16 +1,15 @@
 package com.infamous.dungeons_mobs.client.renderer.projectiles;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.SpriteRenderer;
-import net.minecraft.entity.projectile.AbstractFireballEntity;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraft.world.entity.projectile.Fireball;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class CustomFireballRenderer extends SpriteRenderer<AbstractFireballEntity> {
+public class CustomFireballRenderer extends ThrownItemRenderer<Fireball> {
 
-    public CustomFireballRenderer(EntityRendererManager p_i226035_1_) {
-        super(p_i226035_1_, Minecraft.getInstance().getItemRenderer(), 0.75F, true);
+    public CustomFireballRenderer(EntityRendererProvider.Context p_i226035_1_) {
+        super(p_i226035_1_, 0.75F, true);
     }
 }

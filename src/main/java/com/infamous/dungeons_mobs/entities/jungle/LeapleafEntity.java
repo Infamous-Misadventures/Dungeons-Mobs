@@ -1,10 +1,5 @@
 package com.infamous.dungeons_mobs.entities.jungle;
 
-import java.util.EnumSet;
-import java.util.UUID;
-
-import javax.annotation.Nullable;
-
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
 import com.infamous.dungeons_mobs.entities.summonables.AreaDamageEntity;
 import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
@@ -13,34 +8,33 @@ import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 import com.infamous.dungeons_mobs.tags.CustomTags;
 import com.infamous.dungeons_mobs.utils.PositionUtils;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.command.arguments.EntityAnchorArgument;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.HurtByTargetGoal;
-import net.minecraft.entity.ai.goal.LookAtGoal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.ai.goal.RandomWalkingGoal;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.passive.IronGolemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -48,21 +42,28 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
-public class LeapleafEntity extends MonsterEntity implements IAnimatable {
+import javax.annotation.Nullable;
+import java.util.EnumSet;
+import java.util.UUID;
+
+import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
+
+public class LeapleafEntity extends Monster implements IAnimatable {
 	
 	private static final UUID SPEED_MODIFIER_CHARGING_UUID = UUID.fromString("b380d5fd-85cb-4ac3-9450-d9092a09e0c9");
 	private static final AttributeModifier SPEED_MODIFIER_CHARGING = new AttributeModifier(SPEED_MODIFIER_CHARGING_UUID,
 			"Charging speed increase", 0.1D, AttributeModifier.Operation.ADDITION);
 	
-	private static final DataParameter<Integer> TIMES_LEAPT = EntityDataManager.defineId(LeapleafEntity.class,
-			DataSerializers.INT);
+	private static final EntityDataAccessor<Integer> TIMES_LEAPT = SynchedEntityData.defineId(LeapleafEntity.class,
+			EntityDataSerializers.INT);
 	
-	private static final DataParameter<Boolean> CAN_LEAP = EntityDataManager.defineId(LeapleafEntity.class,
-			DataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> CAN_LEAP = SynchedEntityData.defineId(LeapleafEntity.class,
+			EntityDataSerializers.BOOLEAN);
 	
-	private static final DataParameter<Boolean> LEAPING = EntityDataManager.defineId(LeapleafEntity.class,
-			DataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> LEAPING = SynchedEntityData.defineId(LeapleafEntity.class,
+			EntityDataSerializers.BOOLEAN);
 	
     public int strafeTick;
     public int strafeLength = 40;
@@ -86,13 +87,13 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
 	
 	public int leapCooldown;
 
-	AnimationFactory factory = new AnimationFactory(this);
+	AnimationFactory factory = GeckoLibUtil.createFactory(this);
 	
-	public LeapleafEntity(World world) {
+	public LeapleafEntity(Level world) {
 		super(ModEntityTypes.LEAPLEAF.get(), world);
 	}
 
-	public LeapleafEntity(EntityType<? extends LeapleafEntity> type, World world) {
+	public LeapleafEntity(EntityType<? extends LeapleafEntity> type, Level world) {
 		super(type, world);
 		this.xpReward = 20;
 		this.maxUpStep = 1.0F;
@@ -108,16 +109,16 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
 		this.goalSelector.addGoal(4, new LeapleafEntity.BasicAttackGoal(this));
 		this.goalSelector.addGoal(5, new ApproachTargetGoal(this, 0, 1.2D, true));
 		this.goalSelector.addGoal(6, new LookAtTargetGoal(this));
-		this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 1.0D));
-		this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
-		this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
+		this.goalSelector.addGoal(8, new RandomStrollGoal(this, 1.0D));
+		this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
+		this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 8.0F));
 		this.targetSelector.addGoal(0, new HurtByTargetGoal(this));
-		this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
-		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
+		this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true));
+		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));
 	}
 	
-	public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-		return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.275D)
+	public static AttributeSupplier.Builder setCustomAttributes() {
+		return Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.275D)
 				.add(Attributes.FOLLOW_RANGE, 25.0D).add(Attributes.MAX_HEALTH, 75.0D).add(Attributes.ARMOR, 15D).add(Attributes.KNOCKBACK_RESISTANCE, 1.0D);
 	}
 	
@@ -149,10 +150,10 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
 	public void playSound(SoundEvent vocalSound, SoundEvent foleySound, float vocalVolume, float vocalPitch, float foleyVolume, float foleyPitch) {
 		if (!this.isSilent()) {
 			if (vocalSound != null) {
-	         this.level.playSound((PlayerEntity)null, this.getX(), this.getY(), this.getZ(), vocalSound, this.getSoundSource(), vocalVolume, vocalPitch);
+	         this.level.playSound((Player)null, this.getX(), this.getY(), this.getZ(), vocalSound, this.getSoundSource(), vocalVolume, vocalPitch);
 			}
 			if (foleySound != null) {
-	         this.level.playSound((PlayerEntity)null, this.getX(), this.getY(), this.getZ(), foleySound, this.getSoundSource(), foleyVolume, foleyPitch);
+	         this.level.playSound((Player)null, this.getX(), this.getY(), this.getZ(), foleySound, this.getSoundSource(), foleyVolume, foleyPitch);
 			}
 	    }
 	}
@@ -242,7 +243,7 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
 		super.baseTick();
 		this.tickDownAnimTimers();
 		
-		 ModifiableAttributeInstance modifiableattributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
+		 AttributeInstance modifiableattributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
 	        
 		 if (!this.level.isClientSide && this.canLeap() && (this.getTarget() == null || this.getTarget().isDeadOrDying())) {
 			 this.restTick = this.restLength;
@@ -259,13 +260,13 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
 	        	modifiableattributeinstance.removeModifier(SPEED_MODIFIER_CHARGING);
 	        }	 
 	        
-	        if (getHorizontalDistanceSqr(this.getDeltaMovement()) > (double)2.5000003E-7F && this.random.nextInt(3) == 0) {
-	            int i = MathHelper.floor(this.getX());
-	            int j = MathHelper.floor(this.getY() - (double)0.2F);
-	            int k = MathHelper.floor(this.getZ());
+	        if (this.getDeltaMovement().horizontalDistanceSqr() > (double)2.5000003E-7F && this.random.nextInt(3) == 0) {
+	            int i = Mth.floor(this.getX());
+	            int j = Mth.floor(this.getY() - (double)0.2F);
+	            int k = Mth.floor(this.getZ());
 	            BlockPos pos = new BlockPos(i, j, k);
 	            BlockState blockstate = this.level.getBlockState(pos);
-	            if (!blockstate.isAir(this.level, pos)) {
+	            if (!blockstate.isAir()) {
 	               this.level.addParticle(ModParticleTypes.DUST.get(), this.getX() + ((double)this.random.nextFloat() - 0.5D) * (double)this.getBbWidth(), this.getY() + 0.1D, this.getZ() + ((double)this.random.nextFloat() - 0.5D) * (double)this.getBbWidth(), this.random.nextFloat() * 0.5, this.random.nextGaussian() * 1, this.random.nextGaussian() * 1);
 	            }
 	         }
@@ -302,7 +303,7 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
 	}
 	
 	@Override
-	public boolean causeFallDamage(float p_225503_1_, float p_225503_2_) {
+	public boolean causeFallDamage(float p_225503_1_, float p_225503_2_, DamageSource p_147189_) {
 		return false;
 	}
 
@@ -313,21 +314,21 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
 
 	private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
 		if (this.smashAnimationTick > 0) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("leapleaf_smash", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("leapleaf_smash", LOOP));
 		} else if (this.leapAnimationTick > 0) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("leapleaf_leap", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("leapleaf_leap", LOOP));
 		} else if (this.prepareLeapAnimationTick > 0) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("leapleaf_prepare_leap", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("leapleaf_prepare_leap", LOOP));
 		} else if (this.attackAnimationTick > 0) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("leapleaf_attack", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("leapleaf_attack", LOOP));
 		} else if (this.restTick > 0) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("leapleaf_rest", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("leapleaf_rest", LOOP));
 		} else if (this.isLeaping()) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("leapleaf_leaping", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("leapleaf_leaping", LOOP));
 		} else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("leapleaf_walk", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("leapleaf_walk", LOOP));
 		} else {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("leapleaf_idle", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("leapleaf_idle", LOOP));
 		}
 		return PlayState.CONTINUE;
 	}
@@ -373,7 +374,7 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
 			target = mob.getTarget();
 			
 			return target != null && mob.distanceTo(target) <= 3.25 && animationsUseable()
-					&& mob.canSee(target);
+					&& mob.hasLineOfSight(target);
 		}
 
 		@Override
@@ -393,7 +394,7 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
 			target = mob.getTarget();
 
 			if (mob.attackAnimationTick == mob.attackAnimationActionPoint) {			
-				Vector3d areaDamagePos = PositionUtils.getOffsetPos(mob, -1, 0, 1.5, mob.yBodyRot);
+				Vec3 areaDamagePos = PositionUtils.getOffsetPos(mob, -1, 0, 1.5, mob.yBodyRot);
 				AreaDamageEntity areaDamage = AreaDamageEntity.spawnAreaDamage(mob.level, areaDamagePos, mob, 15F, DamageSource.mobAttack(mob), 0.0F, 4.5F, 1.0F, 0.5F, 0, false, false, 1.0D, 0.2D, false, 0, 1);
 				mob.level.addFreshEntity(areaDamage);
 			}
@@ -431,7 +432,7 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
 			target = mob.getTarget();
 			
 			return target != null && mob.distanceTo(target) <= 15 && !mob.canLeap() && mob.random.nextInt(30) == 0 && animationsUseable()
-					&& mob.canSee(target) && mob.leapCooldown <= 0;
+					&& mob.hasLineOfSight(target) && mob.leapCooldown <= 0;
 		}
 
 		@Override
@@ -489,7 +490,7 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
 			target = mob.getTarget();
 			
 			return target != null && mob.distanceTo(target) <= 10 && mob.canLeap() && mob.random.nextInt(5) == 0 && animationsUseable()
-					&& mob.canSee(target);
+					&& mob.hasLineOfSight(target);
 		}
 
 		@Override
@@ -512,9 +513,9 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
 				double d0 = target.getX() - mob.getX();
 				double d1 = target.getY() - mob.getY();
 				double d2 = target.getZ() - mob.getZ();
-				mob.setDeltaMovement(d0 * 0.15D, 0.75 + MathHelper.clamp(d1 * 0.05D, 0, 10), d2 * 0.15D);
+				mob.setDeltaMovement(d0 * 0.15D, 0.75 + Mth.clamp(d1 * 0.05D, 0, 10), d2 * 0.15D);
 				mob.setLeaping(true);
-				mob.lookAt(EntityAnchorArgument.Type.EYES, target.position());
+				mob.lookAt(EntityAnchorArgument.Anchor.EYES, target.position());
 				this.leapTime = 0;
 			}
 			
@@ -530,10 +531,10 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
 			}
 			
 			if (mob.smashAnimationTick == mob.smashAnimationActionPoint) {
-				Vector3d areaDamagePos = PositionUtils.getOffsetPos(mob, -1.5, 0, 2, mob.yBodyRot);
+				Vec3 areaDamagePos = PositionUtils.getOffsetPos(mob, -1.5, 0, 2, mob.yBodyRot);
 				AreaDamageEntity areaDamage = AreaDamageEntity.spawnAreaDamage(mob.level, areaDamagePos, mob, 25F, DamageSource.mobAttack(mob), 0.0F, 6.0F, 1.0F, 0.75F, 10, false, false, 2.0D, 0.4D, true, 120, 1);
 
-				Vector3d areaDamagePos2 = PositionUtils.getOffsetPos(mob, 1.5, 0, 2, mob.yBodyRot);
+				Vec3 areaDamagePos2 = PositionUtils.getOffsetPos(mob, 1.5, 0, 2, mob.yBodyRot);
 				AreaDamageEntity areaDamage2 = AreaDamageEntity.spawnAreaDamage(mob.level, areaDamagePos2, mob, 25F, DamageSource.mobAttack(mob), 0.0F, 6.0F, 1.0F, 0.75F, 10, false, false, 2.0D, 0.4D, true, 120, 1);
 				
 				areaDamage.connectedAreaDamages.add(areaDamage2);
@@ -611,7 +612,7 @@ public class LeapleafEntity extends MonsterEntity implements IAnimatable {
 			target = mob.getTarget();
 
 			if (target != null) {	
-				mob.lookAt(EntityAnchorArgument.Type.EYES, target.position());
+				mob.lookAt(EntityAnchorArgument.Anchor.EYES, target.position());
 				
 				if (mob.random.nextInt(30) == 0) {
 					this.strafingLeft = !this.strafingLeft;

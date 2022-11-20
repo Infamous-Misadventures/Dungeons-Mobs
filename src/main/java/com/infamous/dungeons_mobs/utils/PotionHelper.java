@@ -1,12 +1,12 @@
 package com.infamous.dungeons_mobs.utils;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 
 public class PotionHelper {
 
     public static void setColor(ItemStack stack, int color) {
-        CompoundNBT compoundnbt = stack.getOrCreateTag();
+        CompoundTag compoundnbt = stack.getOrCreateTag();
         compoundnbt.putInt("CustomPotionColor", color);
     }
 }

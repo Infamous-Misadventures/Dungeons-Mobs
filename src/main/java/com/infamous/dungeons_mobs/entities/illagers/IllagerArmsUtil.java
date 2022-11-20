@@ -1,21 +1,21 @@
 package com.infamous.dungeons_mobs.entities.illagers;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.monster.AbstractIllagerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.monster.AbstractIllager;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ItemStack;
 
 import java.io.IOException;
 
 public class IllagerArmsUtil {
-    public static boolean armorHasCrossedArms(AbstractIllagerEntity p_241739_3_, ItemStack itemstack) {
-        return !(itemstack.getItem() instanceof ArmorItem) || resourceExists(getArmorResourceStatic(p_241739_3_, itemstack, EquipmentSlotType.CHEST));
+    public static boolean armorHasCrossedArms(AbstractIllager p_241739_3_, ItemStack itemstack) {
+        return !(itemstack.getItem() instanceof ArmorItem) || resourceExists(getArmorResourceStatic(p_241739_3_, itemstack, EquipmentSlot.CHEST));
     }
 
-    private static ResourceLocation getArmorResourceStatic(Entity entity, ItemStack stack, EquipmentSlotType slot) {
+    private static ResourceLocation getArmorResourceStatic(Entity entity, ItemStack stack, EquipmentSlot slot) {
         ArmorItem item = (ArmorItem)stack.getItem();
         String texture = item.getMaterial().getName();
         String domain = "minecraft";

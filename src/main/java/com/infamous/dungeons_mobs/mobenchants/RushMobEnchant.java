@@ -1,16 +1,15 @@
 package com.infamous.dungeons_mobs.mobenchants;
 
 import com.baguchan.enchantwithmob.mobenchant.MobEnchant;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import static com.infamous.dungeons_mobs.mobenchants.NewMobEnchantUtils.executeIfPresentWithLevel;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchants.RUSH;
 
-//@Mod.EventBusSubscriber(modid = DungeonsMobs.MODID)
 public class RushMobEnchant extends MobEnchant {
 
     public RushMobEnchant(Properties properties) {
@@ -21,7 +20,7 @@ public class RushMobEnchant extends MobEnchant {
     public static void onLivingDamage(LivingDamageEvent event) {
         LivingEntity defender = (LivingEntity) event.getEntity();
         executeIfPresentWithLevel(defender, RUSH.get(), (level) -> {
-            defender.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 10+20*level, 3, false, false));
+            defender.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 10+20*level, 3, false, false));
         });
 
     }

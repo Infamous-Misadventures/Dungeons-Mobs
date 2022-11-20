@@ -2,11 +2,13 @@ package com.infamous.dungeons_mobs.interfaces;
 
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.monster.AbstractRaiderEntity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.raid.Raider;
 import net.minecraftforge.common.BiomeDictionary;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public enum BiomeSpecificRaider {
@@ -35,11 +37,11 @@ public enum BiomeSpecificRaider {
      */
     ;
 
-    private final EntityType<? extends AbstractRaiderEntity> entityType;
-    private final EntityType<? extends AbstractRaiderEntity> equivalentType;
+    private final EntityType<? extends Raider> entityType;
+    private final EntityType<? extends Raider> equivalentType;
     private final Set<BiomeDictionary.Type> biomeTypes = new HashSet<>();
 
-    BiomeSpecificRaider(EntityType<? extends AbstractRaiderEntity> entityTypeIn, EntityType<? extends AbstractRaiderEntity> equivalentTypeIn, List<? extends String> biomeTypesList){
+    BiomeSpecificRaider(EntityType<? extends Raider> entityTypeIn, EntityType<? extends Raider> equivalentTypeIn, List<? extends String> biomeTypesList){
         this.entityType = entityTypeIn;
         this.equivalentType = equivalentTypeIn;
 
@@ -54,11 +56,11 @@ public enum BiomeSpecificRaider {
         }
     }
 
-    public EntityType<? extends AbstractRaiderEntity> getType(){
+    public EntityType<? extends Raider> getType(){
         return this.entityType;
     }
 
-    public EntityType<? extends AbstractRaiderEntity> getEquivalentType(){
+    public EntityType<? extends Raider> getEquivalentType(){
         return this.equivalentType;
     }
 
