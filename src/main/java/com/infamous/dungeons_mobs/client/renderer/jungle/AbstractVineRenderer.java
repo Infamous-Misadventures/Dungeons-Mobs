@@ -9,6 +9,8 @@ import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.LightType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
@@ -21,7 +23,7 @@ public class AbstractVineRenderer<M extends AbstractVineModel> extends GeoEntity
 	}
 
 	public boolean isShaking(AbstractVineEntity p_230495_1_) {
-		return false;
+		return p_230495_1_.isInWrongHabitat();
 	}
 
 	@Override
@@ -31,6 +33,11 @@ public class AbstractVineRenderer<M extends AbstractVineModel> extends GeoEntity
 			rotationYaw += (float) (Math.cos((double) entityLiving.tickCount * 3.25D) * Math.PI * (double) 0.4F);
 		}
 		super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
+	}
+	
+	@Override
+	protected int getBlockLightLevel(AbstractVineEntity p_225624_1_, BlockPos p_225624_2_) {
+		return p_225624_1_.isOnFire() ? 15 : p_225624_1_.level.getBrightness(LightType.BLOCK, p_225624_1_.getParts()[0].blockPosition());
 	}
 
 	@Override

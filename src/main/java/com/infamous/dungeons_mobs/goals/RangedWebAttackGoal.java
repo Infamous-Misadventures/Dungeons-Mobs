@@ -16,13 +16,13 @@ public class RangedWebAttackGoal<T extends MobEntity & IWebShooter> extends Simp
     @Override
     public boolean canUse() {
         LivingEntity target = this.webShooter.getTarget();
-        return super.canUse() && target != null && !this.webShooter.isTargetTrapped(target);
+        return super.canUse() && target != null && !this.webShooter.isTargetTrapped();
     }
 
     @Override
     public boolean canContinueToUse() {
         LivingEntity target = this.webShooter.getTarget();
-        return super.canContinueToUse() && target != null && !this.webShooter.isTargetTrapped(target);
+        return super.canContinueToUse() && target != null && !this.webShooter.isTargetTrapped();
     }
 
     @Override

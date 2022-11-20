@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.client.models.ocean.DrownedNecromancerModel;
-import com.infamous.dungeons_mobs.client.renderer.layer.PulsatingGlowLayer;
+import com.infamous.dungeons_mobs.client.renderer.layers.PulsatingGlowLayer;
 import com.infamous.dungeons_mobs.entities.water.DrownedNecromancerEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
@@ -54,7 +54,7 @@ public class DrownedNecromancerRenderer extends ExtendedGeoEntityRenderer<Drowne
     public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
         if(this.isArmorBone(bone)) {
             bone.setCubesHidden(true);
-        }      
+        }
         super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
     }
 
@@ -154,6 +154,8 @@ public class DrownedNecromancerRenderer extends ExtendedGeoEntityRenderer<Drowne
             case "armorBipedBody":
             case "armorBipedRightArm":
             case "armorBipedLeftArm":
+            case "armorIllagerRightArm":
+            case "armorIllagerLeftArm":
                 return chestplate;
             case "armorBipedHead":
                 return helmet;
@@ -177,6 +179,8 @@ public class DrownedNecromancerRenderer extends ExtendedGeoEntityRenderer<Drowne
                 return currentEntity.isLeftHanded() ? EquipmentSlotType.MAINHAND : EquipmentSlotType.OFFHAND;
             case "armorBipedRightArm":
             case "armorBipedLeftArm":
+            case "armorIllagerRightArm":
+            case "armorIllagerLeftArm":
             case "armorBipedBody":
                 return EquipmentSlotType.CHEST;
             case "armorBipedHead":
@@ -196,8 +200,10 @@ public class DrownedNecromancerRenderer extends ExtendedGeoEntityRenderer<Drowne
             case "armorBipedRightLeg":
                 return armorBipedModel.rightLeg;
             case "armorBipedRightArm":
+            case "armorIllagerRightArm":
                 return armorBipedModel.rightArm;
             case "armorBipedLeftArm":
+            case "armorIllagerLeftArm":
                 return armorBipedModel.leftArm;
             case "armorBipedBody":
                 return armorBipedModel.body;

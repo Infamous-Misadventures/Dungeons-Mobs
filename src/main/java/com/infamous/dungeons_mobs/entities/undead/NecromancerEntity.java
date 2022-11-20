@@ -108,6 +108,10 @@ public class NecromancerEntity extends SkeletonEntity implements IAnimatable {
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
     }
+    
+    public boolean isSpellcasting() {
+    	return this.shootAnimationTick > 0 || this.summonAnimationTick > 0;
+    }
 
     @Override
     public void reassessWeaponGoal() {

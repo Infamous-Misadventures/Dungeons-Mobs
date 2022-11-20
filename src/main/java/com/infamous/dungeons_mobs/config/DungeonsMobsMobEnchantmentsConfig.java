@@ -19,16 +19,16 @@ public class DungeonsMobsMobEnchantmentsConfig {
             builder.comment("Enchantments on Spawn Configuration").push("spawn_mob_enchantment_configuration");
             ENABLE_ENCHANTS_ON_SPAWN = builder
                     .comment("Enable the the spawning of enchanted mobs. [true / false]")
-                    .define("enableEnchantedMobs", true);
+                    .define("enableEnchantedMobs", false);
             ENABLE_ENCHANTS_ON_PASSIVES = builder
                     .comment("Enable the the spawning of enchanted passive mobs. [true / false]")
-                    .define("enableEnchantedPassiveMobs", true);
+                    .define("enableEnchantedPassiveMobs", false);
             ENCHANT_ON_SPAWN_EXCLUSION_ENCHANTMENTS = builder
                     .comment("Disables specific mob enchantments from appearing on mobs. Use the full name, eg: dungeons_mobs:protection. Defaults to empty list")
                     .defineList("enchantOnSpawnExclusionEnchantments", Lists.newArrayList(), o -> o instanceof String && ResourceLocation.isValidResourceLocation((String) o));
             ENCHANT_ON_SPAWN_EXCLUSION_MOBS = builder
                     .comment("Disables specific mob from receiveing enchantments on spawn. Use the full name, eg: dungeons_mobs:protection. Defaults to bosses.")
-                    .defineList("enchantOnSpawnExclusionMobs", Lists.newArrayList("minecraft:wither", "minecraft:ender_dragon"), o -> o instanceof String && ResourceLocation.isValidResourceLocation((String) o));
+                    .defineList("enchantOnSpawnExclusionMobs", Lists.newArrayList("minecraft:wither", "minecraft:ender_dragon"), o -> o instanceof String);
             ENCHANT_ON_SPAWN_CHANCE = builder
                     .comment("Chance for a mob to spawn with enchantments. Is multiplied with the difficulty level (1 - 3). Defaults to 0.015.")
                     .defineInRange("enchantOnSpawnChance", 0.015D, 0.0D, 1.0D);

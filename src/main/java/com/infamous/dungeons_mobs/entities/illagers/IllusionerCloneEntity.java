@@ -232,17 +232,21 @@ public class IllusionerCloneEntity extends AbstractIllagerEntity implements IAni
 	}
 
 	private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
+		String suffix = "_uncrossed";
+		if(IllagerArmsUtil.armorHasCrossedArms(this, this.getItemBySlot(EquipmentSlotType.CHEST))){
+			suffix = "";
+		}
 		if (this.appearAnimationTick > 0) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_appear", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_appear"+suffix, true));
 		} else if (this.shootAnimationTick > 0) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_clone_shoot", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_clone_shoot"+suffix, true));
 		} else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_walk", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_walk"+suffix, true));
 		} else {
 			if (this.isCelebrating()) {
 				event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_celebrate", true));
 			} else {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_idle", true));
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_idle"+suffix, true));
 			}
 		}
 		return PlayState.CONTINUE;
@@ -251,34 +255,6 @@ public class IllusionerCloneEntity extends AbstractIllagerEntity implements IAni
 	@Override
 	public AnimationFactory getFactory() {
 		return factory;
-	}
-
-	@Override
-	protected void populateDefaultEquipmentSlots(DifficultyInstance p_180481_1_) {
-		super.populateDefaultEquipmentSlots(p_180481_1_);
-		this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.ILLUSIONER_CLOTHES.getHead().get()));
-		this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.ILLUSIONER_CLOTHES.getChest().get()));
-		this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(ModItems.ILLUSIONER_CLOTHES.getLegs().get()));
-		this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(ModItems.ILLUSIONER_CLOTHES.getFeet().get()));
-		if (ModList.get().isLoaded("dungeons_gear")) {
-			Item SHORTBOW = ForgeRegistries.ITEMS.getValue(new ResourceLocation("dungeons_gear", "shortbow"));
-
-			ItemStack shortbow = new ItemStack(SHORTBOW);
-			this.setItemSlot(EquipmentSlotType.MAINHAND, shortbow);
-		} else {
-			this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.BOW));
-		}
-	}
-
-	@Nullable
-	@Override
-	public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance p_213386_2_,
-			SpawnReason p_213386_3_, @Nullable ILivingEntityData p_213386_4_, @Nullable CompoundNBT p_213386_5_) {
-		ILivingEntityData iLivingEntityData = super.finalizeSpawn(p_213386_1_, p_213386_2_, p_213386_3_, p_213386_4_,
-				p_213386_5_);
-		this.populateDefaultEquipmentSlots(p_213386_2_);
-		this.populateDefaultEquipmentEnchantments(p_213386_2_);	
-		return iLivingEntityData;
 	}
 
 	/**
@@ -392,6 +368,8 @@ public class IllusionerCloneEntity extends AbstractIllagerEntity implements IAni
 		public void tick() {
 			target = mob.getTarget();
 
+			mob.getNavigation().stop();
+			
 			if (target != null) {
 				mob.getLookControl().setLookAt(target.getX(), target.getEyeY(), target.getZ());
 			}

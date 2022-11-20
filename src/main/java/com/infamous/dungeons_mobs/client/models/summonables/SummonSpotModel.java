@@ -1,6 +1,4 @@
-package com.infamous.dungeons_mobs.client.models.summonables;// Made with Blockbench 3.6.6
-// Exported for Minecraft version 1.15
-// Paste this class into your mod and generate all required imports
+package com.infamous.dungeons_mobs.client.models.summonables;
 
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
@@ -19,6 +17,8 @@ public class SummonSpotModel<T extends SummonSpotEntity> extends AnimatedGeoMode
 			return new ResourceLocation(DungeonsMobs.MODID, "animations/wildfire_summon_spot.animation.json");
 		} else if (entity.getSummonType() == 2) {
 			return new ResourceLocation(DungeonsMobs.MODID, "animations/illusioner_summon_spot.animation.json");
+		} else if (entity.getSummonType() == 3) {
+			return new ResourceLocation(DungeonsMobs.MODID, "animations/illusioner_summon_spot.animation.json");
 		} else {
 			return new ResourceLocation(DungeonsMobs.MODID, "animations/illusioner_summon_spot.animation.json");
 		}	
@@ -31,6 +31,8 @@ public class SummonSpotModel<T extends SummonSpotEntity> extends AnimatedGeoMode
 		} else if (entity.getSummonType() == 1) {
 			return new ResourceLocation(DungeonsMobs.MODID, "geo/wildfire_summon_spot.geo.json");
 		} else if (entity.getSummonType() == 2) {
+			return new ResourceLocation(DungeonsMobs.MODID, "geo/illusioner_summon_spot.geo.json");
+		} else if (entity.getSummonType() == 3) {
 			return new ResourceLocation(DungeonsMobs.MODID, "geo/illusioner_summon_spot.geo.json");
 		} else {
 			return new ResourceLocation(DungeonsMobs.MODID, "geo/illusioner_summon_spot.geo.json");
@@ -45,6 +47,8 @@ public class SummonSpotModel<T extends SummonSpotEntity> extends AnimatedGeoMode
 			return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/wildfire_summon_spot.png");
 		} else if (entity.getSummonType() == 2) {
 			return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/necromancer_summon_spot.png");
+		} else if (entity.getSummonType() == 3) {
+			return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/mage_summon_spot.png");
 		} else {
 			return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illusioner_summon_spot.png");
 		}	

@@ -140,7 +140,7 @@ public class IceCloudEntity extends Entity implements IAnimatable {
 	}
 	
 	public void moveToTarget() {
-		if (this.target != null && this.distanceToIgnoringY(target) > 1) {
+		if (this.target != null && !this.target.isDeadOrDying() && this.distanceToIgnoringY(target) > 1) {
 			this.setDeltaMovement(0.0D, 0.0D, 0.0D);
 	
 			double x = this.target.getX() - this.getX();
@@ -230,7 +230,7 @@ public class IceCloudEntity extends Entity implements IAnimatable {
         		this.level.broadcastEntityEvent(this, (byte) 6);
         	}			
         	
-	        if ((this.target != null && this.lifeTime > 100 && this.fallAnimationTick <= 0 && this.falling == false) || this.target == null) {
+	        if ((this.target != null && this.lifeTime > 100 && this.fallAnimationTick <= 0 && this.falling == false) || this.target == null || this.target.isDeadOrDying()) {
 	        	this.playSound(ModSoundEvents.ICE_CHUNK_FALL.get(), 1.0F, this.getRandomPitch());
 	        	this.fallAnimationTick = this.fallAnimationLength;
 	        	this.level.broadcastEntityEvent(this, (byte) 2);

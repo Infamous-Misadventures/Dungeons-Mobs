@@ -39,7 +39,6 @@ import com.infamous.dungeons_mobs.entities.water.DrownedNecromancerEntity;
 import com.infamous.dungeons_mobs.entities.water.PoisonAnemoneEntity;
 import com.infamous.dungeons_mobs.entities.water.QuickGrowingKelpEntity;
 import com.infamous.dungeons_mobs.entities.water.SunkenSkeletonEntity;
-import com.infamous.dungeons_mobs.entities.water.WavewhispererEntity;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 
 import net.minecraft.entity.EntityType;
@@ -99,7 +98,7 @@ public class EntityTypeAttributes {
 
         event.put(ModEntityTypes.DROWNED_NECROMANCER.get(), DrownedNecromancerEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.SUNKEN_SKELETON.get(), SunkenSkeletonEntity.setCustomAttributes().build());
-        event.put(ModEntityTypes.WAVEWHISPERER.get(), WavewhispererEntity.setCustomAttributes().build());
+        event.put(ModEntityTypes.WAVEWHISPERER.get(), WhispererEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.QUICK_GROWING_KELP.get(), QuickGrowingKelpEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.POISON_ANEMONE.get(), PoisonAnemoneEntity.setCustomAttributes().build());
 

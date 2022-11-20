@@ -226,7 +226,7 @@ public class PoisonQuillVineEntity extends AbstractVineEntity {
 
 	@Override
 	public void spawnAreaDamage() {
-		AreaDamageEntity areaDamage = AreaDamageEntity.spawnAreaDamage(this.level, this.position(), this, 5.0F, DamageSource.mobAttack(this), 0.0F, 1.5F, 0.25F, 0.25F, false, false, 0.75, 0.25, false, 0, 1);
+		AreaDamageEntity areaDamage = AreaDamageEntity.spawnAreaDamage(this.level, this.position(), this, 5.0F, DamageSource.mobAttack(this), 0.0F, 1.5F, 0.25F, 0.25F, 10, false, false, 0.75, 0.25, false, 0, 1);
 		this.level.addFreshEntity(areaDamage);
 	}
 
@@ -388,7 +388,7 @@ public class PoisonQuillVineEntity extends AbstractVineEntity {
 				poisonQuill.rotateToMatchMovement();
 				poisonQuill.moveTo(pos.x, pos.y, pos.z);
 				mob.level.addFreshEntity(poisonQuill);
-				mob.playSound(mob.getShootSound(), 1.0F, 1.0F);
+				mob.playSound(mob.getShootSound(), 1.25F, 1.0F);
 			}
 		}
 

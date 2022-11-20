@@ -17,7 +17,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.math.MathHelper;
 
-import static com.infamous.dungeons_mobs.client.renderer.layers.IllagerBipedArmorLayer.armorHasCrossedArms;
+import static com.infamous.dungeons_mobs.entities.illagers.IllagerArmsUtil.armorHasCrossedArms;
 
 public class IllagerBipedModel<T extends AbstractIllagerEntity> extends BipedModel<T> {
     public ModelRenderer arms;
@@ -208,7 +208,13 @@ public class IllagerBipedModel<T extends AbstractIllagerEntity> extends BipedMod
             this.rightLeg.xRot = -1.4137167F;
             this.rightLeg.yRot = (-(float)Math.PI / 10F);
             this.rightLeg.zRot = -0.07853982F;
-//         } else {
+         } else {
+             this.leftLeg.xRot = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount * 0.5F;
+             this.leftLeg.yRot = 0.0F;
+             this.leftLeg.zRot = 0.0F;
+             this.rightLeg.xRot = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount * 0.5F;
+             this.rightLeg.yRot = 0.0F;
+             this.rightLeg.zRot = 0.0F;
 //            this.rightArm.xRot = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 2.0F * limbSwingAmount * 0.5F;
 //            this.rightArm.yRot = 0.0F;
 //            this.rightArm.zRot = 0.0F;

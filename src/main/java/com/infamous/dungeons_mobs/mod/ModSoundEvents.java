@@ -163,6 +163,8 @@ public class ModSoundEvents {
 	public static final RegistryObject<SoundEvent> WHISPERER_SUMMON_QGV_FOLEY = SOUNDS.register("entity.whisperer.summon_qgv_foley", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.whisperer.summon_qgv_foley")));
 	public static final RegistryObject<SoundEvent> WHISPERER_GRAPPLE_FOLEY = SOUNDS.register("entity.whisperer.grapple_foley", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.whisperer.grapple_foley")));
 	
+	public static final RegistryObject<SoundEvent> WHISPERER_DEATH = SOUNDS.register("entity.whisperer.death", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.whisperer.death")));
+	
 	public static final RegistryObject<SoundEvent> LEAPLEAF_IDLE_VOCAL = SOUNDS.register("entity.leapleaf.idle_vocal", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.leapleaf.idle_vocal")));
 	public static final RegistryObject<SoundEvent> LEAPLEAF_HURT_VOCAL = SOUNDS.register("entity.leapleaf.hurt_vocal", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.leapleaf.hurt_vocal")));
 	public static final RegistryObject<SoundEvent> LEAPLEAF_STEP_VOCAL = SOUNDS.register("entity.leapleaf.step_vocal", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.leapleaf.step_vocal")));
@@ -248,4 +250,8 @@ public class ModSoundEvents {
 	public static final RegistryObject<SoundEvent> WILDFIRE_PROJECTILE_HIT = SOUNDS.register("entity.wildfire.projectile_hit", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.wildfire.projectile_hit")));
 	public static final RegistryObject<SoundEvent> WILDFIRE_SHOCKWAVE = SOUNDS.register("entity.wildfire.shockwave", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.wildfire.shockwave")));
 	public static final RegistryObject<SoundEvent> WILDFIRE_SHIELD_BREAK = SOUNDS.register("entity.wildfire.shield_break", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.wildfire.shield_break")));
+	
+	public static final RegistryObject<SoundEvent> SPIDER_PREPARE_SHOOT = SOUNDS.register("entity.spider.prepare_shoot", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.spider.prepare_shoot")));
+	public static final RegistryObject<SoundEvent> SPIDER_SHOOT = SOUNDS.register("entity.spider.shoot", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.spider.shoot")));
+	public static final RegistryObject<SoundEvent> SPIDER_WEB_IMPACT = SOUNDS.register("entity.spider.web_impact", () -> new SoundEvent(new ResourceLocation(DungeonsMobs.MODID, "entity.spider.web_impact")));
 }

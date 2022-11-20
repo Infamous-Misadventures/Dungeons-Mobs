@@ -14,7 +14,7 @@ public class EnsnaredEffect extends Effect {
 	public void applyEffectTick(LivingEntity p_76394_1_, int p_76394_2_) {
 		   if (!p_76394_1_.level.isClientSide) {
 			   p_76394_1_.teleportTo(p_76394_1_.getX(), p_76394_1_.getY(), p_76394_1_.getZ());
-		   p_76394_1_.setDeltaMovement(0, p_76394_1_.getDeltaMovement().y > 0 ? 0 : p_76394_1_.getDeltaMovement().y, 0);
+			   p_76394_1_.setDeltaMovement(0, p_76394_1_.getDeltaMovement().y > 0 ? 0 : p_76394_1_.getDeltaMovement().y, 0);
 		   }
 		   super.applyEffectTick(p_76394_1_, p_76394_2_);
 	}

@@ -5,6 +5,8 @@ import net.minecraft.client.renderer.entity.model.SpiderModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
+import net.minecraft.util.math.MathHelper;
+
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -30,13 +32,14 @@ public class SpiderModelMixin{
 
     @Inject(at =@At("RETURN"), method = "setupAnim", cancellable = true)
     private void setRotationAngles(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, CallbackInfo callbackInfo){
-        if(entityIn instanceof MobEntity && entityIn instanceof IWebShooter){
-            IWebShooter webShooter = (IWebShooter)entityIn;
+        if (entityIn instanceof MobEntity && entityIn instanceof IWebShooter){
+            IWebShooter webShooter = (IWebShooter)entityIn;            
+            
             if(webShooter.isWebShooting()){
                 body1.xRot = ((float)Math.PI / 6F);
                 body1.y = originalBodyRotationPointY - 5;
                 body1.z = originalBodyRotationPointZ - 2;
-            } else{
+            } else {
                 body1.xRot = this.originalBodyRotateAngleX;
                 body1.y = originalBodyRotationPointY;
                 body1.z = originalBodyRotationPointZ;

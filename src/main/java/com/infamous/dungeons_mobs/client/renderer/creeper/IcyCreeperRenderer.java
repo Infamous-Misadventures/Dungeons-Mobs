@@ -3,7 +3,7 @@ package com.infamous.dungeons_mobs.client.renderer.creeper;
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
 import com.infamous.dungeons_mobs.client.models.creeper.IcyCreeperModel;
-import com.infamous.dungeons_mobs.client.renderer.layer.IcyCreeperChargeLayer;
+import com.infamous.dungeons_mobs.client.renderer.layers.IcyCreeperChargeLayer;
 import com.infamous.dungeons_mobs.entities.creepers.IcyCreeperEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 

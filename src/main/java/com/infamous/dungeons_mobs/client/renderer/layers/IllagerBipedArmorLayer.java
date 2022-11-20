@@ -1,9 +1,9 @@
 package com.infamous.dungeons_mobs.client.renderer.layers;
 
 import com.infamous.dungeons_mobs.client.models.illager.IllagerBipedModel;
+import com.infamous.dungeons_mobs.entities.illagers.IllagerArmsUtil;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.RenderType;
@@ -19,9 +19,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-import java.io.IOException;
-
 @OnlyIn(Dist.CLIENT)
 public class IllagerBipedArmorLayer<T extends AbstractIllagerEntity, M extends IllagerBipedModel<T>, A extends BipedModel<T>> extends BipedArmorLayer<T, M, A> {
 
@@ -32,35 +29,6 @@ public class IllagerBipedArmorLayer<T extends AbstractIllagerEntity, M extends I
         super(p_i50936_1_, p_i50936_2_, p_i50936_3_);
         this.armorModel = p_i50936_3_;
         this.crossedArmsArmorModel = crossedArmsArmorModel;
-    }
-
-    public static boolean armorHasCrossedArms(AbstractIllagerEntity p_241739_3_, ItemStack itemstack) {
-        return resourceExists(getArmorResourceStatic(p_241739_3_, itemstack, EquipmentSlotType.CHEST, "crossed"));
-    }
-
-    private static ResourceLocation getArmorResourceStatic(net.minecraft.entity.Entity entity, ItemStack stack, EquipmentSlotType slot, @Nullable String type) {
-        ArmorItem item = (ArmorItem)stack.getItem();
-        String texture = item.getMaterial().getName();
-        String domain = "minecraft";
-        int idx = texture.indexOf(':');
-        if (idx != -1) {
-            domain = texture.substring(0, idx);
-            texture = texture.substring(idx + 1);
-        }
-        String s1 = String.format("%s:textures/models/armor/%s_layer_%d%s.png", domain, texture, 1, type == null ? "" : String.format("_%s", type));
-
-        s1 = net.minecraftforge.client.ForgeHooksClient.getArmorTexture(entity, stack, s1, slot, type);
-
-        return new ResourceLocation(s1);
-    }
-
-    private static boolean resourceExists(ResourceLocation resourceLocation) {
-        try {
-            Minecraft.getInstance().getResourceManager().getResource(resourceLocation);
-            return true;
-        } catch (IOException e) {
-            return false;
-        }
     }
 
     public void render(MatrixStack p_225628_1_, IRenderTypeBuffer p_225628_2_, int p_225628_3_, T p_225628_4_, float p_225628_5_, float p_225628_6_, float p_225628_7_, float p_225628_8_, float p_225628_9_, float p_225628_10_) {
@@ -75,7 +43,7 @@ public class IllagerBipedArmorLayer<T extends AbstractIllagerEntity, M extends I
             if (armoritem.getSlot() == p_241739_4_) {
                 this.getParentModel().copyPropertiesTo(crossedArmsModel);
                 ResourceLocation crossedTexture = this.getArmorResource(p_241739_3_, itemstack, p_241739_4_, "crossed");
-                boolean armsCanBeCrossed = resourceExists(crossedTexture);
+                boolean armsCanBeCrossed = IllagerArmsUtil.resourceExists(crossedTexture);
                 this.setPartVisibilityCrossedArms(crossedArmsModel, p_241739_4_, armsCanBeCrossed);
                 if(!armsCanBeCrossed) return;
                 boolean flag1 = itemstack.hasFoil();
