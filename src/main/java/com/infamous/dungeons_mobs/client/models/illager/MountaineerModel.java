@@ -20,7 +20,7 @@ public class MountaineerModel extends AnimatedGeoModel<MountaineerEntity> {
 
     @Override
     public ResourceLocation getAnimationFileLocation(MountaineerEntity entity) {
-        return new ResourceLocation(DungeonsMobs.MODID, "animations/modelbipedgecko.animation.json");
+        return new ResourceLocation(DungeonsMobs.MODID, "animations/vindicator.animation.json");
     }
 
     @Override

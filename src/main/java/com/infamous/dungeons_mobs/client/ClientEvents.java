@@ -1,9 +1,6 @@
 package com.infamous.dungeons_mobs.client;
 
-import com.infamous.dungeons_mobs.client.models.illager.DungeonsIllusionerModel;
-import com.infamous.dungeons_mobs.client.models.illager.IceologerModel;
-import com.infamous.dungeons_mobs.client.models.illager.MageModel;
-import com.infamous.dungeons_mobs.client.models.illager.RoyalGuardModel;
+import com.infamous.dungeons_mobs.client.models.illager.*;
 import com.infamous.dungeons_mobs.client.particle.*;
 import com.infamous.dungeons_mobs.client.renderer.EmptyRenderer;
 import com.infamous.dungeons_mobs.client.renderer.armor.*;
@@ -31,6 +28,7 @@ import com.infamous.dungeons_mobs.client.renderer.water.*;
 import com.infamous.dungeons_mobs.entities.illagers.IllusionerCloneEntity;
 import com.infamous.dungeons_mobs.entities.illagers.MageCloneEntity;
 import com.infamous.dungeons_mobs.entities.illagers.MageEntity;
+import com.infamous.dungeons_mobs.entities.illagers.MountaineerEntity;
 import com.infamous.dungeons_mobs.items.armor.*;
 import com.infamous.dungeons_mobs.items.shield.CustomISTER;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
@@ -81,7 +79,7 @@ public class ClientEvents {
 
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ROYAL_GUARD.get(), manager -> new DefaultIllagerRenderer<>(manager, new RoyalGuardModel(), 0.9375F*1.2F));
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.MOUNTAINEER.get(), CustomVindicatorRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.MOUNTAINEER.get(), manager -> new DefaultIllagerRenderer<>(manager, new MountaineerModel()));
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.ICEOLOGER.get(), manager -> new DefaultIllagerRenderer<>(manager, new IceologerModel()));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.GEOMANCER.get(), GeomancerRenderer::new);
