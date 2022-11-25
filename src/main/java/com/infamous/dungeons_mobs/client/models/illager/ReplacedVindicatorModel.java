@@ -3,8 +3,6 @@ package com.infamous.dungeons_mobs.client.models.illager;
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.entities.illagers.ReplacedVindicatorEntity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.monster.VindicatorEntity;
-import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
@@ -17,7 +15,7 @@ import software.bernie.geckolib3.model.provider.data.EntityModelData;
 import software.bernie.geckolib3.resource.GeckoLibCache;
 
 // Model and animation received from CQR and DerToaster
-public class VindicatorModel extends AnimatedGeoModel {
+public class ReplacedVindicatorModel extends AnimatedGeoModel {
 
     @Override
     public ResourceLocation getAnimationFileLocation(Object entity) {

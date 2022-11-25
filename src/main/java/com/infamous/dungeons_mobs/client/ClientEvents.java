@@ -74,11 +74,13 @@ public class ClientEvents {
         RenderingRegistry.registerEntityRenderingHandler(EntityType.HUSK, CustomZombieRenderer::new);
 
         if(DungeonsMobsConfig.COMMON.ENABLE_PILLAGERS_WEARING_ARMOR.get()){
-            RenderingRegistry.registerEntityRenderingHandler(EntityType.PILLAGER, CustomPillagerRenderer::new);
+            RenderingRegistry.registerEntityRenderingHandler(EntityType.PILLAGER, ReplacedPillagerRenderer::new);
         }
         if(DungeonsMobsConfig.COMMON.ENABLE_VINDICATORS_WEARING_ARMOR.get()){
-//            RenderingRegistry.registerEntityRenderingHandler(EntityType.VINDICATOR, CustomVindicatorRenderer::new);
             RenderingRegistry.registerEntityRenderingHandler(EntityType.VINDICATOR, ReplacedVindicatorRenderer::new);
+        }
+        if(DungeonsMobsConfig.COMMON.ENABLE_EVOKERS_WEARING_ARMOR.get()){
+            RenderingRegistry.registerEntityRenderingHandler(EntityType.EVOKER, ReplacedEvokerRenderer::new);
         }
 
         RenderingRegistry.registerEntityRenderingHandler(EntityType.DROWNED, CustomDrownedRenderer::new);

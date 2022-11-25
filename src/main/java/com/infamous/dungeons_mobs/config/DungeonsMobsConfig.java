@@ -23,6 +23,7 @@ public class DungeonsMobsConfig {
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_SUNKEN_SKELETON_REPLACES_SUNKEN_SKELETON;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_VINDICATORS_WEARING_ARMOR;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_PILLAGERS_WEARING_ARMOR;
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_EVOKERS_WEARING_ARMOR;
 
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> ICEOLOGER_BIOME_TYPES;
         public final ForgeConfigSpec.ConfigValue<Integer> ICEOLOGER_SPAWN_WEIGHT;
@@ -265,6 +266,11 @@ public class DungeonsMobsConfig {
                     .comment("Enable Vindicators wearing armor. \n" +
                             "If you prefer to not have them do this, disable this feature. [true / false]")
                     .define("enableVindicatorsWearingArmor", true);
+
+            ENABLE_EVOKERS_WEARING_ARMOR = builder
+                    .comment("Enable Evokers wearing armor. \n" +
+                            "If you prefer to not have them do this, disable this feature. [true / false]")
+                    .define("enableEvokersWearingArmor", true);
 
             ICEOLOGER_BIOME_TYPES = builder
                     .comment("Add biome types that the Iceologer can spawn in. \n"

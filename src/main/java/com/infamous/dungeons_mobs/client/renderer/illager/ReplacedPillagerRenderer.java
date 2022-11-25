@@ -1,8 +1,8 @@
 package com.infamous.dungeons_mobs.client.renderer.illager;
 
-import com.infamous.dungeons_mobs.client.models.illager.ReplacedVindicatorModel;
+import com.infamous.dungeons_mobs.client.models.illager.ReplacedPillagerModel;
 import com.infamous.dungeons_mobs.client.renderer.util.ModExtentedGeoReplacedEntityRenderer;
-import com.infamous.dungeons_mobs.entities.illagers.ReplacedVindicatorEntity;
+import com.infamous.dungeons_mobs.entities.illagers.ReplacedPillagerEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.block.BlockState;
@@ -20,15 +20,14 @@ import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 
 import javax.annotation.Nullable;
-
 import java.util.List;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
-public class ReplacedVindicatorRenderer extends ModExtentedGeoReplacedEntityRenderer<ReplacedVindicatorEntity> {
-    public ReplacedVindicatorRenderer(EntityRendererManager renderManager) {
-        super(renderManager, new ReplacedVindicatorModel(),
-                new ReplacedVindicatorEntity()
+public class ReplacedPillagerRenderer extends ModExtentedGeoReplacedEntityRenderer<ReplacedPillagerEntity> {
+    public ReplacedPillagerRenderer(EntityRendererManager renderManager) {
+        super(renderManager, new ReplacedPillagerModel(),
+                new ReplacedPillagerEntity()
         );
     }
 
@@ -47,12 +46,12 @@ public class ReplacedVindicatorRenderer extends ModExtentedGeoReplacedEntityRend
 
     @Nullable
     @Override
-    protected ResourceLocation getTextureForBone(String s, ReplacedVindicatorEntity currentEntity) {
+    protected ResourceLocation getTextureForBone(String s, ReplacedPillagerEntity currentEntity) {
         return null;
     }
 
     @Override
-    protected ItemStack getHeldItemForBone(String boneName, ReplacedVindicatorEntity currentEntity) {
+    protected ItemStack getHeldItemForBone(String boneName, ReplacedPillagerEntity currentEntity) {
         switch (boneName) {
             case DefaultBipedBoneIdents.LEFT_HAND_BONE_IDENT:
                 return currentEntity.getMobEntity().isLeftHanded() ? mainHand : offHand;
@@ -77,7 +76,7 @@ public class ReplacedVindicatorRenderer extends ModExtentedGeoReplacedEntityRend
     }
 
     @Override
-    protected void preRenderItem(MatrixStack stack, ItemStack item, String boneName, ReplacedVindicatorEntity currentEntity, IBone bone) {
+    protected void preRenderItem(MatrixStack stack, ItemStack item, String boneName, ReplacedPillagerEntity currentEntity, IBone bone) {
         if (item == this.mainHand || item == this.offHand) {
             stack.scale(1.1F, 1.1F, 1.1F);
             stack.mulPose(Vector3f.XP.rotationDegrees(-90.0F));
@@ -102,30 +101,30 @@ public class ReplacedVindicatorRenderer extends ModExtentedGeoReplacedEntityRend
     }
 
     @Override
-    protected void postRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, ReplacedVindicatorEntity currentEntity, IBone bone) {
+    protected void postRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, ReplacedPillagerEntity currentEntity, IBone bone) {
 
     }
 
     @Override
-    protected BlockState getHeldBlockForBone(String boneName, ReplacedVindicatorEntity currentEntity) {
+    protected BlockState getHeldBlockForBone(String boneName, ReplacedPillagerEntity currentEntity) {
         return null;
     }
 
     @Override
     protected void preRenderBlock(MatrixStack matrixStack, BlockState block, String boneName,
-                                  ReplacedVindicatorEntity currentEntity) {
+                                  ReplacedPillagerEntity currentEntity) {
 
     }
 
     @Override
     protected void postRenderBlock(MatrixStack matrixStack, BlockState block, String boneName,
-                                   ReplacedVindicatorEntity currentEntity) {
+                                   ReplacedPillagerEntity currentEntity) {
 
     }
 
     @Nullable
     @Override
-    protected ItemStack getArmorForBone(String boneName, ReplacedVindicatorEntity currentEntity) {
+    protected ItemStack getArmorForBone(String boneName, ReplacedPillagerEntity currentEntity) {
         switch (boneName) {
             case "armorBipedLeftFoot":
             case "armorBipedRightFoot":
@@ -147,7 +146,7 @@ public class ReplacedVindicatorRenderer extends ModExtentedGeoReplacedEntityRend
     }
 
     @Override
-    protected EquipmentSlotType getEquipmentSlotForArmorBone(String boneName, ReplacedVindicatorEntity currentEntity) {
+    protected EquipmentSlotType getEquipmentSlotForArmorBone(String boneName, ReplacedPillagerEntity currentEntity) {
         switch (boneName) {
             case "armorBipedLeftFoot":
             case "armorBipedRightFoot":
