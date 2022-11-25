@@ -21,6 +21,8 @@ public class DungeonsMobsConfig {
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_MOSSY_SKELETON_REPLACES_SKELETON;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_DROWNED_REPLACES_DROWNED;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_SUNKEN_SKELETON_REPLACES_SUNKEN_SKELETON;
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_VINDICATORS_WEARING_ARMOR;
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_PILLAGERS_WEARING_ARMOR;
 
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> ICEOLOGER_BIOME_TYPES;
         public final ForgeConfigSpec.ConfigValue<Integer> ICEOLOGER_SPAWN_WEIGHT;
@@ -253,6 +255,16 @@ public class DungeonsMobsConfig {
                     .comment("Enable Armored Sunken Skeletons replacing 10% of Sunken Skeleton spawns in the locations they can spawn in. \n" +
                             "If you prefer to not have them do this, disable this feature. [true / false]")
                     .define("enableArmoredSunkenSkeletonReplacesSunkenSkeleton", true);
+
+            ENABLE_PILLAGERS_WEARING_ARMOR = builder
+                    .comment("Enable Pillagers wearing armor. \n" +
+                            "If you prefer to not have them do this, disable this feature. [true / false]")
+                    .define("enablePillagersWearingArmor", true);
+
+            ENABLE_VINDICATORS_WEARING_ARMOR = builder
+                    .comment("Enable Vindicators wearing armor. \n" +
+                            "If you prefer to not have them do this, disable this feature. [true / false]")
+                    .define("enableVindicatorsWearingArmor", true);
 
             ICEOLOGER_BIOME_TYPES = builder
                     .comment("Add biome types that the Iceologer can spawn in. \n"

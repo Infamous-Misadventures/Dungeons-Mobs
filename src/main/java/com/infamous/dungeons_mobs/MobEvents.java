@@ -9,6 +9,7 @@ import java.util.Random;
 import java.util.UUID;
 
 import com.infamous.dungeons_mobs.capabilities.ancient.AncientProvider;
+import com.infamous.dungeons_mobs.capabilities.animatedprops.AnimatedPropsProvider;
 import com.infamous.dungeons_mobs.capabilities.cloneable.CloneableProvider;
 import com.infamous.dungeons_mobs.capabilities.convertible.ConvertibleHelper;
 import com.infamous.dungeons_mobs.capabilities.convertible.ConvertibleProvider;
@@ -36,6 +37,7 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.RangedAttackGoal;
 import net.minecraft.entity.item.ArmorStandEntity;
 import net.minecraft.entity.monster.DrownedEntity;
+import net.minecraft.entity.monster.VindicatorEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.SnowballEntity;
@@ -115,6 +117,9 @@ public class MobEvents {
         }
         if (event.getObject() instanceof LivingEntity) {
             event.addCapability(new ResourceLocation(DungeonsMobs.MODID, "ancient"), new AncientProvider());
+        }
+        if (event.getObject() instanceof VindicatorEntity) {
+            event.addCapability(new ResourceLocation(DungeonsMobs.MODID, "animated_props"), new AnimatedPropsProvider());
         }
     }
 

@@ -14,6 +14,8 @@ import com.infamous.dungeons_mobs.capabilities.convertible.IConvertible;
 import com.infamous.dungeons_mobs.capabilities.properties.IMobProps;
 import com.infamous.dungeons_mobs.capabilities.properties.MobProps;
 import com.infamous.dungeons_mobs.capabilities.properties.MobPropsStorage;
+import com.infamous.dungeons_mobs.capabilities.animatedprops.AnimatedProps;
+import com.infamous.dungeons_mobs.capabilities.animatedprops.AnimatedPropsStorage;
 import com.infamous.dungeons_mobs.capabilities.teamable.ITeamable;
 import com.infamous.dungeons_mobs.capabilities.teamable.Teamable;
 import com.infamous.dungeons_mobs.capabilities.teamable.TeamableStorage;
@@ -107,6 +109,7 @@ public class DungeonsMobs
         CapabilityManager.INSTANCE.register(ITeamable.class, new TeamableStorage(), Teamable::new);
         CapabilityManager.INSTANCE.register(IMobProps.class, new MobPropsStorage(), MobProps::new);
         CapabilityManager.INSTANCE.register(IAncient.class, new AncientStorage(), Ancient::new);
+        CapabilityManager.INSTANCE.register(AnimatedProps.class, new AnimatedPropsStorage(), AnimatedProps::new);
         event.enqueueWork(NetworkHandler::init);
     }
 

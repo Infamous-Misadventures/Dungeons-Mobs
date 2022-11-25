@@ -48,6 +48,11 @@
 							"easing": "linear"
 						}
 					}
+				},
+				"illagerArms": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
 				}
 			}
 		},
@@ -164,6 +169,11 @@
 							"vector": [0, 0, 0]
 						}
 					}
+				},
+				"illagerArms": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
 				}
 			}
 		},
@@ -206,6 +216,11 @@
 					"scale": {
 						"vector": [0, 0, 0]
 					}
+				},
+				"illagerArms": {
+					"scale": {
+						"vector": [1, 1, 1]
+					}
 				}
 			}
 		},
@@ -247,6 +262,11 @@
 				"bipedArmRight": {
 					"scale": {
 						"vector": [0, 0, 0]
+					}
+				},
+				"illagerArms": {
+					"scale": {
+						"vector": [1, 1, 1]
 					}
 				}
 			}

@@ -1,8 +1,8 @@
 package com.infamous.dungeons_mobs.network;
 
-import com.infamous.dungeons_libraries.network.MobEnchantmentMessage;
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.network.message.AncientMessage;
+import com.infamous.dungeons_mobs.network.message.AnimatedPropsMessage;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
@@ -21,9 +21,13 @@ public class NetworkHandler {
     }
 
     public static void init() {
-        INSTANCE.messageBuilder(AncientMessage.class, 0)
+        INSTANCE.messageBuilder(AncientMessage.class, incrementAndGetPacketCounter())
                 .encoder(AncientMessage::encode).decoder(AncientMessage::decode)
                 .consumer(AncientMessage::onPacketReceived)
+                .add();
+        INSTANCE.messageBuilder(AnimatedPropsMessage.class, incrementAndGetPacketCounter())
+                .encoder(AnimatedPropsMessage::encode).decoder(AnimatedPropsMessage::decode)
+                .consumer(AnimatedPropsMessage::onPacketReceived)
                 .add();
     }
 

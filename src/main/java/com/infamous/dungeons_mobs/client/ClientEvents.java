@@ -24,7 +24,9 @@ import com.infamous.dungeons_mobs.client.renderer.redstone.RedstoneMineRenderer;
 import com.infamous.dungeons_mobs.client.renderer.slime.ConjuredSlimeRenderer;
 import com.infamous.dungeons_mobs.client.renderer.summonables.*;
 import com.infamous.dungeons_mobs.client.renderer.undead.*;
+import com.infamous.dungeons_mobs.client.renderer.util.ModGeoReplacedEntityRenderer;
 import com.infamous.dungeons_mobs.client.renderer.water.*;
+import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.entities.illagers.IllusionerCloneEntity;
 import com.infamous.dungeons_mobs.entities.illagers.MageCloneEntity;
 import com.infamous.dungeons_mobs.entities.illagers.MageEntity;
@@ -33,6 +35,7 @@ import com.infamous.dungeons_mobs.items.armor.*;
 import com.infamous.dungeons_mobs.items.shield.CustomISTER;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.DyeColor;
 import net.minecraftforge.api.distmarker.Dist;
@@ -44,7 +47,10 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import software.bernie.example.client.renderer.entity.ReplacedCreeperRenderer;
+import software.bernie.example.entity.ReplacedCreeperEntity;
 import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
+import software.bernie.geckolib3.renderers.geo.GeoReplacedEntityRenderer;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
@@ -66,10 +72,15 @@ public class ClientEvents {
 
         // To match Husk proportions found in MCD
         RenderingRegistry.registerEntityRenderingHandler(EntityType.HUSK, CustomZombieRenderer::new);
-        
-        RenderingRegistry.registerEntityRenderingHandler(EntityType.PILLAGER, CustomPillagerRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityType.VINDICATOR, CustomVindicatorRenderer::new);
-        
+
+        if(DungeonsMobsConfig.COMMON.ENABLE_PILLAGERS_WEARING_ARMOR.get()){
+            RenderingRegistry.registerEntityRenderingHandler(EntityType.PILLAGER, CustomPillagerRenderer::new);
+        }
+        if(DungeonsMobsConfig.COMMON.ENABLE_VINDICATORS_WEARING_ARMOR.get()){
+//            RenderingRegistry.registerEntityRenderingHandler(EntityType.VINDICATOR, CustomVindicatorRenderer::new);
+            RenderingRegistry.registerEntityRenderingHandler(EntityType.VINDICATOR, ReplacedVindicatorRenderer::new);
+        }
+
         RenderingRegistry.registerEntityRenderingHandler(EntityType.DROWNED, CustomDrownedRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.MOSSY_SKELETON.get(), CustomSkeletonRenderer::new);
