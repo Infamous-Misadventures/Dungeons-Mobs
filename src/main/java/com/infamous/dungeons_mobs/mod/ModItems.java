@@ -194,6 +194,20 @@ public class ModItems {
         );
     }
 
+    private static ArmorSet registerArmorSetIllusioner(String armorSetId, String helmetId, String chestId, String legsId, String bootsId) {
+        ResourceLocation armorSet = new ResourceLocation(MODID, armorSetId);
+        ResourceLocation modelLocation = new ResourceLocation(MODID, "geo/armor/"+armorSetId+".geo.json");
+        ResourceLocation textureLocation = new ResourceLocation(MODID, "textures/models/armor/"+armorSetId+".png");
+        ResourceLocation animationFileLocation = new ResourceLocation(MODID, "animations/armor/cloaked_armor.animation.json");
+        return new ArmorSet(
+                armorSet,
+                registerArmor(helmetId, () -> new IllusionerArmorGear(EquipmentSlotType.HEAD, ARMOR_PROPERTIES, armorSet, modelLocation, textureLocation, animationFileLocation)),
+                registerArmor(chestId, () -> new IllusionerArmorGear(EquipmentSlotType.CHEST, ARMOR_PROPERTIES, armorSet, modelLocation, textureLocation, animationFileLocation)),
+                registerArmor(legsId, () -> new IllusionerArmorGear(EquipmentSlotType.LEGS, ARMOR_PROPERTIES, armorSet, modelLocation, textureLocation, animationFileLocation)),
+                registerArmor(bootsId, () -> new IllusionerArmorGear(EquipmentSlotType.FEET, ARMOR_PROPERTIES, armorSet, modelLocation, textureLocation, animationFileLocation))
+        );
+    }
+
     private static ArmorSet registerArmorSetDrownedNecromancer(String armorSetId, String helmetId, String chestId, String legsId, String bootsId) {
         ResourceLocation armorSet = new ResourceLocation(MODID, armorSetId);
         ResourceLocation modelLocation = new ResourceLocation(MODID, "geo/armor/"+armorSetId+".geo.json");

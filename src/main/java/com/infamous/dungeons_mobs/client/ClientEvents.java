@@ -179,6 +179,7 @@ public class ClientEvents {
         GeoArmorRenderer.registerArmorRenderer(IceologerArmorGear.class, IceologerArmorGearRenderer::new);
         GeoArmorRenderer.registerArmorRenderer(NecromancerArmorGear.class, NecromancerArmorGearRenderer::new);
         GeoArmorRenderer.registerArmorRenderer(DrownedNecromancerArmorGear.class, DrownedNecromancerArmorGearRenderer::new);
+        GeoArmorRenderer.registerArmorRenderer(IllusionerArmorGear.class, IllusionerArmorGearRenderer::new);
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)

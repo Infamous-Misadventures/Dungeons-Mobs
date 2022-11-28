@@ -2,6 +2,8 @@ package com.infamous.dungeons_mobs.client.models.armor;
 
 import com.infamous.dungeons_libraries.client.model.ArmorGearModel;
 import com.infamous.dungeons_libraries.items.gearconfig.ArmorGear;
+import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
+import com.infamous.dungeons_mobs.entities.illagers.IceologerEntity;
 import com.infamous.dungeons_mobs.entities.illagers.MageCloneEntity;
 import com.infamous.dungeons_mobs.entities.illagers.MageEntity;
 import com.infamous.dungeons_mobs.entities.undead.NecromancerEntity;
@@ -25,18 +27,24 @@ public class MageArmorGearModel<T extends ArmorGear> extends ArmorGearModel<T> {
     public void setWearer(LivingEntity wearer) {
         this.wearer = wearer;
     }
-    
+
     @Override
     public void setLivingAnimations(T entity, Integer uniqueID, AnimationEvent customPredicate) {
-    	super.setLivingAnimations(entity, uniqueID, customPredicate);
-    	
+        super.setLivingAnimations(entity, uniqueID, customPredicate);
+
         IBone cloak = this.getAnimationProcessor().getBone("armorCloak");
-        
-    	if (cloak != null && this.getWearer() != null && (this.getWearer() instanceof MageEntity || this.getWearer() instanceof MageCloneEntity)) {
-    		cloak.setHidden(true);
-    	} else {
-    		cloak.setHidden(false);
-    	}
+        IBone rightArm = this.getAnimationProcessor().getBone("armorRightArm");
+        IBone leftArm = this.getAnimationProcessor().getBone("armorLeftArm");
+
+        if (this.getWearer() != null && this.getWearer() instanceof IceologerEntity) {
+            cloak.setHidden(true);
+            if(!DungeonsMobsConfig.COMMON.ENABLE_3D_SLEEVES.get()){
+                rightArm.setHidden(true);
+                leftArm.setHidden(true);
+            }
+        } else {
+            cloak.setHidden(false);
+        }
     }
 
     @Override

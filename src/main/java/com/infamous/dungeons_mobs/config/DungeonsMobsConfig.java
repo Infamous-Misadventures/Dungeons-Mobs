@@ -24,6 +24,7 @@ public class DungeonsMobsConfig {
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_VINDICATORS_WEARING_ARMOR;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_PILLAGERS_WEARING_ARMOR;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_EVOKERS_WEARING_ARMOR;
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_3D_SLEEVES;
 
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> ICEOLOGER_BIOME_TYPES;
         public final ForgeConfigSpec.ConfigValue<Integer> ICEOLOGER_SPAWN_WEIGHT;
@@ -271,6 +272,12 @@ public class DungeonsMobsConfig {
                     .comment("Enable Evokers wearing armor. \n" +
                             "If you prefer to not have them do this, disable this feature. [true / false]")
                     .define("enableEvokersWearingArmor", true);
+
+            ENABLE_3D_SLEEVES = builder
+                    .comment("Enable 3D sleeves on the various Illagers. \n" +
+                            "Can be combined with the  resource pack to \n" +
+                            "If you prefer a more vanilla look, disable this feature. [true / false]")
+                    .define("enable3DSleeves", true);
 
             ICEOLOGER_BIOME_TYPES = builder
                     .comment("Add biome types that the Iceologer can spawn in. \n"
