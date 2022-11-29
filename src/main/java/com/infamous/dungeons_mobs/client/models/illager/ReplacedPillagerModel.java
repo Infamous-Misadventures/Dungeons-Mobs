@@ -39,8 +39,8 @@ public class ReplacedPillagerModel extends AnimatedGeoModel {
 
         IBone head = this.getAnimationProcessor().getBone("bipedHead");
         IBone illagerArms = this.getAnimationProcessor().getBone("illagerArms");
-        
-        illagerArms.setHidden(false);
+
+        illagerArms.setHidden(true);
 
         IBone cape = this.getAnimationProcessor().getBone("bipedCape");
 //        if (entity.getMobEntity().getItemBySlot(EquipmentSlotType.CHEST).getItem() == entity.getMobEntity().getArmorSet().getChest().get()) {

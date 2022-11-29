@@ -320,6 +320,11 @@
 					"scale": {
 						"vector": [0, 0, 0]
 					}
+				},
+				"illagerArms": {
+					"scale": {
+						"vector": [1, 1, 1]
+					}
 				}
 			}
 		},
@@ -343,6 +348,9 @@
 						},
 						"1.04": {
 							"vector": [0, 0, -145]
+						},
+						"scale": {
+							"vector": [1, 1, 1]
 						}
 					},
 					"position": {
@@ -365,6 +373,9 @@
 						},
 						"1.04": {
 							"vector": [0, 0, 145]
+						},
+						"scale": {
+							"vector": [1, 1, 1]
 						}
 					},
 					"position": {

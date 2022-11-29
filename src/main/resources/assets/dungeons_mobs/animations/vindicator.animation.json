@@ -24,6 +24,9 @@
 							"vector": [0, 0, 0],
 							"easing": "linear"
 						}
+					},
+					"scale": {
+						"vector": [1, 1, 1]
 					}
 				},
 				"bipedArmRight": {
@@ -47,6 +50,9 @@
 							"vector": [0, 0, 0],
 							"easing": "linear"
 						}
+					},
+					"scale": {
+						"vector": [1, 1, 1]
 					}
 				},
 				"illagerArms": {
@@ -141,6 +147,9 @@
 						"2.08": {
 							"vector": [0, 0, 0]
 						}
+					},
+					"scale": {
+						"vector": [1, 1, 1]
 					}
 				},
 				"bipedLegRight": {
@@ -168,6 +177,9 @@
 						"2.08": {
 							"vector": [0, 0, 0]
 						}
+					},
+					"scale": {
+						"vector": [1, 1, 1]
 					}
 				},
 				"illagerArms": {
@@ -316,6 +328,9 @@
 				"bipedArmLeft": {
 					"rotation": {
 						"vector": [-115, -17.5, 0]
+					},
+					"scale": {
+						"vector": [1, 1, 1]
 					}
 				},
 				"bipedArmRight": {
@@ -329,6 +344,9 @@
 						"0.96": {
 							"vector": [15, 0, 7.5]
 						}
+					},
+					"scale": {
+						"vector": [1, 1, 1]
 					}
 				},
 				"illagerArms": {
@@ -391,11 +409,17 @@
 						"0.96": {
 							"vector": [15, 0, -7.5]
 						}
+					},
+					"scale": {
+						"vector": [1, 1, 1]
 					}
 				},
 				"bipedArmRight": {
 					"rotation": {
 						"vector": [-115, 17.5, 0]
+					},
+					"scale": {
+						"vector": [1, 1, 1]
 					}
 				},
 				"illagerArms": {
@@ -438,11 +462,17 @@
 				"bipedArmLeft": {
 					"rotation": {
 						"vector": [-115, -17.5, 0]
+					},
+					"scale": {
+						"vector": [1, 1, 1]
 					}
 				},
 				"bipedArmRight": {
 					"rotation": {
 						"vector": [-115, 17.5, 0]
+					},
+					"scale": {
+						"vector": [1, 1, 1]
 					}
 				},
 				"illagerArms": {
@@ -469,6 +499,14 @@
 						"0.36": {
 							"vector": [0, 0, 0]
 						}
+					},
+					"scale": {
+						"vector": [1, 1, 1]
+					}
+				},
+				"bipedArmRight": {
+					"scale": {
+						"vector": [1, 1, 1]
 					}
 				},
 				"illagerArms": {
@@ -500,6 +538,14 @@
 						"0.36": {
 							"vector": [0, 0, 0]
 						}
+					},
+					"scale": {
+						"vector": [1, 1, 1]
+					}
+				},
+				"bipedArmLeft": {
+					"scale": {
+						"vector": [1, 1, 1]
 					}
 				}
 			}
@@ -518,6 +564,9 @@
 						"0.24": {
 							"vector": [-115, -17.5, 0]
 						}
+					},
+					"scale": {
+						"vector": [1, 1, 1]
 					}
 				},
 				"bipedArmRight": {
@@ -531,6 +580,9 @@
 						"0.24": {
 							"vector": [-115, 17.5, 0]
 						}
+					},
+					"scale": {
+						"vector": [1, 1, 1]
 					}
 				},
 				"illagerArms": {
@@ -564,6 +616,9 @@
 					},
 					"position": {
 						"vector": [0, 1, 0]
+					},
+					"scale": {
+						"vector": [1, 1, 1]
 					}
 				},
 				"bipedArmRight": {
@@ -586,6 +641,9 @@
 					},
 					"position": {
 						"vector": [0, 1, 0]
+					},
+					"scale": {
+						"vector": [1, 1, 1]
 					}
 				},
 				"illagerArms": {

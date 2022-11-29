@@ -1,10 +1,7 @@
 package com.infamous.dungeons_mobs.client.models.illager;
 
-import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.entities.illagers.ReplacedEvokerEntity;
-import com.infamous.dungeons_mobs.entities.illagers.ReplacedPillagerEntity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
@@ -16,23 +13,25 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
 import software.bernie.geckolib3.resource.GeckoLibCache;
 
+import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
+
 // Model and animation received from CQR and DerToaster
 public class ReplacedEvokerModel extends AnimatedGeoModel {
 
     @Override
     public ResourceLocation getAnimationFileLocation(Object entity) {
-        return new ResourceLocation(DungeonsMobs.MODID, "animations/evoker.animation.json");
+        return new ResourceLocation(MODID, "animations/evoker.animation.json");
     }
 
     @Override
     public ResourceLocation getModelLocation(Object entity) {
-        return new ResourceLocation(DungeonsMobs.MODID, "geo/geo_illager.geo.json") ;
+        return new ResourceLocation(MODID, "geo/geo_illager.geo.json") ;
     }
 
     @Override
     public ResourceLocation getTextureLocation(Object entity) {
 //        return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/pillager.png");
-        return new ResourceLocation("textures/entity/illager/evoker.png");
+        return new ResourceLocation(MODID, "textures/entity/illager/evoker.png");
     }
 
     @Override
@@ -43,10 +42,6 @@ public class ReplacedEvokerModel extends AnimatedGeoModel {
         IBone illagerArms = this.getAnimationProcessor().getBone("illagerArms");
         
         illagerArms.setHidden(false);
-
-//        if(!((ReplacedEvokerEntity) entity).getMobEntity().getItemBySlot(EquipmentSlotType.CHEST).isEmpty()){
-//
-//        }
 
         IBone cape = this.getAnimationProcessor().getBone("bipedCape");
 //        if (entity.getMobEntity().getItemBySlot(EquipmentSlotType.CHEST).getItem() == entity.getMobEntity().getArmorSet().getChest().get()) {

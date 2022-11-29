@@ -42,9 +42,9 @@ public class ReplacedPillagerEntity implements IAnimatable, IGeoReplacedEntity {
         if(this.entity.isLeftHanded()){
             handSide = ".left";
         }
-        if(this.entity.getMainHandItem().isEmpty()){
-            handSide += ".both";
-        }
+//        if(this.entity.getMainHandItem().isEmpty()){
+//            handSide += ".both";
+//        }
         if(IllagerArmsUtil.armorHasCrossedArms((PillagerEntity) this.entity, this.entity.getItemBySlot(EquipmentSlotType.CHEST))){
         }
         if (((PillagerEntity) this.entity).isChargingCrossbow()) {

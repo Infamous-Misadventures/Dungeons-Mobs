@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import it.unimi.dsi.fastutil.objects.ObjectList;
 import net.minecraft.block.AbstractSkullBlock;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -268,14 +269,14 @@ public abstract class ModExtentedGeoReplacedEntityRenderer<T extends IAnimatable
 
     protected void handleGeoArmorBoneVisibility(GeoArmorRenderer<? extends GeoArmorItem> geoArmorRenderer,
                                                 ModelRenderer sourceLimb, BipedModel<?> armorModel, EquipmentSlotType slot) {
-        IBone gbHead = geoArmorRenderer.getGeoModelProvider().getBone(geoArmorRenderer.headBone);
-        IBone gbBody = geoArmorRenderer.getGeoModelProvider().getBone(geoArmorRenderer.bodyBone);
-        IBone gbArmL = geoArmorRenderer.getGeoModelProvider().getBone(geoArmorRenderer.leftArmBone);
-        IBone gbArmR = geoArmorRenderer.getGeoModelProvider().getBone(geoArmorRenderer.rightArmBone);
-        IBone gbLegL = geoArmorRenderer.getGeoModelProvider().getBone(geoArmorRenderer.leftLegBone);
-        IBone gbLegR = geoArmorRenderer.getGeoModelProvider().getBone(geoArmorRenderer.rightLegBone);
-        IBone gbBootL = geoArmorRenderer.getGeoModelProvider().getBone(geoArmorRenderer.leftBootBone);
-        IBone gbBootR = geoArmorRenderer.getGeoModelProvider().getBone(geoArmorRenderer.rightBootBone);
+        IBone gbHead = geoArmorRenderer.getAndHideBone(geoArmorRenderer.headBone);
+        IBone gbBody = geoArmorRenderer.getAndHideBone(geoArmorRenderer.bodyBone);
+        IBone gbArmL = geoArmorRenderer.getAndHideBone(geoArmorRenderer.leftArmBone);
+        IBone gbArmR = geoArmorRenderer.getAndHideBone(geoArmorRenderer.rightArmBone);
+        IBone gbLegL = geoArmorRenderer.getAndHideBone(geoArmorRenderer.leftLegBone);
+        IBone gbLegR = geoArmorRenderer.getAndHideBone(geoArmorRenderer.rightLegBone);
+        IBone gbBootL = geoArmorRenderer.getAndHideBone(geoArmorRenderer.leftBootBone);
+        IBone gbBootR = geoArmorRenderer.getAndHideBone(geoArmorRenderer.rightBootBone);
 
         if (sourceLimb == armorModel.head || sourceLimb == armorModel.hat) {
             gbHead.setHidden(false);
