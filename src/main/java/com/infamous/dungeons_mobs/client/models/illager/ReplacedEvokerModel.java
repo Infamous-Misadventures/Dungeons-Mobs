@@ -35,8 +35,8 @@ public class ReplacedEvokerModel extends AnimatedGeoModel {
     }
 
     @Override
-    public void setLivingAnimations(Object entity, Integer uniqueID, AnimationEvent customPredicate) {
-        super.setLivingAnimations((ReplacedEvokerEntity) entity, uniqueID, customPredicate);
+    public void setCustomAnimations(Object entity, int uniqueID, AnimationEvent customPredicate) {
+        super.setCustomAnimations((ReplacedEvokerEntity) entity, uniqueID, customPredicate);
 
         IBone head = this.getAnimationProcessor().getBone("bipedHead");
         IBone illagerArms = this.getAnimationProcessor().getBone("illagerArms");

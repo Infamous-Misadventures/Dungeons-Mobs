@@ -34,8 +34,8 @@ public class ReplacedPillagerModel extends AnimatedGeoModel {
     }
 
     @Override
-    public void setLivingAnimations(Object entity, Integer uniqueID, AnimationEvent customPredicate) {
-        super.setLivingAnimations((ReplacedPillagerEntity) entity, uniqueID, customPredicate);
+    public void setCustomAnimations(Object entity, int uniqueID, AnimationEvent customPredicate) {
+        super.setCustomAnimations((ReplacedPillagerEntity) entity, uniqueID, customPredicate);
 
         IBone head = this.getAnimationProcessor().getBone("bipedHead");
         IBone illagerArms = this.getAnimationProcessor().getBone("illagerArms");

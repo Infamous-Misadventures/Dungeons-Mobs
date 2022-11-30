@@ -45,7 +45,7 @@ public class ReplacedVindicatorEntity implements IAnimatable, IGeoReplacedEntity
             handSide = "_left";
         }
         if(this.entity.getMainHandItem().isEmpty()){
-            handSide += "_both";
+            handSide = "_both";
         }
         String crossed = "";
         if(IllagerArmsUtil.armorHasCrossedArms((Vindicator) this.entity, this.entity.getItemBySlot(EquipmentSlot.CHEST))){

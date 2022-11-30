@@ -33,8 +33,8 @@ public class ReplacedVindicatorModel extends AnimatedGeoModel {
     }
 
     @Override
-    public void setLivingAnimations(Object entity, Integer uniqueID, AnimationEvent customPredicate) {
-        super.setLivingAnimations((ReplacedVindicatorEntity) entity, uniqueID, customPredicate);
+    public void setCustomAnimations(Object entity, int uniqueID, AnimationEvent customPredicate) {
+        super.setCustomAnimations((ReplacedVindicatorEntity) entity, uniqueID, customPredicate);
 
         IBone head = this.getAnimationProcessor().getBone("bipedHead");
         IBone illagerArms = this.getAnimationProcessor().getBone("illagerArms");

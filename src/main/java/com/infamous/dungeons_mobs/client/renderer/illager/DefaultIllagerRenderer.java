@@ -19,8 +19,10 @@ import software.bernie.example.client.DefaultBipedBoneIdents;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
+import software.bernie.geckolib3.item.GeoArmorItem;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.ExtendedGeoEntityRenderer;
+import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -224,6 +226,36 @@ public class DefaultIllagerRenderer<T extends Mob & IAnimatable> extends Extende
         super.prepareArmorPositionAndScale(bone, cubeList, sourceLimb, stack, geoArmor, modMatrixRot);
         if (bone.getName().equals("armorBipedHead") && geoArmor && helmet.getItem().getRegistryName().getNamespace().equals(MODID)) {
             stack.translate(0, 0.125, 0); // 1y is 1 cube up, we want 2/16
+        }
+    }
+
+    @Override
+    protected void setLimbBoneVisible(GeoArmorRenderer<? extends GeoArmorItem> armorRenderer, ModelPart limb, HumanoidModel<?> armorModel, EquipmentSlot slot) {
+        if (limb == armorModel.head || limb == armorModel.hat) {
+            armorRenderer.getGeoModelProvider().getBone(armorRenderer.headBone).setHidden(false);
+        }
+        else if (limb == armorModel.body) {
+            armorRenderer.getGeoModelProvider().getBone(armorRenderer.bodyBone).setHidden(false);
+            armorRenderer.getGeoModelProvider().getBone(armorRenderer.leftArmBone).setHidden(true);
+            armorRenderer.getGeoModelProvider().getBone(armorRenderer.rightArmBone).setHidden(true);
+        }
+        else if (limb == armorModel.leftArm) {
+            armorRenderer.getGeoModelProvider().getBone(armorRenderer.bodyBone).setHidden(true);
+            armorRenderer.getGeoModelProvider().getBone(armorRenderer.leftArmBone).setHidden(false);
+            armorRenderer.getGeoModelProvider().getBone(armorRenderer.rightArmBone).setHidden(true);
+        }
+        else if (limb == armorModel.leftLeg) {
+            armorRenderer.getGeoModelProvider().getBone((slot == EquipmentSlot.FEET ? armorRenderer.leftBootBone : armorRenderer.leftLegBone)).setHidden(false);
+            armorRenderer.getGeoModelProvider().getBone((slot == EquipmentSlot.FEET ? armorRenderer.rightBootBone : armorRenderer.rightLegBone)).setHidden(false);
+        }
+        else if (limb == armorModel.rightArm) {
+            armorRenderer.getGeoModelProvider().getBone(armorRenderer.bodyBone).setHidden(true);
+            armorRenderer.getGeoModelProvider().getBone(armorRenderer.leftArmBone).setHidden(true);
+            armorRenderer.getGeoModelProvider().getBone(armorRenderer.rightArmBone).setHidden(false);
+        }
+        else if (limb == armorModel.rightLeg) {
+            armorRenderer.getGeoModelProvider().getBone((slot == EquipmentSlot.FEET ? armorRenderer.rightBootBone : armorRenderer.rightLegBone)).setHidden(false);
+            armorRenderer.getGeoModelProvider().getBone((slot == EquipmentSlot.FEET ? armorRenderer.leftBootBone : armorRenderer.leftLegBone)).setHidden(true);
         }
     }
 }
