@@ -291,6 +291,15 @@ public abstract class ModExtentedGeoReplacedEntityRenderer<T extends IAnimatable
         IBone gbBootL = geoArmorRenderer.getGeoModelProvider().getBone(geoArmorRenderer.leftBootBone);
         IBone gbBootR = geoArmorRenderer.getGeoModelProvider().getBone(geoArmorRenderer.rightBootBone);
 
+        gbHead.setHidden(true);
+        gbBody.setHidden(true);
+        gbArmL.setHidden(true);
+        gbArmR.setHidden(true);
+        gbLegL.setHidden(true);
+        gbLegR.setHidden(true);
+        gbBootL.setHidden(true);
+        gbBootR.setHidden(true);
+
         if (sourceLimb == armorModel.head || sourceLimb == armorModel.hat) {
             gbHead.setHidden(false);
             return;

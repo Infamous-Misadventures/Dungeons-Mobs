@@ -171,6 +171,7 @@ public class ClientEvents {
         GeoArmorRenderer.registerArmorRenderer(WindcallerArmorGear.class, WindcallerArmorGearRenderer::new);
         GeoArmorRenderer.registerArmorRenderer(MageArmorGear.class, MageArmorGearRenderer::new);
         GeoArmorRenderer.registerArmorRenderer(IceologerArmorGear.class, IceologerArmorGearRenderer::new);
+        GeoArmorRenderer.registerArmorRenderer(IllusionerArmorGear.class, IllusionerArmorGearRenderer::new);
         GeoArmorRenderer.registerArmorRenderer(NecromancerArmorGear.class, NecromancerArmorGearRenderer::new);
         GeoArmorRenderer.registerArmorRenderer(DrownedNecromancerArmorGear.class, DrownedNecromancerArmorGearRenderer::new);
     }

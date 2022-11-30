@@ -3,7 +3,7 @@ package com.infamous.dungeons_mobs.client.models.armor;
 import com.infamous.dungeons_libraries.client.renderer.gearconfig.ArmorGearModel;
 import com.infamous.dungeons_libraries.items.gearconfig.ArmorGear;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
-import com.infamous.dungeons_mobs.entities.illagers.WindcallerEntity;
+import com.infamous.dungeons_mobs.entities.illagers.IceologerEntity;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
@@ -13,7 +13,7 @@ import software.bernie.geckolib3.core.molang.MolangParser;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.resource.GeckoLibCache;
 
-public class WindcallerArmorGearModel<T extends ArmorGear> extends ArmorGearModel<T> {
+public class IllusionerArmorGearModel<T extends ArmorGear> extends ArmorGearModel<T> {
 
     LivingEntity wearer;
 
@@ -31,7 +31,7 @@ public class WindcallerArmorGearModel<T extends ArmorGear> extends ArmorGearMode
     	
         IBone cloak = this.getAnimationProcessor().getBone("armorCloak");
 
-        cloak.setHidden(this.getWearer() != null && this.getWearer() instanceof WindcallerEntity);
+        cloak.setHidden(this.getWearer() != null && this.getWearer() instanceof IceologerEntity);
 
         IBone rightArm = this.getAnimationProcessor().getBone("armorRightArm");
         IBone leftArm = this.getAnimationProcessor().getBone("armorLeftArm");

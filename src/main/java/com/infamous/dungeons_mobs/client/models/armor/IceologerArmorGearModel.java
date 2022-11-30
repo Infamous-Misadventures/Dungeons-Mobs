@@ -2,6 +2,7 @@ package com.infamous.dungeons_mobs.client.models.armor;
 
 import com.infamous.dungeons_libraries.client.renderer.gearconfig.ArmorGearModel;
 import com.infamous.dungeons_libraries.items.gearconfig.ArmorGear;
+import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.entities.illagers.IceologerEntity;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -31,6 +32,13 @@ public class IceologerArmorGearModel<T extends ArmorGear> extends ArmorGearModel
         IBone cloak = this.getAnimationProcessor().getBone("armorCloak");
 
         cloak.setHidden(this.getWearer() != null && this.getWearer() instanceof IceologerEntity);
+
+        IBone rightArm = this.getAnimationProcessor().getBone("armorRightArm");
+        IBone leftArm = this.getAnimationProcessor().getBone("armorLeftArm");
+        if(!DungeonsMobsConfig.COMMON.ENABLE_3D_SLEEVES.get()){
+            rightArm.setHidden(true);
+            leftArm.setHidden(true);
+        }
     }
 
     @Override
