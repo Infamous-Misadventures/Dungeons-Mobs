@@ -2,6 +2,8 @@ package com.infamous.dungeons_mobs.capabilities;
 
 import com.infamous.dungeons_mobs.capabilities.ancient.Ancient;
 import com.infamous.dungeons_mobs.capabilities.ancient.AttacherAncient;
+import com.infamous.dungeons_mobs.capabilities.animatedprops.AnimatedProps;
+import com.infamous.dungeons_mobs.capabilities.animatedprops.AttacherAnimatedProps;
 import com.infamous.dungeons_mobs.capabilities.convertible.AttacherConvertible;
 import com.infamous.dungeons_mobs.capabilities.convertible.Convertible;
 import com.infamous.dungeons_mobs.capabilities.properties.AttacherMobProps;
@@ -22,6 +24,7 @@ import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 public class ModCapabilities {
 
     public static final Capability<Ancient> ANCIENT_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {});
+    public static final Capability<AnimatedProps> ANIMATED_PROPS_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {});
     public static final Capability<Convertible> CONVERTIBLE_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {});
     public static final Capability<MobProps> MOB_PROPS_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {});
 
@@ -29,6 +32,7 @@ public class ModCapabilities {
     public static void setupCapabilities() {
         IEventBus forgeBus = MinecraftForge.EVENT_BUS;
         forgeBus.addGenericListener(Entity.class, AttacherAncient::attach);
+        forgeBus.addGenericListener(Entity.class, AttacherAnimatedProps::attach);
         forgeBus.addGenericListener(Entity.class, AttacherConvertible::attach);
         forgeBus.addGenericListener(Entity.class, AttacherMobProps::attach);
     }
@@ -36,6 +40,7 @@ public class ModCapabilities {
     @SubscribeEvent
     public static void registerCaps(RegisterCapabilitiesEvent event) {
         event.register(Ancient.class);
+        event.register(AnimatedProps.class);
         event.register(Convertible.class);
         event.register(MobProps.class);
     }

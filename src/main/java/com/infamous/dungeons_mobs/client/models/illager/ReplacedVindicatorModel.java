@@ -1,10 +1,9 @@
 package com.infamous.dungeons_mobs.client.models.illager;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
-import com.infamous.dungeons_mobs.entities.illagers.MountaineerEntity;
+import com.infamous.dungeons_mobs.entities.illagers.ReplacedVindicatorEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -16,34 +15,38 @@ import software.bernie.geckolib3.model.provider.data.EntityModelData;
 import software.bernie.geckolib3.resource.GeckoLibCache;
 
 // Model and animation received from CQR and DerToaster
-public class MountaineerModel extends AnimatedGeoModel<MountaineerEntity> {
+public class ReplacedVindicatorModel extends AnimatedGeoModel {
 
     @Override
-    public ResourceLocation getAnimationFileLocation(MountaineerEntity entity) {
+    public ResourceLocation getAnimationFileLocation(Object entity) {
         return new ResourceLocation(DungeonsMobs.MODID, "animations/vindicator.animation.json");
     }
 
     @Override
-    public ResourceLocation getModelLocation(MountaineerEntity entity) {
+    public ResourceLocation getModelLocation(Object entity) {
         return new ResourceLocation(DungeonsMobs.MODID, "geo/geo_illager.geo.json") ;
     }
 
     @Override
-    public ResourceLocation getTextureLocation(MountaineerEntity entity) {
-        return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/mountaineer.png");
+    public ResourceLocation getTextureLocation(Object entity) {
+        return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/vindicator.png");
     }
 
     @Override
-    public void setCustomAnimations(MountaineerEntity entity, int uniqueID, AnimationEvent customPredicate) {
-        super.setCustomAnimations(entity, uniqueID, customPredicate);
+    public void setLivingAnimations(Object entity, Integer uniqueID, AnimationEvent customPredicate) {
+        super.setLivingAnimations((ReplacedVindicatorEntity) entity, uniqueID, customPredicate);
 
         IBone head = this.getAnimationProcessor().getBone("bipedHead");
         IBone illagerArms = this.getAnimationProcessor().getBone("illagerArms");
         
-        illagerArms.setHidden(true);
+//        illagerArms.setHidden(false);
 
         IBone cape = this.getAnimationProcessor().getBone("bipedCape");
-        cape.setHidden(entity.getItemBySlot(EquipmentSlot.CHEST).getItem() != entity.getArmorSet().getChest().get());
+//        if (entity.getMobEntity().getItemBySlot(EquipmentSlot.CHEST).getItem() == entity.getMobEntity().getArmorSet().getChest().get()) {
+//            cape.setHidden(false);
+//        } else {
+            cape.setHidden(true);
+//        }
 
         EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
         if (extraData.headPitch != 0 || extraData.netHeadYaw != 0) {
@@ -57,9 +60,9 @@ public class MountaineerModel extends AnimatedGeoModel<MountaineerEntity> {
 		super.setMolangQueries(animatable, currentTick);
 		
 		MolangParser parser = GeckoLibCache.getInstance().parser;
-		LivingEntity livingEntity = (LivingEntity) animatable;
+		LivingEntity livingEntity = ((ReplacedVindicatorEntity) animatable).getMob();
 		Vec3 velocity = livingEntity.getDeltaMovement();
 		float groundSpeed = Mth.sqrt((float) ((velocity.x * velocity.x) + (velocity.z * velocity.z)));
-		parser.setValue("query.ground_speed", () -> groundSpeed * 20);
+		parser.setValue("query.ground_speed", groundSpeed * 20);
 	}
 }

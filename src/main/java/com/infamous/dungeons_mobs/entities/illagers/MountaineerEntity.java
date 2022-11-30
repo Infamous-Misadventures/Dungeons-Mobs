@@ -3,6 +3,10 @@ package com.infamous.dungeons_mobs.entities.illagers;
 import com.google.common.collect.Maps;
 import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
 import com.infamous.dungeons_libraries.items.gearconfig.ArmorSet;
+import com.infamous.dungeons_libraries.utils.GoalUtils;
+import com.infamous.dungeons_mobs.entities.AnimatableMeleeAttackMob;
+import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
+import com.infamous.dungeons_mobs.goals.BasicModdedAttackGoal;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModItems;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
@@ -20,6 +24,7 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WallClimberNavigation;
 import net.minecraft.world.entity.monster.Monster;
@@ -43,12 +48,13 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
-
-public class MountaineerEntity extends Vindicator implements SpawnArmoredMob, IAnimatable {
+public class MountaineerEntity extends Vindicator implements SpawnArmoredMob, IAnimatable, AnimatableMeleeAttackMob {
 	
 	   private static final EntityDataAccessor<Byte> DATA_FLAGS_ID = SynchedEntityData.defineId(MountaineerEntity.class, EntityDataSerializers.BYTE);
+    public int attackAnimationTick;
+    public int attackAnimationLength = 7;
+    public int attackAnimationActionPoint = 6;
 	   
     public MountaineerEntity(Level worldIn){
         super(ModEntityTypes.MOUNTAINEER.get(), worldIn);
@@ -56,6 +62,14 @@ public class MountaineerEntity extends Vindicator implements SpawnArmoredMob, IA
 
     public MountaineerEntity(EntityType<? extends MountaineerEntity> entityType, Level world) {
         super(entityType, world);
+    }
+
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+        GoalUtils.removeGoal(this.goalSelector, MeleeAttackGoal.class);
+        this.goalSelector.addGoal(4, new BasicModdedAttackGoal<>(this, null, 20));
+        this.goalSelector.addGoal(5, new ApproachTargetGoal(this, 0, 1.0D, true));
     }
     
     protected PathNavigation createNavigation(Level p_175447_1_) {
@@ -180,6 +194,40 @@ public class MountaineerEntity extends Vindicator implements SpawnArmoredMob, IA
     }
 
     private AnimationFactory factory = GeckoLibUtil.createFactory(this);
+
+    public void handleEntityEvent(byte p_28844_) {
+        if (p_28844_ == 4) {
+            this.attackAnimationTick = attackAnimationLength;
+        } else {
+            super.handleEntityEvent(p_28844_);
+        }
+    }
+
+    @Override
+    public int getAttackAnimationTick() {
+        return attackAnimationTick;
+    }
+
+    @Override
+    public void setAttackAnimationTick(int attackAnimationTick) {
+        this.attackAnimationTick = attackAnimationTick;
+    }
+
+    @Override
+    public int getAttackAnimationLength() {
+        return attackAnimationLength;
+    }
+
+    @Override
+    public int getAttackAnimationActionPoint() {
+        return attackAnimationActionPoint;
+    }
+
+    public void tickDownAnimTimers() {
+        if (this.attackAnimationTick > 0) {
+            this.attackAnimationTick--;
+        }
+    }
     
     @Override
     public void registerControllers(AnimationData data) {
@@ -187,10 +235,35 @@ public class MountaineerEntity extends Vindicator implements SpawnArmoredMob, IA
     }
 
     private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
-        if (this.isCelebrating()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("iceologer_celebrate", LOOP));
+        String animation = "animation.vindicator";
+        if (false) {
+            animation += "_mcd";
+        }
+        String handSide = "_right";
+        if(this.isLeftHanded()){
+            handSide = "_left";
+        }
+        if(this.getMainHandItem().isEmpty()){
+            handSide += "_both";
+        }
+        String crossed = "";
+        if(IllagerArmsUtil.armorHasCrossedArms(this, this.getItemBySlot(EquipmentSlot.CHEST))){
+            crossed = "_crossed";
+        }
+        if (this.attackAnimationTick > 0) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation(animation + ".attack" + handSide, true));
+        } else if (this.isAggressive() && !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
+            event.getController().setAnimation(new AnimationBuilder()
+                    .addAnimation(animation + ".run" + handSide, true));
+        } else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
+            event.getController().setAnimation(new AnimationBuilder()
+                    .addAnimation(animation + ".walk" + crossed, true));
         } else {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("iceologer_idle", LOOP));
+            if (this.isCelebrating()) {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation(animation + ".win", true));
+            } else {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation(animation + ".idle" + crossed, true));
+            }
         }
         return PlayState.CONTINUE;
     }

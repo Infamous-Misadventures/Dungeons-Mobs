@@ -2,7 +2,9 @@ package com.infamous.dungeons_mobs.entities.undead;
 
 import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
 import com.infamous.dungeons_libraries.items.gearconfig.ArmorSet;
+import com.infamous.dungeons_mobs.entities.AnimatableMeleeAttackMob;
 import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
+import com.infamous.dungeons_mobs.goals.BasicModdedAttackGoal;
 import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
 import com.infamous.dungeons_mobs.goals.UseShieldGoal;
 import com.infamous.dungeons_mobs.interfaces.IShieldUser;
@@ -57,7 +59,7 @@ import java.util.UUID;
 import static com.infamous.dungeons_mobs.entities.SpawnArmoredHelper.equipArmorSet;
 import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
-public class SkeletonVanguardEntity extends Skeleton implements IShieldUser, IAnimatable, SpawnArmoredMob {
+public class SkeletonVanguardEntity extends Skeleton implements IShieldUser, IAnimatable, SpawnArmoredMob, AnimatableMeleeAttackMob {
 
 	private static final UUID SPEED_MODIFIER_BLOCKING_UUID = UUID.fromString("e4c96392-42f5-4028-ac44-cad469c10d51");
 	private static final AttributeModifier SPEED_MODIFIER_BLOCKING = new AttributeModifier(SPEED_MODIFIER_BLOCKING_UUID,
@@ -83,7 +85,7 @@ public class SkeletonVanguardEntity extends Skeleton implements IShieldUser, IAn
 	@Override
 	protected void registerGoals() {
 		this.goalSelector.addGoal(0, new UseShieldGoal(this, 10D, 60, 120, 10, 60, true));
-		this.goalSelector.addGoal(1, new SkeletonVanguardEntity.BasicAttackGoal(this));
+		this.goalSelector.addGoal(1, new BasicModdedAttackGoal(this, ModSoundEvents.SKELETON_VANGUARD_ATTACK.get(), 20));
 		this.goalSelector.addGoal(2, new ApproachTargetGoal(this, 0, 1.0D, true));
         this.goalSelector.addGoal(3, new LookAtTargetGoal(this));
 		this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1.0D));
@@ -118,7 +120,7 @@ public class SkeletonVanguardEntity extends Skeleton implements IShieldUser, IAn
 		} else {
 			this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
 		}
-		//this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.SKELETON_VANGUARD_HELMET.get()));
+		//this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(ModItems.SKELETON_VANGUARD_HELMET.get()));
 		this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ModItems.VANGUARD_SHIELD.get()));
 	}
 
@@ -174,6 +176,26 @@ public class SkeletonVanguardEntity extends Skeleton implements IShieldUser, IAn
 		}
 
 		this.tickDownAnimTimers();
+	}
+
+	@Override
+	public int getAttackAnimationTick() {
+		return attackAnimationTick;
+	}
+
+	@Override
+	public void setAttackAnimationTick(int attackAnimationTick) {
+		this.attackAnimationTick = attackAnimationTick;
+	}
+
+	@Override
+	public int getAttackAnimationLength() {
+		return attackAnimationLength;
+	}
+
+	@Override
+	public int getAttackAnimationActionPoint() {
+		return attackAnimationActionPoint;
 	}
 
 	public void tickDownAnimTimers() {
@@ -300,95 +322,4 @@ public class SkeletonVanguardEntity extends Skeleton implements IShieldUser, IAn
 		return ModItems.VANGUARD_ARMOR;
 	}
 
-	class BasicAttackGoal extends Goal {
-
-		public SkeletonVanguardEntity mob;
-		@Nullable
-		public LivingEntity target;
-
-		public BasicAttackGoal(SkeletonVanguardEntity mob) {
-			this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP));
-			this.mob = mob;
-			this.target = mob.getTarget();
-		}
-
-		@Override
-		public boolean isInterruptable() {
-			return false;
-		}
-
-		public boolean requiresUpdateEveryTick() {
-			return true;
-		}
-
-		@Override
-		public boolean canUse() {
-			target = mob.getTarget();
-			return target != null && !mob.isBlocking() && mob.distanceTo(target) <= 3.5 && animationsUseable()
-					&& mob.hasLineOfSight(target);
-		}
-
-		@Override
-		public boolean canContinueToUse() {
-			return target != null && !animationsUseable();
-		}
-
-		@Override
-		public void start() {
-			mob.attackAnimationTick = mob.attackAnimationLength;
-			mob.level.broadcastEntityEvent(mob, (byte) 4);
-		}
-
-		@Override
-		public void tick() {
-			target = mob.getTarget();
-
-			if (mob.attackAnimationTick == mob.attackAnimationActionPoint) {
-			    mob.playSound(ModSoundEvents.SKELETON_VANGUARD_ATTACK.get(), 1.0F, 1.0F);
-			}
-
-			if (target != null && mob.distanceTo(target) < 4
-					&& mob.attackAnimationTick == mob.attackAnimationActionPoint) {
-				mob.doHurtTarget(target);
-			}
-		}
-
-		@Override
-		public void stop() {
-			if (target != null && !isShieldDisabled(mob) && shouldBlockForTarget(target)
-					&& mob.getOffhandItem().canPerformAction(net.minecraftforge.common.ToolActions.SHIELD_BLOCK) && mob.random.nextInt(4) == 0) {
-				mob.startUsingItem(InteractionHand.OFF_HAND);
-			}
-		}
-
-		public boolean isShieldDisabled(PathfinderMob shieldUser) {
-			if (shieldUser instanceof IShieldUser && ((IShieldUser) shieldUser).isShieldDisabled()) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-
-		public boolean shouldBlockForTarget(LivingEntity target) {
-			if (target instanceof Mob && ((Mob) target).getTarget() != mob) {
-				return false;
-			} else {
-				return true;
-			}
-		}
-
-		public boolean animationsUseable() {
-			return mob.attackAnimationTick <= 0;
-		}
-
-	}
-
-	public static void disableShield(LivingEntity livingEntity, int ticks) {
-		if (livingEntity instanceof Player && livingEntity.isBlocking()) {
-			((Player) livingEntity).getCooldowns()
-					.addCooldown(livingEntity.getItemInHand(livingEntity.getUsedItemHand()).getItem(), ticks);
-			livingEntity.stopUsingItem();
-			livingEntity.level.broadcastEntityEvent(livingEntity, (byte) 30);
-		}
-	}
 }

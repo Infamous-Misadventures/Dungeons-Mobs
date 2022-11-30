@@ -1,9 +1,6 @@
 package com.infamous.dungeons_mobs.client;
 
-import com.infamous.dungeons_mobs.client.models.illager.DungeonsIllusionerModel;
-import com.infamous.dungeons_mobs.client.models.illager.IceologerModel;
-import com.infamous.dungeons_mobs.client.models.illager.MageModel;
-import com.infamous.dungeons_mobs.client.models.illager.RoyalGuardModel;
+import com.infamous.dungeons_mobs.client.models.illager.*;
 import com.infamous.dungeons_mobs.client.particle.*;
 import com.infamous.dungeons_mobs.client.renderer.EmptyRenderer;
 import com.infamous.dungeons_mobs.client.renderer.armor.*;
@@ -28,6 +25,7 @@ import com.infamous.dungeons_mobs.client.renderer.slime.ConjuredSlimeRenderer;
 import com.infamous.dungeons_mobs.client.renderer.summonables.*;
 import com.infamous.dungeons_mobs.client.renderer.undead.*;
 import com.infamous.dungeons_mobs.client.renderer.water.*;
+import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.entities.illagers.IllusionerCloneEntity;
 import com.infamous.dungeons_mobs.entities.illagers.MageCloneEntity;
 import com.infamous.dungeons_mobs.entities.illagers.MageEntity;
@@ -68,9 +66,16 @@ public class ClientEvents {
 
         // To match Husk proportions found in MCD
         event.registerEntityRenderer(EntityType.HUSK, CustomZombieRenderer::new);
-        
-        event.registerEntityRenderer(EntityType.PILLAGER, CustomPillagerRenderer::new);
-        event.registerEntityRenderer(EntityType.VINDICATOR, CustomVindicatorRenderer::new);
+
+        if(DungeonsMobsConfig.COMMON.ENABLE_PILLAGERS_WEARING_ARMOR.get()){
+            event.registerEntityRenderer(EntityType.PILLAGER, ReplacedPillagerRenderer::new);
+        }
+        if(DungeonsMobsConfig.COMMON.ENABLE_VINDICATORS_WEARING_ARMOR.get()){
+            event.registerEntityRenderer(EntityType.VINDICATOR, ReplacedVindicatorRenderer::new);
+        }
+        if(DungeonsMobsConfig.COMMON.ENABLE_EVOKERS_WEARING_ARMOR.get()){
+            event.registerEntityRenderer(EntityType.EVOKER, ReplacedEvokerRenderer::new);
+        }
         
         event.registerEntityRenderer(EntityType.DROWNED, CustomDrownedRenderer::new);
 
@@ -81,7 +86,7 @@ public class ClientEvents {
 
 
         event.registerEntityRenderer(ModEntityTypes.ROYAL_GUARD.get(), manager -> new DefaultIllagerRenderer<>(manager, new RoyalGuardModel(), 0.9375F*1.2F));
-        event.registerEntityRenderer(ModEntityTypes.MOUNTAINEER.get(), CustomVindicatorRenderer::new);
+        event.registerEntityRenderer(ModEntityTypes.MOUNTAINEER.get(), manager -> new DefaultIllagerRenderer<>(manager, new MountaineerModel()));
 
         event.registerEntityRenderer(ModEntityTypes.ICEOLOGER.get(), manager -> new DefaultIllagerRenderer<>(manager, new IceologerModel()));
         event.registerEntityRenderer(ModEntityTypes.GEOMANCER.get(), GeomancerRenderer::new);

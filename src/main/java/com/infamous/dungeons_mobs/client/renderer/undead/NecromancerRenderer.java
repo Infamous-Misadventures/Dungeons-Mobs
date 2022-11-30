@@ -213,7 +213,7 @@ public class NecromancerRenderer extends ExtendedGeoEntityRenderer<NecromancerEn
         }
     }
 
-//    protected void handleGeoArmorBoneVisibility(GeoArmorRenderer<? extends GeoArmorItem> geoArmorRenderer, ModelRenderer sourceLimb, BipedModel<?> armorModel, EquipmentSlotType slot) {
+//    protected void handleGeoArmorBoneVisibility(GeoArmorRenderer<? extends GeoArmorItem> geoArmorRenderer, ModelRenderer sourceLimb, BipedModel<?> armorModel, EquipmentSlot slot) {
 //        super.handleGeoArmorBoneVisibility(geoArmorRenderer, sourceLimb, armorModel, slot);
 //        if(geoArmorRenderer instanceof NecromancerArmorGearRenderer) {
 //            IBone gbHood = geoArmorRenderer.getGeoModelProvider().getBone(((NecromancerArmorGearRenderer) geoArmorRenderer).hoodBodyBone);
