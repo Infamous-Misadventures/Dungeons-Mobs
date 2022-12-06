@@ -18,17 +18,17 @@ import software.bernie.geckolib3.resource.GeckoLibCache;
 public class ReplacedPillagerModel extends AnimatedGeoModel {
 
     @Override
-    public ResourceLocation getAnimationFileLocation(Object entity) {
+    public ResourceLocation getAnimationResource(Object entity) {
         return new ResourceLocation(DungeonsMobs.MODID, "animations/pillager.animation.json");
     }
 
     @Override
-    public ResourceLocation getModelLocation(Object entity) {
+    public ResourceLocation getModelResource(Object entity) {
         return new ResourceLocation(DungeonsMobs.MODID, "geo/geo_illager.geo.json") ;
     }
 
     @Override
-    public ResourceLocation getTextureLocation(Object entity) {
+    public ResourceLocation getTextureResource(Object entity) {
 //        return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/pillager.png");
         return new ResourceLocation("textures/entity/illager/pillager.png");
     }
@@ -64,6 +64,6 @@ public class ReplacedPillagerModel extends AnimatedGeoModel {
 		LivingEntity livingEntity = ((ReplacedPillagerEntity) animatable).getMob();
 		Vec3 velocity = livingEntity.getDeltaMovement();
 		float groundSpeed = Mth.sqrt((float) ((velocity.x * velocity.x) + (velocity.z * velocity.z)));
-		parser.setValue("query.ground_speed", groundSpeed * 20);
+		parser.setValue("query.ground_speed", () -> groundSpeed * 20);
 	}
 }

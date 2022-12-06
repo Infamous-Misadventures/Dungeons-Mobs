@@ -44,7 +44,7 @@ import static com.infamous.dungeons_mobs.DungeonsMobs.DUNGEONS_MOBS;
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
 public class ModEntityTypes {
-    public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITIES, MODID);
+    public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, MODID);
     public static final DeferredRegister<Item> SPAWN_EGGS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
 
     public static final List<String> ENTITY_IDS = new ArrayList<>();

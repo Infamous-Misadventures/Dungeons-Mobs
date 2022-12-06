@@ -11,17 +11,17 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 public class CobwebProjectileModel extends AnimatedGeoModel<CobwebProjectileEntity> {
 
 	@Override
-	public ResourceLocation getAnimationFileLocation(CobwebProjectileEntity entity) {
+	public ResourceLocation getAnimationResource(CobwebProjectileEntity entity) {
 		return new ResourceLocation(DungeonsMobs.MODID, "animations/web_projectile.animation.json");
 	}
 
 	@Override
-	public ResourceLocation getModelLocation(CobwebProjectileEntity entity) {
+	public ResourceLocation getModelResource(CobwebProjectileEntity entity) {
 		return new ResourceLocation(DungeonsMobs.MODID, "geo/web_projectile.geo.json");
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(CobwebProjectileEntity entity) {
+	public ResourceLocation getTextureResource(CobwebProjectileEntity entity) {
 		return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/projectile/web_projectile.png");
 	}
 

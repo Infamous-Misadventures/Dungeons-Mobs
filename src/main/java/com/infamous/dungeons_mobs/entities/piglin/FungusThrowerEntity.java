@@ -10,6 +10,7 @@ import com.infamous.dungeons_mobs.utils.PiglinHelper;
 import com.mojang.serialization.Dynamic;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -66,12 +67,12 @@ public class FungusThrowerEntity extends Piglin {
     }
 
     @Override
-    protected void populateDefaultEquipmentSlots(DifficultyInstance p_180481_1_) {
+    protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance p_180481_1_) {
         // NO-OP
     }
 
     @Override
-    protected void populateDefaultEquipmentEnchantments(DifficultyInstance p_180483_1_) {
+    protected void populateDefaultEquipmentEnchantments(RandomSource randomSource, DifficultyInstance p_180483_1_) {
         // NO-OP
     }
 

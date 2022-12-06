@@ -6,7 +6,7 @@ import com.infamous.dungeons_mobs.goals.*;
 import com.infamous.dungeons_mobs.interfaces.IAquaticMob;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
-import com.infamous.dungeons_mobs.tags.CustomTags;
+import com.infamous.dungeons_mobs.tags.EntityTags;
 import com.infamous.dungeons_mobs.utils.GeomancyHelper;
 import com.infamous.dungeons_mobs.utils.PositionUtils;
 import net.minecraft.Util;
@@ -409,7 +409,7 @@ public class WhispererEntity extends Monster implements IAnimatable, IAquaticMob
 	   public boolean isAlliedTo(Entity p_184191_1_) {
 		      if (super.isAlliedTo(p_184191_1_)) {
 		         return true;
-		      } else if (p_184191_1_ instanceof LivingEntity && ((LivingEntity)p_184191_1_).getType().is(CustomTags.PLANT_MOBS)) {
+		      } else if (p_184191_1_ instanceof LivingEntity && ((LivingEntity)p_184191_1_).getType().is(EntityTags.PLANT_MOBS)) {
 		         return this.getTeam() == null && p_184191_1_.getTeam() == null;
 		      } else {
 		         return false;

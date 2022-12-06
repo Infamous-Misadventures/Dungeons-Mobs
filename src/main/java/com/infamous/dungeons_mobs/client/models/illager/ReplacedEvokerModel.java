@@ -19,17 +19,17 @@ import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 public class ReplacedEvokerModel extends AnimatedGeoModel {
 
     @Override
-    public ResourceLocation getAnimationFileLocation(Object entity) {
+    public ResourceLocation getAnimationResource(Object entity) {
         return new ResourceLocation(MODID, "animations/evoker.animation.json");
     }
 
     @Override
-    public ResourceLocation getModelLocation(Object entity) {
+    public ResourceLocation getModelResource(Object entity) {
         return new ResourceLocation(MODID, "geo/geo_illager.geo.json") ;
     }
 
     @Override
-    public ResourceLocation getTextureLocation(Object entity) {
+    public ResourceLocation getTextureResource(Object entity) {
 //        return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/pillager.png");
         return new ResourceLocation(MODID, "textures/entity/illager/evoker.png");
     }
@@ -65,6 +65,6 @@ public class ReplacedEvokerModel extends AnimatedGeoModel {
 		LivingEntity livingEntity = ((ReplacedEvokerEntity) animatable).getMob();
 		Vec3 velocity = livingEntity.getDeltaMovement();
 		float groundSpeed = Mth.sqrt((float) ((velocity.x * velocity.x) + (velocity.z * velocity.z)));
-		parser.setValue("query.ground_speed", groundSpeed * 20);
+		parser.setValue("query.ground_speed", () -> groundSpeed * 20);
 	}
 }

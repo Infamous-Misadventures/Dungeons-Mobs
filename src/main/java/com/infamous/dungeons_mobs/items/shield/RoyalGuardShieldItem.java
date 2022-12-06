@@ -8,12 +8,14 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.level.block.DispenserBlock;
-import net.minecraftforge.client.IItemRenderProperties;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.common.util.NonNullLazy;
 
 import javax.annotation.Nullable;
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
+
+import net.minecraft.world.item.Item.Properties;
 
 public class RoyalGuardShieldItem extends ShieldItem {
     public RoyalGuardShieldItem(Properties builder) {
@@ -34,14 +36,14 @@ public class RoyalGuardShieldItem extends ShieldItem {
     }
 
     @Override
-    public void initializeClient(Consumer<IItemRenderProperties> consumer)
+    public void initializeClient(Consumer<IClientItemExtensions> consumer)
     {
-        consumer.accept(new IItemRenderProperties()
+        consumer.accept(new IClientItemExtensions()
         {
             static final NonNullLazy<BlockEntityWithoutLevelRenderer> renderer = NonNullLazy.of(() -> new RoyalGuardShieldBEWLR(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels()));
 
             @Override
-            public BlockEntityWithoutLevelRenderer getItemStackRenderer()
+            public BlockEntityWithoutLevelRenderer getCustomRenderer()
             {
                 return renderer.get();
             }

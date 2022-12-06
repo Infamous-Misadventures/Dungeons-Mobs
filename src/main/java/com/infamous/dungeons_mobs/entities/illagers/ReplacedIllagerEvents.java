@@ -10,7 +10,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.monster.Vindicator;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -23,7 +23,7 @@ public class ReplacedIllagerEvents {
 
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onEntityJoinWorld(EntityJoinWorldEvent event){
+    public static void onEntityJoinWorld(EntityJoinLevelEvent event){
         Entity entity = event.getEntity();
         if(entity instanceof Vindicator vindicatorEntity) {
             GoalUtils.removeGoal(vindicatorEntity.goalSelector, MeleeAttackGoal.class);
@@ -36,9 +36,9 @@ public class ReplacedIllagerEvents {
     }
 
     @SubscribeEvent
-    public static void onLivingUpdate(LivingEvent.LivingUpdateEvent event){
+    public static void onLivingUpdate(LivingEvent.LivingTickEvent event){
 
-        LivingEntity livingEntity = event.getEntityLiving();
+        LivingEntity livingEntity = event.getEntity();
         if(livingEntity instanceof Vindicator){
             tickDownAnimTimers((Mob) livingEntity);
         }

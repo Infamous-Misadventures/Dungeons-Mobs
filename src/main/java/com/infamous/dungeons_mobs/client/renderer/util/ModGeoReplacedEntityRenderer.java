@@ -192,7 +192,7 @@ public abstract class ModGeoReplacedEntityRenderer<T extends IAnimatable> extend
 		entityModelData.headPitch = -f6;
 		entityModelData.netHeadYaw = -f2;
 
-		GeoModel model = modelProvider.getModel(modelProvider.getModelLocation(animatable));
+		GeoModel model = modelProvider.getModel(modelProvider.getModelResource(animatable));
 		AnimationEvent predicate = new AnimationEvent(animatable, limbSwing, limbSwingAmount, partialTicks,
 				!(limbSwingAmount > -0.15F && limbSwingAmount < 0.15F), Collections.singletonList(entityModelData));
 		((IAnimatableModel) modelProvider).setCustomAnimations(animatable, this.getInstanceId(entity), predicate);
@@ -336,7 +336,7 @@ public abstract class ModGeoReplacedEntityRenderer<T extends IAnimatable> extend
 
 	@Override
 	public ResourceLocation getTextureLocation(Object instance) {
-		return this.modelProvider.getTextureLocation((IAnimatable) instance);
+		return this.modelProvider.getTextureResource((IAnimatable) instance);
 	}
 
 	public <E extends Entity> void renderLeash(Mob entity, float partialTicks, PoseStack poseStack,

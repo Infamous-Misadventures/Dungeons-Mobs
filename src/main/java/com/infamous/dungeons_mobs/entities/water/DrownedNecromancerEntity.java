@@ -21,6 +21,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
@@ -61,6 +62,8 @@ import java.util.Random;
 
 import static com.infamous.dungeons_mobs.entities.SpawnArmoredHelper.equipArmorSet;
 import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
+
+import net.minecraft.world.entity.Entity.RemovalReason;
 
 public class DrownedNecromancerEntity extends Drowned implements IAnimatable, SpawnArmoredMob {
 
@@ -237,7 +240,7 @@ public class DrownedNecromancerEntity extends Drowned implements IAnimatable, Sp
         return ModSoundEvents.DROWNED_NECROMANCER_SWIM.get();
     }
 
-    protected void populateDefaultEquipmentSlots(DifficultyInstance difficultyInstance) {
+    protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficultyInstance) {
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.NECROMANCER_TRIDENT.get()));
         equipArmorSet(ModItems.DROWNED_NECROMANCER_ARMOR, this);
     }
@@ -379,7 +382,7 @@ public class DrownedNecromancerEntity extends Drowned implements IAnimatable, Sp
 
         @Nullable
         private Vec3 getWaterPos() {
-            Random random = this.mob.getRandom();
+            RandomSource random = this.mob.getRandom();
             BlockPos blockpos = this.mob.blockPosition();
 
             for (int i = 0; i < 10; ++i) {
@@ -535,7 +538,7 @@ public class DrownedNecromancerEntity extends Drowned implements IAnimatable, Sp
 
                 int randomIndex = mob.getRandom().nextInt(necromancerMobSummons.size());
                 String randomMobID = necromancerMobSummons.get(randomIndex);
-                entityType = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(randomMobID));
+                entityType = ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(randomMobID));
             }
             if (entityType == null) {
                 entityType = EntityType.DROWNED;
@@ -872,7 +875,7 @@ public class DrownedNecromancerEntity extends Drowned implements IAnimatable, Sp
 
                 int randomIndex = mob.getRandom().nextInt(necromancerMobSummons.size());
                 String randomMobID = necromancerMobSummons.get(randomIndex);
-                entityType = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(randomMobID));
+                entityType = ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(randomMobID));
             }
             if (entityType == null) {
                 entityType = EntityType.DROWNED;

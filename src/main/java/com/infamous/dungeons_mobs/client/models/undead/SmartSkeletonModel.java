@@ -10,6 +10,8 @@ import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 
+import net.minecraft.client.model.HumanoidModel.ArmPose;
+
 public class SmartSkeletonModel<T extends AbstractSkeleton> extends SkeletonModel<T> {
 
     public SmartSkeletonModel(ModelPart p_170941_) {

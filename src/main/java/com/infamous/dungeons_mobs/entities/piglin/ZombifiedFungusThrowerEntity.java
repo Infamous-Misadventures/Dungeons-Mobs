@@ -4,6 +4,7 @@ import com.infamous.dungeons_mobs.entities.piglin.ai.FungusThrowerAi;
 import com.infamous.dungeons_mobs.goals.SimpleRangedAttackGoal;
 import com.infamous.dungeons_mobs.items.BlueNethershroomItem;
 import com.infamous.dungeons_mobs.mod.ModItems;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -28,7 +29,7 @@ public class ZombifiedFungusThrowerEntity extends ZombifiedPiglin {
     }
 
     @Override
-    protected void populateDefaultEquipmentSlots(DifficultyInstance difficultyInstance) {
+    protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficultyInstance) {
         this.setItemSlot(EquipmentSlot.MAINHAND, ModItems.BLUE_NETHERSHROOM.get().getDefaultInstance());
     }
 }

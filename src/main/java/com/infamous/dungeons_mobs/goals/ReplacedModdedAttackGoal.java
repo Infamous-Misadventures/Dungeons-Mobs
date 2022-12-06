@@ -15,6 +15,8 @@ import net.minecraftforge.network.PacketDistributor;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
+import net.minecraft.world.entity.ai.goal.Goal.Flag;
+
 public class ReplacedModdedAttackGoal<T extends Mob> extends Goal {
 
     public T mob;

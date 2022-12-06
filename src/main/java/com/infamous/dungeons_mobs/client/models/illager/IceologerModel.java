@@ -18,17 +18,17 @@ import software.bernie.geckolib3.resource.GeckoLibCache;
 public class IceologerModel extends AnimatedGeoModel<IceologerEntity> {
 
     @Override
-    public ResourceLocation getAnimationFileLocation(IceologerEntity entity) {
+    public ResourceLocation getAnimationResource(IceologerEntity entity) {
         return new ResourceLocation(DungeonsMobs.MODID, "animations/iceologer.animation.json");
     }
 
     @Override
-    public ResourceLocation getModelLocation(IceologerEntity entity) {
+    public ResourceLocation getModelResource(IceologerEntity entity) {
         return new ResourceLocation(DungeonsMobs.MODID, "geo/geo_illager.geo.json") ;
     }
 
     @Override
-    public ResourceLocation getTextureLocation(IceologerEntity entity) {
+    public ResourceLocation getTextureResource(IceologerEntity entity) {
         return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/iceologer.png");
     }
 

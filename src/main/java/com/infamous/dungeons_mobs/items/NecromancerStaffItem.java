@@ -33,6 +33,8 @@ import java.util.stream.Collectors;
 import static com.infamous.dungeons_libraries.attribute.AttributeRegistry.SUMMON_CAP;
 import static com.infamous.dungeons_libraries.capabilities.minionmaster.MinionMasterHelper.getMasterCapability;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class NecromancerStaffItem extends ArtifactItem implements IHasInventorySprite, ISoulConsumer {
     public NecromancerStaffItem(Properties properties) {
         super(properties);

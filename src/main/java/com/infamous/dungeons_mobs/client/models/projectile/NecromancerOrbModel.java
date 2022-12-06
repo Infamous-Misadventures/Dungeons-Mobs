@@ -11,17 +11,17 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 public class NecromancerOrbModel extends AnimatedGeoModel<NecromancerOrbEntity> {
 
 	@Override
-	public ResourceLocation getAnimationFileLocation(NecromancerOrbEntity entity) {
+	public ResourceLocation getAnimationResource(NecromancerOrbEntity entity) {
 		return new ResourceLocation(DungeonsMobs.MODID, "animations/necromancer_orb.animation.json");
 	}
 
 	@Override
-	public ResourceLocation getModelLocation(NecromancerOrbEntity entity) {
+	public ResourceLocation getModelResource(NecromancerOrbEntity entity) {
 		return new ResourceLocation(DungeonsMobs.MODID, "geo/necromancer_orb.geo.json");
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(NecromancerOrbEntity entity) {
+	public ResourceLocation getTextureResource(NecromancerOrbEntity entity) {
 		return new ResourceLocation(DungeonsMobs.MODID,"textures/entity/projectile/necromancer_orb_" + entity.textureChange % 3 + ".png");
 	}
 

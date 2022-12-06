@@ -10,12 +10,14 @@ import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.IItemRenderProperties;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 
 import javax.annotation.Nullable;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 import static com.infamous.dungeons_mobs.client.models.geom.ModModelLayers.PILLAGER_HELMET;
+
+import net.minecraft.world.item.Item.Properties;
 
 public class PillagerHelmetItem extends ArmorItem {
     private final boolean isDiamond;
@@ -26,13 +28,13 @@ public class PillagerHelmetItem extends ArmorItem {
     }
 
     @Override
-    public void initializeClient(java.util.function.Consumer<net.minecraftforge.client.IItemRenderProperties> consumer) {
-        consumer.accept(new IItemRenderProperties() {
+    public void initializeClient(java.util.function.Consumer<net.minecraftforge.client.extensions.common.IClientItemExtensions> consumer) {
+        consumer.accept(new IClientItemExtensions() {
             private PillagerHelmetModel model;
 
             @Nullable
             @Override
-            public net.minecraft.client.model.HumanoidModel<?> getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot armorSlot, net.minecraft.client.model.HumanoidModel<?> _default) {
+            public net.minecraft.client.model.HumanoidModel<?> getHumanoidArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot armorSlot, net.minecraft.client.model.HumanoidModel<?> _default) {
                 if (null == model) {
                     model = new PillagerHelmetModel(
                             net.minecraft.client.Minecraft.getInstance().getEntityModels()

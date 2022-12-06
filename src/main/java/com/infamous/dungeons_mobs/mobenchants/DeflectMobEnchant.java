@@ -1,6 +1,6 @@
 package com.infamous.dungeons_mobs.mobenchants;
 
-import com.baguchan.enchantwithmob.mobenchant.MobEnchant;
+import baguchan.enchantwithmob.mobenchant.MobEnchant;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -14,6 +14,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import static com.infamous.dungeons_mobs.mobenchants.NewMobEnchantUtils.executeIfPresentWithLevel;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchants.DEFLECT;
+
+import baguchan.enchantwithmob.mobenchant.MobEnchant.Properties;
 
 public class DeflectMobEnchant extends MobEnchant {
 

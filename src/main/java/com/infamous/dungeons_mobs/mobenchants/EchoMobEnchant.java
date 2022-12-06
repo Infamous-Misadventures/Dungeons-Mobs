@@ -1,6 +1,6 @@
 package com.infamous.dungeons_mobs.mobenchants;
 
-import com.baguchan.enchantwithmob.mobenchant.MobEnchant;
+import baguchan.enchantwithmob.mobenchant.MobEnchant;
 import com.infamous.dungeons_mobs.utils.EchoDamageSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -10,6 +10,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import static com.infamous.dungeons_mobs.mobenchants.NewMobEnchantUtils.executeIfPresentWithLevel;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchants.ECHO;
+
+import baguchan.enchantwithmob.mobenchant.MobEnchant.Properties;
 
 public class EchoMobEnchant extends MobEnchant {
 

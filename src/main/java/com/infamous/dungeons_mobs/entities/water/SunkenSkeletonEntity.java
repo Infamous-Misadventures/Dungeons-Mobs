@@ -13,6 +13,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
@@ -176,7 +177,7 @@ public class SunkenSkeletonEntity extends AbstractSkeleton implements CrossbowAt
     }
 
     @Override
-    protected void populateDefaultEquipmentSlots(DifficultyInstance p_180481_1_) {
+    protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance p_180481_1_) {
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.CROSSBOW));
     }
     

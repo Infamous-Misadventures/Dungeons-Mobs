@@ -11,8 +11,8 @@ import com.infamous.dungeons_mobs.items.GroupDungeonsMobsItems;
 import com.infamous.dungeons_mobs.mod.*;
 import com.infamous.dungeons_mobs.network.NetworkHandler;
 import com.infamous.dungeons_mobs.network.datasync.ModDataSerializers;
-import com.infamous.dungeons_mobs.tags.CustomTags;
-import com.infamous.dungeons_mobs.worldgen.BiomeSpawnEntries;
+import com.infamous.dungeons_mobs.tags.BiomeTags;
+import com.infamous.dungeons_mobs.tags.EntityTags;
 import com.infamous.dungeons_mobs.worldgen.EntitySpawnPlacements;
 import com.infamous.dungeons_mobs.worldgen.RaidEntries;
 import com.infamous.dungeons_mobs.worldgen.SensorMapModifier;
@@ -58,9 +58,9 @@ public class DungeonsMobs
 
         GeckoLib.initialize();
 
-        // Registering custom tags to ensure compat with Morph.
-        CustomTags.register();
-
+        // Registering custom tags
+        EntityTags.register();
+        BiomeTags.register();
 
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
     	ModSoundEvents.SOUNDS.register(modEventBus);
@@ -85,7 +85,6 @@ public class DungeonsMobs
         event.enqueueWork(EntitySpawnPlacements::initSpawnPlacements);
         event.enqueueWork(RaidEntries::initWaveMemberEntries);
         event.enqueueWork(SensorMapModifier::replaceSensorMaps);
-        event.enqueueWork(BiomeSpawnEntries::addCustomTypesToBiomes);
         event.enqueueWork(NetworkHandler::init);
     }
 

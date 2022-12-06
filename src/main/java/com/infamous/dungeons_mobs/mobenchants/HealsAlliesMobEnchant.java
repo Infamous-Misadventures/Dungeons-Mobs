@@ -1,6 +1,6 @@
 package com.infamous.dungeons_mobs.mobenchants;
 
-import com.baguchan.enchantwithmob.mobenchant.MobEnchant;
+import baguchan.enchantwithmob.mobenchant.MobEnchant;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -9,6 +9,8 @@ import static com.infamous.dungeons_libraries.utils.AreaOfEffectHelper.applyToNe
 import static com.infamous.dungeons_libraries.utils.AreaOfEffectHelper.getCanHealPredicate;
 import static com.infamous.dungeons_mobs.mobenchants.NewMobEnchantUtils.executeIfPresentWithLevel;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchants.HEALS_ALLIES;
+
+import baguchan.enchantwithmob.mobenchant.MobEnchant.Properties;
 
 public class HealsAlliesMobEnchant extends MobEnchant {
 
@@ -20,7 +22,7 @@ public class HealsAlliesMobEnchant extends MobEnchant {
 
     @SubscribeEvent
     public static void onLivingDamage(LivingDamageEvent event) {
-        LivingEntity defender = event.getEntityLiving();
+        LivingEntity defender = event.getEntity();
         executeIfPresentWithLevel(defender, HEALS_ALLIES.get(), (level) -> {
             applyToNearbyEntities(defender, 1.5F,
                     getCanHealPredicate(defender), (LivingEntity nearbyEntity) ->

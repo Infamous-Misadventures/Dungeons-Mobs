@@ -10,6 +10,8 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
+import net.minecraft.world.item.Item.Properties;
+
 public abstract class AbstractNecromancerStaffItem extends AbstractStaffItem{
 
     public AbstractNecromancerStaffItem(Properties properties) {

@@ -22,6 +22,8 @@ import net.minecraftforge.network.NetworkHooks;
 
 import java.util.List;
 
+import net.minecraft.world.entity.Entity.RemovalReason;
+
 public class AreaDamageEntity extends Entity {
 
 	private static final EntityDataAccessor<Float> SIZE = SynchedEntityData.defineId(AreaDamageEntity.class,

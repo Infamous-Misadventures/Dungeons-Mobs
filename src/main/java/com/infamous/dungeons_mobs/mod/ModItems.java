@@ -32,8 +32,7 @@ public class ModItems {
 
     public static final Map<ResourceLocation, RegistryObject<Item>> ARTIFACTS = new HashMap<>();
 
-    public static final Item.Properties ARMOR_PROPERTIES = DungeonsMobsConfig.Common.ENABLE_ITEM_TAB.get() ?
-            new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS) : new Item.Properties();
+    public static final Item.Properties ARMOR_PROPERTIES = new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS);
     public static final Map<ResourceLocation, RegistryObject<Item>> ARMORS = new HashMap<>();
 
     // SHIELD

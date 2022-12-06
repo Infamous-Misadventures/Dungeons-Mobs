@@ -17,6 +17,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.PacketDistributor;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class WindcallerStaffItem extends ArtifactItem implements IHasInventorySprite {
     public WindcallerStaffItem(Properties properties) {
         super(properties);

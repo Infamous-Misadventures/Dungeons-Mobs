@@ -1,6 +1,6 @@
 package com.infamous.dungeons_mobs.mobenchants;
 
-import com.baguchan.enchantwithmob.mobenchant.MobEnchant;
+import baguchan.enchantwithmob.mobenchant.MobEnchant;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -12,6 +12,8 @@ import static com.infamous.dungeons_libraries.utils.AreaOfEffectHelper.getCanHea
 import static com.infamous.dungeons_mobs.DungeonsMobs.PROXY;
 import static com.infamous.dungeons_mobs.mobenchants.NewMobEnchantUtils.executeIfPresentWithLevel;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchants.RADIANCE;
+
+import baguchan.enchantwithmob.mobenchant.MobEnchant.Properties;
 
 public class RadianceMobEnchant extends MobEnchant {
 
@@ -30,7 +32,7 @@ public class RadianceMobEnchant extends MobEnchant {
         }
         if (attacker instanceof LivingEntity)
             executeIfPresentWithLevel((LivingEntity) attacker, RADIANCE.get(), (level) -> {
-                LivingEntity source = event.getSource().isProjectile() ? event.getEntityLiving() : (LivingEntity) attacker;
+                LivingEntity source = event.getSource().isProjectile() ? event.getEntity() : (LivingEntity) attacker;
                 applyToNearbyEntities(source, 1.5F,
                         getCanHealPredicate(source), (LivingEntity nearbyEntity) -> {
                             nearbyEntity.heal(level);

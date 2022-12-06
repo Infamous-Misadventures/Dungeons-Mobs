@@ -19,17 +19,17 @@ import software.bernie.geckolib3.resource.GeckoLibCache;
 public class WhispererModel<T extends WhispererEntity> extends AnimatedGeoModel<T> {
 
 	@Override
-	public ResourceLocation getAnimationFileLocation(T entity) {
+	public ResourceLocation getAnimationResource(T entity) {
 		return new ResourceLocation(DungeonsMobs.MODID, "animations/whisperer.animation.json");
 	}
 
 	@Override
-	public ResourceLocation getModelLocation(T entity) {
+	public ResourceLocation getModelResource(T entity) {
 		return new ResourceLocation(DungeonsMobs.MODID, "geo/whisperer.geo.json") ;
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(T entity) {
+	public ResourceLocation getTextureResource(T entity) {
 		return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/jungle/whisperer.png");
 	}
 

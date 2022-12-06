@@ -23,6 +23,8 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
+import net.minecraft.world.entity.Entity.RemovalReason;
+
 public class SummonSpotEntity extends Entity implements IAnimatable {
 
 	private static final EntityDataAccessor<Integer> SUMMON_TYPE = SynchedEntityData.defineId(SummonSpotEntity.class,

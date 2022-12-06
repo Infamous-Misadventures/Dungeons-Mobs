@@ -8,6 +8,8 @@ import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class MountaineerAxeItem extends PickaxeItem {
     public MountaineerAxeItem(Tier tier, int attackDamageIn, float attackSpeedIn, Properties builder) {
         super(tier, attackDamageIn, attackSpeedIn, builder);

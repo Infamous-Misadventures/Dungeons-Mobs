@@ -6,11 +6,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.TridentItem;
-import net.minecraftforge.client.IItemRenderProperties;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.common.util.NonNullLazy;
 
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
+
+import net.minecraft.world.item.Item.Properties;
 
 public class ColoredTridentItem extends TridentItem implements IHasInventorySprite {
     private final DyeColor tridentColor;
@@ -25,19 +27,19 @@ public class ColoredTridentItem extends TridentItem implements IHasInventorySpri
     }
 
     @Override
-    public String getModelLocation() {
+    public String getModelResource() {
         return "replace with actual location, currently just here to assure the Tridents are working correctly";
     }
 
     @Override
-    public void initializeClient(Consumer<IItemRenderProperties> consumer)
+    public void initializeClient(Consumer<IClientItemExtensions> consumer)
     {
-        consumer.accept(new IItemRenderProperties()
+        consumer.accept(new IClientItemExtensions()
         {
             static final NonNullLazy<BlockEntityWithoutLevelRenderer> renderer = NonNullLazy.of(() -> new CustomISTER(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels()));
 
             @Override
-            public BlockEntityWithoutLevelRenderer getItemStackRenderer()
+            public BlockEntityWithoutLevelRenderer getCustomRenderer()
             {
                 return renderer.get();
             }

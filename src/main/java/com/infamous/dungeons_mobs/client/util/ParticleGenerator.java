@@ -46,7 +46,7 @@ public class ParticleGenerator {
     }
 
     private static ParticleStatus calculateParticleLevel(boolean minimize) {
-        ParticleStatus particlestatus = MINECRAFT.options.particles;
+        ParticleStatus particlestatus = MINECRAFT.options.particles().get();
         if (minimize && particlestatus == ParticleStatus.MINIMAL && RANDOM.nextInt(10) == 0) {
             particlestatus = ParticleStatus.DECREASED;
         }

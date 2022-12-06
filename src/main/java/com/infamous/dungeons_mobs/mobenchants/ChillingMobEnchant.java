@@ -1,6 +1,6 @@
 package com.infamous.dungeons_mobs.mobenchants;
 
-import com.baguchan.enchantwithmob.mobenchant.MobEnchant;
+import baguchan.enchantwithmob.mobenchant.MobEnchant;
 import com.infamous.dungeons_mobs.capabilities.properties.MobProps;
 import com.infamous.dungeons_mobs.capabilities.properties.MobPropsHelper;
 import net.minecraft.core.particles.ParticleTypes;
@@ -16,6 +16,8 @@ import static com.infamous.dungeons_mobs.DungeonsMobs.PROXY;
 import static com.infamous.dungeons_mobs.mobenchants.NewMobEnchantUtils.executeIfPresentWithLevel;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchants.CHILLING;
 
+import baguchan.enchantwithmob.mobenchant.MobEnchant.Properties;
+
 public class ChillingMobEnchant extends MobEnchant {
 
     public ChillingMobEnchant(Properties properties) {
@@ -23,7 +25,7 @@ public class ChillingMobEnchant extends MobEnchant {
     }
 
     @SubscribeEvent
-    public static void OnLivingUpdate(LivingEvent.LivingUpdateEvent event) {
+    public static void OnLivingUpdate(LivingEvent.LivingTickEvent event) {
         LivingEntity entity = (LivingEntity) event.getEntity();
 
         executeIfPresentWithLevel(entity, CHILLING.get(), (level) -> {

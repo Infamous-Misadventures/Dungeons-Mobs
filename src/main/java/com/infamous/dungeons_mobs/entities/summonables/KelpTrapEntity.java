@@ -1,6 +1,6 @@
 package com.infamous.dungeons_mobs.entities.summonables;
 
-import com.infamous.dungeons_mobs.tags.CustomTags;
+import com.infamous.dungeons_mobs.tags.EntityTags;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -84,7 +84,7 @@ public class KelpTrapEntity extends AbstractTrapEntity {
 	
 	@Override
 	public boolean canTrapEntity(LivingEntity entity) {
-		return super.canTrapEntity(entity) && !entity.getType().is(CustomTags.PLANT_MOBS);
+		return super.canTrapEntity(entity) && !entity.getType().is(EntityTags.PLANT_MOBS);
 	} 
 	
 	@Override

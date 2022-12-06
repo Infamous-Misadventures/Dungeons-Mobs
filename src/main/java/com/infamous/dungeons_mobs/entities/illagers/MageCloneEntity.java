@@ -41,6 +41,8 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
+import net.minecraft.world.entity.Entity.RemovalReason;
+
 public class MageCloneEntity extends AbstractIllager implements IAnimatable, SpawnArmoredMob {
 
 	private static final EntityDataAccessor<Boolean> DELAYED_APPEAR = SynchedEntityData.defineId(MageCloneEntity.class,

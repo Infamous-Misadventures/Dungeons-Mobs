@@ -18,6 +18,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
@@ -53,6 +54,8 @@ import java.util.List;
 
 import static com.infamous.dungeons_mobs.entities.SpawnArmoredHelper.equipArmorSet;
 import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
+
+import net.minecraft.world.entity.Entity.RemovalReason;
 
 public class NecromancerEntity extends Skeleton implements IAnimatable, SpawnArmoredMob {
 
@@ -133,7 +136,7 @@ public class NecromancerEntity extends Skeleton implements IAnimatable, SpawnArm
         return false;
     }
 
-    protected void populateDefaultEquipmentSlots(DifficultyInstance difficultyInstance) {
+    protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficultyInstance) {
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.NECROMANCER_STAFF.get()));
         equipArmorSet(ModItems.NECROMANCER_ARMOR, this);
     }
@@ -353,7 +356,7 @@ public class NecromancerEntity extends Skeleton implements IAnimatable, SpawnArm
 
                 int randomIndex = mob.getRandom().nextInt(necromancerMobSummons.size());
                 String randomMobID = necromancerMobSummons.get(randomIndex);
-                entityType = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(randomMobID));
+                entityType = ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(randomMobID));
             }
             if (entityType == null) {
                 entityType = EntityType.ZOMBIE;

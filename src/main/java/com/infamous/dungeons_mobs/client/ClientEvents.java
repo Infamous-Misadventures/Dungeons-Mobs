@@ -38,9 +38,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.DyeColor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
-import net.minecraftforge.client.model.ForgeModelBakery;
+import net.minecraftforge.client.event.ModelEvent;
+import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -52,11 +51,11 @@ import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 public class ClientEvents {
 
     @SubscribeEvent
-    public static void onClientSetup(final ModelRegistryEvent event) {
-        ForgeModelBakery.addSpecialModel(CustomISTER.getTridentMRL(DyeColor.YELLOW, false));
-        ForgeModelBakery.addSpecialModel(CustomISTER.getTridentMRL(DyeColor.PURPLE, false));
-        ForgeModelBakery.addSpecialModel(CustomISTER.getTridentMRL(DyeColor.YELLOW, true));
-        ForgeModelBakery.addSpecialModel(CustomISTER.getTridentMRL(DyeColor.PURPLE, true));
+    public static void onClientSetup(ModelEvent.RegisterAdditional event) {
+        event.register(CustomISTER.getTridentMRL(DyeColor.YELLOW, false));
+        event.register(CustomISTER.getTridentMRL(DyeColor.PURPLE, false));
+        event.register(CustomISTER.getTridentMRL(DyeColor.YELLOW, true));
+        event.register(CustomISTER.getTridentMRL(DyeColor.PURPLE, true));
     }
 
     @SubscribeEvent
@@ -67,15 +66,15 @@ public class ClientEvents {
         // To match Husk proportions found in MCD
         event.registerEntityRenderer(EntityType.HUSK, CustomZombieRenderer::new);
 
-        if(DungeonsMobsConfig.COMMON.ENABLE_PILLAGERS_WEARING_ARMOR.get()){
+//        if(DungeonsMobsConfig.COMMON.ENABLE_PILLAGERS_WEARING_ARMOR.get()){
             event.registerEntityRenderer(EntityType.PILLAGER, ReplacedPillagerRenderer::new);
-        }
-        if(DungeonsMobsConfig.COMMON.ENABLE_VINDICATORS_WEARING_ARMOR.get()){
+//        }
+//        if(DungeonsMobsConfig.COMMON.ENABLE_VINDICATORS_WEARING_ARMOR.get()){
             event.registerEntityRenderer(EntityType.VINDICATOR, ReplacedVindicatorRenderer::new);
-        }
-        if(DungeonsMobsConfig.COMMON.ENABLE_EVOKERS_WEARING_ARMOR.get()){
+//        }
+//        if(DungeonsMobsConfig.COMMON.ENABLE_EVOKERS_WEARING_ARMOR.get()){
             event.registerEntityRenderer(EntityType.EVOKER, ReplacedEvokerRenderer::new);
-        }
+//        }
         
         event.registerEntityRenderer(EntityType.DROWNED, CustomDrownedRenderer::new);
 
@@ -177,7 +176,7 @@ public class ClientEvents {
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void onParticleFactory(ParticleFactoryRegisterEvent event) {
+    public static void onParticleFactory(RegisterParticleProvidersEvent event) {
         Minecraft.getInstance().particleEngine.register(ModParticleTypes.SNOWFLAKE.get(), SnowflakeParticle.Factory::new);
         Minecraft.getInstance().particleEngine.register(ModParticleTypes.REDSTONE_SPARK.get(), RedstoneSparkParticle.Factory::new);
         Minecraft.getInstance().particleEngine.register(ModParticleTypes.WIND.get(), WindParticle.Factory::new);

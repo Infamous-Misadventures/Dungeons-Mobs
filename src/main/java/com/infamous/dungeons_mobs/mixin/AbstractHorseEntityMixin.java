@@ -18,7 +18,7 @@ import javax.annotation.Nullable;
 @Mixin(AbstractHorse.class)
 public abstract class AbstractHorseEntityMixin extends Animal {
 
-    @Shadow @Nullable public abstract Entity getControllingPassenger();
+//    @Shadow @Nullable public abstract Entity getControllingPassenger();
 
     protected AbstractHorseEntityMixin(EntityType<? extends Animal> type, Level worldIn) {
         super(type, worldIn);
@@ -26,7 +26,7 @@ public abstract class AbstractHorseEntityMixin extends Animal {
     @Inject(at = @At("HEAD"), method = "travel", cancellable = true)
     private void travel(Vec3 travelVector, CallbackInfo callbackInfo){
         if (this.isAlive()) {
-            if (this.isVehicle() && this.canBeControlledByRider() && this.isSaddled() && this.getControllingPassenger() instanceof Mob) {
+            if (this.isVehicle() && this.hasControllingPassenger() && this.isSaddled() && this.getControllingPassenger() instanceof Mob) {
                 //DungeonsMobs.LOGGER.info("Forcing saddled horse to follow rider's AI!");
                 this.flyingSpeed = 0.02F;
                 super.travel(travelVector);

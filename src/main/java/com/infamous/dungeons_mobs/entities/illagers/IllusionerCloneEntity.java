@@ -44,6 +44,8 @@ import java.util.EnumSet;
 
 import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
+import net.minecraft.world.entity.Entity.RemovalReason;
+
 public class IllusionerCloneEntity extends AbstractIllager implements IAnimatable, SpawnArmoredMob {
 
 	private static final EntityDataAccessor<Boolean> DELAYED_APPEAR = SynchedEntityData.defineId(IllusionerCloneEntity.class,

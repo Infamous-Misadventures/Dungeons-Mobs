@@ -16,6 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
@@ -66,6 +67,8 @@ import java.util.UUID;
 
 import static com.infamous.dungeons_mobs.entities.SpawnArmoredHelper.equipArmorSet;
 import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
+
+import net.minecraft.world.entity.monster.AbstractIllager.IllagerArmPose;
 
 public class RoyalGuardEntity extends AbstractIllager implements IAnimatable, IShieldUser, SpawnArmoredMob {
 
@@ -121,8 +124,8 @@ public class RoyalGuardEntity extends AbstractIllager implements IAnimatable, IS
 		SpawnGroupData ilivingentitydata = super.finalizeSpawn(p_213386_1_, p_213386_2_, p_213386_3_, p_213386_4_,
 				p_213386_5_);
 		((GroundPathNavigation) this.getNavigation()).setCanOpenDoors(true);
-		this.populateDefaultEquipmentSlots(p_213386_2_);
-		this.populateDefaultEquipmentEnchantments(p_213386_2_);
+		this.populateDefaultEquipmentSlots(this.getRandom(), p_213386_2_);
+		this.populateDefaultEquipmentEnchantments(this.getRandom(), p_213386_2_);
 		return ilivingentitydata;
 	}
 	
@@ -218,7 +221,7 @@ public class RoyalGuardEntity extends AbstractIllager implements IAnimatable, IS
 	}
 
 	@Override
-	protected void populateDefaultEquipmentSlots(DifficultyInstance difficultyInstance) {
+	protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficultyInstance) {
 		equipArmorSet(ModItems.ROYAL_GUARD_ARMOR, this);
 
 		if (ModList.get().isLoaded("dungeons_gear")) {

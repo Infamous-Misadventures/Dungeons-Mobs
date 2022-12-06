@@ -12,6 +12,9 @@ import javax.annotation.Nullable;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
+import net.minecraft.world.item.Item.Properties;
+import net.minecraftforge.registries.ForgeRegistries;
+
 public class PiglinHelmetItem extends ArmorItem {
 
     public PiglinHelmetItem(ArmorMaterial armorMaterial, EquipmentSlot slotType, Properties properties) {
@@ -22,6 +25,6 @@ public class PiglinHelmetItem extends ArmorItem {
     @Override
     @OnlyIn(Dist.CLIENT)
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-        return String.format(MODID + ":textures/models/armor/%s.png", this.getRegistryName().getPath());
+        return String.format(MODID + ":textures/models/armor/%s.png", ForgeRegistries.ITEMS.getKey(this).getPath());
     }
 }

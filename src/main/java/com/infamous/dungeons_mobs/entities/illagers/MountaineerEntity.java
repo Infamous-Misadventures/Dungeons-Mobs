@@ -15,6 +15,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
@@ -48,6 +49,10 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 import javax.annotation.Nullable;
 import java.util.Map;
 
+
+import net.minecraft.world.entity.monster.AbstractIllager.IllagerArmPose;
+
+import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
 public class MountaineerEntity extends Vindicator implements SpawnArmoredMob, IAnimatable, AnimatableMeleeAttackMob {
 	
@@ -134,7 +139,7 @@ public class MountaineerEntity extends Vindicator implements SpawnArmoredMob, IA
     }
 
     @Override
-    protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
+    protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficulty) {
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.MOUNTAINEER_AXE.get()));
         this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(ModItems.MOUNTAINEER_ARMOR.getHead().get()));
         this.setItemSlot(EquipmentSlot.CHEST, new ItemStack(ModItems.MOUNTAINEER_ARMOR.getChest().get()));
@@ -148,8 +153,8 @@ public class MountaineerEntity extends Vindicator implements SpawnArmoredMob, IA
                                            MobSpawnType p_213386_3_, @Nullable SpawnGroupData p_213386_4_, @Nullable CompoundTag p_213386_5_) {
         SpawnGroupData iLivingEntityData = super.finalizeSpawn(p_213386_1_, p_213386_2_, p_213386_3_, p_213386_4_,
                 p_213386_5_);
-        this.populateDefaultEquipmentSlots(p_213386_2_);
-        this.populateDefaultEquipmentEnchantments(p_213386_2_);
+        this.populateDefaultEquipmentSlots(this.getRandom(), p_213386_2_);
+        this.populateDefaultEquipmentEnchantments(this.getRandom(), p_213386_2_);
         return iLivingEntityData;
     }
 
@@ -251,18 +256,18 @@ public class MountaineerEntity extends Vindicator implements SpawnArmoredMob, IA
             crossed = "_crossed";
         }
         if (this.attackAnimationTick > 0) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation(animation + ".attack" + handSide, true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation(animation + ".attack" + handSide, LOOP));
         } else if (this.isAggressive() && !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
             event.getController().setAnimation(new AnimationBuilder()
-                    .addAnimation(animation + ".run" + handSide, true));
+                    .addAnimation(animation + ".run" + handSide, LOOP));
         } else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
             event.getController().setAnimation(new AnimationBuilder()
-                    .addAnimation(animation + ".walk" + crossed, true));
+                    .addAnimation(animation + ".walk" + crossed, LOOP));
         } else {
             if (this.isCelebrating()) {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation(animation + ".win", true));
+                event.getController().setAnimation(new AnimationBuilder().addAnimation(animation + ".win", LOOP));
             } else {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation(animation + ".idle" + crossed, true));
+                event.getController().setAnimation(new AnimationBuilder().addAnimation(animation + ".idle" + crossed, LOOP));
             }
         }
         return PlayState.CONTINUE;

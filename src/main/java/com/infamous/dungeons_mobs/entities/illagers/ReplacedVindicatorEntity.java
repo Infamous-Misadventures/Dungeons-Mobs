@@ -13,6 +13,9 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
+
+import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
 public class ReplacedVindicatorEntity implements IAnimatable, IGeoReplacedEntity {
 
@@ -28,7 +31,7 @@ public class ReplacedVindicatorEntity implements IAnimatable, IGeoReplacedEntity
         this.entity = mob;
     }
 
-    private AnimationFactory factory = new AnimationFactory(this);
+    private AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     @Override
     public void registerControllers(AnimationData data) {
@@ -53,18 +56,18 @@ public class ReplacedVindicatorEntity implements IAnimatable, IGeoReplacedEntity
         }
         AnimatedProps cap = AnimatedPropsHelper.getAnimatedPropsCapability(entity);
         if (cap.attackAnimationTick > 0) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation(animation + ".attack" + handSide, true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation(animation + ".attack" + handSide, LOOP));
         } else if (this.entity.isAggressive() && !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
             event.getController().setAnimation(new AnimationBuilder()
-                    .addAnimation(animation + ".run" + handSide, true));
+                    .addAnimation(animation + ".run" + handSide, LOOP));
         } else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
             event.getController().setAnimation(new AnimationBuilder()
-                    .addAnimation(animation + ".walk" + crossed, true));
+                    .addAnimation(animation + ".walk" + crossed, LOOP));
         } else {
             if (((Vindicator) this.entity).isCelebrating()) {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation(animation + ".win", true));
+                event.getController().setAnimation(new AnimationBuilder().addAnimation(animation + ".win", LOOP));
             } else {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation(animation + ".idle" + crossed, true));
+                event.getController().setAnimation(new AnimationBuilder().addAnimation(animation + ".idle" + crossed, LOOP));
             }
         }
         return PlayState.CONTINUE;

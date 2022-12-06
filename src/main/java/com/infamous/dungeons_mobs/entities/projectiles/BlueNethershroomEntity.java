@@ -28,6 +28,8 @@ import net.minecraftforge.network.NetworkHooks;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import net.minecraft.world.entity.Entity.RemovalReason;
+
 @OnlyIn(
    value = Dist.CLIENT,
    _interface = ItemSupplier.class

@@ -21,6 +21,9 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
+import net.minecraft.world.entity.Entity.MovementEmission;
+import net.minecraft.world.entity.Entity.RemovalReason;
+
 public class DrownedNecromancerOrbEntity extends StraightMovingProjectileEntity implements IAnimatable {
 	
 	public int textureChange = 0;

@@ -11,6 +11,8 @@ import net.minecraft.world.item.SnowballItem;
 
 import java.util.EnumSet;
 
+import net.minecraft.world.entity.ai.goal.Goal.Flag;
+
 public class ThrowAndMeleeAttackGoal<T extends PathfinderMob & RangedAttackMob> extends MeleeAttackGoal
 {
 	public final T hostCreature;

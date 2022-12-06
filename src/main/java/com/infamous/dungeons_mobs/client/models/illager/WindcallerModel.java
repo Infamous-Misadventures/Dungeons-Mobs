@@ -13,17 +13,17 @@ import software.bernie.geckolib3.model.provider.data.EntityModelData;
 public class WindcallerModel extends AnimatedGeoModel<WindcallerEntity> {
 
 	@Override
-	public ResourceLocation getAnimationFileLocation(WindcallerEntity entity) {
+	public ResourceLocation getAnimationResource(WindcallerEntity entity) {
 		return new ResourceLocation(DungeonsMobs.MODID, "animations/windcaller.animation.json");
 	}
 
 	@Override
-	public ResourceLocation getModelLocation(WindcallerEntity entity) {
+	public ResourceLocation getModelResource(WindcallerEntity entity) {
 		return new ResourceLocation(DungeonsMobs.MODID, "geo/windcaller.geo.json") ;
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(WindcallerEntity entity) {
+	public ResourceLocation getTextureResource(WindcallerEntity entity) {
 		return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/windcaller.png");
 	}
 

@@ -1,6 +1,6 @@
 package com.infamous.dungeons_mobs.mobenchants;
 
-import com.baguchan.enchantwithmob.mobenchant.MobEnchant;
+import baguchan.enchantwithmob.mobenchant.MobEnchant;
 import com.infamous.dungeons_mobs.capabilities.properties.MobProps;
 import com.infamous.dungeons_mobs.capabilities.properties.MobPropsHelper;
 import net.minecraft.core.particles.ParticleTypes;
@@ -25,7 +25,7 @@ public class GravityPulseMobEnchant extends MobEnchant {
     }
 
     @SubscribeEvent
-    public static void OnLivingUpdate(LivingEvent.LivingUpdateEvent event) {
+    public static void OnLivingUpdate(LivingEvent.LivingTickEvent event) {
         LivingEntity entity = (LivingEntity) event.getEntity();
 
         executeIfPresentWithLevel(entity, GRAVITY_PULSE.get(), (level) -> {

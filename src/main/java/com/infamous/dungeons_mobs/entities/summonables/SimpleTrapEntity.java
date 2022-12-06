@@ -1,6 +1,6 @@
 package com.infamous.dungeons_mobs.entities.summonables;
 
-import com.infamous.dungeons_mobs.tags.CustomTags;
+import com.infamous.dungeons_mobs.tags.EntityTags;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -104,7 +104,7 @@ public class SimpleTrapEntity extends AbstractTrapEntity {
 		if (this.getTrapType() == 0) {
 			return super.canTrapEntity(entity) && entity.getMobType() != MobType.ARTHROPOD;
 		} else if (this.getTrapType() == 1) {
-			return super.canTrapEntity(entity) && !entity.getType().is(CustomTags.PLANT_MOBS);
+			return super.canTrapEntity(entity) && !entity.getType().is(EntityTags.PLANT_MOBS);
 		} else {
 			return super.canTrapEntity(entity);
 		}

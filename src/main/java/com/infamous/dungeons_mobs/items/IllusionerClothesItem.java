@@ -14,6 +14,8 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class IllusionerClothesItem extends GeoArmorItem implements IAnimatable {
 
     public IllusionerClothesItem(ArmorMaterial materialIn, EquipmentSlot slot, Properties builderIn) {

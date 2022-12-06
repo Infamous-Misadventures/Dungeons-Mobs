@@ -20,6 +20,8 @@ import net.minecraft.world.item.UseAnim;
 
 import static com.infamous.dungeons_mobs.entities.illagers.IllagerArmsUtil.armorHasCrossedArms;
 
+import net.minecraft.client.model.HumanoidModel.ArmPose;
+
 public class IllagerBipedModel<T extends AbstractIllager> extends HumanoidModel<T> {
     public ModelPart nose = this.head.getChild("nose");
     public ModelPart jacket = this.body.getChild("jacket");

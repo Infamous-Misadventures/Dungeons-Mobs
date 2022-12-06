@@ -1,7 +1,7 @@
 package com.infamous.dungeons_mobs.entities.illagers;
 
-import com.baguchan.enchantwithmob.EnchantWithMob;
-import com.baguchan.enchantwithmob.capability.MobEnchantCapability;
+import baguchan.enchantwithmob.EnchantWithMob;
+import baguchan.enchantwithmob.capability.MobEnchantCapability;
 import com.infamous.dungeons_libraries.utils.AreaOfEffectHelper;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
@@ -39,16 +39,19 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.baguchan.enchantwithmob.registry.MobEnchants.PROTECTION;
-import static com.baguchan.enchantwithmob.registry.MobEnchants.STRONG;
+import static baguchan.enchantwithmob.registry.MobEnchants.PROTECTION;
+import static baguchan.enchantwithmob.registry.MobEnchants.STRONG;
 import static com.infamous.dungeons_mobs.network.datasync.ModDataSerializers.UUID_LIST;
 import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
+
+import net.minecraft.world.entity.Entity.RemovalReason;
+import net.minecraft.world.entity.monster.AbstractIllager.IllagerArmPose;
 
 public class EnchanterEntity extends SpellcasterIllager implements IAnimatable {
 
     public static final EntityDataAccessor<Integer> ATTACK_TICKS = SynchedEntityData.defineId(EnchanterEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> ENCHANT_TICKS = SynchedEntityData.defineId(EnchanterEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<List<UUID>> ENCHANTMENT_TARGETS = SynchedEntityData.defineId(EnchanterEntity.class, UUID_LIST);
+    public static final EntityDataAccessor<List<UUID>> ENCHANTMENT_TARGETS = SynchedEntityData.defineId(EnchanterEntity.class, UUID_LIST.get());
 
     AnimationFactory factory = GeckoLibUtil.createFactory(this);
 

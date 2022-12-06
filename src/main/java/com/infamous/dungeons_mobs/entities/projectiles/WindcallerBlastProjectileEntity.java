@@ -13,6 +13,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraftforge.network.NetworkHooks;
 
+import net.minecraft.world.entity.Entity.RemovalReason;
+
 public class WindcallerBlastProjectileEntity extends AbstractHurtingProjectile {
 
     public int lifeTime;

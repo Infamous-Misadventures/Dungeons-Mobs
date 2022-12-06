@@ -11,17 +11,17 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 public class MageMissileModel extends AnimatedGeoModel<MageMissileEntity> {
 
 	@Override
-	public ResourceLocation getAnimationFileLocation(MageMissileEntity entity) {
+	public ResourceLocation getAnimationResource(MageMissileEntity entity) {
 		return new ResourceLocation(DungeonsMobs.MODID, "animations/mage_missile.animation.json");
 	}
 
 	@Override
-	public ResourceLocation getModelLocation(MageMissileEntity entity) {
+	public ResourceLocation getModelResource(MageMissileEntity entity) {
 		return new ResourceLocation(DungeonsMobs.MODID, "geo/mage_missile.geo.json");
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(MageMissileEntity entity) {
+	public ResourceLocation getTextureResource(MageMissileEntity entity) {
 		return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/projectile/mage_missile.png");
 	}
 

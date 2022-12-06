@@ -24,7 +24,6 @@
   ],
   "client": [
     "DrownedModelMixin",
-    "ItemRendererMixin",
     "PiglinModelMixin",
     "SpiderModelMixin",
     "TridentRendererMixin"

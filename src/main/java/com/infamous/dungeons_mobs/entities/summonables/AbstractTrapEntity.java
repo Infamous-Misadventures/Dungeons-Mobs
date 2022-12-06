@@ -16,6 +16,8 @@ import software.bernie.geckolib3.core.IAnimatable;
 
 import java.util.List;
 
+import net.minecraft.world.entity.Entity.RemovalReason;
+
 public abstract class AbstractTrapEntity extends Entity implements IAnimatable {
 	
 	public int spawnAnimationTick = this.getSpawnAnimationLength();

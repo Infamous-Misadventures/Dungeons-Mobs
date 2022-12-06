@@ -958,13 +958,6 @@ public class DungeonsMobsConfig {
                     .define("enableRangedSpiders", true);
             builder.pop();
 
-            builder.comment("Mob Items Configuration").push("mob_items_configuration");
-            ENABLE_ITEM_TAB = builder
-                    .comment("Enable armors appearing in their own tab in the creative menu. \n" +
-                            "Disabling this feature will hide them from creative tab. [true / false]")
-                    .define("enableItemTab", true);
-            builder.pop();
-
         }
     }
 

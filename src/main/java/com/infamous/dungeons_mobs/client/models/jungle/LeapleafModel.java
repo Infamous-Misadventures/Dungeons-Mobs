@@ -13,17 +13,17 @@ import software.bernie.geckolib3.resource.GeckoLibCache;
 public class LeapleafModel extends AnimatedGeoModel {
 
 		@Override
-		public ResourceLocation getAnimationFileLocation(Object entity) {
+		public ResourceLocation getAnimationResource(Object entity) {
 			return new ResourceLocation(DungeonsMobs.MODID, "animations/leapleaf.animation.json");
 		}
 
 		@Override
-		public ResourceLocation getModelLocation(Object entity) {
+		public ResourceLocation getModelResource(Object entity) {
 			return new ResourceLocation(DungeonsMobs.MODID, "geo/leapleaf.geo.json") ;
 		}
 
 		@Override
-		public ResourceLocation getTextureLocation(Object entity) {
+		public ResourceLocation getTextureResource(Object entity) {
 			return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/jungle/leapleaf.png");
 		}
 		

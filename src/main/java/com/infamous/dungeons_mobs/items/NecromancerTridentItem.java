@@ -15,6 +15,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.PacketDistributor;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class NecromancerTridentItem extends ArtifactItem implements IHasInventorySprite {
     public NecromancerTridentItem(Properties properties) {
         super(properties);

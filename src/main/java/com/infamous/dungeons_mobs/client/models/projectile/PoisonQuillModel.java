@@ -11,17 +11,17 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 public class PoisonQuillModel extends AnimatedGeoModel<PoisonQuillEntity> {
 
 	@Override
-	public ResourceLocation getAnimationFileLocation(PoisonQuillEntity entity) {
+	public ResourceLocation getAnimationResource(PoisonQuillEntity entity) {
 		return new ResourceLocation(DungeonsMobs.MODID, "animations/poison_quill.animation.json");
 	}
 
 	@Override
-	public ResourceLocation getModelLocation(PoisonQuillEntity entity) {
+	public ResourceLocation getModelResource(PoisonQuillEntity entity) {
 		return new ResourceLocation(DungeonsMobs.MODID, "geo/poison_quill.geo.json");
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(PoisonQuillEntity entity) {
+	public ResourceLocation getTextureResource(PoisonQuillEntity entity) {
 		return new ResourceLocation(DungeonsMobs.MODID, entity.isKelp() ? "textures/entity/projectile/water_poison_quill.png" : "textures/entity/projectile/poison_quill.png");
 	}
 

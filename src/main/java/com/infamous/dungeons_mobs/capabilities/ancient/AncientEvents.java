@@ -23,7 +23,7 @@ public class AncientEvents {
 
     @SubscribeEvent
     public static void onPlayerStartTracking(PlayerEvent.StartTracking event){
-        Player player = event.getPlayer();
+        Player player = event.getEntity();
         Entity target = event.getTarget();
         if (player instanceof ServerPlayer) {
             Ancient cap = AncientHelper.getAncientCapability(target);
@@ -34,8 +34,8 @@ public class AncientEvents {
     }
 
     @SubscribeEvent
-    public static void onLivingUpdate(LivingEvent.LivingUpdateEvent event){
-        LivingEntity entityLiving = event.getEntityLiving();
+    public static void onLivingUpdate(LivingEvent.LivingTickEvent event){
+        LivingEntity entityLiving = event.getEntity();
         if(!entityLiving.level.isClientSide) {
             Ancient cap = AncientHelper.getAncientCapability(entityLiving);
             if(cap.isAncient() &&  cap.getBossInfo() != null){
@@ -55,8 +55,8 @@ public class AncientEvents {
     }
 
     @SubscribeEvent
-    public static void onLivingUpdateEvent(LivingEvent.LivingUpdateEvent event){
-        LivingEntity livingEntity = event.getEntityLiving();
+    public static void onLivingUpdateEvent(LivingEvent.LivingTickEvent event){
+        LivingEntity livingEntity = event.getEntity();
         Ancient cap = AncientHelper.getAncientCapability(livingEntity);
         if(cap.isAncient() && cap.getBossInfo() != null) {
             cap.getBossInfo().setProgress(livingEntity.getHealth() / livingEntity.getMaxHealth());

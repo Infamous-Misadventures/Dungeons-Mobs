@@ -9,7 +9,7 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 public class SummonSpotModel<T extends SummonSpotEntity> extends AnimatedGeoModel<T> {
 
 	@Override
-	public ResourceLocation getAnimationFileLocation(T entity) {
+	public ResourceLocation getAnimationResource(T entity) {
 		if (entity.getSummonType() == 0) {
 			return new ResourceLocation(DungeonsMobs.MODID, "animations/illusioner_summon_spot.animation.json");
 		} else if (entity.getSummonType() == 1) {
@@ -24,7 +24,7 @@ public class SummonSpotModel<T extends SummonSpotEntity> extends AnimatedGeoMode
 	}
 
 	@Override
-	public ResourceLocation getModelLocation(T entity) {
+	public ResourceLocation getModelResource(T entity) {
 		if (entity.getSummonType() == 0) {
 			return new ResourceLocation(DungeonsMobs.MODID, "geo/illusioner_summon_spot.geo.json");
 		} else if (entity.getSummonType() == 1) {
@@ -39,7 +39,7 @@ public class SummonSpotModel<T extends SummonSpotEntity> extends AnimatedGeoMode
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(T entity) {
+	public ResourceLocation getTextureResource(T entity) {
 		if (entity.getSummonType() == 0) {
 			return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illusioner_summon_spot.png");
 		} else if (entity.getSummonType() == 1) {

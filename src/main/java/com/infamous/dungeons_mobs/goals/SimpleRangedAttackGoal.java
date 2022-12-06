@@ -11,6 +11,8 @@ import java.util.EnumSet;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
+import net.minecraft.world.entity.ai.goal.Goal.Flag;
+
 public class SimpleRangedAttackGoal<T extends Mob> extends Goal {
     protected final T mob;
     protected final BiConsumer<T, LivingEntity> performRangedAttack;

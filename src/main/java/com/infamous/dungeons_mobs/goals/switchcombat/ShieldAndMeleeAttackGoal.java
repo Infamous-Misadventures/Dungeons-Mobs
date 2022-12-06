@@ -1,7 +1,7 @@
 package com.infamous.dungeons_mobs.goals.switchcombat;
 
 import com.infamous.dungeons_mobs.interfaces.IShieldUser;
-import com.infamous.dungeons_mobs.tags.CustomTags;
+import com.infamous.dungeons_mobs.tags.EntityTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
@@ -81,7 +81,7 @@ public class ShieldAndMeleeAttackGoal<T extends PathfinderMob & IShieldUser> ext
     @Override
     public void tick() {
         LivingEntity attackTarget = this.hostCreature.getTarget();
-        boolean dontShieldAgainst = attackTarget != null && attackTarget.getType().is(CustomTags.DONT_SHIELD_AGAINST);
+        boolean dontShieldAgainst = attackTarget != null && attackTarget.getType().is(EntityTags.DONT_SHIELD_AGAINST);
         boolean shieldDisabled = this.hostCreature.isShieldDisabled();
         boolean hasShield = this.hasShieldInOffhand();
         if(hasShield // check if we have a shield - if not, we must default to melee attack AI

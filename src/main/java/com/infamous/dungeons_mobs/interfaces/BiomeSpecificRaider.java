@@ -1,70 +1,56 @@
 package com.infamous.dungeons_mobs.interfaces;
 
-import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
+import com.infamous.dungeons_mobs.tags.BiomeTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.raid.Raider;
-import net.minecraftforge.common.BiomeDictionary;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import net.minecraft.world.level.biome.Biome;
 
 public enum BiomeSpecificRaider {
     MOUNTAINEER(
             ModEntityTypes.MOUNTAINEER.get(),
             EntityType.VINDICATOR,
-            DungeonsMobsConfig.COMMON.MOUNTAINEER_BIOME_TYPES.get()),
+            BiomeTags.MOUNTAINEER_SPAWN_BIOMES),
     ICEOLOGER(
             ModEntityTypes.ICEOLOGER.get(),
             EntityType.EVOKER,
-            DungeonsMobsConfig.COMMON.ICEOLOGER_BIOME_TYPES.get()),
+            BiomeTags.ICEOLOGER_SPAWN_BIOMES),
     WINDCALLER(
             ModEntityTypes.WINDCALLER.get(),
             EntityType.EVOKER,
-            DungeonsMobsConfig.COMMON.WINDCALLER_BIOME_TYPES.get()),
+            BiomeTags.WINDCALLER_SPAWN_BIOMES),
     SQUALL_GOLEM(
             ModEntityTypes.SQUALL_GOLEM.get(),
             EntityType.RAVAGER,
-            DungeonsMobsConfig.COMMON.SQUALL_GOLEM_BIOME_TYPES.get()),
+            BiomeTags.SQUALL_GOLEM_SPAWN_BIOMES),
 
     /*,
     ILLUSIONER(
             EntityType.ILLUSIONER,
             EntityType.ILLUSIONER,
             DungeonsMobsConfig.COMMON.ILLUSIONER_BIOME_TYPES.get())
-     */
-    ;
+     */;
 
     private final EntityType<? extends Raider> entityType;
     private final EntityType<? extends Raider> equivalentType;
-    private final Set<BiomeDictionary.Type> biomeTypes = new HashSet<>();
+    private final TagKey<Biome> biomeTag;
 
-    BiomeSpecificRaider(EntityType<? extends Raider> entityTypeIn, EntityType<? extends Raider> equivalentTypeIn, List<? extends String> biomeTypesList){
+    BiomeSpecificRaider(EntityType<? extends Raider> entityTypeIn, EntityType<? extends Raider> equivalentTypeIn, TagKey<Biome> biomeTag) {
         this.entityType = entityTypeIn;
         this.equivalentType = equivalentTypeIn;
-
-        List<String> filteredBiomesList = biomeTypesList
-                .stream()
-                .filter((type) -> !type.startsWith("!"))
-                .collect(Collectors.toList());
-        for(BiomeDictionary.Type type : BiomeDictionary.Type.getAll()){
-            if(filteredBiomesList.contains(type.getName())){
-                this.biomeTypes.add(type);
-            }
-        }
+        this.biomeTag = biomeTag;
     }
 
-    public EntityType<? extends Raider> getType(){
+    public EntityType<? extends Raider> getType() {
         return this.entityType;
     }
 
-    public EntityType<? extends Raider> getEquivalentType(){
+    public EntityType<? extends Raider> getEquivalentType() {
         return this.equivalentType;
     }
 
-    public Set<BiomeDictionary.Type> getBiomeTypeSet(){
-        return this.biomeTypes;
+    public TagKey<Biome> getBiomeTag() {
+        return biomeTag;
     }
 }

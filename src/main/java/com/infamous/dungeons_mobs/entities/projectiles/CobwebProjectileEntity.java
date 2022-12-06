@@ -33,6 +33,8 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
+import net.minecraft.world.entity.Entity.RemovalReason;
+
 public class CobwebProjectileEntity extends Projectile implements IAnimatable {
 	
 	AnimationFactory factory = GeckoLibUtil.createFactory(this);

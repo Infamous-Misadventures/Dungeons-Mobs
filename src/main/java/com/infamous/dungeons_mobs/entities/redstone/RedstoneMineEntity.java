@@ -32,6 +32,8 @@ import java.util.UUID;
 
 import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
+import net.minecraft.world.entity.Entity.RemovalReason;
+
 public class RedstoneMineEntity extends Entity implements IAnimatable {
     public static final EntityDataAccessor<Integer> LIFE_TICKS = SynchedEntityData.defineId(ConstructEntity.class, EntityDataSerializers.INT);
 

@@ -6,6 +6,7 @@ import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.AreaEffectCloud;
 import net.minecraft.world.entity.EntityType;
@@ -20,6 +21,8 @@ import java.util.Collection;
 import java.util.Random;
 
 
+import net.minecraft.world.entity.Entity.RemovalReason;
+
 public class IcyCreeperEntity extends Creeper {
 
 	   private int oldSwell;
@@ -31,7 +34,7 @@ public class IcyCreeperEntity extends Creeper {
         super(ModEntityTypes.ICY_CREEPER.get(), worldIn);
     }
 
-    public static boolean canIcyCreeperSpawn(EntityType<IcyCreeperEntity> entityType, ServerLevelAccessor iWorld, MobSpawnType spawnReason, BlockPos blockPos, Random rand) {
+    public static boolean canIcyCreeperSpawn(EntityType<IcyCreeperEntity> entityType, ServerLevelAccessor iWorld, MobSpawnType spawnReason, BlockPos blockPos, RandomSource rand) {
         return checkMonsterSpawnRules(entityType, iWorld, spawnReason, blockPos, rand) && (spawnReason == MobSpawnType.SPAWNER || iWorld.canSeeSky(blockPos));
     }
 

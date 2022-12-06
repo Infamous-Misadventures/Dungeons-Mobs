@@ -17,17 +17,17 @@ import software.bernie.geckolib3.resource.GeckoLibCache;
 public class RoyalGuardModel extends AnimatedGeoModel<RoyalGuardEntity> {
 
     @Override
-    public ResourceLocation getAnimationFileLocation(RoyalGuardEntity entity) {
+    public ResourceLocation getAnimationResource(RoyalGuardEntity entity) {
         return new ResourceLocation(DungeonsMobs.MODID, "animations/royal_guard.animation.json");
     }
 
     @Override
-    public ResourceLocation getModelLocation(RoyalGuardEntity entity) {
+    public ResourceLocation getModelResource(RoyalGuardEntity entity) {
         return new ResourceLocation(DungeonsMobs.MODID, "geo/geo_illager.geo.json") ;
     }
 
     @Override
-    public ResourceLocation getTextureLocation(RoyalGuardEntity entity) {
+    public ResourceLocation getTextureResource(RoyalGuardEntity entity) {
         return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/royal_guard.png");
     }
 

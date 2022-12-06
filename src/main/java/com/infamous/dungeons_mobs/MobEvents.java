@@ -32,13 +32,13 @@ import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.EntityMobGriefingEvent;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.living.LivingChangeTargetEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.world.ExplosionEvent;
+import net.minecraftforge.event.level.ExplosionEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -55,7 +55,7 @@ public class MobEvents {
     
     @SubscribeEvent
     public static void onSetAttackTarget(LivingChangeTargetEvent event){
-        LivingEntity attacker = event.getEntityLiving();
+        LivingEntity attacker = event.getEntity();
         Level level = attacker.level;
         LivingEntity target = event.getNewTarget();
         if(attacker instanceof Mob && target instanceof Mob){
@@ -82,7 +82,7 @@ public class MobEvents {
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onEntityJoinWorld(EntityJoinWorldEvent event){
+    public static void onEntityJoinWorld(EntityJoinLevelEvent event){
         // Making mobs avoid Geomancer Constructs
 //        if(event.getEntity() instanceof CreatureEntity && !(event.getEntity() instanceof GeomancerEntity)){
 //            CreatureEntity creatureEntity = (CreatureEntity) event.getEntity();
@@ -103,8 +103,8 @@ public class MobEvents {
     }
 
     @SubscribeEvent
-    public static void onLivingUpdate(LivingEvent.LivingUpdateEvent event){
-        LivingEntity livingEntity = event.getEntityLiving();
+    public static void onLivingUpdate(LivingEvent.LivingTickEvent event){
+        LivingEntity livingEntity = event.getEntity();
         if(livingEntity instanceof Mob && ConvertibleHelper.convertsInWater((Mob)livingEntity)){
             Mob mob = (Mob) livingEntity;
             if (!mob.level.isClientSide && mob.isAlive() && !mob.isNoAi()) {
@@ -169,17 +169,17 @@ public class MobEvents {
     public static void onSnowballDamageMob(LivingHurtEvent event){
         if(event.getSource().getDirectEntity() instanceof Snowball){
             if(event.getSource().getEntity() instanceof FrozenZombieEntity){
-                if(!(event.getEntityLiving() instanceof Player)){
+                if(!(event.getEntity() instanceof Player)){
                     event.setAmount(event.getAmount() + 2.0F);
                         int i = 0;
-                        if (event.getEntityLiving().level.getDifficulty() == Difficulty.NORMAL) {
+                        if (event.getEntity().level.getDifficulty() == Difficulty.NORMAL) {
                             i = 3;
-                        } else if (event.getEntityLiving().level.getDifficulty() == Difficulty.HARD) {
+                        } else if (event.getEntity().level.getDifficulty() == Difficulty.HARD) {
                             i = 6;
                         }
 
                         if (i > 0) {
-                            event.getEntityLiving().addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, i * 20, 1));
+                            event.getEntity().addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, i * 20, 1));
                         }
                 }
             }

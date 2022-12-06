@@ -8,6 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
@@ -45,7 +46,7 @@ public class FrozenZombieEntity extends Zombie implements RangedAttackMob {
         super(p_i48549_1_, p_i48549_2_);
     }
 
-    public static boolean canFrozenZombieSpawn(EntityType<FrozenZombieEntity> entityType, ServerLevelAccessor iWorld, MobSpawnType spawnReason, BlockPos blockPos, Random rand) {
+    public static boolean canFrozenZombieSpawn(EntityType<FrozenZombieEntity> entityType, ServerLevelAccessor iWorld, MobSpawnType spawnReason, BlockPos blockPos, RandomSource rand) {
         return checkMonsterSpawnRules(entityType, iWorld, spawnReason, blockPos, rand) && (spawnReason == MobSpawnType.SPAWNER || iWorld.canSeeSky(blockPos));
     }
 
@@ -92,8 +93,8 @@ public class FrozenZombieEntity extends Zombie implements RangedAttackMob {
 		}
 	}
 
-    protected void populateDefaultEquipmentSlots(DifficultyInstance difficultyInstance) {
-        super.populateDefaultEquipmentSlots(difficultyInstance);
+    protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficultyInstance) {
+        super.populateDefaultEquipmentSlots(random, difficultyInstance);
         this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.SNOWBALL));
     }
 

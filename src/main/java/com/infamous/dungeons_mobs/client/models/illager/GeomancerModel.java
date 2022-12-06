@@ -17,17 +17,17 @@ import software.bernie.geckolib3.resource.GeckoLibCache;
 public class GeomancerModel extends AnimatedGeoModel<GeomancerEntity> {
 
 	@Override
-	public ResourceLocation getAnimationFileLocation(GeomancerEntity entity) {
+	public ResourceLocation getAnimationResource(GeomancerEntity entity) {
 		return new ResourceLocation(DungeonsMobs.MODID, "animations/geomancer.animation.json");
 	}
 
 	@Override
-	public ResourceLocation getModelLocation(GeomancerEntity entity) {
+	public ResourceLocation getModelResource(GeomancerEntity entity) {
 		return new ResourceLocation(DungeonsMobs.MODID, "geo/geomancer.geo.json");
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(GeomancerEntity entity) {
+	public ResourceLocation getTextureResource(GeomancerEntity entity) {
 		return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/geomancer.png");
 	}
 

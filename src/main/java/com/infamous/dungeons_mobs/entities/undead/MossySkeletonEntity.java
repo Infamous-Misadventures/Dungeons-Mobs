@@ -5,6 +5,7 @@ import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -33,7 +34,7 @@ public class MossySkeletonEntity extends AbstractSkeleton {
         super(entityType, world);
     }
 
-    public static boolean canMossySkeletonSpawn(EntityType<MossySkeletonEntity> entityType, ServerLevelAccessor iWorld, MobSpawnType spawnReason, BlockPos blockPos, Random rand) {
+    public static boolean canMossySkeletonSpawn(EntityType<MossySkeletonEntity> entityType, ServerLevelAccessor iWorld, MobSpawnType spawnReason, BlockPos blockPos, RandomSource rand) {
         return checkMonsterSpawnRules(entityType, iWorld, spawnReason, blockPos, rand) && (spawnReason == MobSpawnType.SPAWNER || iWorld.canSeeSky(blockPos));
     }
 

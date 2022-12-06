@@ -11,6 +11,9 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
+
+import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
 public class ReplacedPillagerEntity implements IAnimatable, IGeoReplacedEntity {
 
@@ -26,7 +29,7 @@ public class ReplacedPillagerEntity implements IAnimatable, IGeoReplacedEntity {
         this.entity = mob;
     }
 
-    private AnimationFactory factory = new AnimationFactory(this);
+    private AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     @Override
     public void registerControllers(AnimationData data) {
@@ -49,18 +52,18 @@ public class ReplacedPillagerEntity implements IAnimatable, IGeoReplacedEntity {
         }
         if (((Pillager) this.entity).isChargingCrossbow()) {
             event.getController().setAnimation(new AnimationBuilder()
-                    .addAnimation(animation + ".charge" + handSide, true));
+                    .addAnimation(animation + ".charge" + handSide, LOOP));
         }else if (this.entity.isAggressive() && !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
             event.getController().setAnimation(new AnimationBuilder()
-                    .addAnimation(animation + ".run" + handSide, true));
+                    .addAnimation(animation + ".run" + handSide, LOOP));
         } else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
             event.getController().setAnimation(new AnimationBuilder()
-                    .addAnimation(animation + ".walk" + handSide, true));
+                    .addAnimation(animation + ".walk" + handSide, LOOP));
         } else {
             if (((Pillager) this.entity).isCelebrating()) {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation(animation + ".win", true));
+                event.getController().setAnimation(new AnimationBuilder().addAnimation(animation + ".win", LOOP));
             } else {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation(animation + ".idle" + handSide, true));
+                event.getController().setAnimation(new AnimationBuilder().addAnimation(animation + ".idle" + handSide, LOOP));
             }
         }
         return PlayState.CONTINUE;

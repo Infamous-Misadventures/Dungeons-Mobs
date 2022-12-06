@@ -26,6 +26,8 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.List;
 
+import net.minecraft.world.entity.Entity.RemovalReason;
+
 public class WraithFireEntity extends Entity implements IAnimatable, IAnimationTickable {
 
 	public int lifeTime;

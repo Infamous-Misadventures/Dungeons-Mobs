@@ -1,6 +1,6 @@
 package com.infamous.dungeons_mobs.entities.jungle;
 
-import com.infamous.dungeons_mobs.tags.CustomTags;
+import com.infamous.dungeons_mobs.tags.EntityTags;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.world.damagesource.DamageSource;
@@ -34,7 +34,7 @@ public class VinePartEntity extends PartEntity<AbstractVineEntity> {
 	}
 
 	public boolean hurt(DamageSource p_70097_1_, float p_70097_2_) {
-		if (p_70097_1_.getEntity() != null && p_70097_1_.getEntity().getType().is(CustomTags.PLANT_MOBS)) {
+		if (p_70097_1_.getEntity() != null && p_70097_1_.getEntity().getType().is(EntityTags.PLANT_MOBS)) {
 			return false;
 		} else {
 			return this.isInvulnerableTo(p_70097_1_) ? false : this.parentMob.hurt(p_70097_1_, p_70097_2_);

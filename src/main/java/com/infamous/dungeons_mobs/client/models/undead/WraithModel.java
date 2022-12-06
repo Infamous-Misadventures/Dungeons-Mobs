@@ -13,17 +13,17 @@ import software.bernie.geckolib3.model.provider.data.EntityModelData;
 public class WraithModel extends AnimatedGeoModel<WraithEntity> {
 
 	@Override
-	public ResourceLocation getAnimationFileLocation(WraithEntity entity) {
+	public ResourceLocation getAnimationResource(WraithEntity entity) {
 		return new ResourceLocation(DungeonsMobs.MODID, "animations/wraith.animation.json");
 	}
 
 	@Override
-	public ResourceLocation getModelLocation(WraithEntity entity) {
+	public ResourceLocation getModelResource(WraithEntity entity) {
 		return new ResourceLocation(DungeonsMobs.MODID, "geo/wraith.geo.json");
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(WraithEntity entity) {
+	public ResourceLocation getTextureResource(WraithEntity entity) {
 		return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/wraith/wraith.png");
 	}
 

@@ -40,6 +40,9 @@ import java.util.function.Predicate;
 
 import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
+import net.minecraft.world.entity.Entity.MovementEmission;
+import net.minecraft.world.entity.Entity.RemovalReason;
+
 public class IceCloudEntity extends Entity implements IAnimatable {
 
     private static final Predicate<Entity> ALIVE = (p_213685_0_) -> {

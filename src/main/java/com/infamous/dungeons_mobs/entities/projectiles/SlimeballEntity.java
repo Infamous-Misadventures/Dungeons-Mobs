@@ -25,6 +25,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkHooks;
 
+import net.minecraft.world.entity.Entity.RemovalReason;
+
 @OnlyIn(
    value = Dist.CLIENT,
    _interface = ItemSupplier.class

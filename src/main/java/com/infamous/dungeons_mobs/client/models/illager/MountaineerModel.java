@@ -19,17 +19,17 @@ import software.bernie.geckolib3.resource.GeckoLibCache;
 public class MountaineerModel extends AnimatedGeoModel<MountaineerEntity> {
 
     @Override
-    public ResourceLocation getAnimationFileLocation(MountaineerEntity entity) {
+    public ResourceLocation getAnimationResource(MountaineerEntity entity) {
         return new ResourceLocation(DungeonsMobs.MODID, "animations/vindicator.animation.json");
     }
 
     @Override
-    public ResourceLocation getModelLocation(MountaineerEntity entity) {
+    public ResourceLocation getModelResource(MountaineerEntity entity) {
         return new ResourceLocation(DungeonsMobs.MODID, "geo/geo_illager.geo.json") ;
     }
 
     @Override
-    public ResourceLocation getTextureLocation(MountaineerEntity entity) {
+    public ResourceLocation getTextureResource(MountaineerEntity entity) {
         return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/mountaineer.png");
     }
 

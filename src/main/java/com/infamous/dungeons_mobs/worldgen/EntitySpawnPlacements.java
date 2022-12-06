@@ -10,6 +10,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -224,7 +225,7 @@ public class EntitySpawnPlacements {
 
     }
 
-    public static boolean checkAquaticMobSpawnRules(EntityType<? extends Mob> type, ServerLevelAccessor serverWorld, MobSpawnType spawnReason, BlockPos blockPos, Random random) {
+    public static boolean checkAquaticMobSpawnRules(EntityType<? extends Mob> type, ServerLevelAccessor serverWorld, MobSpawnType spawnReason, BlockPos blockPos, RandomSource random) {
         Holder<Biome> biome = serverWorld.getBiome(blockPos);
         boolean canSpawn = serverWorld.getDifficulty() != Difficulty.PEACEFUL && Monster.isDarkEnoughToSpawn(serverWorld, blockPos, random) && (spawnReason == MobSpawnType.SPAWNER || serverWorld.getFluidState(blockPos).is(FluidTags.WATER));
         if (!biome.is(Biomes.RIVER) && !biome.is(Biomes.FROZEN_RIVER)) {
@@ -234,25 +235,25 @@ public class EntitySpawnPlacements {
         }
     }
 
-    public static boolean checkZombifiedPiglinSpawnRules(EntityType<? extends ZombifiedPiglin> p_234351_0_, LevelAccessor p_234351_1_, MobSpawnType p_234351_2_, BlockPos p_234351_3_, Random p_234351_4_) {
+    public static boolean checkZombifiedPiglinSpawnRules(EntityType<? extends ZombifiedPiglin> p_234351_0_, LevelAccessor p_234351_1_, MobSpawnType p_234351_2_, BlockPos p_234351_3_, RandomSource p_234351_4_) {
         return p_234351_1_.getDifficulty() != Difficulty.PEACEFUL && p_234351_1_.getBlockState(p_234351_3_.below()).getBlock() != Blocks.NETHER_WART_BLOCK;
     }
 
-    public static boolean checkPiglinSpawnRules(EntityType<? extends Piglin> p_234418_0_, LevelAccessor p_234418_1_, MobSpawnType p_234418_2_, BlockPos p_234418_3_, Random p_234418_4_) {
+    public static boolean checkPiglinSpawnRules(EntityType<? extends Piglin> p_234418_0_, LevelAccessor p_234418_1_, MobSpawnType p_234418_2_, BlockPos p_234418_3_, RandomSource p_234418_4_) {
         return !p_234418_1_.getBlockState(p_234418_3_.below()).is(Blocks.NETHER_WART_BLOCK);
     }
 
-    public static boolean canJungleMobSpawn(EntityType<? extends Monster> entityType, ServerLevelAccessor world, MobSpawnType spawnReason, BlockPos blockPos, Random rand) {
+    public static boolean canJungleMobSpawn(EntityType<? extends Monster> entityType, ServerLevelAccessor world, MobSpawnType spawnReason, BlockPos blockPos, RandomSource rand) {
         return Monster.checkMonsterSpawnRules(entityType, world, spawnReason, blockPos, rand)
                 && (spawnReason == MobSpawnType.SPAWNER || canSeeSkyLight(world, blockPos));
     }
 
-    public static boolean canIllagerSpawn(EntityType<? extends AbstractIllager> entityType, ServerLevelAccessor world, MobSpawnType spawnReason, BlockPos blockPos, Random rand) {
+    public static boolean canIllagerSpawn(EntityType<? extends AbstractIllager> entityType, ServerLevelAccessor world, MobSpawnType spawnReason, BlockPos blockPos, RandomSource rand) {
         return Monster.checkMonsterSpawnRules(entityType, world, spawnReason, blockPos, rand)
                 && (spawnReason == MobSpawnType.SPAWNER || canSeeSkyLight(world, blockPos));
     }
 
-    public static boolean canRaiderSpawn(EntityType<? extends Raider> entityType, ServerLevelAccessor world, MobSpawnType spawnReason, BlockPos blockPos, Random rand) {
+    public static boolean canRaiderSpawn(EntityType<? extends Raider> entityType, ServerLevelAccessor world, MobSpawnType spawnReason, BlockPos blockPos, RandomSource rand) {
         return Monster.checkMonsterSpawnRules(entityType, world, spawnReason, blockPos, rand)
                 && (spawnReason == MobSpawnType.SPAWNER || canSeeSkyLight(world, blockPos));
     }

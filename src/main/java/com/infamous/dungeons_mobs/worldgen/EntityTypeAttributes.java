@@ -25,15 +25,20 @@ import com.infamous.dungeons_mobs.entities.water.QuickGrowingKelpEntity;
 import com.infamous.dungeons_mobs.entities.water.SunkenSkeletonEntity;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.ZombifiedPiglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
+import static net.minecraft.world.entity.EntityType.HUSK;
 
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class EntityTypeAttributes {
@@ -94,15 +99,5 @@ public class EntityTypeAttributes {
         
         event.put(ModEntityTypes.WILDFIRE.get(), WildfireEntity.setCustomAttributes().build());
 
-    }
-
-    @SubscribeEvent
-    public static void changeAttributes(EntityAttributeModificationEvent event){
-        // Tougher Husks
-        if(DungeonsMobsConfig.COMMON.ENABLE_STRONGER_HUSKS.get()){
-            event.add(EntityType.HUSK, Attributes.ARMOR, 10.0D);
-            event.add(EntityType.HUSK, Attributes.MOVEMENT_SPEED, 0.17D);
-            event.add(EntityType.HUSK, Attributes.KNOCKBACK_RESISTANCE, 0.6D);
-        }
     }
 }

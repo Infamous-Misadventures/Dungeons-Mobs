@@ -1,7 +1,9 @@
 package com.infamous.dungeons_mobs.data;
 
-import com.baguchan.enchantwithmob.EnchantWithMob;
-import com.baguchan.enchantwithmob.capability.MobEnchantCapability;
+import baguchan.enchantwithmob.EnchantWithMob;
+import baguchan.enchantwithmob.capability.MobEnchantCapability;
+import baguchan.enchantwithmob.mobenchant.MobEnchant;
+import baguchan.enchantwithmob.registry.MobEnchants;
 import com.infamous.dungeons_libraries.data.util.MergeableCodecDataManager;
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import net.minecraft.resources.ResourceLocation;
@@ -9,6 +11,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -18,8 +21,8 @@ import java.util.Set;
 @Mod.EventBusSubscriber(modid = DungeonsMobs.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class AncientDataHelper {
 
-    public static final MergeableCodecDataManager<MobAncientData, MobAncientData> MOB_ANCIENT_DATA = new MergeableCodecDataManager<>("ancient/mob_ancient_data", DungeonsMobs.LOGGER, MobAncientData.CODEC, AncientDataHelper::mobMerger);
-    public static final MergeableCodecDataManager<MobEnchantmentAncientData, MobEnchantmentAncientData> MOB_ENCHANTMENT_ANCIENT_DATA = new MergeableCodecDataManager<>("ancient/mob_enchantment_ancient_data", DungeonsMobs.LOGGER, MobEnchantmentAncientData.CODEC, AncientDataHelper::mobEnchantmentMerger);
+    public static final MergeableCodecDataManager<MobAncientData, MobAncientData> MOB_ANCIENT_DATA = new MergeableCodecDataManager<>("ancient/mob_ancient_data", MobAncientData.CODEC, AncientDataHelper::mobMerger);
+    public static final MergeableCodecDataManager<MobEnchantmentAncientData, MobEnchantmentAncientData> MOB_ENCHANTMENT_ANCIENT_DATA = new MergeableCodecDataManager<>("ancient/mob_enchantment_ancient_data", MobEnchantmentAncientData.CODEC, AncientDataHelper::mobEnchantmentMerger);
 
     public static MobAncientData mobMerger(List<MobAncientData> raws){
         List<String> adjectives = new ArrayList<>();
@@ -46,11 +49,11 @@ public class AncientDataHelper {
 
     public static MobAncientData getMobAncientData(ResourceLocation mobResourceLocation){
 
-        return MOB_ANCIENT_DATA.data.getOrDefault(mobResourceLocation, MobAncientData.DEFAULT);
+        return MOB_ANCIENT_DATA.getData().getOrDefault(mobResourceLocation, MobAncientData.DEFAULT);
     }
 
     public static MobEnchantmentAncientData getMobEnchantmentAncientData(ResourceLocation mobEnchantmentResourceLocation){
-        return MOB_ENCHANTMENT_ANCIENT_DATA.data.getOrDefault(mobEnchantmentResourceLocation, MobEnchantmentAncientData.DEFAULT);
+        return MOB_ENCHANTMENT_ANCIENT_DATA.getData().getOrDefault(mobEnchantmentResourceLocation, MobEnchantmentAncientData.DEFAULT);
     }
 
     public static String getAncientName(LivingEntity entity){
@@ -58,11 +61,11 @@ public class AncientDataHelper {
         Set<String> nouns = new HashSet<>();
         MobEnchantCapability enchantCap = entity.getCapability(EnchantWithMob.MOB_ENCHANT_CAP).orElse(new MobEnchantCapability());
         enchantCap.getMobEnchants().forEach(mobEnchantment -> {
-            MobEnchantmentAncientData mobEnchantmentAncientData = getMobEnchantmentAncientData(mobEnchantment.getMobEnchant().getRegistryName());
+            MobEnchantmentAncientData mobEnchantmentAncientData = getMobEnchantmentAncientData(MobEnchants.MOB_ENCHANT_REGISTRY.getKey(mobEnchantment.getMobEnchant()));
             adjectives.addAll(mobEnchantmentAncientData.getAdjectives());
             nouns.addAll(mobEnchantmentAncientData.getNouns());
         });
-        MobAncientData mobAncientData = getMobAncientData(entity.getType().getRegistryName());
+        MobAncientData mobAncientData = getMobAncientData(ForgeRegistries.ENTITY_TYPES.getKey(entity.getType()));
         adjectives.addAll(mobAncientData.getAdjectives());
         nouns.addAll(mobAncientData.getNouns());
 //        adjectives.addAll(MobAncientData.DEFAULT.getAdjectives());

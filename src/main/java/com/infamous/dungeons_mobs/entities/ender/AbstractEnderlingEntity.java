@@ -165,7 +165,7 @@ public abstract class AbstractEnderlingEntity extends Monster implements IAnimat
 
 	protected void customServerAiStep() {
 		if (this.shouldTeleportInDay() && this.level.isDay() && this.random.nextInt(600) == 0) {
-			float f = this.getBrightness();
+			float f = this.getLightLevelDependentMagicValue();
 			if (f > 0.5F && this.level.canSeeSky(this.blockPosition())
 					&& this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F) {
 				this.setTarget((LivingEntity) null);

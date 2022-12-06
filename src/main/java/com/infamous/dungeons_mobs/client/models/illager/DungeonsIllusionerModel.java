@@ -16,17 +16,17 @@ import software.bernie.geckolib3.resource.GeckoLibCache;
 public class DungeonsIllusionerModel extends AnimatedGeoModel {
 
     @Override
-    public ResourceLocation getAnimationFileLocation(Object entity) {
+    public ResourceLocation getAnimationResource(Object entity) {
         return new ResourceLocation(DungeonsMobs.MODID, "animations/illusioner.animation.json");
     }
 
     @Override
-    public ResourceLocation getModelLocation(Object entity) {
+    public ResourceLocation getModelResource(Object entity) {
         return new ResourceLocation(DungeonsMobs.MODID, "geo/geo_illager.geo.json");
     }
 
     @Override
-    public ResourceLocation getTextureLocation(Object entity) {
+    public ResourceLocation getTextureResource(Object entity) {
         return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/illusioner.png");
     }
 

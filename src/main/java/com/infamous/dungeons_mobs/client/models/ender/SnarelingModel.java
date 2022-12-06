@@ -12,17 +12,17 @@ import software.bernie.geckolib3.model.provider.data.EntityModelData;
 public class SnarelingModel extends AnimatedGeoModel {
 	   
 		@Override
-		public ResourceLocation getAnimationFileLocation(Object entity) {
+		public ResourceLocation getAnimationResource(Object entity) {
 			return new ResourceLocation(DungeonsMobs.MODID, "animations/snareling.animation.json");
 		}
 
 		@Override
-		public ResourceLocation getModelLocation(Object entity) {
+		public ResourceLocation getModelResource(Object entity) {
 			return new ResourceLocation(DungeonsMobs.MODID, "geo/snareling.geo.json");
 		}
 
 		@Override
-		public ResourceLocation getTextureLocation(Object entity) {
+		public ResourceLocation getTextureResource(Object entity) {
 				return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/ender/snareling.png");
 		}
 

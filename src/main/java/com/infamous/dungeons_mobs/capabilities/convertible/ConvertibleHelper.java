@@ -3,7 +3,7 @@ package com.infamous.dungeons_mobs.capabilities.convertible;
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.entities.water.SunkenSkeletonEntity;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
-import com.infamous.dungeons_mobs.tags.CustomTags;
+import com.infamous.dungeons_mobs.tags.EntityTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -69,6 +69,6 @@ public class ConvertibleHelper {
     }
 
     public static boolean convertsInWater(Mob mobEntity) {
-        return mobEntity.getType().is(CustomTags.CONVERTS_IN_WATER);
+        return mobEntity.getType().is(EntityTags.CONVERTS_IN_WATER);
     }
 }

@@ -14,6 +14,7 @@ import net.minecraft.Util;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
@@ -45,6 +46,8 @@ import javax.annotation.Nullable;
 import java.util.EnumSet;
 
 import static com.infamous.dungeons_mobs.entities.SpawnArmoredHelper.equipArmorSet;
+
+import net.minecraft.world.entity.monster.AbstractIllager.IllagerArmPose;
 
 public class GeomancerEntity extends SpellcasterIllager implements IAnimatable, SpawnArmoredMob {
 
@@ -149,16 +152,16 @@ public class GeomancerEntity extends SpellcasterIllager implements IAnimatable, 
 		return factory;
 	}
 
-    @Override
-    protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
+	@Override
+    protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficulty) {
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.GEOMANCER_STAFF.get()));
 		equipArmorSet(ModItems.GEOMANCER_ARMOR, this);
     }
 
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
-        this.populateDefaultEquipmentSlots(difficultyIn);
-        this.populateDefaultEquipmentEnchantments(difficultyIn);
+        this.populateDefaultEquipmentSlots(this.getRandom(), difficultyIn);
+        this.populateDefaultEquipmentEnchantments(this.getRandom(), difficultyIn);
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 

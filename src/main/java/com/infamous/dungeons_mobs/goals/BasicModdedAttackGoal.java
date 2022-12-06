@@ -12,6 +12,8 @@ import software.bernie.geckolib3.core.IAnimatable;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
+import net.minecraft.world.entity.ai.goal.Goal.Flag;
+
 public class BasicModdedAttackGoal<T extends Mob & IAnimatable & AnimatableMeleeAttackMob> extends Goal {
 
     public T mob;

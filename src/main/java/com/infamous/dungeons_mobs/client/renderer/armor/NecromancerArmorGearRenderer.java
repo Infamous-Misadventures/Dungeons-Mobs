@@ -45,7 +45,7 @@ public class NecromancerArmorGearRenderer extends ArmorGearRenderer<NecromancerA
 	public GeoArmorRenderer applySlot(EquipmentSlot slot) {
 		super.applySlot(slot);
 		
-		this.getGeoModelProvider().getModel(this.getGeoModelProvider().getModelLocation(currentArmorItem));
+		this.getGeoModelProvider().getModel(this.getGeoModelProvider().getModelResource(currentArmorItem));
 
 		IBone hoodBone = this.getAndHideBone(this.hoodBone);
 

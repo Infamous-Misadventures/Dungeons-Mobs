@@ -16,6 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
@@ -108,7 +109,7 @@ public class SkeletonVanguardEntity extends Skeleton implements IShieldUser, IAn
 		return Skeleton.createAttributes().add(Attributes.FOLLOW_RANGE, 26.0D).add(Attributes.ARMOR, 6.0D).add(Attributes.ATTACK_KNOCKBACK, 1.5D).add(Attributes.KNOCKBACK_RESISTANCE, 0.3D);
 	}
 
-	protected void populateDefaultEquipmentSlots(DifficultyInstance difficultyInstance) {
+	protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficultyInstance) {
 		equipArmorSet(ModItems.VANGUARD_ARMOR, this);
 
 		if (ModList.get().isLoaded("dungeons_gear")) {

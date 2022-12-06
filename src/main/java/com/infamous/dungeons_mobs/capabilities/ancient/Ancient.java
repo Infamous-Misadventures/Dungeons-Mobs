@@ -2,7 +2,6 @@ package com.infamous.dungeons_mobs.capabilities.ancient;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.world.BossEvent;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -48,7 +47,7 @@ public class Ancient implements INBTSerializable<CompoundTag> {
     public void deserializeNBT(CompoundTag tag) {
         this.setAncient(tag.getBoolean("ancient"));
         if(tag.contains("displayName")) {
-            this.initiateBossBar(new TextComponent(tag.getString("displayName")));
+            this.initiateBossBar(Component.literal(tag.getString("displayName")));
         }
     }
 }

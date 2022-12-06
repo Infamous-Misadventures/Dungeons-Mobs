@@ -19,7 +19,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
-apply from: 'https://raw.githubusercontent.com/SizableShrimp/Forge-Class-Remapper/main/classremapper.gradle'
+apply from: 'https://raw.githubusercontent.com/SizableShrimp/ForgeUpdatesRemapper/main/remapper.gradle'
 
 version = "${mc_version}-${mod_version}"
 group = 'com.infamous.dungeons_mobs' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -132,13 +132,13 @@ dependencies {
     //Library
     implementation fg.deobf("dungeons_libraries:dungeons_libraries:${mc_version}-${libraries_version}")
 //    implementation fg.deobf("mutantmore-test:mutantmore-test:11")
-    implementation fg.deobf("software.bernie.geckolib:geckolib-forge-1.18:${geckolib_version}")
+    implementation fg.deobf("software.bernie.geckolib:geckolib-forge-1.19:${geckolib_version}")
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}:api")
 //    runtimeOnly fg.deobf("curse.maven:blame-406201:3440093")
 //    runtimeOnly fg.deobf("curse.maven:neat-238372:3182258")
-    implementation fg.deobf("curse.maven:enchantwithmob-391187:3819280")
-    runtimeOnly fg.deobf("dungeons_gear:dungeons_gear:1.18.2-4.0.0-alpha")
+    implementation fg.deobf("curse.maven:enchantwithmob-391187:4102968")
+    runtimeOnly fg.deobf("dungeons_gear:dungeons_gear:1.19.2-5.0.0-alpha")
 
 //    runtimeOnly fg.deobf("rubidium:rubidium:0.2.10")
 //    runtimeOnly fg.deobf("oculus:oculus:1.2.6")

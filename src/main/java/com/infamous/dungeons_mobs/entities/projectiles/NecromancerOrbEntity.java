@@ -27,6 +27,9 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
+import net.minecraft.world.entity.Entity.MovementEmission;
+import net.minecraft.world.entity.Entity.RemovalReason;
+
 public class NecromancerOrbEntity extends StraightMovingProjectileEntity implements IAnimatable {
 
 	private static final EntityDataAccessor<Boolean> DELAYED_FORM = SynchedEntityData.defineId(NecromancerOrbEntity.class,

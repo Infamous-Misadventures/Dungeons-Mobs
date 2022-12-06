@@ -18,7 +18,7 @@ public class AnimatedPropsEvents {
 
     @SubscribeEvent
     public static void onPlayerStartTracking(PlayerEvent.StartTracking event){
-        Player player = event.getPlayer();
+        Player player = event.getEntity();
         Entity target = event.getTarget();
         if (player instanceof ServerPlayer && target instanceof Vindicator) {
             AnimatedProps cap = AnimatedPropsHelper.getAnimatedPropsCapability((Vindicator) target);

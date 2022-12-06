@@ -15,6 +15,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
@@ -177,8 +178,8 @@ public class MageEntity extends AbstractIllager implements IAnimatable, SpawnArm
     }
 
     @Override
-    protected void populateDefaultEquipmentSlots(DifficultyInstance p_180481_1_) {
-        super.populateDefaultEquipmentSlots(p_180481_1_);
+    protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance p_180481_1_) {
+        super.populateDefaultEquipmentSlots(random, p_180481_1_);
 		equipArmorSet(ModItems.MAGE_ARMOR, this);
     }
 
@@ -186,8 +187,8 @@ public class MageEntity extends AbstractIllager implements IAnimatable, SpawnArm
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor p_213386_1_, DifficultyInstance p_213386_2_, MobSpawnType p_213386_3_, @Nullable SpawnGroupData p_213386_4_, @Nullable CompoundTag p_213386_5_) {
         SpawnGroupData iLivingEntityData = super.finalizeSpawn(p_213386_1_, p_213386_2_, p_213386_3_, p_213386_4_, p_213386_5_);
-        this.populateDefaultEquipmentSlots(p_213386_2_);
-        this.populateDefaultEquipmentEnchantments(p_213386_2_);
+        this.populateDefaultEquipmentSlots(this.getRandom(), p_213386_2_);
+        this.populateDefaultEquipmentEnchantments(this.getRandom(), p_213386_2_);
         return iLivingEntityData;
     }
 

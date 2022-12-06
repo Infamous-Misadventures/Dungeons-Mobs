@@ -24,6 +24,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkHooks;
 
+import net.minecraft.world.entity.Entity.RemovalReason;
+
 public class SnarelingGlobEntity extends ThrowableItemProjectile {
 	
 	   public SnarelingGlobEntity(EntityType<? extends SnarelingGlobEntity> p_i50159_1_, Level p_i50159_2_) {

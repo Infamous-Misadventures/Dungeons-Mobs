@@ -23,6 +23,8 @@ import java.util.List;
 
 import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
+import net.minecraft.world.entity.Entity.RemovalReason;
+
 public class TridentStormEntity extends Entity implements IAnimatable, IAnimationTickable {
 
 	AnimationFactory factory = GeckoLibUtil.createFactory(this);

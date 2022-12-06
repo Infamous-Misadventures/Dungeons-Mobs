@@ -13,17 +13,17 @@ import software.bernie.geckolib3.model.provider.data.EntityModelData;
 public class BlastlingModel extends AnimatedGeoModel {
 	   
 		@Override
-		public ResourceLocation getAnimationFileLocation(Object entity) {
+		public ResourceLocation getAnimationResource(Object entity) {
 			return new ResourceLocation(DungeonsMobs.MODID, "animations/blastling.animation.json");
 		}
 
 		@Override
-		public ResourceLocation getModelLocation(Object entity) {
+		public ResourceLocation getModelResource(Object entity) {
 			return new ResourceLocation(DungeonsMobs.MODID, "geo/blastling.geo.json");
 		}
 
 		@Override
-		public ResourceLocation getTextureLocation(Object entity) {
+		public ResourceLocation getTextureResource(Object entity) {
 			return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/ender/blastling" + ( 1 + ((int)((BlastlingEntity)entity).flameTicks) % 3) + ".png");
 		}
 

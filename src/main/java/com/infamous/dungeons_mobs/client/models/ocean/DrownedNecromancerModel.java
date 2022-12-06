@@ -27,17 +27,17 @@ import software.bernie.geckolib3.resource.GeckoLibCache;
 public class DrownedNecromancerModel extends AnimatedGeoModel<DrownedNecromancerEntity> {
 
     @Override
-    public ResourceLocation getAnimationFileLocation(DrownedNecromancerEntity entity) {
+    public ResourceLocation getAnimationResource(DrownedNecromancerEntity entity) {
         return new ResourceLocation(DungeonsMobs.MODID, "animations/drowned_necromancer.animation.json");
     }
 
     @Override
-    public ResourceLocation getModelLocation(DrownedNecromancerEntity entity) {
+    public ResourceLocation getModelResource(DrownedNecromancerEntity entity) {
         return new ResourceLocation(DungeonsMobs.MODID, "geo/drowned_necromancer.geo.json");
     }
 
     @Override
-    public ResourceLocation getTextureLocation(DrownedNecromancerEntity entity) {
+    public ResourceLocation getTextureResource(DrownedNecromancerEntity entity) {
         return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/ocean/drowned_necromancer.png");
     }
 

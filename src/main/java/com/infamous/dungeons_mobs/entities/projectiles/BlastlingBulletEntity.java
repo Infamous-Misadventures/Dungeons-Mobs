@@ -15,6 +15,8 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.network.NetworkHooks;
 
+import net.minecraft.world.entity.Entity.RemovalReason;
+
 public class BlastlingBulletEntity extends NecromancerOrbEntity {
 
 	public BlastlingBulletEntity(EntityType<? extends BlastlingBulletEntity> p_i50147_1_, Level p_i50147_2_) {

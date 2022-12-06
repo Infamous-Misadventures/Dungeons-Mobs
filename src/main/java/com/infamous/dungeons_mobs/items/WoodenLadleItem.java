@@ -8,6 +8,8 @@ import net.minecraft.world.level.block.Block;
 
 import java.util.Set;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class WoodenLadleItem extends ShovelItem {
     private static final Set<Block> EFFECTIVE_ON = ImmutableSet.of();
 

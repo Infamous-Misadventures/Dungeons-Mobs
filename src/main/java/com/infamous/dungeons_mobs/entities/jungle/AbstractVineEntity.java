@@ -1,6 +1,6 @@
 package com.infamous.dungeons_mobs.entities.jungle;
 
-import com.infamous.dungeons_mobs.tags.CustomTags;
+import com.infamous.dungeons_mobs.tags.EntityTags;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -105,7 +105,7 @@ public abstract class AbstractVineEntity extends PathfinderMob implements Enemy,
 	   public boolean isAlliedTo(Entity p_184191_1_) {
 		      if (super.isAlliedTo(p_184191_1_)) {
 		         return true;
-		      } else if (p_184191_1_ instanceof LivingEntity && ((LivingEntity)p_184191_1_).getType().is(CustomTags.PLANT_MOBS)) {
+		      } else if (p_184191_1_ instanceof LivingEntity && ((LivingEntity)p_184191_1_).getType().is(EntityTags.PLANT_MOBS)) {
 		         return this.getTeam() == null && p_184191_1_.getTeam() == null;
 		      } else {
 		         return false;
@@ -304,7 +304,7 @@ public abstract class AbstractVineEntity extends PathfinderMob implements Enemy,
     }
     
     public boolean shouldBurstFor(Entity entity) {
-    	return entity instanceof LivingEntity && !entity.getType().is(CustomTags.PLANT_MOBS) && entity.isAlive() && !entity.isSpectator() && !(entity instanceof Player && ((Player)entity).isCreative());
+    	return entity instanceof LivingEntity && !entity.getType().is(EntityTags.PLANT_MOBS) && entity.isAlive() && !entity.isSpectator() && !(entity instanceof Player && ((Player)entity).isCreative());
     }
    
     @Override

@@ -7,6 +7,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -51,7 +52,7 @@ public abstract class ZombifiedPiglinEntityMixin extends Zombie implements ISmar
     }
 
     @Inject(at = @At("TAIL"), method = "populateDefaultEquipmentSlots", cancellable = true)
-    private void spawnWeapon(DifficultyInstance p_180481_1_, CallbackInfo ci){
+    private void spawnWeapon(RandomSource random, DifficultyInstance p_180481_1_, CallbackInfo ci){
         this.setItemSlot(EquipmentSlot.MAINHAND, this.createSpawnWeapon());
     }
 

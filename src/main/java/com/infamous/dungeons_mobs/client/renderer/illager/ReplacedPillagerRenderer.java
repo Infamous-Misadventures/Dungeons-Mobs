@@ -15,6 +15,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.example.client.DefaultBipedBoneIdents;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
@@ -198,7 +199,7 @@ public class ReplacedPillagerRenderer extends ModExtentedGeoReplacedEntityRender
     @Override
     protected void prepareArmorPositionAndScale(GeoBone bone, List<ModelPart.Cube> cubeList, ModelPart sourceLimb, PoseStack stack, boolean geoArmor, boolean modMatrixRot) {
         super.prepareArmorPositionAndScale(bone, cubeList, sourceLimb, stack, geoArmor, modMatrixRot);
-        if (bone.getName().equals("armorBipedHead") && geoArmor && helmet.getItem().getRegistryName().getNamespace().equals(MODID)) {
+        if (bone.getName().equals("armorBipedHead") && geoArmor && ForgeRegistries.ITEMS.getKey(helmet.getItem()).getNamespace().equals(MODID)) {
             stack.translate(0, 0.125, 0); // 1y is 1 cube up, we want 2/16
         }
     }

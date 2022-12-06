@@ -19,17 +19,17 @@ import software.bernie.geckolib3.resource.GeckoLibCache;
 public class SkeletonVanguardModel extends AnimatedGeoModel<SkeletonVanguardEntity> {
 	
     @Override
-    public ResourceLocation getAnimationFileLocation(SkeletonVanguardEntity entity) {
+    public ResourceLocation getAnimationResource(SkeletonVanguardEntity entity) {
         return new ResourceLocation(DungeonsMobs.MODID, "animations/skeleton_vanguard.animation.json");
     }
 
     @Override
-    public ResourceLocation getModelLocation(SkeletonVanguardEntity entity) {
+    public ResourceLocation getModelResource(SkeletonVanguardEntity entity) {
         return new ResourceLocation(DungeonsMobs.MODID, "geo/geo_skeleton.geo.json") ;
     }
 
     @Override
-    public ResourceLocation getTextureLocation(SkeletonVanguardEntity entity) {
+    public ResourceLocation getTextureResource(SkeletonVanguardEntity entity) {
         return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/skeleton/skeleton_vanguard.png");
     }
 

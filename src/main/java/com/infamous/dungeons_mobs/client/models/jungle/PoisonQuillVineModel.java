@@ -9,17 +9,17 @@ import software.bernie.geckolib3.model.provider.data.EntityModelData;
 
 public class PoisonQuillVineModel extends AbstractVineModel {
 	@Override
-	public ResourceLocation getAnimationFileLocation(AbstractVineEntity entity) {
+	public ResourceLocation getAnimationResource(AbstractVineEntity entity) {
 		return new ResourceLocation(DungeonsMobs.MODID, "animations/poison_quill_vine.animation.json");
 	}
 
 	@Override
-	public ResourceLocation getModelLocation(AbstractVineEntity entity) {
+	public ResourceLocation getModelResource(AbstractVineEntity entity) {
 		return new ResourceLocation(DungeonsMobs.MODID, "geo/poison_quill_vine.geo.json");
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(AbstractVineEntity entity) {
+	public ResourceLocation getTextureResource(AbstractVineEntity entity) {
 		return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/jungle/poison_quill_vine.png");
 	}
 	

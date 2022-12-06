@@ -6,17 +6,17 @@ import net.minecraft.resources.ResourceLocation;
 
 public class QuickGrowingVineModel extends AbstractVineModel {
 	@Override
-	public ResourceLocation getAnimationFileLocation(AbstractVineEntity entity) {
+	public ResourceLocation getAnimationResource(AbstractVineEntity entity) {
 		return new ResourceLocation(DungeonsMobs.MODID, "animations/quick_growing_vine.animation.json");
 	}
 
 	@Override
-	public ResourceLocation getModelLocation(AbstractVineEntity entity) {
+	public ResourceLocation getModelResource(AbstractVineEntity entity) {
 		return new ResourceLocation(DungeonsMobs.MODID, "geo/quick_growing_vine.geo.json");
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(AbstractVineEntity entity) {
+	public ResourceLocation getTextureResource(AbstractVineEntity entity) {
 		return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/jungle/quick_growing_vine.png");
 	}
 }

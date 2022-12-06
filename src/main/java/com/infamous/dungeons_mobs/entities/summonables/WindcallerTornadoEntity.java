@@ -23,6 +23,8 @@ import java.util.List;
 
 import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
+import net.minecraft.world.entity.Entity.RemovalReason;
+
 public class WindcallerTornadoEntity extends Entity implements IAnimatable {
 
 	private static final EntityDataAccessor<Boolean> BLAST = SynchedEntityData.defineId(WindcallerTornadoEntity.class,

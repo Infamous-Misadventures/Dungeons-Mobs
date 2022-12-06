@@ -7,17 +7,17 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 public class IceCloudModel extends AnimatedGeoModel {
 
 	@Override
-	public ResourceLocation getAnimationFileLocation(Object entity) {
+	public ResourceLocation getAnimationResource(Object entity) {
 		return new ResourceLocation(DungeonsMobs.MODID, "animations/ice_chunk.animation.json");
 	}
 
 	@Override
-	public ResourceLocation getModelLocation(Object entity) {
+	public ResourceLocation getModelResource(Object entity) {
 		return new ResourceLocation(DungeonsMobs.MODID, "geo/ice_chunk.geo.json");
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(Object entity) {
+	public ResourceLocation getTextureResource(Object entity) {
 		return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/ice_chunk.png");
 	}
 }
