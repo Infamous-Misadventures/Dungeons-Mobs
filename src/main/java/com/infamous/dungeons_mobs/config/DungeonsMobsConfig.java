@@ -19,8 +19,6 @@ public class DungeonsMobsConfig {
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ICY_CREEPER_REPLACES_CREEPER;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_JUNGLE_ZOMBIE_REPLACES_ZOMBIE;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_MOSSY_SKELETON_REPLACES_SKELETON;
-        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_DROWNED_REPLACES_DROWNED;
-        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ARMORED_SUNKEN_SKELETON_REPLACES_SUNKEN_SKELETON;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_VINDICATORS_WEARING_ARMOR;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_PILLAGERS_WEARING_ARMOR;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_EVOKERS_WEARING_ARMOR;
@@ -229,35 +227,7 @@ public class DungeonsMobsConfig {
 
             builder.pop();
 
-            // SPAWN CONFIGURATION
-            builder.comment("Spawn Configuration").push("spawn_configuration");
-            ENABLE_FROZEN_ZOMBIE_REPLACES_ZOMBIE = builder
-                    .comment("Enable Frozen Zombies replacing 80% of  Zombie spawns in ICY biomes. \n" +
-                            "If you prefer to not have them do this, disable this feature. [true / false]")
-                    .define("enableFrozenZombieReplacesZombie", true);
-            ENABLE_ICY_CREEPER_REPLACES_CREEPER = builder
-                    .comment("Enable Icy Creepers replacing 80% of Creeper spawns in ICY biomes. \n" +
-                            "If you prefer to not have them do this, disable this feature. [true / false]")
-                    .define("enableIcyCreeperReplacesCreeper", true);
-            ENABLE_JUNGLE_ZOMBIE_REPLACES_ZOMBIE = builder
-                    .comment("Enable Jungle Zombies replacing 80% of Zombie spawns in JUNGLE biomes. \n" +
-                            "If you prefer to not have them do this, disable this feature. [true / false]")
-                    .define("enableJungleZombieReplacesZombie", true);
-            ENABLE_MOSSY_SKELETON_REPLACES_SKELETON = builder
-                    .comment("Enable Mossy Skeletons  80% of Skeleton spawns in JUNGLE biomes. \n" +
-                            "If you prefer to not have them do this, disable this feature. [true / false]")
-                    .define("enableMossySkeletonReplacesSkeleton", true);
-
-            ENABLE_ARMORED_DROWNED_REPLACES_DROWNED = builder
-                    .comment("Enable Armored Drowned replacing 10% of Drowned spawns in the locations they can spawn in. \n" +
-                            "If you prefer to not have them do this, disable this feature. [true / false]")
-                    .define("enabledArmoredDrownedReplacesDrowned", true);
-
-            ENABLE_ARMORED_SUNKEN_SKELETON_REPLACES_SUNKEN_SKELETON = builder
-                    .comment("Enable Armored Sunken Skeletons replacing 10% of Sunken Skeleton spawns in the locations they can spawn in. \n" +
-                            "If you prefer to not have them do this, disable this feature. [true / false]")
-                    .define("enableArmoredSunkenSkeletonReplacesSunkenSkeleton", true);
-
+            builder.comment("Vanilla Illager Configuration").push("vanilla_illager_configuration");
             ENABLE_PILLAGERS_WEARING_ARMOR = builder
                     .comment("Enable Pillagers wearing armor. \n" +
                             "If you prefer to not have them do this, disable this feature. [true / false]")
@@ -278,6 +248,26 @@ public class DungeonsMobsConfig {
                             "Can be combined with the  resource pack to \n" +
                             "If you prefer a more vanilla look, disable this feature. [true / false]")
                     .define("enable3DSleeves", true);
+            builder.pop();
+
+            // SPAWN CONFIGURATION
+            builder.comment("Spawn Configuration").push("spawn_configuration");
+            ENABLE_FROZEN_ZOMBIE_REPLACES_ZOMBIE = builder
+                    .comment("Enable Frozen Zombies replacing 80% of  Zombie spawns in ICY biomes. \n" +
+                            "If you prefer to not have them do this, disable this feature. [true / false]")
+                    .define("enableFrozenZombieReplacesZombie", true);
+            ENABLE_ICY_CREEPER_REPLACES_CREEPER = builder
+                    .comment("Enable Icy Creepers replacing 80% of Creeper spawns in ICY biomes. \n" +
+                            "If you prefer to not have them do this, disable this feature. [true / false]")
+                    .define("enableIcyCreeperReplacesCreeper", true);
+            ENABLE_JUNGLE_ZOMBIE_REPLACES_ZOMBIE = builder
+                    .comment("Enable Jungle Zombies replacing 80% of Zombie spawns in JUNGLE biomes. \n" +
+                            "If you prefer to not have them do this, disable this feature. [true / false]")
+                    .define("enableJungleZombieReplacesZombie", true);
+            ENABLE_MOSSY_SKELETON_REPLACES_SKELETON = builder
+                    .comment("Enable Mossy Skeletons  80% of Skeleton spawns in JUNGLE biomes. \n" +
+                            "If you prefer to not have them do this, disable this feature. [true / false]")
+                    .define("enableMossySkeletonReplacesSkeleton", true);
 
             ICEOLOGER_BIOME_TYPES = builder
                     .comment("Add biome types that the Iceologer can spawn in. \n"
