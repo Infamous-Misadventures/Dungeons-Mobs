@@ -504,6 +504,10 @@ public class RedstoneGolemEntity extends Raider implements IAnimatable {
             setAttackID(0);
         }
 
+        @Override
+        public boolean requiresUpdateEveryTick() {
+            return true;
+        }
     }
 
 
