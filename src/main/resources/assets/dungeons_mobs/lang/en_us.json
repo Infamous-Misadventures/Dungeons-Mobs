@@ -168,7 +168,7 @@
   "lore.dungeons_mobs.diamond_vindicator_helmet": "Horned helm sported by the most vicious vindicators to mimic the fury of the ravager.",
   "item.dungeons_mobs.vanguard_helmet": "Vanguard Helmet",
   "item.dungeons_mobs.vanguard_chestplate": "Vanguard Chestplate",
-  "item.dungeons_mobs.vanguard_legs": "Vanguard Leggings",
+  "item.dungeons_mobs.vanguard_leggings": "Vanguard Leggings",
   "lore.dungeons_mobs.vanguard_armor": "Ancient suit of armour worn by the undying Guard of a sorcerous sovereign whose name was lost in the sands of time.",
   "item.dungeons_mobs.chef_helmet": "Chef Hat",
   "item.dungeons_mobs.chef_chestplate": "Chef Apron",
@@ -217,6 +217,7 @@
   "item.dungeons_mobs.expedition_helmet": "Expedition Hood",
   "item.dungeons_mobs.expedition_chestplate": "Expedition Jacket",
   "item.dungeons_mobs.expedition_leggings": "Expedition Pants",
+  "item.dungeons_mobs.expedition_boots": "Expedition Pants",
   "lore.dungeons_mobs.expedition_armor": "Robust climbing gear worn by the hardened mountaineers of the Windswept Peaks.",
   
   "item.dungeons_mobs.alpine_helmet": "Alpine Hood",
