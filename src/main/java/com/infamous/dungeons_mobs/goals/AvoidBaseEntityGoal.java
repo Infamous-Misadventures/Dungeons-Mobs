@@ -27,6 +27,10 @@ public class AvoidBaseEntityGoal<T extends Entity> extends Goal {
    /** Class of entity this behavior seeks to avoid */
    private final Class<T> classToAvoid;
 
+   private static final Predicate<Entity> ALIVE = (p_213685_0_) -> {
+      return p_213685_0_.isAlive();
+   };
+
    public AvoidBaseEntityGoal(PathfinderMob entityIn, Class<T> avoidClass, float distance, double farSpeedIn, double nearSpeedIn) {
       this.hostCreature = entityIn;
       this.classToAvoid = avoidClass;
@@ -91,14 +95,10 @@ public class AvoidBaseEntityGoal<T extends Entity> extends Goal {
 
    }
 
-
-
    @Nullable
    private <T extends Entity> T getNearestEntity(Class<? extends T> entityClass, LivingEntity livingEntity, double xPos, double yPos, double zPos, AABB axisAlignedBB) {
-      return this.getClosestEntity(livingEntity.level.getEntitiesOfClass(entityClass, axisAlignedBB, null), livingEntity, xPos, yPos, zPos);
+      return this.getClosestEntity(livingEntity.level.getEntitiesOfClass(entityClass, axisAlignedBB, ALIVE), livingEntity, xPos, yPos, zPos);
    }
-
-
 
    @Nullable
    private <T extends Entity> T getClosestEntity(List<? extends T> nearbyEntities, LivingEntity livingEntity, double xPos, double yPos, double zPos) {
