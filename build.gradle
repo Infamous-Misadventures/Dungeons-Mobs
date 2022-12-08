@@ -135,6 +135,7 @@ dependencies {
     implementation fg.deobf("software.bernie.geckolib:geckolib-forge-1.19:${geckolib_version}")
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}:api")
+    runtimeOnly fg.deobf("curse.maven:illagersweararmor-407488:4132486")
 //    runtimeOnly fg.deobf("curse.maven:blame-406201:3440093")
 //    runtimeOnly fg.deobf("curse.maven:neat-238372:3182258")
     implementation fg.deobf("curse.maven:enchantwithmob-391187:4102968")

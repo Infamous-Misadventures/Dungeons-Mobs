@@ -66,15 +66,15 @@ public class ClientEvents {
         // To match Husk proportions found in MCD
         event.registerEntityRenderer(EntityType.HUSK, CustomZombieRenderer::new);
 
-//        if(DungeonsMobsConfig.COMMON.ENABLE_PILLAGERS_WEARING_ARMOR.get()){
-            event.registerEntityRenderer(EntityType.PILLAGER, ReplacedPillagerRenderer::new);
-//        }
-//        if(DungeonsMobsConfig.COMMON.ENABLE_VINDICATORS_WEARING_ARMOR.get()){
-            event.registerEntityRenderer(EntityType.VINDICATOR, ReplacedVindicatorRenderer::new);
-//        }
-//        if(DungeonsMobsConfig.COMMON.ENABLE_EVOKERS_WEARING_ARMOR.get()){
-            event.registerEntityRenderer(EntityType.EVOKER, ReplacedEvokerRenderer::new);
-//        }
+////        if(DungeonsMobsConfig.COMMON.ENABLE_PILLAGERS_WEARING_ARMOR.get()){
+//            event.registerEntityRenderer(EntityType.PILLAGER, ReplacedPillagerRenderer::new);
+////        }
+////        if(DungeonsMobsConfig.COMMON.ENABLE_VINDICATORS_WEARING_ARMOR.get()){
+//            event.registerEntityRenderer(EntityType.VINDICATOR, ReplacedVindicatorRenderer::new);
+////        }
+////        if(DungeonsMobsConfig.COMMON.ENABLE_EVOKERS_WEARING_ARMOR.get()){
+//            event.registerEntityRenderer(EntityType.EVOKER, ReplacedEvokerRenderer::new);
+////        }
         
         event.registerEntityRenderer(EntityType.DROWNED, CustomDrownedRenderer::new);
 
