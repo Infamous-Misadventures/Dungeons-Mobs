@@ -23,7 +23,7 @@ public class RedstoneGolemRenderer extends GeoEntityRenderer<RedstoneGolemEntity
             public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn,
                                RedstoneGolemEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
                                float ageInTicks, float netHeadYaw, float headPitch) {
-                if (!entitylivingbaseIn.isSummoningMines()) {
+                if (!entitylivingbaseIn.isSummoningMines() && !entitylivingbaseIn.isDeadOrDying()) {
                     super.render(matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks,
                             ageInTicks, netHeadYaw, headPitch);
                 }
@@ -37,7 +37,7 @@ public class RedstoneGolemRenderer extends GeoEntityRenderer<RedstoneGolemEntity
 
                 RedstoneGolemEntity redstoneGolem = ((RedstoneGolemEntity) entitylivingbaseIn);
 
-                if (!redstoneGolem.isSummoningMines()) {
+                if (!redstoneGolem.isSummoningMines() && !entitylivingbaseIn.isDeadOrDying()) {
                     super.render(matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks,
                             ageInTicks, netHeadYaw, headPitch);
                 }
@@ -51,7 +51,7 @@ public class RedstoneGolemRenderer extends GeoEntityRenderer<RedstoneGolemEntity
 
                 RedstoneGolemEntity redstoneGolem = ((RedstoneGolemEntity) entitylivingbaseIn);
 
-                if (redstoneGolem.isSummoningMines()) {
+                if (redstoneGolem.isSummoningMines() && !entitylivingbaseIn.isDeadOrDying()) {
                     super.render(matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks,
                             ageInTicks, netHeadYaw, headPitch);
                 }
@@ -65,7 +65,7 @@ public class RedstoneGolemRenderer extends GeoEntityRenderer<RedstoneGolemEntity
 
                 RedstoneGolemEntity redstoneGolem = ((RedstoneGolemEntity) entitylivingbaseIn);
 
-                if (redstoneGolem.isSummoningMines()) {
+                if (redstoneGolem.isSummoningMines() && !entitylivingbaseIn.isDeadOrDying()) {
                     super.render(matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks,
                             ageInTicks, netHeadYaw, headPitch);
                 }
