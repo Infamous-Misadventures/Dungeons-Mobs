@@ -1,7 +1,10 @@
 package com.infamous.dungeons_mobs.entities.golem;
 
+import com.infamous.dungeons_mobs.entities.summonables.AreaDamageEntity;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
+import com.infamous.dungeons_mobs.utils.PositionUtils;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -13,11 +16,11 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -28,14 +31,12 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.NaturalSpawner;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -60,18 +61,30 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
+import java.util.UUID;
 
-import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
-import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.PLAY_ONCE;
+import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.*;
 
 public class SquallGolemEntity extends Raider implements IAnimatable {
+
+    private static final UUID SPEED_MODIFIER_SLOW_DOWN_AFTER_ATTACK_UUID = UUID.fromString("00cd371b-0ff4-4ded-8630-b380232ed7b1");
+    private static final AttributeModifier SPEED_MODIFIER_SLOW_DOWN_AFTER_ATTACK = new AttributeModifier(SPEED_MODIFIER_SLOW_DOWN_AFTER_ATTACK_UUID,
+            "Slowdown After Attacking speed decrease", -0.1D, AttributeModifier.Operation.ADDITION);
+
+    private boolean needEnergy;
+    private boolean hasEnergy;
+    private boolean shouldReturnToOriginalPosition;
     private int attackTimer;
     private int attackID;
-    public int cd;
+    public int meleeCooldown;
+    public int slowdownAfterAttackTime;
+    private Vec3 originalPosition;
     public static final byte STOMP_ATTACK = 1;
     public static final byte GOLEM_ACTIVATE = 2;
     public static final byte GOLEM_DEACTIVATE = 3;
+    public static final byte RETURN_TO_ORIGINAL = 4;
     private int timeWithoutTarget;
+    private int maxTimeWithoutTarget;
     private static final EntityDataAccessor<Boolean> ACTIVATE = SynchedEntityData.defineId(SquallGolemEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> MELEEATTACKING = SynchedEntityData.defineId(SquallGolemEntity.class, EntityDataSerializers.BOOLEAN);
 
@@ -81,21 +94,51 @@ public class SquallGolemEntity extends Raider implements IAnimatable {
 
     public SquallGolemEntity(EntityType<? extends Raider> type, Level world) {
         super(type, world);
-        this.xpReward = 20;
+        this.xpReward = Enemy.XP_REWARD_HUGE;
     }
 
     public static AttributeSupplier.Builder setCustomAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 90.0D) // >= Golem Health
+                .add(Attributes.MAX_HEALTH, 100.0D) // == Golem Health
                 .add(Attributes.MOVEMENT_SPEED, 0.3D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
                 .add(Attributes.ATTACK_DAMAGE, 15.0D) // 1x Golem Attack
-                .add(Attributes.ATTACK_KNOCKBACK, 1.25D); // 1x Ravager knockback
+                .add(Attributes.ATTACK_KNOCKBACK, 1.35D); // >= Ravager knockback
+    }
+
+    @Override
+    public boolean isAlliedTo(Entity entityIn) {
+        if (super.isAlliedTo(entityIn)) {
+            return true;
+        } else if ((entityIn instanceof LivingEntity && ((LivingEntity)entityIn).getMobType() == MobType.ILLAGER)
+                || entityIn instanceof SquallGolemEntity) {
+            return this.getTeam() == null && entityIn.getTeam() == null;
+        } else {
+            return false;
+        }
     }
 
     @Override
     public boolean isPushable() {
         return false;
+    }
+
+    @Override
+    public boolean canBeCollidedWith() {
+        return true;
+    }
+
+    @org.jetbrains.annotations.Nullable
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor p_37856_, DifficultyInstance p_37857_, MobSpawnType mobSpawnType, @org.jetbrains.annotations.Nullable SpawnGroupData p_37859_, @org.jetbrains.annotations.Nullable CompoundTag p_37860_) {
+        if (mobSpawnType == MobSpawnType.COMMAND ||
+                mobSpawnType == MobSpawnType.SPAWNER ||
+                mobSpawnType == MobSpawnType.EVENT ||
+                mobSpawnType == MobSpawnType.SPAWN_EGG) {
+            this.entityData.set(ACTIVATE, true);
+            this.timeWithoutTarget = 0;
+        }
+        return super.finalizeSpawn(p_37856_, p_37857_, mobSpawnType, p_37859_, p_37860_);
     }
 
     AnimationFactory factory = GeckoLibUtil.createFactory(this);
@@ -109,23 +152,23 @@ public class SquallGolemEntity extends Raider implements IAnimatable {
 		Vec3 velocity = this.getDeltaMovement();
 		float groundSpeed = Mth.sqrt((float) ((velocity.x * velocity.x) + (velocity.z * velocity.z)));
         if (this.attackID == GOLEM_ACTIVATE) {
-            event.getController().setAnimationSpeed(1.0D);
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.squall_golem.activate", PLAY_ONCE));
+            event.getController().setAnimationSpeed(1.15D);
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.squall_golem.activate", HOLD_ON_LAST_FRAME));
             return PlayState.CONTINUE;
 
         } else if (this.attackID == GOLEM_DEACTIVATE) {
-        	event.getController().setAnimationSpeed(1.0D);
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.squall_golem.deactivate", PLAY_ONCE));
+        	event.getController().setAnimationSpeed(1.15D);
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.squall_golem.deactivate", HOLD_ON_LAST_FRAME));
             return PlayState.CONTINUE;
 
         } else if (!this.getActivate()) {
-        	event.getController().setAnimationSpeed(1.0D);
+        	event.getController().setAnimationSpeed(1.15D);
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.squall_golem.deactivated", LOOP));
             return PlayState.CONTINUE;
 
         }else if (this.isMeleeAttacking()&& this.isAlive()) {
-        	event.getController().setAnimationSpeed(1.0D);
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.squall_golem.attack", PLAY_ONCE));
+        	event.getController().setAnimationSpeed(1.5D);
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.squall_golem.attack", HOLD_ON_LAST_FRAME));
             return PlayState.CONTINUE;
 
         } else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
@@ -147,12 +190,13 @@ public class SquallGolemEntity extends Raider implements IAnimatable {
 
     protected void registerGoals() {
         super.registerGoals();
+        this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.6D));
         this.goalSelector.addGoal(4, new SquallGolemEntity.AttackGoal());
-        this.goalSelector.addGoal(0, new SquallGolemEntity.MeleeGoal());
+        this.goalSelector.addGoal(3, new SquallGolemEntity.ReturnToOriginalPosGoal());
         this.goalSelector.addGoal(1, new SquallGolemEntity.DoNothingGoal());
+        this.goalSelector.addGoal(0, new SquallGolemEntity.MeleeGoal());
         this.goalSelector.addGoal(0, new SquallGolemEntity.Deactivate());
         this.goalSelector.addGoal(0, new SquallGolemEntity.Activate());
-        this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.6D));
 
         this.targetSelector.addGoal(2, (new HurtByTargetGoal(this, Raider.class)).setAlertOthers());
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, true));
@@ -163,18 +207,36 @@ public class SquallGolemEntity extends Raider implements IAnimatable {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
+        this.needEnergy = false;
+        this.shouldReturnToOriginalPosition = false;
+        this.originalPosition = Vec3.ZERO;
+        this.maxTimeWithoutTarget = 200;
         this.entityData.define(ACTIVATE, false);
         this.entityData.define(MELEEATTACKING, false);
     }
 
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
+        compound.putDouble("originalPositionX", originalPosition.x());
+        compound.putDouble("originalPositionY", originalPosition.y());
+        compound.putDouble("originalPositionZ", originalPosition.z());
+        compound.putBoolean("isNeedEnergy", needEnergy);
         compound.putBoolean("activate", getActivate());
+        compound.putBoolean("shouldReturnToOriginalPosition", shouldReturnToOriginalPosition);
+        compound.putInt("maxTimerWithoutTarget", maxTimeWithoutTarget);
     }
 
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
+        this.originalPosition = new Vec3(
+                compound.getDouble("originalPositionX"),
+                compound.getDouble("originalPositionY"),
+                compound.getDouble("originalPositionZ")
+        );
+        needEnergy = (compound.getBoolean("isNeedEnergy"));
         setActivate(compound.getBoolean("activate"));
+        shouldReturnToOriginalPosition = (compound.getBoolean("shouldReturnToOriginalPosition"));
+        maxTimeWithoutTarget = (compound.getInt("maxTimerWithoutTarget"));
     }
 
     public void setActivate(boolean isActivate) {
@@ -187,6 +249,34 @@ public class SquallGolemEntity extends Raider implements IAnimatable {
 
     public boolean isMeleeAttacking() {
         return this.entityData.get(MELEEATTACKING);
+    }
+
+    public boolean isHasEnergy() {
+        return this.hasEnergy;
+    }
+
+    public void setHasEnergy(boolean hasEnergy) {
+        this.hasEnergy = hasEnergy;
+    }
+
+    public void setNeedEnergy(boolean needEnergy) {
+        this.needEnergy = needEnergy;
+    }
+
+    public void setSlowdownAfterAttackTime(int slowdownAfterAttackTime) {
+        this.slowdownAfterAttackTime = slowdownAfterAttackTime;
+    }
+
+    public void setMaxTimeWithoutTarget(int maxTimeWithoutTarget) {
+        this.maxTimeWithoutTarget = maxTimeWithoutTarget;
+    }
+
+    public void setShouldReturnToOriginalPosition(boolean shouldReturnToOriginalPosition) {
+        this.shouldReturnToOriginalPosition = shouldReturnToOriginalPosition;
+    }
+
+    public void setOriginalPosition(Vec3 originalPosition) {
+        this.originalPosition = originalPosition;
     }
 
     public void setMeleeAttacking(boolean attacking) {
@@ -213,34 +303,71 @@ public class SquallGolemEntity extends Raider implements IAnimatable {
                 //this.playSound(SoundEvents.GENERIC_EXPLODE, 1.5f, 1F + this.getRandom().nextFloat() * 0.1F);
             }
         }
+
         LivingEntity target = this.getTarget();
+
+        if (target != null && !target.isAlive()) this.setTarget(null);
+
         if (!level.isClientSide) {
             timeWithoutTarget++;
-            if (target != null) {
-                timeWithoutTarget = 0;
-                if(!this.getActivate()) {
-                    this.setActivate(true);
-                    this.attackID = GOLEM_ACTIVATE;
+            if (!this.needEnergy) {
+                if (target != null) {
+                    timeWithoutTarget = 0;
+                    if (!this.getActivate()) {
+                        this.setActivate(true);
+                        this.attackID = GOLEM_ACTIVATE;
+                    }
                 }
-            }
-            if (this.getCurrentRaid() != null && this.getCurrentRaid().isActive()) {
-                timeWithoutTarget = 0;
-                if(!this.getActivate()) {
-                    this.setActivate(true);
-                    this.attackID = GOLEM_ACTIVATE;
+                if (this.getCurrentRaid() != null && this.getCurrentRaid().isActive()) {
+                    timeWithoutTarget = 0;
+                    if (!this.getActivate()) {
+                        this.setActivate(true);
+                        this.attackID = GOLEM_ACTIVATE;
+                    }
+                }
+            }else {
+                if (this.hasEnergy) {
+                    timeWithoutTarget = 0;
+                    if (!this.getActivate()) {
+                        this.setActivate(true);
+                        this.attackID = GOLEM_ACTIVATE;
+                    }
+                } else if (this.distanceToSqr(SquallGolemEntity.this.originalPosition.x(),
+                                SquallGolemEntity.this.originalPosition.y() + 0.5d,
+                                SquallGolemEntity.this.originalPosition.z()) < 9) {
+                    timeWithoutTarget = 0;
+                    this.setActivate(false);
+                    this.attackID = GOLEM_DEACTIVATE;
                 }
             }
 
-            if (timeWithoutTarget > 200 && this.getActivate() && target == null) {
-                timeWithoutTarget = 0;
-                this.setActivate(false);
-                this.attackID = GOLEM_DEACTIVATE;
-
+            if (!this.shouldReturnToOriginalPosition) {
+                if (timeWithoutTarget > this.maxTimeWithoutTarget && this.getActivate() && target == null) {
+                    timeWithoutTarget = 0;
+                    this.setActivate(false);
+                    this.attackID = GOLEM_DEACTIVATE;
+                }
+            }else {
+                if (timeWithoutTarget > this.maxTimeWithoutTarget) {
+                    timeWithoutTarget = 0;
+                    this.attackID = RETURN_TO_ORIGINAL;
+                }
             }
         }
 
-        if (this.cd > 0) {
-            this.cd--;
+        if (this.meleeCooldown > 0) {
+            this.meleeCooldown--;
+        }
+
+        AttributeInstance modifiableattributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
+
+        if (this.slowdownAfterAttackTime > 0) {
+            this.slowdownAfterAttackTime--;
+            if (!modifiableattributeinstance.hasModifier(SPEED_MODIFIER_SLOW_DOWN_AFTER_ATTACK)) {
+                modifiableattributeinstance.addTransientModifier(SPEED_MODIFIER_SLOW_DOWN_AFTER_ATTACK);
+            }
+        }else {
+            modifiableattributeinstance.removeModifier(SPEED_MODIFIER_SLOW_DOWN_AFTER_ATTACK);
         }
 
     }
@@ -336,13 +463,19 @@ public class SquallGolemEntity extends Raider implements IAnimatable {
     @Override
     public boolean hurt(DamageSource source, float amount) {
         boolean flag = false;
-        if (!this.getActivate() && source != DamageSource.OUT_OF_WORLD) {
+        if ((!this.getActivate() || this.attackID == GOLEM_ACTIVATE || this.attackID == GOLEM_DEACTIVATE) &&
+                ((source != DamageSource.OUT_OF_WORLD &&
+                        source != DamageSource.LAVA &&
+                        source != DamageSource.ON_FIRE &&
+                        source != DamageSource.IN_FIRE) || this.getRandom().nextInt(10) == 0)) {
             this.playSound(SoundEvents.ZOMBIE_ATTACK_IRON_DOOR, 1.0F, 0.4F);
             if (source.getEntity() instanceof LivingEntity && source.getEntity().isInvulnerable()) {
                 this.setTarget((LivingEntity) source.getEntity());
             }
-            flag = false;
         }else {
+            flag = super.hurt(source, amount);
+        }
+        if (source.isBypassArmor()) {
             flag = super.hurt(source, amount);
         }
         return flag;
@@ -454,7 +587,8 @@ public class SquallGolemEntity extends Raider implements IAnimatable {
     // RAIDER METHODS
     @Override
     public void applyRaidBuffs(int p_213660_1_, boolean p_213660_2_) {
-
+        this.setActivate(true);
+        this.maxTimeWithoutTarget = Integer.MAX_VALUE;
     }
 
     @Override
@@ -489,6 +623,7 @@ public class SquallGolemEntity extends Raider implements IAnimatable {
         @Override
         public void tick() {
             SquallGolemEntity.this.setDeltaMovement(0, SquallGolemEntity.this.getDeltaMovement().y, 0);
+            SquallGolemEntity.this.getNavigation().stop();
         }
     }
 
@@ -515,6 +650,7 @@ public class SquallGolemEntity extends Raider implements IAnimatable {
 
         @Override
         public void tick() {
+            SquallGolemEntity.this.getNavigation().stop();
             SquallGolemEntity.this.setDeltaMovement(0, SquallGolemEntity.this.getDeltaMovement().y, 0);
         }
 
@@ -547,6 +683,9 @@ public class SquallGolemEntity extends Raider implements IAnimatable {
 
         @Override
         public void tick() {
+            if (SquallGolemEntity.this.shouldReturnToOriginalPosition)
+                SquallGolemEntity.this.moveTo(SquallGolemEntity.this.originalPosition.add(0,0.5,0));
+            SquallGolemEntity.this.getNavigation().stop();
             SquallGolemEntity.this.setDeltaMovement(0, SquallGolemEntity.this.getDeltaMovement().y, 0);
         }
 
@@ -563,13 +702,13 @@ public class SquallGolemEntity extends Raider implements IAnimatable {
 
         @Override
         public boolean canUse() {
-            return attackID == STOMP_ATTACK && (SquallGolemEntity.this.cd <= 0);
+            return attackID == STOMP_ATTACK && (SquallGolemEntity.this.meleeCooldown <= 0);
         }
 
         @Override
         public boolean canContinueToUse() {
             //animation tick
-            return attackTimer < 34;
+            return attackTimer < (int) (34 / 1.5);
         }
 
         @Override
@@ -585,15 +724,27 @@ public class SquallGolemEntity extends Raider implements IAnimatable {
             SquallGolemEntity.this.setDeltaMovement(0, SquallGolemEntity.this.getDeltaMovement().y, 0);
             LivingEntity target = SquallGolemEntity.this.getTarget();
             if (SquallGolemEntity.this.attackTimer < 15 && target != null) {
-                SquallGolemEntity.this.lookAt(target, 15.0F, 15.0F);
+                SquallGolemEntity.this.lookAt(EntityAnchorArgument.Anchor.EYES, target.position());
             } else {
                 SquallGolemEntity.this.setYRot(SquallGolemEntity.this.yRotO);
             }
-            if (SquallGolemEntity.this.attackTimer == 12){
+            if (SquallGolemEntity.this.attackTimer == (int) (13 / 1.5)){
                 SquallGolemEntity.this.playSound(ModSoundEvents.SQUALL_GOLEM_ATTACK.get(), 2.0F, 1F);
             }
-            if (SquallGolemEntity.this.attackTimer == 30){
-                AreaAttack(5, 5, 5, 5, 60, 1.0F);
+            if (SquallGolemEntity.this.attackTimer == (int) (30 / 1.5)){
+                AreaAttack(5, 5, 5, 5, 90, 1.33333333F);
+
+                Vec3 areaDamagePos = PositionUtils.getOffsetPos(SquallGolemEntity.this, 0.5, 0, 2.6, SquallGolemEntity.this.yBodyRot);
+                AreaDamageEntity areaDamage = AreaDamageEntity.spawnAreaDamage(SquallGolemEntity.this.level, areaDamagePos, SquallGolemEntity.this, 5F, DamageSource.mobAttack(SquallGolemEntity.this), 0.0F, 3.0F, 1.0F, 0.75F, 10, false, false, 0.5D, 0.1D, true, 120, 1);
+
+                Vec3 areaDamagePos2 = PositionUtils.getOffsetPos(SquallGolemEntity.this, -1, 0, 2.4, SquallGolemEntity.this.yBodyRot);
+                AreaDamageEntity areaDamage2 = AreaDamageEntity.spawnAreaDamage(SquallGolemEntity.this.level, areaDamagePos2, SquallGolemEntity.this, 5F, DamageSource.mobAttack(SquallGolemEntity.this), 0.0F, 3.0F, 1.0F, 0.75F, 10, false, false, 0.5D, 0.1D, true, 120, 1);
+
+                areaDamage.connectedAreaDamages.add(areaDamage2);
+                areaDamage2.connectedAreaDamages.add(areaDamage);
+
+                SquallGolemEntity.this.level.addFreshEntity(areaDamage);
+                SquallGolemEntity.this.level.addFreshEntity(areaDamage2);
             }
         }
 
@@ -610,17 +761,17 @@ public class SquallGolemEntity extends Raider implements IAnimatable {
                 float entityRelativeAngle = entityHitAngle - entityAttackingAngle;
                 float entityHitDistance = (float) Math.sqrt((entityHit.getZ() - SquallGolemEntity.this.getZ()) * (entityHit.getZ() - SquallGolemEntity.this.getZ()) + (entityHit.getX() - SquallGolemEntity.this.getX()) * (entityHit.getX() - SquallGolemEntity.this.getX()));
                 if (entityHitDistance <= range && (entityRelativeAngle <= arc / 2 && entityRelativeAngle >= -arc / 2) || (entityRelativeAngle >= 360 - arc / 2 || entityRelativeAngle <= -360 + arc / 2)) {
-                    if (!isAlliedTo(entityHit) && !(entityHit == SquallGolemEntity.this)) {
-                        entityHit.hurt(DamageSource.mobAttack(SquallGolemEntity.this), (float) SquallGolemEntity.this.getAttributeValue(Attributes.ATTACK_DAMAGE) * damage);
+                    if (entityHit != SquallGolemEntity.this && !SquallGolemEntity.this.isAlliedTo(entityHit)) {
+                        entityHit.hurt(DamageSource.mobAttack(SquallGolemEntity.this), (float) SquallGolemEntity.this.getAttributeValue(Attributes.ATTACK_DAMAGE) * damage * (SquallGolemEntity.this.isAlliedTo(entityHit) ? 0.5f : 1f));
 
                         SquallGolemEntity v = SquallGolemEntity.this;
                         float attackKnockback = (float) SquallGolemEntity.this.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
                         double ratioX = (double) Mth.sin(v.getYRot() * ((float) Math.PI / 180F));
                         double ratioZ = (double) (-Mth.cos(v.getYRot() * ((float) Math.PI / 180F)));
-                        double knockbackReduction = 0.35D;
+                        double knockbackReduction = 0.5D;
                         entityHit.hurt(DamageSource.mobAttack(v), damage);
-                        this.forceKnockback(entityHit, attackKnockback * 0.8F, ratioX, ratioZ, knockbackReduction);
-                        entityHit.setDeltaMovement(entityHit.getDeltaMovement().add(0,0.3333333,0));
+                        this.forceKnockback(entityHit, attackKnockback * 1.28F, ratioX, ratioZ, knockbackReduction);
+                        entityHit.setDeltaMovement(entityHit.getDeltaMovement().add(0,0.5333333,0));
                     }
                 }
             }
@@ -629,7 +780,8 @@ public class SquallGolemEntity extends Raider implements IAnimatable {
         public void stop() {
             setMeleeAttacking(false);
             setAttackID(0);
-            SquallGolemEntity.this.cd = 25;
+            SquallGolemEntity.this.meleeCooldown = 15;
+            SquallGolemEntity.this.slowdownAfterAttackTime = 35;
         }
 
         private void forceKnockback(LivingEntity attackTarget, float strength, double ratioX, double ratioZ, double knockbackResistanceReduction) {
@@ -646,7 +798,53 @@ public class SquallGolemEntity extends Raider implements IAnimatable {
                 attackTarget.setDeltaMovement(vector3d.x / 2.0D - vector3d1.x, attackTarget.isOnGround() ? Math.min(0.4D, vector3d.y / 2.0D + (double)strength) : vector3d.y, vector3d.z / 2.0D - vector3d1.z);
             }
         }
+    }
 
+    class ReturnToOriginalPosGoal extends Goal {
+
+        public ReturnToOriginalPosGoal() {
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE));
+        }
+
+        @Override
+        public boolean canUse() {
+            return SquallGolemEntity.this.attackID == RETURN_TO_ORIGINAL;
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return !SquallGolemEntity.this.hasEnergy && SquallGolemEntity.this.attackID == RETURN_TO_ORIGINAL;
+        }
+
+        @Override
+        public boolean isInterruptable() {
+            return false;
+        }
+
+        @Override
+        public void start() {
+            setAttackID(RETURN_TO_ORIGINAL);
+        }
+
+        @Override
+        public void tick() {
+            SquallGolemEntity.this.timeWithoutTarget = 0;
+            SquallGolemEntity.this.getNavigation().moveTo(
+                    SquallGolemEntity.this.originalPosition.x(),
+                    SquallGolemEntity.this.originalPosition.y(),
+                    SquallGolemEntity.this.originalPosition.z(),
+                    0.8D
+            );
+
+            if (SquallGolemEntity.this.hasEnergy) {
+                setAttackID(0);
+            }
+        }
+
+        @Override
+        public void stop() {
+            setAttackID(0);
+        }
     }
 
 }
