@@ -39,6 +39,7 @@ public class RoyalGuardShieldBEWLR extends BlockEntityWithoutLevelRenderer {
         boolean flag = BlockItem.getBlockEntityData(stack) != null;
         matrixStack.pushPose();
         matrixStack.scale(1.0F, -1.0F, -1.0F);
+
         Material material = flag ? LOCATION_ROYAL_GUARD_SHIELD_BASE : LOCATION_ROYAL_GUARD_SHIELD_NO_PATTERN;
         VertexConsumer vertexconsumer = material.sprite().wrap(ItemRenderer.getFoilBufferDirect(buffer, this.royalGuardShieldModel.renderType(material.atlasLocation()), true, stack.hasFoil()));
         this.royalGuardShieldModel.handle().render(matrixStack, vertexconsumer, combinedLight, combinedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);

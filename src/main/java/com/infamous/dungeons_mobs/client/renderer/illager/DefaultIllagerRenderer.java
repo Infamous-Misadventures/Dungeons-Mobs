@@ -103,25 +103,18 @@ public class DefaultIllagerRenderer<T extends Mob & IAnimatable> extends Extende
 
     @Override
     protected void preRenderItem(PoseStack stack, ItemStack item, String boneName, T currentEntity, IBone bone) {
-        if (item == this.mainHand || item == this.offHand) {
-            stack.scale(1.1F, 1.1F, 1.1F);
-            stack.mulPose(Vector3f.XP.rotationDegrees(-90.0F));
-            boolean shieldFlag = item.getItem() instanceof ShieldItem;
-            if (item == this.mainHand) {
-                if (shieldFlag) {
-                    stack.translate(0.0, 0.125, -0.25);
-                } else {
+        if (item == this.mainHand) {
+            stack.mulPose(Vector3f.XP.rotationDegrees(-90f));
 
-                }
-            } else {
-                if (shieldFlag) {
-                    stack.translate(-0.15, 0.125, 0.05);
-                    stack.mulPose(Vector3f.YP.rotationDegrees(90));
-                } else {
+            if (item.getItem() instanceof ShieldItem)
+                stack.translate(0, 0.125, -0.25);
+        }
+        else if (item == this.offHand) {
+            stack.mulPose(Vector3f.XP.rotationDegrees(-90f));
 
-                }
-
-
+            if (item.getItem() instanceof ShieldItem) {
+                stack.translate(0, 0.125, 0.25);
+                stack.mulPose(Vector3f.YP.rotationDegrees(180));
             }
         }
     }
@@ -246,7 +239,9 @@ public class DefaultIllagerRenderer<T extends Mob & IAnimatable> extends Extende
         }
         else if (limb == armorModel.leftLeg) {
             armorRenderer.getGeoModelProvider().getBone((slot == EquipmentSlot.FEET ? armorRenderer.leftBootBone : armorRenderer.leftLegBone)).setHidden(false);
-            armorRenderer.getGeoModelProvider().getBone((slot == EquipmentSlot.FEET ? armorRenderer.rightBootBone : armorRenderer.rightLegBone)).setHidden(false);
+            armorRenderer.getGeoModelProvider().getBone((slot == EquipmentSlot.FEET ? armorRenderer.leftLegBone : armorRenderer.leftBootBone)).setHidden(true);
+            armorRenderer.getGeoModelProvider().getBone(armorRenderer.rightBootBone).setHidden(true);
+            armorRenderer.getGeoModelProvider().getBone(armorRenderer.rightLegBone).setHidden(true);
         }
         else if (limb == armorModel.rightArm) {
             armorRenderer.getGeoModelProvider().getBone(armorRenderer.bodyBone).setHidden(true);
@@ -255,7 +250,9 @@ public class DefaultIllagerRenderer<T extends Mob & IAnimatable> extends Extende
         }
         else if (limb == armorModel.rightLeg) {
             armorRenderer.getGeoModelProvider().getBone((slot == EquipmentSlot.FEET ? armorRenderer.rightBootBone : armorRenderer.rightLegBone)).setHidden(false);
-            armorRenderer.getGeoModelProvider().getBone((slot == EquipmentSlot.FEET ? armorRenderer.leftBootBone : armorRenderer.leftLegBone)).setHidden(true);
+            armorRenderer.getGeoModelProvider().getBone((slot == EquipmentSlot.FEET ? armorRenderer.rightLegBone : armorRenderer.rightBootBone)).setHidden(true);
+            armorRenderer.getGeoModelProvider().getBone(armorRenderer.leftBootBone).setHidden(true);
+            armorRenderer.getGeoModelProvider().getBone(armorRenderer.leftLegBone).setHidden(true);
         }
     }
 }
