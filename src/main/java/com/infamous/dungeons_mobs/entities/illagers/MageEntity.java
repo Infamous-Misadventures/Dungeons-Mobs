@@ -325,7 +325,7 @@ public class MageEntity extends AbstractIllager implements IAnimatable, SpawnArm
 
 				int clonesByDifficulty = mob.level.getCurrentDifficultyAt(mob.blockPosition()).getDifficulty().getId();
 
-				for (int i = 0; i < clonesByDifficulty * 5; i ++) {
+				for (int i = 0; i < clonesByDifficulty * 4; i ++) {
 					SummonSpotEntity cloneSummonSpot = ModEntityTypes.SUMMON_SPOT.get().create(mob.level);
 					cloneSummonSpot.moveTo(target.blockPosition().offset(-12.5 + mob.random.nextInt(25), 0, -12.5 + mob.random.nextInt(25)), 0.0F, 0.0F);
 					cloneSummonSpot.setSummonType(3);
