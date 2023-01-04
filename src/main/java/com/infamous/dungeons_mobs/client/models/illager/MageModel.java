@@ -2,6 +2,7 @@ package com.infamous.dungeons_mobs.client.models.illager;
 
 import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
 import com.infamous.dungeons_mobs.DungeonsMobs;
+import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.entities.illagers.MageEntity;
 
 import net.minecraft.entity.LivingEntity;
@@ -32,7 +33,11 @@ public class MageModel extends AnimatedGeoModel {
 
     @Override
     public ResourceLocation getTextureLocation(Object entity) {
-        return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/mage.png");
+        if(DungeonsMobsConfig.COMMON.ENABLE_3D_SLEEVES.get()){
+            return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/mage.png");
+        }else{
+            return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/mage_sleeved.png");
+        }
     }
 
     @Override

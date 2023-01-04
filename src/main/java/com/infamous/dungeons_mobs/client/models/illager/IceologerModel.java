@@ -2,6 +2,7 @@ package com.infamous.dungeons_mobs.client.models.illager;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
 
+import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.entities.illagers.IceologerEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -30,7 +31,11 @@ public class IceologerModel extends AnimatedGeoModel<IceologerEntity> {
 
     @Override
     public ResourceLocation getTextureLocation(IceologerEntity entity) {
-        return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/iceologer.png");
+        if(DungeonsMobsConfig.COMMON.ENABLE_3D_SLEEVES.get()){
+            return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/iceologer.png");
+        }else{
+            return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/iceologer_sleeved.png");
+        }
     }
 
     @Override

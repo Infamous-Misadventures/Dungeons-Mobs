@@ -36,7 +36,7 @@ public class MageArmorGearModel<T extends ArmorGear> extends ArmorGearModel<T> {
         IBone rightArm = this.getAnimationProcessor().getBone("armorRightArm");
         IBone leftArm = this.getAnimationProcessor().getBone("armorLeftArm");
 
-        if (this.getWearer() != null && this.getWearer() instanceof IceologerEntity) {
+        if (this.getWearer() != null && (this.getWearer() instanceof MageEntity || this.getWearer() instanceof MageCloneEntity)) {
             cloak.setHidden(true);
             if(!DungeonsMobsConfig.COMMON.ENABLE_3D_SLEEVES.get()){
                 rightArm.setHidden(true);

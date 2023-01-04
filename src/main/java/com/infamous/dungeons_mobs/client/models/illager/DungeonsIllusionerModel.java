@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.client.models.illager;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
+import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.util.ResourceLocation;
@@ -29,7 +30,11 @@ public class DungeonsIllusionerModel extends AnimatedGeoModel {
 
     @Override
     public ResourceLocation getTextureLocation(Object entity) {
-        return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/illusioner.png");
+        if(DungeonsMobsConfig.COMMON.ENABLE_3D_SLEEVES.get()){
+            return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/illusioner.png");
+        }else{
+            return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/illusioner_sleeved.png");
+        }
     }
 
     @Override

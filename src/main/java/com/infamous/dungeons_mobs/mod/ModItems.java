@@ -69,7 +69,7 @@ public class ModItems {
     public static final ArmorSet DROWNED_NECROMANCER_ARMOR = registerArmorSetDrownedNecromancer("drowned_necromancer_armor", "drowned_necromancer_helmet", "drowned_necromancer_chestplate", "drowned_necromancer_leggings", null);
     public static final ArmorSet GEOMANCER_ARMOR = registerArmorSet("geomancer_armor", "geomancer_helmet", "geomancer_chestplate", null, null);
     public static final ArmorSet ICEOLOGER_ARMOR = registerArmorSetIceologer("iceologer_armor", "iceologer_helmet", "iceologer_chestplate", "iceologer_leggings", "iceologer_boots");
-    public static final ArmorSet ILLUSIONER_ARMOR = registerArmorSet("illusioner_armor", "illusioner_helmet", "illusioner_chestplate", "illusioner_leggings", "illusioner_boots");
+    public static final ArmorSet ILLUSIONER_ARMOR = registerArmorSetIllusioner("illusioner_armor", "illusioner_helmet", "illusioner_chestplate", "illusioner_leggings", "illusioner_boots");
     public static final ArmorSet NECROMANCER_ARMOR = registerArmorSetNecromancerArmor("necromancer_armor", "necromancer_helmet", "necromancer_chestplate", "necromancer_leggings", null);
     public static final ArmorSet NETHERPLATE_ARMOR = registerArmorSet("netherplate_armor", "netherplate_helmet", null, null, null);
     public static final ArmorSet ROYAL_GUARD_ARMOR = registerArmorSet("royal_guard_armor", "royal_guard_helmet", "royal_guard_chestplate", "royal_guard_leggings", "royal_guard_boots");
