@@ -3,7 +3,9 @@ package com.infamous.dungeons_mobs.client.models.armor;
 import com.infamous.dungeons_libraries.client.renderer.gearconfig.ArmorGearModel;
 import com.infamous.dungeons_libraries.items.gearconfig.ArmorGear;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
+import com.infamous.dungeons_mobs.entities.illagers.DungeonsIllusionerEntity;
 import com.infamous.dungeons_mobs.entities.illagers.IceologerEntity;
+import com.infamous.dungeons_mobs.entities.illagers.IllusionerCloneEntity;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
@@ -31,7 +33,7 @@ public class IllusionerArmorGearModel<T extends ArmorGear> extends ArmorGearMode
     	
         IBone rightArm = this.getAnimationProcessor().getBone("armorRightArm");
         IBone leftArm = this.getAnimationProcessor().getBone("armorLeftArm");
-        if(!DungeonsMobsConfig.COMMON.ENABLE_3D_SLEEVES.get()){
+        if(!DungeonsMobsConfig.COMMON.ENABLE_3D_SLEEVES.get() && this.getWearer() != null && (this.getWearer() instanceof DungeonsIllusionerEntity || this.getWearer() instanceof IllusionerCloneEntity)){
             rightArm.setHidden(true);
             leftArm.setHidden(true);
         }

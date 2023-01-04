@@ -36,7 +36,7 @@ public class MageArmorGearModel<T extends ArmorGear> extends ArmorGearModel<T> {
 
         IBone rightArm = this.getAnimationProcessor().getBone("armorRightArm");
         IBone leftArm = this.getAnimationProcessor().getBone("armorLeftArm");
-        if(!DungeonsMobsConfig.COMMON.ENABLE_3D_SLEEVES.get()){
+        if(!DungeonsMobsConfig.COMMON.ENABLE_3D_SLEEVES.get() && this.getWearer() != null && (this.getWearer() instanceof MageEntity || this.getWearer() instanceof MageCloneEntity)){
             rightArm.setHidden(true);
             leftArm.setHidden(true);
         }

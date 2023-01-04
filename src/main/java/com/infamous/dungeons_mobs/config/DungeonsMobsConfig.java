@@ -19,9 +19,6 @@ public class DungeonsMobsConfig {
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ICY_CREEPER_REPLACES_CREEPER;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_JUNGLE_ZOMBIE_REPLACES_ZOMBIE;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_MOSSY_SKELETON_REPLACES_SKELETON;
-        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_VINDICATORS_WEARING_ARMOR;
-        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_PILLAGERS_WEARING_ARMOR;
-        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_EVOKERS_WEARING_ARMOR;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_3D_SLEEVES;
 
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> ICEOLOGER_BIOME_TYPES;
@@ -227,22 +224,7 @@ public class DungeonsMobsConfig {
 
             builder.pop();
 
-            builder.comment("Vanilla Illager Configuration").push("vanilla_illager_configuration");
-            ENABLE_PILLAGERS_WEARING_ARMOR = builder
-                    .comment("Enable Pillagers wearing armor. \n" +
-                            "If you prefer to not have them do this, disable this feature. [true / false]")
-                    .define("enablePillagersWearingArmor", true);
-
-            ENABLE_VINDICATORS_WEARING_ARMOR = builder
-                    .comment("Enable Vindicators wearing armor. \n" +
-                            "If you prefer to not have them do this, disable this feature. [true / false]")
-                    .define("enableVindicatorsWearingArmor", true);
-
-            ENABLE_EVOKERS_WEARING_ARMOR = builder
-                    .comment("Enable Evokers wearing armor. \n" +
-                            "If you prefer to not have them do this, disable this feature. [true / false]")
-                    .define("enableEvokersWearingArmor", true);
-
+            builder.comment("Texture Configuration").push("texture_configuration");
             ENABLE_3D_SLEEVES = builder
                     .comment("Enable 3D sleeves on the various Illagers. \n" +
                             "Can be combined with the  resource pack to \n" +
