@@ -2,7 +2,6 @@ package com.infamous.dungeons_mobs.client.models.undead;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.entities.undead.SkeletonVanguardEntity;
-
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -17,45 +16,45 @@ import software.bernie.geckolib3.resource.GeckoLibCache;
 
 public class SkeletonVanguardModel extends AnimatedGeoModel<SkeletonVanguardEntity> {
 
-	@Override
-	public ResourceLocation getAnimationResource(SkeletonVanguardEntity entity) {
-		return new ResourceLocation(DungeonsMobs.MODID, "animations/skeleton_vanguard.animation.json");
-	}
+    @Override
+    public ResourceLocation getAnimationResource(SkeletonVanguardEntity entity) {
+        return new ResourceLocation(DungeonsMobs.MODID, "animations/skeleton_vanguard.animation.json");
+    }
 
-	@Override
-	public ResourceLocation getModelResource(SkeletonVanguardEntity entity) {
-		return new ResourceLocation(DungeonsMobs.MODID, "geo/geo_skeleton.geo.json");
-	}
+    @Override
+    public ResourceLocation getModelResource(SkeletonVanguardEntity entity) {
+        return new ResourceLocation(DungeonsMobs.MODID, "geo/geo_skeleton.geo.json");
+    }
 
-	@Override
-	public ResourceLocation getTextureResource(SkeletonVanguardEntity entity) {
-		return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/skeleton/skeleton_vanguard.png");
-	}
+    @Override
+    public ResourceLocation getTextureResource(SkeletonVanguardEntity entity) {
+        return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/skeleton/skeleton_vanguard.png");
+    }
 
-	@Override
-	public void setCustomAnimations(SkeletonVanguardEntity entity, int uniqueID, AnimationEvent customPredicate) {
-		super.setCustomAnimations(entity, uniqueID, customPredicate);
+    @Override
+    public void setCustomAnimations(SkeletonVanguardEntity entity, int uniqueID, AnimationEvent customPredicate) {
+        super.setCustomAnimations(entity, uniqueID, customPredicate);
 
-		IBone head = this.getAnimationProcessor().getBone("bipedHead");
-		IBone cape = this.getAnimationProcessor().getBone("bipedCape");
+        IBone head = this.getAnimationProcessor().getBone("bipedHead");
+        IBone cape = this.getAnimationProcessor().getBone("bipedCape");
 
-		cape.setHidden(true);
+        cape.setHidden(true);
 
-		EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
-		if (extraData.headPitch != 0 || extraData.netHeadYaw != 0) {
-			head.setRotationX(head.getRotationX() + (extraData.headPitch * ((float) Math.PI / 180F)));
-			head.setRotationY(head.getRotationY() + (extraData.netHeadYaw * ((float) Math.PI / 180F)));
-		}
-	}
+        EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
+        if (extraData.headPitch != 0 || extraData.netHeadYaw != 0) {
+            head.setRotationX(head.getRotationX() + (extraData.headPitch * ((float) Math.PI / 180F)));
+            head.setRotationY(head.getRotationY() + (extraData.netHeadYaw * ((float) Math.PI / 180F)));
+        }
+    }
 
-	@Override
-	public void setMolangQueries(IAnimatable animatable, double currentTick) {
-		super.setMolangQueries(animatable, currentTick);
+    @Override
+    public void setMolangQueries(IAnimatable animatable, double currentTick) {
+        super.setMolangQueries(animatable, currentTick);
 
-		MolangParser parser = GeckoLibCache.getInstance().parser;
-		LivingEntity livingEntity = (LivingEntity) animatable;
-		Vec3 velocity = livingEntity.getDeltaMovement();
-		float groundSpeed = Mth.sqrt((float) ((velocity.x * velocity.x) + (velocity.z * velocity.z)));
-		parser.setValue("query.ground_speed", () -> groundSpeed * 20);
-	}
+        MolangParser parser = GeckoLibCache.getInstance().parser;
+        LivingEntity livingEntity = (LivingEntity) animatable;
+        Vec3 velocity = livingEntity.getDeltaMovement();
+        float groundSpeed = Mth.sqrt((float) ((velocity.x * velocity.x) + (velocity.z * velocity.z)));
+        parser.setValue("query.ground_speed", () -> groundSpeed * 20);
+    }
 }

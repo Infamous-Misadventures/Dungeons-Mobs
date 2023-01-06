@@ -2,11 +2,11 @@ package com.infamous.dungeons_mobs.interfaces;
 
 public interface IShieldUser {
 
-	int getShieldCooldownTime();
+    int getShieldCooldownTime();
 
-	void setShieldCooldownTime(int shieldCooldownTime);
+    void setShieldCooldownTime(int shieldCooldownTime);
 
-	void disableShield(boolean guaranteeDisable);
+    void disableShield(boolean guaranteeDisable);
 
-	boolean isShieldDisabled();
+    boolean isShieldDisabled();
 }

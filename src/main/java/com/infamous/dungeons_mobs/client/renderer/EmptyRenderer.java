@@ -10,12 +10,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class EmptyRenderer extends EntityRenderer<Entity> {
 
-	public EmptyRenderer(EntityRendererProvider.Context p_i46553_1_) {
-		super(p_i46553_1_);
-	}
+    public EmptyRenderer(EntityRendererProvider.Context p_i46553_1_) {
+        super(p_i46553_1_);
+    }
 
-	@Override
-	public ResourceLocation getTextureLocation(Entity p_110775_1_) {
-		return null;
-	}
+    @Override
+    public ResourceLocation getTextureLocation(Entity p_110775_1_) {
+        return null;
+    }
 }

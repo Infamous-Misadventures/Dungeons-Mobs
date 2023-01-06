@@ -2,11 +2,11 @@ package com.infamous.dungeons_mobs.entities;
 
 public interface AnimatableMeleeAttackMob {
 
-	int getAttackAnimationTick();
+    int getAttackAnimationTick();
 
-	void setAttackAnimationTick(int attackAnimationTick);
+    void setAttackAnimationTick(int attackAnimationTick);
 
-	int getAttackAnimationLength();
+    int getAttackAnimationLength();
 
-	int getAttackAnimationActionPoint();
+    int getAttackAnimationActionPoint();
 }

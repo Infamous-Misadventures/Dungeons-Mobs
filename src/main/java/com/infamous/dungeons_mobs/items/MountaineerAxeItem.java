@@ -9,18 +9,19 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 
 public class MountaineerAxeItem extends PickaxeItem {
-	public MountaineerAxeItem(Tier tier, int attackDamageIn, float attackSpeedIn, Properties builder) {
-		super(tier, attackDamageIn, attackSpeedIn, builder);
-	}
+    public MountaineerAxeItem(Tier tier, int attackDamageIn, float attackSpeedIn, Properties builder) {
+        super(tier, attackDamageIn, attackSpeedIn, builder);
+    }
 
-	@Override
-	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-		return (enchantment.category.canEnchant(Items.IRON_SWORD) || enchantment.category.canEnchant(Items.IRON_AXE))
-				&& enchantment != Enchantments.SWEEPING_EDGE;
-	}
+    @Override
+    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+        return (enchantment.category.canEnchant(Items.IRON_SWORD)
+                || enchantment.category.canEnchant(Items.IRON_AXE))
+                && enchantment != Enchantments.SWEEPING_EDGE;
+    }
 
-	@Override
-	public boolean canDisableShield(ItemStack stack, ItemStack shield, LivingEntity entity, LivingEntity attacker) {
-		return true;
-	}
+    @Override
+    public boolean canDisableShield(ItemStack stack, ItemStack shield, LivingEntity entity, LivingEntity attacker) {
+        return true;
+    }
 }

@@ -1,129 +1,93 @@
-modLoader="javafml" 
-loaderVersion="[43,)" 
+# This is an example mods.toml file. It contains the data relating to the loading mods.
+# There are several mandatory fields (#mandatory), and many more that are optional (#optional).
+# The overall format is standard TOML format, v0.5.0.
+# Note that there are a couple of TOML lists in this file.
+# Find more information on toml format here:  https://github.com/toml-lang/toml
+# The name of the mod loader type to load - for regular FML @Mod mods it should be javafml
+modLoader="javafml" #mandatory
+# A version range to match for said mod loader - for regular FML @Mod it will be the forge version
+loaderVersion="[43,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
+# The license for you mod. This is mandatory metadata and allows for easier comprehension of your redistributive properties.
+# Review your options at https://choosealicense.com/. All rights reserved is the default copyright stance, and is thus the default here.
 license="MIT License"
-issueTrackerURL="http://my.issue.tracker/"
-
-[[mods]]
-modId="dungeons_mobs"
-version="${file.jarVersion}" 
-displayName="Dungeons Mobs" 
-updateJSONURL="http://myurl.me/" 
-displayURL="http://example.com/"
-logoFile="examplemod.png" 
-credits="Infamous Mods" 
-authors="the_infamous_1" # TODO maybe replace it with the dev names here(?)
+# A URL to refer people to when problems occur with this mod
+issueTrackerURL="http://my.issue.tracker/" #optional
+# A list of mods - how many allowed here is determined by the individual mod loader
+[[mods]] #mandatory
+# The modid of the mod
+modId="dungeons_mobs" #mandatory
+# The version number of the mod - there's a few well known ${} variables useable here or just hardcode it
+version="${file.jarVersion}" #mandatory
+ # A display name for the mod
+displayName="Dungeons Mobs" #mandatory
+# A URL to query for updates for this mod. See the JSON update specification <here>
+updateJSONURL="http://myurl.me/" #optional
+# A URL for the "homepage" for this mod, displayed in the mod UI
+displayURL="http://example.com/" #optional
+# A file name (in the root of the mod JAR) containing a logo for display
+logoFile="examplemod.png" #optional
+# A text field displayed in the mod UI
+credits="Thanks for this example mod goes to Java" #optional
+# A text field displayed in the mod UI
+authors="the_infamous_1" #optional
+# The description text for the mod (multi line!) (#mandatory)
 description='''
+This is a long form description of the mod. You can write whatever you want here
 
+Have some lorem ipsum.
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed mollis lacinia magna. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed sagittis luctus odio eu tempus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque volutpat ligula eget lacus auctor sagittis. In hac habitasse platea dictumst. Nunc gravida elit vitae sem vehicula efficitur. Donec mattis ipsum et arcu lobortis, eleifend sagittis sem rutrum. Cras pharetra quam eget posuere fermentum. Sed id tincidunt justo. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 '''
-
-[[dependencies.dungeons_mobs]] 
-    modId="forge"
-    mandatory=true 
-    versionRange="[43,)"
-    ordering="NONE"
-    side="BOTH"
-
-[[dependencies.dungeons_mobs]]
-    modId="minecraft"
-    mandatory=true
-    versionRange="[1.19.2,)"
-    ordering="NONE"
-    side="BOTH"
-
+# A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.dungeons_mobs]]
     modId="geckolib3"
     mandatory=true
     versionRange="[3.1.38,)"
     ordering="NONE"
-    side="BOTH"
-
+    side="CLIENT"
 [[dependencies.dungeons_mobs]]
     modId="curios"
     mandatory=true
     versionRange="[1.19.2-5.1.1.0,)"
     ordering="NONE"
     side="BOTH"
-
-[[dependencies.dungeons_mobs]] 
-    modId="dungeons_libraries" 
-    mandatory=true 
-    versionRange="[1.19.2-3.0.0-alpha,)" 
+[[dependencies.dungeons_mobs]] #optional
+    # the modid of the dependency
+    modId="dungeons_libraries" #mandatory
+    # Does this dependency have to exist - if not, ordering below must be specified
+    mandatory=true #mandatory
+    # The version range of the dependency
+    versionRange="[1.19.2-3.0.0-alpha,)" #mandatory
+    # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
+    ordering="NONE"
+    # Side this dependency is applied on - BOTH, CLIENT or SERVER
+    side="BOTH"
+[[dependencies.dungeons_mobs]] #optional
+    # the modid of the dependency
+    modId="enchantwithmob" #mandatory
+    # Does this dependency have to exist - if not, ordering below must be specified
+    mandatory=false #mandatory
+    # The version range of the dependency
+    versionRange="[1.19.2-7.0.1,)" #mandatory
+    # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
+    ordering="NONE"
+    # Side this dependency is applied on - BOTH, CLIENT or SERVER
+    side="BOTH"
+[[dependencies.dungeons_mobs]] #optional
+    # the modid of the dependency
+    modId="forge" #mandatory
+    # Does this dependency have to exist - if not, ordering below must be specified
+    mandatory=true #mandatory
+    # The version range of the dependency
+    versionRange="[43,)" #mandatory
+    # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
+    ordering="NONE"
+    # Side this dependency is applied on - BOTH, CLIENT or SERVER
+    side="BOTH"
+# Here's another dependency
+[[dependencies.dungeons_mobs]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.19.2,)"
     ordering="NONE"
     side="BOTH"
-
-[[dependencies.dungeons_mobs]] 
-    modId="enchantwithmob" 
-    mandatory=false 
-    versionRange="[1.19.2-7.0.1,)" 
-    ordering="NONE"
-    side="BOTH"
-
-[[dependencies.dungeons_mobs]] 
-    modId="jei" 
-    mandatory=false 
-    versionRange="[11.2.0.247,)" 
-    ordering="NONE"
-    side="BOTH"
-
-[[dependencies.dungeons_mobs]] 
-    modId="justenoughresources" 
-    mandatory=false 
-    versionRange="[1.2.1.189,)" 
-    ordering="NONE"
-    side="BOTH"
-
-[[dependencies.dungeons_mobs]] 
-    modId="jeed" 
-    mandatory=false 
-    versionRange="[1.18,)" 
-    ordering="NONE"
-    side="BOTH"
-
-[[dependencies.dungeons_mobs]] 
-    modId="roughlyenoughitems" 
-    mandatory=false 
-    versionRange="[9.1.580,)" 
-    ordering="NONE"
-    side="BOTH"
-
-[[dependencies.dungeons_mobs]] 
-    modId="roughlyenoughresources" 
-    mandatory=false 
-    versionRange="[2.5.2,)" 
-    ordering="NONE"
-    side="BOTH"
-
-[[dependencies.dungeons_mobs]] 
-    modId="architectury" 
-    mandatory=false 
-    versionRange="[6.4.62,)" 
-    ordering="NONE"
-    side="BOTH"
-
-[[dependencies.dungeons_mobs]] 
-    modId="clothconfig" 
-    mandatory=false 
-    versionRange="[8.2.88,)" 
-    ordering="NONE"
-    side="BOTH"
-
-[[dependencies.dungeons_mobs]] 
-    modId="configured" 
-    mandatory=false 
-    versionRange="[2.0.1,)" 
-    ordering="NONE"
-    side="CLIENT"
-
-[[dependencies.dungeons_mobs]] 
-    modId="catalogue" 
-    mandatory=false 
-    versionRange="[1.7.0,)" 
-    ordering="NONE"
-    side="CLIENT"
-
-[[dependencies.dungeons_mobs]] 
-    modId="appleskin" 
-    mandatory=false 
-    versionRange="[2.4.2,)" 
-    ordering="NONE"
-    side="CLIENT"

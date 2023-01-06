@@ -1,7 +1,6 @@
 package com.infamous.dungeons_mobs.entities.projectiles;
 
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
-
 import net.minecraft.Util;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -26,125 +25,127 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkHooks;
 
-@OnlyIn(value = Dist.CLIENT, _interface = ItemSupplier.class)
+@OnlyIn(
+        value = Dist.CLIENT,
+        _interface = ItemSupplier.class
+)
 public class SlimeballEntity extends AbstractHurtingProjectile implements ItemSupplier {
-	private static final EntityDataAccessor<ItemStack> STACK = SynchedEntityData.defineId(SlimeballEntity.class,
-			EntityDataSerializers.ITEM_STACK);
+    private static final EntityDataAccessor<ItemStack> STACK = SynchedEntityData.defineId(SlimeballEntity.class, EntityDataSerializers.ITEM_STACK);
 
-	public SlimeballEntity(Level worldIn) {
-		super(ModEntityTypes.SLIMEBALL.get(), worldIn);
-	}
+    public SlimeballEntity(Level worldIn) {
+        super(ModEntityTypes.SLIMEBALL.get(), worldIn);
+    }
 
-	public SlimeballEntity(EntityType<? extends SlimeballEntity> entityType, Level world) {
-		super(entityType, world);
-	}
 
-	public SlimeballEntity(Level world, double x, double y, double z, double accelX, double accelY, double accelZ) {
-		super(ModEntityTypes.SLIMEBALL.get(), x, y, z, accelX, accelY, accelZ, world);
-	}
+    public SlimeballEntity(EntityType<? extends SlimeballEntity> entityType, Level world) {
+        super(entityType, world);
+    }
 
-	public SlimeballEntity(Level world, LivingEntity shooter, double accelX, double accelY, double accelZ) {
-		super(ModEntityTypes.SLIMEBALL.get(), shooter, accelX, accelY, accelZ, world);
-	}
+    public SlimeballEntity(Level world, double x, double y, double z, double accelX, double accelY, double accelZ) {
+        super(ModEntityTypes.SLIMEBALL.get(), x, y, z, accelX, accelY, accelZ, world);
+    }
 
-	public void setStack(ItemStack stack) {
-		if (stack.getItem() != Items.SLIME_BALL || stack.hasTag()) {
-			this.getEntityData().set(STACK, Util.make(stack.copy(), (itemStack) -> {
-				itemStack.setCount(1);
-			}));
-		}
-	}
+    public SlimeballEntity(Level world, LivingEntity shooter, double accelX, double accelY, double accelZ) {
+        super(ModEntityTypes.SLIMEBALL.get(), shooter, accelX, accelY, accelZ, world);
+    }
 
-	protected ItemStack getStack() {
-		return this.getEntityData().get(STACK);
-	}
+    public void setStack(ItemStack stack) {
+        if (stack.getItem() != Items.SLIME_BALL || stack.hasTag()) {
+            this.getEntityData().set(STACK, Util.make(stack.copy(), (itemStack) -> {
+                itemStack.setCount(1);
+            }));
+        }
+    }
 
-	@OnlyIn(Dist.CLIENT)
-	public ItemStack getItem() {
-		ItemStack itemstack = this.getStack();
-		return itemstack.isEmpty() ? new ItemStack(Items.SLIME_BALL) : itemstack;
-	}
+    protected ItemStack getStack() {
+        return this.getEntityData().get(STACK);
+    }
 
-	protected void defineSynchedData() {
-		this.getEntityData().define(STACK, ItemStack.EMPTY);
-	}
+    @OnlyIn(Dist.CLIENT)
+    public ItemStack getItem() {
+        ItemStack itemstack = this.getStack();
+        return itemstack.isEmpty() ? new ItemStack(Items.SLIME_BALL) : itemstack;
+    }
 
-	public void addAdditionalSaveData(CompoundTag compound) {
-		super.addAdditionalSaveData(compound);
-		ItemStack itemstack = this.getStack();
-		if (!itemstack.isEmpty()) {
-			compound.put("Item", itemstack.save(new CompoundTag()));
-		}
+    protected void defineSynchedData() {
+        this.getEntityData().define(STACK, ItemStack.EMPTY);
+    }
 
-	}
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        ItemStack itemstack = this.getStack();
+        if (!itemstack.isEmpty()) {
+            compound.put("Item", itemstack.save(new CompoundTag()));
+        }
 
-	/**
-	 * (abstract) Protected helper method to read subclass entity data from NBT.
-	 */
-	public void readAdditionalSaveData(CompoundTag compound) {
-		super.readAdditionalSaveData(compound);
-		ItemStack itemstack = ItemStack.of(compound.getCompound("Item"));
-		this.setStack(itemstack);
-	}
+    }
 
-	protected boolean shouldBurn() {
-		return false;
-	}
+    /**
+     * (abstract) Protected helper method to read subclass entity data from NBT.
+     */
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        ItemStack itemstack = ItemStack.of(compound.getCompound("Item"));
+        this.setStack(itemstack);
+    }
 
-	protected ParticleOptions getTrailParticle() {
-		return ParticleTypes.ITEM_SLIME;
-	}
+    protected boolean shouldBurn() {
+        return false;
+    }
 
-	@Override
-	protected void onHitEntity(EntityHitResult rayTraceResult) {
-		super.onHitEntity(rayTraceResult);
-		Entity entity = rayTraceResult.getEntity();
-		int attackDamage = 3;
-		if (!(entity instanceof Slime)) {
-			entity.hurt(DamageSource.thrown(this, this.getOwner()), (float) attackDamage);
-		}
-	}
+    protected ParticleOptions getTrailParticle() {
+        return ParticleTypes.ITEM_SLIME;
+    }
 
-	/**
-	 * Called when this EntityFireball hits a block or entity.
-	 */
-	protected void onHit(HitResult result) {
-		super.onHit(result);
-		if (result instanceof EntityHitResult) {
-			EntityHitResult entityRayTraceResult = (EntityHitResult) result;
-			if (!(entityRayTraceResult.getEntity() instanceof Slime)) {
-				if (!this.level.isClientSide) {
-					this.remove(RemovalReason.DISCARDED);
-				}
-			}
-		} else {
-			removeIfWorldNotRemote();
-		}
-	}
+    @Override
+    protected void onHitEntity(EntityHitResult rayTraceResult) {
+        super.onHitEntity(rayTraceResult);
+        Entity entity = rayTraceResult.getEntity();
+        int attackDamage = 3;
+        if (!(entity instanceof Slime)) {
+            entity.hurt(DamageSource.thrown(this, this.getOwner()), (float) attackDamage);
+        }
+    }
 
-	private void removeIfWorldNotRemote() {
-		if (!this.level.isClientSide) {
-			this.remove(RemovalReason.DISCARDED);
-		}
-	}
+    /**
+     * Called when this EntityFireball hits a block or entity.
+     */
+    protected void onHit(HitResult result) {
+        super.onHit(result);
+        if (result instanceof EntityHitResult) {
+            EntityHitResult entityRayTraceResult = (EntityHitResult) result;
+            if (!(entityRayTraceResult.getEntity() instanceof Slime)) {
+                if (!this.level.isClientSide) {
+                    this.remove(RemovalReason.DISCARDED);
+                }
+            }
+        } else {
+            removeIfWorldNotRemote();
+        }
+    }
 
-	/**
-	 * Returns true if other Entities should be prevented from moving through this
-	 * Entity.
-	 */
-	public boolean isPickable() {
-		return false;
-	}
+    private void removeIfWorldNotRemote() {
+        if (!this.level.isClientSide) {
+            this.remove(RemovalReason.DISCARDED);
+        }
+    }
 
-	/**
-	 * Called when the entity is attacked.
-	 */
-	public boolean hurt(DamageSource source, float amount) {
-		return false;
-	}
+    /**
+     * Returns true if other Entities should be prevented from moving through this Entity.
+     */
+    public boolean isPickable() {
+        return false;
+    }
 
-	@Override
-	public Packet<?> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
-	}
+    /**
+     * Called when the entity is attacked.
+     */
+    public boolean hurt(DamageSource source, float amount) {
+        return false;
+    }
+
+    @Override
+    public Packet<?> getAddEntityPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
+    }
 }

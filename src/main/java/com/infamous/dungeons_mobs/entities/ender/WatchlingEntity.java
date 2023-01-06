@@ -1,9 +1,6 @@
 package com.infamous.dungeons_mobs.entities.ender;
 
-import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
-
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
@@ -31,106 +28,103 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
+import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
+
 public class WatchlingEntity extends AbstractEnderlingEntity implements IAnimatable {
 
-	AnimationFactory factory = GeckoLibUtil.createFactory(this);
+    AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
-	public WatchlingEntity(EntityType<? extends WatchlingEntity> p_i50210_1_, Level p_i50210_2_) {
-		super(p_i50210_1_, p_i50210_2_);
-	}
+    public WatchlingEntity(EntityType<? extends WatchlingEntity> p_i50210_1_, Level p_i50210_2_) {
+        super(p_i50210_1_, p_i50210_2_);
+    }
 
-	protected void registerGoals() {
-		this.goalSelector.addGoal(0, new FloatGoal(this));
-		this.goalSelector.addGoal(2, new AbstractEnderlingEntity.AttackGoal(1.5D));
-		this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D, 0.0F));
-		this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
-		this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
-		this.targetSelector.addGoal(1, new AbstractEnderlingEntity.FindPlayerGoal(this, null));
-		this.targetSelector.addGoal(2,
-				new HurtByTargetGoal(this, AbstractEnderlingEntity.class).setAlertOthers().setUnseenMemoryTicks(500));
-		this.targetSelector.addGoal(1, new EnderlingTargetGoal<>(this, Player.class, true).setUnseenMemoryTicks(500));
+    protected void registerGoals() {
+        this.goalSelector.addGoal(0, new FloatGoal(this));
+        this.goalSelector.addGoal(2, new AbstractEnderlingEntity.AttackGoal(1.5D));
+        this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D, 0.0F));
+        this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
+        this.targetSelector.addGoal(1, new AbstractEnderlingEntity.FindPlayerGoal(this, null));
+        this.targetSelector.addGoal(2, new HurtByTargetGoal(this, AbstractEnderlingEntity.class).setAlertOthers().setUnseenMemoryTicks(500));
+        this.targetSelector.addGoal(1, new EnderlingTargetGoal<>(this, Player.class, true).setUnseenMemoryTicks(500));
 
-		// this.targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this,
-		// AbstractEndermanVariant.class, true, false));
-	}
 
-	public MobType getMobType() {
-		return MobType.UNDEAD;
-	}
+        //this.targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, AbstractEndermanVariant.class, true, false));
+    }
 
-	public static AttributeSupplier.Builder setCustomAttributes() {
-		return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 30.0D)
-				.add(Attributes.MOVEMENT_SPEED, 0.225F).add(Attributes.ATTACK_DAMAGE, 7.0D)
-				.add(Attributes.FOLLOW_RANGE, 32.0D);
-	}
+    public MobType getMobType() {
+        return MobType.UNDEAD;
+    }
 
-	protected SoundEvent getAmbientSound() {
-		return ModSoundEvents.WATCHLING_IDLE.get();
-	}
+    public static AttributeSupplier.Builder setCustomAttributes() {
+        return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 30.0D).add(Attributes.MOVEMENT_SPEED, 0.225F).add(Attributes.ATTACK_DAMAGE, 7.0D).add(Attributes.FOLLOW_RANGE, 32.0D);
+    }
 
-	protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
-		return ModSoundEvents.WATCHLING_HURT.get();
-	}
+    protected SoundEvent getAmbientSound() {
+        return ModSoundEvents.WATCHLING_IDLE.get();
+    }
 
-	protected SoundEvent getDeathSound() {
-		return ModSoundEvents.WATCHLING_DEATH.get();
-	}
+    protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
+        return ModSoundEvents.WATCHLING_HURT.get();
+    }
 
-	public boolean doHurtTarget(Entity p_70652_1_) {
-		this.playSound(ModSoundEvents.WATCHLING_ATTACK.get(), 1.0F, 1.0F);
-		return super.doHurtTarget(p_70652_1_);
-	}
+    protected SoundEvent getDeathSound() {
+        return ModSoundEvents.WATCHLING_DEATH.get();
+    }
 
-	@Override
-	protected void playStepSound(BlockPos p_180429_1_, BlockState p_180429_2_) {
-		this.playSound(this.getStepSound(), 0.75F, 1.0F);
-	}
+    public boolean doHurtTarget(Entity p_70652_1_) {
+        this.playSound(ModSoundEvents.WATCHLING_ATTACK.get(), 1.0F, 1.0F);
+        return super.doHurtTarget(p_70652_1_);
+    }
 
-	protected SoundEvent getStepSound() {
-		return ModSoundEvents.WATCHLING_STEP.get();
-	}
+    @Override
+    protected void playStepSound(BlockPos p_180429_1_, BlockState p_180429_2_) {
+        this.playSound(this.getStepSound(), 0.75F, 1.0F);
+    }
 
-	public void setTarget(LivingEntity p_70624_1_) {
-		if (p_70624_1_ != null && p_70624_1_ != this.getTarget()) {
-			this.teleport(p_70624_1_.getX() - 3 + this.random.nextInt(6), p_70624_1_.getY(),
-					p_70624_1_.getZ() - 3 + this.random.nextInt(6));
-		}
-		super.setTarget(p_70624_1_);
-	}
+    protected SoundEvent getStepSound() {
+        return ModSoundEvents.WATCHLING_STEP.get();
+    }
 
-	public void baseTick() {
-		super.baseTick();
+    public void setTarget(LivingEntity p_70624_1_) {
+        if (p_70624_1_ != null && p_70624_1_ != this.getTarget()) {
+            this.teleport(p_70624_1_.getX() - 3 + this.random.nextInt(6), p_70624_1_.getY(), p_70624_1_.getZ() - 3 + this.random.nextInt(6));
+        }
+        super.setTarget(p_70624_1_);
+    }
 
-		// if (this.getTarget() != null) {
-		// this.getTarget().lookAt(EntityAnchorArgument.Type.EYES, new
-		// Vector3d(this.getX(), this.getEyeY(), this.getZ()));
-		// }
+    public void baseTick() {
+        super.baseTick();
 
-	}
+        //if (this.getTarget() != null) {
+        //	this.getTarget().lookAt(EntityAnchorArgument.Type.EYES, new Vector3d(this.getX(), this.getEyeY(), this.getZ()));
+        //}
 
-	@Override
-	public void registerControllers(AnimationData data) {
-		data.addAnimationController(new AnimationController(this, "controller", 5, this::predicate));
-	}
+    }
 
-	private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
-		if (this.isAttacking() > 0) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("watchling_attack", LOOP));
-		} else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
-			if (this.isRunning() > 0) {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("watchling_run", LOOP));
-			} else {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("watchling_walk", LOOP));
-			}
-		} else {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("watchling_idle", LOOP));
-		}
-		return PlayState.CONTINUE;
-	}
+    @Override
+    public void registerControllers(AnimationData data) {
+        data.addAnimationController(new AnimationController(this, "controller", 5, this::predicate));
+    }
 
-	@Override
-	public AnimationFactory getFactory() {
-		return factory;
-	}
+    private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
+        if (this.isAttacking() > 0) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("watchling_attack", LOOP));
+        } else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
+            if (this.isRunning() > 0) {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("watchling_run", LOOP));
+            } else {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("watchling_walk", LOOP));
+            }
+        } else {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("watchling_idle", LOOP));
+        }
+        return PlayState.CONTINUE;
+    }
+
+    @Override
+    public AnimationFactory getFactory() {
+        return factory;
+    }
 
 }
