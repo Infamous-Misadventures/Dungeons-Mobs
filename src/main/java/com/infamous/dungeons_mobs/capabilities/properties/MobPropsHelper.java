@@ -1,9 +1,9 @@
 package com.infamous.dungeons_mobs.capabilities.properties;
 
+import static com.infamous.dungeons_mobs.capabilities.ModCapabilities.MOB_PROPS_CAPABILITY;
+
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.common.util.LazyOptional;
-
-import static com.infamous.dungeons_mobs.capabilities.ModCapabilities.MOB_PROPS_CAPABILITY;
 
 public class MobPropsHelper {
 

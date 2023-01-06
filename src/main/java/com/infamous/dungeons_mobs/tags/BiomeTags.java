@@ -1,10 +1,10 @@
 package com.infamous.dungeons_mobs.tags;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
+
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
 
 public class BiomeTags {

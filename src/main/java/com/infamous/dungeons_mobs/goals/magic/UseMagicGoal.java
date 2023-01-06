@@ -1,13 +1,14 @@
 package com.infamous.dungeons_mobs.goals.magic;
 
+import javax.annotation.Nullable;
+
 import com.infamous.dungeons_mobs.entities.magic.MagicType;
 import com.infamous.dungeons_mobs.interfaces.IMagicUser;
+
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
-
-import javax.annotation.Nullable;
 
 public abstract class UseMagicGoal<T extends Mob & IMagicUser> extends Goal {
     private int magicWarmup;

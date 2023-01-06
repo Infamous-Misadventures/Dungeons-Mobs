@@ -2,6 +2,7 @@ package com.infamous.dungeons_mobs.client.models.ender;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.entities.ender.BlastlingEntity;
+
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import software.bernie.geckolib3.core.IAnimatable;

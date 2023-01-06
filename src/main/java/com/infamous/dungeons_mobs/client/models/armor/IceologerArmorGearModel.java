@@ -4,6 +4,7 @@ import com.infamous.dungeons_libraries.client.renderer.gearconfig.ArmorGearModel
 import com.infamous.dungeons_libraries.items.gearconfig.ArmorGear;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.entities.illagers.IceologerEntity;
+
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;

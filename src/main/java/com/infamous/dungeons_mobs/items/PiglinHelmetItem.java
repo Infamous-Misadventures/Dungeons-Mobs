@@ -1,5 +1,9 @@
 package com.infamous.dungeons_mobs.items;
 
+import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorItem;
@@ -7,12 +11,6 @@ import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.annotation.Nullable;
-
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
-
-import net.minecraft.world.item.Item.Properties;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class PiglinHelmetItem extends ArmorItem {

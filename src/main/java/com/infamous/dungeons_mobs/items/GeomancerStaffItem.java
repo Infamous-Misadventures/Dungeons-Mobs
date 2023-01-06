@@ -7,6 +7,7 @@ import com.infamous.dungeons_mobs.interfaces.IHasInventorySprite;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.network.NetworkHandler;
 import com.infamous.dungeons_mobs.utils.GeomancyHelper;
+
 import net.minecraft.Util;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionResult;
@@ -14,8 +15,6 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.PacketDistributor;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class GeomancerStaffItem extends ArtifactItem implements IHasInventorySprite {
     public GeomancerStaffItem(Properties properties) {

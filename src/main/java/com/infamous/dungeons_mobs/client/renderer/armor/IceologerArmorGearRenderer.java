@@ -5,6 +5,7 @@ import com.infamous.dungeons_mobs.client.models.armor.IceologerArmorGearModel;
 import com.infamous.dungeons_mobs.items.armor.IceologerArmorGear;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 public class IceologerArmorGearRenderer extends ArmorGearRenderer<IceologerArmorGear> {

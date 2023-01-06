@@ -1,5 +1,7 @@
 package com.infamous.dungeons_mobs.client.renderer.water;
 
+import javax.annotation.Nullable;
+
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.client.models.ocean.DrownedNecromancerModel;
 import com.infamous.dungeons_mobs.client.renderer.layers.PulsatingGlowLayer;
@@ -7,6 +9,7 @@ import com.infamous.dungeons_mobs.entities.water.DrownedNecromancerEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
+
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -22,8 +25,6 @@ import software.bernie.example.client.DefaultBipedBoneIdents;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.renderers.geo.ExtendedGeoEntityRenderer;
-
-import javax.annotation.Nullable;
 
 public class DrownedNecromancerRenderer extends ExtendedGeoEntityRenderer<DrownedNecromancerEntity> {
 	

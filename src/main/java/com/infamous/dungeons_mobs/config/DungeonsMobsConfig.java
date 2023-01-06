@@ -1,10 +1,12 @@
 package com.infamous.dungeons_mobs.config;
 
-import com.google.common.collect.Lists;
-import net.minecraftforge.common.ForgeConfigSpec;
+import java.util.List;
+
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.List;
+import com.google.common.collect.Lists;
+
+import net.minecraftforge.common.ForgeConfigSpec;
 
 public class DungeonsMobsConfig {
 

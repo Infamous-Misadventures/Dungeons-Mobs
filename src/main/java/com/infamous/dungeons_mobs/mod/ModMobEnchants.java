@@ -1,9 +1,18 @@
 package com.infamous.dungeons_mobs.mod;
 
+import com.infamous.dungeons_mobs.DungeonsMobs;
+import com.infamous.dungeons_mobs.mobenchants.BurningMobEnchant;
+import com.infamous.dungeons_mobs.mobenchants.ChillingMobEnchant;
+import com.infamous.dungeons_mobs.mobenchants.DeflectMobEnchant;
+import com.infamous.dungeons_mobs.mobenchants.EchoMobEnchant;
+import com.infamous.dungeons_mobs.mobenchants.GravityPulseMobEnchant;
+import com.infamous.dungeons_mobs.mobenchants.HealsAlliesMobEnchant;
+import com.infamous.dungeons_mobs.mobenchants.RadianceMobEnchant;
+import com.infamous.dungeons_mobs.mobenchants.RegenerationMobEnchant;
+import com.infamous.dungeons_mobs.mobenchants.RushMobEnchant;
+
 import baguchan.enchantwithmob.mobenchant.MobEnchant;
 import baguchan.enchantwithmob.registry.MobEnchants;
-import com.infamous.dungeons_mobs.DungeonsMobs;
-import com.infamous.dungeons_mobs.mobenchants.*;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 

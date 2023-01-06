@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.client;
 
 import com.infamous.dungeons_mobs.mod.ModItems;
+
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 

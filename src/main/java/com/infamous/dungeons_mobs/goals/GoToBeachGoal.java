@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.goals;
 
 import com.infamous.dungeons_mobs.interfaces.IAquaticMob;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.MoveToBlockGoal;

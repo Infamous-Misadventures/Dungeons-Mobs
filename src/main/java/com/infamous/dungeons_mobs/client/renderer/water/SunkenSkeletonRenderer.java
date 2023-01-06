@@ -1,10 +1,18 @@
 package com.infamous.dungeons_mobs.client.renderer.water;
 
+import static com.infamous.dungeons_mobs.client.models.geom.ModModelLayers.SUNKEN_SKELETON;
+import static net.minecraft.client.model.geom.ModelLayers.SKELETON_INNER_ARMOR;
+import static net.minecraft.client.model.geom.ModelLayers.SKELETON_OUTER_ARMOR;
+
+import java.util.Arrays;
+import java.util.List;
+
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.client.models.undead.SunkenSkeletonModel;
 import com.infamous.dungeons_mobs.entities.water.SunkenSkeletonEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
+
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
@@ -12,13 +20,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import java.util.Arrays;
-import java.util.List;
-
-import static com.infamous.dungeons_mobs.client.models.geom.ModModelLayers.SUNKEN_SKELETON;
-import static net.minecraft.client.model.geom.ModelLayers.SKELETON_INNER_ARMOR;
-import static net.minecraft.client.model.geom.ModelLayers.SKELETON_OUTER_ARMOR;
 
 @OnlyIn(Dist.CLIENT)
 public class SunkenSkeletonRenderer<T extends SunkenSkeletonEntity> extends HumanoidMobRenderer<T, SunkenSkeletonModel<T>> {

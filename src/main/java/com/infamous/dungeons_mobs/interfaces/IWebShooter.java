@@ -3,6 +3,7 @@ package com.infamous.dungeons_mobs.interfaces;
 import com.infamous.dungeons_mobs.entities.projectiles.CobwebProjectileEntity;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 import com.infamous.dungeons_mobs.utils.PositionUtils;
+
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;

@@ -8,6 +8,7 @@ import com.infamous.dungeons_mobs.entities.illagers.WindcallerEntity;
 import com.infamous.dungeons_mobs.items.armor.WindcallerArmorGear;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.world.entity.LivingEntity;

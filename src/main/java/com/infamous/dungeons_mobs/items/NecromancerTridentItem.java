@@ -8,14 +8,13 @@ import com.infamous.dungeons_mobs.interfaces.IHasInventorySprite;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.network.NetworkHandler;
 import com.infamous.dungeons_mobs.utils.PositionUtils;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.PacketDistributor;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class NecromancerTridentItem extends ArtifactItem implements IHasInventorySprite {
     public NecromancerTridentItem(Properties properties) {

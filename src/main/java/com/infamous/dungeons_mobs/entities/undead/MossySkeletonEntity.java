@@ -2,6 +2,7 @@ package com.infamous.dungeons_mobs.entities.undead;
 
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
@@ -22,8 +23,6 @@ import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-
-import java.util.Random;
 
 public class MossySkeletonEntity extends AbstractSkeleton {
     public MossySkeletonEntity(Level worldIn) {

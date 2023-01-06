@@ -1,7 +1,10 @@
 package com.infamous.dungeons_mobs.entities.summonables;
 
+import java.util.List;
+
 import com.google.common.collect.Lists;
 import com.infamous.dungeons_mobs.interfaces.ITrapsTarget;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.util.Mth;
@@ -13,10 +16,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
-
-import java.util.List;
-
-import net.minecraft.world.entity.Entity.RemovalReason;
 
 public abstract class AbstractTrapEntity extends Entity implements IAnimatable {
 	

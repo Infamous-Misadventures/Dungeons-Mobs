@@ -1,6 +1,11 @@
 package com.infamous.dungeons_mobs.capabilities.ancient;
 
+import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
+
+import org.jetbrains.annotations.NotNull;
+
 import com.infamous.dungeons_mobs.capabilities.ModCapabilities;
+
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -11,9 +16,6 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import org.jetbrains.annotations.NotNull;
-
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
 public class AttacherAncient {
 

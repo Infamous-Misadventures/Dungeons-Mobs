@@ -1,5 +1,7 @@
 package com.infamous.dungeons_mobs.entities.piglin.ai;
 
+import java.util.function.Predicate;
+
 import com.google.common.collect.ImmutableList;
 import com.infamous.dungeons_mobs.entities.piglin.FungusThrowerEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.BlueNethershroomEntity;
@@ -8,6 +10,7 @@ import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 import com.infamous.dungeons_mobs.tasks.ThrowAtTargetTask;
 import com.infamous.dungeons_mobs.utils.BrainHelper;
 import com.mojang.datafixers.util.Pair;
+
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
@@ -22,8 +25,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.function.Predicate;
 
 public class FungusThrowerAi {
 

@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.client.models.summonables;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
+
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 

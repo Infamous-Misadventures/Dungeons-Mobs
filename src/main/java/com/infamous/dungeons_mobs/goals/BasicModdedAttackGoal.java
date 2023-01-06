@@ -1,18 +1,18 @@
 package com.infamous.dungeons_mobs.goals;
 
+import java.util.EnumSet;
+
+import javax.annotation.Nullable;
+
 import com.infamous.dungeons_mobs.entities.AnimatableMeleeAttackMob;
 import com.infamous.dungeons_mobs.interfaces.IShieldUser;
+
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import software.bernie.geckolib3.core.IAnimatable;
-
-import javax.annotation.Nullable;
-import java.util.EnumSet;
-
-import net.minecraft.world.entity.ai.goal.Goal.Flag;
 
 public class BasicModdedAttackGoal<T extends Mob & IAnimatable & AnimatableMeleeAttackMob> extends Goal {
 

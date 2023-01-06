@@ -1,5 +1,8 @@
 package com.infamous.dungeons_mobs.entities.projectiles;
 
+import java.util.List;
+import java.util.function.Predicate;
+
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -21,11 +24,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.entity.PartEntity;
 import net.minecraftforge.network.NetworkHooks;
-
-import java.util.List;
-import java.util.function.Predicate;
-
-import net.minecraft.world.entity.Entity.RemovalReason;
 
 public abstract class StraightMovingProjectileEntity extends Projectile {
     public double xPower;

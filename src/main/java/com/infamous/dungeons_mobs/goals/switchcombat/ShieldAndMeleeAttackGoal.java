@@ -2,6 +2,7 @@ package com.infamous.dungeons_mobs.goals.switchcombat;
 
 import com.infamous.dungeons_mobs.interfaces.IShieldUser;
 import com.infamous.dungeons_mobs.tags.EntityTags;
+
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;

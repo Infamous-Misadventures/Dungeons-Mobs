@@ -1,8 +1,15 @@
 package com.infamous.dungeons_mobs.items.shield.bewlr;
 
+import static com.infamous.dungeons_mobs.items.shield.ShieldTextures.LOCATION_ROYAL_GUARD_SHIELD_BASE;
+import static com.infamous.dungeons_mobs.items.shield.ShieldTextures.LOCATION_ROYAL_GUARD_SHIELD_NO_PATTERN;
+import static net.minecraft.client.model.geom.ModelLayers.SHIELD;
+
+import java.util.List;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.util.Pair;
+
 import net.minecraft.client.model.ShieldModel;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -21,12 +28,6 @@ import net.minecraft.world.level.block.entity.BannerBlockEntity;
 import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import java.util.List;
-
-import static com.infamous.dungeons_mobs.items.shield.ShieldTextures.LOCATION_ROYAL_GUARD_SHIELD_BASE;
-import static com.infamous.dungeons_mobs.items.shield.ShieldTextures.LOCATION_ROYAL_GUARD_SHIELD_NO_PATTERN;
-import static net.minecraft.client.model.geom.ModelLayers.SHIELD;
 
 @OnlyIn(Dist.CLIENT)
 public class RoyalGuardShieldBEWLR extends BlockEntityWithoutLevelRenderer {

@@ -1,21 +1,21 @@
 package com.infamous.dungeons_mobs.goals;
 
+import java.util.EnumSet;
+
+import javax.annotation.Nullable;
+
 import com.infamous.dungeons_mobs.capabilities.animatedprops.AnimatedProps;
 import com.infamous.dungeons_mobs.capabilities.animatedprops.AnimatedPropsHelper;
 import com.infamous.dungeons_mobs.interfaces.IShieldUser;
 import com.infamous.dungeons_mobs.network.NetworkHandler;
 import com.infamous.dungeons_mobs.network.message.AnimatedPropsMessage;
+
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraftforge.network.PacketDistributor;
-
-import javax.annotation.Nullable;
-import java.util.EnumSet;
-
-import net.minecraft.world.entity.ai.goal.Goal.Flag;
 
 public class ReplacedModdedAttackGoal<T extends Mob> extends Goal {
 

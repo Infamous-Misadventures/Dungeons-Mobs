@@ -1,14 +1,15 @@
 package com.infamous.dungeons_mobs.client.renderer.water;
 
+import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
+
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.client.renderer.jungle.WhispererRenderer;
 import com.infamous.dungeons_mobs.client.renderer.layers.GeoEyeLayer;
 import com.infamous.dungeons_mobs.entities.jungle.WhispererEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
+
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
-
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
 public class WavewhispererRenderer extends WhispererRenderer {
 

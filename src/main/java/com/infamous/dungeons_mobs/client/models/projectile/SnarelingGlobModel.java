@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.client.models.projectile;
 
 import com.google.common.collect.ImmutableList;
+
 import net.minecraft.client.model.ListModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;

@@ -1,5 +1,7 @@
 package com.infamous.dungeons_mobs.client.renderer.jungle;
 
+import javax.annotation.Nullable;
+
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.client.models.jungle.WhispererModel;
 import com.infamous.dungeons_mobs.client.renderer.layers.GeoEyeLayer;
@@ -7,6 +9,7 @@ import com.infamous.dungeons_mobs.entities.jungle.WhispererEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
+
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -24,8 +27,6 @@ import software.bernie.example.client.DefaultBipedBoneIdents;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.renderers.geo.ExtendedGeoEntityRenderer;
-
-import javax.annotation.Nullable;
 
 @OnlyIn(Dist.CLIENT)
 public class WhispererRenderer extends ExtendedGeoEntityRenderer<WhispererEntity> {

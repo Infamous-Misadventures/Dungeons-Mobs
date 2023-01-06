@@ -1,6 +1,12 @@
 package com.infamous.dungeons_mobs.items;
 
+import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
+import static com.infamous.dungeons_mobs.client.models.geom.ModModelLayers.VINDICATOR_HELMET;
+
+import javax.annotation.Nullable;
+
 import com.infamous.dungeons_mobs.client.models.armor.VindicatorHelmetModel;
+
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -10,13 +16,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-
-import javax.annotation.Nullable;
-
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
-import static com.infamous.dungeons_mobs.client.models.geom.ModModelLayers.VINDICATOR_HELMET;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class VindicatorHelmetItem extends ArmorItem {
     private final boolean isDiamond;

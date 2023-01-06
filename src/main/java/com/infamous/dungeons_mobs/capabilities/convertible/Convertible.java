@@ -1,13 +1,13 @@
 package com.infamous.dungeons_mobs.capabilities.convertible;
 
+import static com.infamous.dungeons_mobs.capabilities.ModCapabilities.CONVERTIBLE_CAPABILITY;
+
+import java.util.function.BiConsumer;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraftforge.common.util.INBTSerializable;
-
-import java.util.function.BiConsumer;
-
-import static com.infamous.dungeons_mobs.capabilities.ModCapabilities.CONVERTIBLE_CAPABILITY;
 
 public class Convertible implements INBTSerializable<CompoundTag> {
 

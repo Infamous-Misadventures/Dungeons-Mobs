@@ -1,5 +1,9 @@
 package com.infamous.dungeons_mobs.client.util;
 
+import java.util.Random;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.ParticleStatus;
@@ -14,9 +18,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-
-import javax.annotation.Nullable;
-import java.util.Random;
 
 public class ParticleGenerator {
 

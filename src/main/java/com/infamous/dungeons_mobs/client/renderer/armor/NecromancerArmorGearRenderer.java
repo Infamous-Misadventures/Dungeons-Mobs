@@ -5,6 +5,7 @@ import com.infamous.dungeons_mobs.client.models.armor.NecromancerArmorGearModel;
 import com.infamous.dungeons_mobs.items.armor.NecromancerArmorGear;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+
 import net.minecraft.world.entity.EquipmentSlot;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;

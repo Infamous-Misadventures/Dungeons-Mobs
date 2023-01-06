@@ -1,15 +1,16 @@
 package com.infamous.dungeons_mobs.client.renderer.undead;
 
+import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
+
 import com.infamous.dungeons_mobs.entities.undead.FrozenZombieEntity;
 import com.infamous.dungeons_mobs.entities.undead.JungleZombieEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
+
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.ZombieRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.monster.Husk;
 import net.minecraft.world.entity.monster.Zombie;
-
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
 public class CustomZombieRenderer extends ZombieRenderer {
 

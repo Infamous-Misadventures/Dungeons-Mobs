@@ -1,17 +1,14 @@
 package com.infamous.dungeons_mobs.goals;
 
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-
 import java.util.EnumSet;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
-import net.minecraft.world.entity.ai.goal.Goal.Flag;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.item.ItemStack;
 
 public class SimpleRangedAttackGoal<T extends Mob> extends Goal {
     protected final T mob;

@@ -2,6 +2,7 @@ package com.infamous.dungeons_mobs.worldgen;
 
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
+
 import net.minecraft.world.entity.raid.Raid;
 
 public class RaidEntries {

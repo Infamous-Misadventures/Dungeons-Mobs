@@ -1,8 +1,11 @@
 package com.infamous.dungeons_mobs.entities.creepers;
 
+import java.util.Collection;
+
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
@@ -16,12 +19,6 @@ import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-
-import java.util.Collection;
-import java.util.Random;
-
-
-import net.minecraft.world.entity.Entity.RemovalReason;
 
 public class IcyCreeperEntity extends Creeper {
 

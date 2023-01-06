@@ -6,6 +6,7 @@ package com.infamous.dungeons_mobs.client.models.summonables;// Made with Blockb
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.entities.summonables.ConstructEntity;
 import com.infamous.dungeons_mobs.entities.summonables.GeomancerBombEntity;
+
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;

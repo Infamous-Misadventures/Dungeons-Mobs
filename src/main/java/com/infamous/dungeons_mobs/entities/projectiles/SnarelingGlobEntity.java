@@ -4,6 +4,7 @@ import com.infamous.dungeons_mobs.entities.ender.AbstractEnderlingEntity;
 import com.infamous.dungeons_mobs.mod.ModEffects;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
+
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -23,8 +24,6 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkHooks;
-
-import net.minecraft.world.entity.Entity.RemovalReason;
 
 public class SnarelingGlobEntity extends ThrowableItemProjectile {
 	

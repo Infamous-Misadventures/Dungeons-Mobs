@@ -1,12 +1,13 @@
 package com.infamous.dungeons_mobs.datagen;
 
-import baguchan.enchantwithmob.mobenchant.MobEnchant;
+import static com.infamous.dungeons_mobs.mod.ModMobEnchants.MOB_ENCHANTS_DEFERRED;
+
 import com.infamous.dungeons_mobs.DungeonsMobs;
+
+import baguchan.enchantwithmob.mobenchant.MobEnchant;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.data.LanguageProvider;
-
-import static com.infamous.dungeons_mobs.mod.ModMobEnchants.MOB_ENCHANTS_DEFERRED;
 
 public class ModLanguageProvider extends LanguageProvider {
 

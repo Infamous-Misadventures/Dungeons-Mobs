@@ -1,8 +1,8 @@
 package com.infamous.dungeons_mobs.capabilities.animatedprops;
 
-import net.minecraft.world.entity.Mob;
-
 import static com.infamous.dungeons_mobs.capabilities.ModCapabilities.ANIMATED_PROPS_CAPABILITY;
+
+import net.minecraft.world.entity.Mob;
 
 public class AnimatedPropsHelper {
 

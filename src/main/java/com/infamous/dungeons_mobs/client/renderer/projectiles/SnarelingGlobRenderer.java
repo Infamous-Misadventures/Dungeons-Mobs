@@ -1,11 +1,14 @@
 package com.infamous.dungeons_mobs.client.renderer.projectiles;
 
+import static com.infamous.dungeons_mobs.client.models.geom.ModModelLayers.SNARELING_GLOB;
+
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.client.models.projectile.SnarelingGlobModel;
 import com.infamous.dungeons_mobs.entities.projectiles.SnarelingGlobEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
+
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -15,8 +18,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import static com.infamous.dungeons_mobs.client.models.geom.ModModelLayers.SNARELING_GLOB;
 
 @OnlyIn(Dist.CLIENT)
 public class SnarelingGlobRenderer extends EntityRenderer<SnarelingGlobEntity> {

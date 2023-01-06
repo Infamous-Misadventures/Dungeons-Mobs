@@ -5,6 +5,7 @@ import com.infamous.dungeons_libraries.items.gearconfig.ArmorGear;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.entities.illagers.MageCloneEntity;
 import com.infamous.dungeons_mobs.entities.illagers.MageEntity;
+
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;

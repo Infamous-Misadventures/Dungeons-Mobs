@@ -1,11 +1,12 @@
 package com.infamous.dungeons_mobs.mixin;
 
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.projectile.Arrow;
+import java.util.Set;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-import java.util.Set;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.projectile.Arrow;
 
 @Mixin(Arrow.class)
 public interface ArrowAccessor {

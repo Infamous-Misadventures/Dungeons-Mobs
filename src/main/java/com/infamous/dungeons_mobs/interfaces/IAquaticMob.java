@@ -1,5 +1,7 @@
 package com.infamous.dungeons_mobs.interfaces;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -10,8 +12,6 @@ import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
-
-import javax.annotation.Nullable;
 
 public interface IAquaticMob {
 

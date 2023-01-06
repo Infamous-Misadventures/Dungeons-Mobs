@@ -1,8 +1,11 @@
 package com.infamous.dungeons_mobs.entities.projectiles;
 
+import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
+
 import com.infamous.dungeons_mobs.entities.summonables.SimpleTrapEntity;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
+
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.util.Mth;
@@ -30,10 +33,6 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
-
-import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
-
-import net.minecraft.world.entity.Entity.RemovalReason;
 
 public class CobwebProjectileEntity extends Projectile implements IAnimatable {
 	

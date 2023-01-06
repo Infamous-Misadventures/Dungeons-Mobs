@@ -1,21 +1,20 @@
 package com.infamous.dungeons_mobs.mobenchants;
 
-import baguchan.enchantwithmob.mobenchant.MobEnchant;
-import com.infamous.dungeons_mobs.capabilities.properties.MobProps;
-import com.infamous.dungeons_mobs.capabilities.properties.MobPropsHelper;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-
 import static com.infamous.dungeons_libraries.utils.AreaOfEffectHelper.applyToNearbyEntities;
 import static com.infamous.dungeons_libraries.utils.AreaOfEffectHelper.getCanApplyToEnemyPredicate;
 import static com.infamous.dungeons_mobs.DungeonsMobs.PROXY;
 import static com.infamous.dungeons_mobs.mobenchants.NewMobEnchantUtils.executeIfPresentWithLevel;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchants.BURNING;
 
-import baguchan.enchantwithmob.mobenchant.MobEnchant.Properties;
+import com.infamous.dungeons_mobs.capabilities.properties.MobProps;
+import com.infamous.dungeons_mobs.capabilities.properties.MobPropsHelper;
+
+import baguchan.enchantwithmob.mobenchant.MobEnchant;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class BurningMobEnchant extends MobEnchant {
 

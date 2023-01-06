@@ -1,10 +1,10 @@
 package com.infamous.dungeons_mobs.items.shield;
 
+import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
+
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.resources.ResourceLocation;
-
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
 public class ShieldTextures {
 

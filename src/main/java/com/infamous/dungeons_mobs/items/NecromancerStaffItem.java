@@ -1,5 +1,12 @@
 package com.infamous.dungeons_mobs.items;
 
+import static com.infamous.dungeons_libraries.attribute.AttributeRegistry.SUMMON_CAP;
+import static com.infamous.dungeons_libraries.capabilities.minionmaster.MinionMasterHelper.getMasterCapability;
+
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.infamous.dungeons_libraries.capabilities.minionmaster.Master;
@@ -12,6 +19,7 @@ import com.infamous.dungeons_libraries.utils.SoundHelper;
 import com.infamous.dungeons_mobs.interfaces.IHasInventorySprite;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 import com.infamous.dungeons_mobs.network.NetworkHandler;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -25,15 +33,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.network.PacketDistributor;
-
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-import static com.infamous.dungeons_libraries.attribute.AttributeRegistry.SUMMON_CAP;
-import static com.infamous.dungeons_libraries.capabilities.minionmaster.MinionMasterHelper.getMasterCapability;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class NecromancerStaffItem extends ArtifactItem implements IHasInventorySprite, ISoulConsumer {
     public NecromancerStaffItem(Properties properties) {

@@ -1,8 +1,8 @@
 package com.infamous.dungeons_mobs.capabilities.ancient;
 
-import net.minecraft.world.entity.Entity;
-
 import static com.infamous.dungeons_mobs.capabilities.ModCapabilities.ANCIENT_CAPABILITY;
+
+import net.minecraft.world.entity.Entity;
 
 
 public class AncientHelper {

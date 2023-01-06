@@ -1,5 +1,8 @@
 package com.infamous.dungeons_mobs.client.renderer.piglin;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.client.models.FungusSackModel;
 import com.infamous.dungeons_mobs.client.models.geom.ModModelLayers;
@@ -7,6 +10,7 @@ import com.infamous.dungeons_mobs.client.renderer.layers.FungusSackLayer;
 import com.infamous.dungeons_mobs.interfaces.ISmartCrossbowUser;
 import com.infamous.dungeons_mobs.mod.ModItems;
 import com.mojang.blaze3d.vertex.PoseStack;
+
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.PiglinRenderer;
@@ -16,9 +20,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class CustomPiglinRenderer extends PiglinRenderer {
    public static final Map<EntityType<?>, Map<String, ResourceLocation>> RESOURCE_LOCATION_MAP = new HashMap<>();

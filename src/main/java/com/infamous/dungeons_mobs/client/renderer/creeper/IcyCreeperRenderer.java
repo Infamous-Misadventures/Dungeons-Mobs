@@ -1,8 +1,11 @@
 package com.infamous.dungeons_mobs.client.renderer.creeper;
 
+import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
+
 import com.infamous.dungeons_mobs.client.renderer.layers.IcyCreeperChargeLayer;
 import com.infamous.dungeons_mobs.entities.creepers.IcyCreeperEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
+
 import net.minecraft.client.model.CreeperModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -11,8 +14,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
 @OnlyIn(Dist.CLIENT)
 public class IcyCreeperRenderer extends MobRenderer<IcyCreeperEntity, CreeperModel<IcyCreeperEntity>> {

@@ -1,16 +1,18 @@
 package com.infamous.dungeons_mobs.mixin;
 
-import com.infamous.dungeons_mobs.interfaces.IWebShooter;
-import net.minecraft.client.model.SpiderModel;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.Mob;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import com.infamous.dungeons_mobs.interfaces.IWebShooter;
+
+import net.minecraft.client.model.SpiderModel;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Mob;
 
 @Mixin(SpiderModel.class)
 public class SpiderModelMixin{

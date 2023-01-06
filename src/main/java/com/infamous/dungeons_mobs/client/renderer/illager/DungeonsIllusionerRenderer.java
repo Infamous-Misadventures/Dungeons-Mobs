@@ -3,6 +3,7 @@ package com.infamous.dungeons_mobs.client.renderer.illager;
 import com.infamous.dungeons_mobs.client.models.illager.DungeonsIllusionerModel;
 import com.infamous.dungeons_mobs.entities.illagers.DungeonsIllusionerEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
+
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 

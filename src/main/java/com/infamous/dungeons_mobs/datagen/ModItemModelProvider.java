@@ -1,15 +1,16 @@
 package com.infamous.dungeons_mobs.datagen;
 
+import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
+import static com.infamous.dungeons_mobs.mod.ModItems.ARMORS;
+
 import com.infamous.dungeons_mobs.DungeonsMobs;
+
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.client.model.generators.ModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
-
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
-import static com.infamous.dungeons_mobs.mod.ModItems.ARMORS;
 
 
 public class ModItemModelProvider extends ItemModelProvider {

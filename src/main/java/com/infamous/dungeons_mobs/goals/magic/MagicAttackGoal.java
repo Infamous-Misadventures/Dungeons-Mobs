@@ -1,11 +1,12 @@
 package com.infamous.dungeons_mobs.goals.magic;
 
+import java.util.EnumSet;
+
 import com.infamous.dungeons_mobs.interfaces.IMagicUser;
+
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Monster;
-
-import java.util.EnumSet;
 
 public class MagicAttackGoal<T extends Monster & IMagicUser> extends Goal {
    private final T magicUserMob;

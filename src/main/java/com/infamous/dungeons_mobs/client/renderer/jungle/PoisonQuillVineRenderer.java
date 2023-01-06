@@ -3,6 +3,7 @@ package com.infamous.dungeons_mobs.client.renderer.jungle;
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.client.models.jungle.PoisonQuillVineModel;
 import com.infamous.dungeons_mobs.client.renderer.layers.GeoEyeLayer;
+
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;

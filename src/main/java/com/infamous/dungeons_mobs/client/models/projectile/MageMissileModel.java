@@ -3,6 +3,7 @@ package com.infamous.dungeons_mobs.client.models.projectile;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.entities.projectiles.MageMissileEntity;
+
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;

@@ -1,10 +1,10 @@
 package com.infamous.dungeons_mobs.data;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-
 import java.util.Arrays;
 import java.util.List;
+
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 public class MobEnchantmentAncientData {
     public static final List<String> defaultAdjectives = Arrays.asList();

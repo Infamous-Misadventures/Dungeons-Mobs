@@ -1,12 +1,13 @@
 package com.infamous.dungeons_mobs.worldgen;
 
-import com.google.common.collect.ImmutableMap;
-import com.infamous.dungeons_mobs.mod.ModEntityTypes;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.ai.sensing.VillagerHostilesSensor;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import com.google.common.collect.ImmutableMap;
+import com.infamous.dungeons_mobs.mod.ModEntityTypes;
+
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.sensing.VillagerHostilesSensor;
 
 public class SensorMapModifier {
 

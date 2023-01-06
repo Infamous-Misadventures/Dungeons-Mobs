@@ -1,15 +1,16 @@
 package com.infamous.dungeons_mobs.entities;
 
+import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
+import static net.minecraft.world.entity.EntityType.HUSK;
+
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
+
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
-import static net.minecraft.world.entity.EntityType.HUSK;
 
 @Mod.EventBusSubscriber(modid = MODID)
 public class EntityEvents {

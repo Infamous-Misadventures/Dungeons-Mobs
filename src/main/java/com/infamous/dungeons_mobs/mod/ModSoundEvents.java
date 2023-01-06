@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.mod;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
+
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.registries.DeferredRegister;

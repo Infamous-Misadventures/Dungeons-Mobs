@@ -1,6 +1,9 @@
 package com.infamous.dungeons_mobs.entities.summonables;
 
+import java.util.List;
+
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -23,10 +26,6 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
-
-import java.util.List;
-
-import net.minecraft.world.entity.Entity.RemovalReason;
 
 public class WraithFireEntity extends Entity implements IAnimatable, IAnimationTickable {
 

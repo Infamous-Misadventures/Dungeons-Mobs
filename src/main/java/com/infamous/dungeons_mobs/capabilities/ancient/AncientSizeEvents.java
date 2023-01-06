@@ -2,6 +2,7 @@ package com.infamous.dungeons_mobs.capabilities.ancient;
 
 
 import com.infamous.dungeons_libraries.DungeonsLibraries;
+
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;

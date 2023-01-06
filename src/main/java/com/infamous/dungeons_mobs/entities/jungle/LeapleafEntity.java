@@ -1,5 +1,12 @@
 package com.infamous.dungeons_mobs.entities.jungle;
 
+import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
+
+import java.util.EnumSet;
+import java.util.UUID;
+
+import javax.annotation.Nullable;
+
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
 import com.infamous.dungeons_mobs.entities.summonables.AreaDamageEntity;
 import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
@@ -8,6 +15,7 @@ import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 import com.infamous.dungeons_mobs.tags.EntityTags;
 import com.infamous.dungeons_mobs.utils.PositionUtils;
+
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -43,12 +51,6 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
-
-import javax.annotation.Nullable;
-import java.util.EnumSet;
-import java.util.UUID;
-
-import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
 public class LeapleafEntity extends Monster implements IAnimatable {
 	

@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.compat;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
+
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;

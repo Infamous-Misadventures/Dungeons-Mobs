@@ -1,7 +1,10 @@
 package com.infamous.dungeons_mobs.items;
 
+import java.util.function.Predicate;
+
 import com.infamous.dungeons_mobs.entities.projectiles.BlueNethershroomEntity;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
+
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -12,8 +15,6 @@ import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
-
-import java.util.function.Predicate;
 
 public class BlueNethershroomItem extends ProjectileWeaponItem {
    public BlueNethershroomItem(Item.Properties properties) {

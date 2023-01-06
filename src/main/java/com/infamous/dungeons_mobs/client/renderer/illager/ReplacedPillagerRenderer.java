@@ -1,11 +1,18 @@
 package com.infamous.dungeons_mobs.client.renderer.illager;
 
+import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
+
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import com.infamous.dungeons_mobs.client.models.illager.ReplacedPillagerModel;
 import com.infamous.dungeons_mobs.client.renderer.util.ModExtentedGeoReplacedEntityRenderer;
 import com.infamous.dungeons_mobs.entities.illagers.ReplacedPillagerEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
+
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
@@ -19,11 +26,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.example.client.DefaultBipedBoneIdents;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
-
-import javax.annotation.Nullable;
-import java.util.List;
-
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
 public class ReplacedPillagerRenderer extends ModExtentedGeoReplacedEntityRenderer<ReplacedPillagerEntity> {
     public ReplacedPillagerRenderer(EntityRendererProvider.Context renderManager) {

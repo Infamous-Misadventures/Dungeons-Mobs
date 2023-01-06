@@ -1,15 +1,16 @@
 package com.infamous.dungeons_mobs.network.datasync;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import com.infamous.dungeons_mobs.DungeonsMobs;
+
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 public class ModDataSerializers {
 

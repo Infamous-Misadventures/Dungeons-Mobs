@@ -1,22 +1,22 @@
 package com.infamous.dungeons_mobs.data;
 
-import baguchan.enchantwithmob.EnchantWithMob;
-import baguchan.enchantwithmob.capability.MobEnchantCapability;
-import baguchan.enchantwithmob.mobenchant.MobEnchant;
-import baguchan.enchantwithmob.registry.MobEnchants;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import com.infamous.dungeons_libraries.data.util.MergeableCodecDataManager;
 import com.infamous.dungeons_mobs.DungeonsMobs;
+
+import baguchan.enchantwithmob.EnchantWithMob;
+import baguchan.enchantwithmob.capability.MobEnchantCapability;
+import baguchan.enchantwithmob.registry.MobEnchants;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Mod.EventBusSubscriber(modid = DungeonsMobs.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class AncientDataHelper {

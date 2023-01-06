@@ -1,17 +1,16 @@
 package com.infamous.dungeons_mobs.mobenchants;
 
-import baguchan.enchantwithmob.mobenchant.MobEnchant;
+import static com.infamous.dungeons_mobs.mobenchants.NewMobEnchantUtils.executeIfPresentWithLevel;
+import static com.infamous.dungeons_mobs.mod.ModMobEnchants.ECHO;
+
 import com.infamous.dungeons_mobs.utils.EchoDamageSource;
+
+import baguchan.enchantwithmob.mobenchant.MobEnchant;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-
-import static com.infamous.dungeons_mobs.mobenchants.NewMobEnchantUtils.executeIfPresentWithLevel;
-import static com.infamous.dungeons_mobs.mod.ModMobEnchants.ECHO;
-
-import baguchan.enchantwithmob.mobenchant.MobEnchant.Properties;
 
 public class EchoMobEnchant extends MobEnchant {
 

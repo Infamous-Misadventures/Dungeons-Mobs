@@ -2,6 +2,7 @@ package com.infamous.dungeons_mobs.interfaces;
 
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.tags.BiomeTags;
+
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.raid.Raider;

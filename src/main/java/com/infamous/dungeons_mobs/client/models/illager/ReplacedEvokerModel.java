@@ -1,6 +1,9 @@
 package com.infamous.dungeons_mobs.client.models.illager;
 
+import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
+
 import com.infamous.dungeons_mobs.entities.illagers.ReplacedEvokerEntity;
+
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -12,8 +15,6 @@ import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
 import software.bernie.geckolib3.resource.GeckoLibCache;
-
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
 // Model and animation received from CQR and DerToaster
 public class ReplacedEvokerModel extends AnimatedGeoModel {

@@ -1,6 +1,10 @@
 package com.infamous.dungeons_mobs.tasks;
 
+import java.util.function.BiConsumer;
+import java.util.function.Predicate;
+
 import com.google.common.collect.ImmutableMap;
+
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -9,11 +13,7 @@ import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
 import net.minecraft.world.entity.ai.behavior.EntityTracker;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-
-import java.util.function.BiConsumer;
-import java.util.function.Predicate;
 
 public class ThrowAtTargetTask<E extends Mob> extends Behavior<E> {
    private int attackDelay = 0;

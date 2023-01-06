@@ -1,10 +1,13 @@
 package com.infamous.dungeons_mobs.entities.illagers;
 
+import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
+
 import com.infamous.dungeons_libraries.utils.GoalUtils;
 import com.infamous.dungeons_mobs.capabilities.animatedprops.AnimatedProps;
 import com.infamous.dungeons_mobs.capabilities.animatedprops.AnimatedPropsHelper;
 import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
 import com.infamous.dungeons_mobs.goals.ReplacedModdedAttackGoal;
+
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -15,8 +18,6 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
 @Mod.EventBusSubscriber(modid = MODID)
 public class ReplacedIllagerEvents {

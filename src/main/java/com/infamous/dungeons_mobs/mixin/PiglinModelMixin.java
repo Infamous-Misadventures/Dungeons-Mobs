@@ -1,6 +1,13 @@
 package com.infamous.dungeons_mobs.mixin;
 
+import org.objectweb.asm.Opcodes;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
 import com.infamous.dungeons_mobs.interfaces.ISmartCrossbowUser;
+
 import net.minecraft.client.model.AnimationUtils;
 import net.minecraft.client.model.PiglinModel;
 import net.minecraft.client.model.PlayerModel;
@@ -8,11 +15,6 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.ZombifiedPiglin;
 import net.minecraft.world.item.CrossbowItem;
-import org.objectweb.asm.Opcodes;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PiglinModel.class)
 public abstract class PiglinModelMixin<T extends Mob> extends PlayerModel<T> {

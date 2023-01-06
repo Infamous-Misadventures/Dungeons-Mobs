@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.goals;
 
 import com.infamous.dungeons_mobs.interfaces.IWebShooter;
+
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 

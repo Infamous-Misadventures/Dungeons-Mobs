@@ -3,6 +3,7 @@ package com.infamous.dungeons_mobs.entities.water;
 import com.infamous.dungeons_mobs.entities.jungle.QuickGrowingVineEntity;
 import com.infamous.dungeons_mobs.entities.summonables.AreaDamageEntity;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
+
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;

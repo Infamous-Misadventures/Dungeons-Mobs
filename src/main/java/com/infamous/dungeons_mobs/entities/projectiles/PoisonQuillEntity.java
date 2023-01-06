@@ -4,6 +4,7 @@ import com.google.common.base.MoreObjects;
 import com.infamous.dungeons_mobs.mod.ModDamageSources;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
+
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -29,9 +30,6 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
-
-import net.minecraft.world.entity.Entity.MovementEmission;
-import net.minecraft.world.entity.Entity.RemovalReason;
 
 public class PoisonQuillEntity extends StraightMovingProjectileEntity implements IAnimatable {
 

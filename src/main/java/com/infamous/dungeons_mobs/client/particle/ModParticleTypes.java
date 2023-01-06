@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.client.particle;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
+
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraftforge.registries.DeferredRegister;

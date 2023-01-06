@@ -1,16 +1,14 @@
 package com.infamous.dungeons_mobs.mobenchants;
 
-import baguchan.enchantwithmob.mobenchant.MobEnchant;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.event.entity.living.LivingDamageEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-
 import static com.infamous.dungeons_libraries.utils.AreaOfEffectHelper.applyToNearbyEntities;
 import static com.infamous.dungeons_libraries.utils.AreaOfEffectHelper.getCanHealPredicate;
 import static com.infamous.dungeons_mobs.mobenchants.NewMobEnchantUtils.executeIfPresentWithLevel;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchants.HEALS_ALLIES;
 
-import baguchan.enchantwithmob.mobenchant.MobEnchant.Properties;
+import baguchan.enchantwithmob.mobenchant.MobEnchant;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.event.entity.living.LivingDamageEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class HealsAlliesMobEnchant extends MobEnchant {
 

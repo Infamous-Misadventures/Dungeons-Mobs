@@ -1,10 +1,13 @@
 package com.infamous.dungeons_mobs.client.renderer.undead;
 
+import javax.annotation.Nullable;
+
 import com.infamous.dungeons_mobs.client.models.undead.SkeletonVanguardModel;
 import com.infamous.dungeons_mobs.entities.undead.SkeletonVanguardEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
+
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -19,11 +22,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import software.bernie.example.client.DefaultBipedBoneIdents;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
-import software.bernie.geckolib3.item.GeoArmorItem;
 import software.bernie.geckolib3.renderers.geo.ExtendedGeoEntityRenderer;
-import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
-
-import javax.annotation.Nullable;
 public class SkeletonVanguardRenderer extends ExtendedGeoEntityRenderer<SkeletonVanguardEntity> {
     public SkeletonVanguardRenderer(EntityRendererProvider.Context renderManager) {
         super(renderManager, new SkeletonVanguardModel());

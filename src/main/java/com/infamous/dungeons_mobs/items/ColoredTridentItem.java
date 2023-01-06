@@ -1,18 +1,16 @@
 package com.infamous.dungeons_mobs.items;
 
+import java.util.function.Consumer;
+
 import com.infamous.dungeons_mobs.interfaces.IHasInventorySprite;
 import com.infamous.dungeons_mobs.items.shield.CustomISTER;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.TridentItem;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.common.util.NonNullLazy;
-
-import java.util.concurrent.Callable;
-import java.util.function.Consumer;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class ColoredTridentItem extends TridentItem implements IHasInventorySprite {
     private final DyeColor tridentColor;

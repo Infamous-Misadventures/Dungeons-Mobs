@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.client.renderer.projectiles;
 
 import com.infamous.dungeons_mobs.entities.projectiles.BlueNethershroomEntity;
+
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraftforge.api.distmarker.Dist;

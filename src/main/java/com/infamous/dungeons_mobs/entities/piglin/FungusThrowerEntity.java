@@ -1,5 +1,7 @@
 package com.infamous.dungeons_mobs.entities.piglin;
 
+import javax.annotation.Nullable;
+
 import com.infamous.dungeons_mobs.entities.piglin.ai.FungusThrowerAi;
 import com.infamous.dungeons_mobs.interfaces.ISmartCrossbowUser;
 import com.infamous.dungeons_mobs.items.BlueNethershroomItem;
@@ -8,6 +10,7 @@ import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModItems;
 import com.infamous.dungeons_mobs.utils.PiglinHelper;
 import com.mojang.serialization.Dynamic;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -22,8 +25,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-
-import javax.annotation.Nullable;
 
 public class FungusThrowerEntity extends Piglin {
 

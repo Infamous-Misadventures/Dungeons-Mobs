@@ -4,6 +4,7 @@ import com.infamous.dungeons_mobs.entities.piglin.ai.FungusThrowerAi;
 import com.infamous.dungeons_mobs.goals.SimpleRangedAttackGoal;
 import com.infamous.dungeons_mobs.items.BlueNethershroomItem;
 import com.infamous.dungeons_mobs.mod.ModItems;
+
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntityType;

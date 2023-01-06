@@ -1,12 +1,12 @@
 package com.infamous.dungeons_mobs.capabilities.ancient;
 
+import static com.infamous.dungeons_mobs.capabilities.ModCapabilities.ANCIENT_CAPABILITY;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.world.BossEvent;
 import net.minecraftforge.common.util.INBTSerializable;
-
-import static com.infamous.dungeons_mobs.capabilities.ModCapabilities.ANCIENT_CAPABILITY;
 
 public class Ancient implements INBTSerializable<CompoundTag> {
     private boolean ancient = false;

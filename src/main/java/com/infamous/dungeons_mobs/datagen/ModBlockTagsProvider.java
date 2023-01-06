@@ -1,10 +1,10 @@
 package com.infamous.dungeons_mobs.datagen;
 
+import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
+
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
-
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
 public class ModBlockTagsProvider extends BlockTagsProvider {
 

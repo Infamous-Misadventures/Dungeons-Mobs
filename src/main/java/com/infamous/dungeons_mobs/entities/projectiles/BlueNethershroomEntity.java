@@ -1,9 +1,14 @@
 package com.infamous.dungeons_mobs.entities.projectiles;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModItems;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 import com.infamous.dungeons_mobs.utils.PotionHelper;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -24,11 +29,6 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkHooks;
-
-import javax.annotation.Nullable;
-import java.util.List;
-
-import net.minecraft.world.entity.Entity.RemovalReason;
 
 @OnlyIn(
    value = Dist.CLIENT,

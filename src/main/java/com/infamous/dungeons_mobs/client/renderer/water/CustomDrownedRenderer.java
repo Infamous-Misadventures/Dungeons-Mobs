@@ -1,10 +1,14 @@
 package com.infamous.dungeons_mobs.client.renderer.water;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.infamous.dungeons_libraries.capabilities.elite.EliteMob;
 import com.infamous.dungeons_libraries.capabilities.elite.EliteMobHelper;
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
+
 import net.minecraft.client.model.DrownedModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.AbstractZombieRenderer;
@@ -13,9 +17,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.monster.Drowned;
 import net.minecraft.world.entity.monster.Zombie;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class CustomDrownedRenderer extends AbstractZombieRenderer<Drowned, DrownedModel<Drowned>> {
     private static final ResourceLocation DROWNED_LOCATION = new ResourceLocation("textures/entity/zombie/drowned.png");

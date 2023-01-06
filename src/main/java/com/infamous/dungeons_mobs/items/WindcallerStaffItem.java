@@ -9,6 +9,7 @@ import com.infamous.dungeons_mobs.interfaces.IHasInventorySprite;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 import com.infamous.dungeons_mobs.network.NetworkHandler;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResultHolder;
@@ -16,8 +17,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.PacketDistributor;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class WindcallerStaffItem extends ArtifactItem implements IHasInventorySprite {
     public WindcallerStaffItem(Properties properties) {

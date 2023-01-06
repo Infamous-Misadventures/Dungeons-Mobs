@@ -1,6 +1,9 @@
 package com.infamous.dungeons_mobs.entities.illagers;
 
+import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
+
 import com.infamous.dungeons_mobs.client.renderer.util.IGeoReplacedEntity;
+
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.Evoker;
@@ -12,8 +15,6 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
-
-import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
 public class ReplacedEvokerEntity implements IAnimatable, IGeoReplacedEntity {
 

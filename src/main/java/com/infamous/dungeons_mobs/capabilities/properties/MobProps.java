@@ -1,9 +1,9 @@
 package com.infamous.dungeons_mobs.capabilities.properties;
 
+import static com.infamous.dungeons_mobs.capabilities.ModCapabilities.CONVERTIBLE_CAPABILITY;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.util.INBTSerializable;
-
-import static com.infamous.dungeons_mobs.capabilities.ModCapabilities.CONVERTIBLE_CAPABILITY;
 
 public class MobProps implements INBTSerializable<CompoundTag> {
     private int burnNearbyTimer;

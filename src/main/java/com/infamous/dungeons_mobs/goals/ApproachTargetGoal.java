@@ -1,11 +1,11 @@
 package com.infamous.dungeons_mobs.goals;
 
+import java.util.EnumSet;
+
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
-
-import java.util.EnumSet;
 
 public class ApproachTargetGoal extends MeleeAttackGoal {
 	

@@ -3,6 +3,7 @@ package com.infamous.dungeons_mobs.utils;
 import com.infamous.dungeons_mobs.entities.jungle.AbstractVineEntity;
 import com.infamous.dungeons_mobs.entities.summonables.ConstructEntity;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
+
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

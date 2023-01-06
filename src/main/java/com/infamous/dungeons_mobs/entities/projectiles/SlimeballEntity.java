@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.entities.projectiles;
 
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
+
 import net.minecraft.Util;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -24,8 +25,6 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkHooks;
-
-import net.minecraft.world.entity.Entity.RemovalReason;
 
 @OnlyIn(
    value = Dist.CLIENT,

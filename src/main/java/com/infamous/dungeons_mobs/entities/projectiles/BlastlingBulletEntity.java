@@ -4,6 +4,7 @@ import com.infamous.dungeons_mobs.entities.ender.AbstractEnderlingEntity;
 import com.infamous.dungeons_mobs.mod.ModDamageSources;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
+
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.world.damagesource.DamageSource;
@@ -14,8 +15,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.network.NetworkHooks;
-
-import net.minecraft.world.entity.Entity.RemovalReason;
 
 public class BlastlingBulletEntity extends NecromancerOrbEntity {
 

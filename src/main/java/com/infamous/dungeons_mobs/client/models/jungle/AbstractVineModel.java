@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.client.models.jungle;
 
 import com.infamous.dungeons_mobs.entities.jungle.AbstractVineEntity;
+
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.molang.MolangParser;

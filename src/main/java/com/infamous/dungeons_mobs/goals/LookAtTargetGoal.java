@@ -1,9 +1,9 @@
 package com.infamous.dungeons_mobs.goals;
 
+import java.util.EnumSet;
+
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
-
-import java.util.EnumSet;
 
 public class LookAtTargetGoal extends Goal {
    protected final Mob mob;

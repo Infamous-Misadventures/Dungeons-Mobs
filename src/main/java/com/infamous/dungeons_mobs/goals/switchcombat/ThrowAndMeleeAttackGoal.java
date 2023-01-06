@@ -1,5 +1,7 @@
 package com.infamous.dungeons_mobs.goals.switchcombat;
 
+import java.util.EnumSet;
+
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
@@ -8,10 +10,6 @@ import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.item.EggItem;
 import net.minecraft.world.item.SnowballItem;
-
-import java.util.EnumSet;
-
-import net.minecraft.world.entity.ai.goal.Goal.Flag;
 
 public class ThrowAndMeleeAttackGoal<T extends PathfinderMob & RangedAttackMob> extends MeleeAttackGoal
 {

@@ -1,15 +1,16 @@
 package com.infamous.dungeons_mobs.network.message;
 
+import java.util.function.Supplier;
+
 import com.infamous.dungeons_mobs.capabilities.animatedprops.AnimatedProps;
 import com.infamous.dungeons_mobs.capabilities.animatedprops.AnimatedPropsHelper;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
 
 public class AnimatedPropsMessage {
     private int entityId;

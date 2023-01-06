@@ -1,10 +1,11 @@
 package com.infamous.dungeons_mobs.data;
 
+import java.util.List;
+
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.resources.ResourceLocation;
 
-import java.util.List;
+import net.minecraft.resources.ResourceLocation;
 
 public class UniqueAncientData {
     public static final Codec<UniqueAncientData> CODEC = RecordCodecBuilder.create(builder ->

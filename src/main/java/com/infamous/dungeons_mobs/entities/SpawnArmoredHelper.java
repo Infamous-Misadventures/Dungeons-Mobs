@@ -2,6 +2,7 @@ package com.infamous.dungeons_mobs.entities;
 
 import com.infamous.dungeons_libraries.items.gearconfig.ArmorSet;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
+
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;

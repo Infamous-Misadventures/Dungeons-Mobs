@@ -1,5 +1,7 @@
 package com.infamous.dungeons_mobs.capabilities;
 
+import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
+
 import com.infamous.dungeons_mobs.capabilities.ancient.Ancient;
 import com.infamous.dungeons_mobs.capabilities.ancient.AttacherAncient;
 import com.infamous.dungeons_mobs.capabilities.animatedprops.AnimatedProps;
@@ -8,6 +10,7 @@ import com.infamous.dungeons_mobs.capabilities.convertible.AttacherConvertible;
 import com.infamous.dungeons_mobs.capabilities.convertible.Convertible;
 import com.infamous.dungeons_mobs.capabilities.properties.AttacherMobProps;
 import com.infamous.dungeons_mobs.capabilities.properties.MobProps;
+
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
@@ -17,8 +20,6 @@ import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModCapabilities {

@@ -18,8 +18,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
-import net.minecraft.world.item.Item.Properties;
-
 public abstract class AbstractStaffItem extends Item {
 
     private static final double RAYTRACE_DISTANCE = 256;

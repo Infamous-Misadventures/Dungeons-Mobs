@@ -1,13 +1,14 @@
 package com.infamous.dungeons_mobs.goals;
 
+import java.util.EnumSet;
+
 import com.infamous.dungeons_mobs.utils.ModProjectileHelper;
+
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.item.BowItem;
-
-import java.util.EnumSet;
 
 public class ModdedRangedBowAttackGoal<T extends Monster & RangedAttackMob> extends Goal {
    private final T entity;

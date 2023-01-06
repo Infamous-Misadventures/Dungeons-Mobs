@@ -1,8 +1,15 @@
 package com.infamous.dungeons_mobs.client.renderer.illager;
 
+import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
+
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
+
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -24,11 +31,6 @@ import software.bernie.geckolib3.item.GeoArmorItem;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.ExtendedGeoEntityRenderer;
 import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
-
-import javax.annotation.Nullable;
-import java.util.List;
-
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
 public class DefaultIllagerRenderer<T extends Mob & IAnimatable> extends ExtendedGeoEntityRenderer<T> {
     private float scaleFactor = 0.9375F;

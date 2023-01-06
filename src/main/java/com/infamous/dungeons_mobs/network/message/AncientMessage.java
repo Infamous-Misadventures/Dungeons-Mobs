@@ -1,15 +1,16 @@
 package com.infamous.dungeons_mobs.network.message;
 
+import java.util.function.Supplier;
+
 import com.infamous.dungeons_mobs.capabilities.ancient.Ancient;
 import com.infamous.dungeons_mobs.capabilities.ancient.AncientHelper;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
 
 public class AncientMessage {
     private final int entityId;

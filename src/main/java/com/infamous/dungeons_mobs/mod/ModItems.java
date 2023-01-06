@@ -1,15 +1,37 @@
 package com.infamous.dungeons_mobs.mod;
 
+import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Supplier;
+
 import com.infamous.dungeons_libraries.DungeonsLibraries;
 import com.infamous.dungeons_libraries.items.gearconfig.ArmorGear;
 import com.infamous.dungeons_libraries.items.gearconfig.ArmorSet;
 import com.infamous.dungeons_mobs.DungeonsMobs;
-import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
-import com.infamous.dungeons_mobs.items.*;
-import com.infamous.dungeons_mobs.items.armor.*;
+import com.infamous.dungeons_mobs.items.BlueNethershroomItem;
+import com.infamous.dungeons_mobs.items.ColoredTridentItem;
+import com.infamous.dungeons_mobs.items.CustomArmorMaterial;
+import com.infamous.dungeons_mobs.items.GeomancerStaffItem;
+import com.infamous.dungeons_mobs.items.MountaineerAxeItem;
+import com.infamous.dungeons_mobs.items.NecromancerStaffItem;
+import com.infamous.dungeons_mobs.items.NecromancerTridentItem;
+import com.infamous.dungeons_mobs.items.PiglinHelmetItem;
+import com.infamous.dungeons_mobs.items.PillagerHelmetItem;
+import com.infamous.dungeons_mobs.items.VindicatorHelmetItem;
+import com.infamous.dungeons_mobs.items.WindcallerStaffItem;
+import com.infamous.dungeons_mobs.items.WoodenLadleItem;
+import com.infamous.dungeons_mobs.items.armor.DrownedNecromancerArmorGear;
+import com.infamous.dungeons_mobs.items.armor.IceologerArmorGear;
+import com.infamous.dungeons_mobs.items.armor.IllusionerArmorGear;
+import com.infamous.dungeons_mobs.items.armor.MageArmorGear;
+import com.infamous.dungeons_mobs.items.armor.NecromancerArmorGear;
+import com.infamous.dungeons_mobs.items.armor.WindcallerArmorGear;
 import com.infamous.dungeons_mobs.items.shield.RoyalGuardShieldItem;
 import com.infamous.dungeons_mobs.items.shield.VanguardShieldItem;
 import com.infamous.dungeons_mobs.utils.GeneralHelper;
+
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorMaterials;
@@ -19,12 +41,6 @@ import net.minecraft.world.item.Tiers;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Supplier;
-
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
 
 public class ModItems {

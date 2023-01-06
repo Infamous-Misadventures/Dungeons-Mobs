@@ -1,13 +1,20 @@
 package com.infamous.dungeons_mobs.client.models.illager;
 
+import static com.infamous.dungeons_mobs.entities.illagers.IllagerArmsUtil.armorHasCrossedArms;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.infamous.dungeons_mobs.entities.illagers.MountaineerEntity;
+
 import net.minecraft.client.model.AnimationUtils;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -17,10 +24,6 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraft.world.item.UseAnim;
-
-import static com.infamous.dungeons_mobs.entities.illagers.IllagerArmsUtil.armorHasCrossedArms;
-
-import net.minecraft.client.model.HumanoidModel.ArmPose;
 
 public class IllagerBipedModel<T extends AbstractIllager> extends HumanoidModel<T> {
     public ModelPart nose = this.head.getChild("nose");

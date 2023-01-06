@@ -1,6 +1,9 @@
 package com.infamous.dungeons_mobs.compat;
 
+import java.util.function.Supplier;
+
 import com.infamous.dungeons_mobs.DungeonsMobs;
+
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -9,8 +12,6 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.function.Supplier;
 
 @Mod.EventBusSubscriber(modid = DungeonsMobs.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class DungeonsGearCompat {

@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.client.renderer.layers;
 
 import com.infamous.dungeons_mobs.entities.creepers.IcyCreeperEntity;
+
 import net.minecraft.client.model.CreeperModel;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.entity.RenderLayerParent;

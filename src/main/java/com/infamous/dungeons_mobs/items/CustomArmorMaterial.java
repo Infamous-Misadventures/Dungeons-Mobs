@@ -1,5 +1,7 @@
 package com.infamous.dungeons_mobs.items;
 
+import java.util.function.Supplier;
+
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.LazyLoadedValue;
@@ -9,8 +11,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.Tags;
-
-import java.util.function.Supplier;
 
 public enum CustomArmorMaterial implements ArmorMaterial {
     PURE_NETHERITE("pure_netherite", 15, new int[]{2, 5, 6, 2}, 9, SoundEvents.ARMOR_EQUIP_NETHERITE, 0.0F, 0.0F, () -> {

@@ -4,6 +4,7 @@ import com.infamous.dungeons_mobs.client.models.illager.IllagerBipedModel;
 import com.infamous.dungeons_mobs.entities.illagers.IllagerArmsUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;

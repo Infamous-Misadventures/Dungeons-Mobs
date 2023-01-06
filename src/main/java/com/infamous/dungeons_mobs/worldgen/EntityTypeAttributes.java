@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.worldgen;
 
-import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
+import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
+
 import com.infamous.dungeons_mobs.entities.blaze.WildfireEntity;
 import com.infamous.dungeons_mobs.entities.creepers.IcyCreeperEntity;
 import com.infamous.dungeons_mobs.entities.ender.BlastlingEntity;
@@ -8,7 +9,15 @@ import com.infamous.dungeons_mobs.entities.ender.EndersentEntity;
 import com.infamous.dungeons_mobs.entities.ender.SnarelingEntity;
 import com.infamous.dungeons_mobs.entities.ender.WatchlingEntity;
 import com.infamous.dungeons_mobs.entities.golem.SquallGolemEntity;
-import com.infamous.dungeons_mobs.entities.illagers.*;
+import com.infamous.dungeons_mobs.entities.illagers.DungeonsIllusionerEntity;
+import com.infamous.dungeons_mobs.entities.illagers.GeomancerEntity;
+import com.infamous.dungeons_mobs.entities.illagers.IceologerEntity;
+import com.infamous.dungeons_mobs.entities.illagers.IllusionerCloneEntity;
+import com.infamous.dungeons_mobs.entities.illagers.MageCloneEntity;
+import com.infamous.dungeons_mobs.entities.illagers.MageEntity;
+import com.infamous.dungeons_mobs.entities.illagers.MountaineerEntity;
+import com.infamous.dungeons_mobs.entities.illagers.RoyalGuardEntity;
+import com.infamous.dungeons_mobs.entities.illagers.WindcallerEntity;
 import com.infamous.dungeons_mobs.entities.jungle.LeapleafEntity;
 import com.infamous.dungeons_mobs.entities.jungle.PoisonQuillVineEntity;
 import com.infamous.dungeons_mobs.entities.jungle.QuickGrowingVineEntity;
@@ -18,27 +27,23 @@ import com.infamous.dungeons_mobs.entities.redstone.RedstoneGolemEntity;
 import com.infamous.dungeons_mobs.entities.slime.ConjuredSlimeEntity;
 import com.infamous.dungeons_mobs.entities.summonables.GeomancerBombEntity;
 import com.infamous.dungeons_mobs.entities.summonables.GeomancerWallEntity;
-import com.infamous.dungeons_mobs.entities.undead.*;
+import com.infamous.dungeons_mobs.entities.undead.FrozenZombieEntity;
+import com.infamous.dungeons_mobs.entities.undead.JungleZombieEntity;
+import com.infamous.dungeons_mobs.entities.undead.MossySkeletonEntity;
+import com.infamous.dungeons_mobs.entities.undead.NecromancerEntity;
+import com.infamous.dungeons_mobs.entities.undead.SkeletonVanguardEntity;
+import com.infamous.dungeons_mobs.entities.undead.WraithEntity;
 import com.infamous.dungeons_mobs.entities.water.DrownedNecromancerEntity;
 import com.infamous.dungeons_mobs.entities.water.PoisonAnemoneEntity;
 import com.infamous.dungeons_mobs.entities.water.QuickGrowingKelpEntity;
 import com.infamous.dungeons_mobs.entities.water.SunkenSkeletonEntity;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
+
 import net.minecraft.world.entity.monster.ZombifiedPiglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
-import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
-import static net.minecraft.world.entity.EntityType.HUSK;
 
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class EntityTypeAttributes {

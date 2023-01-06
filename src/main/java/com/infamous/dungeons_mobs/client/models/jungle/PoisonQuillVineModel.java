@@ -2,6 +2,7 @@ package com.infamous.dungeons_mobs.client.models.jungle;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.entities.jungle.AbstractVineEntity;
+
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;

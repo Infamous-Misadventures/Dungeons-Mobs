@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.items;
 
 import com.infamous.dungeons_mobs.mod.ModItems;
+
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 

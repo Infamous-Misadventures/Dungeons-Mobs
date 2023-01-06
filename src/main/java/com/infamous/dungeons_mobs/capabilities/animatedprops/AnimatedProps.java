@@ -1,10 +1,11 @@
 package com.infamous.dungeons_mobs.capabilities.animatedprops;
 
+import static com.infamous.dungeons_mobs.capabilities.ModCapabilities.ANIMATED_PROPS_CAPABILITY;
+
 import com.infamous.dungeons_mobs.entities.AnimatableMeleeAttackMob;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.util.INBTSerializable;
-
-import static com.infamous.dungeons_mobs.capabilities.ModCapabilities.ANIMATED_PROPS_CAPABILITY;
 
 public class AnimatedProps implements INBTSerializable<CompoundTag>, AnimatableMeleeAttackMob {
     public int attackAnimationTick = 0;

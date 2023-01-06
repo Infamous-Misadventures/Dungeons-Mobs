@@ -1,7 +1,16 @@
 package com.infamous.dungeons_mobs.compat;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
-import com.infamous.dungeons_mobs.mobenchants.*;
+import com.infamous.dungeons_mobs.mobenchants.BurningMobEnchant;
+import com.infamous.dungeons_mobs.mobenchants.ChillingMobEnchant;
+import com.infamous.dungeons_mobs.mobenchants.DeflectMobEnchant;
+import com.infamous.dungeons_mobs.mobenchants.EchoMobEnchant;
+import com.infamous.dungeons_mobs.mobenchants.GravityPulseMobEnchant;
+import com.infamous.dungeons_mobs.mobenchants.HealsAlliesMobEnchant;
+import com.infamous.dungeons_mobs.mobenchants.RadianceMobEnchant;
+import com.infamous.dungeons_mobs.mobenchants.RegenerationMobEnchant;
+import com.infamous.dungeons_mobs.mobenchants.RushMobEnchant;
+
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;

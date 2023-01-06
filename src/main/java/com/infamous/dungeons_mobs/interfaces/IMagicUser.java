@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.interfaces;
 
 import com.infamous.dungeons_mobs.entities.magic.MagicType;
+
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;

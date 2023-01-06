@@ -1,10 +1,17 @@
 package com.infamous.dungeons_mobs.entities.slime;
 
+import java.util.EnumSet;
+
 import com.infamous.dungeons_mobs.entities.projectiles.SlimeballEntity;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
+
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -15,8 +22,6 @@ import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-
-import java.util.EnumSet;
 
 public class ConjuredSlimeEntity extends Slime implements RangedAttackMob {
 

@@ -1,12 +1,13 @@
 package com.infamous.dungeons_mobs.data;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.resources.ResourceLocation;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+
+import net.minecraft.resources.ResourceLocation;
 
 public class MobAncientData {
     public static final List<String> defaultAdjectives = Arrays.asList("The Abominable", "The Wretched", "The Harrowing", "The Devastating", "The Ominous", "The Grim", "The Terrible");

@@ -6,6 +6,7 @@ package com.infamous.dungeons_mobs.client.models.ocean;// Made with Blockbench 3
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
 import com.infamous.dungeons_mobs.entities.water.DrownedNecromancerEntity;
+
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;

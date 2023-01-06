@@ -1,9 +1,13 @@
 package com.infamous.dungeons_mobs.client.renderer.redstone;
 
+import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
+import static com.infamous.dungeons_mobs.client.models.geom.ModModelLayers.REDSTONE_CUBE;
+
 import com.infamous.dungeons_mobs.client.models.redstone.RedstoneCubeModel;
 import com.infamous.dungeons_mobs.entities.redstone.RedstoneCubeEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
+
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
@@ -11,9 +15,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
-import static com.infamous.dungeons_mobs.client.models.geom.ModModelLayers.REDSTONE_CUBE;
 
 @OnlyIn(Dist.CLIENT)
 public class RedstoneCubeRenderer extends MobRenderer<RedstoneCubeEntity, RedstoneCubeModel<RedstoneCubeEntity>> {

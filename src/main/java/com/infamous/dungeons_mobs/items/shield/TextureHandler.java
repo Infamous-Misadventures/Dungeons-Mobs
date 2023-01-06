@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.items.shield;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
+
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.TextureStitchEvent;

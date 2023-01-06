@@ -1,5 +1,7 @@
 package com.infamous.dungeons_mobs.client.models.geom;
 
+import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
+
 import com.infamous.dungeons_mobs.client.models.FungusSackModel;
 import com.infamous.dungeons_mobs.client.models.armor.IllagerArmorModel;
 import com.infamous.dungeons_mobs.client.models.armor.PillagerHelmetModel;
@@ -9,14 +11,13 @@ import com.infamous.dungeons_mobs.client.models.illager.IllagerBipedModel;
 import com.infamous.dungeons_mobs.client.models.projectile.SnarelingGlobModel;
 import com.infamous.dungeons_mobs.client.models.redstone.RedstoneCubeModel;
 import com.infamous.dungeons_mobs.client.models.undead.SunkenSkeletonModel;
+
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ModModelLayers {
