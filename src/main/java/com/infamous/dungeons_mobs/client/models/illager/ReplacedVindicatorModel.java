@@ -31,11 +31,11 @@ public class ReplacedVindicatorModel extends AnimatedGeoModel {
     public ResourceLocation getTextureResource(Object entity) {
         return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/vindicator.png");
     }
-
+    
     @Override
-    public void setCustomAnimations(Object entity, int uniqueID, AnimationEvent customPredicate) {
-        super.setCustomAnimations((ReplacedVindicatorEntity) entity, uniqueID, customPredicate);
-
+    public void codeAnimations(IAnimatable entity, Integer uniqueID, AnimationEvent customPredicate) {
+    	super.codeAnimations((ReplacedVindicatorEntity) entity, uniqueID, customPredicate);
+    	
         IBone head = this.getAnimationProcessor().getBone("bipedHead");
         IBone illagerArms = this.getAnimationProcessor().getBone("illagerArms");
         

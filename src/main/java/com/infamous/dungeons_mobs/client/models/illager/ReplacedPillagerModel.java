@@ -32,11 +32,11 @@ public class ReplacedPillagerModel extends AnimatedGeoModel {
 //        return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/pillager.png");
         return new ResourceLocation("textures/entity/illager/pillager.png");
     }
-
+    
     @Override
-    public void setCustomAnimations(Object entity, int uniqueID, AnimationEvent customPredicate) {
-        super.setCustomAnimations((ReplacedPillagerEntity) entity, uniqueID, customPredicate);
-
+    public void codeAnimations(IAnimatable entity, Integer uniqueID, AnimationEvent customPredicate) {
+    	super.codeAnimations((ReplacedPillagerEntity) entity, uniqueID, customPredicate);
+    	
         IBone head = this.getAnimationProcessor().getBone("bipedHead");
         IBone illagerArms = this.getAnimationProcessor().getBone("illagerArms");
 

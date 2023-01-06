@@ -33,11 +33,10 @@ public class ReplacedEvokerModel extends AnimatedGeoModel {
 //        return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/pillager.png");
         return new ResourceLocation(MODID, "textures/entity/illager/evoker.png");
     }
-
+    
     @Override
-    public void setCustomAnimations(Object entity, int uniqueID, AnimationEvent customPredicate) {
-        super.setCustomAnimations((ReplacedEvokerEntity) entity, uniqueID, customPredicate);
-
+    public void codeAnimations(IAnimatable entity, Integer uniqueID, AnimationEvent customPredicate) {
+    	super.codeAnimations((ReplacedEvokerEntity) entity, uniqueID, customPredicate);
         IBone head = this.getAnimationProcessor().getBone("bipedHead");
         IBone illagerArms = this.getAnimationProcessor().getBone("illagerArms");
         
