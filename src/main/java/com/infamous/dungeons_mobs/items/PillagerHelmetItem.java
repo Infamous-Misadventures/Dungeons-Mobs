@@ -18,39 +18,41 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 
 public class PillagerHelmetItem extends ArmorItem {
-    private final boolean isDiamond;
+	private final boolean isDiamond;
 
-    public PillagerHelmetItem(ArmorMaterial materialIn, EquipmentSlot slot, Properties builderIn, boolean isDiamondIn) {
-        super(materialIn, slot, builderIn);
-        this.isDiamond = isDiamondIn;
-    }
+	public PillagerHelmetItem(ArmorMaterial materialIn, EquipmentSlot slot, Properties builderIn, boolean isDiamondIn) {
+		super(materialIn, slot, builderIn);
+		this.isDiamond = isDiamondIn;
+	}
 
-    @Override
-    public void initializeClient(java.util.function.Consumer<net.minecraftforge.client.extensions.common.IClientItemExtensions> consumer) {
-        consumer.accept(new IClientItemExtensions() {
-            private PillagerHelmetModel model;
+	@Override
+	public void initializeClient(
+			java.util.function.Consumer<net.minecraftforge.client.extensions.common.IClientItemExtensions> consumer) {
+		consumer.accept(new IClientItemExtensions() {
+			private PillagerHelmetModel model;
 
-            @Nullable
-            @Override
-            public net.minecraft.client.model.HumanoidModel<?> getHumanoidArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot armorSlot, net.minecraft.client.model.HumanoidModel<?> _default) {
-                if (null == model) {
-                    model = new PillagerHelmetModel(
-                            net.minecraft.client.Minecraft.getInstance().getEntityModels()
-                                    .bakeLayer(PILLAGER_HELMET),
-                            entityLiving);
-                }
-                return model;
-            }
-        });
-    }
+			@Nullable
+			@Override
+			public net.minecraft.client.model.HumanoidModel<?> getHumanoidArmorModel(LivingEntity entityLiving,
+					ItemStack itemStack, EquipmentSlot armorSlot,
+					net.minecraft.client.model.HumanoidModel<?> _default) {
+				if (null == model) {
+					model = new PillagerHelmetModel(
+							net.minecraft.client.Minecraft.getInstance().getEntityModels().bakeLayer(PILLAGER_HELMET),
+							entityLiving);
+				}
+				return model;
+			}
+		});
+	}
 
-    @Nullable
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-        if (this.isDiamond) {
-            return MODID + ":textures/models/armor/diamond_pillager_helmet.png";
-        }
-        return MODID + ":textures/models/armor/gold_pillager_helmet.png";
-    }
+	@Nullable
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
+		if (this.isDiamond) {
+			return MODID + ":textures/models/armor/diamond_pillager_helmet.png";
+		}
+		return MODID + ":textures/models/armor/gold_pillager_helmet.png";
+	}
 }

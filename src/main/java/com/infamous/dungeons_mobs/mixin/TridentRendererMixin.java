@@ -18,17 +18,18 @@ import net.minecraft.world.item.ItemStack;
 
 @Mixin(ThrownTridentRenderer.class)
 public abstract class TridentRendererMixin extends EntityRenderer<ThrownTrident> {
-    protected TridentRendererMixin(EntityRendererProvider.Context p_i46179_1_) {
-        super(p_i46179_1_);
-    }
+	protected TridentRendererMixin(EntityRendererProvider.Context p_i46179_1_) {
+		super(p_i46179_1_);
+	}
 
-    @Inject(at = @At("RETURN"), method = "getTextureLocation", cancellable = true)
-    private void checkColoredTexture(ThrownTrident tridentEntity, CallbackInfoReturnable<ResourceLocation> cir){
-        if(tridentEntity instanceof IHasItemStackData){
-            ItemStack dataItem = ((IHasItemStackData) tridentEntity).getDataItem();
-            if(dataItem.getItem() instanceof ColoredTridentItem){
-                cir.setReturnValue(CustomISTER.getTridentTexture(((ColoredTridentItem) dataItem.getItem()).getTridentColor()));
-            }
-        }
-    }
+	@Inject(at = @At("RETURN"), method = "getTextureLocation", cancellable = true)
+	private void checkColoredTexture(ThrownTrident tridentEntity, CallbackInfoReturnable<ResourceLocation> cir) {
+		if (tridentEntity instanceof IHasItemStackData) {
+			ItemStack dataItem = ((IHasItemStackData) tridentEntity).getDataItem();
+			if (dataItem.getItem() instanceof ColoredTridentItem) {
+				cir.setReturnValue(
+						CustomISTER.getTridentTexture(((ColoredTridentItem) dataItem.getItem()).getTridentColor()));
+			}
+		}
+	}
 }

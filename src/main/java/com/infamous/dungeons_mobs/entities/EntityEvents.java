@@ -15,22 +15,23 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = MODID)
 public class EntityEvents {
 
-    @SubscribeEvent
-    public static void changeAttributes(EntityJoinLevelEvent event){
-        // Tougher Husks
-        if(event.getEntity().getType().equals(HUSK) && event.getEntity() instanceof LivingEntity livingEntity && DungeonsMobsConfig.COMMON.ENABLE_STRONGER_HUSKS.get()){
-            AttributeInstance attribute = livingEntity.getAttribute(Attributes.ARMOR);
-            if(attribute != null){
-                attribute.setBaseValue(10.0D);
-            }
-            attribute = livingEntity.getAttribute(Attributes.MOVEMENT_SPEED);
-            if(attribute != null){
-                attribute.setBaseValue(0.17D);
-            }
-            attribute = livingEntity.getAttribute(Attributes.KNOCKBACK_RESISTANCE);
-            if(attribute != null){
-                attribute.setBaseValue(0.6D);
-            }
-        }
-    }
+	@SubscribeEvent
+	public static void changeAttributes(EntityJoinLevelEvent event) {
+		// Tougher Husks
+		if (event.getEntity().getType().equals(HUSK) && event.getEntity() instanceof LivingEntity livingEntity
+				&& DungeonsMobsConfig.COMMON.ENABLE_STRONGER_HUSKS.get()) {
+			AttributeInstance attribute = livingEntity.getAttribute(Attributes.ARMOR);
+			if (attribute != null) {
+				attribute.setBaseValue(10.0D);
+			}
+			attribute = livingEntity.getAttribute(Attributes.MOVEMENT_SPEED);
+			if (attribute != null) {
+				attribute.setBaseValue(0.17D);
+			}
+			attribute = livingEntity.getAttribute(Attributes.KNOCKBACK_RESISTANCE);
+			if (attribute != null) {
+				attribute.setBaseValue(0.6D);
+			}
+		}
+	}
 }

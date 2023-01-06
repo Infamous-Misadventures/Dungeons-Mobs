@@ -13,22 +13,23 @@ import software.bernie.geckolib3.renderers.geo.GeoProjectilesRenderer;
 
 public class CobwebProjectileRenderer extends GeoProjectilesRenderer<CobwebProjectileEntity> {
 
-    public CobwebProjectileRenderer(EntityRendererProvider.Context renderManager) {
-        super(renderManager, new CobwebProjectileModel());
-    }
-	
-    @Override
-    public void render(CobwebProjectileEntity entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
-        float scaleFactor = 1.0F;
-        matrixStackIn.scale(scaleFactor, scaleFactor, scaleFactor);
-        
-        super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
-    }
+	public CobwebProjectileRenderer(EntityRendererProvider.Context renderManager) {
+		super(renderManager, new CobwebProjectileModel());
+	}
 
-    @Override
-    public RenderType getRenderType(CobwebProjectileEntity animatable, float partialTicks, PoseStack stack,
-                                    MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn,
-                                    ResourceLocation textureLocation) {
-        return RenderType.entityTranslucent(getTextureLocation(animatable));
-    }
+	@Override
+	public void render(CobwebProjectileEntity entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn,
+			MultiBufferSource bufferIn, int packedLightIn) {
+		float scaleFactor = 1.0F;
+		matrixStackIn.scale(scaleFactor, scaleFactor, scaleFactor);
+
+		super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
+	}
+
+	@Override
+	public RenderType getRenderType(CobwebProjectileEntity animatable, float partialTicks, PoseStack stack,
+			MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn,
+			ResourceLocation textureLocation) {
+		return RenderType.entityTranslucent(getTextureLocation(animatable));
+	}
 }

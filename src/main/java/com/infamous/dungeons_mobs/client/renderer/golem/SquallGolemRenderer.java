@@ -11,24 +11,23 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
-
 public class SquallGolemRenderer extends GeoEntityRenderer<SquallGolemEntity> {
-   public SquallGolemRenderer(EntityRendererProvider.Context renderManager) {
-      super(renderManager, new SquallGolemModel());
+	public SquallGolemRenderer(EntityRendererProvider.Context renderManager) {
+		super(renderManager, new SquallGolemModel());
 
-   }
+	}
 
-   protected void applyRotations(SquallGolemEntity entityLiving, PoseStack matrixStackIn, float ageInTicks,
-                                 float rotationYaw, float partialTicks) {
-      float scaleFactor = 1.0f;
-      matrixStackIn.scale(scaleFactor, scaleFactor, scaleFactor);
-      super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
-   }
+	protected void applyRotations(SquallGolemEntity entityLiving, PoseStack matrixStackIn, float ageInTicks,
+			float rotationYaw, float partialTicks) {
+		float scaleFactor = 1.0f;
+		matrixStackIn.scale(scaleFactor, scaleFactor, scaleFactor);
+		super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
+	}
 
-   @Override
-   public RenderType getRenderType(SquallGolemEntity animatable, float partialTicks, PoseStack stack,
-                                   MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn,
-                                   ResourceLocation textureLocation) {
-      return RenderType.entityTranslucent(getTextureLocation(animatable));
-   }
+	@Override
+	public RenderType getRenderType(SquallGolemEntity animatable, float partialTicks, PoseStack stack,
+			MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn,
+			ResourceLocation textureLocation) {
+		return RenderType.entityTranslucent(getTextureLocation(animatable));
+	}
 }

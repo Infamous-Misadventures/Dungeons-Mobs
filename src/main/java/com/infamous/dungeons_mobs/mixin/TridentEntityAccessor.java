@@ -8,6 +8,6 @@ import net.minecraft.world.item.ItemStack;
 
 @Mixin(ThrownTrident.class)
 public interface TridentEntityAccessor {
-    @Accessor
-    ItemStack getTridentItem();
+	@Accessor
+	ItemStack getTridentItem();
 }

@@ -54,7 +54,8 @@ import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 
 @OnlyIn(Dist.CLIENT)
 @SuppressWarnings({ "rawtypes", "unchecked" })
-public abstract class ModGeoReplacedEntityRenderer<T extends IAnimatable> extends EntityRenderer implements IGeoRenderer {
+public abstract class ModGeoReplacedEntityRenderer<T extends IAnimatable> extends EntityRenderer
+		implements IGeoRenderer {
 	final AnimatedGeoModel<IAnimatable> modelProvider;
 	protected final T animatable;
 	protected MultiBufferSource rtb;
@@ -79,7 +80,7 @@ public abstract class ModGeoReplacedEntityRenderer<T extends IAnimatable> extend
 	}
 
 	public ModGeoReplacedEntityRenderer(EntityRendererProvider.Context renderManager,
-										AnimatedGeoModel<IAnimatable> modelProvider, T animatable) {
+			AnimatedGeoModel<IAnimatable> modelProvider, T animatable) {
 		super(renderManager);
 		this.modelProvider = modelProvider;
 		this.animatable = animatable;
@@ -99,10 +100,13 @@ public abstract class ModGeoReplacedEntityRenderer<T extends IAnimatable> extend
 	}
 
 	@Override
-	public void renderEarly(Object animatable, PoseStack stackIn, float partialTicks, @Nullable MultiBufferSource renderTypeBuffer, @Nullable VertexConsumer vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+	public void renderEarly(Object animatable, PoseStack stackIn, float partialTicks,
+			@Nullable MultiBufferSource renderTypeBuffer, @Nullable VertexConsumer vertexBuilder, int packedLightIn,
+			int packedOverlayIn, float red, float green, float blue, float alpha) {
 		this.rtb = renderTypeBuffer;
 		Matrix4f renderEarlyMat = stackIn.last().pose().copy();
-		IGeoRenderer.super.renderEarly(animatable, stackIn, partialTicks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+		IGeoRenderer.super.renderEarly(animatable, stackIn, partialTicks, renderTypeBuffer, vertexBuilder,
+				packedLightIn, packedOverlayIn, red, green, blue, alpha);
 	}
 
 	@SuppressWarnings("resource")
@@ -113,12 +117,12 @@ public abstract class ModGeoReplacedEntityRenderer<T extends IAnimatable> extend
 		IAnimatable geo = animatable;
 		if (entity instanceof LivingEntity) {
 			entityLiving = (LivingEntity) entity;
-			this.mainHand =   ((LivingEntity)entity).getItemBySlot(EquipmentSlot.MAINHAND);
-			this.offHand =    ((LivingEntity)entity).getItemBySlot(EquipmentSlot.OFFHAND);
-			this.helmet =     ((LivingEntity)entity).getItemBySlot(EquipmentSlot.HEAD);
-			this.chestplate = ((LivingEntity)entity).getItemBySlot(EquipmentSlot.CHEST);
-			this.leggings =   ((LivingEntity)entity).getItemBySlot(EquipmentSlot.LEGS);
-			this.boots =      ((LivingEntity)entity).getItemBySlot(EquipmentSlot.FEET);
+			this.mainHand = ((LivingEntity) entity).getItemBySlot(EquipmentSlot.MAINHAND);
+			this.offHand = ((LivingEntity) entity).getItemBySlot(EquipmentSlot.OFFHAND);
+			this.helmet = ((LivingEntity) entity).getItemBySlot(EquipmentSlot.HEAD);
+			this.chestplate = ((LivingEntity) entity).getItemBySlot(EquipmentSlot.CHEST);
+			this.leggings = ((LivingEntity) entity).getItemBySlot(EquipmentSlot.LEGS);
+			this.boots = ((LivingEntity) entity).getItemBySlot(EquipmentSlot.FEET);
 			this.whTexture = this.getTextureLocation(animatable);
 			this.currentEntity = entityLiving;
 		} else {
@@ -374,12 +378,12 @@ public abstract class ModGeoReplacedEntityRenderer<T extends IAnimatable> extend
 		int s = entity.level.getBrightness(LightLayer.SKY, blockPos);
 		int t = entity.level.getBrightness(LightLayer.SKY, blockPos2);
 		for (u = 0; u <= 24; ++u) {
-			ModGeoReplacedEntityRenderer.renderLeashPiece(vertexConsumer, matrix4f, j, k, l, q, r, s, t, 0.025f, 0.025f, o,
-					p, u, false);
+			ModGeoReplacedEntityRenderer.renderLeashPiece(vertexConsumer, matrix4f, j, k, l, q, r, s, t, 0.025f, 0.025f,
+					o, p, u, false);
 		}
 		for (u = 24; u >= 0; --u) {
-			ModGeoReplacedEntityRenderer.renderLeashPiece(vertexConsumer, matrix4f, j, k, l, q, r, s, t, 0.025f, 0.0f, o,
-					p, u, true);
+			ModGeoReplacedEntityRenderer.renderLeashPiece(vertexConsumer, matrix4f, j, k, l, q, r, s, t, 0.025f, 0.0f,
+					o, p, u, true);
 		}
 		poseStack.popPose();
 	}

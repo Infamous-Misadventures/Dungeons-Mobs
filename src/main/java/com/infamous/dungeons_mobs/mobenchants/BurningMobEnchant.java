@@ -18,31 +18,30 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class BurningMobEnchant extends MobEnchant {
 
-    public BurningMobEnchant(Properties properties) {
-        super(properties);
-    }
+	public BurningMobEnchant(Properties properties) {
+		super(properties);
+	}
 
-    @SubscribeEvent
-    public static void OnLivingUpdate(LivingEvent.LivingTickEvent event) {
-        LivingEntity entity = (LivingEntity) event.getEntity();
+	@SubscribeEvent
+	public static void OnLivingUpdate(LivingEvent.LivingTickEvent event) {
+		LivingEntity entity = (LivingEntity) event.getEntity();
 
-        executeIfPresentWithLevel(entity, BURNING.get(), (level) -> {
-            MobProps comboCap = MobPropsHelper.getMobPropsCapability(entity);
-            if(comboCap == null) return;
-            int burnNearbyTimer = comboCap.getBurnNearbyTimer();
-            if(burnNearbyTimer <= 0){
-                PROXY.spawnParticles(entity, ParticleTypes.FLAME);
-                applyToNearbyEntities(entity, 1.5F,
-                        getCanApplyToEnemyPredicate(entity), (LivingEntity nearbyEntity) -> {
-                            nearbyEntity.hurt(DamageSource.ON_FIRE, 0.5F * level);
-                            PROXY.spawnParticles(nearbyEntity, ParticleTypes.FLAME);
-                        }
-                );
-                comboCap.setBurnNearbyTimer(20);
-            }
-            else{
-                comboCap.setBurnNearbyTimer(burnNearbyTimer - 1);
-            }
-        });
-    }
+		executeIfPresentWithLevel(entity, BURNING.get(), (level) -> {
+			MobProps comboCap = MobPropsHelper.getMobPropsCapability(entity);
+			if (comboCap == null)
+				return;
+			int burnNearbyTimer = comboCap.getBurnNearbyTimer();
+			if (burnNearbyTimer <= 0) {
+				PROXY.spawnParticles(entity, ParticleTypes.FLAME);
+				applyToNearbyEntities(entity, 1.5F, getCanApplyToEnemyPredicate(entity),
+						(LivingEntity nearbyEntity) -> {
+							nearbyEntity.hurt(DamageSource.ON_FIRE, 0.5F * level);
+							PROXY.spawnParticles(nearbyEntity, ParticleTypes.FLAME);
+						});
+				comboCap.setBurnNearbyTimer(20);
+			} else {
+				comboCap.setBurnNearbyTimer(burnNearbyTimer - 1);
+			}
+		});
+	}
 }

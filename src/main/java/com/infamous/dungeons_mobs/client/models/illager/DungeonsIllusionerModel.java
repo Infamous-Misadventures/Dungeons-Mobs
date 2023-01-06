@@ -16,39 +16,39 @@ import software.bernie.geckolib3.resource.GeckoLibCache;
 
 public class DungeonsIllusionerModel extends AnimatedGeoModel {
 
-    @Override
-    public ResourceLocation getAnimationResource(Object entity) {
-        return new ResourceLocation(DungeonsMobs.MODID, "animations/illusioner.animation.json");
-    }
+	@Override
+	public ResourceLocation getAnimationResource(Object entity) {
+		return new ResourceLocation(DungeonsMobs.MODID, "animations/illusioner.animation.json");
+	}
 
-    @Override
-    public ResourceLocation getModelResource(Object entity) {
-        return new ResourceLocation(DungeonsMobs.MODID, "geo/geo_illager.geo.json");
-    }
+	@Override
+	public ResourceLocation getModelResource(Object entity) {
+		return new ResourceLocation(DungeonsMobs.MODID, "geo/geo_illager.geo.json");
+	}
 
-    @Override
-    public ResourceLocation getTextureResource(Object entity) {
-        return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/illusioner.png");
-    }
+	@Override
+	public ResourceLocation getTextureResource(Object entity) {
+		return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/illusioner.png");
+	}
 
-    @Override
-    public void setCustomAnimations(IAnimatable entity, int uniqueID, AnimationEvent customPredicate) {
-        super.setCustomAnimations(entity, uniqueID, customPredicate);
+	@Override
+	public void setCustomAnimations(IAnimatable entity, int uniqueID, AnimationEvent customPredicate) {
+		super.setCustomAnimations(entity, uniqueID, customPredicate);
 
-        IBone head = this.getAnimationProcessor().getBone("bipedHead");
+		IBone head = this.getAnimationProcessor().getBone("bipedHead");
 
-        EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
+		EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
 
-        if (extraData.headPitch != 0 || extraData.netHeadYaw != 0) {
-            head.setRotationX(head.getRotationX() + (extraData.headPitch * ((float) Math.PI / 180F)));
-            head.setRotationY(head.getRotationY() + (extraData.netHeadYaw * ((float) Math.PI / 180F)));
-        }
-    }
-    
+		if (extraData.headPitch != 0 || extraData.netHeadYaw != 0) {
+			head.setRotationX(head.getRotationX() + (extraData.headPitch * ((float) Math.PI / 180F)));
+			head.setRotationY(head.getRotationY() + (extraData.netHeadYaw * ((float) Math.PI / 180F)));
+		}
+	}
+
 	@Override
 	public void setMolangQueries(IAnimatable animatable, double currentTick) {
 		super.setMolangQueries(animatable, currentTick);
-		
+
 		MolangParser parser = GeckoLibCache.getInstance().parser;
 		LivingEntity livingEntity = (LivingEntity) animatable;
 		Vec3 velocity = livingEntity.getDeltaMovement();

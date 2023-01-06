@@ -12,22 +12,22 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class RegenerationMobEnchant extends MobEnchant {
 
-    public RegenerationMobEnchant(Properties properties) {
-        super(properties);
-    }
+	public RegenerationMobEnchant(Properties properties) {
+		super(properties);
+	}
 
-    @SubscribeEvent
-    public static void onLivingUpdate(LivingEvent.LivingTickEvent event) {
-        LivingEntity entity = (LivingEntity) event.getEntity();
-        executeIfPresentWithLevel(entity, REGENERATION.get(), (level) -> {
-            if (entity.getHealth() < entity.getMaxHealth() && entity.tickCount % getTickCountForLevel(level) == 0) {
-                entity.heal(1.0F);
-                PROXY.spawnParticles(entity, ParticleTypes.HEART);
-            }
-        });
-    }
+	@SubscribeEvent
+	public static void onLivingUpdate(LivingEvent.LivingTickEvent event) {
+		LivingEntity entity = (LivingEntity) event.getEntity();
+		executeIfPresentWithLevel(entity, REGENERATION.get(), (level) -> {
+			if (entity.getHealth() < entity.getMaxHealth() && entity.tickCount % getTickCountForLevel(level) == 0) {
+				entity.heal(1.0F);
+				PROXY.spawnParticles(entity, ParticleTypes.HEART);
+			}
+		});
+	}
 
-    private static int getTickCountForLevel(Integer level) {
-        return 62 - level * 12;
-    }
+	private static int getTickCountForLevel(Integer level) {
+		return 62 - level * 12;
+	}
 }

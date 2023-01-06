@@ -9,45 +9,44 @@ import net.minecraft.world.BossEvent;
 import net.minecraftforge.common.util.INBTSerializable;
 
 public class Ancient implements INBTSerializable<CompoundTag> {
-    private boolean ancient = false;
-    private ServerBossEvent bossInfo = null;
+	private boolean ancient = false;
+	private ServerBossEvent bossInfo = null;
 
+	public boolean isAncient() {
+		return ancient;
+	}
 
-    public boolean isAncient() {
-        return ancient;
-    }
+	public void setAncient(boolean ancient) {
+		this.ancient = ancient;
+	}
 
-    public void setAncient(boolean ancient) {
-        this.ancient = ancient;
-    }
+	public boolean initiateBossBar(Component displayName) {
+		bossInfo = new ServerBossEvent(displayName, BossEvent.BossBarColor.YELLOW, BossEvent.BossBarOverlay.PROGRESS);
+		return true;
+	}
 
-    public boolean initiateBossBar(Component displayName) {
-        bossInfo = new ServerBossEvent(displayName, BossEvent.BossBarColor.YELLOW, BossEvent.BossBarOverlay.PROGRESS);
-        return true;
-    }
+	public ServerBossEvent getBossInfo() {
+		return bossInfo;
+	}
 
-    public ServerBossEvent getBossInfo() {
-        return bossInfo;
-    }
+	@Override
+	public CompoundTag serializeNBT() {
+		if (ANCIENT_CAPABILITY == null) {
+			return new CompoundTag();
+		}
+		CompoundTag tag = new CompoundTag();
+		tag.putBoolean("ancient", this.isAncient());
+		if (this.getBossInfo() != null) {
+			tag.putString("displayName", this.getBossInfo().getName().getString());
+		}
+		return tag;
+	}
 
-    @Override
-    public CompoundTag serializeNBT() {
-        if (ANCIENT_CAPABILITY == null) {
-            return new CompoundTag();
-        }
-        CompoundTag tag = new CompoundTag();
-        tag.putBoolean("ancient", this.isAncient());
-        if(this.getBossInfo() != null) {
-            tag.putString("displayName", this.getBossInfo().getName().getString());
-        }
-        return tag;
-    }
-
-    @Override
-    public void deserializeNBT(CompoundTag tag) {
-        this.setAncient(tag.getBoolean("ancient"));
-        if(tag.contains("displayName")) {
-            this.initiateBossBar(Component.literal(tag.getString("displayName")));
-        }
-    }
+	@Override
+	public void deserializeNBT(CompoundTag tag) {
+		this.setAncient(tag.getBoolean("ancient"));
+		if (tag.contains("displayName")) {
+			this.initiateBossBar(Component.literal(tag.getString("displayName")));
+		}
+	}
 }

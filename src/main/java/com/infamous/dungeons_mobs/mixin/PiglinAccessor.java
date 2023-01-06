@@ -9,6 +9,6 @@ import net.minecraft.world.entity.monster.piglin.Piglin;
 @Mixin(Piglin.class)
 public interface PiglinAccessor {
 
-    @Accessor
-    SimpleContainer getInventory();
+	@Accessor
+	SimpleContainer getInventory();
 }

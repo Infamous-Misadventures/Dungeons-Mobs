@@ -22,24 +22,28 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class VanguardShieldBEWLR extends BlockEntityWithoutLevelRenderer {
 
-    private final VanguardShieldModel modelVanguardShield;
+	private final VanguardShieldModel modelVanguardShield;
 
-    public VanguardShieldBEWLR(BlockEntityRenderDispatcher p_172550_, EntityModelSet p_172551_) {
-        super(p_172550_, p_172551_);
-        modelVanguardShield = new VanguardShieldModel(p_172551_.bakeLayer(VANGUARD_SHIELD));
-    }
+	public VanguardShieldBEWLR(BlockEntityRenderDispatcher p_172550_, EntityModelSet p_172551_) {
+		super(p_172550_, p_172551_);
+		modelVanguardShield = new VanguardShieldModel(p_172551_.bakeLayer(VANGUARD_SHIELD));
+	}
 
-    public void renderByItem(ItemStack stack, ItemTransforms.TransformType transformType, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
-        Item item = stack.getItem();
-        matrixStack.pushPose();
-        matrixStack.scale(1.0F, -1.0F, -1.0F);
-        Material rendermaterial = LOCATION_VANGUARD_SHIELD;
-        VertexConsumer ivertexbuilder = rendermaterial.sprite().wrap(ItemRenderer.getFoilBufferDirect(buffer, this.modelVanguardShield.renderType(rendermaterial.atlasLocation()), true, stack.hasFoil()));
-        //this.modelVanguardShield.getHandle().render(matrixStack, ivertexbuilder, combinedLight, combinedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);
-        this.modelVanguardShield.getRoot().render(matrixStack, ivertexbuilder, combinedLight, combinedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);
+	public void renderByItem(ItemStack stack, ItemTransforms.TransformType transformType, PoseStack matrixStack,
+			MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
+		Item item = stack.getItem();
+		matrixStack.pushPose();
+		matrixStack.scale(1.0F, -1.0F, -1.0F);
+		Material rendermaterial = LOCATION_VANGUARD_SHIELD;
+		VertexConsumer ivertexbuilder = rendermaterial.sprite().wrap(ItemRenderer.getFoilBufferDirect(buffer,
+				this.modelVanguardShield.renderType(rendermaterial.atlasLocation()), true, stack.hasFoil()));
+		// this.modelVanguardShield.getHandle().render(matrixStack, ivertexbuilder,
+		// combinedLight, combinedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);
+		this.modelVanguardShield.getRoot().render(matrixStack, ivertexbuilder, combinedLight, combinedOverlay, 1.0F,
+				1.0F, 1.0F, 1.0F);
 
-        matrixStack.popPose();
+		matrixStack.popPose();
 
-    }
+	}
 
 }

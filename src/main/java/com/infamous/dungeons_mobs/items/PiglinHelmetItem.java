@@ -15,14 +15,14 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class PiglinHelmetItem extends ArmorItem {
 
-    public PiglinHelmetItem(ArmorMaterial armorMaterial, EquipmentSlot slotType, Properties properties) {
-        super(armorMaterial, slotType, properties);
-    }
+	public PiglinHelmetItem(ArmorMaterial armorMaterial, EquipmentSlot slotType, Properties properties) {
+		super(armorMaterial, slotType, properties);
+	}
 
-    @Nullable
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-        return String.format(MODID + ":textures/models/armor/%s.png", ForgeRegistries.ITEMS.getKey(this).getPath());
-    }
+	@Nullable
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
+		return String.format(MODID + ":textures/models/armor/%s.png", ForgeRegistries.ITEMS.getKey(this).getPath());
+	}
 }

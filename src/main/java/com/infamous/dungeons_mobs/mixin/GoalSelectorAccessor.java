@@ -11,6 +11,6 @@ import net.minecraft.world.entity.ai.goal.WrappedGoal;
 @Mixin(GoalSelector.class)
 public interface GoalSelectorAccessor {
 
-    @Accessor
-    Set<WrappedGoal> getAvailableGoals();
+	@Accessor
+	Set<WrappedGoal> getAvailableGoals();
 }

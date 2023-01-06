@@ -23,45 +23,47 @@ import software.bernie.example.client.DefaultBipedBoneIdents;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.renderers.geo.ExtendedGeoEntityRenderer;
+
 public class SkeletonVanguardRenderer extends ExtendedGeoEntityRenderer<SkeletonVanguardEntity> {
-    public SkeletonVanguardRenderer(EntityRendererProvider.Context renderManager) {
-        super(renderManager, new SkeletonVanguardModel());
-    }
+	public SkeletonVanguardRenderer(EntityRendererProvider.Context renderManager) {
+		super(renderManager, new SkeletonVanguardModel());
+	}
 
-    @Override
-    protected void applyRotations(SkeletonVanguardEntity entityLiving, PoseStack matrixStackIn, float ageInTicks,
-                                  float rotationYaw, float partialTicks) {
-        float scaleFactor = 1.0F;
-        matrixStackIn.scale(scaleFactor, scaleFactor, scaleFactor);
-        super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
+	@Override
+	protected void applyRotations(SkeletonVanguardEntity entityLiving, PoseStack matrixStackIn, float ageInTicks,
+			float rotationYaw, float partialTicks) {
+		float scaleFactor = 1.0F;
+		matrixStackIn.scale(scaleFactor, scaleFactor, scaleFactor);
+		super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
 
-    }
+	}
 
-    @Override
-    public RenderType getRenderType(SkeletonVanguardEntity animatable, float partialTicks, PoseStack stack,
-                                    MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn,
-                                    ResourceLocation textureLocation) {
-        return RenderType.entityTranslucent(getTextureLocation(animatable));
-    }
+	@Override
+	public RenderType getRenderType(SkeletonVanguardEntity animatable, float partialTicks, PoseStack stack,
+			MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn,
+			ResourceLocation textureLocation) {
+		return RenderType.entityTranslucent(getTextureLocation(animatable));
+	}
 
-    @Override
-    public void renderRecursively(GeoBone bone, PoseStack stack, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-        if(this.isArmorBone(bone)) {
-            bone.setCubesHidden(true);
-        }
-        super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-    }
+	@Override
+	public void renderRecursively(GeoBone bone, PoseStack stack, VertexConsumer bufferIn, int packedLightIn,
+			int packedOverlayIn, float red, float green, float blue, float alpha) {
+		if (this.isArmorBone(bone)) {
+			bone.setCubesHidden(true);
+		}
+		super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+	}
 
-    @Override
-    protected boolean isArmorBone(GeoBone bone) {
-        return bone.getName().startsWith("armor");
-    }
+	@Override
+	protected boolean isArmorBone(GeoBone bone) {
+		return bone.getName().startsWith("armor");
+	}
 
-    @Nullable
-    @Override
-    protected ResourceLocation getTextureForBone(String s, SkeletonVanguardEntity windcallerEntity) {
-        return null;
-    }
+	@Nullable
+	@Override
+	protected ResourceLocation getTextureForBone(String s, SkeletonVanguardEntity windcallerEntity) {
+		return null;
+	}
 
 	@Override
 	protected ItemStack getHeldItemForBone(String boneName, SkeletonVanguardEntity currentEntity) {
@@ -89,87 +91,89 @@ public class SkeletonVanguardRenderer extends ExtendedGeoEntityRenderer<Skeleton
 	}
 
 	@Override
-	protected void preRenderItem(PoseStack stack, ItemStack item, String boneName, SkeletonVanguardEntity currentEntity, IBone bone) {
-		if(item == this.mainHand || item == this.offHand) {
+	protected void preRenderItem(PoseStack stack, ItemStack item, String boneName, SkeletonVanguardEntity currentEntity,
+			IBone bone) {
+		if (item == this.mainHand || item == this.offHand) {
 			stack.scale(1.1F, 1.1F, 1.1F);
 			stack.mulPose(Vector3f.XP.rotationDegrees(-90.0F));
 			boolean shieldFlag = item.getItem() instanceof ShieldItem;
-			if(item == this.mainHand) {
-				if(shieldFlag) {
+			if (item == this.mainHand) {
+				if (shieldFlag) {
 					stack.translate(0.0, 0.125, -0.25);
 				} else {
-					
+
 				}
 			} else {
-				if(shieldFlag) {
+				if (shieldFlag) {
 					stack.translate(-0.15, 0.125, 0.05);
 					stack.mulPose(Vector3f.YP.rotationDegrees(90));
 				} else {
-					
+
 				}
-					
-				
+
 			}
 		}
 	}
 
 	@Override
-	protected void postRenderItem(PoseStack matrixStack, ItemStack item, String boneName, SkeletonVanguardEntity currentEntity, IBone bone) {
+	protected void postRenderItem(PoseStack matrixStack, ItemStack item, String boneName,
+			SkeletonVanguardEntity currentEntity, IBone bone) {
 
 	}
-    
+
 	@Override
 	protected BlockState getHeldBlockForBone(String boneName, SkeletonVanguardEntity currentEntity) {
 		return null;
 	}
-	
+
 	@Override
 	protected void preRenderBlock(PoseStack matrixStack, BlockState block, String boneName,
 			SkeletonVanguardEntity currentEntity) {
-		
+
 	}
 
 	@Override
 	protected void postRenderBlock(PoseStack matrixStack, BlockState block, String boneName,
 			SkeletonVanguardEntity currentEntity) {
-		
+
 	}
 
-    @Nullable
-    @Override
-    protected ItemStack getArmorForBone(String boneName, SkeletonVanguardEntity currentEntity) {
-        return switch (boneName) {
-            case "armorBipedLeftFoot", "armorBipedRightFoot" -> currentEntity.getItemBySlot(EquipmentSlot.FEET);
-            case "armorBipedLeftLeg", "armorBipedRightLeg" -> currentEntity.getItemBySlot(EquipmentSlot.LEGS);
-            case "armorBipedBody", "armorBipedRightArm", "armorBipedLeftArm" -> currentEntity.getItemBySlot(EquipmentSlot.CHEST);
-            case "armorBipedHead" -> currentEntity.getItemBySlot(EquipmentSlot.HEAD);
-            default -> null;
-        };
-    }
+	@Nullable
+	@Override
+	protected ItemStack getArmorForBone(String boneName, SkeletonVanguardEntity currentEntity) {
+		return switch (boneName) {
+		case "armorBipedLeftFoot", "armorBipedRightFoot" -> currentEntity.getItemBySlot(EquipmentSlot.FEET);
+		case "armorBipedLeftLeg", "armorBipedRightLeg" -> currentEntity.getItemBySlot(EquipmentSlot.LEGS);
+		case "armorBipedBody", "armorBipedRightArm", "armorBipedLeftArm" ->
+			currentEntity.getItemBySlot(EquipmentSlot.CHEST);
+		case "armorBipedHead" -> currentEntity.getItemBySlot(EquipmentSlot.HEAD);
+		default -> null;
+		};
+	}
 
-    @Override
-    protected EquipmentSlot getEquipmentSlotForArmorBone(String boneName, SkeletonVanguardEntity currentEntity) {
-        return switch (boneName) {
-            case "armorBipedLeftFoot", "armorBipedRightFoot" -> EquipmentSlot.FEET;
-            case "armorBipedLeftLeg", "armorBipedRightLeg" -> EquipmentSlot.LEGS;
-            case "armorBipedRightHand" -> !currentEntity.isLeftHanded() ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
-            case "armorBipedLeftHand" -> currentEntity.isLeftHanded() ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
-            case "armorBipedRightArm", "armorBipedLeftArm", "armorBipedBody" -> EquipmentSlot.CHEST;
-            case "armorBipedHead" -> EquipmentSlot.HEAD;
-            default -> null;
-        };
-    }
+	@Override
+	protected EquipmentSlot getEquipmentSlotForArmorBone(String boneName, SkeletonVanguardEntity currentEntity) {
+		return switch (boneName) {
+		case "armorBipedLeftFoot", "armorBipedRightFoot" -> EquipmentSlot.FEET;
+		case "armorBipedLeftLeg", "armorBipedRightLeg" -> EquipmentSlot.LEGS;
+		case "armorBipedRightHand" -> !currentEntity.isLeftHanded() ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
+		case "armorBipedLeftHand" -> currentEntity.isLeftHanded() ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
+		case "armorBipedRightArm", "armorBipedLeftArm", "armorBipedBody" -> EquipmentSlot.CHEST;
+		case "armorBipedHead" -> EquipmentSlot.HEAD;
+		default -> null;
+		};
+	}
 
-    @Override
-    protected ModelPart getArmorPartForBone(String name, HumanoidModel<?> armorBipedModel) {
-        return switch (name) {
-            case "armorBipedLeftFoot", "armorBipedLeftLeg" -> armorBipedModel.leftLeg;
-            case "armorBipedRightFoot", "armorBipedRightLeg" -> armorBipedModel.rightLeg;
-            case "armorBipedRightArm" -> armorBipedModel.rightArm;
-            case "armorBipedLeftArm" -> armorBipedModel.leftArm;
-            case "armorBipedBody" -> armorBipedModel.body;
-            case "armorBipedHead" -> armorBipedModel.head;
-            default -> null;
-        };
-    }
+	@Override
+	protected ModelPart getArmorPartForBone(String name, HumanoidModel<?> armorBipedModel) {
+		return switch (name) {
+		case "armorBipedLeftFoot", "armorBipedLeftLeg" -> armorBipedModel.leftLeg;
+		case "armorBipedRightFoot", "armorBipedRightLeg" -> armorBipedModel.rightLeg;
+		case "armorBipedRightArm" -> armorBipedModel.rightArm;
+		case "armorBipedLeftArm" -> armorBipedModel.leftArm;
+		case "armorBipedBody" -> armorBipedModel.body;
+		case "armorBipedHead" -> armorBipedModel.head;
+		default -> null;
+		};
+	}
 }

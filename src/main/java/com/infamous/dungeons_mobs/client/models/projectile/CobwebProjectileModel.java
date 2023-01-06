@@ -1,6 +1,5 @@
 package com.infamous.dungeons_mobs.client.models.projectile;
 
-
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.entities.projectiles.CobwebProjectileEntity;
 

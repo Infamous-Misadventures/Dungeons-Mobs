@@ -20,29 +20,31 @@ import net.minecraft.world.level.Level;
 @Mixin(Drowned.class)
 public abstract class DrownedEntityMixin extends Zombie {
 
-    public DrownedEntityMixin(EntityType<? extends Zombie> entityType, Level world) {
-        super(entityType, world);
-    }
+	public DrownedEntityMixin(EntityType<? extends Zombie> entityType, Level world) {
+		super(entityType, world);
+	}
 
-    @Inject(at = @At("RETURN"), method = "canReplaceCurrentItem", cancellable = true)
-    private void checkForAnyTrident(ItemStack replacement, ItemStack current, CallbackInfoReturnable<Boolean> cir){
-        if (current.getItem() == Items.NAUTILUS_SHELL) {
-            cir.setReturnValue(false);
-        } else if (current.getItem() instanceof TridentItem) {
-            if (replacement.getItem() instanceof TridentItem) {
-                cir.setReturnValue(replacement.getDamageValue() < current.getDamageValue());
-            } else {
-                cir.setReturnValue(false);
-            }
-        } else {
-            cir.setReturnValue(replacement.getItem() instanceof TridentItem || super.canReplaceCurrentItem(replacement, current));
-        }
-    }
+	@Inject(at = @At("RETURN"), method = "canReplaceCurrentItem", cancellable = true)
+	private void checkForAnyTrident(ItemStack replacement, ItemStack current, CallbackInfoReturnable<Boolean> cir) {
+		if (current.getItem() == Items.NAUTILUS_SHELL) {
+			cir.setReturnValue(false);
+		} else if (current.getItem() instanceof TridentItem) {
+			if (replacement.getItem() instanceof TridentItem) {
+				cir.setReturnValue(replacement.getDamageValue() < current.getDamageValue());
+			} else {
+				cir.setReturnValue(false);
+			}
+		} else {
+			cir.setReturnValue(
+					replacement.getItem() instanceof TridentItem || super.canReplaceCurrentItem(replacement, current));
+		}
+	}
 
-    @ModifyVariable(at = @At("STORE"), method = "performRangedAttack")
-    private ThrownTrident createTrident(ThrownTrident original){
-        InteractionHand tridentHoldingHand = ProjectileUtil.getWeaponHoldingHand(this, item -> item instanceof TridentItem);
-        ItemStack tridentStack = this.getItemInHand(tridentHoldingHand);
-        return new ThrownTrident(this.level, this, tridentStack);
-    }
+	@ModifyVariable(at = @At("STORE"), method = "performRangedAttack")
+	private ThrownTrident createTrident(ThrownTrident original) {
+		InteractionHand tridentHoldingHand = ProjectileUtil.getWeaponHoldingHand(this,
+				item -> item instanceof TridentItem);
+		ItemStack tridentStack = this.getItemInHand(tridentHoldingHand);
+		return new ThrownTrident(this.level, this, tridentStack);
+	}
 }

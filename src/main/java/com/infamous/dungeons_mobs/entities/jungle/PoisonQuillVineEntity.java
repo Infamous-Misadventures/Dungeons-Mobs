@@ -45,17 +45,17 @@ public class PoisonQuillVineEntity extends AbstractVineEntity {
 	AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
 	public int delayedBehaviourTime;
-	
+
 	public int shootAnimationTick;
 	public int shootAnimationLength = 18;
 	public int shootAnimationActionPoint = 8;
-	
+
 	public boolean open;
-	
+
 	public PoisonQuillVineEntity(EntityType<? extends PoisonQuillVineEntity> p_i50147_1_, Level p_i50147_2_) {
 		super(p_i50147_1_, p_i50147_2_);
 	}
-	
+
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
@@ -69,44 +69,42 @@ public class PoisonQuillVineEntity extends AbstractVineEntity {
 		this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true));
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));
 	}
-	
-	   protected float getStandingEyeHeight(Pose p_213348_1_, EntityDimensions p_213348_2_) {
-		      return this.isOut() ? this.getBbHeight() - 0.75F : super.getStandingEyeHeight(p_213348_1_, p_213348_2_);
-		   }
-	
-	   protected BodyRotationControl createBodyControl() {
-		      return new PoisonQuillVineEntity.BodyHelperController(this);
-		   }
-	   
-	   class BodyHelperController extends BodyRotationControl {
-		      public BodyHelperController(Mob p_i50612_2_) {
-		         super(p_i50612_2_);
-		      }
 
-		      public void clientTick() {
-		      }
-		   }
+	protected float getStandingEyeHeight(Pose p_213348_1_, EntityDimensions p_213348_2_) {
+		return this.isOut() ? this.getBbHeight() - 0.75F : super.getStandingEyeHeight(p_213348_1_, p_213348_2_);
+	}
 
-	   public int getMaxHeadXRot() {
-		      return 180;
-		   }
+	protected BodyRotationControl createBodyControl() {
+		return new PoisonQuillVineEntity.BodyHelperController(this);
+	}
 
-		   public int getMaxHeadYRot() {
-		      return 180;
-		   }
+	class BodyHelperController extends BodyRotationControl {
+		public BodyHelperController(Mob p_i50612_2_) {
+			super(p_i50612_2_);
+		}
 
+		public void clientTick() {
+		}
+	}
 
-	public static AttributeSupplier.Builder setCustomAttributes(){
-		return Monster.createMonsterAttributes()
-				.add(Attributes.MAX_HEALTH, 25.0D)
-				.add(Attributes.FOLLOW_RANGE, 25.0D);
+	public int getMaxHeadXRot() {
+		return 180;
+	}
+
+	public int getMaxHeadYRot() {
+		return 180;
+	}
+
+	public static AttributeSupplier.Builder setCustomAttributes() {
+		return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 25.0D).add(Attributes.FOLLOW_RANGE, 25.0D);
 	}
 
 	@Override
 	public void registerControllers(AnimationData data) {
-		data.addAnimationController(new AnimationController(this, "controller", this.getAnimationTransitionTime(), this::predicate));
+		data.addAnimationController(
+				new AnimationController(this, "controller", this.getAnimationTransitionTime(), this::predicate));
 	}
-	
+
 	@Override
 	public int getAnimationTransitionTime() {
 		return 5;
@@ -124,12 +122,15 @@ public class PoisonQuillVineEntity extends AbstractVineEntity {
 		} else {
 			if (this.isOut() || this.burstAnimationTick > 0) {
 				if (this.open) {
-					event.getController().setAnimation(new AnimationBuilder().addAnimation("poison_quill_vine_idle_open", LOOP));
+					event.getController()
+							.setAnimation(new AnimationBuilder().addAnimation("poison_quill_vine_idle_open", LOOP));
 				} else {
-					event.getController().setAnimation(new AnimationBuilder().addAnimation("poison_quill_vine_idle", LOOP));
+					event.getController()
+							.setAnimation(new AnimationBuilder().addAnimation("poison_quill_vine_idle", LOOP));
 				}
 			} else {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("poison_quill_vine_idle_underground", LOOP));
+				event.getController()
+						.setAnimation(new AnimationBuilder().addAnimation("poison_quill_vine_idle_underground", LOOP));
 			}
 		}
 		return PlayState.CONTINUE;
@@ -154,7 +155,7 @@ public class PoisonQuillVineEntity extends AbstractVineEntity {
 	protected SoundEvent getAmbientSoundFoley() {
 		return null;
 	}
-	
+
 	@Override
 	protected SoundEvent getAmbientSound() {
 		return ModSoundEvents.POISON_QUILL_VINE_IDLE.get();
@@ -185,18 +186,18 @@ public class PoisonQuillVineEntity extends AbstractVineEntity {
 		return ModSoundEvents.POISON_QUILL_VINE_BURST.get();
 	}
 
-    public SoundEvent getShootSound() {
-    	return ModSoundEvents.POISON_QUILL_VINE_SHOOT.get();
-    }
-    
-    public SoundEvent getOpenSound() {
-    	return ModSoundEvents.POISON_QUILL_VINE_OPEN.get();
-    }
-    
-    public SoundEvent getCloseSound() {
-    	return ModSoundEvents.POISON_QUILL_VINE_CLOSE.get();
-    }
-    
+	public SoundEvent getShootSound() {
+		return ModSoundEvents.POISON_QUILL_VINE_SHOOT.get();
+	}
+
+	public SoundEvent getOpenSound() {
+		return ModSoundEvents.POISON_QUILL_VINE_OPEN.get();
+	}
+
+	public SoundEvent getCloseSound() {
+		return ModSoundEvents.POISON_QUILL_VINE_CLOSE.get();
+	}
+
 	@Override
 	public SoundEvent getBurstSoundFoley() {
 		return null;
@@ -206,7 +207,7 @@ public class PoisonQuillVineEntity extends AbstractVineEntity {
 	public SoundEvent getRetractSoundFoley() {
 		return null;
 	}
-	
+
 	@Override
 	public boolean isKelp() {
 		return false;
@@ -221,14 +222,15 @@ public class PoisonQuillVineEntity extends AbstractVineEntity {
 	public int wrongHabitatDieChance() {
 		return 100;
 	}
-	
-    public int getLengthInSegments() {
-        return Mth.clamp(this.entityData.get(LENGTH), 2, 26);
-    }
+
+	public int getLengthInSegments() {
+		return Mth.clamp(this.entityData.get(LENGTH), 2, 26);
+	}
 
 	@Override
 	public void spawnAreaDamage() {
-		AreaDamageEntity areaDamage = AreaDamageEntity.spawnAreaDamage(this.level, this.position(), this, 5.0F, DamageSource.mobAttack(this), 0.0F, 1.5F, 0.25F, 0.25F, 10, false, false, 0.75, 0.25, false, 0, 1);
+		AreaDamageEntity areaDamage = AreaDamageEntity.spawnAreaDamage(this.level, this.position(), this, 5.0F,
+				DamageSource.mobAttack(this), 0.0F, 1.5F, 0.25F, 0.25F, 10, false, false, 0.75, 0.25, false, 0, 1);
 		this.level.addFreshEntity(areaDamage);
 	}
 
@@ -244,58 +246,58 @@ public class PoisonQuillVineEntity extends AbstractVineEntity {
 	public float getExtraHitboxY() {
 		return 1.625F;
 	}
-	
+
 	@Override
 	public void burst() {
 		super.burst();
 		this.delayedBehaviourTime = 10;
 	}
-	
+
 	@Override
 	public void retract() {
 		super.retract();
 		this.delayedBehaviourTime = 20;
 	}
-	
-    @Override
-    public void handleEntityEvent(byte p_70103_1_) {
-    	if (p_70103_1_ == 7) {
-    		this.open = true;
-    	} else if (p_70103_1_ == 8) {
-    		this.open = false;
-    	} else if (p_70103_1_ == 9) {
-    		this.shootAnimationTick = this.shootAnimationLength;
-    	} else {
-    		super.handleEntityEvent(p_70103_1_);
-    	}
-    }
-    
-    @Override
-    public void baseTick() {
-    	super.baseTick();
-    	
-    	if (this.delayedBehaviourTime > 0) {
-    		this.delayedBehaviourTime --;
-    	}
-    }
-    
-    @Override
-    public void tickDownAnimTimers() {
-    	super.tickDownAnimTimers();
-    	
-    	if (this.shootAnimationTick > 0) {
-    		this.shootAnimationTick --;
-    	}
-    }
+
+	@Override
+	public void handleEntityEvent(byte p_70103_1_) {
+		if (p_70103_1_ == 7) {
+			this.open = true;
+		} else if (p_70103_1_ == 8) {
+			this.open = false;
+		} else if (p_70103_1_ == 9) {
+			this.shootAnimationTick = this.shootAnimationLength;
+		} else {
+			super.handleEntityEvent(p_70103_1_);
+		}
+	}
+
+	@Override
+	public void baseTick() {
+		super.baseTick();
+
+		if (this.delayedBehaviourTime > 0) {
+			this.delayedBehaviourTime--;
+		}
+	}
+
+	@Override
+	public void tickDownAnimTimers() {
+		super.tickDownAnimTimers();
+
+		if (this.shootAnimationTick > 0) {
+			this.shootAnimationTick--;
+		}
+	}
 
 	@Override
 	public float distanceTo(Entity p_70032_1_) {
-		float f = (float)(this.getX() - p_70032_1_.getX());
-		float f1 = (float)(this.getEyeY() - p_70032_1_.getY());
-		float f2 = (float)(this.getZ() - p_70032_1_.getZ());
+		float f = (float) (this.getX() - p_70032_1_.getX());
+		float f1 = (float) (this.getEyeY() - p_70032_1_.getY());
+		float f2 = (float) (this.getZ() - p_70032_1_.getZ());
 		return Mth.sqrt(f * f + f1 * f1 + f2 * f2);
 	}
-    
+
 	class OpenGoal extends Goal {
 
 		public OpenGoal() {
@@ -304,9 +306,11 @@ public class PoisonQuillVineEntity extends AbstractVineEntity {
 
 		@Override
 		public boolean canUse() {
-			return PoisonQuillVineEntity.this.isOut() && PoisonQuillVineEntity.this.delayedBehaviourTime <= 0 && PoisonQuillVineEntity.this.getTarget() != null && !PoisonQuillVineEntity.this.open && PoisonQuillVineEntity.this.distanceTo(PoisonQuillVineEntity.this.getTarget()) <= 15;
+			return PoisonQuillVineEntity.this.isOut() && PoisonQuillVineEntity.this.delayedBehaviourTime <= 0
+					&& PoisonQuillVineEntity.this.getTarget() != null && !PoisonQuillVineEntity.this.open
+					&& PoisonQuillVineEntity.this.distanceTo(PoisonQuillVineEntity.this.getTarget()) <= 15;
 		}
-		
+
 		@Override
 		public void start() {
 			super.start();
@@ -316,7 +320,7 @@ public class PoisonQuillVineEntity extends AbstractVineEntity {
 			PoisonQuillVineEntity.this.playSound(PoisonQuillVineEntity.this.getOpenSound(), 1.0F, 1.0F);
 		}
 	}
-	
+
 	class CloseGoal extends Goal {
 
 		public CloseGoal() {
@@ -325,9 +329,11 @@ public class PoisonQuillVineEntity extends AbstractVineEntity {
 
 		@Override
 		public boolean canUse() {
-			return PoisonQuillVineEntity.this.isOut() && PoisonQuillVineEntity.this.delayedBehaviourTime <= 0 && PoisonQuillVineEntity.this.open && (PoisonQuillVineEntity.this.getTarget() == null || PoisonQuillVineEntity.this.distanceTo(PoisonQuillVineEntity.this.getTarget()) > 17.5);
+			return PoisonQuillVineEntity.this.isOut() && PoisonQuillVineEntity.this.delayedBehaviourTime <= 0
+					&& PoisonQuillVineEntity.this.open && (PoisonQuillVineEntity.this.getTarget() == null
+							|| PoisonQuillVineEntity.this.distanceTo(PoisonQuillVineEntity.this.getTarget()) > 17.5);
 		}
-		
+
 		@Override
 		public void start() {
 			super.start();
@@ -337,12 +343,12 @@ public class PoisonQuillVineEntity extends AbstractVineEntity {
 			PoisonQuillVineEntity.this.playSound(PoisonQuillVineEntity.this.getCloseSound(), 1.0F, 1.0F);
 		}
 	}
-	
+
 	class ShootAttackGoal extends Goal {
 		public PoisonQuillVineEntity mob;
 		@Nullable
 		public LivingEntity target;
-	      
+
 		public ShootAttackGoal(PoisonQuillVineEntity mob) {
 			this.mob = mob;
 			this.target = mob.getTarget();
@@ -360,7 +366,8 @@ public class PoisonQuillVineEntity extends AbstractVineEntity {
 		@Override
 		public boolean canUse() {
 			target = mob.getTarget();
-			return mob.open && mob.delayedBehaviourTime <= 0 && target != null && mob.distanceTo(target) <= 12.5 && mob.hasLineOfSight(target) && animationsUseable();
+			return mob.open && mob.delayedBehaviourTime <= 0 && target != null && mob.distanceTo(target) <= 12.5
+					&& mob.hasLineOfSight(target) && animationsUseable();
 		}
 
 		@Override
@@ -381,7 +388,8 @@ public class PoisonQuillVineEntity extends AbstractVineEntity {
 			this.mob.getNavigation().stop();
 
 			if (target != null && mob.shootAnimationTick == mob.shootAnimationActionPoint) {
-				Vec3 pos = PositionUtils.getOffsetPos(mob, 0, mob.getStandingEyeHeight(mob.getPose(), mob.getDimensions(mob.getPose())), 1.0, yHeadRot);
+				Vec3 pos = PositionUtils.getOffsetPos(mob, 0,
+						mob.getStandingEyeHeight(mob.getPose(), mob.getDimensions(mob.getPose())), 1.0, yHeadRot);
 				double d1 = target.getX() - pos.x;
 				double d2 = target.getY(0.6D) - pos.y;
 				double d3 = target.getZ() - pos.z;

@@ -19,48 +19,48 @@ import software.bernie.geckolib3.resource.GeckoLibCache;
 // Model and animation received from CQR and DerToaster
 public class ReplacedEvokerModel extends AnimatedGeoModel {
 
-    @Override
-    public ResourceLocation getAnimationResource(Object entity) {
-        return new ResourceLocation(MODID, "animations/evoker.animation.json");
-    }
+	@Override
+	public ResourceLocation getAnimationResource(Object entity) {
+		return new ResourceLocation(MODID, "animations/evoker.animation.json");
+	}
 
-    @Override
-    public ResourceLocation getModelResource(Object entity) {
-        return new ResourceLocation(MODID, "geo/geo_illager.geo.json") ;
-    }
+	@Override
+	public ResourceLocation getModelResource(Object entity) {
+		return new ResourceLocation(MODID, "geo/geo_illager.geo.json");
+	}
 
-    @Override
-    public ResourceLocation getTextureResource(Object entity) {
+	@Override
+	public ResourceLocation getTextureResource(Object entity) {
 //        return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/pillager.png");
-        return new ResourceLocation(MODID, "textures/entity/illager/evoker.png");
-    }
-    
-    @Override
-    public void codeAnimations(IAnimatable entity, Integer uniqueID, AnimationEvent customPredicate) {
-    	super.codeAnimations((ReplacedEvokerEntity) entity, uniqueID, customPredicate);
-        IBone head = this.getAnimationProcessor().getBone("bipedHead");
-        IBone illagerArms = this.getAnimationProcessor().getBone("illagerArms");
-        
-        illagerArms.setHidden(false);
+		return new ResourceLocation(MODID, "textures/entity/illager/evoker.png");
+	}
 
-        IBone cape = this.getAnimationProcessor().getBone("bipedCape");
+	@Override
+	public void codeAnimations(IAnimatable entity, Integer uniqueID, AnimationEvent customPredicate) {
+		super.codeAnimations((ReplacedEvokerEntity) entity, uniqueID, customPredicate);
+		IBone head = this.getAnimationProcessor().getBone("bipedHead");
+		IBone illagerArms = this.getAnimationProcessor().getBone("illagerArms");
+
+		illagerArms.setHidden(false);
+
+		IBone cape = this.getAnimationProcessor().getBone("bipedCape");
 //        if (entity.getMobEntity().getItemBySlot(EquipmentSlot.CHEST).getItem() == entity.getMobEntity().getArmorSet().getChest().get()) {
 //            cape.setHidden(false);
 //        } else {
-            cape.setHidden(true);
+		cape.setHidden(true);
 //        }
 
-        EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
-        if (extraData.headPitch != 0 || extraData.netHeadYaw != 0) {
-            head.setRotationX(head.getRotationX() + (extraData.headPitch * ((float) Math.PI / 180F)));
-            head.setRotationY(head.getRotationY() + (extraData.netHeadYaw * ((float) Math.PI / 180F)));
-        }
-    }
-    
+		EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
+		if (extraData.headPitch != 0 || extraData.netHeadYaw != 0) {
+			head.setRotationX(head.getRotationX() + (extraData.headPitch * ((float) Math.PI / 180F)));
+			head.setRotationY(head.getRotationY() + (extraData.netHeadYaw * ((float) Math.PI / 180F)));
+		}
+	}
+
 	@Override
 	public void setMolangQueries(IAnimatable animatable, double currentTick) {
 		super.setMolangQueries(animatable, currentTick);
-		
+
 		MolangParser parser = GeckoLibCache.getInstance().parser;
 		LivingEntity livingEntity = ((ReplacedEvokerEntity) animatable).getMob();
 		Vec3 velocity = livingEntity.getDeltaMovement();

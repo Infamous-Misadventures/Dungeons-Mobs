@@ -24,7 +24,8 @@ public class UseShieldGoal extends Goal {
 	@Nullable
 	public LivingEntity target;
 
-	public UseShieldGoal(PathfinderMob attackingMob, double blockDistance, int blockDuration, int maxBlockDuration, int stopChanceAfterDurationEnds, int blockChance, boolean guaranteedBlockIfTargetNotVisible) {
+	public UseShieldGoal(PathfinderMob attackingMob, double blockDistance, int blockDuration, int maxBlockDuration,
+			int stopChanceAfterDurationEnds, int blockChance, boolean guaranteedBlockIfTargetNotVisible) {
 		this.blockDuration = maxBlockDuration;
 		this.mob = attackingMob;
 		this.target = attackingMob.getTarget();
@@ -45,7 +46,7 @@ public class UseShieldGoal extends Goal {
 	}
 
 	public boolean shouldBlockForTarget(LivingEntity target) {
-		if (target instanceof Mob && ((Mob)target).getTarget() != null && ((Mob)target).getTarget() != mob) {
+		if (target instanceof Mob && ((Mob) target).getTarget() != null && ((Mob) target).getTarget() != mob) {
 			return false;
 		} else {
 			return true;
@@ -53,7 +54,7 @@ public class UseShieldGoal extends Goal {
 	}
 
 	public boolean isShieldDisabled(PathfinderMob shieldUser) {
-		if (shieldUser instanceof IShieldUser && ((IShieldUser)shieldUser).isShieldDisabled()) {
+		if (shieldUser instanceof IShieldUser && ((IShieldUser) shieldUser).isShieldDisabled()) {
 			return true;
 		} else {
 			return false;
@@ -63,12 +64,17 @@ public class UseShieldGoal extends Goal {
 	@Override
 	public boolean canUse() {
 		target = mob.getTarget();
-		return target != null && !isShieldDisabled(mob) && shouldBlockForTarget(target) && (((mob.getRandom().nextInt(this.blockChance) == 0 && mob.distanceTo(target) <= blockDistance && mob.hasLineOfSight(target) && mob.getOffhandItem().canPerformAction(net.minecraftforge.common.ToolActions.SHIELD_BLOCK)) || mob.isBlocking()) || (guaranteedBlockIfTargetNotVisible && !mob.hasLineOfSight(target)));
+		return target != null && !isShieldDisabled(mob) && shouldBlockForTarget(target)
+				&& (((mob.getRandom().nextInt(this.blockChance) == 0 && mob.distanceTo(target) <= blockDistance
+						&& mob.hasLineOfSight(target)
+						&& mob.getOffhandItem().canPerformAction(net.minecraftforge.common.ToolActions.SHIELD_BLOCK))
+						|| mob.isBlocking()) || (guaranteedBlockIfTargetNotVisible && !mob.hasLineOfSight(target)));
 	}
 
 	@Override
 	public boolean canContinueToUse() {
-		return target != null && mob.invulnerableTime <= 0 && !isShieldDisabled(mob) && mob.getOffhandItem().canPerformAction(net.minecraftforge.common.ToolActions.SHIELD_BLOCK);
+		return target != null && mob.invulnerableTime <= 0 && !isShieldDisabled(mob)
+				&& mob.getOffhandItem().canPerformAction(net.minecraftforge.common.ToolActions.SHIELD_BLOCK);
 	}
 
 	@Override
@@ -79,9 +85,10 @@ public class UseShieldGoal extends Goal {
 	@Override
 	public void tick() {
 		target = mob.getTarget();
-		this.blockingFor ++;
+		this.blockingFor++;
 
-		if ((this.blockingFor >= this.blockDuration && mob.getRandom().nextInt(this.stopChanceAfterDurationEnds) == 0) || this.blockingFor >= this.maxBlockDuration) {
+		if ((this.blockingFor >= this.blockDuration && mob.getRandom().nextInt(this.stopChanceAfterDurationEnds) == 0)
+				|| this.blockingFor >= this.maxBlockDuration) {
 			this.stop();
 		}
 	}

@@ -11,6 +11,6 @@ import net.minecraft.world.entity.projectile.Arrow;
 @Mixin(Arrow.class)
 public interface ArrowAccessor {
 
-    @Accessor
-    Set<MobEffectInstance> getEffects();
+	@Accessor
+	Set<MobEffectInstance> getEffects();
 }

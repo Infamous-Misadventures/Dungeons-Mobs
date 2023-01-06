@@ -64,7 +64,8 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
-public class SkeletonVanguardEntity extends Skeleton implements IShieldUser, IAnimatable, SpawnArmoredMob, AnimatableMeleeAttackMob {
+public class SkeletonVanguardEntity extends Skeleton
+		implements IShieldUser, IAnimatable, SpawnArmoredMob, AnimatableMeleeAttackMob {
 
 	private static final UUID SPEED_MODIFIER_BLOCKING_UUID = UUID.fromString("e4c96392-42f5-4028-ac44-cad469c10d51");
 	private static final AttributeModifier SPEED_MODIFIER_BLOCKING = new AttributeModifier(SPEED_MODIFIER_BLOCKING_UUID,
@@ -90,9 +91,10 @@ public class SkeletonVanguardEntity extends Skeleton implements IShieldUser, IAn
 	@Override
 	protected void registerGoals() {
 		this.goalSelector.addGoal(0, new UseShieldGoal(this, 10D, 60, 120, 10, 60, true));
-		this.goalSelector.addGoal(1, new BasicModdedAttackGoal(this, ModSoundEvents.SKELETON_VANGUARD_ATTACK.get(), 20));
+		this.goalSelector.addGoal(1,
+				new BasicModdedAttackGoal(this, ModSoundEvents.SKELETON_VANGUARD_ATTACK.get(), 20));
 		this.goalSelector.addGoal(2, new ApproachTargetGoal(this, 0, 1.0D, true));
-        this.goalSelector.addGoal(3, new LookAtTargetGoal(this));
+		this.goalSelector.addGoal(3, new LookAtTargetGoal(this));
 		this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1.0D));
 		this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
 		this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
@@ -100,17 +102,18 @@ public class SkeletonVanguardEntity extends Skeleton implements IShieldUser, IAn
 		this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true));
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));
 		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Wolf.class, true));
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Turtle.class, 10, true, false,
-				Turtle.BABY_ON_LAND_SELECTOR));
+		this.targetSelector.addGoal(3,
+				new NearestAttackableTargetGoal<>(this, Turtle.class, 10, true, false, Turtle.BABY_ON_LAND_SELECTOR));
 	}
-	
+
 	@Override
 	protected boolean isSunBurnTick() {
 		return false;
 	}
 
 	public static AttributeSupplier.Builder setCustomAttributes() {
-		return Skeleton.createAttributes().add(Attributes.FOLLOW_RANGE, 26.0D).add(Attributes.ARMOR, 6.0D).add(Attributes.ATTACK_KNOCKBACK, 1.5D).add(Attributes.KNOCKBACK_RESISTANCE, 0.3D);
+		return Skeleton.createAttributes().add(Attributes.FOLLOW_RANGE, 26.0D).add(Attributes.ARMOR, 6.0D)
+				.add(Attributes.ATTACK_KNOCKBACK, 1.5D).add(Attributes.KNOCKBACK_RESISTANCE, 0.3D);
 	}
 
 	protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficultyInstance) {
@@ -125,14 +128,14 @@ public class SkeletonVanguardEntity extends Skeleton implements IShieldUser, IAn
 		} else {
 			this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
 		}
-		//this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(ModItems.SKELETON_VANGUARD_HELMET.get()));
+		// this.setItemSlot(EquipmentSlot.HEAD, new
+		// ItemStack(ModItems.SKELETON_VANGUARD_HELMET.get()));
 		this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ModItems.VANGUARD_SHIELD.get()));
 	}
 
 	@Nullable
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficultyInstance,
-			MobSpawnType spawnReason, @Nullable SpawnGroupData livingEntityDataIn,
-			@Nullable CompoundTag compoundNBT) {
+			MobSpawnType spawnReason, @Nullable SpawnGroupData livingEntityDataIn, @Nullable CompoundTag compoundNBT) {
 		livingEntityDataIn = super.finalizeSpawn(world, difficultyInstance, spawnReason, livingEntityDataIn,
 				compoundNBT);
 

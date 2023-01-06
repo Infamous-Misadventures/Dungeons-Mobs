@@ -23,7 +23,7 @@ public class PoisonQuillVineModel extends AbstractVineModel {
 	public ResourceLocation getTextureResource(AbstractVineEntity entity) {
 		return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/jungle/poison_quill_vine.png");
 	}
-	
+
 	@Override
 	public void setCustomAnimations(AbstractVineEntity entity, int uniqueID, AnimationEvent customPredicate) {
 		super.setCustomAnimations(entity, uniqueID, customPredicate);
@@ -32,10 +32,10 @@ public class PoisonQuillVineModel extends AbstractVineModel {
 		IBone headRotator = this.getAnimationProcessor().getBone("headRotator");
 
 		EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
-        if (extraData.headPitch != 0 || extraData.netHeadYaw != 0) {
-            head.setRotationX(head.getRotationX() + (extraData.headPitch * ((float) Math.PI / 180F)));
-            
-            headRotator.setRotationY(headRotator.getRotationY() + (extraData.netHeadYaw * ((float) Math.PI / 180F)));
-        }
+		if (extraData.headPitch != 0 || extraData.netHeadYaw != 0) {
+			head.setRotationX(head.getRotationX() + (extraData.headPitch * ((float) Math.PI / 180F)));
+
+			headRotator.setRotationY(headRotator.getRotationY() + (extraData.netHeadYaw * ((float) Math.PI / 180F)));
+		}
 	}
 }

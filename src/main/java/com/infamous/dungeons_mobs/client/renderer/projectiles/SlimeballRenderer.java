@@ -10,7 +10,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class SlimeballRenderer extends ThrownItemRenderer<SlimeballEntity> {
 
-    public SlimeballRenderer(EntityRendererProvider.Context entityRendererManager) {
-        super(entityRendererManager, 0.75F, true);
-    }
+	public SlimeballRenderer(EntityRendererProvider.Context entityRendererManager) {
+		super(entityRendererManager, 0.75F, true);
+	}
 }

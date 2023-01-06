@@ -6,12 +6,12 @@ import net.minecraft.world.item.Items;
 
 public class GroupDungeonsMobs extends CreativeModeTab {
 
-    public GroupDungeonsMobs(String groupName) {
-        super(groupName);
-    }
+	public GroupDungeonsMobs(String groupName) {
+		super(groupName);
+	}
 
-    @Override
-    public ItemStack makeIcon() {
-        return new ItemStack(Items.ZOMBIE_SPAWN_EGG);
-    }
+	@Override
+	public ItemStack makeIcon() {
+		return new ItemStack(Items.ZOMBIE_SPAWN_EGG);
+	}
 }

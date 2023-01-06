@@ -16,27 +16,25 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 
 public class IllusionerClothesItem extends GeoArmorItem implements IAnimatable {
 
-    public IllusionerClothesItem(ArmorMaterial materialIn, EquipmentSlot slot, Properties builderIn) {
-        super(materialIn, slot, builderIn);
-    }
+	public IllusionerClothesItem(ArmorMaterial materialIn, EquipmentSlot slot, Properties builderIn) {
+		super(materialIn, slot, builderIn);
+	}
 
-    protected AnimationFactory factory = GeckoLibUtil.createFactory(this);
+	protected AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
-    @Override
-    public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController<>(this, "controller",
-                20, this::predicate));
-    }
+	@Override
+	public void registerControllers(AnimationData data) {
+		data.addAnimationController(new AnimationController<>(this, "controller", 20, this::predicate));
+	}
 
-    @Override
-    public AnimationFactory getFactory() {
-        return this.factory;
-    }
+	@Override
+	public AnimationFactory getFactory() {
+		return this.factory;
+	}
 
-    private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("idle", LOOP));
-        return PlayState.CONTINUE;
-    }
-
+	private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
+		event.getController().setAnimation(new AnimationBuilder().addAnimation("idle", LOOP));
+		return PlayState.CONTINUE;
+	}
 
 }

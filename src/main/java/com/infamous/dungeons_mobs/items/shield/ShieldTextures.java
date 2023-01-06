@@ -8,8 +8,11 @@ import net.minecraft.resources.ResourceLocation;
 
 public class ShieldTextures {
 
-    public static final Material LOCATION_ROYAL_GUARD_SHIELD_BASE = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(MODID, "entity/shield/royal_guard_shield_base"));
-    public static final Material LOCATION_ROYAL_GUARD_SHIELD_NO_PATTERN = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(MODID,"entity/shield/royal_guard_shield_base_no_pattern"));
-    public static final Material LOCATION_VANGUARD_SHIELD = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(MODID,"entity/shield/vanguard_shield"));
+	public static final Material LOCATION_ROYAL_GUARD_SHIELD_BASE = new Material(TextureAtlas.LOCATION_BLOCKS,
+			new ResourceLocation(MODID, "entity/shield/royal_guard_shield_base"));
+	public static final Material LOCATION_ROYAL_GUARD_SHIELD_NO_PATTERN = new Material(TextureAtlas.LOCATION_BLOCKS,
+			new ResourceLocation(MODID, "entity/shield/royal_guard_shield_base_no_pattern"));
+	public static final Material LOCATION_VANGUARD_SHIELD = new Material(TextureAtlas.LOCATION_BLOCKS,
+			new ResourceLocation(MODID, "entity/shield/vanguard_shield"));
 
 }

@@ -26,7 +26,7 @@ public class WhispererModel<T extends WhispererEntity> extends AnimatedGeoModel<
 
 	@Override
 	public ResourceLocation getModelResource(T entity) {
-		return new ResourceLocation(DungeonsMobs.MODID, "geo/whisperer.geo.json") ;
+		return new ResourceLocation(DungeonsMobs.MODID, "geo/whisperer.geo.json");
 	}
 
 	@Override
@@ -40,25 +40,35 @@ public class WhispererModel<T extends WhispererEntity> extends AnimatedGeoModel<
 
 		IBone head = this.getAnimationProcessor().getBone("jaw");
 		IBone cape = this.getAnimationProcessor().getBone("bipedCape");
-		
+
 		cape.setHidden(true);
-		
-        IBone leftHand = this.getAnimationProcessor().getBone("bipedHandLeft");
-        IBone rightHand = this.getAnimationProcessor().getBone("bipedHandRight");
-        
-        if (entity.tickCount % 1 == 0 && rightHand instanceof GeoBone && leftHand instanceof GeoBone && entity.isSpellcasting()) {
-        	GeoBone leftHandBone = ((GeoBone)leftHand);
-        	GeoBone rightHandBone = ((GeoBone)rightHand);
-        	entity.level.addParticle(ModParticleTypes.CORRUPTED_MAGIC.get(), leftHandBone.getWorldPosition().x, leftHandBone.getWorldPosition().y, leftHandBone.getWorldPosition().z, 0, 0, 0);
-        	entity.level.addParticle(ModParticleTypes.CORRUPTED_MAGIC.get(), rightHandBone.getWorldPosition().x, rightHandBone.getWorldPosition().y, rightHandBone.getWorldPosition().z, 0, 0, 0);
-        }
-        
-        if (entity.tickCount % 2 == 0 && rightHand instanceof GeoBone && leftHand instanceof GeoBone && entity.isSpellcasting()) {
-        	GeoBone leftHandBone = ((GeoBone)leftHand);
-        	GeoBone rightHandBone = ((GeoBone)rightHand);
-        	entity.level.addParticle(ModParticleTypes.CORRUPTED_DUST.get(), leftHandBone.getWorldPosition().x, leftHandBone.getWorldPosition().y, leftHandBone.getWorldPosition().z, entity.getRandom().nextGaussian() * 0.01, entity.getRandom().nextGaussian() * 0.01, entity.getRandom().nextGaussian() * 0.01);
-        	entity.level.addParticle(ModParticleTypes.CORRUPTED_DUST.get(), rightHandBone.getWorldPosition().x, rightHandBone.getWorldPosition().y, rightHandBone.getWorldPosition().z, entity.getRandom().nextGaussian() * 0.01, entity.getRandom().nextGaussian() * 0.01, entity.getRandom().nextGaussian() * 0.01);
-        }
+
+		IBone leftHand = this.getAnimationProcessor().getBone("bipedHandLeft");
+		IBone rightHand = this.getAnimationProcessor().getBone("bipedHandRight");
+
+		if (entity.tickCount % 1 == 0 && rightHand instanceof GeoBone && leftHand instanceof GeoBone
+				&& entity.isSpellcasting()) {
+			GeoBone leftHandBone = ((GeoBone) leftHand);
+			GeoBone rightHandBone = ((GeoBone) rightHand);
+			entity.level.addParticle(ModParticleTypes.CORRUPTED_MAGIC.get(), leftHandBone.getWorldPosition().x,
+					leftHandBone.getWorldPosition().y, leftHandBone.getWorldPosition().z, 0, 0, 0);
+			entity.level.addParticle(ModParticleTypes.CORRUPTED_MAGIC.get(), rightHandBone.getWorldPosition().x,
+					rightHandBone.getWorldPosition().y, rightHandBone.getWorldPosition().z, 0, 0, 0);
+		}
+
+		if (entity.tickCount % 2 == 0 && rightHand instanceof GeoBone && leftHand instanceof GeoBone
+				&& entity.isSpellcasting()) {
+			GeoBone leftHandBone = ((GeoBone) leftHand);
+			GeoBone rightHandBone = ((GeoBone) rightHand);
+			entity.level.addParticle(ModParticleTypes.CORRUPTED_DUST.get(), leftHandBone.getWorldPosition().x,
+					leftHandBone.getWorldPosition().y, leftHandBone.getWorldPosition().z,
+					entity.getRandom().nextGaussian() * 0.01, entity.getRandom().nextGaussian() * 0.01,
+					entity.getRandom().nextGaussian() * 0.01);
+			entity.level.addParticle(ModParticleTypes.CORRUPTED_DUST.get(), rightHandBone.getWorldPosition().x,
+					rightHandBone.getWorldPosition().y, rightHandBone.getWorldPosition().z,
+					entity.getRandom().nextGaussian() * 0.01, entity.getRandom().nextGaussian() * 0.01,
+					entity.getRandom().nextGaussian() * 0.01);
+		}
 
 		EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
 
@@ -67,11 +77,11 @@ public class WhispererModel<T extends WhispererEntity> extends AnimatedGeoModel<
 			head.setRotationY(head.getRotationY() + (extraData.netHeadYaw * ((float) Math.PI / 180F)));
 		}
 	}
-	
+
 	@Override
 	public void setMolangQueries(IAnimatable animatable, double currentTick) {
 		super.setMolangQueries(animatable, currentTick);
-		
+
 		MolangParser parser = GeckoLibCache.getInstance().parser;
 		LivingEntity livingEntity = (LivingEntity) animatable;
 		Vec3 velocity = livingEntity.getDeltaMovement();

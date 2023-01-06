@@ -1,6 +1,5 @@
 package com.infamous.dungeons_mobs.client.models.projectile;
 
-
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.entities.projectiles.DrownedNecromancerOrbEntity;
 
@@ -23,7 +22,8 @@ public class DrownedNecromancerOrbModel extends AnimatedGeoModel<DrownedNecroman
 
 	@Override
 	public ResourceLocation getTextureResource(DrownedNecromancerOrbEntity entity) {
-		return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/projectile/drowned_necromancer_orb_" + entity.textureChange % 2 + ".png");
+		return new ResourceLocation(DungeonsMobs.MODID,
+				"textures/entity/projectile/drowned_necromancer_orb_" + entity.textureChange % 2 + ".png");
 	}
 
 	@Override

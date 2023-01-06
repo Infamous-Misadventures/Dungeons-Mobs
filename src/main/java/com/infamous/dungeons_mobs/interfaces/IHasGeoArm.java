@@ -9,10 +9,10 @@ import software.bernie.geckolib3.core.processor.IBone;
 
 @OnlyIn(Dist.CLIENT)
 public interface IHasGeoArm {
-	
+
 	IBone getArm(HumanoidArm p_191216_1_);
-	
+
 	void translateToHand(HumanoidArm p_225599_1_, PoseStack p_225599_2_);
-	
+
 	void translateAndRotate(IBone bone, PoseStack p_228307_1_);
 }

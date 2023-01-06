@@ -9,7 +9,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class CustomFireballRenderer extends ThrownItemRenderer<Fireball> {
 
-    public CustomFireballRenderer(EntityRendererProvider.Context p_i226035_1_) {
-        super(p_i226035_1_, 0.75F, true);
-    }
+	public CustomFireballRenderer(EntityRendererProvider.Context p_i226035_1_) {
+		super(p_i226035_1_, 0.75F, true);
+	}
 }

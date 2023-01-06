@@ -10,7 +10,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class BlueNethershroomRenderer extends ThrownItemRenderer<BlueNethershroomEntity> {
 
-    public BlueNethershroomRenderer(EntityRendererProvider.Context entityRendererManager) {
-        super(entityRendererManager, 0.75F, true);
-    }
+	public BlueNethershroomRenderer(EntityRendererProvider.Context entityRendererManager) {
+		super(entityRendererManager, 0.75F, true);
+	}
 }

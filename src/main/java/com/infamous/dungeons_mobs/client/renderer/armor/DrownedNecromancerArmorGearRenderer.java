@@ -16,9 +16,9 @@ public class DrownedNecromancerArmorGearRenderer extends ArmorGearRenderer<Drown
 
 	public String hoodBone = "armorHood";
 
-    public DrownedNecromancerArmorGearRenderer() {
-        super(new DrownedNecromancerArmorGearModel<>());
-    }
+	public DrownedNecromancerArmorGearRenderer() {
+		super(new DrownedNecromancerArmorGearModel<>());
+	}
 
 	@Override
 	public void fitToBiped() {
@@ -31,12 +31,12 @@ public class DrownedNecromancerArmorGearRenderer extends ArmorGearRenderer<Drown
 			hoodBone.setPositionZ(this.head.z);
 		}
 	}
-	
+
 	@SuppressWarnings("incomplete-switch")
 	@Override
 	public GeoArmorRenderer applySlot(EquipmentSlot slot) {
 		super.applySlot(slot);
-		
+
 		this.getGeoModelProvider().getModel(this.getGeoModelProvider().getModelResource(currentArmorItem));
 
 		IBone hoodBone = this.getAndHideBone(this.hoodBone);
@@ -55,14 +55,15 @@ public class DrownedNecromancerArmorGearRenderer extends ArmorGearRenderer<Drown
 		}
 		return this;
 	}
-	
-    @Override
-    public void render(float partialTicks, PoseStack stack, VertexConsumer bufferIn, int packedLightIn) {
 
-        AnimatedGeoModel<DrownedNecromancerArmorGear> geoModelProvider = getGeoModelProvider();
-        if(geoModelProvider instanceof DrownedNecromancerArmorGearModel){
-            ((DrownedNecromancerArmorGearModel<DrownedNecromancerArmorGear>) geoModelProvider).setWearer(this.entityLiving);
-        }
-        super.render(partialTicks, stack, bufferIn, packedLightIn);
-    }
+	@Override
+	public void render(float partialTicks, PoseStack stack, VertexConsumer bufferIn, int packedLightIn) {
+
+		AnimatedGeoModel<DrownedNecromancerArmorGear> geoModelProvider = getGeoModelProvider();
+		if (geoModelProvider instanceof DrownedNecromancerArmorGearModel) {
+			((DrownedNecromancerArmorGearModel<DrownedNecromancerArmorGear>) geoModelProvider)
+					.setWearer(this.entityLiving);
+		}
+		super.render(partialTicks, stack, bufferIn, packedLightIn);
+	}
 }

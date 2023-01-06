@@ -17,13 +17,14 @@ import net.minecraftforge.network.PacketDistributor;
 @Mod.EventBusSubscriber(modid = MODID)
 public class AnimatedPropsEvents {
 
-    @SubscribeEvent
-    public static void onPlayerStartTracking(PlayerEvent.StartTracking event){
-        Player player = event.getEntity();
-        Entity target = event.getTarget();
-        if (player instanceof ServerPlayer && target instanceof Vindicator) {
-            AnimatedProps cap = AnimatedPropsHelper.getAnimatedPropsCapability((Vindicator) target);
-            NetworkHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), new AnimatedPropsMessage(target.getId(), cap));
-        }
-    }
+	@SubscribeEvent
+	public static void onPlayerStartTracking(PlayerEvent.StartTracking event) {
+		Player player = event.getEntity();
+		Entity target = event.getTarget();
+		if (player instanceof ServerPlayer && target instanceof Vindicator) {
+			AnimatedProps cap = AnimatedPropsHelper.getAnimatedPropsCapability((Vindicator) target);
+			NetworkHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player),
+					new AnimatedPropsMessage(target.getId(), cap));
+		}
+	}
 }

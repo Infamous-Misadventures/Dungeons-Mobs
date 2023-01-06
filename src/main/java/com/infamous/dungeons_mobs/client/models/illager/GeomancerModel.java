@@ -32,29 +32,29 @@ public class GeomancerModel extends AnimatedGeoModel<GeomancerEntity> {
 		return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/geomancer.png");
 	}
 
-    @Override
-    public void setCustomAnimations(GeomancerEntity entity, int uniqueID, AnimationEvent customPredicate) {
-        super.setCustomAnimations(entity, uniqueID, customPredicate);
+	@Override
+	public void setCustomAnimations(GeomancerEntity entity, int uniqueID, AnimationEvent customPredicate) {
+		super.setCustomAnimations(entity, uniqueID, customPredicate);
 
-        IBone head = this.getAnimationProcessor().getBone("bipedHead");
-        IBone cape = this.getAnimationProcessor().getBone("bipedCape");
-        IBone illagerArms = this.getAnimationProcessor().getBone("illagerArms");
-        
-        cape.setHidden(true);
-        illagerArms.setHidden(true);
+		IBone head = this.getAnimationProcessor().getBone("bipedHead");
+		IBone cape = this.getAnimationProcessor().getBone("bipedCape");
+		IBone illagerArms = this.getAnimationProcessor().getBone("illagerArms");
 
-        EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
+		cape.setHidden(true);
+		illagerArms.setHidden(true);
 
-        if (extraData.headPitch != 0 || extraData.netHeadYaw != 0) {
-            head.setRotationX(head.getRotationX() + (extraData.headPitch * ((float) Math.PI / 180F)));
-            head.setRotationY(head.getRotationY() + (extraData.netHeadYaw * ((float) Math.PI / 180F)));
-        }
-    }
-    
+		EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
+
+		if (extraData.headPitch != 0 || extraData.netHeadYaw != 0) {
+			head.setRotationX(head.getRotationX() + (extraData.headPitch * ((float) Math.PI / 180F)));
+			head.setRotationY(head.getRotationY() + (extraData.netHeadYaw * ((float) Math.PI / 180F)));
+		}
+	}
+
 	@Override
 	public void setMolangQueries(IAnimatable animatable, double currentTick) {
 		super.setMolangQueries(animatable, currentTick);
-		
+
 		MolangParser parser = GeckoLibCache.getInstance().parser;
 		LivingEntity livingEntity = (LivingEntity) animatable;
 		Vec3 velocity = livingEntity.getDeltaMovement();

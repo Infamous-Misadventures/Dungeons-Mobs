@@ -7,12 +7,12 @@ import net.minecraft.world.item.ItemStack;
 
 public class GroupDungeonsMobsItems extends CreativeModeTab {
 
-    public GroupDungeonsMobsItems(String groupName) {
-        super(groupName);
-    }
+	public GroupDungeonsMobsItems(String groupName) {
+		super(groupName);
+	}
 
-    @Override
-    public ItemStack makeIcon() {
-        return new ItemStack(ModItems.GOLD_PIGLIN_HELMET.get());
-    }
+	@Override
+	public ItemStack makeIcon() {
+		return new ItemStack(ModItems.GOLD_PIGLIN_HELMET.get());
+	}
 }

@@ -1,7 +1,7 @@
 package com.infamous.dungeons_mobs.client.models.redstone;// Made with Blockbench 3.6.6
+
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
-
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.entities.redstone.RedstoneGolemEntity;
@@ -27,7 +27,7 @@ public class RedstoneGolemModel extends AnimatedGeoModel {
 
 	@Override
 	public ResourceLocation getTextureResource(Object entity) {
-		//ChorusGormandizerEntity entityIn = (ChorusGormandizerEntity) entity;
+		// ChorusGormandizerEntity entityIn = (ChorusGormandizerEntity) entity;
 		return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/redstone/redstone_golem.png");
 	}
 

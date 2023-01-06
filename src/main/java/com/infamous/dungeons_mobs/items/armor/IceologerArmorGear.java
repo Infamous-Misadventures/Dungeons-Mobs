@@ -7,7 +7,8 @@ import net.minecraft.world.entity.EquipmentSlot;
 
 public class IceologerArmorGear extends ArmorGear {
 
-    public IceologerArmorGear(EquipmentSlot slotType, Properties properties, ResourceLocation armorSet, ResourceLocation modelLocation, ResourceLocation textureLocation, ResourceLocation animationFileLocation) {
-        super(slotType, properties, armorSet, modelLocation, textureLocation, animationFileLocation);
-    }
+	public IceologerArmorGear(EquipmentSlot slotType, Properties properties, ResourceLocation armorSet,
+			ResourceLocation modelLocation, ResourceLocation textureLocation, ResourceLocation animationFileLocation) {
+		super(slotType, properties, armorSet, modelLocation, textureLocation, animationFileLocation);
+	}
 }

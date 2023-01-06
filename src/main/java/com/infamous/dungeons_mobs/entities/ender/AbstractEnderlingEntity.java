@@ -44,8 +44,8 @@ import software.bernie.geckolib3.core.IAnimatable;
 
 public abstract class AbstractEnderlingEntity extends Monster implements IAnimatable {
 
-	public static final EntityDataAccessor<Integer> ATTACKING = SynchedEntityData.defineId(AbstractEnderlingEntity.class,
-			EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Integer> ATTACKING = SynchedEntityData
+			.defineId(AbstractEnderlingEntity.class, EntityDataSerializers.INT);
 
 	public static final EntityDataAccessor<Integer> RUNNING = SynchedEntityData.defineId(AbstractEnderlingEntity.class,
 			EntityDataSerializers.INT);
@@ -117,9 +117,9 @@ public abstract class AbstractEnderlingEntity extends Monster implements IAnimat
 
 	@SuppressWarnings("unchecked")
 	public boolean checkSpawnRules(LevelAccessor p_213380_1_, MobSpawnType p_213380_2_) {
-		return (p_213380_2_ != MobSpawnType.NATURAL
-				|| !this.level.getBiome(this.blockPosition()).is(Biomes.THE_END)) && super.checkMobSpawnRules(((EntityType<? extends Mob>) this.getType()), p_213380_1_,
-				p_213380_2_, this.blockPosition(), this.random);
+		return (p_213380_2_ != MobSpawnType.NATURAL || !this.level.getBiome(this.blockPosition()).is(Biomes.THE_END))
+				&& super.checkMobSpawnRules(((EntityType<? extends Mob>) this.getType()), p_213380_1_, p_213380_2_,
+						this.blockPosition(), this.random);
 	}
 
 	public void baseTick() {
@@ -219,8 +219,8 @@ public abstract class AbstractEnderlingEntity extends Monster implements IAnimat
 		boolean flag = blockstate.getMaterial().blocksMotion();
 		boolean flag1 = blockstate.getFluidState().is(FluidTags.WATER);
 		if (flag && !flag1) {
-			EntityTeleportEvent.EnderEntity event = net.minecraftforge.event.ForgeEventFactory
-					.onEnderTeleport(this, p_70825_1_, p_70825_3_, p_70825_5_);
+			EntityTeleportEvent.EnderEntity event = net.minecraftforge.event.ForgeEventFactory.onEnderTeleport(this,
+					p_70825_1_, p_70825_3_, p_70825_5_);
 			if (event.isCanceled())
 				return false;
 			boolean flag2 = this.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
@@ -313,8 +313,7 @@ public abstract class AbstractEnderlingEntity extends Monster implements IAnimat
 			this(p_i50313_1_, p_i50313_2_, p_i50313_3_, false);
 		}
 
-		public EnderlingTargetGoal(Mob p_i50314_1_, Class<T> p_i50314_2_, boolean p_i50314_3_,
-				boolean p_i50314_4_) {
+		public EnderlingTargetGoal(Mob p_i50314_1_, Class<T> p_i50314_2_, boolean p_i50314_3_, boolean p_i50314_4_) {
 			this(p_i50314_1_, p_i50314_2_, 10, p_i50314_3_, p_i50314_4_, (Predicate<LivingEntity>) null);
 		}
 
@@ -324,7 +323,8 @@ public abstract class AbstractEnderlingEntity extends Monster implements IAnimat
 			this.targetType = p_i50315_2_;
 			this.randomInterval = p_i50315_3_;
 			this.setFlags(EnumSet.of(Goal.Flag.TARGET));
-			this.targetConditions = TargetingConditions.forCombat().range(this.getFollowDistance()).selector(p_i50315_6_);
+			this.targetConditions = TargetingConditions.forCombat().range(this.getFollowDistance())
+					.selector(p_i50315_6_);
 		}
 
 		public boolean canUse() {

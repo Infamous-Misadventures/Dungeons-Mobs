@@ -34,10 +34,11 @@ public class AbstractVineRenderer<M extends AbstractVineModel> extends GeoEntity
 		}
 		super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
 	}
-	
+
 	@Override
 	protected int getBlockLightLevel(AbstractVineEntity p_225624_1_, BlockPos p_225624_2_) {
-		return p_225624_1_.isOnFire() ? 15 : p_225624_1_.level.getBrightness(LightLayer.BLOCK, p_225624_1_.getParts()[0].blockPosition());
+		return p_225624_1_.isOnFire() ? 15
+				: p_225624_1_.level.getBrightness(LightLayer.BLOCK, p_225624_1_.getParts()[0].blockPosition());
 	}
 
 	@Override

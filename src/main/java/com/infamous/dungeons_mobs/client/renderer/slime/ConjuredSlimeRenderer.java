@@ -11,14 +11,15 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class ConjuredSlimeRenderer extends SlimeRenderer {
-   private static final ResourceLocation CONJURED_SLIME_TEXTURE = new ResourceLocation(MODID, "textures/entity/slime/conjured_slime.png");
+	private static final ResourceLocation CONJURED_SLIME_TEXTURE = new ResourceLocation(MODID,
+			"textures/entity/slime/conjured_slime.png");
 
-   public ConjuredSlimeRenderer(EntityRendererProvider.Context renderManagerIn) {
-      super(renderManagerIn);
-   }
+	public ConjuredSlimeRenderer(EntityRendererProvider.Context renderManagerIn) {
+		super(renderManagerIn);
+	}
 
-   @Override
-   public ResourceLocation getTextureLocation(Slime entity) {
-      return CONJURED_SLIME_TEXTURE;
-   }
+	@Override
+	public ResourceLocation getTextureLocation(Slime entity) {
+		return CONJURED_SLIME_TEXTURE;
+	}
 }

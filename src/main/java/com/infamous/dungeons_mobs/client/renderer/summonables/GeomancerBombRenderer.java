@@ -16,26 +16,30 @@ import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 public class GeomancerBombRenderer extends GeoEntityRenderer<GeomancerBombEntity> {
 	public GeomancerBombRenderer(EntityRendererProvider.Context renderManager) {
 		super(renderManager, new GeomancerConstructModel());
-		this.addLayer(new PulsatingGlowLayer<GeomancerBombEntity>(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/constructs/geomancer_bomb.png"), 0.5F, 0.6F, 0.2F) {
+		this.addLayer(new PulsatingGlowLayer<GeomancerBombEntity>(this,
+				new ResourceLocation(DungeonsMobs.MODID, "textures/entity/constructs/geomancer_bomb.png"), 0.5F, 0.6F,
+				0.2F) {
 			@Override
 			public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn,
-							   GeomancerBombEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
-							   float ageInTicks, float netHeadYaw, float headPitch) {
+					GeomancerBombEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
+					float ageInTicks, float netHeadYaw, float headPitch) {
 
 				if (entitylivingbaseIn.getLifeTicks() < 60 && entitylivingbaseIn.getLifeTicks() >= 30) {
-					textureLocation = new ResourceLocation(DungeonsMobs.MODID, "textures/entity/constructs/geomancer_bomb_eyes_1.png");
-					super.render(matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks,
-							ageInTicks, netHeadYaw, headPitch);
+					textureLocation = new ResourceLocation(DungeonsMobs.MODID,
+							"textures/entity/constructs/geomancer_bomb_eyes_1.png");
+					super.render(matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, limbSwing, limbSwingAmount,
+							partialTicks, ageInTicks, netHeadYaw, headPitch);
 				} else if (entitylivingbaseIn.getLifeTicks() < 30 && entitylivingbaseIn.getLifeTicks() >= 0) {
 					pulseSpeed = 0.8F;
-					textureLocation = new ResourceLocation(DungeonsMobs.MODID, "textures/entity/constructs/geomancer_bomb_eyes_2.png");
-					super.render(matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks,
-							ageInTicks, netHeadYaw, headPitch);
+					textureLocation = new ResourceLocation(DungeonsMobs.MODID,
+							"textures/entity/constructs/geomancer_bomb_eyes_2.png");
+					super.render(matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, limbSwing, limbSwingAmount,
+							partialTicks, ageInTicks, netHeadYaw, headPitch);
 				}
 			}
 		});
 	}
-	
+
 	protected void applyRotations(GeomancerBombEntity entityLiving, PoseStack matrixStackIn, float ageInTicks,
 			float rotationYaw, float partialTicks) {
 

@@ -14,10 +14,12 @@ import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 public class GeomancerWallRenderer extends GeoEntityRenderer<GeomancerWallEntity> {
 	public GeomancerWallRenderer(EntityRendererProvider.Context renderManager) {
 		super(renderManager, new GeomancerConstructModel());
-		//this.addLayer(new GeoEyeLayer<>(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/enchanter/enchanter_eyes.png")));
-		//this.addLayer(new GeoHeldItemLayer<>(this, 0.0, 0.0, 0.5));
+		// this.addLayer(new GeoEyeLayer<>(this, new
+		// ResourceLocation(DungeonsMobs.MODID,
+		// "textures/entity/enchanter/enchanter_eyes.png")));
+		// this.addLayer(new GeoHeldItemLayer<>(this, 0.0, 0.0, 0.5));
 	}
-	
+
 	protected void applyRotations(GeomancerWallEntity entityLiving, PoseStack matrixStackIn, float ageInTicks,
 			float rotationYaw, float partialTicks) {
 		super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);

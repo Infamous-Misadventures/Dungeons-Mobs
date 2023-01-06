@@ -33,10 +33,11 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 
 public class PoisonQuillEntity extends StraightMovingProjectileEntity implements IAnimatable {
 
-	private static final EntityDataAccessor<Boolean> KELP = SynchedEntityData.defineId(PoisonQuillEntity.class, EntityDataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> KELP = SynchedEntityData.defineId(PoisonQuillEntity.class,
+			EntityDataSerializers.BOOLEAN);
 
 	AnimationFactory factory = GeckoLibUtil.createFactory(this);
-		   
+
 	public PoisonQuillEntity(Level worldIn) {
 		super(ModEntityTypes.POISON_QUILL.get(), worldIn);
 	}
@@ -56,31 +57,31 @@ public class PoisonQuillEntity extends StraightMovingProjectileEntity implements
 		super(ModEntityTypes.POISON_QUILL.get(), p_i1795_2_, p_i1795_4_, p_i1795_6_, p_i1795_8_, p_i1795_10_,
 				p_i1795_12_, p_i1795_1_);
 	}
-	
+
 	@Override
 	protected ParticleOptions getTrailParticle() {
 		return null;
 	}
-	
+
 	@Override
 	public double getSpawnParticlesY() {
 		return 0.2;
 	}
-	
+
 	@Override
 	public boolean slowedDownInWater() {
 		return !this.isKelp();
 	}
-	
+
 	@Override
 	protected float getInertia() {
 		return 1.0F;
 	}
-	
+
 	@Override
 	protected MovementEmission getMovementEmission() {
-        return MovementEmission.NONE;
-	}	
+		return MovementEmission.NONE;
+	}
 
 	@Override
 	public void registerControllers(AnimationData data) {
@@ -103,50 +104,51 @@ public class PoisonQuillEntity extends StraightMovingProjectileEntity implements
 	protected void onHitEntity(EntityHitResult p_213868_1_) {
 		super.onHitEntity(p_213868_1_);
 	}
-	
+
 	@Override
 	public void playImpactSound() {
 		this.playSound(ModSoundEvents.JUNGLE_ZOMBIE_STEP.get(), 0.75F, 1.0F + (this.random.nextFloat() * 0.5F));
 	}
-	
+
 	public void onHitEntity(Entity entity) {
 		if (!this.level.isClientSide) {
 			super.onHitEntity(entity);
 			boolean flag;
-				flag = entity.hurt(ModDamageSources.poisonQuill(this, MoreObjects.firstNonNull(this.getOwner(), this)), 5.0F);
-	            if (entity instanceof LivingEntity) {
-	                int i = 0;
-	                if (this.level.getDifficulty() == Difficulty.NORMAL) {
-	                    i = 8;
-	                } else if (this.level.getDifficulty() == Difficulty.HARD) {
-	                    i = 16;
-	                }
-
-	                if (i > 0) {
-	                    ((LivingEntity)entity).addEffect(new MobEffectInstance(MobEffects.POISON, i * 20, 0));
-	                }
-	            }
-				if (flag) {
-					if (entity.isAlive() && this.getOwner() != null && this.getOwner() instanceof LivingEntity) {
-						this.doEnchantDamageEffects((LivingEntity)this.getOwner(), entity);
-					}
+			flag = entity.hurt(ModDamageSources.poisonQuill(this, MoreObjects.firstNonNull(this.getOwner(), this)),
+					5.0F);
+			if (entity instanceof LivingEntity) {
+				int i = 0;
+				if (this.level.getDifficulty() == Difficulty.NORMAL) {
+					i = 8;
+				} else if (this.level.getDifficulty() == Difficulty.HARD) {
+					i = 16;
 				}
-			
+
+				if (i > 0) {
+					((LivingEntity) entity).addEffect(new MobEffectInstance(MobEffects.POISON, i * 20, 0));
+				}
+			}
+			if (flag) {
+				if (entity.isAlive() && this.getOwner() != null && this.getOwner() instanceof LivingEntity) {
+					this.doEnchantDamageEffects((LivingEntity) this.getOwner(), entity);
+				}
+			}
+
 			this.remove(RemovalReason.DISCARDED);
 		}
 	}
-	
-	   protected void defineSynchedData() {
-		      this.entityData.define(KELP, false);
-		   }
 
-		   public boolean isKelp() {
-		      return this.entityData.get(KELP);
-		   }
+	protected void defineSynchedData() {
+		this.entityData.define(KELP, false);
+	}
 
-		   public void setKelp(boolean p_82343_1_) {
-		      this.entityData.set(KELP, p_82343_1_);
-		   }
+	public boolean isKelp() {
+		return this.entityData.get(KELP);
+	}
+
+	public void setKelp(boolean p_82343_1_) {
+		this.entityData.set(KELP, p_82343_1_);
+	}
 
 	public boolean isPickable() {
 		return false;
@@ -159,17 +161,17 @@ public class PoisonQuillEntity extends StraightMovingProjectileEntity implements
 	protected boolean shouldBurn() {
 		return false;
 	}
-	
+
 	@Override
 	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
-	
+
 	@Override
 	public boolean getsStuckInBlocks() {
 		return true;
 	}
-	
+
 	@Override
 	public SoundEvent getImpactSound() {
 		return null;

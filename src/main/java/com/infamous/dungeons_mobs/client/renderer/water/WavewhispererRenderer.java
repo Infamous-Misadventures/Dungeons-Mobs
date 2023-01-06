@@ -13,14 +13,16 @@ import net.minecraft.resources.ResourceLocation;
 
 public class WavewhispererRenderer extends WhispererRenderer {
 
-    private static final ResourceLocation WAVEWHISPERER_TEXTURE = new ResourceLocation(MODID, "textures/entity/ocean/wavewhisperer.png");
-    
-    @SuppressWarnings("unchecked")
+	private static final ResourceLocation WAVEWHISPERER_TEXTURE = new ResourceLocation(MODID,
+			"textures/entity/ocean/wavewhisperer.png");
+
+	@SuppressWarnings("unchecked")
 	public WavewhispererRenderer(EntityRendererProvider.Context renderManager) {
-        super(renderManager);
-        this.addLayer(new GeoEyeLayer(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/ocean/wavewhisperer_glow.png")));
-    }
-    
+		super(renderManager);
+		this.addLayer(new GeoEyeLayer(this,
+				new ResourceLocation(DungeonsMobs.MODID, "textures/entity/ocean/wavewhisperer_glow.png")));
+	}
+
 	public boolean isShaking(WhispererEntity p_230495_1_) {
 		return p_230495_1_.isInWrongHabitat();
 	}
@@ -33,9 +35,9 @@ public class WavewhispererRenderer extends WhispererRenderer {
 		}
 		super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
 	}
-    
-    @Override
-    public ResourceLocation getTextureLocation(WhispererEntity entity) {
-        return WAVEWHISPERER_TEXTURE;
-    }
+
+	@Override
+	public ResourceLocation getTextureLocation(WhispererEntity entity) {
+		return WAVEWHISPERER_TEXTURE;
+	}
 }

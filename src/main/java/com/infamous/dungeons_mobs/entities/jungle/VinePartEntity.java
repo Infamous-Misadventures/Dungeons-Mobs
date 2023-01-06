@@ -49,7 +49,7 @@ public class VinePartEntity extends PartEntity<AbstractVineEntity> {
 		super.refreshDimensions();
 		this.setPos(d0, d1, d2);
 	}
-	
+
 	public boolean isPoisonQuill() {
 		return parentMob instanceof PoisonQuillVineEntity;
 	}
@@ -62,7 +62,7 @@ public class VinePartEntity extends PartEntity<AbstractVineEntity> {
 	public EntityDimensions getSizeForSegment() {
 		EntityDimensions size = EntityDimensions.scalable(0, 0);
 
-		if(this.segmentNumber < 27 - parentMob.getLengthInSegments()) {
+		if (this.segmentNumber < 27 - parentMob.getLengthInSegments()) {
 			return size;
 		}
 
@@ -87,7 +87,8 @@ public class VinePartEntity extends PartEntity<AbstractVineEntity> {
 	}
 
 	public float getYOffsetForSegment() {
-		float extraHeight = this.isPoisonQuill() && this.segmentNumber > 24 ? (0.625F * (-24 + this.segmentNumber)) : 0.0F;
+		float extraHeight = this.isPoisonQuill() && this.segmentNumber > 24 ? (0.625F * (-24 + this.segmentNumber))
+				: 0.0F;
 		return ((1.375F * (this.segmentNumber - 1)) - (1.375F * 26) + this.parentMob.getLengthInBlocks()) + extraHeight;
 	}
 

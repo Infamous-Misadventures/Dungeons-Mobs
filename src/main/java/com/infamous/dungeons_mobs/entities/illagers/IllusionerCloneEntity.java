@@ -54,19 +54,19 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 
 public class IllusionerCloneEntity extends AbstractIllager implements IAnimatable, SpawnArmoredMob {
 
-	private static final EntityDataAccessor<Boolean> DELAYED_APPEAR = SynchedEntityData.defineId(IllusionerCloneEntity.class,
-			EntityDataSerializers.BOOLEAN);
-	
+	private static final EntityDataAccessor<Boolean> DELAYED_APPEAR = SynchedEntityData
+			.defineId(IllusionerCloneEntity.class, EntityDataSerializers.BOOLEAN);
+
 	public int shootAnimationTick;
 	public int shootAnimationLength = 38;
 	public int shootAnimationActionPoint = 16;
 
 	public int appearAnimationTick;
 	public int appearAnimationLength = 20;
-	
+
 	public int lifeTime;
-	
-	   private Mob owner;
+
+	private Mob owner;
 
 	AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
@@ -91,15 +91,14 @@ public class IllusionerCloneEntity extends AbstractIllager implements IAnimatabl
 		this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 8.0F));
 		this.targetSelector.addGoal(1, new IllusionerCloneEntity.CopyOwnerTargetGoal(this));
 	}
-	
-	
+
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		
+
 		this.entityData.define(DELAYED_APPEAR, false);
 	}
-	
+
 	public boolean hasDelayedAppear() {
 		return this.entityData.get(DELAYED_APPEAR);
 	}
@@ -107,39 +106,41 @@ public class IllusionerCloneEntity extends AbstractIllager implements IAnimatabl
 	public void setDelayedAppear(boolean attached) {
 		this.entityData.set(DELAYED_APPEAR, attached);
 	}
-	
+
 	@Override
 	public boolean hurt(DamageSource p_70097_1_, float p_70097_2_) {
-		if (p_70097_1_.getEntity() != null && this.isAlliedTo(p_70097_1_.getEntity()) && p_70097_1_ != DamageSource.OUT_OF_WORLD) {
+		if (p_70097_1_.getEntity() != null && this.isAlliedTo(p_70097_1_.getEntity())
+				&& p_70097_1_ != DamageSource.OUT_OF_WORLD) {
 			return false;
 		} else {
 			return super.hurt(p_70097_1_, p_70097_2_);
 		}
 	}
-	
-	   public Mob getOwner() {
-		      return this.owner;
-		   }
-	   
-	   public void setOwner(Mob p_190658_1_) {
-		      this.owner = p_190658_1_;
-		   }
-	
-	@Override
-	   protected void tickDeath() {
-	      ++this.deathTime;
-	      if (this.deathTime == 1) {
-	         this.remove(RemovalReason.DISCARDED);
-	         for(int i = 0; i < 20; ++i) {
-	            double d0 = this.random.nextGaussian() * 0.02D;
-	            double d1 = this.random.nextGaussian() * 0.02D;
-	            double d2 = this.random.nextGaussian() * 0.02D;
-	            this.level.addParticle(ParticleTypes.POOF, this.getRandomX(1.0D), this.getRandomY(), this.getRandomZ(1.0D), d0, d1, d2);
-	         }
-	      }
 
-	   }
-	
+	public Mob getOwner() {
+		return this.owner;
+	}
+
+	public void setOwner(Mob p_190658_1_) {
+		this.owner = p_190658_1_;
+	}
+
+	@Override
+	protected void tickDeath() {
+		++this.deathTime;
+		if (this.deathTime == 1) {
+			this.remove(RemovalReason.DISCARDED);
+			for (int i = 0; i < 20; ++i) {
+				double d0 = this.random.nextGaussian() * 0.02D;
+				double d1 = this.random.nextGaussian() * 0.02D;
+				double d2 = this.random.nextGaussian() * 0.02D;
+				this.level.addParticle(ParticleTypes.POOF, this.getRandomX(1.0D), this.getRandomY(),
+						this.getRandomZ(1.0D), d0, d1, d2);
+			}
+		}
+
+	}
+
 	public boolean shouldBeStationary() {
 		return this.appearAnimationTick > 0;
 	}
@@ -160,12 +161,13 @@ public class IllusionerCloneEntity extends AbstractIllager implements IAnimatabl
 		} else if (p_28844_ == 8) {
 			this.appearAnimationTick = appearAnimationLength;
 		} else if (p_28844_ == 11) {
-			for(int i = 0; i < 20; ++i) {
-	            double d0 = this.random.nextGaussian() * 0.02D;
-	            double d1 = this.random.nextGaussian() * 0.02D;
-	            double d2 = this.random.nextGaussian() * 0.02D;
-	            this.level.addParticle(ParticleTypes.POOF, this.getRandomX(1.0D), this.getRandomY(), this.getRandomZ(1.0D), d0, d1, d2);
-	         }
+			for (int i = 0; i < 20; ++i) {
+				double d0 = this.random.nextGaussian() * 0.02D;
+				double d1 = this.random.nextGaussian() * 0.02D;
+				double d2 = this.random.nextGaussian() * 0.02D;
+				this.level.addParticle(ParticleTypes.POOF, this.getRandomX(1.0D), this.getRandomY(),
+						this.getRandomZ(1.0D), d0, d1, d2);
+			}
 		} else {
 			super.handleEntityEvent(p_28844_);
 		}
@@ -174,18 +176,20 @@ public class IllusionerCloneEntity extends AbstractIllager implements IAnimatabl
 	public void baseTick() {
 		super.baseTick();
 		this.tickDownAnimTimers();
-		
+
 		this.lifeTime++;
-		
+
 		if (!this.level.isClientSide && this.hasDelayedAppear()) {
 			this.appearAnimationTick = this.appearAnimationLength;
 			this.level.broadcastEntityEvent(this, (byte) 8);
 			this.setDelayedAppear(false);
 		}
-		
+
 		int lifeTimeByDifficulty = this.level.getCurrentDifficultyAt(this.blockPosition()).getDifficulty().getId();
-		
-		if (!this.level.isClientSide && (this.hurtTime > 0 || ((this.lifeTime >= lifeTimeByDifficulty * 100) || this.getOwner() != null && (this.getOwner().isDeadOrDying() || this.getOwner().hurtTime > 0 || this.getOwner().getTarget() == null)))) {
+
+		if (!this.level.isClientSide && (this.hurtTime > 0 || ((this.lifeTime >= lifeTimeByDifficulty * 100)
+				|| this.getOwner() != null && (this.getOwner().isDeadOrDying() || this.getOwner().hurtTime > 0
+						|| this.getOwner().getTarget() == null)))) {
 			if (this.hurtTime > 0) {
 				this.playSound(this.getDeathSound(), this.getSoundVolume(), this.getVoicePitch());
 			} else {
@@ -194,7 +198,7 @@ public class IllusionerCloneEntity extends AbstractIllager implements IAnimatabl
 			this.remove(RemovalReason.DISCARDED);
 			this.level.broadcastEntityEvent(this, (byte) 11);
 		}
-		
+
 		if (!this.level.isClientSide && this.getOwner() != null) {
 			this.setHealth(this.getOwner().getHealth());
 		}
@@ -217,20 +221,22 @@ public class IllusionerCloneEntity extends AbstractIllager implements IAnimatabl
 
 	private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
 		String suffix = "_uncrossed";
-		if(IllagerArmsUtil.armorHasCrossedArms(this, this.getItemBySlot(EquipmentSlot.CHEST))){
+		if (IllagerArmsUtil.armorHasCrossedArms(this, this.getItemBySlot(EquipmentSlot.CHEST))) {
 			suffix = "";
 		}
 		if (this.appearAnimationTick > 0) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_appear"+suffix, LOOP));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_appear" + suffix, LOOP));
 		} else if (this.shootAnimationTick > 0) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_clone_shoot"+suffix, LOOP));
+			event.getController()
+					.setAnimation(new AnimationBuilder().addAnimation("illusioner_clone_shoot" + suffix, LOOP));
 		} else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_walk"+suffix, LOOP));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_walk" + suffix, LOOP));
 		} else {
 			if (this.isCelebrating()) {
 				event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_celebrate", LOOP));
 			} else {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("illusioner_idle"+suffix, LOOP));
+				event.getController()
+						.setAnimation(new AnimationBuilder().addAnimation("illusioner_idle" + suffix, LOOP));
 			}
 		}
 		return PlayState.CONTINUE;
@@ -247,8 +253,7 @@ public class IllusionerCloneEntity extends AbstractIllager implements IAnimatabl
 	public boolean isAlliedTo(Entity entityIn) {
 		if (super.isAlliedTo(entityIn)) {
 			return true;
-		} else if (entityIn instanceof LivingEntity
-				&& ((LivingEntity) entityIn).getMobType() == MobType.ILLAGER) {
+		} else if (entityIn instanceof LivingEntity && ((LivingEntity) entityIn).getMobType() == MobType.ILLAGER) {
 			return this.getTeam() == null && entityIn.getTeam() == null;
 		} else {
 			return false;
@@ -278,26 +283,29 @@ public class IllusionerCloneEntity extends AbstractIllager implements IAnimatabl
 	public SoundEvent getCelebrateSound() {
 		return SoundEvents.ILLUSIONER_AMBIENT;
 	}
-	
-	   public void shootArrow(LivingEntity target) {
-		      {
-		    	  ItemStack itemstack = this.getProjectile(this.getItemInHand(ProjectileUtil.getWeaponHoldingHand(this, item -> item instanceof net.minecraft.world.item.BowItem)));
-		          AbstractArrow abstractarrowentity = this.getArrow(itemstack, 0);
-		          if (this.getMainHandItem().getItem() instanceof net.minecraft.world.item.BowItem)
-		             abstractarrowentity = ((net.minecraft.world.item.BowItem)this.getMainHandItem().getItem()).customArrow(abstractarrowentity);
-		          double d0 = target.getX() - this.getX();
-		          double d1 = target.getY(0.3333333333333333D) - abstractarrowentity.getY();
-		          double d2 = target.getZ() - this.getZ();
-		          double d3 = (double)Mth.sqrt((float) (d0 * d0 + d2 * d2));
-		          abstractarrowentity.shoot(d0, d1 + d3 * (double)0.2F, d2, 1.6F, (float)(14 - this.level.getDifficulty().getId() * 4));
-		          this.playSound(SoundEvents.ARROW_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
-		          this.level.addFreshEntity(abstractarrowentity);
-		      }
-		   }
-	   
-	   protected AbstractArrow getArrow(ItemStack p_213624_1_, float p_213624_2_) {
-		      return ProjectileUtil.getMobArrow(this, p_213624_1_, p_213624_2_);
-		   }
+
+	public void shootArrow(LivingEntity target) {
+		{
+			ItemStack itemstack = this.getProjectile(this.getItemInHand(ProjectileUtil.getWeaponHoldingHand(this,
+					item -> item instanceof net.minecraft.world.item.BowItem)));
+			AbstractArrow abstractarrowentity = this.getArrow(itemstack, 0);
+			if (this.getMainHandItem().getItem() instanceof net.minecraft.world.item.BowItem)
+				abstractarrowentity = ((net.minecraft.world.item.BowItem) this.getMainHandItem().getItem())
+						.customArrow(abstractarrowentity);
+			double d0 = target.getX() - this.getX();
+			double d1 = target.getY(0.3333333333333333D) - abstractarrowentity.getY();
+			double d2 = target.getZ() - this.getZ();
+			double d3 = (double) Mth.sqrt((float) (d0 * d0 + d2 * d2));
+			abstractarrowentity.shoot(d0, d1 + d3 * (double) 0.2F, d2, 1.6F,
+					(float) (14 - this.level.getDifficulty().getId() * 4));
+			this.playSound(SoundEvents.ARROW_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+			this.level.addFreshEntity(abstractarrowentity);
+		}
+	}
+
+	protected AbstractArrow getArrow(ItemStack p_213624_1_, float p_213624_2_) {
+		return ProjectileUtil.getMobArrow(this, p_213624_1_, p_213624_2_);
+	}
 
 	@Override
 	public ArmorSet getArmorSet() {
@@ -310,7 +318,7 @@ public class IllusionerCloneEntity extends AbstractIllager implements IAnimatabl
 		public LivingEntity target;
 
 		public int cooldown;
-		
+
 		public ShootAttackGoal(IllusionerCloneEntity mob) {
 			this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP, Goal.Flag.LOOK));
 			this.mob = mob;
@@ -331,10 +339,11 @@ public class IllusionerCloneEntity extends AbstractIllager implements IAnimatabl
 			target = mob.getTarget();
 
 			if (this.cooldown > 0) {
-				this.cooldown --;
+				this.cooldown--;
 			}
-			
-			return target != null && mob.distanceTo(target) <= 12.5 && this.cooldown <= 0 && mob.hasLineOfSight(target) && animationsUseable();
+
+			return target != null && mob.distanceTo(target) <= 12.5 && this.cooldown <= 0 && mob.hasLineOfSight(target)
+					&& animationsUseable();
 		}
 
 		@Override
@@ -353,45 +362,47 @@ public class IllusionerCloneEntity extends AbstractIllager implements IAnimatabl
 			target = mob.getTarget();
 
 			mob.getNavigation().stop();
-			
+
 			if (target != null) {
 				mob.getLookControl().setLookAt(target.getX(), target.getEyeY(), target.getZ());
 			}
 
 			if (target != null && mob.shootAnimationTick == mob.shootAnimationActionPoint) {
-	            mob.shootArrow(target);
+				mob.shootArrow(target);
 			}
 		}
-		
+
 		@Override
-			public void stop() {
-				super.stop();
-				this.cooldown = 20 + mob.random.nextInt(40);
-			}
+		public void stop() {
+			super.stop();
+			this.cooldown = 20 + mob.random.nextInt(40);
+		}
 
 		public boolean animationsUseable() {
 			return mob.shootAnimationTick <= 0;
 		}
 
 	}
-	
-	   class CopyOwnerTargetGoal extends TargetGoal {
-		      private final TargetingConditions copyOwnerTargeting = TargetingConditions.forCombat().ignoreInvisibilityTesting();
 
-		      public CopyOwnerTargetGoal(PathfinderMob p_i47231_2_) {
-		         super(p_i47231_2_, false);
-		      }
+	class CopyOwnerTargetGoal extends TargetGoal {
+		private final TargetingConditions copyOwnerTargeting = TargetingConditions.forCombat()
+				.ignoreInvisibilityTesting();
 
-		      public boolean canUse() {
-		         return IllusionerCloneEntity.this.owner != null && IllusionerCloneEntity.this.owner.getTarget() != null && this.canAttack(IllusionerCloneEntity.this.owner.getTarget(), this.copyOwnerTargeting);
-		      }
+		public CopyOwnerTargetGoal(PathfinderMob p_i47231_2_) {
+			super(p_i47231_2_, false);
+		}
 
-		      public void start() {
-		    	  IllusionerCloneEntity.this.setTarget(IllusionerCloneEntity.this.owner.getTarget());
-		         super.start();
-		      }
-		   }
-	
+		public boolean canUse() {
+			return IllusionerCloneEntity.this.owner != null && IllusionerCloneEntity.this.owner.getTarget() != null
+					&& this.canAttack(IllusionerCloneEntity.this.owner.getTarget(), this.copyOwnerTargeting);
+		}
+
+		public void start() {
+			IllusionerCloneEntity.this.setTarget(IllusionerCloneEntity.this.owner.getTarget());
+			super.start();
+		}
+	}
+
 	class RemainStationaryGoal extends Goal {
 
 		public RemainStationaryGoal() {
@@ -403,5 +414,5 @@ public class IllusionerCloneEntity extends AbstractIllager implements IAnimatabl
 			return IllusionerCloneEntity.this.shouldBeStationary();
 		}
 	}
-	
+
 }

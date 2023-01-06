@@ -14,26 +14,27 @@ import software.bernie.geckolib3.renderers.geo.GeoProjectilesRenderer;
 
 public class MageMissileRenderer extends GeoProjectilesRenderer<MageMissileEntity> {
 
-    public MageMissileRenderer(EntityRendererProvider.Context renderManager) {
-        super(renderManager, new MageMissileModel());
-    }
+	public MageMissileRenderer(EntityRendererProvider.Context renderManager) {
+		super(renderManager, new MageMissileModel());
+	}
 
 	protected int getBlockLightLevel(MageMissileEntity p_225624_1_, BlockPos p_225624_2_) {
 		return 15;
 	}
 
-    @Override
-    public void render(MageMissileEntity entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
-        float scaleFactor = 1.0F;
-        matrixStackIn.scale(scaleFactor, scaleFactor, scaleFactor);
-        
-        super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
-    }
+	@Override
+	public void render(MageMissileEntity entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn,
+			MultiBufferSource bufferIn, int packedLightIn) {
+		float scaleFactor = 1.0F;
+		matrixStackIn.scale(scaleFactor, scaleFactor, scaleFactor);
 
-    @Override
-    public RenderType getRenderType(MageMissileEntity animatable, float partialTicks, PoseStack stack,
-                                    MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn,
-                                    ResourceLocation textureLocation) {
-        return RenderType.entityTranslucent(getTextureLocation(animatable));
-    }
+		super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
+	}
+
+	@Override
+	public RenderType getRenderType(MageMissileEntity animatable, float partialTicks, PoseStack stack,
+			MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn,
+			ResourceLocation textureLocation) {
+		return RenderType.entityTranslucent(getTextureLocation(animatable));
+	}
 }

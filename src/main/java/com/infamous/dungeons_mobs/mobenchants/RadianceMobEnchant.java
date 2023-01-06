@@ -15,28 +15,25 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class RadianceMobEnchant extends MobEnchant {
 
+	public RadianceMobEnchant(Properties properties) {
+		super(properties);
+	}
 
-    public RadianceMobEnchant(Properties properties) {
-        super(properties);
-    }
-
-    @SubscribeEvent
-    public static void onLivingDamage(LivingDamageEvent event) {
-        Entity attacker;
-        if (!event.getSource().isProjectile()) {
-            attacker = event.getSource().getDirectEntity();
-        } else {
-            attacker = event.getSource().getEntity();
-        }
-        if (attacker instanceof LivingEntity)
-            executeIfPresentWithLevel((LivingEntity) attacker, RADIANCE.get(), (level) -> {
-                LivingEntity source = event.getSource().isProjectile() ? event.getEntity() : (LivingEntity) attacker;
-                applyToNearbyEntities(source, 1.5F,
-                        getCanHealPredicate(source), (LivingEntity nearbyEntity) -> {
-                            nearbyEntity.heal(level);
-                            PROXY.spawnParticles(nearbyEntity, ParticleTypes.HEART);
-                        }
-                );
-            });
-    }
+	@SubscribeEvent
+	public static void onLivingDamage(LivingDamageEvent event) {
+		Entity attacker;
+		if (!event.getSource().isProjectile()) {
+			attacker = event.getSource().getDirectEntity();
+		} else {
+			attacker = event.getSource().getEntity();
+		}
+		if (attacker instanceof LivingEntity)
+			executeIfPresentWithLevel((LivingEntity) attacker, RADIANCE.get(), (level) -> {
+				LivingEntity source = event.getSource().isProjectile() ? event.getEntity() : (LivingEntity) attacker;
+				applyToNearbyEntities(source, 1.5F, getCanHealPredicate(source), (LivingEntity nearbyEntity) -> {
+					nearbyEntity.heal(level);
+					PROXY.spawnParticles(nearbyEntity, ParticleTypes.HEART);
+				});
+			});
+	}
 }

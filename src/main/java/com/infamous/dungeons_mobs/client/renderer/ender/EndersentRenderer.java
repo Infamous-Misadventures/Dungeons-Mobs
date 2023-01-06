@@ -16,7 +16,8 @@ import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 public class EndersentRenderer extends GeoEntityRenderer<AbstractEnderlingEntity> {
 	public EndersentRenderer(EntityRendererProvider.Context renderManager) {
 		super(renderManager, new EndersentModel());
-		this.addLayer(new GeoEyeLayer<>(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/ender/endersent_eyes.png")));
+		this.addLayer(new GeoEyeLayer<>(this,
+				new ResourceLocation(DungeonsMobs.MODID, "textures/entity/ender/endersent_eyes.png")));
 	}
 
 	@Override
@@ -25,8 +26,8 @@ public class EndersentRenderer extends GeoEntityRenderer<AbstractEnderlingEntity
 			ResourceLocation textureLocation) {
 		return RenderType.entityTranslucent(getTextureLocation(animatable));
 	}
-	
-	   protected float getDeathMaxRotation(AbstractEnderlingEntity p_77037_1_) {
-		      return 0.0F;
-		   }
+
+	protected float getDeathMaxRotation(AbstractEnderlingEntity p_77037_1_) {
+		return 0.0F;
+	}
 }

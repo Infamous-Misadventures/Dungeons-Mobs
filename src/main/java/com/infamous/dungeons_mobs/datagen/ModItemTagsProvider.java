@@ -13,16 +13,18 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class ModItemTagsProvider extends net.minecraft.data.tags.ItemTagsProvider {
 
-    public ModItemTagsProvider(DataGenerator dataGenerator, BlockTagsProvider blockTagProvider, @Nullable ExistingFileHelper existingFileHelper) {
-        super(dataGenerator, blockTagProvider, MODID, existingFileHelper);
-    }
+	public ModItemTagsProvider(DataGenerator dataGenerator, BlockTagsProvider blockTagProvider,
+			@Nullable ExistingFileHelper existingFileHelper) {
+		super(dataGenerator, blockTagProvider, MODID, existingFileHelper);
+	}
 
-    @Override
-    protected void addTags() {
-        curiosArtifactTags();
-    }
+	@Override
+	protected void addTags() {
+		curiosArtifactTags();
+	}
 
-    private void curiosArtifactTags() {
-        ModItems.ARTIFACTS.forEach((resourceLocation, itemRegistryObject) -> this.tag(CURIOS_ARTIFACTS).add(itemRegistryObject.get()));
-    }
+	private void curiosArtifactTags() {
+		ModItems.ARTIFACTS.forEach(
+				(resourceLocation, itemRegistryObject) -> this.tag(CURIOS_ARTIFACTS).add(itemRegistryObject.get()));
+	}
 }

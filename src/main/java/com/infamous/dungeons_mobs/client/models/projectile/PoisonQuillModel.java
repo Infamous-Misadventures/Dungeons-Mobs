@@ -1,6 +1,5 @@
 package com.infamous.dungeons_mobs.client.models.projectile;
 
-
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.entities.projectiles.PoisonQuillEntity;
 
@@ -23,7 +22,9 @@ public class PoisonQuillModel extends AnimatedGeoModel<PoisonQuillEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(PoisonQuillEntity entity) {
-		return new ResourceLocation(DungeonsMobs.MODID, entity.isKelp() ? "textures/entity/projectile/water_poison_quill.png" : "textures/entity/projectile/poison_quill.png");
+		return new ResourceLocation(DungeonsMobs.MODID,
+				entity.isKelp() ? "textures/entity/projectile/water_poison_quill.png"
+						: "textures/entity/projectile/poison_quill.png");
 	}
 
 	@Override

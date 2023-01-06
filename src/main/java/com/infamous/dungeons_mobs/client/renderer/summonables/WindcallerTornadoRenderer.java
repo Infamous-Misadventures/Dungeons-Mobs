@@ -27,12 +27,12 @@ public class WindcallerTornadoRenderer extends GeoProjectilesRenderer<Windcaller
 		} else {
 			stackIn.mulPose(Vector3f.YP.rotationDegrees(animatable.getYRot() * ((float) Math.PI / 180F)));
 		}
-		
+
 		if (animatable.lifeTime <= 1) {
 			float scaleFactor = 0.0F;
 			stackIn.scale(scaleFactor, scaleFactor, scaleFactor);
 		} else {
-			
+
 		}
 	}
 

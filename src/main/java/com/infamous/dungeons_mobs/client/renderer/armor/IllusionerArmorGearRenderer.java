@@ -10,17 +10,17 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 public class IllusionerArmorGearRenderer extends ArmorGearRenderer<IllusionerArmorGear> {
 
-    public IllusionerArmorGearRenderer() {
-        super(new IllusionerArmorGearModel<>());
-    }
+	public IllusionerArmorGearRenderer() {
+		super(new IllusionerArmorGearModel<>());
+	}
 
-    @Override
-    public void render(float partialTicks, PoseStack stack, VertexConsumer bufferIn, int packedLightIn) {
+	@Override
+	public void render(float partialTicks, PoseStack stack, VertexConsumer bufferIn, int packedLightIn) {
 
-        AnimatedGeoModel<IllusionerArmorGear> geoModelProvider = getGeoModelProvider();
-        if(geoModelProvider instanceof IllusionerArmorGearModel){
-            ((IllusionerArmorGearModel<IllusionerArmorGear>) geoModelProvider).setWearer(this.entityLiving);
-        }
-        super.render(partialTicks, stack, bufferIn, packedLightIn);
-    }
+		AnimatedGeoModel<IllusionerArmorGear> geoModelProvider = getGeoModelProvider();
+		if (geoModelProvider instanceof IllusionerArmorGearModel) {
+			((IllusionerArmorGearModel<IllusionerArmorGear>) geoModelProvider).setWearer(this.entityLiving);
+		}
+		super.render(partialTicks, stack, bufferIn, packedLightIn);
+	}
 }

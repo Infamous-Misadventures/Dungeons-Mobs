@@ -28,70 +28,71 @@ import net.minecraft.world.level.ServerLevelAccessor;
 
 public class FungusThrowerEntity extends Piglin {
 
-    public FungusThrowerEntity(EntityType<? extends FungusThrowerEntity> entityType, Level world) {
-        super(entityType, world);
-    }
+	public FungusThrowerEntity(EntityType<? extends FungusThrowerEntity> entityType, Level world) {
+		super(entityType, world);
+	}
 
-    @Override
-    public boolean canFireProjectileWeapon(ProjectileWeaponItem shootableItem) {
-        return super.canFireProjectileWeapon(shootableItem) || shootableItem instanceof BlueNethershroomItem;
-    }
+	@Override
+	public boolean canFireProjectileWeapon(ProjectileWeaponItem shootableItem) {
+		return super.canFireProjectileWeapon(shootableItem) || shootableItem instanceof BlueNethershroomItem;
+	}
 
-    @Override
-    protected Brain<?> makeBrain(Dynamic<?> dynamic) {
-        Brain<?> brain = super.makeBrain(dynamic);
-        //noinspection unchecked
-        FungusThrowerAi.addFungusThrowerTasks((Brain<FungusThrowerEntity>)brain);
-        return brain;
-    }
+	@Override
+	protected Brain<?> makeBrain(Dynamic<?> dynamic) {
+		Brain<?> brain = super.makeBrain(dynamic);
+		// noinspection unchecked
+		FungusThrowerAi.addFungusThrowerTasks((Brain<FungusThrowerEntity>) brain);
+		return brain;
+	}
 
-    @Nullable
-    @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverWorld, DifficultyInstance difficultyInstance, MobSpawnType spawnReason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag compoundNBT) {
-        SpawnGroupData spawnData = super.finalizeSpawn(serverWorld, difficultyInstance, spawnReason, spawnDataIn, compoundNBT);
-        if(this instanceof ISmartCrossbowUser && ((ISmartCrossbowUser) this).isCrossbowUser()){
-            ((ISmartCrossbowUser) this).setCrossbowUser(false);
-        }
-        if(spawnReason != MobSpawnType.STRUCTURE){
-            if(this.isAdult()){
-                this.setItemSlot(EquipmentSlot.MAINHAND, ModItems.BLUE_NETHERSHROOM.get().getDefaultInstance());
-            }
-        }
-        return spawnData;
-    }
+	@Nullable
+	@Override
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverWorld, DifficultyInstance difficultyInstance,
+			MobSpawnType spawnReason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag compoundNBT) {
+		SpawnGroupData spawnData = super.finalizeSpawn(serverWorld, difficultyInstance, spawnReason, spawnDataIn,
+				compoundNBT);
+		if (this instanceof ISmartCrossbowUser && ((ISmartCrossbowUser) this).isCrossbowUser()) {
+			((ISmartCrossbowUser) this).setCrossbowUser(false);
+		}
+		if (spawnReason != MobSpawnType.STRUCTURE) {
+			if (this.isAdult()) {
+				this.setItemSlot(EquipmentSlot.MAINHAND, ModItems.BLUE_NETHERSHROOM.get().getDefaultInstance());
+			}
+		}
+		return spawnData;
+	}
 
-    @Override
-    protected void finishConversion(ServerLevel serverWorld) {
-        PiglinHelper.stopAdmiringItem(this);
-        ((PiglinAccessor)this).getInventory().removeAllItems().forEach(this::spawnAtLocation);
-        PiglinHelper.zombify(ModEntityTypes.ZOMBIFIED_FUNGUS_THROWER.get(), this);
-    }
+	@Override
+	protected void finishConversion(ServerLevel serverWorld) {
+		PiglinHelper.stopAdmiringItem(this);
+		((PiglinAccessor) this).getInventory().removeAllItems().forEach(this::spawnAtLocation);
+		PiglinHelper.zombify(ModEntityTypes.ZOMBIFIED_FUNGUS_THROWER.get(), this);
+	}
 
-    @Override
-    protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance p_180481_1_) {
-        // NO-OP
-    }
+	@Override
+	protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance p_180481_1_) {
+		// NO-OP
+	}
 
-    @Override
-    protected void populateDefaultEquipmentEnchantments(RandomSource randomSource, DifficultyInstance p_180483_1_) {
-        // NO-OP
-    }
+	@Override
+	protected void populateDefaultEquipmentEnchantments(RandomSource randomSource, DifficultyInstance p_180483_1_) {
+		// NO-OP
+	}
 
-    @Override
-    protected boolean canReplaceCurrentItem(ItemStack replacement, ItemStack current) {
-        boolean canReplaceCurrentItem = super.canReplaceCurrentItem(replacement, current);
+	@Override
+	protected boolean canReplaceCurrentItem(ItemStack replacement, ItemStack current) {
+		boolean canReplaceCurrentItem = super.canReplaceCurrentItem(replacement, current);
 
-        boolean takeReplacement =
-                FungusThrowerAi.isBlueNethershroom(replacement);
-        boolean keepCurrent =
-                FungusThrowerAi.isBlueNethershroom(current);
-        if (takeReplacement && !keepCurrent) {
-            return true;
-        } else if (!takeReplacement && keepCurrent) {
-            return canReplaceCurrentItem;
-        } else {
-            return (!this.isAdult() || !FungusThrowerAi.isBlueNethershroom(replacement) || !(FungusThrowerAi.isBlueNethershroom(current))) && canReplaceCurrentItem;
-        }
-    }
+		boolean takeReplacement = FungusThrowerAi.isBlueNethershroom(replacement);
+		boolean keepCurrent = FungusThrowerAi.isBlueNethershroom(current);
+		if (takeReplacement && !keepCurrent) {
+			return true;
+		} else if (!takeReplacement && keepCurrent) {
+			return canReplaceCurrentItem;
+		} else {
+			return (!this.isAdult() || !FungusThrowerAi.isBlueNethershroom(replacement)
+					|| !(FungusThrowerAi.isBlueNethershroom(current))) && canReplaceCurrentItem;
+		}
+	}
 
 }

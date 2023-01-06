@@ -1,6 +1,5 @@
 package com.infamous.dungeons_mobs.client.models.summonables;
 
-
 import com.infamous.dungeons_mobs.DungeonsMobs;
 import com.infamous.dungeons_mobs.entities.summonables.WraithFireEntity;
 
@@ -22,7 +21,8 @@ public class WraithFireModel extends AnimatedGeoModel<WraithFireEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(WraithFireEntity entity) {
-		return new ResourceLocation(DungeonsMobs.MODID,"textures/entity/wraith_fire/wraith_fire_" + entity.textureChange % 31 + ".png");
+		return new ResourceLocation(DungeonsMobs.MODID,
+				"textures/entity/wraith_fire/wraith_fire_" + entity.textureChange % 31 + ".png");
 	}
 
 	@Override

@@ -23,49 +23,50 @@ import software.bernie.geckolib3.resource.GeckoLibCache;
 @OnlyIn(Dist.CLIENT)
 public class NecromancerModel extends AnimatedGeoModel<NecromancerEntity> {
 
-    @Override
-    public ResourceLocation getAnimationResource(NecromancerEntity entity) {
-        return new ResourceLocation(DungeonsMobs.MODID, "animations/necromancer.animation.json");
-    }
+	@Override
+	public ResourceLocation getAnimationResource(NecromancerEntity entity) {
+		return new ResourceLocation(DungeonsMobs.MODID, "animations/necromancer.animation.json");
+	}
 
-    @Override
-    public ResourceLocation getModelResource(NecromancerEntity entity) {
-        return new ResourceLocation(DungeonsMobs.MODID, "geo/necromancer.geo.json");
-    }
+	@Override
+	public ResourceLocation getModelResource(NecromancerEntity entity) {
+		return new ResourceLocation(DungeonsMobs.MODID, "geo/necromancer.geo.json");
+	}
 
-    @Override
-    public ResourceLocation getTextureResource(NecromancerEntity entity) {
-        return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/skeleton/necromancer.png");
-    }
+	@Override
+	public ResourceLocation getTextureResource(NecromancerEntity entity) {
+		return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/skeleton/necromancer.png");
+	}
 
-    @Override
-    public void setCustomAnimations(NecromancerEntity entity, int uniqueID, AnimationEvent customPredicate) {
-        super.setCustomAnimations(entity, uniqueID, customPredicate);
+	@Override
+	public void setCustomAnimations(NecromancerEntity entity, int uniqueID, AnimationEvent customPredicate) {
+		super.setCustomAnimations(entity, uniqueID, customPredicate);
 
-        IBone head = this.getAnimationProcessor().getBone("bipedHead");
-        IBone cape = this.getAnimationProcessor().getBone("bipedCape");
-        
-        IBone particles = this.getAnimationProcessor().getBone("staffParticles");
-        
-        if (entity.tickCount % 1 == 0 && particles instanceof GeoBone && entity.isSpellcasting()) {
-        	GeoBone particleBone = ((GeoBone)particles);
-        	entity.level.addParticle(ModParticleTypes.NECROMANCY.get(), particleBone.getWorldPosition().x, particleBone.getWorldPosition().y, particleBone.getWorldPosition().z, 0, 0, 0);
-        }
+		IBone head = this.getAnimationProcessor().getBone("bipedHead");
+		IBone cape = this.getAnimationProcessor().getBone("bipedCape");
 
-        cape.setHidden(entity.getItemBySlot(EquipmentSlot.CHEST).getItem() != entity.getArmorSet().getChest().get());
+		IBone particles = this.getAnimationProcessor().getBone("staffParticles");
 
-        EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
+		if (entity.tickCount % 1 == 0 && particles instanceof GeoBone && entity.isSpellcasting()) {
+			GeoBone particleBone = ((GeoBone) particles);
+			entity.level.addParticle(ModParticleTypes.NECROMANCY.get(), particleBone.getWorldPosition().x,
+					particleBone.getWorldPosition().y, particleBone.getWorldPosition().z, 0, 0, 0);
+		}
 
-        if (extraData.headPitch != 0 || extraData.netHeadYaw != 0) {
-            head.setRotationX(head.getRotationX() + (extraData.headPitch * ((float) Math.PI / 180F)));
-            head.setRotationY(head.getRotationY() + (extraData.netHeadYaw * ((float) Math.PI / 180F)));
-        }
-    }
-    
+		cape.setHidden(entity.getItemBySlot(EquipmentSlot.CHEST).getItem() != entity.getArmorSet().getChest().get());
+
+		EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
+
+		if (extraData.headPitch != 0 || extraData.netHeadYaw != 0) {
+			head.setRotationX(head.getRotationX() + (extraData.headPitch * ((float) Math.PI / 180F)));
+			head.setRotationY(head.getRotationY() + (extraData.netHeadYaw * ((float) Math.PI / 180F)));
+		}
+	}
+
 	@Override
 	public void setMolangQueries(IAnimatable animatable, double currentTick) {
 		super.setMolangQueries(animatable, currentTick);
-		
+
 		MolangParser parser = GeckoLibCache.getInstance().parser;
 		LivingEntity livingEntity = (LivingEntity) animatable;
 		Vec3 velocity = livingEntity.getDeltaMovement();

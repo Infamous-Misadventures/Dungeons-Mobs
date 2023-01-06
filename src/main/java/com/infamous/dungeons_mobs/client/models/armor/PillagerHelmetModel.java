@@ -1,7 +1,7 @@
 package com.infamous.dungeons_mobs.client.models.armor;// Made with Blockbench 3.6.6
+
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
-
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -32,19 +32,29 @@ public class PillagerHelmetModel<T extends LivingEntity> extends HumanoidModel<T
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 		partdefinition.addOrReplaceChild("everything", CubeListBuilder.create(), PartPose.offset(0.0F, 12.0F, 0.0F));
-		PartDefinition helmet = partdefinition.addOrReplaceChild("helmet", CubeListBuilder.create().texOffs(32, 0).addBox(-4.0F, -10.0F, -4.0F, 8.0F, 6.0F, 8.0F), PartPose.offset(0.0F, -24.0F, 0.0F));
-		helmet.addOrReplaceChild("flap1", CubeListBuilder.create().texOffs(46, 27).addBox(-4.0F, -10.0F, -4.0F, 8.0F, 6.0F, 8.0F), PartPose.offset(-1.0F, 0.0F, -4.0F));
-		helmet.addOrReplaceChild("flap2", CubeListBuilder.create().texOffs(46, 27).addBox(-5.0F, -3.0F, 0.0F, 1.0F, 3.0F, 8.0F), PartPose.offset(-1.0F, 0.0F, -4.0F));
-		helmet.addOrReplaceChild("flap3", CubeListBuilder.create().texOffs(45, 30).addBox(-8.0F, -3.0F, 0.0F, 8.0F, 3.0F, 1.0F), PartPose.offset(4.0F, -3.0F, 7.0F));
+		PartDefinition helmet = partdefinition.addOrReplaceChild("helmet",
+				CubeListBuilder.create().texOffs(32, 0).addBox(-4.0F, -10.0F, -4.0F, 8.0F, 6.0F, 8.0F),
+				PartPose.offset(0.0F, -24.0F, 0.0F));
+		helmet.addOrReplaceChild("flap1",
+				CubeListBuilder.create().texOffs(46, 27).addBox(-4.0F, -10.0F, -4.0F, 8.0F, 6.0F, 8.0F),
+				PartPose.offset(-1.0F, 0.0F, -4.0F));
+		helmet.addOrReplaceChild("flap2",
+				CubeListBuilder.create().texOffs(46, 27).addBox(-5.0F, -3.0F, 0.0F, 1.0F, 3.0F, 8.0F),
+				PartPose.offset(-1.0F, 0.0F, -4.0F));
+		helmet.addOrReplaceChild("flap3",
+				CubeListBuilder.create().texOffs(45, 30).addBox(-8.0F, -3.0F, 0.0F, 8.0F, 3.0F, 1.0F),
+				PartPose.offset(4.0F, -3.0F, 7.0F));
 		return LayerDefinition.create(meshdefinition, 64, 64);
 	}
 
 	@Override
-	public void setupAnim(T  entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
+	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw,
+			float headPitch) {
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha){
+	public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn,
+			float red, float green, float blue, float alpha) {
 		matrixStackIn.pushPose();
 		this.helmet.copyFrom(this.head);
 		if (livingEntity.isBaby()) {

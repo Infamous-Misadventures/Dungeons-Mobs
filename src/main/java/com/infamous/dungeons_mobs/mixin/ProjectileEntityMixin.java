@@ -15,7 +15,7 @@ import net.minecraft.world.entity.projectile.Projectile;
 
 @Mixin(Projectile.class)
 public abstract class ProjectileEntityMixin {
-	
+
 	@Inject(at = @At("HEAD"), method = "canHitEntity", cancellable = true)
 	private void canHitEntity(Entity entity, CallbackInfoReturnable<Boolean> callback) {
 		if (entity instanceof IllusionerCloneEntity) {
@@ -23,18 +23,18 @@ public abstract class ProjectileEntityMixin {
 				callback.setReturnValue(false);
 			}
 		}
-		
+
 		if (entity instanceof MageCloneEntity) {
 			if (this.getOwner() != null && entity.isAlliedTo(this.getOwner())) {
 				callback.setReturnValue(false);
 			}
 		}
-		
+
 		if (entity instanceof TridentStormEntity) {
-				callback.setReturnValue(false);
+			callback.setReturnValue(false);
 		}
 	}
-	
+
 	@Shadow
-    public abstract Entity getOwner();
+	public abstract Entity getOwner();
 }

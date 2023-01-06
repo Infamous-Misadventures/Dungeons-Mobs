@@ -16,7 +16,8 @@ import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 public class WatchlingRenderer extends GeoEntityRenderer<AbstractEnderlingEntity> {
 	public WatchlingRenderer(EntityRendererProvider.Context renderManager) {
 		super(renderManager, new WatchlingModel());
-		this.addLayer(new GeoEyeLayer<>(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/ender/watchling_eyes.png")));
+		this.addLayer(new GeoEyeLayer<>(this,
+				new ResourceLocation(DungeonsMobs.MODID, "textures/entity/ender/watchling_eyes.png")));
 	}
 
 	@Override

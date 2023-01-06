@@ -19,44 +19,44 @@ import software.bernie.geckolib3.resource.GeckoLibCache;
 // Model and animation received from CQR and DerToaster
 public class MountaineerModel extends AnimatedGeoModel<MountaineerEntity> {
 
-    @Override
-    public ResourceLocation getAnimationResource(MountaineerEntity entity) {
-        return new ResourceLocation(DungeonsMobs.MODID, "animations/vindicator.animation.json");
-    }
+	@Override
+	public ResourceLocation getAnimationResource(MountaineerEntity entity) {
+		return new ResourceLocation(DungeonsMobs.MODID, "animations/vindicator.animation.json");
+	}
 
-    @Override
-    public ResourceLocation getModelResource(MountaineerEntity entity) {
-        return new ResourceLocation(DungeonsMobs.MODID, "geo/geo_illager.geo.json") ;
-    }
+	@Override
+	public ResourceLocation getModelResource(MountaineerEntity entity) {
+		return new ResourceLocation(DungeonsMobs.MODID, "geo/geo_illager.geo.json");
+	}
 
-    @Override
-    public ResourceLocation getTextureResource(MountaineerEntity entity) {
-        return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/mountaineer.png");
-    }
+	@Override
+	public ResourceLocation getTextureResource(MountaineerEntity entity) {
+		return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/mountaineer.png");
+	}
 
-    @Override
-    public void setCustomAnimations(MountaineerEntity entity, int uniqueID, AnimationEvent customPredicate) {
-        super.setCustomAnimations(entity, uniqueID, customPredicate);
+	@Override
+	public void setCustomAnimations(MountaineerEntity entity, int uniqueID, AnimationEvent customPredicate) {
+		super.setCustomAnimations(entity, uniqueID, customPredicate);
 
-        IBone head = this.getAnimationProcessor().getBone("bipedHead");
-        IBone illagerArms = this.getAnimationProcessor().getBone("illagerArms");
-        
-        illagerArms.setHidden(true);
+		IBone head = this.getAnimationProcessor().getBone("bipedHead");
+		IBone illagerArms = this.getAnimationProcessor().getBone("illagerArms");
 
-        IBone cape = this.getAnimationProcessor().getBone("bipedCape");
-        cape.setHidden(entity.getItemBySlot(EquipmentSlot.CHEST).getItem() != entity.getArmorSet().getChest().get());
+		illagerArms.setHidden(true);
 
-        EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
-        if (extraData.headPitch != 0 || extraData.netHeadYaw != 0) {
-            head.setRotationX(head.getRotationX() + (extraData.headPitch * ((float) Math.PI / 180F)));
-            head.setRotationY(head.getRotationY() + (extraData.netHeadYaw * ((float) Math.PI / 180F)));
-        }
-    }
-    
+		IBone cape = this.getAnimationProcessor().getBone("bipedCape");
+		cape.setHidden(entity.getItemBySlot(EquipmentSlot.CHEST).getItem() != entity.getArmorSet().getChest().get());
+
+		EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
+		if (extraData.headPitch != 0 || extraData.netHeadYaw != 0) {
+			head.setRotationX(head.getRotationX() + (extraData.headPitch * ((float) Math.PI / 180F)));
+			head.setRotationY(head.getRotationY() + (extraData.netHeadYaw * ((float) Math.PI / 180F)));
+		}
+	}
+
 	@Override
 	public void setMolangQueries(IAnimatable animatable, double currentTick) {
 		super.setMolangQueries(animatable, currentTick);
-		
+
 		MolangParser parser = GeckoLibCache.getInstance().parser;
 		LivingEntity livingEntity = (LivingEntity) animatable;
 		Vec3 velocity = livingEntity.getDeltaMovement();

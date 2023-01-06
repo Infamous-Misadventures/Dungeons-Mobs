@@ -25,39 +25,40 @@ import net.minecraft.world.level.Level;
 
 @Mixin(WitherSkeleton.class)
 public abstract class WitherSkeletonEntityMixin extends AbstractSkeleton {
-    protected WitherSkeletonEntityMixin(EntityType<? extends AbstractSkeleton> p_i48555_1_, Level p_i48555_2_) {
-        super(p_i48555_1_, p_i48555_2_);
-    }
+	protected WitherSkeletonEntityMixin(EntityType<? extends AbstractSkeleton> p_i48555_1_, Level p_i48555_2_) {
+		super(p_i48555_1_, p_i48555_2_);
+	}
 
-    @Inject(at = @At("RETURN"), method = "getArrow")
-    private void getWitherArrow(ItemStack ammoStack, float p_213624_2_, CallbackInfoReturnable<AbstractArrow> cir){
-        AbstractArrow arrow = cir.getReturnValue();
-        arrow.clearFire();
-        if (arrow instanceof Arrow && ((ArrowAccessor)arrow).getEffects().isEmpty()) {
-            int difficultyFactor = 0;
-            if (this.level.getDifficulty() == Difficulty.NORMAL) {
-                difficultyFactor = 5;
-            } else if (this.level.getDifficulty() == Difficulty.HARD) {
-                difficultyFactor = 10;
-            }
-            if(difficultyFactor > 0){
-                ((Arrow)arrow).addEffect(new MobEffectInstance(MobEffects.WITHER, difficultyFactor * 20));
-            }
-        }
-    }
+	@Inject(at = @At("RETURN"), method = "getArrow")
+	private void getWitherArrow(ItemStack ammoStack, float p_213624_2_, CallbackInfoReturnable<AbstractArrow> cir) {
+		AbstractArrow arrow = cir.getReturnValue();
+		arrow.clearFire();
+		if (arrow instanceof Arrow && ((ArrowAccessor) arrow).getEffects().isEmpty()) {
+			int difficultyFactor = 0;
+			if (this.level.getDifficulty() == Difficulty.NORMAL) {
+				difficultyFactor = 5;
+			} else if (this.level.getDifficulty() == Difficulty.HARD) {
+				difficultyFactor = 10;
+			}
+			if (difficultyFactor > 0) {
+				((Arrow) arrow).addEffect(new MobEffectInstance(MobEffects.WITHER, difficultyFactor * 20));
+			}
+		}
+	}
 
-    @Inject(at = @At("RETURN"), method = "populateDefaultEquipmentSlots")
-    private void setEquipmentOnInitialSpawn(RandomSource randomSource, DifficultyInstance difficultyInstance, CallbackInfo ci){
-        this.setItemSlot(EquipmentSlot.MAINHAND, this.createSpawnWeapon());
-    }
+	@Inject(at = @At("RETURN"), method = "populateDefaultEquipmentSlots")
+	private void setEquipmentOnInitialSpawn(RandomSource randomSource, DifficultyInstance difficultyInstance,
+			CallbackInfo ci) {
+		this.setItemSlot(EquipmentSlot.MAINHAND, this.createSpawnWeapon());
+	}
 
-    private ItemStack createSpawnWeapon() {
-        ItemStack bowStack = new ItemStack(Items.BOW);
-        ItemStack swordStack = new ItemStack(Items.STONE_SWORD);
-        if(DungeonsGearCompat.isLoaded()){
-            bowStack = new ItemStack(DungeonsGearCompat.getRedSnake().get());
-            swordStack = new ItemStack(DungeonsGearCompat.getStoneSword().get());
-        }
-        return (double)this.random.nextFloat() < 0.5D ? bowStack : swordStack;
-    }
+	private ItemStack createSpawnWeapon() {
+		ItemStack bowStack = new ItemStack(Items.BOW);
+		ItemStack swordStack = new ItemStack(Items.STONE_SWORD);
+		if (DungeonsGearCompat.isLoaded()) {
+			bowStack = new ItemStack(DungeonsGearCompat.getRedSnake().get());
+			swordStack = new ItemStack(DungeonsGearCompat.getStoneSword().get());
+		}
+		return (double) this.random.nextFloat() < 0.5D ? bowStack : swordStack;
+	}
 }

@@ -11,30 +11,29 @@ import net.minecraft.world.entity.ai.sensing.VillagerHostilesSensor;
 
 public class SensorMapModifier {
 
+	public static void replaceSensorMaps() {
+		ImmutableMap<EntityType<?>, Float> oldImmutableVillagerHostiles = VillagerHostilesSensor.ACCEPTABLE_DISTANCE_FROM_HOSTILES;
+		Map<EntityType<?>, Float> villagerHostiles = new HashMap<>(oldImmutableVillagerHostiles);
 
-    public static void replaceSensorMaps(){
-        ImmutableMap<EntityType<?>, Float> oldImmutableVillagerHostiles = VillagerHostilesSensor.ACCEPTABLE_DISTANCE_FROM_HOSTILES;
-        Map<EntityType<?>, Float> villagerHostiles = new HashMap<>(oldImmutableVillagerHostiles);
+		// only use for Zombies and Raiders
 
-        // only use for Zombies and Raiders
+		villagerHostiles.put(ModEntityTypes.ICEOLOGER.get(), 12.0F);
+		villagerHostiles.put(ModEntityTypes.ILLUSIONER.get(), 15.0F);
+		villagerHostiles.put(ModEntityTypes.ILLUSIONER_CLONE.get(), 15.0F);
+		villagerHostiles.put(ModEntityTypes.WINDCALLER.get(), 12.0F);
+		villagerHostiles.put(ModEntityTypes.GEOMANCER.get(), 12.0F);
 
-        villagerHostiles.put(ModEntityTypes.ICEOLOGER.get(), 12.0F);
-        villagerHostiles.put(ModEntityTypes.ILLUSIONER.get(), 15.0F);
-        villagerHostiles.put(ModEntityTypes.ILLUSIONER_CLONE.get(), 15.0F);
-        villagerHostiles.put(ModEntityTypes.WINDCALLER.get(), 12.0F);
-        villagerHostiles.put(ModEntityTypes.GEOMANCER.get(), 12.0F);
+		villagerHostiles.put(ModEntityTypes.REDSTONE_GOLEM.get(), 12.0F);
+		villagerHostiles.put(ModEntityTypes.SQUALL_GOLEM.get(), 12.0F);
 
-        villagerHostiles.put(ModEntityTypes.REDSTONE_GOLEM.get(), 12.0F);
-        villagerHostiles.put(ModEntityTypes.SQUALL_GOLEM.get(), 12.0F);
+		villagerHostiles.put(ModEntityTypes.ROYAL_GUARD.get(), 10.0F);
+		villagerHostiles.put(ModEntityTypes.MOUNTAINEER.get(), 10.0F);
 
-        villagerHostiles.put(ModEntityTypes.ROYAL_GUARD.get(), 10.0F);
-        villagerHostiles.put(ModEntityTypes.MOUNTAINEER.get(), 10.0F);
+		villagerHostiles.put(ModEntityTypes.FROZEN_ZOMBIE.get(), 8.0F);
+		villagerHostiles.put(ModEntityTypes.JUNGLE_ZOMBIE.get(), 8.0F);
 
-        villagerHostiles.put(ModEntityTypes.FROZEN_ZOMBIE.get(), 8.0F);
-        villagerHostiles.put(ModEntityTypes.JUNGLE_ZOMBIE.get(), 8.0F);
-        
-        villagerHostiles.put(ModEntityTypes.DROWNED_NECROMANCER.get(), 20.0F);
+		villagerHostiles.put(ModEntityTypes.DROWNED_NECROMANCER.get(), 20.0F);
 
-        VillagerHostilesSensor.ACCEPTABLE_DISTANCE_FROM_HOSTILES = ImmutableMap.copyOf(villagerHostiles);
-    }
+		VillagerHostilesSensor.ACCEPTABLE_DISTANCE_FROM_HOSTILES = ImmutableMap.copyOf(villagerHostiles);
+	}
 }

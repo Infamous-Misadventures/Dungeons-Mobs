@@ -16,10 +16,10 @@ public class NecromancerArmorGearRenderer extends ArmorGearRenderer<NecromancerA
 
 	public String hoodBone = "armorHood";
 	public String leggingsBodyBone = "armorLeggingsTop";
-	
-    public NecromancerArmorGearRenderer() {
-        super(new NecromancerArmorGearModel<>());
-    }
+
+	public NecromancerArmorGearRenderer() {
+		super(new NecromancerArmorGearModel<>());
+	}
 
 	@Override
 	public void fitToBiped() {
@@ -31,7 +31,7 @@ public class NecromancerArmorGearRenderer extends ArmorGearRenderer<NecromancerA
 			hoodBone.setPositionY(-this.head.y);
 			hoodBone.setPositionZ(this.head.z);
 		}
-		
+
 //		if (this.leggingsBodyBone != null) {
 //			IBone leggingsBodyBone = this.getGeoModelProvider().getBone(this.leggingsBodyBone);
 //			GeoUtils.copyRotations(this.body, leggingsBodyBone);
@@ -40,12 +40,12 @@ public class NecromancerArmorGearRenderer extends ArmorGearRenderer<NecromancerA
 //			leggingsBodyBone.setPositionZ(this.body.z);
 //		}
 	}
-	
+
 	@SuppressWarnings("incomplete-switch")
 	@Override
 	public GeoArmorRenderer applySlot(EquipmentSlot slot) {
 		super.applySlot(slot);
-		
+
 		this.getGeoModelProvider().getModel(this.getGeoModelProvider().getModelResource(currentArmorItem));
 
 		IBone hoodBone = this.getAndHideBone(this.hoodBone);
@@ -64,14 +64,14 @@ public class NecromancerArmorGearRenderer extends ArmorGearRenderer<NecromancerA
 		}
 		return this;
 	}
-	
-    @Override
-    public void render(float partialTicks, PoseStack stack, VertexConsumer bufferIn, int packedLightIn) {
 
-        AnimatedGeoModel<NecromancerArmorGear> geoModelProvider = getGeoModelProvider();
-        if(geoModelProvider instanceof NecromancerArmorGearModel){
-            ((NecromancerArmorGearModel<NecromancerArmorGear>) geoModelProvider).setWearer(this.entityLiving);
-        }
-        super.render(partialTicks, stack, bufferIn, packedLightIn);
-    }
+	@Override
+	public void render(float partialTicks, PoseStack stack, VertexConsumer bufferIn, int packedLightIn) {
+
+		AnimatedGeoModel<NecromancerArmorGear> geoModelProvider = getGeoModelProvider();
+		if (geoModelProvider instanceof NecromancerArmorGearModel) {
+			((NecromancerArmorGearModel<NecromancerArmorGear>) geoModelProvider).setWearer(this.entityLiving);
+		}
+		super.render(partialTicks, stack, bufferIn, packedLightIn);
+	}
 }

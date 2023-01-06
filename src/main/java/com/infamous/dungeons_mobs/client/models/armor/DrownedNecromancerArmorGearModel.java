@@ -15,32 +15,32 @@ import software.bernie.geckolib3.resource.GeckoLibCache;
 
 public class DrownedNecromancerArmorGearModel<T extends ArmorGear> extends ArmorGearModel<T> {
 
-    LivingEntity wearer;
+	LivingEntity wearer;
 
-    public LivingEntity getWearer() {
-        return wearer;
-    }
+	public LivingEntity getWearer() {
+		return wearer;
+	}
 
-    public void setWearer(LivingEntity wearer) {
-        this.wearer = wearer;
-    }
-    
-    @Override
-    public void setCustomAnimations(T entity, int uniqueID, AnimationEvent customPredicate) {
-    	super.setCustomAnimations(entity, uniqueID, customPredicate);
-    	
-        IBone cloak = this.getAnimationProcessor().getBone("armorCloak");
+	public void setWearer(LivingEntity wearer) {
+		this.wearer = wearer;
+	}
 
-        cloak.setHidden(this.getWearer() != null && this.getWearer() instanceof DrownedNecromancerEntity);
-    }
+	@Override
+	public void setCustomAnimations(T entity, int uniqueID, AnimationEvent customPredicate) {
+		super.setCustomAnimations(entity, uniqueID, customPredicate);
 
-    @Override
-    public void setMolangQueries(IAnimatable animatable, double currentTick) {
-        super.setMolangQueries(animatable, currentTick);
+		IBone cloak = this.getAnimationProcessor().getBone("armorCloak");
 
-        MolangParser parser = GeckoLibCache.getInstance().parser;
-        Vec3 velocity = wearer.getDeltaMovement();
-        float groundSpeed = Mth.sqrt((float) ((velocity.x * velocity.x) + (velocity.z * velocity.z)));
-        parser.setValue("query.ground_speed", () -> groundSpeed * 13);
-    }
+		cloak.setHidden(this.getWearer() != null && this.getWearer() instanceof DrownedNecromancerEntity);
+	}
+
+	@Override
+	public void setMolangQueries(IAnimatable animatable, double currentTick) {
+		super.setMolangQueries(animatable, currentTick);
+
+		MolangParser parser = GeckoLibCache.getInstance().parser;
+		Vec3 velocity = wearer.getDeltaMovement();
+		float groundSpeed = Mth.sqrt((float) ((velocity.x * velocity.x) + (velocity.z * velocity.z)));
+		parser.setValue("query.ground_speed", () -> groundSpeed * 13);
+	}
 }

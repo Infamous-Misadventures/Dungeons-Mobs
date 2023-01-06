@@ -14,35 +14,34 @@ import net.minecraft.world.entity.monster.Zombie;
 
 public class CustomZombieRenderer extends ZombieRenderer {
 
-    private static final ResourceLocation JUNGLE_ZOMBIE_TEXUTRE = new ResourceLocation(MODID, "textures/entity/zombie/jungle_zombie.png");
-    private static final ResourceLocation FROZEN_ZOMBIE_TEXTURE = new ResourceLocation(MODID, "textures/entity/zombie/frozen_zombie.png");
-    private static final ResourceLocation HUSK_ZOMBIE_TEXTURE = new ResourceLocation("textures/entity/zombie/husk.png");
+	private static final ResourceLocation JUNGLE_ZOMBIE_TEXUTRE = new ResourceLocation(MODID,
+			"textures/entity/zombie/jungle_zombie.png");
+	private static final ResourceLocation FROZEN_ZOMBIE_TEXTURE = new ResourceLocation(MODID,
+			"textures/entity/zombie/frozen_zombie.png");
+	private static final ResourceLocation HUSK_ZOMBIE_TEXTURE = new ResourceLocation("textures/entity/zombie/husk.png");
 
-    public CustomZombieRenderer(EntityRendererProvider.Context renderContext) {
-        super(renderContext);
-    }
+	public CustomZombieRenderer(EntityRendererProvider.Context renderContext) {
+		super(renderContext);
+	}
 
-    @Override
-    protected void scale(Zombie zombieEntity, PoseStack matrixStack, float v) {
-        if(zombieEntity instanceof Husk){
-            float scaleFactor = 1.2F;
-            matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
-        }
-        super.scale(zombieEntity, matrixStack, v);
-    }
+	@Override
+	protected void scale(Zombie zombieEntity, PoseStack matrixStack, float v) {
+		if (zombieEntity instanceof Husk) {
+			float scaleFactor = 1.2F;
+			matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
+		}
+		super.scale(zombieEntity, matrixStack, v);
+	}
 
-    public ResourceLocation getTextureLocation(Zombie zombieEntity) {
-        if(zombieEntity instanceof JungleZombieEntity){
-            return JUNGLE_ZOMBIE_TEXUTRE;
-        }
-        else if(zombieEntity instanceof FrozenZombieEntity){
-            return FROZEN_ZOMBIE_TEXTURE;
-        }
-        else if(zombieEntity instanceof Husk){
-            return HUSK_ZOMBIE_TEXTURE;
-        }
-        else {
-            return super.getTextureLocation(zombieEntity);
-        }
-    }
+	public ResourceLocation getTextureLocation(Zombie zombieEntity) {
+		if (zombieEntity instanceof JungleZombieEntity) {
+			return JUNGLE_ZOMBIE_TEXUTRE;
+		} else if (zombieEntity instanceof FrozenZombieEntity) {
+			return FROZEN_ZOMBIE_TEXTURE;
+		} else if (zombieEntity instanceof Husk) {
+			return HUSK_ZOMBIE_TEXTURE;
+		} else {
+			return super.getTextureLocation(zombieEntity);
+		}
+	}
 }

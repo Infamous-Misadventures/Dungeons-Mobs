@@ -20,7 +20,7 @@ public class WindcallerModel extends AnimatedGeoModel<WindcallerEntity> {
 
 	@Override
 	public ResourceLocation getModelResource(WindcallerEntity entity) {
-		return new ResourceLocation(DungeonsMobs.MODID, "geo/windcaller.geo.json") ;
+		return new ResourceLocation(DungeonsMobs.MODID, "geo/windcaller.geo.json");
 	}
 
 	@Override

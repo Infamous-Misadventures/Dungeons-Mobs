@@ -44,33 +44,34 @@ public class PoisonAnemoneEntity extends PoisonQuillVineEntity {
 	public SoundEvent getRetractSound() {
 		return ModSoundEvents.POISON_ANEMONE_BURST.get();
 	}
-	
+
 	@Override
 	public SoundEvent getCloseSound() {
 		return ModSoundEvents.POISON_ANEMONE_CLOSE.get();
 	}
-	
+
 	@Override
 	public SoundEvent getShootSound() {
 		return ModSoundEvents.POISON_ANEMONE_SHOOT.get();
 	}
-	
+
 	@Override
 	public boolean isKelp() {
 		return true;
 	}
-	
+
 	@Override
 	public int wrongHabitatDieChance() {
 		return 75;
 	}
-	
+
 	@Override
 	public void spawnAreaDamage() {
-		AreaDamageEntity areaDamage = AreaDamageEntity.spawnAreaDamage(this.level, this.position(), this, 5.0F, DamageSource.mobAttack(this), 0.0F, 1.5F, 0.25F, 0.25F, 5, false, false, 0.75, 0.25, false, 0, 2);
+		AreaDamageEntity areaDamage = AreaDamageEntity.spawnAreaDamage(this.level, this.position(), this, 5.0F,
+				DamageSource.mobAttack(this), 0.0F, 1.5F, 0.25F, 0.25F, 5, false, false, 0.75, 0.25, false, 0, 2);
 		this.level.addFreshEntity(areaDamage);
 	}
-	
+
 	@Override
 	public void setDefaultFeatures() {
 		super.setDefaultFeatures();

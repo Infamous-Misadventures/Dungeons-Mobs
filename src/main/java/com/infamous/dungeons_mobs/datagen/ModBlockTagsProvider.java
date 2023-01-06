@@ -8,11 +8,11 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class ModBlockTagsProvider extends BlockTagsProvider {
 
-    public ModBlockTagsProvider(DataGenerator generatorIn, ExistingFileHelper existingFileHelper) {
-        super(generatorIn, MODID, existingFileHelper);
-    }
+	public ModBlockTagsProvider(DataGenerator generatorIn, ExistingFileHelper existingFileHelper) {
+		super(generatorIn, MODID, existingFileHelper);
+	}
 
-    @Override
-    protected void addTags() {
-    }
+	@Override
+	protected void addTags() {
+	}
 }

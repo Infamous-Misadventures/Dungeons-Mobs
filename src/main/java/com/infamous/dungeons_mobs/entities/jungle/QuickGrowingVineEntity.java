@@ -29,17 +29,16 @@ public class QuickGrowingVineEntity extends AbstractVineEntity {
 		super(p_i50147_1_, p_i50147_2_);
 	}
 
-
-	public static AttributeSupplier.Builder setCustomAttributes(){
-		return Monster.createMonsterAttributes()
-				.add(Attributes.MAX_HEALTH, 15.0D);
+	public static AttributeSupplier.Builder setCustomAttributes() {
+		return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 15.0D);
 	}
 
 	@Override
 	public void registerControllers(AnimationData data) {
-		data.addAnimationController(new AnimationController(this, "controller", this.getAnimationTransitionTime(), this::predicate));
+		data.addAnimationController(
+				new AnimationController(this, "controller", this.getAnimationTransitionTime(), this::predicate));
 	}
-	
+
 	@Override
 	public int getAnimationTransitionTime() {
 		return 2;
@@ -54,9 +53,11 @@ public class QuickGrowingVineEntity extends AbstractVineEntity {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("quick_growing_vine_retract", LOOP));
 		} else {
 			if (this.isOut() || this.burstAnimationTick > 0) {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("quick_growing_vine_idle", LOOP));
+				event.getController()
+						.setAnimation(new AnimationBuilder().addAnimation("quick_growing_vine_idle", LOOP));
 			} else {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("quick_growing_vine_idle_underground", LOOP));
+				event.getController()
+						.setAnimation(new AnimationBuilder().addAnimation("quick_growing_vine_idle_underground", LOOP));
 			}
 		}
 		return PlayState.CONTINUE;
@@ -116,7 +117,7 @@ public class QuickGrowingVineEntity extends AbstractVineEntity {
 	public SoundEvent getRetractSoundFoley() {
 		return null;
 	}
-	
+
 	@Override
 	public boolean isKelp() {
 		return false;
@@ -134,7 +135,8 @@ public class QuickGrowingVineEntity extends AbstractVineEntity {
 
 	@Override
 	public void spawnAreaDamage() {
-		AreaDamageEntity areaDamage = AreaDamageEntity.spawnAreaDamage(this.level, this.position(), this, 2.5F, DamageSource.mobAttack(this), 0.0F, 1.25F, 0.25F, 0.25F, 5, false, false, 0.75, 0.25, false, 0, 1);
+		AreaDamageEntity areaDamage = AreaDamageEntity.spawnAreaDamage(this.level, this.position(), this, 2.5F,
+				DamageSource.mobAttack(this), 0.0F, 1.25F, 0.25F, 0.25F, 5, false, false, 0.75, 0.25, false, 0, 1);
 		this.level.addFreshEntity(areaDamage);
 	}
 

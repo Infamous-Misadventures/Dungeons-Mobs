@@ -18,54 +18,55 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 
 public class ReplacedEvokerEntity implements IAnimatable, IGeoReplacedEntity {
 
-    public Mob entity;
+	public Mob entity;
 
-    @Override
-    public Mob getMob(){
-        return this.entity;
-    }
+	@Override
+	public Mob getMob() {
+		return this.entity;
+	}
 
-    @Override
-    public void setMob(Mob mob){
-        this.entity = mob;
-    }
+	@Override
+	public void setMob(Mob mob) {
+		this.entity = mob;
+	}
 
-    private AnimationFactory factory = GeckoLibUtil.createFactory(this);
+	private AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
-    @Override
-    public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController(this, "controller", 2, this::predicate));
-    }
+	@Override
+	public void registerControllers(AnimationData data) {
+		data.addAnimationController(new AnimationController(this, "controller", 2, this::predicate));
+	}
 
-    private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
-        String animation = "animation.evoker";
-        if (false) {
-            animation += "_mcd";
-        }
-        String crossed = "";
-        if(IllagerArmsUtil.armorHasCrossedArms((Evoker) this.entity, this.entity.getItemBySlot(EquipmentSlot.CHEST))){
-            crossed = ".crossed";
-        }
-        if (((Evoker) this.entity).isCastingSpell()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation(animation + ".cast-spell", LOOP));
-        } else if (this.entity.isAggressive() && !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
-            event.getController().setAnimation(new AnimationBuilder()
-                    .addAnimation(animation + ".run" + crossed, LOOP));
-        } else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
-            event.getController().setAnimation(new AnimationBuilder()
-                    .addAnimation(animation + ".walk" + crossed, LOOP));
-        } else {
-            if (((Evoker) this.entity).isCelebrating()) {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation(animation + ".win", LOOP));
-            } else {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation(animation + ".idle" + crossed, LOOP));
-            }
-        }
-        return PlayState.CONTINUE;
-    }
+	private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
+		String animation = "animation.evoker";
+		if (false) {
+			animation += "_mcd";
+		}
+		String crossed = "";
+		if (IllagerArmsUtil.armorHasCrossedArms((Evoker) this.entity, this.entity.getItemBySlot(EquipmentSlot.CHEST))) {
+			crossed = ".crossed";
+		}
+		if (((Evoker) this.entity).isCastingSpell()) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(animation + ".cast-spell", LOOP));
+		} else if (this.entity.isAggressive()
+				&& !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(animation + ".run" + crossed, LOOP));
+		} else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
+			event.getController()
+					.setAnimation(new AnimationBuilder().addAnimation(animation + ".walk" + crossed, LOOP));
+		} else {
+			if (((Evoker) this.entity).isCelebrating()) {
+				event.getController().setAnimation(new AnimationBuilder().addAnimation(animation + ".win", LOOP));
+			} else {
+				event.getController()
+						.setAnimation(new AnimationBuilder().addAnimation(animation + ".idle" + crossed, LOOP));
+			}
+		}
+		return PlayState.CONTINUE;
+	}
 
-    @Override
-    public AnimationFactory getFactory() {
-        return factory;
-    }
+	@Override
+	public AnimationFactory getFactory() {
+		return factory;
+	}
 }

@@ -12,10 +12,10 @@ import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.renderers.geo.GeoProjectilesRenderer;
 
 public class SimpleTrapRenderer extends GeoProjectilesRenderer<SimpleTrapEntity> {
-   public SimpleTrapRenderer(EntityRendererProvider.Context renderManager) {
-      super(renderManager, new SimpleTrapModel<SimpleTrapEntity>());
-   }
-   
+	public SimpleTrapRenderer(EntityRendererProvider.Context renderManager) {
+		super(renderManager, new SimpleTrapModel<SimpleTrapEntity>());
+	}
+
 	@Override
 	public void renderEarly(SimpleTrapEntity animatable, PoseStack stackIn, float partialTicks,
 			MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn, int packedOverlayIn,
@@ -29,10 +29,10 @@ public class SimpleTrapRenderer extends GeoProjectilesRenderer<SimpleTrapEntity>
 		stackIn.scale(scaleFactor, scaleFactor, scaleFactor);
 	}
 
-   @Override
-   public RenderType getRenderType(SimpleTrapEntity animatable, float partialTicks, PoseStack stack,
-                                   MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn,
-                                   ResourceLocation textureLocation) {
-      return RenderType.entityTranslucent(getTextureLocation(animatable));
-   }
+	@Override
+	public RenderType getRenderType(SimpleTrapEntity animatable, float partialTicks, PoseStack stack,
+			MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn,
+			ResourceLocation textureLocation) {
+		return RenderType.entityTranslucent(getTextureLocation(animatable));
+	}
 }

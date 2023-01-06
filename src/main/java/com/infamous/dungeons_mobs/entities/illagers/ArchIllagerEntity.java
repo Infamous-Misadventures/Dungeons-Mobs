@@ -8,22 +8,22 @@ import net.minecraft.world.level.Level;
 @SuppressWarnings("EntityConstructor")
 public class ArchIllagerEntity extends AbstractIllager {
 
-    protected ArchIllagerEntity(EntityType<? extends ArchIllagerEntity> type, Level worldIn) {
-        super(type, worldIn);
-    }
+	protected ArchIllagerEntity(EntityType<? extends ArchIllagerEntity> type, Level worldIn) {
+		super(type, worldIn);
+	}
 
-    @Override
-    public boolean canBeLeader() {
-        return false;
-    }
+	@Override
+	public boolean canBeLeader() {
+		return false;
+	}
 
-    @Override
-    public void applyRaidBuffs(int p_213660_1_, boolean p_213660_2_) {
+	@Override
+	public void applyRaidBuffs(int p_213660_1_, boolean p_213660_2_) {
 
-    }
+	}
 
-    @Override
-    public SoundEvent getCelebrateSound() {
-        return null;
-    }
+	@Override
+	public SoundEvent getCelebrateSound() {
+		return null;
+	}
 }

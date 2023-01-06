@@ -84,8 +84,8 @@ public class RoyalGuardEntity extends AbstractIllager implements IAnimatable, IS
 
 	AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
-    private int shieldCooldownTime;
-    
+	private int shieldCooldownTime;
+
 	public int attackAnimationTick;
 	public int attackAnimationLength = 27;
 	public int attackAnimationActionPoint = 15;
@@ -112,7 +112,7 @@ public class RoyalGuardEntity extends AbstractIllager implements IAnimatable, IS
 		this.goalSelector.addGoal(0, new UseShieldGoal(this, 7.5D, 60, 160, 15, 100, false));
 		this.goalSelector.addGoal(1, new RoyalGuardEntity.BasicAttackGoal(this));
 		this.goalSelector.addGoal(2, new ApproachTargetGoal(this, 0, 1.0D, true));
-        this.goalSelector.addGoal(3, new LookAtTargetGoal(this));
+		this.goalSelector.addGoal(3, new LookAtTargetGoal(this));
 		this.goalSelector.addGoal(1, new AbstractIllager.RaiderOpenDoorGoal(this));
 		this.goalSelector.addGoal(3, new Raider.HoldGroundAttackGoal(this, 10.0F));
 		this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, Raider.class)).setAlertOthers());
@@ -134,7 +134,7 @@ public class RoyalGuardEntity extends AbstractIllager implements IAnimatable, IS
 		this.populateDefaultEquipmentEnchantments(this.getRandom(), p_213386_2_);
 		return ilivingentitydata;
 	}
-	
+
 	@Override
 	public boolean isLeftHanded() {
 		return false;
@@ -165,19 +165,19 @@ public class RoyalGuardEntity extends AbstractIllager implements IAnimatable, IS
 	}
 
 	public void baseTick() {
-        super.baseTick();
-        AttributeInstance modifiableattributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);   
-        
-        if (this.isBlocking()) {
-            if (!modifiableattributeinstance.hasModifier(SPEED_MODIFIER_BLOCKING)) {
-                modifiableattributeinstance.addTransientModifier(SPEED_MODIFIER_BLOCKING);
-             }
-        } else {
-        	modifiableattributeinstance.removeModifier(SPEED_MODIFIER_BLOCKING);
-        }
-        
-        this.tickDownAnimTimers();
-    }
+		super.baseTick();
+		AttributeInstance modifiableattributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
+
+		if (this.isBlocking()) {
+			if (!modifiableattributeinstance.hasModifier(SPEED_MODIFIER_BLOCKING)) {
+				modifiableattributeinstance.addTransientModifier(SPEED_MODIFIER_BLOCKING);
+			}
+		} else {
+			modifiableattributeinstance.removeModifier(SPEED_MODIFIER_BLOCKING);
+		}
+
+		this.tickDownAnimTimers();
+	}
 
 	public void tickDownAnimTimers() {
 		if (this.attackAnimationTick > 0) {
@@ -195,9 +195,11 @@ public class RoyalGuardEntity extends AbstractIllager implements IAnimatable, IS
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("royal_guard_attack", LOOP));
 		} else if (this.isBlocking()) {
 			if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("royal_guard_new_walk_blocking", LOOP));
+				event.getController()
+						.setAnimation(new AnimationBuilder().addAnimation("royal_guard_new_walk_blocking", LOOP));
 			} else {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("royal_guard_new_blocking", LOOP));
+				event.getController()
+						.setAnimation(new AnimationBuilder().addAnimation("royal_guard_new_blocking", LOOP));
 			}
 		} else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("royal_guard_new_walk", LOOP));
@@ -223,7 +225,8 @@ public class RoyalGuardEntity extends AbstractIllager implements IAnimatable, IS
 
 	public static AttributeSupplier.Builder setCustomAttributes() {
 		return Vindicator.createAttributes().add(Attributes.KNOCKBACK_RESISTANCE, 0.6D)
-				.add(Attributes.MOVEMENT_SPEED, (double) 0.325F).add(Attributes.FOLLOW_RANGE, 18.0D).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
+				.add(Attributes.MOVEMENT_SPEED, (double) 0.325F).add(Attributes.FOLLOW_RANGE, 18.0D)
+				.add(Attributes.ATTACK_KNOCKBACK, 1.0D);
 	}
 
 	@Override
@@ -282,42 +285,40 @@ public class RoyalGuardEntity extends AbstractIllager implements IAnimatable, IS
 	}
 
 	// SHIELD STUFF
-	
-    @Override
-    public void aiStep() {
-        super.aiStep();
-        if(this.shieldCooldownTime > 0){
-            this.shieldCooldownTime--;
-        }
-        else if(this.shieldCooldownTime < 0){
-            this.shieldCooldownTime = 0;
-        }
-    }
-    
 
-    @Override
-    public int getShieldCooldownTime() {
-        return this.shieldCooldownTime;
-    }
+	@Override
+	public void aiStep() {
+		super.aiStep();
+		if (this.shieldCooldownTime > 0) {
+			this.shieldCooldownTime--;
+		} else if (this.shieldCooldownTime < 0) {
+			this.shieldCooldownTime = 0;
+		}
+	}
 
-    @Override
-    public void setShieldCooldownTime(int shieldCooldownTime) {
-        this.shieldCooldownTime = shieldCooldownTime;
-    }
-    
-    @Override
-    public boolean isShieldDisabled() {
-        return this.shieldCooldownTime > 0;
-    }
+	@Override
+	public int getShieldCooldownTime() {
+		return this.shieldCooldownTime;
+	}
 
-    @Override
+	@Override
+	public void setShieldCooldownTime(int shieldCooldownTime) {
+		this.shieldCooldownTime = shieldCooldownTime;
+	}
+
+	@Override
+	public boolean isShieldDisabled() {
+		return this.shieldCooldownTime > 0;
+	}
+
+	@Override
 	public void disableShield(boolean guaranteeDisable) {
 		float f = 0.25F + (float) EnchantmentHelper.getBlockEfficiency(this) * 0.05F;
 		if (guaranteeDisable) {
 			f += 0.75F;
 		}
 		if (this.random.nextFloat() < f) {
-            this.shieldCooldownTime = 100;
+			this.shieldCooldownTime = 100;
 			this.stopUsingItem();
 			this.level.broadcastEntityEvent(this, (byte) 30);
 		}
@@ -424,24 +425,26 @@ public class RoyalGuardEntity extends AbstractIllager implements IAnimatable, IS
 				RoyalGuardEntity.disableShield(target, 60);
 			}
 		}
-		
+
 		@Override
 		public void stop() {
-			if (target != null && !isShieldDisabled(mob) && shouldBlockForTarget(target) && mob.getOffhandItem().canPerformAction(net.minecraftforge.common.ToolActions.SHIELD_BLOCK) && mob.random.nextInt(6) == 0) {
+			if (target != null && !isShieldDisabled(mob) && shouldBlockForTarget(target)
+					&& mob.getOffhandItem().canPerformAction(net.minecraftforge.common.ToolActions.SHIELD_BLOCK)
+					&& mob.random.nextInt(6) == 0) {
 				mob.startUsingItem(InteractionHand.OFF_HAND);
 			}
 		}
-		
+
 		public boolean isShieldDisabled(PathfinderMob shieldUser) {
-			if (shieldUser instanceof IShieldUser && ((IShieldUser)shieldUser).isShieldDisabled()) {
+			if (shieldUser instanceof IShieldUser && ((IShieldUser) shieldUser).isShieldDisabled()) {
 				return true;
 			} else {
 				return false;
 			}
 		}
-		
+
 		public boolean shouldBlockForTarget(LivingEntity target) {
-			if (target instanceof Mob && ((Mob)target).getTarget() != mob) {
+			if (target instanceof Mob && ((Mob) target).getTarget() != mob) {
 				return false;
 			} else {
 				return true;
@@ -450,7 +453,7 @@ public class RoyalGuardEntity extends AbstractIllager implements IAnimatable, IS
 
 		public boolean animationsUseable() {
 			return mob.attackAnimationTick <= 0;
-		}	
+		}
 
 	}
 

@@ -19,42 +19,41 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class GravityPulseMobEnchant extends MobEnchant {
 
-    public static final double PULL_IN_SPEED_FACTOR = 0.1;
+	public static final double PULL_IN_SPEED_FACTOR = 0.1;
 
-    public GravityPulseMobEnchant(Properties properties) {
-        super(properties);
-    }
+	public GravityPulseMobEnchant(Properties properties) {
+		super(properties);
+	}
 
-    @SubscribeEvent
-    public static void OnLivingUpdate(LivingEvent.LivingTickEvent event) {
-        LivingEntity entity = (LivingEntity) event.getEntity();
+	@SubscribeEvent
+	public static void OnLivingUpdate(LivingEvent.LivingTickEvent event) {
+		LivingEntity entity = (LivingEntity) event.getEntity();
 
-        executeIfPresentWithLevel(entity, GRAVITY_PULSE.get(), (level) -> {
-            MobProps comboCap = MobPropsHelper.getMobPropsCapability(entity);
-            if(comboCap == null) return;
-            int gravityPulseTimer = comboCap.getGravityPulseTimer();
-            if(gravityPulseTimer <= 0){
-                PROXY.spawnParticles(entity, ParticleTypes.PORTAL);
-                applyToNearbyEntities(entity, 5F,
-                        getCanApplyToEnemyPredicate(entity), (LivingEntity nearbyEntity) -> {
-                            pullVictimTowardsTarget(entity, nearbyEntity, ParticleTypes.PORTAL, level);
-                        }
-                );
-                comboCap.setGravityPulseTimer(100);
-            }
-            else{
-                comboCap.setGravityPulseTimer(gravityPulseTimer - 1);
-            }
-        });
-    }
+		executeIfPresentWithLevel(entity, GRAVITY_PULSE.get(), (level) -> {
+			MobProps comboCap = MobPropsHelper.getMobPropsCapability(entity);
+			if (comboCap == null)
+				return;
+			int gravityPulseTimer = comboCap.getGravityPulseTimer();
+			if (gravityPulseTimer <= 0) {
+				PROXY.spawnParticles(entity, ParticleTypes.PORTAL);
+				applyToNearbyEntities(entity, 5F, getCanApplyToEnemyPredicate(entity), (LivingEntity nearbyEntity) -> {
+					pullVictimTowardsTarget(entity, nearbyEntity, ParticleTypes.PORTAL, level);
+				});
+				comboCap.setGravityPulseTimer(100);
+			} else {
+				comboCap.setGravityPulseTimer(gravityPulseTimer - 1);
+			}
+		});
+	}
 
-    public static void pullVictimTowardsTarget(LivingEntity target, LivingEntity nearbyEntity, SimpleParticleType particleType, Integer level) {
-        double motionX = target.getX() - (nearbyEntity.getX());
-        double motionY = target.getY() - (nearbyEntity.getY());
-        double motionZ = target.getZ() - (nearbyEntity.getZ());
-        Vec3 vector3d = new Vec3(motionX, motionY, motionZ).scale(PULL_IN_SPEED_FACTOR * level);
+	public static void pullVictimTowardsTarget(LivingEntity target, LivingEntity nearbyEntity,
+			SimpleParticleType particleType, Integer level) {
+		double motionX = target.getX() - (nearbyEntity.getX());
+		double motionY = target.getY() - (nearbyEntity.getY());
+		double motionZ = target.getZ() - (nearbyEntity.getZ());
+		Vec3 vector3d = new Vec3(motionX, motionY, motionZ).scale(PULL_IN_SPEED_FACTOR * level);
 
-        nearbyEntity.setDeltaMovement(vector3d);
-        PROXY.spawnParticles(nearbyEntity, particleType);
-    }
+		nearbyEntity.setDeltaMovement(vector3d);
+		PROXY.spawnParticles(nearbyEntity, particleType);
+	}
 }

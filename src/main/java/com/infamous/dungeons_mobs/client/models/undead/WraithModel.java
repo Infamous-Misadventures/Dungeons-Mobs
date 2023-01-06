@@ -28,30 +28,37 @@ public class WraithModel extends AnimatedGeoModel<WraithEntity> {
 		return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/wraith/wraith.png");
 	}
 
-    @Override
-    public void setCustomAnimations(WraithEntity entity, int uniqueID, AnimationEvent customPredicate) {
-        super.setCustomAnimations(entity, uniqueID, customPredicate);
+	@Override
+	public void setCustomAnimations(WraithEntity entity, int uniqueID, AnimationEvent customPredicate) {
+		super.setCustomAnimations(entity, uniqueID, customPredicate);
 
-        IBone head = this.getAnimationProcessor().getBone("bipedHead");
-        IBone cape = this.getAnimationProcessor().getBone("bipedCape");
-        
-        cape.setHidden(true);
-        
-        IBone leftHand = this.getAnimationProcessor().getBone("bipedHandLeft");
-        IBone rightHand = this.getAnimationProcessor().getBone("bipedHandRight");
-        
-        if (entity.tickCount % 2 == 0 && rightHand instanceof GeoBone && leftHand instanceof GeoBone && entity.isSpellcasting()) {
-        	GeoBone leftHandBone = ((GeoBone)leftHand);
-        	GeoBone rightHandBone = ((GeoBone)rightHand);
-        	entity.level.addParticle(ParticleTypes.SOUL_FIRE_FLAME, leftHandBone.getWorldPosition().x, leftHandBone.getWorldPosition().y, leftHandBone.getWorldPosition().z, entity.getRandom().nextGaussian() * 0.01, entity.getRandom().nextGaussian() * 0.01, entity.getRandom().nextGaussian() * 0.01);
-        	entity.level.addParticle(ParticleTypes.SOUL_FIRE_FLAME, rightHandBone.getWorldPosition().x, rightHandBone.getWorldPosition().y, rightHandBone.getWorldPosition().z, entity.getRandom().nextGaussian() * 0.01, entity.getRandom().nextGaussian() * 0.01, entity.getRandom().nextGaussian() * 0.01);
-        }
+		IBone head = this.getAnimationProcessor().getBone("bipedHead");
+		IBone cape = this.getAnimationProcessor().getBone("bipedCape");
 
-        EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
+		cape.setHidden(true);
 
-        if (extraData.headPitch != 0 || extraData.netHeadYaw != 0) {
-            head.setRotationX(head.getRotationX() + (extraData.headPitch * ((float) Math.PI / 180F)));
-            head.setRotationY(head.getRotationY() + (extraData.netHeadYaw * ((float) Math.PI / 180F)));
-        }
-    }
+		IBone leftHand = this.getAnimationProcessor().getBone("bipedHandLeft");
+		IBone rightHand = this.getAnimationProcessor().getBone("bipedHandRight");
+
+		if (entity.tickCount % 2 == 0 && rightHand instanceof GeoBone && leftHand instanceof GeoBone
+				&& entity.isSpellcasting()) {
+			GeoBone leftHandBone = ((GeoBone) leftHand);
+			GeoBone rightHandBone = ((GeoBone) rightHand);
+			entity.level.addParticle(ParticleTypes.SOUL_FIRE_FLAME, leftHandBone.getWorldPosition().x,
+					leftHandBone.getWorldPosition().y, leftHandBone.getWorldPosition().z,
+					entity.getRandom().nextGaussian() * 0.01, entity.getRandom().nextGaussian() * 0.01,
+					entity.getRandom().nextGaussian() * 0.01);
+			entity.level.addParticle(ParticleTypes.SOUL_FIRE_FLAME, rightHandBone.getWorldPosition().x,
+					rightHandBone.getWorldPosition().y, rightHandBone.getWorldPosition().z,
+					entity.getRandom().nextGaussian() * 0.01, entity.getRandom().nextGaussian() * 0.01,
+					entity.getRandom().nextGaussian() * 0.01);
+		}
+
+		EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
+
+		if (extraData.headPitch != 0 || extraData.netHeadYaw != 0) {
+			head.setRotationX(head.getRotationX() + (extraData.headPitch * ((float) Math.PI / 180F)));
+			head.setRotationY(head.getRotationY() + (extraData.netHeadYaw * ((float) Math.PI / 180F)));
+		}
+	}
 }

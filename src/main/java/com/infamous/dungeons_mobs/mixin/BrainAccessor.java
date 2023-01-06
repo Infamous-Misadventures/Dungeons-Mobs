@@ -14,6 +14,6 @@ import net.minecraft.world.entity.schedule.Activity;
 @Mixin(Brain.class)
 public interface BrainAccessor<E extends LivingEntity> {
 
-    @Accessor
-    Map<Integer, Map<Activity, Set<Behavior<? super E>>>> getAvailableBehaviorsByPriority();
+	@Accessor
+	Map<Integer, Map<Activity, Set<Behavior<? super E>>>> getAvailableBehaviorsByPriority();
 }

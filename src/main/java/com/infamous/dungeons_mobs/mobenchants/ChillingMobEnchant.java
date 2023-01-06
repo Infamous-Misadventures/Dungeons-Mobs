@@ -19,39 +19,40 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class ChillingMobEnchant extends MobEnchant {
 
-    public ChillingMobEnchant(Properties properties) {
-        super(properties);
-    }
+	public ChillingMobEnchant(Properties properties) {
+		super(properties);
+	}
 
-    @SubscribeEvent
-    public static void OnLivingUpdate(LivingEvent.LivingTickEvent event) {
-        LivingEntity entity = (LivingEntity) event.getEntity();
+	@SubscribeEvent
+	public static void OnLivingUpdate(LivingEvent.LivingTickEvent event) {
+		LivingEntity entity = (LivingEntity) event.getEntity();
 
-        executeIfPresentWithLevel(entity, CHILLING.get(), (level) -> {
-            MobProps comboCap = MobPropsHelper.getMobPropsCapability(entity);
-            if(comboCap == null) return;
-            int freezeNearbyTimer = comboCap.getFreezeNearbyTimer();
-            if(freezeNearbyTimer <= 0){
-                PROXY.spawnParticles(entity, ParticleTypes.ITEM_SNOWBALL);
-                applyToNearbyEntities(entity, 1.5F,
-                        getCanApplyToEnemyPredicate(entity), (LivingEntity nearbyEntity) -> {
-                            freezeEnemy(1, nearbyEntity, level);
-                            PROXY.spawnParticles(nearbyEntity, ParticleTypes.ITEM_SNOWBALL);
-                        }
-                );
-                comboCap.setFreezeNearbyTimer(40);
-            }
-            else{
-                comboCap.setFreezeNearbyTimer(freezeNearbyTimer - 1);
-            }
-        });
-    }
+		executeIfPresentWithLevel(entity, CHILLING.get(), (level) -> {
+			MobProps comboCap = MobPropsHelper.getMobPropsCapability(entity);
+			if (comboCap == null)
+				return;
+			int freezeNearbyTimer = comboCap.getFreezeNearbyTimer();
+			if (freezeNearbyTimer <= 0) {
+				PROXY.spawnParticles(entity, ParticleTypes.ITEM_SNOWBALL);
+				applyToNearbyEntities(entity, 1.5F, getCanApplyToEnemyPredicate(entity),
+						(LivingEntity nearbyEntity) -> {
+							freezeEnemy(1, nearbyEntity, level);
+							PROXY.spawnParticles(nearbyEntity, ParticleTypes.ITEM_SNOWBALL);
+						});
+				comboCap.setFreezeNearbyTimer(40);
+			} else {
+				comboCap.setFreezeNearbyTimer(freezeNearbyTimer - 1);
+			}
+		});
+	}
 
-    private static void freezeEnemy(int amplifier, LivingEntity nearbyEntity, int durationInSeconds) {
-        MobEffectInstance slowness = new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, durationInSeconds * 20, amplifier);
-        MobEffectInstance fatigue = new MobEffectInstance(MobEffects.DIG_SLOWDOWN, durationInSeconds * 20, Math.max(0, amplifier * 2 - 1));
-        nearbyEntity.addEffect(slowness);
-        nearbyEntity.addEffect(fatigue);
-        PROXY.spawnParticles(nearbyEntity, ParticleTypes.ITEM_SNOWBALL);
-    }
+	private static void freezeEnemy(int amplifier, LivingEntity nearbyEntity, int durationInSeconds) {
+		MobEffectInstance slowness = new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, durationInSeconds * 20,
+				amplifier);
+		MobEffectInstance fatigue = new MobEffectInstance(MobEffects.DIG_SLOWDOWN, durationInSeconds * 20,
+				Math.max(0, amplifier * 2 - 1));
+		nearbyEntity.addEffect(slowness);
+		nearbyEntity.addEffect(fatigue);
+		PROXY.spawnParticles(nearbyEntity, ParticleTypes.ITEM_SNOWBALL);
+	}
 }

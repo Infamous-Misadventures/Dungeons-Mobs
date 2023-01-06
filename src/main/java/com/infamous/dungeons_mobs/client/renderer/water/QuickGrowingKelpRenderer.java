@@ -15,17 +15,19 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class QuickGrowingKelpRenderer extends AbstractVineRenderer {
-	
-    private static final ResourceLocation QUICK_GROWING_KELP_TEXTURE = new ResourceLocation(MODID, "textures/entity/ocean/quick_growing_kelp.png");
-    
-    @SuppressWarnings("unchecked")
+
+	private static final ResourceLocation QUICK_GROWING_KELP_TEXTURE = new ResourceLocation(MODID,
+			"textures/entity/ocean/quick_growing_kelp.png");
+
+	@SuppressWarnings("unchecked")
 	public QuickGrowingKelpRenderer(EntityRendererProvider.Context renderManager) {
-        super(renderManager, new QuickGrowingVineModel());
-        this.addLayer(new GeoEyeLayer(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/ocean/quick_growing_kelp_glow.png")));
-    }
-    
-    @Override
-    public ResourceLocation getTextureLocation(AbstractVineEntity entity) {
-        return QUICK_GROWING_KELP_TEXTURE;
-    }
+		super(renderManager, new QuickGrowingVineModel());
+		this.addLayer(new GeoEyeLayer(this,
+				new ResourceLocation(DungeonsMobs.MODID, "textures/entity/ocean/quick_growing_kelp_glow.png")));
+	}
+
+	@Override
+	public ResourceLocation getTextureLocation(AbstractVineEntity entity) {
+		return QUICK_GROWING_KELP_TEXTURE;
+	}
 }

@@ -32,29 +32,35 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class RoyalGuardShieldBEWLR extends BlockEntityWithoutLevelRenderer {
 
-    private final ShieldModel royalGuardShieldModel;
+	private final ShieldModel royalGuardShieldModel;
 
-    public RoyalGuardShieldBEWLR(BlockEntityRenderDispatcher p_172550_, EntityModelSet p_172551_) {
-        super(p_172550_, p_172551_);
-        royalGuardShieldModel = new ShieldModel(p_172551_.bakeLayer(SHIELD));
-    }
+	public RoyalGuardShieldBEWLR(BlockEntityRenderDispatcher p_172550_, EntityModelSet p_172551_) {
+		super(p_172550_, p_172551_);
+		royalGuardShieldModel = new ShieldModel(p_172551_.bakeLayer(SHIELD));
+	}
 
-    public void renderByItem(ItemStack stack, ItemTransforms.TransformType transformType, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
-        Item item = stack.getItem();
-        boolean flag = stack.getTagElement("BlockEntityTag") != null;
-        matrixStack.pushPose();
-        matrixStack.scale(1.0F, -1.0F, -1.0F);
-        Material rendermaterial = flag ? LOCATION_ROYAL_GUARD_SHIELD_BASE : LOCATION_ROYAL_GUARD_SHIELD_NO_PATTERN;
-        VertexConsumer ivertexbuilder = rendermaterial.sprite().wrap(ItemRenderer.getFoilBufferDirect(buffer, this.royalGuardShieldModel.renderType(rendermaterial.atlasLocation()), true, stack.hasFoil()));
-        this.royalGuardShieldModel.handle().render(matrixStack, ivertexbuilder, combinedLight, combinedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);
-        if (flag) {
-            List<Pair<Holder<BannerPattern>, DyeColor>> list = BannerBlockEntity.createPatterns(ShieldItem.getColor(stack), BannerBlockEntity.getItemPatterns(stack));
-            BannerRenderer.renderPatterns(matrixStack, buffer, combinedLight, combinedOverlay, this.royalGuardShieldModel.plate(), rendermaterial, false, list, stack.hasFoil());
-        } else {
-            this.royalGuardShieldModel.plate().render(matrixStack, ivertexbuilder, combinedLight, combinedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);
-        }
+	public void renderByItem(ItemStack stack, ItemTransforms.TransformType transformType, PoseStack matrixStack,
+			MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
+		Item item = stack.getItem();
+		boolean flag = stack.getTagElement("BlockEntityTag") != null;
+		matrixStack.pushPose();
+		matrixStack.scale(1.0F, -1.0F, -1.0F);
+		Material rendermaterial = flag ? LOCATION_ROYAL_GUARD_SHIELD_BASE : LOCATION_ROYAL_GUARD_SHIELD_NO_PATTERN;
+		VertexConsumer ivertexbuilder = rendermaterial.sprite().wrap(ItemRenderer.getFoilBufferDirect(buffer,
+				this.royalGuardShieldModel.renderType(rendermaterial.atlasLocation()), true, stack.hasFoil()));
+		this.royalGuardShieldModel.handle().render(matrixStack, ivertexbuilder, combinedLight, combinedOverlay, 1.0F,
+				1.0F, 1.0F, 1.0F);
+		if (flag) {
+			List<Pair<Holder<BannerPattern>, DyeColor>> list = BannerBlockEntity
+					.createPatterns(ShieldItem.getColor(stack), BannerBlockEntity.getItemPatterns(stack));
+			BannerRenderer.renderPatterns(matrixStack, buffer, combinedLight, combinedOverlay,
+					this.royalGuardShieldModel.plate(), rendermaterial, false, list, stack.hasFoil());
+		} else {
+			this.royalGuardShieldModel.plate().render(matrixStack, ivertexbuilder, combinedLight, combinedOverlay, 1.0F,
+					1.0F, 1.0F, 1.0F);
+		}
 
-        matrixStack.popPose();
-    }
+		matrixStack.popPose();
+	}
 
 }

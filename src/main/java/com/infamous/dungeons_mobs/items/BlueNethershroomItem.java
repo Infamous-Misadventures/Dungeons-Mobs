@@ -17,36 +17,37 @@ import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
 
 public class BlueNethershroomItem extends ProjectileWeaponItem {
-   public BlueNethershroomItem(Item.Properties properties) {
-      super(properties);
-   }
+	public BlueNethershroomItem(Item.Properties properties) {
+		super(properties);
+	}
 
-   @Override
-   public Predicate<ItemStack> getAllSupportedProjectiles() {
-      return itemStack -> itemStack.getItem() instanceof BlueNethershroomItem;
-   }
+	@Override
+	public Predicate<ItemStack> getAllSupportedProjectiles() {
+		return itemStack -> itemStack.getItem() instanceof BlueNethershroomItem;
+	}
 
-   public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
-      ItemStack itemstack = player.getItemInHand(hand);
-      if (!world.isClientSide) {
-         BlueNethershroomEntity blueNethershroom = new BlueNethershroomEntity(world, player);
-         BlueNethershroomEntity.setLightBluePotionColor(itemstack);
-         blueNethershroom.setItem(PotionUtils.setPotion(itemstack, Potions.POISON));
-         blueNethershroom.shootFromRotation(player, player.getXRot(), player.getYRot(), -20.0F, 0.5F, 1.0F);
-         player.level.playSound(null, player.getX(), player.getY(), player.getZ(), ModSoundEvents.FUNGUS_THROWER_THROW.get(), player.getSoundSource(), 1.0F, (player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.2F + 1.0F);
-         world.addFreshEntity(blueNethershroom);
-      }
+	public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+		ItemStack itemstack = player.getItemInHand(hand);
+		if (!world.isClientSide) {
+			BlueNethershroomEntity blueNethershroom = new BlueNethershroomEntity(world, player);
+			BlueNethershroomEntity.setLightBluePotionColor(itemstack);
+			blueNethershroom.setItem(PotionUtils.setPotion(itemstack, Potions.POISON));
+			blueNethershroom.shootFromRotation(player, player.getXRot(), player.getYRot(), -20.0F, 0.5F, 1.0F);
+			player.level.playSound(null, player.getX(), player.getY(), player.getZ(),
+					ModSoundEvents.FUNGUS_THROWER_THROW.get(), player.getSoundSource(), 1.0F,
+					(player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.2F + 1.0F);
+			world.addFreshEntity(blueNethershroom);
+		}
 
-      player.awardStat(Stats.ITEM_USED.get(this));
-      if (!player.getAbilities().instabuild) {
-         itemstack.shrink(1);
-      }
+		player.awardStat(Stats.ITEM_USED.get(this));
+		if (!player.getAbilities().instabuild) {
+			itemstack.shrink(1);
+		}
 
-      return InteractionResultHolder.sidedSuccess(itemstack, world.isClientSide());
-   }
+		return InteractionResultHolder.sidedSuccess(itemstack, world.isClientSide());
+	}
 
-
-   public int getDefaultProjectileRange() {
-      return 8;
-   }
+	public int getDefaultProjectileRange() {
+		return 8;
+	}
 }

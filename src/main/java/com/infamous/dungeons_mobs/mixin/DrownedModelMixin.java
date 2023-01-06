@@ -18,27 +18,28 @@ import net.minecraft.world.item.TridentItem;
 @Mixin(DrownedModel.class)
 public abstract class DrownedModelMixin<T extends Zombie> extends ZombieModel<T> {
 
-    public DrownedModelMixin(ModelPart p_171090_) {
-        super(p_171090_);
-    }
+	public DrownedModelMixin(ModelPart p_171090_) {
+		super(p_171090_);
+	}
 
-    @Inject(at = @At("TAIL"), method = "prepareMobModel")
-    private void setPosesForAnyTrident(T drowned, float p_212843_2_, float p_212843_3_, float p_212843_4_, CallbackInfo ci){
-        ItemStack mainhandStack = drowned.getItemInHand(InteractionHand.MAIN_HAND);
-        ItemStack offhandStack = drowned.getItemInHand(InteractionHand.OFF_HAND);
+	@Inject(at = @At("TAIL"), method = "prepareMobModel")
+	private void setPosesForAnyTrident(T drowned, float p_212843_2_, float p_212843_3_, float p_212843_4_,
+			CallbackInfo ci) {
+		ItemStack mainhandStack = drowned.getItemInHand(InteractionHand.MAIN_HAND);
+		ItemStack offhandStack = drowned.getItemInHand(InteractionHand.OFF_HAND);
 
-        if (mainhandStack.getItem() instanceof TridentItem && drowned.isAggressive()) {
-            if (drowned.getMainArm() == HumanoidArm.RIGHT) {
-                this.rightArmPose = HumanoidModel.ArmPose.THROW_SPEAR;
-            } else {
-                this.leftArmPose = HumanoidModel.ArmPose.THROW_SPEAR;
-            }
-        } else if(offhandStack.getItem() instanceof TridentItem && drowned.isAggressive()) {
-            if (drowned.getMainArm() == HumanoidArm.RIGHT) {
-                this.leftArmPose = HumanoidModel.ArmPose.THROW_SPEAR;
-            } else {
-                this.rightArmPose = HumanoidModel.ArmPose.THROW_SPEAR;
-            }
-        }
-    }
+		if (mainhandStack.getItem() instanceof TridentItem && drowned.isAggressive()) {
+			if (drowned.getMainArm() == HumanoidArm.RIGHT) {
+				this.rightArmPose = HumanoidModel.ArmPose.THROW_SPEAR;
+			} else {
+				this.leftArmPose = HumanoidModel.ArmPose.THROW_SPEAR;
+			}
+		} else if (offhandStack.getItem() instanceof TridentItem && drowned.isAggressive()) {
+			if (drowned.getMainArm() == HumanoidArm.RIGHT) {
+				this.leftArmPose = HumanoidModel.ArmPose.THROW_SPEAR;
+			} else {
+				this.rightArmPose = HumanoidModel.ArmPose.THROW_SPEAR;
+			}
+		}
+	}
 }

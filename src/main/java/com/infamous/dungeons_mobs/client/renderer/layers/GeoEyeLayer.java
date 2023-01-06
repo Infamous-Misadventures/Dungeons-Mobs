@@ -18,29 +18,33 @@ import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 @OnlyIn(Dist.CLIENT)
 public class GeoEyeLayer<T extends LivingEntity & IAnimatable> extends GeoLayerRenderer<T> {
 
-    public ResourceLocation textureLocation;
+	public ResourceLocation textureLocation;
 
-    public GeoEyeLayer(IGeoRenderer<T> endermanReplacementRenderer, ResourceLocation textureLocation) {
-        super(endermanReplacementRenderer);
-        this.textureLocation = textureLocation;
-    }
+	public GeoEyeLayer(IGeoRenderer<T> endermanReplacementRenderer, ResourceLocation textureLocation) {
+		super(endermanReplacementRenderer);
+		this.textureLocation = textureLocation;
+	}
 
-    @Override
-    public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn,
-                       T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
-                       float ageInTicks, float netHeadYaw, float headPitch) {
+	@Override
+	public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, T entitylivingbaseIn,
+			float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw,
+			float headPitch) {
 
-        GeoModelProvider<T> geomodel = this.getEntityModel();
-        if (entitylivingbaseIn instanceof BlastlingEntity) {
-            renderModel(geomodel, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/ender/blastling" + (1 + ((int) ((BlastlingEntity) entitylivingbaseIn).flameTicks) % 3) + "_eyes.png"), matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, 1.0F, 1.0F, 1.0F, 1.0F);
-        } else {
-            renderModel(geomodel, textureLocation, matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, 1.0F, 0.8F, 0.8F, 0.8F);
-        }
-    }
+		GeoModelProvider<T> geomodel = this.getEntityModel();
+		if (entitylivingbaseIn instanceof BlastlingEntity) {
+			renderModel(geomodel,
+					new ResourceLocation(DungeonsMobs.MODID, "textures/entity/ender/blastling"
+							+ (1 + ((int) ((BlastlingEntity) entitylivingbaseIn).flameTicks) % 3) + "_eyes.png"),
+					matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, 1.0F, 1.0F, 1.0F, 1.0F);
+		} else {
+			renderModel(geomodel, textureLocation, matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, 1.0F,
+					0.8F, 0.8F, 0.8F);
+		}
+	}
 
-    @Override
-    public RenderType getRenderType(ResourceLocation textureLocation) {
-        return RenderType.eyes(textureLocation);
-    }
+	@Override
+	public RenderType getRenderType(ResourceLocation textureLocation) {
+		return RenderType.eyes(textureLocation);
+	}
 
 }

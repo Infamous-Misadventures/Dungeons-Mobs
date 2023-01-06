@@ -13,34 +13,33 @@ import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.common.util.NonNullLazy;
 
 public class ColoredTridentItem extends TridentItem implements IHasInventorySprite {
-    private final DyeColor tridentColor;
+	private final DyeColor tridentColor;
 
-    public ColoredTridentItem(Properties properties, DyeColor dyeColor) {
-        super(properties);
-        this.tridentColor = dyeColor;
-    }
+	public ColoredTridentItem(Properties properties, DyeColor dyeColor) {
+		super(properties);
+		this.tridentColor = dyeColor;
+	}
 
-    public DyeColor getTridentColor() {
-        return tridentColor;
-    }
+	public DyeColor getTridentColor() {
+		return tridentColor;
+	}
 
-    @Override
-    public String getModelResource() {
-        return "replace with actual location, currently just here to assure the Tridents are working correctly";
-    }
+	@Override
+	public String getModelResource() {
+		return "replace with actual location, currently just here to assure the Tridents are working correctly";
+	}
 
-    @Override
-    public void initializeClient(Consumer<IClientItemExtensions> consumer)
-    {
-        consumer.accept(new IClientItemExtensions()
-        {
-            static final NonNullLazy<BlockEntityWithoutLevelRenderer> renderer = NonNullLazy.of(() -> new CustomISTER(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels()));
+	@Override
+	public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+		consumer.accept(new IClientItemExtensions() {
+			static final NonNullLazy<BlockEntityWithoutLevelRenderer> renderer = NonNullLazy
+					.of(() -> new CustomISTER(Minecraft.getInstance().getBlockEntityRenderDispatcher(),
+							Minecraft.getInstance().getEntityModels()));
 
-            @Override
-            public BlockEntityWithoutLevelRenderer getCustomRenderer()
-            {
-                return renderer.get();
-            }
-        });
-    }
+			@Override
+			public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+				return renderer.get();
+			}
+		});
+	}
 }

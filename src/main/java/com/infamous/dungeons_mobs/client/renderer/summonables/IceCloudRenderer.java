@@ -14,10 +14,10 @@ import net.minecraft.world.level.LightLayer;
 import software.bernie.geckolib3.renderers.geo.GeoProjectilesRenderer;
 
 public class IceCloudRenderer extends GeoProjectilesRenderer<IceCloudEntity> {
-   public IceCloudRenderer(EntityRendererProvider.Context renderManager) {
-      super(renderManager, new IceCloudModel());
-   }
-   
+	public IceCloudRenderer(EntityRendererProvider.Context renderManager) {
+		super(renderManager, new IceCloudModel());
+	}
+
 	@Override
 	protected int getBlockLightLevel(IceCloudEntity p_114496_, BlockPos p_114497_) {
 		return p_114496_.level.getBrightness(LightLayer.BLOCK, p_114497_) > 10
@@ -25,10 +25,10 @@ public class IceCloudRenderer extends GeoProjectilesRenderer<IceCloudEntity> {
 				: 5;
 	}
 
-   @Override
-   public RenderType getRenderType(IceCloudEntity animatable, float partialTicks, PoseStack stack,
-                                   MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn,
-                                   ResourceLocation textureLocation) {
-      return RenderType.entityTranslucent(getTextureLocation(animatable));
-   }
+	@Override
+	public RenderType getRenderType(IceCloudEntity animatable, float partialTicks, PoseStack stack,
+			MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn,
+			ResourceLocation textureLocation) {
+		return RenderType.entityTranslucent(getTextureLocation(animatable));
+	}
 }

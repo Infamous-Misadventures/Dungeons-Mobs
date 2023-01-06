@@ -10,8 +10,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 public class ModRecipes {
-    public static final DeferredRegister<RecipeSerializer<?>> RECIPES = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, MODID);
+	public static final DeferredRegister<RecipeSerializer<?>> RECIPES = DeferredRegister
+			.create(ForgeRegistries.RECIPE_SERIALIZERS, MODID);
 
-    public static final RegistryObject<RecipeSerializer<?>> SHIELD_RECIPE = RECIPES.register("shield_decoration",
-            () -> CustomShieldRecipes.SERIALIZER);
+	public static final RegistryObject<RecipeSerializer<?>> SHIELD_RECIPE = RECIPES.register("shield_decoration",
+			() -> CustomShieldRecipes.SERIALIZER);
 }

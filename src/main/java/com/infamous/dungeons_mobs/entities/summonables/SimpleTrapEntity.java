@@ -25,14 +25,14 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 public class SimpleTrapEntity extends AbstractTrapEntity {
 
 	private static final EntityDataAccessor<Integer> TRAP_TYPE = SynchedEntityData.defineId(SimpleTrapEntity.class,
-			EntityDataSerializers.INT);	
-	
+			EntityDataSerializers.INT);
+
 	AnimationFactory factory = GeckoLibUtil.createFactory(this);
-	
-    public SimpleTrapEntity(EntityType<? extends SimpleTrapEntity> entityTypeIn, Level worldIn) {
-        super(entityTypeIn, worldIn);
-    }
-    
+
+	public SimpleTrapEntity(EntityType<? extends SimpleTrapEntity> entityTypeIn, Level worldIn) {
+		super(entityTypeIn, worldIn);
+	}
+
 	@Override
 	protected void defineSynchedData() {
 		this.entityData.define(TRAP_TYPE, 0);
@@ -47,7 +47,7 @@ public class SimpleTrapEntity extends AbstractTrapEntity {
 	protected void addAdditionalSaveData(CompoundTag p_213281_1_) {
 		p_213281_1_.putInt("TrapType", this.getTrapType());
 	}
-	
+
 	public int getTrapType() {
 		return Mth.clamp(this.entityData.get(TRAP_TYPE), 0, 1);
 	}
@@ -56,39 +56,38 @@ public class SimpleTrapEntity extends AbstractTrapEntity {
 		this.entityData.set(TRAP_TYPE, attached);
 	}
 
-    @Override
-    public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController(this, "controller", 0, this::predicate));
-    }
+	@Override
+	public void registerControllers(AnimationData data) {
+		data.addAnimationController(new AnimationController(this, "controller", 0, this::predicate));
+	}
 
+	private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
+		if (this.getTrapType() == 0) {
+			if (this.spawnAnimationTick > 0) {
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("web_trap_spawn", LOOP));
+			} else if (this.decayAnimationTick > 0) {
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("vine_trap_decay", LOOP));
+			} else {
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("vine_trap_idle", LOOP));
+			}
+		} else if (this.getTrapType() == 1) {
+			if (this.spawnAnimationTick > 0) {
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("vine_trap_spawn", LOOP));
+			} else if (this.decayAnimationTick > 0) {
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("vine_trap_decay", LOOP));
+			} else {
+				event.getController().setAnimation(new AnimationBuilder().addAnimation("vine_trap_idle", LOOP));
+			}
+		} else {
 
-    private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
-    	if (this.getTrapType() == 0) {
-    		if (this.spawnAnimationTick > 0) {
-        		event.getController().setAnimation(new AnimationBuilder().addAnimation("web_trap_spawn", LOOP)); 
-    		} else if (this.decayAnimationTick > 0) {
-    			event.getController().setAnimation(new AnimationBuilder().addAnimation("vine_trap_decay", LOOP)); 
-    		} else {
-    			event.getController().setAnimation(new AnimationBuilder().addAnimation("vine_trap_idle", LOOP)); 
-    		}   
-    	} else if (this.getTrapType() == 1) {
-    		if (this.spawnAnimationTick > 0) {
-        		event.getController().setAnimation(new AnimationBuilder().addAnimation("vine_trap_spawn", LOOP)); 
-    		} else if (this.decayAnimationTick > 0) {
-    			event.getController().setAnimation(new AnimationBuilder().addAnimation("vine_trap_decay", LOOP)); 
-    		} else {
-    			event.getController().setAnimation(new AnimationBuilder().addAnimation("vine_trap_idle", LOOP)); 
-    		}    
-    	} else {
- 
-    	}
-        return PlayState.CONTINUE;
-    }
+		}
+		return PlayState.CONTINUE;
+	}
 
-    @Override
-    public AnimationFactory getFactory() {
-        return factory;
-    }
+	@Override
+	public AnimationFactory getFactory() {
+		return factory;
+	}
 
 	@Override
 	public int getSpawnAnimationLength() {
@@ -99,7 +98,7 @@ public class SimpleTrapEntity extends AbstractTrapEntity {
 	public int getDecayAnimationLength() {
 		return 25;
 	}
-	
+
 	@Override
 	public boolean canTrapEntity(LivingEntity entity) {
 		if (this.getTrapType() == 0) {
@@ -109,5 +108,5 @@ public class SimpleTrapEntity extends AbstractTrapEntity {
 		} else {
 			return super.canTrapEntity(entity);
 		}
-	} 
+	}
 }
