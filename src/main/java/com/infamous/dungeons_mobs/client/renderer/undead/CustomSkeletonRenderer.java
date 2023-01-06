@@ -16,10 +16,9 @@ public class CustomSkeletonRenderer extends SkeletonRenderer {
     }
 
     public ResourceLocation getTextureLocation(AbstractSkeleton abstractSkeletonEntity) {
-        if(abstractSkeletonEntity instanceof MossySkeletonEntity){
+        if (abstractSkeletonEntity instanceof MossySkeletonEntity) {
             return MOSSY_SKELETON_TEXTURE;
-        }
-        else{
+        } else {
             return super.getTextureLocation(abstractSkeletonEntity);
         }
     }

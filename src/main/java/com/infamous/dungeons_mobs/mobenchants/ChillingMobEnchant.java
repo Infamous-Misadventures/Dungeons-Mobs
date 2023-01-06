@@ -16,8 +16,6 @@ import static com.infamous.dungeons_mobs.DungeonsMobs.PROXY;
 import static com.infamous.dungeons_mobs.mobenchants.NewMobEnchantUtils.executeIfPresentWithLevel;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchants.CHILLING;
 
-import baguchan.enchantwithmob.mobenchant.MobEnchant.Properties;
-
 public class ChillingMobEnchant extends MobEnchant {
 
     public ChillingMobEnchant(Properties properties) {
@@ -26,13 +24,13 @@ public class ChillingMobEnchant extends MobEnchant {
 
     @SubscribeEvent
     public static void OnLivingUpdate(LivingEvent.LivingTickEvent event) {
-        LivingEntity entity = (LivingEntity) event.getEntity();
+        LivingEntity entity = event.getEntity();
 
         executeIfPresentWithLevel(entity, CHILLING.get(), (level) -> {
             MobProps comboCap = MobPropsHelper.getMobPropsCapability(entity);
-            if(comboCap == null) return;
+            if (comboCap == null) return;
             int freezeNearbyTimer = comboCap.getFreezeNearbyTimer();
-            if(freezeNearbyTimer <= 0){
+            if (freezeNearbyTimer <= 0) {
                 PROXY.spawnParticles(entity, ParticleTypes.ITEM_SNOWBALL);
                 applyToNearbyEntities(entity, 1.5F,
                         getCanApplyToEnemyPredicate(entity), (LivingEntity nearbyEntity) -> {
@@ -41,8 +39,7 @@ public class ChillingMobEnchant extends MobEnchant {
                         }
                 );
                 comboCap.setFreezeNearbyTimer(40);
-            }
-            else{
+            } else {
                 comboCap.setFreezeNearbyTimer(freezeNearbyTimer - 1);
             }
         });

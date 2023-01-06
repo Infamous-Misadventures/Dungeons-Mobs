@@ -17,12 +17,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.PacketDistributor;
 
-import net.minecraft.world.item.Item.Properties;
-
 public class WindcallerStaffItem extends ArtifactItem implements IHasInventorySprite {
     public WindcallerStaffItem(Properties properties) {
         super(properties);
-        procOnItemUse=true;
+        procOnItemUse = true;
     }
 
     public InteractionResultHolder<ItemStack> procArtifact(ArtifactUseContext itemUseContext) {
@@ -34,8 +32,8 @@ public class WindcallerStaffItem extends ArtifactItem implements IHasInventorySp
             Player player = itemUseContext.getPlayer();
             BlockPos itemUseContextPos = itemUseContext.getClickedPos();
 
-            if(player != null){
-                shoot(player, itemUseContextPos.getX(), itemUseContextPos.getY()+0.5, itemUseContextPos.getZ());
+            if (player != null) {
+                shoot(player, itemUseContextPos.getX(), itemUseContextPos.getY() + 0.5, itemUseContextPos.getZ());
                 itemUseContextItem.hurtAndBreak(1, player, (entity) -> NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), new BreakItemMessage(entity.getId(), itemUseContextItem)));
                 ArtifactItem.putArtifactOnCooldown(player, itemUseContextItem.getItem());
             }
@@ -65,7 +63,7 @@ public class WindcallerStaffItem extends ArtifactItem implements IHasInventorySp
         tornado.playSound(ModSoundEvents.WINDCALLER_BLAST_WIND.get(), 1.5F, 1.0F);
         tornado.setBlast(true);
         tornado.setYRot(-mob.yHeadRot - 90);
-        ((ServerLevel)mob.level).addFreshEntityWithPassengers(tornado);
+        ((ServerLevel) mob.level).addFreshEntityWithPassengers(tornado);
     }
 
 

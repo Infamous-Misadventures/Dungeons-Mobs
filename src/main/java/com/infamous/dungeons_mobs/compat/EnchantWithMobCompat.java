@@ -14,17 +14,17 @@ public class EnchantWithMobCompat {
     private static boolean IS_LOADED = false;
 
     @SubscribeEvent
-    public static void onInterMod(InterModProcessEvent event){
-        if(ModList.get().isLoaded(ENCHANTWITHMOB_MOD_ID)){
+    public static void onInterMod(InterModProcessEvent event) {
+        if (ModList.get().isLoaded(ENCHANTWITHMOB_MOD_ID)) {
             IS_LOADED = true;
         }
     }
 
-    public static boolean isLoaded(){
+    public static boolean isLoaded() {
         return IS_LOADED;
     }
 
-    public static void initMobEnchants(IEventBus modEventBus){
+    public static void initMobEnchants(IEventBus modEventBus) {
         modEventBus.register(BurningMobEnchant.class);
         modEventBus.register(ChillingMobEnchant.class);
         modEventBus.register(DeflectMobEnchant.class);

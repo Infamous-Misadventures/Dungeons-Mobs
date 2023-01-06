@@ -12,30 +12,30 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 public class GeomancerConstructModel extends AnimatedGeoModel {
-	   
-	@Override
-	public ResourceLocation getAnimationResource(Object entity) {
-		return new ResourceLocation(DungeonsMobs.MODID, "animations/geomancer_pillar.animation.json");
-	}
 
-	@Override
-	public ResourceLocation getModelResource(Object entity) {
-		return new ResourceLocation(DungeonsMobs.MODID, "geo/geomancer_pillar.geo.json");
-	}
+    @Override
+    public ResourceLocation getAnimationResource(Object entity) {
+        return new ResourceLocation(DungeonsMobs.MODID, "animations/geomancer_pillar.animation.json");
+    }
 
-	@Override
-	public ResourceLocation getTextureResource(Object entity) {
-		//ChorusGormandizerEntity entityIn = (ChorusGormandizerEntity) entity;
-		return entity instanceof GeomancerBombEntity ? new ResourceLocation(DungeonsMobs.MODID, "textures/entity/constructs/geomancer_bomb.png") : new ResourceLocation(DungeonsMobs.MODID, "textures/entity/constructs/geomancer_wall.png");
-	}
+    @Override
+    public ResourceLocation getModelResource(Object entity) {
+        return new ResourceLocation(DungeonsMobs.MODID, "geo/geomancer_pillar.geo.json");
+    }
 
-	@Override
-	public void setCustomAnimations(IAnimatable entity, int uniqueID, AnimationEvent customPredicate) {
-		super.setCustomAnimations(entity, uniqueID, customPredicate);
-		
-		ConstructEntity entityIn = (ConstructEntity) entity;
-		
-	}
+    @Override
+    public ResourceLocation getTextureResource(Object entity) {
+        //ChorusGormandizerEntity entityIn = (ChorusGormandizerEntity) entity;
+        return entity instanceof GeomancerBombEntity ? new ResourceLocation(DungeonsMobs.MODID, "textures/entity/constructs/geomancer_bomb.png") : new ResourceLocation(DungeonsMobs.MODID, "textures/entity/constructs/geomancer_wall.png");
+    }
+
+    @Override
+    public void setCustomAnimations(IAnimatable entity, int uniqueID, AnimationEvent customPredicate) {
+        super.setCustomAnimations(entity, uniqueID, customPredicate);
+
+        ConstructEntity entityIn = (ConstructEntity) entity;
+
+    }
 
 	/*public IBone getArm(HandSide p_191216_1_) {
 		return this.getAnimationProcessor().getBone("rightArm");

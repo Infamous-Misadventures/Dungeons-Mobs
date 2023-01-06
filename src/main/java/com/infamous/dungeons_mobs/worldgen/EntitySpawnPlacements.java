@@ -32,13 +32,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.material.FluidState;
 
-import java.util.Random;
-
 public class EntitySpawnPlacements {
 
     public static SpawnPlacements.Type IN_WATER_ON_GROUND;
 
-    public static void createPlacementTypes(){
+    public static void createPlacementTypes() {
         IN_WATER_ON_GROUND = SpawnPlacements.Type.create("in_water_on_ground",
                 (iWorldReader, blockPos, entityType) -> {
                     BlockState blockstate = iWorldReader.getBlockState(blockPos);
@@ -68,7 +66,7 @@ public class EntitySpawnPlacements {
         }
     }
 
-    public static void initSpawnPlacements(){
+    public static void initSpawnPlacements() {
         SpawnPlacements.register(ModEntityTypes.WRAITH.get(),
                 SpawnPlacements.Type.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
@@ -155,7 +153,7 @@ public class EntitySpawnPlacements {
                 SpawnPlacements.Type.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING,
                 EntitySpawnPlacements::canJungleMobSpawn);
-     // COMMENTED OUT BECAUSE THEY SHOULDN'T SPAWN WITHOUT DUNGEONS WORLD
+        // COMMENTED OUT BECAUSE THEY SHOULDN'T SPAWN WITHOUT DUNGEONS WORLD
         /*EntitySpawnPlacementRegistry.register(ModEntityTypes.QUICK_GROWING_VINE.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING,
@@ -187,7 +185,7 @@ public class EntitySpawnPlacements {
                 SpawnPlacements.Type.IN_WATER,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 EntitySpawnPlacements::checkAquaticMobSpawnRules);
-     // COMMENTED OUT BECAUSE THEY SHOULDN'T SPAWN WITHOUT DUNGEONS WORLD
+        // COMMENTED OUT BECAUSE THEY SHOULDN'T SPAWN WITHOUT DUNGEONS WORLD
         /*EntitySpawnPlacementRegistry.register(ModEntityTypes.QUICK_GROWING_KELP.get(),
                 IN_WATER_ON_GROUND,
                 Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,

@@ -47,25 +47,23 @@ import java.util.EnumSet;
 
 import static com.infamous.dungeons_mobs.entities.SpawnArmoredHelper.equipArmorSet;
 
-import net.minecraft.world.entity.monster.AbstractIllager.IllagerArmPose;
-
 public class GeomancerEntity extends SpellcasterIllager implements IAnimatable, SpawnArmoredMob {
 
-	AnimationFactory factory = GeckoLibUtil.createFactory(this);
-	
-	public int summonBombsAttackAnimationTick;
-	public int summonBombsAttackAnimationLength = 35;
-	public int summonBombsAttackAnimationActionPoint = 15;
-	
-	public int summonWallsAnimationTick;
-	public int summonWallsAnimationLength = 35;
-	public int summonWallsAnimationActionPoint = 20;
+    AnimationFactory factory = GeckoLibUtil.createFactory(this);
+
+    public int summonBombsAttackAnimationTick;
+    public int summonBombsAttackAnimationLength = 35;
+    public int summonBombsAttackAnimationActionPoint = 15;
+
+    public int summonWallsAnimationTick;
+    public int summonWallsAnimationLength = 35;
+    public int summonWallsAnimationActionPoint = 20;
 
     public GeomancerEntity(EntityType<? extends SpellcasterIllager> type, Level world) {
         super(type, world);
     }
 
-    public static AttributeSupplier.Builder setCustomAttributes(){
+    public static AttributeSupplier.Builder setCustomAttributes() {
         return Evoker.createAttributes().add(Attributes.MOVEMENT_SPEED, 0.25D).add(Attributes.FOLLOW_RANGE, 30.0D);
     }
 
@@ -93,69 +91,69 @@ public class GeomancerEntity extends SpellcasterIllager implements IAnimatable, 
         this.targetSelector.addGoal(3, (new NearestAttackableTargetGoal<>(this, AbstractVillager.class, false)).setUnseenMemoryTicks(600));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, false).setUnseenMemoryTicks(600));
     }
-    
+
     @Override
     public boolean isLeftHanded() {
-    	return false;
+        return false;
     }
-    
-	public void handleEntityEvent(byte p_28844_) {
-		if (p_28844_ == 4) {
-			this.summonWallsAnimationTick = summonWallsAnimationLength;
-		} else if (p_28844_ == 11) {
-			this.summonBombsAttackAnimationTick = summonBombsAttackAnimationLength;
-		} else {
-			super.handleEntityEvent(p_28844_);
-		}
-	}
-    
-    public void baseTick() {
-    	super.baseTick();
 
-    	this.tickDownAnimTimers();
+    public void handleEntityEvent(byte p_28844_) {
+        if (p_28844_ == 4) {
+            this.summonWallsAnimationTick = summonWallsAnimationLength;
+        } else if (p_28844_ == 11) {
+            this.summonBombsAttackAnimationTick = summonBombsAttackAnimationLength;
+        } else {
+            super.handleEntityEvent(p_28844_);
+        }
+    }
+
+    public void baseTick() {
+        super.baseTick();
+
+        this.tickDownAnimTimers();
     }
 
     public void tickDownAnimTimers() {
-    	if (this.summonWallsAnimationTick >= 0) {
-    		this.summonWallsAnimationTick --;
-    	}
-    	
-    	if (this.summonBombsAttackAnimationTick >= 0) {
-    		this.summonBombsAttackAnimationTick --;
-    	}
-    }
-    
-    @Override
-	public void registerControllers(AnimationData data) {
-		data.addAnimationController(new AnimationController(this, "controller", 2, this::predicate));
-	}
-   
-	private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
-			if (this.summonBombsAttackAnimationTick > 0) {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("geomancer_attack", EDefaultLoopTypes.LOOP));	
-			} else if (this.summonWallsAnimationTick > 0) {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("geomancer_summon", EDefaultLoopTypes.LOOP));				
-			} else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("geomancer_walk", EDefaultLoopTypes.LOOP));
-			} else {
-				if (this.isCelebrating()) {
-					event.getController().setAnimation(new AnimationBuilder().addAnimation("geomancer_celebrate", EDefaultLoopTypes.LOOP));
-				} else {
-					event.getController().setAnimation(new AnimationBuilder().addAnimation("geomancer_idle", EDefaultLoopTypes.LOOP));
-				}
-			}
-		return PlayState.CONTINUE;
-	}
-	
-	@Override
-	public AnimationFactory getFactory() {
-		return factory;
-	}
+        if (this.summonWallsAnimationTick >= 0) {
+            this.summonWallsAnimationTick--;
+        }
 
-	@Override
+        if (this.summonBombsAttackAnimationTick >= 0) {
+            this.summonBombsAttackAnimationTick--;
+        }
+    }
+
+    @Override
+    public void registerControllers(AnimationData data) {
+        data.addAnimationController(new AnimationController(this, "controller", 2, this::predicate));
+    }
+
+    private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
+        if (this.summonBombsAttackAnimationTick > 0) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("geomancer_attack", EDefaultLoopTypes.LOOP));
+        } else if (this.summonWallsAnimationTick > 0) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("geomancer_summon", EDefaultLoopTypes.LOOP));
+        } else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("geomancer_walk", EDefaultLoopTypes.LOOP));
+        } else {
+            if (this.isCelebrating()) {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("geomancer_celebrate", EDefaultLoopTypes.LOOP));
+            } else {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("geomancer_idle", EDefaultLoopTypes.LOOP));
+            }
+        }
+        return PlayState.CONTINUE;
+    }
+
+    @Override
+    public AnimationFactory getFactory() {
+        return factory;
+    }
+
+    @Override
     protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficulty) {
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.GEOMANCER_STAFF.get()));
-		equipArmorSet(ModItems.GEOMANCER_ARMOR, this);
+        equipArmorSet(ModItems.GEOMANCER_ARMOR, this);
     }
 
     @Nullable
@@ -176,7 +174,7 @@ public class GeomancerEntity extends SpellcasterIllager implements IAnimatable, 
     public boolean isAlliedTo(Entity entityIn) {
         if (super.isAlliedTo(entityIn)) {
             return true;
-        } else if (entityIn instanceof LivingEntity && ((LivingEntity)entityIn).getMobType() == MobType.ILLAGER) {
+        } else if (entityIn instanceof LivingEntity && ((LivingEntity) entityIn).getMobType() == MobType.ILLAGER) {
             return this.getTeam() == null && entityIn.getTeam() == null;
         } else {
             return false;
@@ -215,107 +213,107 @@ public class GeomancerEntity extends SpellcasterIllager implements IAnimatable, 
 
     @Override
     public IllagerArmPose getArmPose() {
-        IllagerArmPose illagerArmPose =  super.getArmPose();
-        if(illagerArmPose == IllagerArmPose.CROSSED){
+        IllagerArmPose illagerArmPose = super.getArmPose();
+        if (illagerArmPose == IllagerArmPose.CROSSED) {
             return IllagerArmPose.NEUTRAL;
         }
         return illagerArmPose;
     }
-    
+
     class SummonPillarsGoal extends Goal {
-		public GeomancerEntity mob;
-		@Nullable
-		public LivingEntity target;
-		
-		public int nextUseTime = 0;
-		
-		public SummonPillarsGoal(GeomancerEntity mob) {
-			this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP, Goal.Flag.LOOK));
-			this.mob = mob;
-			this.target = mob.getTarget();
-		}
+        public GeomancerEntity mob;
+        @Nullable
+        public LivingEntity target;
 
-		@Override
-		public boolean isInterruptable() {
-			return false;
-		}
+        public int nextUseTime = 0;
 
-		public boolean requiresUpdateEveryTick() {
-			return true;
-		}
+        public SummonPillarsGoal(GeomancerEntity mob) {
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP, Goal.Flag.LOOK));
+            this.mob = mob;
+            this.target = mob.getTarget();
+        }
 
-		@Override
-		public boolean canUse() {
-			target = mob.getTarget();
-			
-			return target != null && mob.tickCount >= this.nextUseTime && mob.distanceTo(target) <= 20 && mob.hasLineOfSight(target) && animationsUseable();
-		}
+        @Override
+        public boolean isInterruptable() {
+            return false;
+        }
 
-		@Override
-		public boolean canContinueToUse() {
-			return target != null && animationsNotUseable();
-		}
+        public boolean requiresUpdateEveryTick() {
+            return true;
+        }
 
-		@Override
-		public void start() {
-			mob.playSound(ModSoundEvents.GEOMANCER_PRE_ATTACK.get(), 1.0F, mob.getVoicePitch());
-			if (mob.random.nextBoolean()) {
-				mob.summonWallsAnimationTick = mob.summonWallsAnimationLength;
-				mob.level.broadcastEntityEvent(mob, (byte) 4);
-			} else {
-				mob.summonBombsAttackAnimationTick = mob.summonBombsAttackAnimationLength;
-				mob.level.broadcastEntityEvent(mob, (byte) 11);
-			}
-		}
+        @Override
+        public boolean canUse() {
+            target = mob.getTarget();
 
-		@Override
-		public void tick() {
-			target = mob.getTarget();
+            return target != null && mob.tickCount >= this.nextUseTime && mob.distanceTo(target) <= 20 && mob.hasLineOfSight(target) && animationsUseable();
+        }
 
-			mob.getNavigation().stop();
-			
-			if (target != null) {
-				mob.getLookControl().setLookAt(target.getX(), target.getEyeY(), target.getZ());
-			}
+        @Override
+        public boolean canContinueToUse() {
+            return target != null && animationsNotUseable();
+        }
 
-			if (target != null && mob.summonWallsAnimationTick == mob.summonWallsAnimationActionPoint) {
-				mob.playSound(ModSoundEvents.GEOMANCER_ATTACK.get(), 1.0F, mob.getVoicePitch());
-            	int randomInt = mob.random.nextInt(3);
-            	
-            	if (randomInt == 0) {
-                int[] rowToRemove = Util.getRandom(GeomancyHelper.CONFIG_1_ROWS, mob.getRandom());
-                GeomancyHelper.summonAreaDenialTrap(mob, target, ModEntityTypes.GEOMANCER_WALL.get(), rowToRemove);
-            	} else if (randomInt == 1) {
-            		GeomancyHelper.summonWallTrap(mob, target, ModEntityTypes.GEOMANCER_WALL.get());
-            	} else {
-            		GeomancyHelper.summonRandomPillarsTrap(mob, target, ModEntityTypes.GEOMANCER_WALL.get());
-            	}
-			}
-			
-			if (target != null && mob.summonBombsAttackAnimationTick == mob.summonBombsAttackAnimationActionPoint) {
-				mob.playSound(ModSoundEvents.GEOMANCER_ATTACK.get(), 1.0F, mob.getVoicePitch());
-            	if (mob.getRandom().nextBoolean()) {
-            	GeomancyHelper.summonQuadOffensiveTrap(mob, target, ModEntityTypes.GEOMANCER_BOMB.get());	
-            	} else {
-            		boolean movingOnX = mob.random.nextBoolean();
-            		GeomancyHelper.summonOffensiveConstruct(mob, target, ModEntityTypes.GEOMANCER_BOMB.get(), movingOnX ? (mob.random.nextBoolean() ? 2 : -2) : 0, !movingOnX ? (mob.random.nextBoolean() ? 2 : -2) : 0, Direction.NORTH);
-            	}
-			}
-		}
-		
-		@Override
-		public void stop() {
-			super.stop();
-			this.nextUseTime = mob.tickCount + 100 + mob.random.nextInt(40);
-		}
+        @Override
+        public void start() {
+            mob.playSound(ModSoundEvents.GEOMANCER_PRE_ATTACK.get(), 1.0F, mob.getVoicePitch());
+            if (mob.random.nextBoolean()) {
+                mob.summonWallsAnimationTick = mob.summonWallsAnimationLength;
+                mob.level.broadcastEntityEvent(mob, (byte) 4);
+            } else {
+                mob.summonBombsAttackAnimationTick = mob.summonBombsAttackAnimationLength;
+                mob.level.broadcastEntityEvent(mob, (byte) 11);
+            }
+        }
 
-		public boolean animationsUseable() {
-			return mob.summonWallsAnimationTick <= 0 || mob.summonBombsAttackAnimationTick <= 0;
-		}
-		
-		public boolean animationsNotUseable() {
-			return mob.summonWallsAnimationTick > 0 || mob.summonBombsAttackAnimationTick > 0;
-		}
-	}
-   
+        @Override
+        public void tick() {
+            target = mob.getTarget();
+
+            mob.getNavigation().stop();
+
+            if (target != null) {
+                mob.getLookControl().setLookAt(target.getX(), target.getEyeY(), target.getZ());
+            }
+
+            if (target != null && mob.summonWallsAnimationTick == mob.summonWallsAnimationActionPoint) {
+                mob.playSound(ModSoundEvents.GEOMANCER_ATTACK.get(), 1.0F, mob.getVoicePitch());
+                int randomInt = mob.random.nextInt(3);
+
+                if (randomInt == 0) {
+                    int[] rowToRemove = Util.getRandom(GeomancyHelper.CONFIG_1_ROWS, mob.getRandom());
+                    GeomancyHelper.summonAreaDenialTrap(mob, target, ModEntityTypes.GEOMANCER_WALL.get(), rowToRemove);
+                } else if (randomInt == 1) {
+                    GeomancyHelper.summonWallTrap(mob, target, ModEntityTypes.GEOMANCER_WALL.get());
+                } else {
+                    GeomancyHelper.summonRandomPillarsTrap(mob, target, ModEntityTypes.GEOMANCER_WALL.get());
+                }
+            }
+
+            if (target != null && mob.summonBombsAttackAnimationTick == mob.summonBombsAttackAnimationActionPoint) {
+                mob.playSound(ModSoundEvents.GEOMANCER_ATTACK.get(), 1.0F, mob.getVoicePitch());
+                if (mob.getRandom().nextBoolean()) {
+                    GeomancyHelper.summonQuadOffensiveTrap(mob, target, ModEntityTypes.GEOMANCER_BOMB.get());
+                } else {
+                    boolean movingOnX = mob.random.nextBoolean();
+                    GeomancyHelper.summonOffensiveConstruct(mob, target, ModEntityTypes.GEOMANCER_BOMB.get(), movingOnX ? (mob.random.nextBoolean() ? 2 : -2) : 0, !movingOnX ? (mob.random.nextBoolean() ? 2 : -2) : 0, Direction.NORTH);
+                }
+            }
+        }
+
+        @Override
+        public void stop() {
+            super.stop();
+            this.nextUseTime = mob.tickCount + 100 + mob.random.nextInt(40);
+        }
+
+        public boolean animationsUseable() {
+            return mob.summonWallsAnimationTick <= 0 || mob.summonBombsAttackAnimationTick <= 0;
+        }
+
+        public boolean animationsNotUseable() {
+            return mob.summonWallsAnimationTick > 0 || mob.summonBombsAttackAnimationTick > 0;
+        }
+    }
+
 }

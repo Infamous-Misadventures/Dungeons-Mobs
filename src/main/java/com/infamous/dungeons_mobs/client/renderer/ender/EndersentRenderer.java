@@ -13,19 +13,19 @@ import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 public class EndersentRenderer extends GeoEntityRenderer<AbstractEnderlingEntity> {
-	public EndersentRenderer(EntityRendererProvider.Context renderManager) {
-		super(renderManager, new EndersentModel());
-		this.addLayer(new GeoEyeLayer<>(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/ender/endersent_eyes.png")));
-	}
+    public EndersentRenderer(EntityRendererProvider.Context renderManager) {
+        super(renderManager, new EndersentModel());
+        this.addLayer(new GeoEyeLayer<>(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/ender/endersent_eyes.png")));
+    }
 
-	@Override
-	public RenderType getRenderType(AbstractEnderlingEntity animatable, float partialTicks, PoseStack stack,
-			MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn,
-			ResourceLocation textureLocation) {
-		return RenderType.entityTranslucent(getTextureLocation(animatable));
-	}
-	
-	   protected float getDeathMaxRotation(AbstractEnderlingEntity p_77037_1_) {
-		      return 0.0F;
-		   }
+    @Override
+    public RenderType getRenderType(AbstractEnderlingEntity animatable, float partialTicks, PoseStack stack,
+                                    MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn,
+                                    ResourceLocation textureLocation) {
+        return RenderType.entityTranslucent(getTextureLocation(animatable));
+    }
+
+    protected float getDeathMaxRotation(AbstractEnderlingEntity p_77037_1_) {
+        return 0.0F;
+    }
 }

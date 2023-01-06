@@ -24,7 +24,7 @@ public class BrainHelper {
         int priorityIndex = priorityStart;
         ImmutableList.Builder<Pair<Integer, ? extends Behavior<? super E>>> priorityPairs = ImmutableList.builder();
 
-        for(Behavior<? super E> task : tasks) {
+        for (Behavior<? super E> task : tasks) {
             priorityPairs.add(Pair.of(priorityIndex++, task));
         }
 
@@ -55,7 +55,7 @@ public class BrainHelper {
     public static <E extends LivingEntity> void addPrioritizedBehaviors(Activity activity, ImmutableList<? extends Pair<Integer, ? extends Behavior<? super E>>> prioritizedTasks, Brain<E> brain) {
         BrainAccessor<E> brainAccessor = castToAccessor(brain);
 
-        for(Pair<Integer, ? extends Behavior<? super E>> pair : prioritizedTasks) {
+        for (Pair<Integer, ? extends Behavior<? super E>> pair : prioritizedTasks) {
             brainAccessor.getAvailableBehaviorsByPriority()
                     .computeIfAbsent(pair.getFirst(), (p) -> Maps.newHashMap())
                     .computeIfAbsent(activity, (a) -> Sets.newLinkedHashSet())
@@ -65,6 +65,6 @@ public class BrainHelper {
 
     public static <E extends LivingEntity> BrainAccessor<E> castToAccessor(Brain<E> brain) {
         //noinspection unchecked
-        return (BrainAccessor<E>)brain;
+        return (BrainAccessor<E>) brain;
     }
 }

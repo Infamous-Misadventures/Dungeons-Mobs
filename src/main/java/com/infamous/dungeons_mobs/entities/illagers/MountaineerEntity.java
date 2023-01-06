@@ -49,19 +49,16 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-
-import net.minecraft.world.entity.monster.AbstractIllager.IllagerArmPose;
-
 import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
 public class MountaineerEntity extends Vindicator implements SpawnArmoredMob, IAnimatable, AnimatableMeleeAttackMob {
-	
-	   private static final EntityDataAccessor<Byte> DATA_FLAGS_ID = SynchedEntityData.defineId(MountaineerEntity.class, EntityDataSerializers.BYTE);
+
+    private static final EntityDataAccessor<Byte> DATA_FLAGS_ID = SynchedEntityData.defineId(MountaineerEntity.class, EntityDataSerializers.BYTE);
     public int attackAnimationTick;
     public int attackAnimationLength = 7;
     public int attackAnimationActionPoint = 6;
-	   
-    public MountaineerEntity(Level worldIn){
+
+    public MountaineerEntity(Level worldIn) {
         super(ModEntityTypes.MOUNTAINEER.get(), worldIn);
     }
 
@@ -76,66 +73,66 @@ public class MountaineerEntity extends Vindicator implements SpawnArmoredMob, IA
         this.goalSelector.addGoal(4, new BasicModdedAttackGoal<>(this, null, 20));
         this.goalSelector.addGoal(5, new ApproachTargetGoal(this, 0, 1.0D, true));
     }
-    
+
     protected PathNavigation createNavigation(Level p_175447_1_) {
         return new WallClimberNavigation(this, p_175447_1_);
-     }
+    }
 
-     protected void defineSynchedData() {
+    protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(DATA_FLAGS_ID, (byte)0);
-     }
+        this.entityData.define(DATA_FLAGS_ID, (byte) 0);
+    }
 
-     public void tick() {
+    public void tick() {
         super.tick();
         if (!this.level.isClientSide) {
-           this.setClimbing(this.horizontalCollision);
+            this.setClimbing(this.horizontalCollision);
         }
 
-     }
-     
-     public boolean onClimbable() {
-         return this.isClimbing();
-      }
-     
-     public boolean isClimbing() {
-         return (this.entityData.get(DATA_FLAGS_ID) & 1) != 0;
-      }
-
-      public void setClimbing(boolean p_70839_1_) {
-         byte b0 = this.entityData.get(DATA_FLAGS_ID);
-         if (p_70839_1_) {
-            b0 = (byte)(b0 | 1);
-         } else {
-            b0 = (byte)(b0 & -2);
-         }
-
-         this.entityData.set(DATA_FLAGS_ID, b0);
-      }
-      
-    protected float getSoundVolume() {
-    	return 0.5F;
     }
-    
+
+    public boolean onClimbable() {
+        return this.isClimbing();
+    }
+
+    public boolean isClimbing() {
+        return (this.entityData.get(DATA_FLAGS_ID) & 1) != 0;
+    }
+
+    public void setClimbing(boolean p_70839_1_) {
+        byte b0 = this.entityData.get(DATA_FLAGS_ID);
+        if (p_70839_1_) {
+            b0 = (byte) (b0 | 1);
+        } else {
+            b0 = (byte) (b0 & -2);
+        }
+
+        this.entityData.set(DATA_FLAGS_ID, b0);
+    }
+
+    protected float getSoundVolume() {
+        return 0.5F;
+    }
+
     protected SoundEvent getAmbientSound() {
         return ModSoundEvents.MOUNTAINEER_IDLE.get();
-     }
-    
+    }
+
     public SoundEvent getCelebrateSound() {
         return ModSoundEvents.MOUNTAINEER_IDLE.get();
-     }
+    }
 
-     protected SoundEvent getDeathSound() {
+    protected SoundEvent getDeathSound() {
         return ModSoundEvents.MOUNTAINEER_DEATH.get();
-     }
+    }
 
-     protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
+    protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
         return ModSoundEvents.MOUNTAINEER_HURT.get();
-     }
+    }
 
 
     public static AttributeSupplier.Builder setCustomAttributes() {
-        return Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, (double)0.3F).add(Attributes.FOLLOW_RANGE, 16.0D).add(Attributes.MAX_HEALTH, 28.0D).add(Attributes.ATTACK_DAMAGE, 6.0D);
+        return Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.3F).add(Attributes.FOLLOW_RANGE, 16.0D).add(Attributes.MAX_HEALTH, 28.0D).add(Attributes.ATTACK_DAMAGE, 6.0D);
     }
 
     @Override
@@ -150,7 +147,7 @@ public class MountaineerEntity extends Vindicator implements SpawnArmoredMob, IA
     @Nullable
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor p_213386_1_, DifficultyInstance p_213386_2_,
-                                           MobSpawnType p_213386_3_, @Nullable SpawnGroupData p_213386_4_, @Nullable CompoundTag p_213386_5_) {
+                                        MobSpawnType p_213386_3_, @Nullable SpawnGroupData p_213386_4_, @Nullable CompoundTag p_213386_5_) {
         SpawnGroupData iLivingEntityData = super.finalizeSpawn(p_213386_1_, p_213386_2_, p_213386_3_, p_213386_4_,
                 p_213386_5_);
         this.populateDefaultEquipmentSlots(this.getRandom(), p_213386_2_);
@@ -181,8 +178,8 @@ public class MountaineerEntity extends Vindicator implements SpawnArmoredMob, IA
 
     @Override
     public IllagerArmPose getArmPose() {
-        IllagerArmPose illagerArmPose =  super.getArmPose();
-        if(illagerArmPose == IllagerArmPose.CROSSED){
+        IllagerArmPose illagerArmPose = super.getArmPose();
+        if (illagerArmPose == IllagerArmPose.CROSSED) {
             return IllagerArmPose.NEUTRAL;
         }
         return illagerArmPose;
@@ -198,7 +195,7 @@ public class MountaineerEntity extends Vindicator implements SpawnArmoredMob, IA
         return ModItems.MOUNTAINEER_ARMOR;
     }
 
-    private AnimationFactory factory = GeckoLibUtil.createFactory(this);
+    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     public void handleEntityEvent(byte p_28844_) {
         if (p_28844_ == 4) {
@@ -233,7 +230,7 @@ public class MountaineerEntity extends Vindicator implements SpawnArmoredMob, IA
             this.attackAnimationTick--;
         }
     }
-    
+
     @Override
     public void registerControllers(AnimationData data) {
         data.addAnimationController(new AnimationController(this, "controller", 2, this::predicate));
@@ -245,14 +242,14 @@ public class MountaineerEntity extends Vindicator implements SpawnArmoredMob, IA
             animation += "_mcd";
         }
         String handSide = "_right";
-        if(this.isLeftHanded()){
+        if (this.isLeftHanded()) {
             handSide = "_left";
         }
-        if(this.getMainHandItem().isEmpty()){
+        if (this.getMainHandItem().isEmpty()) {
             handSide += "_both";
         }
         String crossed = "";
-        if(IllagerArmsUtil.armorHasCrossedArms(this, this.getItemBySlot(EquipmentSlot.CHEST))){
+        if (IllagerArmsUtil.armorHasCrossedArms(this, this.getItemBySlot(EquipmentSlot.CHEST))) {
             crossed = "_crossed";
         }
         if (this.attackAnimationTick > 0) {

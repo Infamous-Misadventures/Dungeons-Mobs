@@ -32,8 +32,6 @@ import java.util.UUID;
 
 import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
-import net.minecraft.world.entity.Entity.RemovalReason;
-
 public class RedstoneMineEntity extends Entity implements IAnimatable {
     public static final EntityDataAccessor<Integer> LIFE_TICKS = SynchedEntityData.defineId(ConstructEntity.class, EntityDataSerializers.INT);
 
@@ -41,7 +39,7 @@ public class RedstoneMineEntity extends Entity implements IAnimatable {
     private UUID casterUuid;
 
     //nerf
-    private float explosionRadius = 1.0F;
+    private final float explosionRadius = 1.0F;
     public static final int LIFE_TIME = 250;
 
     public RedstoneMineEntity(Level worldIn) {
@@ -52,14 +50,14 @@ public class RedstoneMineEntity extends Entity implements IAnimatable {
         super(entityTypeIn, worldIn);
     }
 
-    public RedstoneMineEntity(Level worldIn, double x, double y, double z, int delay, LivingEntity casterIn){
+    public RedstoneMineEntity(Level worldIn, double x, double y, double z, int delay, LivingEntity casterIn) {
         this(ModEntityTypes.REDSTONE_MINE.get(), worldIn);
         this.setLifeTicks(delay);
         this.setCaster(casterIn);
         this.setPos(x, y, z);
     }
 
-    private AnimationFactory factory = GeckoLibUtil.createFactory(this);
+    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
         if (this.getLifeTicks() == 6) {
@@ -68,7 +66,7 @@ public class RedstoneMineEntity extends Entity implements IAnimatable {
         if (this.getLifeTicks() == LIFE_TIME) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.redstone_mine.activate", LOOP));
         }
-        if (this.getLifeTicks() < LIFE_TIME - 3 && this.getLifeTicks() > 4){
+        if (this.getLifeTicks() < LIFE_TIME - 3 && this.getLifeTicks() > 4) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.redstone_mine.idle", LOOP));
         }
         return PlayState.CONTINUE;
@@ -87,9 +85,9 @@ public class RedstoneMineEntity extends Entity implements IAnimatable {
     @Nullable
     public LivingEntity getCaster() {
         if (this.caster == null && this.casterUuid != null && this.level instanceof ServerLevel) {
-            Entity entity = ((ServerLevel)this.level).getEntity(this.casterUuid);
+            Entity entity = ((ServerLevel) this.level).getEntity(this.casterUuid);
             if (entity instanceof LivingEntity) {
-                this.caster = (LivingEntity)entity;
+                this.caster = (LivingEntity) entity;
             }
         }
 
@@ -98,14 +96,14 @@ public class RedstoneMineEntity extends Entity implements IAnimatable {
 
     protected float getRandomPitch() {
         return (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F;
-     }
-    
+    }
+
     @OnlyIn(Dist.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id == 4) {
-    		for (int i = 0; i < 2; i++) {
-    			this.level.addParticle(ModParticleTypes.REDSTONE_SPARK.get(), this.getRandomX(1.1D), this.getRandomY(), this.getRandomZ(1.1D), -0.05D + this.random.nextDouble() * 0.05D, -0.05D + this.random.nextDouble() * 0.05D, -0.05D + this.random.nextDouble() * 0.05D);
-    		}
+            for (int i = 0; i < 2; i++) {
+                this.level.addParticle(ModParticleTypes.REDSTONE_SPARK.get(), this.getRandomX(1.1D), this.getRandomY(), this.getRandomZ(1.1D), -0.05D + this.random.nextDouble() * 0.05D, -0.05D + this.random.nextDouble() * 0.05D, -0.05D + this.random.nextDouble() * 0.05D);
+            }
         } else {
             super.handleEntityEvent(id);
         }
@@ -117,18 +115,18 @@ public class RedstoneMineEntity extends Entity implements IAnimatable {
 
     public void tick() {
         super.tick();
-        
-    	if (!this.level.isClientSide && this.random.nextInt(20) == 0) {
-    		this.playSound(ModSoundEvents.REDSTONE_GOLEM_SPARK.get(), 0.1F, this.getRandomPitch());
-    		this.level.broadcastEntityEvent(this, (byte) 4);
-    	}
-    	
+
+        if (!this.level.isClientSide && this.random.nextInt(20) == 0) {
+            this.playSound(ModSoundEvents.REDSTONE_GOLEM_SPARK.get(), 0.1F, this.getRandomPitch());
+            this.level.broadcastEntityEvent(this, (byte) 4);
+        }
+
         this.setLifeTicks(this.getLifeTicks() - 1);
         if (!this.level.isClientSide) {
-            if(this.getLifeTicks() <= 0) {
+            if (this.getLifeTicks() <= 0) {
                 this.remove(RemovalReason.DISCARDED);
-            }else if (this.getLifeTicks() < LIFE_TIME - 3 && this.getLifeTicks() > 6){
-                for(LivingEntity livingentity : this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(0.3D, 0.3D, 0.3D))) {
+            } else if (this.getLifeTicks() < LIFE_TIME - 3 && this.getLifeTicks() > 6) {
+                for (LivingEntity livingentity : this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(0.3D, 0.3D, 0.3D))) {
                     this.explode(livingentity);
                 }
             }
@@ -140,20 +138,19 @@ public class RedstoneMineEntity extends Entity implements IAnimatable {
     private void explode(LivingEntity livingentity) {
         LivingEntity Caster = this.getCaster();
 
-            if (livingentity.isAlive() && !livingentity.isInvulnerable()) {
-                if (Caster != null) {
-                    if (!Caster.isAlliedTo(livingentity) || livingentity != Caster) {
-                        this.level.explode(Caster, this.getX(), this.getY(0.0625D), this.getZ(), this.explosionRadius, Explosion.BlockInteraction.NONE);
-                        this.remove(RemovalReason.DISCARDED);
-                    }
-                } else {
-                    this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), this.explosionRadius, Explosion.BlockInteraction.NONE);
+        if (livingentity.isAlive() && !livingentity.isInvulnerable()) {
+            if (Caster != null) {
+                if (!Caster.isAlliedTo(livingentity) || livingentity != Caster) {
+                    this.level.explode(Caster, this.getX(), this.getY(0.0625D), this.getZ(), this.explosionRadius, Explosion.BlockInteraction.NONE);
                     this.remove(RemovalReason.DISCARDED);
                 }
+            } else {
+                this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), this.explosionRadius, Explosion.BlockInteraction.NONE);
+                this.remove(RemovalReason.DISCARDED);
+            }
 
         }
     }
-
 
 
     @Override

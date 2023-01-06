@@ -17,7 +17,7 @@ public class MageArmorGearRenderer extends ArmorGearRenderer<MageArmorGear> {
     public void render(float partialTicks, PoseStack stack, VertexConsumer bufferIn, int packedLightIn) {
 
         AnimatedGeoModel<MageArmorGear> geoModelProvider = getGeoModelProvider();
-        if(geoModelProvider instanceof MageArmorGearModel){
+        if (geoModelProvider instanceof MageArmorGearModel) {
             ((MageArmorGearModel<MageArmorGear>) geoModelProvider).setWearer(this.entityLiving);
         }
         super.render(partialTicks, stack, bufferIn, packedLightIn);

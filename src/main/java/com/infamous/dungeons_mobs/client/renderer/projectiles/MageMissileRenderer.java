@@ -17,15 +17,15 @@ public class MageMissileRenderer extends GeoProjectilesRenderer<MageMissileEntit
         super(renderManager, new MageMissileModel());
     }
 
-	protected int getBlockLightLevel(MageMissileEntity p_225624_1_, BlockPos p_225624_2_) {
-		return 15;
-	}
+    protected int getBlockLightLevel(MageMissileEntity p_225624_1_, BlockPos p_225624_2_) {
+        return 15;
+    }
 
     @Override
     public void render(MageMissileEntity entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
         float scaleFactor = 1.0F;
         matrixStackIn.scale(scaleFactor, scaleFactor, scaleFactor);
-        
+
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
     }
 

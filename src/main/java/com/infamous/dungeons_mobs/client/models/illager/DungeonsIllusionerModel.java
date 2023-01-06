@@ -43,16 +43,16 @@ public class DungeonsIllusionerModel extends AnimatedGeoModel {
             head.setRotationY(head.getRotationY() + (extraData.netHeadYaw * ((float) Math.PI / 180F)));
         }
     }
-    
-	@Override
-	public void setMolangQueries(IAnimatable animatable, double currentTick) {
-		super.setMolangQueries(animatable, currentTick);
-		
-		MolangParser parser = GeckoLibCache.getInstance().parser;
-		LivingEntity livingEntity = (LivingEntity) animatable;
-		Vec3 velocity = livingEntity.getDeltaMovement();
-		float groundSpeed = Mth.sqrt((float) ((velocity.x * velocity.x) + (velocity.z * velocity.z)));
-		parser.setValue("query.ground_speed", () -> groundSpeed * 20);
-	}
+
+    @Override
+    public void setMolangQueries(IAnimatable animatable, double currentTick) {
+        super.setMolangQueries(animatable, currentTick);
+
+        MolangParser parser = GeckoLibCache.getInstance().parser;
+        LivingEntity livingEntity = (LivingEntity) animatable;
+        Vec3 velocity = livingEntity.getDeltaMovement();
+        float groundSpeed = Mth.sqrt((float) ((velocity.x * velocity.x) + (velocity.z * velocity.z)));
+        parser.setValue("query.ground_speed", () -> groundSpeed * 20);
+    }
 
 }

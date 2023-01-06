@@ -24,7 +24,7 @@ public class IceologerModel extends AnimatedGeoModel<IceologerEntity> {
 
     @Override
     public ResourceLocation getModelResource(IceologerEntity entity) {
-        return new ResourceLocation(DungeonsMobs.MODID, "geo/geo_illager.geo.json") ;
+        return new ResourceLocation(DungeonsMobs.MODID, "geo/geo_illager.geo.json");
     }
 
     @Override
@@ -38,7 +38,7 @@ public class IceologerModel extends AnimatedGeoModel<IceologerEntity> {
 
         IBone head = this.getAnimationProcessor().getBone("bipedHead");
         IBone illagerArms = this.getAnimationProcessor().getBone("illagerArms");
-        
+
         illagerArms.setHidden(true);
 
         IBone cape = this.getAnimationProcessor().getBone("bipedCape");
@@ -50,15 +50,15 @@ public class IceologerModel extends AnimatedGeoModel<IceologerEntity> {
             head.setRotationY(head.getRotationY() + (extraData.netHeadYaw * ((float) Math.PI / 180F)));
         }
     }
-    
-	@Override
-	public void setMolangQueries(IAnimatable animatable, double currentTick) {
-		super.setMolangQueries(animatable, currentTick);
-		
-		MolangParser parser = GeckoLibCache.getInstance().parser;
-		LivingEntity livingEntity = (LivingEntity) animatable;
-		Vec3 velocity = livingEntity.getDeltaMovement();
-		float groundSpeed = Mth.sqrt((float) ((velocity.x * velocity.x) + (velocity.z * velocity.z)));
-		parser.setValue("query.ground_speed", () -> groundSpeed * 20);
-	}
+
+    @Override
+    public void setMolangQueries(IAnimatable animatable, double currentTick) {
+        super.setMolangQueries(animatable, currentTick);
+
+        MolangParser parser = GeckoLibCache.getInstance().parser;
+        LivingEntity livingEntity = (LivingEntity) animatable;
+        Vec3 velocity = livingEntity.getDeltaMovement();
+        float groundSpeed = Mth.sqrt((float) ((velocity.x * velocity.x) + (velocity.z * velocity.z)));
+        parser.setValue("query.ground_speed", () -> groundSpeed * 20);
+    }
 }

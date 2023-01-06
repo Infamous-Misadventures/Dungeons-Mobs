@@ -25,18 +25,18 @@ public class ShieldAndMeleeAttackGoal<T extends PathfinderMob & IShieldUser> ext
         this.closeQuartersShieldUseCounter = 0;
     }
 
-    private boolean hasShieldInOffhand(){
+    private boolean hasShieldInOffhand() {
         return this.hostCreature.getOffhandItem().canPerformAction(net.minecraftforge.common.ToolActions.SHIELD_BLOCK); // using the Forge ItemStack-sensitive version
     }
 
-    private void useShield(){
-        if(this.hasShieldInOffhand() && !this.hostCreature.isShieldDisabled()){
+    private void useShield() {
+        if (this.hasShieldInOffhand() && !this.hostCreature.isShieldDisabled()) {
             this.hostCreature.startUsingItem(InteractionHand.OFF_HAND);
         }
     }
 
-    private void stopUsingShield(){
-        if(this.hostCreature.isBlocking()){
+    private void stopUsingShield() {
+        if (this.hostCreature.isBlocking()) {
             this.hostCreature.releaseUsingItem();
         }
     }
@@ -44,11 +44,10 @@ public class ShieldAndMeleeAttackGoal<T extends PathfinderMob & IShieldUser> ext
     @Override
     public boolean canUse() {
 
-        if(this.hasShieldInOffhand() && !this.hostCreature.isShieldDisabled()){
+        if (this.hasShieldInOffhand() && !this.hostCreature.isShieldDisabled()) {
             LivingEntity attackTarget = this.hostCreature.getTarget();
             return attackTarget != null && attackTarget.isAlive();
-        }
-        else{
+        } else {
             return super.canUse();
         }
     }
@@ -60,17 +59,16 @@ public class ShieldAndMeleeAttackGoal<T extends PathfinderMob & IShieldUser> ext
 
     @Override
     public boolean canContinueToUse() {
-        if(this.hasShieldInOffhand() && !this.hostCreature.isShieldDisabled()){
+        if (this.hasShieldInOffhand() && !this.hostCreature.isShieldDisabled()) {
             return this.canUse();
-        }
-        else{
+        } else {
             return super.canContinueToUse();
         }
     }
 
     @Override
     public void stop() {
-        if(this.hasShieldInOffhand() && this.hostCreature.isBlocking()){
+        if (this.hasShieldInOffhand() && this.hostCreature.isBlocking()) {
             this.seeTime = 0;
             this.closeQuartersShieldUseCounter = 0;
             this.stopUsingShield();
@@ -84,10 +82,10 @@ public class ShieldAndMeleeAttackGoal<T extends PathfinderMob & IShieldUser> ext
         boolean dontShieldAgainst = attackTarget != null && attackTarget.getType().is(EntityTags.DONT_SHIELD_AGAINST);
         boolean shieldDisabled = this.hostCreature.isShieldDisabled();
         boolean hasShield = this.hasShieldInOffhand();
-        if(hasShield // check if we have a shield - if not, we must default to melee attack AI
+        if (hasShield // check if we have a shield - if not, we must default to melee attack AI
                 && !shieldDisabled // check if our shield is disabled - if so, we must default to melee attack AI
                 && attackTarget != null // check if our target exists - otherwise we will get a NPE below
-                && !dontShieldAgainst){ // check if the target is a villager - if so, default to melee attack AI since it cannot fight back
+                && !dontShieldAgainst) { // check if the target is a villager - if so, default to melee attack AI since it cannot fight back
             double hostDistanceSq = this.hostCreature.distanceToSqr(attackTarget.getX(), attackTarget.getY(), attackTarget.getZ());
             double detectRange = this.hostCreature.getAttributeValue(Attributes.FOLLOW_RANGE);
             double detectRangeSq = detectRange * detectRange;
@@ -104,11 +102,11 @@ public class ShieldAndMeleeAttackGoal<T extends PathfinderMob & IShieldUser> ext
 
             boolean closeQuarters = hostDistanceSq <= this.closeQuartersRangeSq;
 
-            if(closeQuarters && this.hostCreature.isBlocking()){
+            if (closeQuarters && this.hostCreature.isBlocking()) {
                 this.closeQuartersShieldUseCounter++;
             }
 
-            if(this.closeQuartersShieldUseCounter >= this.maxCloseQuartersShieldUseTime){
+            if (this.closeQuartersShieldUseCounter >= this.maxCloseQuartersShieldUseTime) {
                 this.closeQuartersShieldUseCounter = 0;
                 this.stopUsingShield();
                 this.hostCreature.setShieldCooldownTime(this.attackWindowTime);
@@ -121,10 +119,10 @@ public class ShieldAndMeleeAttackGoal<T extends PathfinderMob & IShieldUser> ext
                 return;
             }
 
-            if(!this.hostCreature.isBlocking()){
+            if (!this.hostCreature.isBlocking()) {
                 this.useShield();
             }
-        } else if(attackTarget != null){
+        } else if (attackTarget != null) {
             this.closeQuartersShieldUseCounter = 0;
             super.tick();
         }

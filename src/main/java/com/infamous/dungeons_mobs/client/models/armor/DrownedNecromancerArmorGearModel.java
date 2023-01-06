@@ -23,11 +23,11 @@ public class DrownedNecromancerArmorGearModel<T extends ArmorGear> extends Armor
     public void setWearer(LivingEntity wearer) {
         this.wearer = wearer;
     }
-    
+
     @Override
     public void setCustomAnimations(T entity, int uniqueID, AnimationEvent customPredicate) {
-    	super.setCustomAnimations(entity, uniqueID, customPredicate);
-    	
+        super.setCustomAnimations(entity, uniqueID, customPredicate);
+
         IBone cloak = this.getAnimationProcessor().getBone("armorCloak");
 
         cloak.setHidden(this.getWearer() != null && this.getWearer() instanceof DrownedNecromancerEntity);

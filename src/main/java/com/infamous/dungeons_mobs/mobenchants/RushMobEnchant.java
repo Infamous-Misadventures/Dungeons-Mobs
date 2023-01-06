@@ -10,8 +10,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import static com.infamous.dungeons_mobs.mobenchants.NewMobEnchantUtils.executeIfPresentWithLevel;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchants.RUSH;
 
-import baguchan.enchantwithmob.mobenchant.MobEnchant.Properties;
-
 public class RushMobEnchant extends MobEnchant {
 
     public RushMobEnchant(Properties properties) {
@@ -20,9 +18,9 @@ public class RushMobEnchant extends MobEnchant {
 
     @SubscribeEvent
     public static void onLivingDamage(LivingDamageEvent event) {
-        LivingEntity defender = (LivingEntity) event.getEntity();
+        LivingEntity defender = event.getEntity();
         executeIfPresentWithLevel(defender, RUSH.get(), (level) -> {
-            defender.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 10+20*level, 3, false, false));
+            defender.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 10 + 20 * level, 3, false, false));
         });
 
     }

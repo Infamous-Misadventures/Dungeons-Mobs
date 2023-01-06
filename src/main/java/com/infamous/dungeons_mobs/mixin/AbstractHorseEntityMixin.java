@@ -1,6 +1,5 @@
 package com.infamous.dungeons_mobs.mixin;
 
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Animal;
@@ -13,8 +12,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import javax.annotation.Nullable;
-
 @Mixin(AbstractHorse.class)
 public abstract class AbstractHorseEntityMixin extends Animal {
 
@@ -23,8 +20,9 @@ public abstract class AbstractHorseEntityMixin extends Animal {
     protected AbstractHorseEntityMixin(EntityType<? extends Animal> type, Level worldIn) {
         super(type, worldIn);
     }
+
     @Inject(at = @At("HEAD"), method = "travel", cancellable = true)
-    private void travel(Vec3 travelVector, CallbackInfo callbackInfo){
+    private void travel(Vec3 travelVector, CallbackInfo callbackInfo) {
         if (this.isAlive()) {
             if (this.isVehicle() && this.hasControllingPassenger() && this.isSaddled() && this.getControllingPassenger() instanceof Mob) {
                 //DungeonsMobs.LOGGER.info("Forcing saddled horse to follow rider's AI!");

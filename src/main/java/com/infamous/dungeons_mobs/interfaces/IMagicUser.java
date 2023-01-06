@@ -15,11 +15,11 @@ public interface IMagicUser {
             double d0 = magicType.getParticleSpeed()[0];
             double d1 = magicType.getParticleSpeed()[1];
             double d2 = magicType.getParticleSpeed()[2];
-            float f = magicUser.yBodyRot * ((float)Math.PI / 180F) + Mth.cos((float)magicUser.tickCount * 0.6662F) * 0.25F;
+            float f = magicUser.yBodyRot * ((float) Math.PI / 180F) + Mth.cos((float) magicUser.tickCount * 0.6662F) * 0.25F;
             float f1 = Mth.cos(f);
             float f2 = Mth.sin(f);
-            magicUser.level.addParticle(ParticleTypes.ENTITY_EFFECT, magicUser.getX() + (double)f1 * 0.6D, magicUser.getY() + 1.8D, magicUser.getZ() + (double)f2 * 0.6D, d0, d1, d2);
-            magicUser.level.addParticle(ParticleTypes.ENTITY_EFFECT, magicUser.getX() - (double)f1 * 0.6D, magicUser.getY() + 1.8D, magicUser.getZ() - (double)f2 * 0.6D, d0, d1, d2);
+            magicUser.level.addParticle(ParticleTypes.ENTITY_EFFECT, magicUser.getX() + (double) f1 * 0.6D, magicUser.getY() + 1.8D, magicUser.getZ() + (double) f2 * 0.6D, d0, d1, d2);
+            magicUser.level.addParticle(ParticleTypes.ENTITY_EFFECT, magicUser.getX() - (double) f1 * 0.6D, magicUser.getY() + 1.8D, magicUser.getZ() - (double) f2 * 0.6D, d0, d1, d2);
         }
     }
 

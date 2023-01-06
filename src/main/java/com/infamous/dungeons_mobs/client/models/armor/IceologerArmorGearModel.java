@@ -24,18 +24,18 @@ public class IceologerArmorGearModel<T extends ArmorGear> extends ArmorGearModel
     public void setWearer(LivingEntity wearer) {
         this.wearer = wearer;
     }
-    
+
     @Override
     public void setCustomAnimations(T entity, int uniqueID, AnimationEvent customPredicate) {
-    	super.setCustomAnimations(entity, uniqueID, customPredicate);
-    	
+        super.setCustomAnimations(entity, uniqueID, customPredicate);
+
         IBone cloak = this.getAnimationProcessor().getBone("armorCloak");
 
         cloak.setHidden(this.getWearer() != null && this.getWearer() instanceof IceologerEntity);
 
         IBone rightArm = this.getAnimationProcessor().getBone("armorRightArm");
         IBone leftArm = this.getAnimationProcessor().getBone("armorLeftArm");
-        if(!DungeonsMobsConfig.COMMON.ENABLE_3D_SLEEVES.get()){
+        if (!DungeonsMobsConfig.COMMON.ENABLE_3D_SLEEVES.get()) {
             rightArm.setHidden(true);
             leftArm.setHidden(true);
         }

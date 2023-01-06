@@ -15,8 +15,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.PacketDistributor;
 
-import net.minecraft.world.item.Item.Properties;
-
 public class NecromancerTridentItem extends ArtifactItem implements IHasInventorySprite {
     public NecromancerTridentItem(Properties properties) {
         super(properties);
@@ -33,8 +31,8 @@ public class NecromancerTridentItem extends ArtifactItem implements IHasInventor
             Player itemUseContextPlayer = itemUseContext.getPlayer();
             BlockPos itemUseContextPos = itemUseContext.getClickedPos();
 
-            if(itemUseContextPlayer != null){
-                for(int i = 0; i < 8; i++){
+            if (itemUseContextPlayer != null) {
+                for (int i = 0; i < 8; i++) {
                     TridentStormEntity tridentStorm = ModEntityTypes.TRIDENT_STORM.get().create(itemUseContextPlayer.level);
                     tridentStorm.owner = itemUseContextPlayer;
                     tridentStorm.moveTo(new BlockPos(itemUseContextPos.getX() - tridentSummonRange + itemUseContextPlayer.getRandom().nextInt(tridentSummonRange * 2), itemUseContextPos.getY(), itemUseContextPos.getZ() - tridentSummonRange + itemUseContextPlayer.getRandom().nextInt(tridentSummonRange * 2)), 0, 0);

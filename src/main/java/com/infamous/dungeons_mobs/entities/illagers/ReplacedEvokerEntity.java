@@ -20,16 +20,16 @@ public class ReplacedEvokerEntity implements IAnimatable, IGeoReplacedEntity {
     public Mob entity;
 
     @Override
-    public Mob getMob(){
+    public Mob getMob() {
         return this.entity;
     }
 
     @Override
-    public void setMob(Mob mob){
+    public void setMob(Mob mob) {
         this.entity = mob;
     }
 
-    private AnimationFactory factory = GeckoLibUtil.createFactory(this);
+    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     @Override
     public void registerControllers(AnimationData data) {
@@ -42,7 +42,7 @@ public class ReplacedEvokerEntity implements IAnimatable, IGeoReplacedEntity {
             animation += "_mcd";
         }
         String crossed = "";
-        if(IllagerArmsUtil.armorHasCrossedArms((Evoker) this.entity, this.entity.getItemBySlot(EquipmentSlot.CHEST))){
+        if (IllagerArmsUtil.armorHasCrossedArms((Evoker) this.entity, this.entity.getItemBySlot(EquipmentSlot.CHEST))) {
             crossed = ".crossed";
         }
         if (((Evoker) this.entity).isCastingSpell()) {

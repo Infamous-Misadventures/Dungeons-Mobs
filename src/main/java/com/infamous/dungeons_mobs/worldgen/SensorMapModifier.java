@@ -11,7 +11,7 @@ import java.util.Map;
 public class SensorMapModifier {
 
 
-    public static void replaceSensorMaps(){
+    public static void replaceSensorMaps() {
         ImmutableMap<EntityType<?>, Float> oldImmutableVillagerHostiles = VillagerHostilesSensor.ACCEPTABLE_DISTANCE_FROM_HOSTILES;
         Map<EntityType<?>, Float> villagerHostiles = new HashMap<>(oldImmutableVillagerHostiles);
 
@@ -31,7 +31,7 @@ public class SensorMapModifier {
 
         villagerHostiles.put(ModEntityTypes.FROZEN_ZOMBIE.get(), 8.0F);
         villagerHostiles.put(ModEntityTypes.JUNGLE_ZOMBIE.get(), 8.0F);
-        
+
         villagerHostiles.put(ModEntityTypes.DROWNED_NECROMANCER.get(), 20.0F);
 
         VillagerHostilesSensor.ACCEPTABLE_DISTANCE_FROM_HOSTILES = ImmutableMap.copyOf(villagerHostiles);

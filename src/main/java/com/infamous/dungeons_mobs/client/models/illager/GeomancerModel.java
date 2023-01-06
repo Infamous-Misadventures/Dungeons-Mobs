@@ -16,20 +16,20 @@ import software.bernie.geckolib3.resource.GeckoLibCache;
 
 public class GeomancerModel extends AnimatedGeoModel<GeomancerEntity> {
 
-	@Override
-	public ResourceLocation getAnimationResource(GeomancerEntity entity) {
-		return new ResourceLocation(DungeonsMobs.MODID, "animations/geomancer.animation.json");
-	}
+    @Override
+    public ResourceLocation getAnimationResource(GeomancerEntity entity) {
+        return new ResourceLocation(DungeonsMobs.MODID, "animations/geomancer.animation.json");
+    }
 
-	@Override
-	public ResourceLocation getModelResource(GeomancerEntity entity) {
-		return new ResourceLocation(DungeonsMobs.MODID, "geo/geomancer.geo.json");
-	}
+    @Override
+    public ResourceLocation getModelResource(GeomancerEntity entity) {
+        return new ResourceLocation(DungeonsMobs.MODID, "geo/geomancer.geo.json");
+    }
 
-	@Override
-	public ResourceLocation getTextureResource(GeomancerEntity entity) {
-		return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/geomancer.png");
-	}
+    @Override
+    public ResourceLocation getTextureResource(GeomancerEntity entity) {
+        return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/geomancer.png");
+    }
 
     @Override
     public void setCustomAnimations(GeomancerEntity entity, int uniqueID, AnimationEvent customPredicate) {
@@ -38,7 +38,7 @@ public class GeomancerModel extends AnimatedGeoModel<GeomancerEntity> {
         IBone head = this.getAnimationProcessor().getBone("bipedHead");
         IBone cape = this.getAnimationProcessor().getBone("bipedCape");
         IBone illagerArms = this.getAnimationProcessor().getBone("illagerArms");
-        
+
         cape.setHidden(true);
         illagerArms.setHidden(true);
 
@@ -49,15 +49,15 @@ public class GeomancerModel extends AnimatedGeoModel<GeomancerEntity> {
             head.setRotationY(head.getRotationY() + (extraData.netHeadYaw * ((float) Math.PI / 180F)));
         }
     }
-    
-	@Override
-	public void setMolangQueries(IAnimatable animatable, double currentTick) {
-		super.setMolangQueries(animatable, currentTick);
-		
-		MolangParser parser = GeckoLibCache.getInstance().parser;
-		LivingEntity livingEntity = (LivingEntity) animatable;
-		Vec3 velocity = livingEntity.getDeltaMovement();
-		float groundSpeed = Mth.sqrt((float) ((velocity.x * velocity.x) + (velocity.z * velocity.z)));
-		parser.setValue("query.ground_speed", () -> groundSpeed * 20);
-	}
+
+    @Override
+    public void setMolangQueries(IAnimatable animatable, double currentTick) {
+        super.setMolangQueries(animatable, currentTick);
+
+        MolangParser parser = GeckoLibCache.getInstance().parser;
+        LivingEntity livingEntity = (LivingEntity) animatable;
+        Vec3 velocity = livingEntity.getDeltaMovement();
+        float groundSpeed = Mth.sqrt((float) ((velocity.x * velocity.x) + (velocity.z * velocity.z)));
+        parser.setValue("query.ground_speed", () -> groundSpeed * 20);
+    }
 }

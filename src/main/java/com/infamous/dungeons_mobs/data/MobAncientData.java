@@ -24,7 +24,7 @@ public class MobAncientData {
             ).apply(builder, MobAncientData::new));
 
     private final List<String> adjectives;
-    private final List<String> nouns ;
+    private final List<String> nouns;
     private final List<ResourceLocation> minions;
     private final List<UniqueAncientData> uniques;
 
@@ -51,11 +51,11 @@ public class MobAncientData {
         return uniques;
     }
 
-    public String getAncientName(Random random){
+    public String getAncientName(Random random) {
         return adjectives.get(random.nextInt(adjectives.size())) + " " + nouns.get(random.nextInt(nouns.size()));
     }
 
-    private static ResourceLocation mcLoc(String path){
+    private static ResourceLocation mcLoc(String path) {
         return new ResourceLocation(path);
     }
 }

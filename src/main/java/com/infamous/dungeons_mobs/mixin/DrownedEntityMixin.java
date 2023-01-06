@@ -24,7 +24,7 @@ public abstract class DrownedEntityMixin extends Zombie {
     }
 
     @Inject(at = @At("RETURN"), method = "canReplaceCurrentItem", cancellable = true)
-    private void checkForAnyTrident(ItemStack replacement, ItemStack current, CallbackInfoReturnable<Boolean> cir){
+    private void checkForAnyTrident(ItemStack replacement, ItemStack current, CallbackInfoReturnable<Boolean> cir) {
         if (current.getItem() == Items.NAUTILUS_SHELL) {
             cir.setReturnValue(false);
         } else if (current.getItem() instanceof TridentItem) {
@@ -39,7 +39,7 @@ public abstract class DrownedEntityMixin extends Zombie {
     }
 
     @ModifyVariable(at = @At("STORE"), method = "performRangedAttack")
-    private ThrownTrident createTrident(ThrownTrident original){
+    private ThrownTrident createTrident(ThrownTrident original) {
         InteractionHand tridentHoldingHand = ProjectileUtil.getWeaponHoldingHand(this, item -> item instanceof TridentItem);
         ItemStack tridentStack = this.getItemInHand(tridentHoldingHand);
         return new ThrownTrident(this.level, this, tridentStack);

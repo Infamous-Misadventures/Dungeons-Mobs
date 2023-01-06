@@ -12,15 +12,13 @@ import software.bernie.geckolib3.core.IAnimatable;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-import net.minecraft.world.entity.ai.goal.Goal.Flag;
-
 public class BasicModdedAttackGoal<T extends Mob & IAnimatable & AnimatableMeleeAttackMob> extends Goal {
 
     public T mob;
     @Nullable
     public LivingEntity target;
-    private SoundEvent soundEvent;
-    private int cooldown;
+    private final SoundEvent soundEvent;
+    private final int cooldown;
     private long lastUseTime;
 
     public BasicModdedAttackGoal(T mob, SoundEvent soundEvent, int cooldown) {
@@ -87,19 +85,11 @@ public class BasicModdedAttackGoal<T extends Mob & IAnimatable & AnimatableMelee
     }
 
     public boolean isShieldDisabled(Mob shieldUser) {
-        if (shieldUser instanceof IShieldUser && ((IShieldUser) shieldUser).isShieldDisabled()) {
-            return true;
-        } else {
-            return false;
-        }
+        return shieldUser instanceof IShieldUser && ((IShieldUser) shieldUser).isShieldDisabled();
     }
 
     public boolean shouldBlockForTarget(LivingEntity target) {
-        if (target instanceof Mob && ((Mob) target).getTarget() != mob) {
-            return false;
-        } else {
-            return true;
-        }
+        return !(target instanceof Mob) || ((Mob) target).getTarget() == mob;
     }
 
     public boolean animationsUseable() {
@@ -107,7 +97,7 @@ public class BasicModdedAttackGoal<T extends Mob & IAnimatable & AnimatableMelee
     }
 
     public double getAttackReachSqr(LivingEntity p_179512_1_) {
-        return (double) (this.mob.getBbWidth() * 2.0F * this.mob.getBbWidth() * 2.0F + p_179512_1_.getBbWidth());
+        return this.mob.getBbWidth() * 2.0F * this.mob.getBbWidth() * 2.0F + p_179512_1_.getBbWidth();
     }
 
 }

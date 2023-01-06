@@ -75,7 +75,7 @@ public class SquallGolemEntity extends Raider implements IAnimatable {
     private static final EntityDataAccessor<Boolean> ACTIVATE = SynchedEntityData.defineId(SquallGolemEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> MELEEATTACKING = SynchedEntityData.defineId(SquallGolemEntity.class, EntityDataSerializers.BOOLEAN);
 
-    public SquallGolemEntity(Level world){
+    public SquallGolemEntity(Level world) {
         super(ModEntityTypes.SQUALL_GOLEM.get(), world);
     }
 
@@ -106,35 +106,35 @@ public class SquallGolemEntity extends Raider implements IAnimatable {
     }
 
     private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
-		Vec3 velocity = this.getDeltaMovement();
-		float groundSpeed = Mth.sqrt((float) ((velocity.x * velocity.x) + (velocity.z * velocity.z)));
+        Vec3 velocity = this.getDeltaMovement();
+        float groundSpeed = Mth.sqrt((float) ((velocity.x * velocity.x) + (velocity.z * velocity.z)));
         if (this.attackID == GOLEM_ACTIVATE) {
             event.getController().setAnimationSpeed(1.0D);
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.squall_golem.activate", PLAY_ONCE));
             return PlayState.CONTINUE;
 
         } else if (this.attackID == GOLEM_DEACTIVATE) {
-        	event.getController().setAnimationSpeed(1.0D);
+            event.getController().setAnimationSpeed(1.0D);
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.squall_golem.deactivate", PLAY_ONCE));
             return PlayState.CONTINUE;
 
         } else if (!this.getActivate()) {
-        	event.getController().setAnimationSpeed(1.0D);
+            event.getController().setAnimationSpeed(1.0D);
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.squall_golem.deactivated", LOOP));
             return PlayState.CONTINUE;
 
-        }else if (this.isMeleeAttacking()&& this.isAlive()) {
-        	event.getController().setAnimationSpeed(1.0D);
+        } else if (this.isMeleeAttacking() && this.isAlive()) {
+            event.getController().setAnimationSpeed(1.0D);
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.squall_golem.attack", PLAY_ONCE));
             return PlayState.CONTINUE;
 
         } else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
-        	event.getController().setAnimationSpeed(groundSpeed * 25);
+            event.getController().setAnimationSpeed(groundSpeed * 25);
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.squall_golem.walk", LOOP));
             return PlayState.CONTINUE;
 
         } else {
-        	event.getController().setAnimationSpeed(1.0D);
+            event.getController().setAnimationSpeed(1.0D);
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.squall_golem.idle", LOOP));
             return PlayState.CONTINUE;
         }
@@ -198,7 +198,7 @@ public class SquallGolemEntity extends Raider implements IAnimatable {
         if (this.attackID != 0) {
             ++this.attackTimer;
         }
-        this.setDeltaMovement(SquallGolemEntity.this.getDeltaMovement().x, SquallGolemEntity.this.getDeltaMovement().y-2.5, SquallGolemEntity.this.getDeltaMovement().z);
+        this.setDeltaMovement(SquallGolemEntity.this.getDeltaMovement().x, SquallGolemEntity.this.getDeltaMovement().y - 2.5, SquallGolemEntity.this.getDeltaMovement().z);
         this.handleLeafCollision();
         this.handleSteppingOnBlocks();
     }
@@ -206,10 +206,10 @@ public class SquallGolemEntity extends Raider implements IAnimatable {
     public void tick() {
         super.tick();
 
-        if(this.attackID == STOMP_ATTACK) {
+        if (this.attackID == STOMP_ATTACK) {
             if (this.attackTimer == 30) {
-                Attackparticle(40,0.5f,2.6f,0.5f);
-                Attackparticle(40,0.5f,2.4f,-1f);
+                Attackparticle(40, 0.5f, 2.6f, 0.5f);
+                Attackparticle(40, 0.5f, 2.4f, -1f);
                 //this.playSound(SoundEvents.GENERIC_EXPLODE, 1.5f, 1F + this.getRandom().nextFloat() * 0.1F);
             }
         }
@@ -218,14 +218,14 @@ public class SquallGolemEntity extends Raider implements IAnimatable {
             timeWithoutTarget++;
             if (target != null) {
                 timeWithoutTarget = 0;
-                if(!this.getActivate()) {
+                if (!this.getActivate()) {
                     this.setActivate(true);
                     this.attackID = GOLEM_ACTIVATE;
                 }
             }
             if (this.getCurrentRaid() != null && this.getCurrentRaid().isActive()) {
                 timeWithoutTarget = 0;
-                if(!this.getActivate()) {
+                if (!this.getActivate()) {
                     this.setActivate(true);
                     this.attackID = GOLEM_ACTIVATE;
                 }
@@ -245,15 +245,15 @@ public class SquallGolemEntity extends Raider implements IAnimatable {
 
     }
 
-    private void Attackparticle(int paticle,float circle, float vec, float math) {
+    private void Attackparticle(int paticle, float circle, float vec, float math) {
         if (this.level.isClientSide) {
             for (int i1 = 0; i1 < paticle; i1++) {
                 double DeltaMovementX = getRandom().nextGaussian() * 0.07D;
                 double DeltaMovementY = getRandom().nextGaussian() * 0.07D;
                 double DeltaMovementZ = getRandom().nextGaussian() * 0.07D;
                 float angle = (0.01745329251F * this.yBodyRot) + i1;
-                float f = Mth.cos(this.getYRot() * ((float)Math.PI / 180F)) ;
-                float f1 = Mth.sin(this.getYRot() * ((float)Math.PI / 180F)) ;
+                float f = Mth.cos(this.getYRot() * ((float) Math.PI / 180F));
+                float f1 = Mth.sin(this.getYRot() * ((float) Math.PI / 180F));
                 double extraX = circle * Mth.sin((float) (Math.PI + angle));
                 double extraY = 0.3F;
                 double extraZ = circle * Mth.cos(angle);
@@ -261,7 +261,7 @@ public class SquallGolemEntity extends Raider implements IAnimatable {
                 theta += Math.PI / 2;
                 double vecX = Math.cos(theta);
                 double vecZ = Math.sin(theta);
-                int hitX = Mth.floor(getX() + vec * vecX+ extraX);
+                int hitX = Mth.floor(getX() + vec * vecX + extraX);
                 int hitY = Mth.floor(getY());
                 int hitZ = Mth.floor(getZ() + vec * vecZ + extraZ);
                 BlockPos hit = new BlockPos(hitX, hitY, hitZ);
@@ -274,14 +274,14 @@ public class SquallGolemEntity extends Raider implements IAnimatable {
 
 
     private void handleSteppingOnBlocks() {
-        if (this.getDeltaMovement().horizontalDistanceSqr() > (double)2.5000003E-7F && this.random.nextInt(5) == 0) {
+        if (this.getDeltaMovement().horizontalDistanceSqr() > (double) 2.5000003E-7F && this.random.nextInt(5) == 0) {
             int i = Mth.floor(this.getX());
-            int j = Mth.floor(this.getY() - (double)0.2F);
+            int j = Mth.floor(this.getY() - (double) 0.2F);
             int k = Mth.floor(this.getZ());
             BlockPos pos = new BlockPos(i, j, k);
             BlockState blockstate = this.level.getBlockState(pos);
             if (!blockstate.isAir()) {
-                this.level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, blockstate).setPos(pos), this.getX() + ((double)this.random.nextFloat() - 0.5D) * (double)this.getBbWidth(), this.getY() + 0.1D, this.getZ() + ((double)this.random.nextFloat() - 0.5D) * (double)this.getBbWidth(), 4.0D * ((double)this.random.nextFloat() - 0.5D), 0.5D, ((double)this.random.nextFloat() - 0.5D) * 4.0D);
+                this.level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, blockstate).setPos(pos), this.getX() + ((double) this.random.nextFloat() - 0.5D) * (double) this.getBbWidth(), this.getY() + 0.1D, this.getZ() + ((double) this.random.nextFloat() - 0.5D) * (double) this.getBbWidth(), 4.0D * ((double) this.random.nextFloat() - 0.5D), 0.5D, ((double) this.random.nextFloat() - 0.5D) * 4.0D);
             }
         }
     }
@@ -293,7 +293,7 @@ public class SquallGolemEntity extends Raider implements IAnimatable {
                 boolean destroyedLeafBlock = false;
                 AABB axisalignedbb = this.getBoundingBox().inflate(0.2D);
 
-                for(BlockPos blockpos : BlockPos.betweenClosed(Mth.floor(axisalignedbb.minX), Mth.floor(axisalignedbb.minY), Mth.floor(axisalignedbb.minZ), Mth.floor(axisalignedbb.maxX), Mth.floor(axisalignedbb.maxY), Mth.floor(axisalignedbb.maxZ))) {
+                for (BlockPos blockpos : BlockPos.betweenClosed(Mth.floor(axisalignedbb.minX), Mth.floor(axisalignedbb.minY), Mth.floor(axisalignedbb.minZ), Mth.floor(axisalignedbb.maxX), Mth.floor(axisalignedbb.maxY), Mth.floor(axisalignedbb.maxZ))) {
                     BlockState blockstate = this.level.getBlockState(blockpos);
                     Block block = blockstate.getBlock();
                     if (block instanceof LeavesBlock) {
@@ -318,7 +318,7 @@ public class SquallGolemEntity extends Raider implements IAnimatable {
     protected SoundEvent getAmbientSound() {
         if (this.entityData.get(ACTIVATE) && this.noActionTime > 5) {
             return ModSoundEvents.SQUALL_GOLEM_IDLE.get();
-        }else {
+        } else {
             return null;
         }
     }
@@ -342,7 +342,7 @@ public class SquallGolemEntity extends Raider implements IAnimatable {
                 this.setTarget((LivingEntity) source.getEntity());
             }
             flag = false;
-        }else {
+        } else {
             flag = super.hurt(source, amount);
         }
         return flag;
@@ -355,7 +355,7 @@ public class SquallGolemEntity extends Raider implements IAnimatable {
         if (!blockstateBeneathGolem.entityCanStandOn(worldIn, posBeneathGolem, this)) {
             return false;
         } else {
-            for(int i = 1; i < 3; ++i) {
+            for (int i = 1; i < 3; ++i) {
                 BlockPos posAboveGolem = golemPos.above(i);
                 BlockState blockstateAboveGolem = worldIn.getBlockState(posAboveGolem);
                 if (!NaturalSpawner
@@ -376,13 +376,15 @@ public class SquallGolemEntity extends Raider implements IAnimatable {
                             ModEntityTypes.SQUALL_GOLEM.get())
                     && worldIn.isUnobstructed(this);
         }
-    }/**
+    }
+
+    /**
      * Handler for {link WorldsetEntityState}
      */
     private void setAttackID(int id) {
         this.attackID = id;
         this.attackTimer = 0;
-        this.level.broadcastEntityEvent(this, (byte)-id);
+        this.level.broadcastEntityEvent(this, (byte) -id);
     }
 
 
@@ -399,7 +401,7 @@ public class SquallGolemEntity extends Raider implements IAnimatable {
 
     @OnlyIn(Dist.CLIENT)
     public Vec3 getLeashOffset() {
-        return new Vec3(0.0D, (double)(0.875F * this.getEyeHeight()), (double)(this.getBbWidth() * 0.4F));
+        return new Vec3(0.0D, 0.875F * this.getEyeHeight(), this.getBbWidth() * 0.4F);
     }
 
     public SoundSource getSoundSource() {
@@ -575,7 +577,7 @@ public class SquallGolemEntity extends Raider implements IAnimatable {
         @Override
         public void start() {
             if (SquallGolemEntity.this.getTarget() != null)
-                SquallGolemEntity.this.getLookControl().setLookAt(SquallGolemEntity.this.getTarget(),30,30);
+                SquallGolemEntity.this.getLookControl().setLookAt(SquallGolemEntity.this.getTarget(), 30, 30);
             setMeleeAttacking(true);
             setAttackID(STOMP_ATTACK);
         }
@@ -589,15 +591,15 @@ public class SquallGolemEntity extends Raider implements IAnimatable {
             } else {
                 SquallGolemEntity.this.setYRot(SquallGolemEntity.this.yRotO);
             }
-            if (SquallGolemEntity.this.attackTimer == 12){
+            if (SquallGolemEntity.this.attackTimer == 12) {
                 SquallGolemEntity.this.playSound(ModSoundEvents.SQUALL_GOLEM_ATTACK.get(), 2.0F, 1F);
             }
-            if (SquallGolemEntity.this.attackTimer == 30){
+            if (SquallGolemEntity.this.attackTimer == 30) {
                 AreaAttack(5, 5, 5, 5, 60, 1.0F);
             }
         }
 
-        private void AreaAttack(float range,float X,float Y, float Z,float arc ,float damage) {
+        private void AreaAttack(float range, float X, float Y, float Z, float arc, float damage) {
             for (LivingEntity entityHit : level.getEntitiesOfClass(LivingEntity.class, getBoundingBox().inflate(X, Y, Z))) {
                 float entityHitAngle = (float) ((Math.atan2(entityHit.getZ() - SquallGolemEntity.this.getZ(), entityHit.getX() - SquallGolemEntity.this.getX()) * (180 / Math.PI) - 90) % 360);
                 float entityAttackingAngle = SquallGolemEntity.this.yBodyRot % 360;
@@ -615,16 +617,17 @@ public class SquallGolemEntity extends Raider implements IAnimatable {
 
                         SquallGolemEntity v = SquallGolemEntity.this;
                         float attackKnockback = (float) SquallGolemEntity.this.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
-                        double ratioX = (double) Mth.sin(v.getYRot() * ((float) Math.PI / 180F));
-                        double ratioZ = (double) (-Mth.cos(v.getYRot() * ((float) Math.PI / 180F)));
+                        double ratioX = Mth.sin(v.getYRot() * ((float) Math.PI / 180F));
+                        double ratioZ = -Mth.cos(v.getYRot() * ((float) Math.PI / 180F));
                         double knockbackReduction = 0.35D;
                         entityHit.hurt(DamageSource.mobAttack(v), damage);
                         this.forceKnockback(entityHit, attackKnockback * 0.8F, ratioX, ratioZ, knockbackReduction);
-                        entityHit.setDeltaMovement(entityHit.getDeltaMovement().add(0,0.3333333,0));
+                        entityHit.setDeltaMovement(entityHit.getDeltaMovement().add(0, 0.3333333, 0));
                     }
                 }
             }
         }
+
         @Override
         public void stop() {
             setMeleeAttacking(false);
@@ -634,16 +637,16 @@ public class SquallGolemEntity extends Raider implements IAnimatable {
 
         private void forceKnockback(LivingEntity attackTarget, float strength, double ratioX, double ratioZ, double knockbackResistanceReduction) {
             LivingKnockBackEvent event = ForgeHooks.onLivingKnockBack(attackTarget, strength, ratioX, ratioZ);
-            if(event.isCanceled()) return;
+            if (event.isCanceled()) return;
             strength = event.getStrength();
             ratioX = event.getRatioX();
             ratioZ = event.getRatioZ();
-            strength = (float)((double)strength * (1.0D - attackTarget.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE) * knockbackResistanceReduction));
+            strength = (float) ((double) strength * (1.0D - attackTarget.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE) * knockbackResistanceReduction));
             if (!(strength <= 0.0F)) {
                 attackTarget.hasImpulse = true;
                 Vec3 vector3d = attackTarget.getDeltaMovement();
-                Vec3 vector3d1 = (new Vec3(ratioX, 0.0D, ratioZ)).normalize().scale((double)strength);
-                attackTarget.setDeltaMovement(vector3d.x / 2.0D - vector3d1.x, attackTarget.isOnGround() ? Math.min(0.4D, vector3d.y / 2.0D + (double)strength) : vector3d.y, vector3d.z / 2.0D - vector3d1.z);
+                Vec3 vector3d1 = (new Vec3(ratioX, 0.0D, ratioZ)).normalize().scale(strength);
+                attackTarget.setDeltaMovement(vector3d.x / 2.0D - vector3d1.x, attackTarget.isOnGround() ? Math.min(0.4D, vector3d.y / 2.0D + (double) strength) : vector3d.y, vector3d.z / 2.0D - vector3d1.z);
             }
         }
 

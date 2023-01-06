@@ -12,37 +12,37 @@ import software.bernie.geckolib3.model.provider.data.EntityModelData;
 
 public class WindcallerModel extends AnimatedGeoModel<WindcallerEntity> {
 
-	@Override
-	public ResourceLocation getAnimationResource(WindcallerEntity entity) {
-		return new ResourceLocation(DungeonsMobs.MODID, "animations/windcaller.animation.json");
-	}
+    @Override
+    public ResourceLocation getAnimationResource(WindcallerEntity entity) {
+        return new ResourceLocation(DungeonsMobs.MODID, "animations/windcaller.animation.json");
+    }
 
-	@Override
-	public ResourceLocation getModelResource(WindcallerEntity entity) {
-		return new ResourceLocation(DungeonsMobs.MODID, "geo/windcaller.geo.json") ;
-	}
+    @Override
+    public ResourceLocation getModelResource(WindcallerEntity entity) {
+        return new ResourceLocation(DungeonsMobs.MODID, "geo/windcaller.geo.json");
+    }
 
-	@Override
-	public ResourceLocation getTextureResource(WindcallerEntity entity) {
-		return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/windcaller.png");
-	}
+    @Override
+    public ResourceLocation getTextureResource(WindcallerEntity entity) {
+        return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/windcaller.png");
+    }
 
-	@Override
-	public void setCustomAnimations(WindcallerEntity entity, int uniqueID, AnimationEvent customPredicate) {
-		super.setCustomAnimations(entity, uniqueID, customPredicate);
+    @Override
+    public void setCustomAnimations(WindcallerEntity entity, int uniqueID, AnimationEvent customPredicate) {
+        super.setCustomAnimations(entity, uniqueID, customPredicate);
 
-		LivingEntity entityIn = entity;
+        LivingEntity entityIn = entity;
 
-		IBone head = this.getAnimationProcessor().getBone("bipedHead");
+        IBone head = this.getAnimationProcessor().getBone("bipedHead");
 
-		IBone cape = this.getAnimationProcessor().getBone("bipedCape");
-		cape.setHidden(entity.getItemBySlot(EquipmentSlot.CHEST).getItem() != entity.getArmorSet().getChest().get());
+        IBone cape = this.getAnimationProcessor().getBone("bipedCape");
+        cape.setHidden(entity.getItemBySlot(EquipmentSlot.CHEST).getItem() != entity.getArmorSet().getChest().get());
 
-		EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
+        EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
 
-		if (extraData.headPitch != 0 || extraData.netHeadYaw != 0) {
-			head.setRotationX(head.getRotationX() + (extraData.headPitch * ((float) Math.PI / 180F)));
-			head.setRotationY(head.getRotationY() + (extraData.netHeadYaw * ((float) Math.PI / 180F)));
-		}
-	}
+        if (extraData.headPitch != 0 || extraData.netHeadYaw != 0) {
+            head.setRotationX(head.getRotationX() + (extraData.headPitch * ((float) Math.PI / 180F)));
+            head.setRotationY(head.getRotationY() + (extraData.netHeadYaw * ((float) Math.PI / 180F)));
+        }
+    }
 }

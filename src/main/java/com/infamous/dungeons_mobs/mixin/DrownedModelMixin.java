@@ -22,7 +22,7 @@ public abstract class DrownedModelMixin<T extends Zombie> extends ZombieModel<T>
     }
 
     @Inject(at = @At("TAIL"), method = "prepareMobModel")
-    private void setPosesForAnyTrident(T drowned, float p_212843_2_, float p_212843_3_, float p_212843_4_, CallbackInfo ci){
+    private void setPosesForAnyTrident(T drowned, float p_212843_2_, float p_212843_3_, float p_212843_4_, CallbackInfo ci) {
         ItemStack mainhandStack = drowned.getItemInHand(InteractionHand.MAIN_HAND);
         ItemStack offhandStack = drowned.getItemInHand(InteractionHand.OFF_HAND);
 
@@ -32,7 +32,7 @@ public abstract class DrownedModelMixin<T extends Zombie> extends ZombieModel<T>
             } else {
                 this.leftArmPose = HumanoidModel.ArmPose.THROW_SPEAR;
             }
-        } else if(offhandStack.getItem() instanceof TridentItem && drowned.isAggressive()) {
+        } else if (offhandStack.getItem() instanceof TridentItem && drowned.isAggressive()) {
             if (drowned.getMainArm() == HumanoidArm.RIGHT) {
                 this.leftArmPose = HumanoidModel.ArmPose.THROW_SPEAR;
             } else {

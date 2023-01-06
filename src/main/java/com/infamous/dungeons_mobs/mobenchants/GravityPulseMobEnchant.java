@@ -26,13 +26,13 @@ public class GravityPulseMobEnchant extends MobEnchant {
 
     @SubscribeEvent
     public static void OnLivingUpdate(LivingEvent.LivingTickEvent event) {
-        LivingEntity entity = (LivingEntity) event.getEntity();
+        LivingEntity entity = event.getEntity();
 
         executeIfPresentWithLevel(entity, GRAVITY_PULSE.get(), (level) -> {
             MobProps comboCap = MobPropsHelper.getMobPropsCapability(entity);
-            if(comboCap == null) return;
+            if (comboCap == null) return;
             int gravityPulseTimer = comboCap.getGravityPulseTimer();
-            if(gravityPulseTimer <= 0){
+            if (gravityPulseTimer <= 0) {
                 PROXY.spawnParticles(entity, ParticleTypes.PORTAL);
                 applyToNearbyEntities(entity, 5F,
                         getCanApplyToEnemyPredicate(entity), (LivingEntity nearbyEntity) -> {
@@ -40,8 +40,7 @@ public class GravityPulseMobEnchant extends MobEnchant {
                         }
                 );
                 comboCap.setGravityPulseTimer(100);
-            }
-            else{
+            } else {
                 comboCap.setGravityPulseTimer(gravityPulseTimer - 1);
             }
         });

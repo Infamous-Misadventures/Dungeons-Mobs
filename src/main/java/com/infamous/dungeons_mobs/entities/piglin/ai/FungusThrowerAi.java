@@ -43,12 +43,12 @@ public class FungusThrowerAi {
         BrainHelper.addPrioritizedBehaviors(Activity.FIGHT, prioritizedFightTasks, brain);
     }
 
-    public static void performFungusThrow(LivingEntity fungusThrower, LivingEntity attackTarget){
+    public static void performFungusThrow(LivingEntity fungusThrower, LivingEntity attackTarget) {
         Vec3 targetDeltaMove = attackTarget.getDeltaMovement();
         double xDiff = attackTarget.getX() + targetDeltaMove.x - fungusThrower.getX();
         double yDiff = attackTarget.getY() - fungusThrower.getY();
         double zDiff = attackTarget.getZ() + targetDeltaMove.z - fungusThrower.getZ();
-        float horizDistSq = Mth.sqrt((float)( xDiff * xDiff + zDiff * zDiff));
+        float horizDistSq = Mth.sqrt((float) (xDiff * xDiff + zDiff * zDiff));
 
         BlueNethershroomEntity blueNethershroom = new BlueNethershroomEntity(fungusThrower.level, fungusThrower);
         ItemStack blueNethershroomStack = blueNethershroom.getItem();
@@ -56,9 +56,9 @@ public class FungusThrowerAi {
         blueNethershroom.setItem(PotionUtils.setPotion(blueNethershroomStack, Potions.POISON));
 
         blueNethershroom.setXRot(blueNethershroom.getXRot() - -20.0F);
-        blueNethershroom.shoot(xDiff, yDiff + (double)(horizDistSq * 0.2F), zDiff, 0.75F, 8.0F);
+        blueNethershroom.shoot(xDiff, yDiff + (double) (horizDistSq * 0.2F), zDiff, 0.75F, 8.0F);
         if (!fungusThrower.isSilent()) {
-            fungusThrower.level.playSound((Player)null, fungusThrower.getX(), fungusThrower.getY(), fungusThrower.getZ(), ModSoundEvents.FUNGUS_THROWER_THROW.get(), fungusThrower.getSoundSource(), 1.0F, (fungusThrower.getRandom().nextFloat() - fungusThrower.getRandom().nextFloat()) * 0.2F + 1.0F);
+            fungusThrower.level.playSound(null, fungusThrower.getX(), fungusThrower.getY(), fungusThrower.getZ(), ModSoundEvents.FUNGUS_THROWER_THROW.get(), fungusThrower.getSoundSource(), 1.0F, (fungusThrower.getRandom().nextFloat() - fungusThrower.getRandom().nextFloat()) * 0.2F + 1.0F);
         }
 
         fungusThrower.level.addFreshEntity(blueNethershroom);

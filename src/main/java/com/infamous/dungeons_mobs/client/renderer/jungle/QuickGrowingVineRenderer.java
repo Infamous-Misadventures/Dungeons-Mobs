@@ -11,7 +11,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class QuickGrowingVineRenderer extends AbstractVineRenderer {
     @SuppressWarnings("unchecked")
-	public QuickGrowingVineRenderer(EntityRendererProvider.Context renderManager) {
+    public QuickGrowingVineRenderer(EntityRendererProvider.Context renderManager) {
         super(renderManager, new QuickGrowingVineModel());
         this.addLayer(new GeoEyeLayer(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/jungle/quick_growing_vine_glow.png")));
     }

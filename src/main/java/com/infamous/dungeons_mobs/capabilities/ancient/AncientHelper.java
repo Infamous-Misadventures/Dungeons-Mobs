@@ -7,8 +7,7 @@ import static com.infamous.dungeons_mobs.capabilities.ModCapabilities.ANCIENT_CA
 
 public class AncientHelper {
 
-    public static Ancient getAncientCapability(Entity entity)
-    {
+    public static Ancient getAncientCapability(Entity entity) {
         return entity.getCapability(ANCIENT_CAPABILITY).orElse(new Ancient());
     }
 }

@@ -40,7 +40,7 @@ public class FungusThrowerEntity extends Piglin {
     protected Brain<?> makeBrain(Dynamic<?> dynamic) {
         Brain<?> brain = super.makeBrain(dynamic);
         //noinspection unchecked
-        FungusThrowerAi.addFungusThrowerTasks((Brain<FungusThrowerEntity>)brain);
+        FungusThrowerAi.addFungusThrowerTasks((Brain<FungusThrowerEntity>) brain);
         return brain;
     }
 
@@ -48,11 +48,11 @@ public class FungusThrowerEntity extends Piglin {
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverWorld, DifficultyInstance difficultyInstance, MobSpawnType spawnReason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag compoundNBT) {
         SpawnGroupData spawnData = super.finalizeSpawn(serverWorld, difficultyInstance, spawnReason, spawnDataIn, compoundNBT);
-        if(this instanceof ISmartCrossbowUser && ((ISmartCrossbowUser) this).isCrossbowUser()){
+        if (this instanceof ISmartCrossbowUser && ((ISmartCrossbowUser) this).isCrossbowUser()) {
             ((ISmartCrossbowUser) this).setCrossbowUser(false);
         }
-        if(spawnReason != MobSpawnType.STRUCTURE){
-            if(this.isAdult()){
+        if (spawnReason != MobSpawnType.STRUCTURE) {
+            if (this.isAdult()) {
                 this.setItemSlot(EquipmentSlot.MAINHAND, ModItems.BLUE_NETHERSHROOM.get().getDefaultInstance());
             }
         }
@@ -62,7 +62,7 @@ public class FungusThrowerEntity extends Piglin {
     @Override
     protected void finishConversion(ServerLevel serverWorld) {
         PiglinHelper.stopAdmiringItem(this);
-        ((PiglinAccessor)this).getInventory().removeAllItems().forEach(this::spawnAtLocation);
+        ((PiglinAccessor) this).getInventory().removeAllItems().forEach(this::spawnAtLocation);
         PiglinHelper.zombify(ModEntityTypes.ZOMBIFIED_FUNGUS_THROWER.get(), this);
     }
 

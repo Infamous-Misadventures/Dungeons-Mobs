@@ -55,8 +55,6 @@ import java.util.List;
 import static com.infamous.dungeons_mobs.entities.SpawnArmoredHelper.equipArmorSet;
 import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
-import net.minecraft.world.entity.Entity.RemovalReason;
-
 public class NecromancerEntity extends Skeleton implements IAnimatable, SpawnArmoredMob {
 
     public int shootAnimationTick;
@@ -102,9 +100,9 @@ public class NecromancerEntity extends Skeleton implements IAnimatable, SpawnArm
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));
     }
-    
+
     public boolean isSpellcasting() {
-    	return this.shootAnimationTick > 0 || this.summonAnimationTick > 0;
+        return this.shootAnimationTick > 0 || this.summonAnimationTick > 0;
     }
 
     @Override
@@ -143,8 +141,8 @@ public class NecromancerEntity extends Skeleton implements IAnimatable, SpawnArm
 
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficultyInstance,
-                                           MobSpawnType spawnReason, @Nullable SpawnGroupData livingEntityDataIn,
-                                           @Nullable CompoundTag compoundNBT) {
+                                        MobSpawnType spawnReason, @Nullable SpawnGroupData livingEntityDataIn,
+                                        @Nullable CompoundTag compoundNBT) {
         livingEntityDataIn = super.finalizeSpawn(world, difficultyInstance, spawnReason, livingEntityDataIn,
                 compoundNBT);
 
@@ -328,7 +326,7 @@ public class NecromancerEntity extends Skeleton implements IAnimatable, SpawnArm
 
                 Entity entity = SummonHelper.summonEntity(mob, mobSummonSpot.blockPosition(), entityType);
 
-                if(entity == null){
+                if (entity == null) {
                     mobSummonSpot.remove(RemovalReason.DISCARDED);
                     return;
                 }
@@ -338,7 +336,7 @@ public class NecromancerEntity extends Skeleton implements IAnimatable, SpawnArm
                 }
 
                 summonedMob.setTarget(target);
-                summonedMob.finalizeSpawn(((ServerLevel) mob.level), mob.level.getCurrentDifficultyAt(summonPos), MobSpawnType.MOB_SUMMONED, (SpawnGroupData) null, (CompoundTag) null);
+                summonedMob.finalizeSpawn(((ServerLevel) mob.level), mob.level.getCurrentDifficultyAt(summonPos), MobSpawnType.MOB_SUMMONED, null, null);
                 mobSummonSpot.playSound(ModSoundEvents.NECROMANCER_SUMMON.get(), 1.0F, 1.0F);
                 if (mob.getTeam() != null) {
                     Scoreboard scoreboard = mob.level.getScoreboard();
@@ -350,7 +348,7 @@ public class NecromancerEntity extends Skeleton implements IAnimatable, SpawnArm
 
         private EntityType<?> getEntityType() {
             EntityType<?> entityType = null;
-            List<String> necromancerMobSummons = (List<String>) DungeonsMobsConfig.COMMON.NECROMANCER_MOB_SUMMONS.get();
+            List<String> necromancerMobSummons = (List<String>) DungeonsMobsConfig.Common.NECROMANCER_MOB_SUMMONS.get();
             if (!necromancerMobSummons.isEmpty()) {
                 Collections.shuffle(necromancerMobSummons);
 

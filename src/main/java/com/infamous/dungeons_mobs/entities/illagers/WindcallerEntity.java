@@ -52,19 +52,19 @@ import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes
 
 public class WindcallerEntity extends AbstractIllager implements IAnimatable, SpawnArmoredMob {
 
-	public int liftAttackAnimationTick;
-	public int liftAttackAnimationLength = 25;
-	public int liftAttackAnimationActionPoint = 15;
-	
-	public int blastAttackAnimationTick;
-	public int blastAttackAnimationLength = 32;
-	public int blastAttackAnimationActionPoint = 20;
+    public int liftAttackAnimationTick;
+    public int liftAttackAnimationLength = 25;
+    public int liftAttackAnimationActionPoint = 15;
+
+    public int blastAttackAnimationTick;
+    public int blastAttackAnimationLength = 32;
+    public int blastAttackAnimationActionPoint = 20;
 
     AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     public int soundLoopTick;
-    
-    public WindcallerEntity(Level world){
+
+    public WindcallerEntity(Level world) {
         super(ModEntityTypes.WINDCALLER.get(), world);
     }
 
@@ -93,86 +93,86 @@ public class WindcallerEntity extends AbstractIllager implements IAnimatable, Sp
         this.targetSelector.addGoal(3, (new NearestAttackableTargetGoal<>(this, AbstractVillager.class, false)).setUnseenMemoryTicks(600));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, false).setUnseenMemoryTicks(600));
     }
-    
-	public void handleEntityEvent(byte p_28844_) {
-		if (p_28844_ == 4) {
-			this.liftAttackAnimationTick = liftAttackAnimationLength;
-		} else if (p_28844_ == 11) {
-			this.blastAttackAnimationTick = blastAttackAnimationLength;
-		} else {
-			super.handleEntityEvent(p_28844_);
-		}
-	}
-	
-	boolean steepDropBelow() {
-		boolean blockBeneath = false;
-		
-		for (int i = 0; i < 4; i++) {
-			if (!this.level.getBlockState(new BlockPos(this.blockPosition().getX(), this.blockPosition().getY() - i, this.blockPosition().getZ())).isAir()) {
-				blockBeneath = true;
-			}
-		}
-		
-		return !this.level.isClientSide && blockBeneath == false;
-	}
-	
-	   public boolean causeFallDamage(float p_225503_1_, float p_225503_2_) {
-		      return false;
-		   }
+
+    public void handleEntityEvent(byte p_28844_) {
+        if (p_28844_ == 4) {
+            this.liftAttackAnimationTick = liftAttackAnimationLength;
+        } else if (p_28844_ == 11) {
+            this.blastAttackAnimationTick = blastAttackAnimationLength;
+        } else {
+            super.handleEntityEvent(p_28844_);
+        }
+    }
+
+    boolean steepDropBelow() {
+        boolean blockBeneath = false;
+
+        for (int i = 0; i < 4; i++) {
+            if (!this.level.getBlockState(new BlockPos(this.blockPosition().getX(), this.blockPosition().getY() - i, this.blockPosition().getZ())).isAir()) {
+                blockBeneath = true;
+            }
+        }
+
+        return !this.level.isClientSide && blockBeneath == false;
+    }
+
+    public boolean causeFallDamage(float p_225503_1_, float p_225503_2_) {
+        return false;
+    }
 
     public void baseTick() {
         super.baseTick();
         this.tickDownAnimTimers();
-        
-        if (this.getTarget() != null && this.distanceTo(this.getTarget()) > 4 && ((!this.isOnGround() && steepDropBelow()) || ((this.getTarget().getY() > this.getY() + 4 || this.getY() < this.getTarget().getY() - 2) && this.distanceTo(this.getTarget()) > 4) || this.distanceTo(this.getTarget()) > 10)) {
-        	if (this.getY() < this.getTarget().getY() + 4) {
-        		this.setDeltaMovement(0.0D, 0.05D, 0.0D);
-        	} else {
-        		this.setDeltaMovement(0.0D, -0.01D, 0.0D);
-        	}
 
-			double x = this.getTarget().getX() - this.getX();
-			double y = this.getTarget().getY() - this.getY();
-			double z = this.getTarget().getZ() - this.getZ();
-			double d = Math.sqrt(x * x + y * y + z * z);
-			this.setDeltaMovement(this.getDeltaMovement()
-					.add(x / d * 0.20000000298023224D, y / d * 0.20000000298023224D, z / d * 0.20000000298023224D)
-					.scale(1.5D));
-			this.move(MoverType.SELF, this.getDeltaMovement());
-			
-			this.getNavigation().stop();
-			this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(this.getTarget().getX(), this.getTarget().getEyeY(), this.getTarget().getZ()));
+        if (this.getTarget() != null && this.distanceTo(this.getTarget()) > 4 && ((!this.isOnGround() && steepDropBelow()) || ((this.getTarget().getY() > this.getY() + 4 || this.getY() < this.getTarget().getY() - 2) && this.distanceTo(this.getTarget()) > 4) || this.distanceTo(this.getTarget()) > 10)) {
+            if (this.getY() < this.getTarget().getY() + 4) {
+                this.setDeltaMovement(0.0D, 0.05D, 0.0D);
+            } else {
+                this.setDeltaMovement(0.0D, -0.01D, 0.0D);
+            }
+
+            double x = this.getTarget().getX() - this.getX();
+            double y = this.getTarget().getY() - this.getY();
+            double z = this.getTarget().getZ() - this.getZ();
+            double d = Math.sqrt(x * x + y * y + z * z);
+            this.setDeltaMovement(this.getDeltaMovement()
+                    .add(x / d * 0.20000000298023224D, y / d * 0.20000000298023224D, z / d * 0.20000000298023224D)
+                    .scale(1.5D));
+            this.move(MoverType.SELF, this.getDeltaMovement());
+
+            this.getNavigation().stop();
+            this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(this.getTarget().getX(), this.getTarget().getEyeY(), this.getTarget().getZ()));
         }
-        
-        this.soundLoopTick ++;
-        
+
+        this.soundLoopTick++;
+
         if (this.soundLoopTick % 40 == 0) {
-        	this.playSound(ModSoundEvents.WINDCALLER_FLY_LOOP.get(), 0.75F, 1.0F);
+            this.playSound(ModSoundEvents.WINDCALLER_FLY_LOOP.get(), 0.75F, 1.0F);
         }
     }
-    
+
     public void aiStep() {
-    	
+
         if (!this.onGround && this.getDeltaMovement().y < 0.0D) {
             this.setDeltaMovement(this.getDeltaMovement().multiply(1.0D, 0.5D, 1.0D));
-         }
-        
+        }
+
         if (this.level.isClientSide) {
             this.level.addParticle(ModParticleTypes.WIND.get(), this.getRandomX(0.1D), this.getY() + 0.05D, this.getRandomZ(0.1D), (this.random.nextDouble() - 0.5D) * 1.0D, 0.0, (this.random.nextDouble() - 0.5D) * 1.0D);
         }
-         
-    	super.aiStep();
+
+        super.aiStep();
     }
-    
-	public void tickDownAnimTimers() {
-		if (this.liftAttackAnimationTick > 0) {
-			this.liftAttackAnimationTick--;
-		}
-		
-		if (this.blastAttackAnimationTick > 0) {
-			this.blastAttackAnimationTick--;
-		}
-	}
+
+    public void tickDownAnimTimers() {
+        if (this.liftAttackAnimationTick > 0) {
+            this.liftAttackAnimationTick--;
+        }
+
+        if (this.blastAttackAnimationTick > 0) {
+            this.blastAttackAnimationTick--;
+        }
+    }
 
     @Override
     public void registerControllers(AnimationData data) {
@@ -181,18 +181,18 @@ public class WindcallerEntity extends AbstractIllager implements IAnimatable, Sp
 
 
     private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
-    	if (this.liftAttackAnimationTick > 0) {
+        if (this.liftAttackAnimationTick > 0) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("windcaller_lift", LOOP));
-    	} else if (this.blastAttackAnimationTick > 10) {
+        } else if (this.blastAttackAnimationTick > 10) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("windcaller_blast", LOOP));
         } else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("windcaller_fly", LOOP));
         } else {
-        	if (this.isCelebrating()) {
-        		event.getController().setAnimation(new AnimationBuilder().addAnimation("windcaller_celebrate", LOOP));
-        	} else {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("windcaller_idle", LOOP));       		
-        	}
+            if (this.isCelebrating()) {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("windcaller_celebrate", LOOP));
+            } else {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("windcaller_idle", LOOP));
+            }
         }
         return PlayState.CONTINUE;
     }
@@ -206,7 +206,7 @@ public class WindcallerEntity extends AbstractIllager implements IAnimatable, Sp
     protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance p_180481_1_) {
         super.populateDefaultEquipmentSlots(random, p_180481_1_);
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.WINDCALLER_STAFF.get()));
-		equipArmorSet(ModItems.WINDCALLER_ARMOR, this);
+        equipArmorSet(ModItems.WINDCALLER_ARMOR, this);
     }
 
     @Nullable
@@ -228,7 +228,7 @@ public class WindcallerEntity extends AbstractIllager implements IAnimatable, Sp
     public boolean isAlliedTo(Entity entityIn) {
         if (super.isAlliedTo(entityIn)) {
             return true;
-        } else if (entityIn instanceof LivingEntity && ((LivingEntity)entityIn).getMobType() == MobType.ILLAGER) {
+        } else if (entityIn instanceof LivingEntity && ((LivingEntity) entityIn).getMobType() == MobType.ILLAGER) {
             return this.getTeam() == null && entityIn.getTeam() == null;
         } else {
             return false;
@@ -259,161 +259,161 @@ public class WindcallerEntity extends AbstractIllager implements IAnimatable, Sp
         return ModSoundEvents.WINDCALLER_BLAST_VOCAL.get();
     }
 
-	@Override
-	public ArmorSet getArmorSet() {
-		return ModItems.WINDCALLER_ARMOR;
-	}
+    @Override
+    public ArmorSet getArmorSet() {
+        return ModItems.WINDCALLER_ARMOR;
+    }
 
-	class LiftAttackGoal extends Goal {
-		public WindcallerEntity mob;
-		@Nullable
-		public LivingEntity target;
-		
-		private final Predicate<Entity> TORNADO = (p_33346_) -> {
-			return p_33346_ instanceof WindcallerTornadoEntity;
-		};
-		
-		public LiftAttackGoal(WindcallerEntity mob) {
-			this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP, Goal.Flag.LOOK));
-			this.mob = mob;
-			this.target = mob.getTarget();
-		}
+    class LiftAttackGoal extends Goal {
+        public WindcallerEntity mob;
+        @Nullable
+        public LivingEntity target;
 
-		@Override
-		public boolean isInterruptable() {
-			return false;
-		}
+        private final Predicate<Entity> TORNADO = (p_33346_) -> {
+            return p_33346_ instanceof WindcallerTornadoEntity;
+        };
 
-		public boolean requiresUpdateEveryTick() {
-			return true;
-		}
+        public LiftAttackGoal(WindcallerEntity mob) {
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP, Goal.Flag.LOOK));
+            this.mob = mob;
+            this.target = mob.getTarget();
+        }
 
-		@Override
-		public boolean canUse() {
-			target = mob.getTarget();
-			
-			int nearbyTornadoes = 1;
-			
-			if (target != null) {
-				nearbyTornadoes = mob.level.getEntities(mob, target.getBoundingBox().inflate(5.0D), TORNADO)
-					.size();
-			}
-			
-			return target != null && target.isOnGround() && mob.random.nextInt(30) == 0 && mob.distanceTo(target) <= 16 && mob.distanceTo(target) > 3 && nearbyTornadoes <= 0 && mob.hasLineOfSight(target) && animationsUseable();
-		}
+        @Override
+        public boolean isInterruptable() {
+            return false;
+        }
 
-		@Override
-		public boolean canContinueToUse() {
-			return target != null && !animationsUseable();
-		}
+        public boolean requiresUpdateEveryTick() {
+            return true;
+        }
 
-		@Override
-		public void start() {
-			mob.playSound(ModSoundEvents.WINDCALLER_LIFT_VOCAL.get(), 1.0F, mob.getVoicePitch());
-			mob.liftAttackAnimationTick = mob.liftAttackAnimationLength;
-			mob.level.broadcastEntityEvent(mob, (byte) 4);
-		}
+        @Override
+        public boolean canUse() {
+            target = mob.getTarget();
 
-		@Override
-		public void tick() {
-			target = mob.getTarget();
+            int nearbyTornadoes = 1;
 
-			if (target != null) {
-				mob.getLookControl().setLookAt(target.getX(), target.getEyeY(), target.getZ());
-			}
+            if (target != null) {
+                nearbyTornadoes = mob.level.getEntities(mob, target.getBoundingBox().inflate(5.0D), TORNADO)
+                        .size();
+            }
 
-			if (target != null && mob.liftAttackAnimationTick == mob.liftAttackAnimationActionPoint) {
-	            WindcallerTornadoEntity tornado = ModEntityTypes.TORNADO.get().create(mob.level);
-	            tornado.moveTo(target.blockPosition(), 0, 0);
-	            tornado.playSound(ModSoundEvents.WINDCALLER_LIFT_WIND.get(), 1.5F, 1.0F);
-	            ((ServerLevel)mob.level).addFreshEntityWithPassengers(tornado);
-			}
-		}
+            return target != null && target.isOnGround() && mob.random.nextInt(30) == 0 && mob.distanceTo(target) <= 16 && mob.distanceTo(target) > 3 && nearbyTornadoes <= 0 && mob.hasLineOfSight(target) && animationsUseable();
+        }
 
-		public boolean animationsUseable() {
-			return mob.liftAttackAnimationTick <= 0;
-		}
+        @Override
+        public boolean canContinueToUse() {
+            return target != null && !animationsUseable();
+        }
 
-	}
-    
+        @Override
+        public void start() {
+            mob.playSound(ModSoundEvents.WINDCALLER_LIFT_VOCAL.get(), 1.0F, mob.getVoicePitch());
+            mob.liftAttackAnimationTick = mob.liftAttackAnimationLength;
+            mob.level.broadcastEntityEvent(mob, (byte) 4);
+        }
+
+        @Override
+        public void tick() {
+            target = mob.getTarget();
+
+            if (target != null) {
+                mob.getLookControl().setLookAt(target.getX(), target.getEyeY(), target.getZ());
+            }
+
+            if (target != null && mob.liftAttackAnimationTick == mob.liftAttackAnimationActionPoint) {
+                WindcallerTornadoEntity tornado = ModEntityTypes.TORNADO.get().create(mob.level);
+                tornado.moveTo(target.blockPosition(), 0, 0);
+                tornado.playSound(ModSoundEvents.WINDCALLER_LIFT_WIND.get(), 1.5F, 1.0F);
+                ((ServerLevel) mob.level).addFreshEntityWithPassengers(tornado);
+            }
+        }
+
+        public boolean animationsUseable() {
+            return mob.liftAttackAnimationTick <= 0;
+        }
+
+    }
+
     class BlastAttackGoal extends Goal {
-		public WindcallerEntity mob;
-		@Nullable
-		public LivingEntity target;
-		
-		private final Predicate<Entity> TORNADO = (p_33346_) -> {
-			return p_33346_ instanceof WindcallerTornadoEntity;
-		};
-		
-		public BlastAttackGoal(WindcallerEntity mob) {
-			this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP, Goal.Flag.LOOK));
-			this.mob = mob;
-			this.target = mob.getTarget();
-		}
+        public WindcallerEntity mob;
+        @Nullable
+        public LivingEntity target;
 
-		@Override
-		public boolean isInterruptable() {
-			return false;
-		}
+        private final Predicate<Entity> TORNADO = (p_33346_) -> {
+            return p_33346_ instanceof WindcallerTornadoEntity;
+        };
 
-		public boolean requiresUpdateEveryTick() {
-			return true;
-		}
+        public BlastAttackGoal(WindcallerEntity mob) {
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP, Goal.Flag.LOOK));
+            this.mob = mob;
+            this.target = mob.getTarget();
+        }
 
-		@Override
-		public boolean canUse() {
-			target = mob.getTarget();
-			
-			int nearbyTornadoes = 1;
-			
-			if (target != null) {
-				nearbyTornadoes = mob.level.getEntities(mob, target.getBoundingBox().inflate(5.0D), TORNADO)
-					.size();
-			}
-			
-			return target != null && mob.random.nextInt(5) == 0 && (mob.distanceTo(target) <= 4 || (!target.isOnGround() && mob.random.nextInt(10) == 0 && mob.distanceTo(target) < 7.5)) && nearbyTornadoes <= 0 && mob.hasLineOfSight(target) && animationsUseable();
-		}
+        @Override
+        public boolean isInterruptable() {
+            return false;
+        }
 
-		@Override
-		public boolean canContinueToUse() {
-			return target != null && !animationsUseable();
-		}
+        public boolean requiresUpdateEveryTick() {
+            return true;
+        }
 
-		@Override
-		public void start() {
-			mob.playSound(ModSoundEvents.WINDCALLER_BLAST_VOCAL.get(), 1.0F, mob.getVoicePitch());
-			mob.blastAttackAnimationTick = mob.blastAttackAnimationLength;
-			mob.level.broadcastEntityEvent(mob, (byte) 11);
-		}
+        @Override
+        public boolean canUse() {
+            target = mob.getTarget();
 
-		@Override
-		public void tick() {
-			target = mob.getTarget();
+            int nearbyTornadoes = 1;
 
-			if (target != null) {
-				mob.getLookControl().setLookAt(target.getX(), target.getEyeY(), target.getZ());
-			}
+            if (target != null) {
+                nearbyTornadoes = mob.level.getEntities(mob, target.getBoundingBox().inflate(5.0D), TORNADO)
+                        .size();
+            }
 
-			if (target != null && mob.blastAttackAnimationTick == mob.blastAttackAnimationActionPoint) {
-				double d1 = target.getX() - mob.getX();
-	               double d2 = target.getY(0.5D) - mob.getY(0.5D);
-	               double d3 = target.getZ() - mob.getZ();
-				WindcallerBlastProjectileEntity smallfireballentity = new WindcallerBlastProjectileEntity(mob.level, mob, d1, 0, d3);
+            return target != null && mob.random.nextInt(5) == 0 && (mob.distanceTo(target) <= 4 || (!target.isOnGround() && mob.random.nextInt(10) == 0 && mob.distanceTo(target) < 7.5)) && nearbyTornadoes <= 0 && mob.hasLineOfSight(target) && animationsUseable();
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return target != null && !animationsUseable();
+        }
+
+        @Override
+        public void start() {
+            mob.playSound(ModSoundEvents.WINDCALLER_BLAST_VOCAL.get(), 1.0F, mob.getVoicePitch());
+            mob.blastAttackAnimationTick = mob.blastAttackAnimationLength;
+            mob.level.broadcastEntityEvent(mob, (byte) 11);
+        }
+
+        @Override
+        public void tick() {
+            target = mob.getTarget();
+
+            if (target != null) {
+                mob.getLookControl().setLookAt(target.getX(), target.getEyeY(), target.getZ());
+            }
+
+            if (target != null && mob.blastAttackAnimationTick == mob.blastAttackAnimationActionPoint) {
+                double d1 = target.getX() - mob.getX();
+                double d2 = target.getY(0.5D) - mob.getY(0.5D);
+                double d3 = target.getZ() - mob.getZ();
+                WindcallerBlastProjectileEntity smallfireballentity = new WindcallerBlastProjectileEntity(mob.level, mob, d1, 0, d3);
                 smallfireballentity.setPos(mob.getX(), mob.getY(0.25D), mob.getZ());
                 mob.level.addFreshEntity(smallfireballentity);
-	            WindcallerTornadoEntity tornado = ModEntityTypes.TORNADO.get().create(mob.level);
-	            tornado.moveTo(mob.blockPosition(), 0, 0);
-	            tornado.playSound(ModSoundEvents.WINDCALLER_BLAST_WIND.get(), 1.5F, 1.0F);
-	            tornado.setBlast(true);
+                WindcallerTornadoEntity tornado = ModEntityTypes.TORNADO.get().create(mob.level);
+                tornado.moveTo(mob.blockPosition(), 0, 0);
+                tornado.playSound(ModSoundEvents.WINDCALLER_BLAST_WIND.get(), 1.5F, 1.0F);
+                tornado.setBlast(true);
 //	            mob.lookAt(EntityAnchorArgument.Type.EYES, new Vector3d(target.getX(), target.getY(), target.getZ()));
-				tornado.setYRot(-mob.yHeadRot - 90);
-	            ((ServerLevel)mob.level).addFreshEntityWithPassengers(tornado);
-			}
-		}
+                tornado.setYRot(-mob.yHeadRot - 90);
+                ((ServerLevel) mob.level).addFreshEntityWithPassengers(tornado);
+            }
+        }
 
-		public boolean animationsUseable() {
-			return mob.blastAttackAnimationTick <= 0;
-		}
+        public boolean animationsUseable() {
+            return mob.blastAttackAnimationTick <= 0;
+        }
 
-	}
+    }
 }

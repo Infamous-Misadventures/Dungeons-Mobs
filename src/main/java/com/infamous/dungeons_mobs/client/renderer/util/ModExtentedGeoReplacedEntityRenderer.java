@@ -47,7 +47,6 @@ import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.item.GeoArmorItem;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
-import software.bernie.geckolib3.util.EModelRenderCycle;
 import software.bernie.geckolib3.util.RenderUtils;
 
 import java.lang.reflect.InvocationTargetException;
@@ -59,11 +58,11 @@ public abstract class ModExtentedGeoReplacedEntityRenderer<T extends IAnimatable
         this(renderManager, modelProvider, animatable, 1, 1, 0);
     }
 
-    public static interface IRenderCycle {
-        public String name();
+    public interface IRenderCycle {
+        String name();
     }
 
-    public static enum EModelRenderCycle implements IRenderCycle {
+    public enum EModelRenderCycle implements IRenderCycle {
         INITIAL, REPEATED, SPECIAL /* For special use by the user */
     }
 
@@ -72,10 +71,10 @@ public abstract class ModExtentedGeoReplacedEntityRenderer<T extends IAnimatable
 
     protected final Queue<Tuple<GeoBone, ItemStack>> HEAD_QUEUE = new ArrayDeque<>();
 
-    private software.bernie.geckolib3.util.EModelRenderCycle currentModelRenderCycle = software.bernie.geckolib3.util.EModelRenderCycle.INITIAL;
+    private final software.bernie.geckolib3.util.EModelRenderCycle currentModelRenderCycle = software.bernie.geckolib3.util.EModelRenderCycle.INITIAL;
 
     protected ModExtentedGeoReplacedEntityRenderer(EntityRendererProvider.Context renderManager, AnimatedGeoModel<IAnimatable> modelProvider, T animation,
-                                         float widthScale, float heightScale, float shadowSize) {
+                                                   float widthScale, float heightScale, float shadowSize) {
         super(renderManager, modelProvider, animation);
         this.shadowRadius = shadowSize;
         this.widthScale = widthScale;
@@ -108,7 +107,7 @@ public abstract class ModExtentedGeoReplacedEntityRenderer<T extends IAnimatable
                 } else if (compoundnbt.contains("SkullOwner", 8)) {
                     String s = compoundnbt.getString("SkullOwner");
                     if (!StringUtils.isBlank(s)) {
-                        SkullBlockEntity.updateGameprofile(new GameProfile((UUID) null, s), (p_172560_) -> {
+                        SkullBlockEntity.updateGameprofile(new GameProfile(null, s), (p_172560_) -> {
                             compoundnbt.put("SkullOwner", NbtUtils.writeGameProfile(new CompoundTag(), p_172560_));
                         });
                     }
@@ -135,7 +134,7 @@ public abstract class ModExtentedGeoReplacedEntityRenderer<T extends IAnimatable
             SkullModelBase skullmodelbase = SkullBlockRenderer
                     .createSkullRenderers(Minecraft.getInstance().getEntityModels()).get(skullblock$type);
             RenderType rendertype = SkullBlockRenderer.getRenderType(skullblock$type, skullOwnerProfile);
-            SkullBlockRenderer.renderSkull((Direction) null, 0, 0, stack, buffer, packedLightIn, skullmodelbase,
+            SkullBlockRenderer.renderSkull(null, 0, 0, stack, buffer, packedLightIn, skullmodelbase,
                     rendertype);
             stack.popPose();
 
@@ -208,21 +207,20 @@ public abstract class ModExtentedGeoReplacedEntityRenderer<T extends IAnimatable
             if (armorForBone.getItem() instanceof ArmorItem) {
                 final ArmorItem armorItem = (ArmorItem) armorForBone.getItem();
                 final HumanoidModel<?> armorModel = (HumanoidModel<?>) ForgeHooksClient.getArmorModel(
-                        (LivingEntity) currentEntity, armorForBone, boneSlot,
+                        currentEntity, armorForBone, boneSlot,
                         boneSlot == EquipmentSlot.LEGS ? DEFAULT_BIPED_ARMOR_MODEL_INNER
                                 : DEFAULT_BIPED_ARMOR_MODEL_OUTER);
                 final ModelPart sourceLimb = this.getArmorPartForBone(bone.getName(), armorModel);
 
                 if (armorModel != null) {
                     if (armorForBone.getItem() instanceof GeoArmorItem) {
-                        @SuppressWarnings("unchecked")
-                        final GeoArmorRenderer<? extends GeoArmorItem> geoArmorRenderer = GeoArmorRenderer
+                        @SuppressWarnings("unchecked") final GeoArmorRenderer<? extends GeoArmorItem> geoArmorRenderer = GeoArmorRenderer
                                 .getRenderer(armorItem.getClass(), this.currentEntity);
 
                         if (sourceLimb != null) {
                             List<ModelPart.Cube> cubeList;
                             cubeList = sourceLimb.cubes;
-                            if (!cubeList.isEmpty()){
+                            if (!cubeList.isEmpty()) {
                                 // IMPORTANT: The first cube is used to define the armor part!!
                                 stack.scale(-1, -1, 1);
                                 stack.pushPose();
@@ -247,7 +245,7 @@ public abstract class ModExtentedGeoReplacedEntityRenderer<T extends IAnimatable
                                 stack.popPose();
                             }
                         }
-                    }else {
+                    } else {
                         List<ModelPart.Cube> cubeList;
                         if (sourceLimb != null) {
                             cubeList = sourceLimb.cubes;
@@ -474,6 +472,7 @@ public abstract class ModExtentedGeoReplacedEntityRenderer<T extends IAnimatable
         }
         super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
     }
+
     /*
      * Gets called after armor and item rendering but in every render cycle. This
      * serves as a hook for modders to include their own bone specific rendering
@@ -532,6 +531,7 @@ public abstract class ModExtentedGeoReplacedEntityRenderer<T extends IAnimatable
                 armorForBone.hasFoil());
         sourceLimb.render(stack, ivb, packedLightIn, packedOverlayIn, red, green, blue, alpha);
     }
+
     @javax.annotation.Nullable
     protected abstract ResourceLocation getTextureForBone(String boneName, T currentEntity);
 
@@ -607,7 +607,7 @@ public abstract class ModExtentedGeoReplacedEntityRenderer<T extends IAnimatable
                 (slot == EquipmentSlot.LEGS ? 2 : 1), type == null ? "" : String.format("_%s", type));
 
         s1 = ForgeHooksClient.getArmorTexture(entity, stack, s1, slot, type);
-        ResourceLocation resourcelocation = (ResourceLocation) ARMOR_TEXTURE_RES_MAP.get(s1);
+        ResourceLocation resourcelocation = ARMOR_TEXTURE_RES_MAP.get(s1);
 
         if (resourcelocation == null) {
             resourcelocation = new ResourceLocation(s1);

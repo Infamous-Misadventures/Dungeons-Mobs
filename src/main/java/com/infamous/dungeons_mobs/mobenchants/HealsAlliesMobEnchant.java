@@ -10,11 +10,9 @@ import static com.infamous.dungeons_libraries.utils.AreaOfEffectHelper.getCanHea
 import static com.infamous.dungeons_mobs.mobenchants.NewMobEnchantUtils.executeIfPresentWithLevel;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchants.HEALS_ALLIES;
 
-import baguchan.enchantwithmob.mobenchant.MobEnchant.Properties;
-
 public class HealsAlliesMobEnchant extends MobEnchant {
 
-    private static float HEAL_PERCENTAGE = 0.10F;
+    private static final float HEAL_PERCENTAGE = 0.10F;
 
     public HealsAlliesMobEnchant(Properties properties) {
         super(properties);
@@ -26,7 +24,7 @@ public class HealsAlliesMobEnchant extends MobEnchant {
         executeIfPresentWithLevel(defender, HEALS_ALLIES.get(), (level) -> {
             applyToNearbyEntities(defender, 1.5F,
                     getCanHealPredicate(defender), (LivingEntity nearbyEntity) ->
-                            nearbyEntity.heal(event.getAmount() * HEAL_PERCENTAGE*level)
+                            nearbyEntity.heal(event.getAmount() * HEAL_PERCENTAGE * level)
             );
         });
     }

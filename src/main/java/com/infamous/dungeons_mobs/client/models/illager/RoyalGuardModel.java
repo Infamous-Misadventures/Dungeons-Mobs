@@ -23,7 +23,7 @@ public class RoyalGuardModel extends AnimatedGeoModel<RoyalGuardEntity> {
 
     @Override
     public ResourceLocation getModelResource(RoyalGuardEntity entity) {
-        return new ResourceLocation(DungeonsMobs.MODID, "geo/geo_illager.geo.json") ;
+        return new ResourceLocation(DungeonsMobs.MODID, "geo/geo_illager.geo.json");
     }
 
     @Override
@@ -41,7 +41,7 @@ public class RoyalGuardModel extends AnimatedGeoModel<RoyalGuardEntity> {
         IBone armorHead = this.getAnimationProcessor().getBone("armorBipedHead");
         IBone illagerArms = this.getAnimationProcessor().getBone("illagerArms");
         IBone cape = this.getAnimationProcessor().getBone("bipedCape");
-        
+
         illagerArms.setHidden(true);
         cape.setHidden(true);
 
@@ -51,15 +51,15 @@ public class RoyalGuardModel extends AnimatedGeoModel<RoyalGuardEntity> {
             head.setRotationY(head.getRotationY() + (extraData.netHeadYaw * ((float) Math.PI / 180F)));
         }
     }
-    
-	@Override
-	public void setMolangQueries(IAnimatable animatable, double currentTick) {
-		super.setMolangQueries(animatable, currentTick);
-		
-		MolangParser parser = GeckoLibCache.getInstance().parser;
-		LivingEntity livingEntity = (LivingEntity) animatable;
-		Vec3 velocity = livingEntity.getDeltaMovement();
-		float groundSpeed = Mth.sqrt((float) ((velocity.x * velocity.x) + (velocity.z * velocity.z)));
-		parser.setValue("query.ground_speed", () -> groundSpeed * 20);
-	}
+
+    @Override
+    public void setMolangQueries(IAnimatable animatable, double currentTick) {
+        super.setMolangQueries(animatable, currentTick);
+
+        MolangParser parser = GeckoLibCache.getInstance().parser;
+        LivingEntity livingEntity = (LivingEntity) animatable;
+        Vec3 velocity = livingEntity.getDeltaMovement();
+        float groundSpeed = Mth.sqrt((float) ((velocity.x * velocity.x) + (velocity.z * velocity.z)));
+        parser.setValue("query.ground_speed", () -> groundSpeed * 20);
+    }
 }

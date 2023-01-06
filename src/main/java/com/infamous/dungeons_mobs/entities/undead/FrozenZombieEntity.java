@@ -35,8 +35,6 @@ import net.minecraft.world.item.SnowballItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 
-import java.util.Random;
-
 public class FrozenZombieEntity extends Zombie implements RangedAttackMob {
     public FrozenZombieEntity(Level worldIn) {
         super(worldIn);
@@ -62,36 +60,36 @@ public class FrozenZombieEntity extends Zombie implements RangedAttackMob {
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));
         this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Turtle.class, 10, true, false, Turtle.BABY_ON_LAND_SELECTOR));
     }
-    
+
     protected SoundEvent getAmbientSound() {
         return ModSoundEvents.FROZEN_ZOMBIE_IDLE.get();
-     }
+    }
 
-     protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
+    protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
         return ModSoundEvents.FROZEN_ZOMBIE_HURT.get();
-     }
+    }
 
-     protected SoundEvent getDeathSound() {
+    protected SoundEvent getDeathSound() {
         return ModSoundEvents.FROZEN_ZOMBIE_DEATH.get();
-     }
+    }
 
     public static AttributeSupplier.Builder setCustomAttributes() {
         return Zombie.createAttributes();
     }
-    
-	/**
-	 * Returns whether this Entity is on the same team as the given Entity.
-	 */
-	public boolean isAlliedTo(Entity entityIn) {
-		if (super.isAlliedTo(entityIn)) {
-			return true;
-		} else if (entityIn instanceof LivingEntity
-				&& ((LivingEntity)entityIn) instanceof Zombie) {
-			return this.getTeam() == null && entityIn.getTeam() == null;
-		} else {
-			return false;
-		}
-	}
+
+    /**
+     * Returns whether this Entity is on the same team as the given Entity.
+     */
+    public boolean isAlliedTo(Entity entityIn) {
+        if (super.isAlliedTo(entityIn)) {
+            return true;
+        } else if (entityIn instanceof LivingEntity
+                && entityIn instanceof Zombie) {
+            return this.getTeam() == null && entityIn.getTeam() == null;
+        } else {
+            return false;
+        }
+    }
 
     protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficultyInstance) {
         super.populateDefaultEquipmentSlots(random, difficultyInstance);
@@ -118,7 +116,7 @@ public class FrozenZombieEntity extends Zombie implements RangedAttackMob {
                 }
 
                 if (i > 0) {
-                    ((LivingEntity)targetEntity).addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, i * 20, 0));
+                    ((LivingEntity) targetEntity).addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, i * 20, 0));
                 }
             }
 
@@ -136,7 +134,7 @@ public class FrozenZombieEntity extends Zombie implements RangedAttackMob {
         double yDifference = adjustedEyeY - snowballentity.getY();
         double zDifference = livingEntity.getZ() - this.getZ();
         float adjustedHorizontalDistance = Mth.sqrt((float) (xDifference * xDifference + zDifference * zDifference)) * 0.2F;
-        snowballentity.shoot(xDifference, yDifference + (double)adjustedHorizontalDistance, zDifference, 1.6F, 7.5F);
+        snowballentity.shoot(xDifference, yDifference + (double) adjustedHorizontalDistance, zDifference, 1.6F, 7.5F);
         this.playSound(SoundEvents.SNOW_GOLEM_SHOOT, 1.0F, 0.4F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
         this.level.addFreshEntity(snowballentity);
     }
@@ -149,12 +147,12 @@ public class FrozenZombieEntity extends Zombie implements RangedAttackMob {
             super(zombieEntity, speedAmplifier, attackInterval, maxDistance, useLongMemory);
             this.zombie = zombieEntity;
         }
-        
+
         @Override
-    	public boolean hasThrowableItemInMainhand(){
-    		return (this.zombie.getMainHandItem().getItem() instanceof SnowballItem
-    				| this.zombie.getMainHandItem().getItem() instanceof EggItem) && zombie.getTarget() != null && !zombie.getTarget().hasEffect(MobEffects.MOVEMENT_SLOWDOWN);
-    	}
+        public boolean hasThrowableItemInMainhand() {
+            return (this.zombie.getMainHandItem().getItem() instanceof SnowballItem
+                    | this.zombie.getMainHandItem().getItem() instanceof EggItem) && zombie.getTarget() != null && !zombie.getTarget().hasEffect(MobEffects.MOVEMENT_SLOWDOWN);
+        }
 
         public void start() {
             super.start();
@@ -169,11 +167,7 @@ public class FrozenZombieEntity extends Zombie implements RangedAttackMob {
         public void tick() {
             super.tick();
             ++this.raiseArmTicks;
-            if (this.raiseArmTicks >= 5 && this.getTicksUntilNextAttack() < this.getAttackInterval() / 2) {
-                this.zombie.setAggressive(true);
-            } else {
-                this.zombie.setAggressive(false);
-            }
+            this.zombie.setAggressive(this.raiseArmTicks >= 5 && this.getTicksUntilNextAttack() < this.getAttackInterval() / 2);
 
         }
     }

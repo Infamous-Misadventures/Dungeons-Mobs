@@ -13,33 +13,33 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
 
 public class WindcallerTornadoModel extends AnimatedGeoModel {
-	   
-	@Override
-	public ResourceLocation getAnimationResource(Object entity) {
-		return new ResourceLocation(DungeonsMobs.MODID, "animations/windcaller_tornado.animation.json");
-	}
 
-	@Override
-	public ResourceLocation getModelResource(Object entity) {
-		return new ResourceLocation(DungeonsMobs.MODID, "geo/windcaller_tornado.geo.json");
-	}
+    @Override
+    public ResourceLocation getAnimationResource(Object entity) {
+        return new ResourceLocation(DungeonsMobs.MODID, "animations/windcaller_tornado.animation.json");
+    }
 
-	@Override
-	public ResourceLocation getTextureResource(Object entity) {
-		return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/windcaller_tornado.png");
-	}
-	
-	@Override
-	public void setCustomAnimations(IAnimatable entity, int uniqueID, AnimationEvent customPredicate) {
-		super.setCustomAnimations(entity, uniqueID, customPredicate);
+    @Override
+    public ResourceLocation getModelResource(Object entity) {
+        return new ResourceLocation(DungeonsMobs.MODID, "geo/windcaller_tornado.geo.json");
+    }
 
-		IBone everything = this.getAnimationProcessor().getBone("everything");
+    @Override
+    public ResourceLocation getTextureResource(Object entity) {
+        return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/windcaller_tornado.png");
+    }
 
-		EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
+    @Override
+    public void setCustomAnimations(IAnimatable entity, int uniqueID, AnimationEvent customPredicate) {
+        super.setCustomAnimations(entity, uniqueID, customPredicate);
 
-		if (((WindcallerTornadoEntity)entity).isBlast() && (extraData.headPitch != 0 || extraData.netHeadYaw != 0)) {
-			//everything.setRotationX(((Entity)entity).getXRot());
-			//everything.setRotationY(((Entity)entity).yRot);
-		}
-	}
+        IBone everything = this.getAnimationProcessor().getBone("everything");
+
+        EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
+
+        if (((WindcallerTornadoEntity) entity).isBlast() && (extraData.headPitch != 0 || extraData.netHeadYaw != 0)) {
+            //everything.setRotationX(((Entity)entity).getXRot());
+            //everything.setRotationY(((Entity)entity).yRot);
+        }
+    }
 }

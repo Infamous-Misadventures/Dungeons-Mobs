@@ -18,40 +18,45 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class PillagerHelmetModel<T extends LivingEntity> extends HumanoidModel<T> {
-	private final LivingEntity livingEntity;
-	private final ModelPart helmet;
+    private final LivingEntity livingEntity;
+    private final ModelPart helmet;
 
-	public PillagerHelmetModel(ModelPart modelPart, LivingEntity livingEntity) {
-		super(modelPart);
-		this.helmet = modelPart.getChild("everything").getChild("helmet");
-		this.livingEntity = livingEntity;
-	}
+    public PillagerHelmetModel(ModelPart modelPart, LivingEntity livingEntity) {
+        super(modelPart);
+        this.helmet = modelPart.getChild("head");
+        this.livingEntity = livingEntity;
+    }
 
-	public static LayerDefinition createHelmetLayer() {
-		MeshDefinition meshdefinition = new MeshDefinition();
-		PartDefinition partdefinition = meshdefinition.getRoot();
-		partdefinition.addOrReplaceChild("everything", CubeListBuilder.create(), PartPose.offset(0.0F, 12.0F, 0.0F));
-		PartDefinition helmet = partdefinition.addOrReplaceChild("helmet", CubeListBuilder.create().texOffs(32, 0).addBox(-4.0F, -10.0F, -4.0F, 8.0F, 6.0F, 8.0F), PartPose.offset(0.0F, -24.0F, 0.0F));
-		helmet.addOrReplaceChild("flap1", CubeListBuilder.create().texOffs(46, 27).addBox(-4.0F, -10.0F, -4.0F, 8.0F, 6.0F, 8.0F), PartPose.offset(-1.0F, 0.0F, -4.0F));
-		helmet.addOrReplaceChild("flap2", CubeListBuilder.create().texOffs(46, 27).addBox(-5.0F, -3.0F, 0.0F, 1.0F, 3.0F, 8.0F), PartPose.offset(-1.0F, 0.0F, -4.0F));
-		helmet.addOrReplaceChild("flap3", CubeListBuilder.create().texOffs(45, 30).addBox(-8.0F, -3.0F, 0.0F, 8.0F, 3.0F, 1.0F), PartPose.offset(4.0F, -3.0F, 7.0F));
-		return LayerDefinition.create(meshdefinition, 64, 64);
-	}
+    public static LayerDefinition createHelmetLayer() {
+        MeshDefinition meshdefinition = new MeshDefinition();
+        PartDefinition partdefinition = meshdefinition.getRoot();
+        PartDefinition helmet = partdefinition.addOrReplaceChild("head", CubeListBuilder.create().texOffs(32, 0).addBox(-4.0F, -10.0F, -4.0F, 8.0F, 6.0F, 8.0F), PartPose.offset(0.0F, -24.0F, 0.0F));
+        helmet.addOrReplaceChild("flap1", CubeListBuilder.create().texOffs(46, 27).addBox(-4.0F, -10.0F, -4.0F, 8.0F, 6.0F, 8.0F), PartPose.offset(-1.0F, 0.0F, -4.0F));
+        helmet.addOrReplaceChild("flap2", CubeListBuilder.create().texOffs(46, 27).addBox(-5.0F, -3.0F, 0.0F, 1.0F, 3.0F, 8.0F), PartPose.offset(-1.0F, 0.0F, -4.0F));
+        helmet.addOrReplaceChild("flap3", CubeListBuilder.create().texOffs(45, 30).addBox(-8.0F, -3.0F, 0.0F, 8.0F, 3.0F, 1.0F), PartPose.offset(4.0F, -3.0F, 7.0F));
+        partdefinition.addOrReplaceChild("hat", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        partdefinition.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        partdefinition.addOrReplaceChild("right_arm", CubeListBuilder.create(), PartPose.offset(-5.0F, 2.0F, 0.0F));
+        partdefinition.addOrReplaceChild("left_arm", CubeListBuilder.create(), PartPose.offset(5.0F, 2.0F, 0.0F));
+        partdefinition.addOrReplaceChild("right_leg", CubeListBuilder.create(), PartPose.offset(-1.9F, 12.0F, 0.0F));
+        partdefinition.addOrReplaceChild("left_leg", CubeListBuilder.create(), PartPose.offset(1.9F, 12.0F, 0.0F));
+        return LayerDefinition.create(meshdefinition, 64, 64);
+    }
 
-	@Override
-	public void setupAnim(T  entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
-	}
+    @Override
+    public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    }
 
-	@Override
-	public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha){
-		matrixStackIn.pushPose();
-		this.helmet.copyFrom(this.head);
-		if (livingEntity.isBaby()) {
-			matrixStackIn.scale(0.8F, 0.8F, 0.8F);
-			this.helmet.setPos(0.0F, 15.0F, 0.0F);
-		}
-		this.helmet.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-		matrixStackIn.popPose();
-	}
+    @Override
+    public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+        matrixStackIn.pushPose();
+        this.helmet.copyFrom(this.head);
+        if (livingEntity.isBaby()) {
+            matrixStackIn.scale(0.8F, 0.8F, 0.8F);
+            this.helmet.setPos(0.0F, 15.0F, 0.0F);
+        }
+        this.helmet.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+        matrixStackIn.popPose();
+    }
 
 }

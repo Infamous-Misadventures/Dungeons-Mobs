@@ -9,7 +9,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
 
 public class NetworkHandler {
     public static final SimpleChannel INSTANCE = NetworkRegistry.ChannelBuilder.named(
-            new ResourceLocation(DungeonsMobs.MODID, "network"))
+                    new ResourceLocation(DungeonsMobs.MODID, "network"))
             .clientAcceptedVersions("1"::equals)
             .serverAcceptedVersions("1"::equals)
             .networkProtocolVersion(() -> "1")

@@ -19,6 +19,7 @@ public class IllagerArmorModel<T extends AbstractIllager> extends HumanoidModel<
                 8.0F, 8.0F, 8.0F, new CubeDeformation(1.0F)), PartPose.offset(0.0F, 1.0F, 0.0F));
         return LayerDefinition.create(meshdefinition, 64, 32);
     }
+
     public static LayerDefinition createInnerArmorLayer() {
         MeshDefinition meshdefinition = HumanoidModel.createMesh(new CubeDeformation(0.5F), 0.0F);
         return LayerDefinition.create(meshdefinition, 64, 32);

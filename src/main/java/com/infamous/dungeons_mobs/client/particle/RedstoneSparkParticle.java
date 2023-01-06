@@ -7,14 +7,14 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class RedstoneSparkParticle extends TextureSheetParticle {
-	private final SpriteSet sprites;
-	
+    private final SpriteSet sprites;
+
     protected RedstoneSparkParticle(ClientLevel level, double xCoord, double yCoord, double zCoord,
-    		SpriteSet spriteSet, double xd, double yd, double zd) {
+                                    SpriteSet spriteSet, double xd, double yd, double zd) {
         super(level, xCoord, yCoord, zCoord, xd, yd, zd);
 
         this.sprites = spriteSet;
-        
+
         //this.friction = 0.8F;
         this.xd = xd;
         this.yd = yd;
@@ -55,14 +55,14 @@ public class RedstoneSparkParticle extends TextureSheetParticle {
     }
 
     private void fadeOut() {
-        this.alpha = (-(1/(float)lifetime) * age + 1);
+        this.alpha = (-(1 / (float) lifetime) * age + 1);
     }
 
-    
+
     public int getLightColor(float p_106821_) {
         return 240;
-     }
-    
+    }
+
     @Override
     public ParticleRenderType getRenderType() {
         return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;

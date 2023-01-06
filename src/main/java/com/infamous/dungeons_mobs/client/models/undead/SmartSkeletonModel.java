@@ -10,8 +10,6 @@ import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 
-import net.minecraft.client.model.HumanoidModel.ArmPose;
-
 public class SmartSkeletonModel<T extends AbstractSkeleton> extends SkeletonModel<T> {
 
     public SmartSkeletonModel(ModelPart p_170941_) {
@@ -51,10 +49,9 @@ public class SmartSkeletonModel<T extends AbstractSkeleton> extends SkeletonMode
         UseAnim useaction = itemstack.getUseAnimation();
         switch (useaction) {
             case BLOCK:
-                if(skeleton.isBlocking()){
+                if (skeleton.isBlocking()) {
                     this.rightArmPose = ArmPose.BLOCK;
-                }
-                else{
+                } else {
                     this.rightArmPose = ArmPose.ITEM;
                 }
                 break;
@@ -84,10 +81,9 @@ public class SmartSkeletonModel<T extends AbstractSkeleton> extends SkeletonMode
         UseAnim useaction = itemstack.getUseAnimation();
         switch (useaction) {
             case BLOCK:
-                if(entityIn.isBlocking()){
+                if (entityIn.isBlocking()) {
                     this.leftArmPose = ArmPose.BLOCK;
-                }
-                else{
+                } else {
                     this.leftArmPose = ArmPose.ITEM;
                 }
                 break;

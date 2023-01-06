@@ -24,7 +24,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Piglin.class)
 public abstract class PiglinEntityMixin extends AbstractPiglin implements ISmartCrossbowUser {
 
-    @Shadow protected abstract boolean isChargingCrossbow();
+    @Shadow
+    protected abstract boolean isChargingCrossbow();
 
     private static final EntityDataAccessor<Boolean> DATA_IS_CROSSBOW_USER = SynchedEntityData.defineId(Piglin.class, EntityDataSerializers.BOOLEAN);
 
@@ -33,23 +34,23 @@ public abstract class PiglinEntityMixin extends AbstractPiglin implements ISmart
     }
 
     @Inject(at = @At("TAIL"), method = "readAdditionalSaveData")
-    private void readAdditional(CompoundTag compoundNBT, CallbackInfo ci){
+    private void readAdditional(CompoundTag compoundNBT, CallbackInfo ci) {
         this.readCrossbowUserNBT(compoundNBT);
     }
 
     @Inject(at = @At("TAIL"), method = "addAdditionalSaveData")
-    private void writeAdditional(CompoundTag compoundNBT, CallbackInfo ci){
+    private void writeAdditional(CompoundTag compoundNBT, CallbackInfo ci) {
         this.writeCrossbowUserNBT(compoundNBT);
     }
 
 
     @Inject(at = @At("TAIL"), method = "finalizeSpawn")
-    private void finalizeSpawn(ServerLevelAccessor p_213386_1_, DifficultyInstance p_213386_2_, MobSpawnType p_213386_3_, SpawnGroupData p_213386_4_, CompoundTag p_213386_5_, CallbackInfoReturnable<SpawnGroupData> cir){
+    private void finalizeSpawn(ServerLevelAccessor p_213386_1_, DifficultyInstance p_213386_2_, MobSpawnType p_213386_3_, SpawnGroupData p_213386_4_, CompoundTag p_213386_5_, CallbackInfoReturnable<SpawnGroupData> cir) {
         this.setCrossbowUser(this.isHolding(itemStack -> itemStack.getItem() instanceof CrossbowItem));
     }
 
     @Inject(at = @At("TAIL"), method = "defineSynchedData")
-    private void registerCustomData(CallbackInfo ci){
+    private void registerCustomData(CallbackInfo ci) {
         this.entityData.define(DATA_IS_CROSSBOW_USER, false);
     }
 

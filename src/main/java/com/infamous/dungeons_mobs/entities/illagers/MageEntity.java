@@ -52,16 +52,16 @@ import static com.infamous.dungeons_mobs.entities.SpawnArmoredHelper.equipArmorS
 
 public class MageEntity extends AbstractIllager implements IAnimatable, SpawnArmoredMob {
 
-	public int attackAnimationTick;
-	public int attackAnimationLength = 50;
+    public int attackAnimationTick;
+    public int attackAnimationLength = 50;
 
-	public int vanishAnimationTick;
-	public int vanishAnimationLength = 23;
+    public int vanishAnimationTick;
+    public int vanishAnimationLength = 23;
 
-	public int appearAnimationTick;
-	public int appearAnimationLength = 25;
+    public int appearAnimationTick;
+    public int appearAnimationLength = 25;
 
-	public int appearDelay = 0;
+    public int appearDelay = 0;
 
     AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
@@ -93,59 +93,59 @@ public class MageEntity extends AbstractIllager implements IAnimatable, SpawnArm
         this.targetSelector.addGoal(3, (new NearestAttackableTargetGoal<>(this, AbstractVillager.class, false)).setUnseenMemoryTicks(600));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, false).setUnseenMemoryTicks(600));
     }
-    
-	public boolean shouldBeStationary() {
-		return this.appearAnimationTick > 0 || this.appearDelay > 0;
-	}
-    
-	public void handleEntityEvent(byte p_28844_) {
-		if (p_28844_ == 4) {
-			this.attackAnimationTick = attackAnimationLength;
-		} else if (p_28844_ == 6) {
-			this.appearDelay = 11;
-		} else if (p_28844_ == 7) {
-			for(int i = 0; i < 20; ++i) {
-	            double d0 = this.random.nextGaussian() * 0.02D;
-	            double d1 = this.random.nextGaussian() * 0.02D;
-	            double d2 = this.random.nextGaussian() * 0.02D;
-	            this.level.addParticle(ParticleTypes.POOF, this.getRandomX(1.0D), this.getRandomY(), this.getRandomZ(1.0D), d0, d1, d2);
-	         }
-		} else if (p_28844_ == 8) {
-			this.vanishAnimationTick = vanishAnimationLength;
-		} else if (p_28844_ == 9) {
-			this.appearAnimationTick = appearAnimationLength;
-		} else {
-			super.handleEntityEvent(p_28844_);
-		}
-	}
+
+    public boolean shouldBeStationary() {
+        return this.appearAnimationTick > 0 || this.appearDelay > 0;
+    }
+
+    public void handleEntityEvent(byte p_28844_) {
+        if (p_28844_ == 4) {
+            this.attackAnimationTick = attackAnimationLength;
+        } else if (p_28844_ == 6) {
+            this.appearDelay = 11;
+        } else if (p_28844_ == 7) {
+            for (int i = 0; i < 20; ++i) {
+                double d0 = this.random.nextGaussian() * 0.02D;
+                double d1 = this.random.nextGaussian() * 0.02D;
+                double d2 = this.random.nextGaussian() * 0.02D;
+                this.level.addParticle(ParticleTypes.POOF, this.getRandomX(1.0D), this.getRandomY(), this.getRandomZ(1.0D), d0, d1, d2);
+            }
+        } else if (p_28844_ == 8) {
+            this.vanishAnimationTick = vanishAnimationLength;
+        } else if (p_28844_ == 9) {
+            this.appearAnimationTick = appearAnimationLength;
+        } else {
+            super.handleEntityEvent(p_28844_);
+        }
+    }
 
     public void baseTick() {
         super.baseTick();
         this.tickDownAnimTimers();
-        
-		if (this.appearDelay > 0) {
-			this.appearDelay--;
-		}
 
-		if (!this.level.isClientSide && this.appearDelay == 1) {
-			this.appearAnimationTick = appearAnimationLength;
-			this.level.broadcastEntityEvent(this, (byte) 9);
-		}
+        if (this.appearDelay > 0) {
+            this.appearDelay--;
+        }
+
+        if (!this.level.isClientSide && this.appearDelay == 1) {
+            this.appearAnimationTick = appearAnimationLength;
+            this.level.broadcastEntityEvent(this, (byte) 9);
+        }
     }
-    
-	public void tickDownAnimTimers() {
-		if (this.attackAnimationTick > 0) {
-			this.attackAnimationTick--;
-		}
-		
-		if (this.vanishAnimationTick > 0) {
-			this.vanishAnimationTick--;
-		}
-		
-		if (this.appearAnimationTick > 0) {
-			this.appearAnimationTick--;
-		}
-	}
+
+    public void tickDownAnimTimers() {
+        if (this.attackAnimationTick > 0) {
+            this.attackAnimationTick--;
+        }
+
+        if (this.vanishAnimationTick > 0) {
+            this.vanishAnimationTick--;
+        }
+
+        if (this.appearAnimationTick > 0) {
+            this.appearAnimationTick--;
+        }
+    }
 
     @Override
     public void registerControllers(AnimationData data) {
@@ -163,11 +163,11 @@ public class MageEntity extends AbstractIllager implements IAnimatable, SpawnArm
         } else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("mage_walk", EDefaultLoopTypes.LOOP));
         } else {
-        	if (this.isCelebrating()) {
-        		event.getController().setAnimation(new AnimationBuilder().addAnimation("mage_celebrate", EDefaultLoopTypes.LOOP));
-        	} else {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("mage_idle", EDefaultLoopTypes.LOOP));       		
-        	}
+            if (this.isCelebrating()) {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("mage_celebrate", EDefaultLoopTypes.LOOP));
+            } else {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("mage_idle", EDefaultLoopTypes.LOOP));
+            }
         }
         return PlayState.CONTINUE;
     }
@@ -180,7 +180,7 @@ public class MageEntity extends AbstractIllager implements IAnimatable, SpawnArm
     @Override
     protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance p_180481_1_) {
         super.populateDefaultEquipmentSlots(random, p_180481_1_);
-		equipArmorSet(ModItems.MAGE_ARMOR, this);
+        equipArmorSet(ModItems.MAGE_ARMOR, this);
     }
 
     @Nullable
@@ -192,10 +192,10 @@ public class MageEntity extends AbstractIllager implements IAnimatable, SpawnArm
         return iLivingEntityData;
     }
 
-	public static AttributeSupplier.Builder setCustomAttributes() {
-		return Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.25D)
-				.add(Attributes.FOLLOW_RANGE, 30.0D).add(Attributes.MAX_HEALTH, 40.0D);
-	}
+    public static AttributeSupplier.Builder setCustomAttributes() {
+        return Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.25D)
+                .add(Attributes.FOLLOW_RANGE, 30.0D).add(Attributes.MAX_HEALTH, 40.0D);
+    }
 
     /**
      * Returns whether this Entity is on the same team as the given Entity.
@@ -203,7 +203,7 @@ public class MageEntity extends AbstractIllager implements IAnimatable, SpawnArm
     public boolean isAlliedTo(Entity entityIn) {
         if (super.isAlliedTo(entityIn)) {
             return true;
-        } else if (entityIn instanceof LivingEntity && ((LivingEntity)entityIn).getMobType() == MobType.ILLAGER) {
+        } else if (entityIn instanceof LivingEntity && ((LivingEntity) entityIn).getMobType() == MobType.ILLAGER) {
             return this.getTeam() == null && entityIn.getTeam() == null;
         } else {
             return false;
@@ -240,231 +240,231 @@ public class MageEntity extends AbstractIllager implements IAnimatable, SpawnArm
     }
 
     class CreateIllusionsGoal extends Goal {
-		public MageEntity mob;
-		@Nullable
-		public LivingEntity target;
-		
-		public int nextUseTime;
+        public MageEntity mob;
+        @Nullable
+        public LivingEntity target;
 
-		private final Predicate<Entity> MAGE_CLONE = (p_33346_) -> {
-			return p_33346_ instanceof MageCloneEntity && ((MageCloneEntity)p_33346_).getOwner() != null && ((MageCloneEntity)p_33346_).getOwner() == mob;
-		};
+        public int nextUseTime;
 
-		public CreateIllusionsGoal(MageEntity mob) {
-			this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP, Goal.Flag.LOOK));
-			this.mob = mob;
-			this.target = mob.getTarget();
-		}
+        private final Predicate<Entity> MAGE_CLONE = (p_33346_) -> {
+            return p_33346_ instanceof MageCloneEntity && ((MageCloneEntity) p_33346_).getOwner() != null && ((MageCloneEntity) p_33346_).getOwner() == mob;
+        };
 
-		@Override
-		public boolean isInterruptable() {
-			return mob.shouldBeStationary();
-		}
+        public CreateIllusionsGoal(MageEntity mob) {
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP, Goal.Flag.LOOK));
+            this.mob = mob;
+            this.target = mob.getTarget();
+        }
 
-		public boolean requiresUpdateEveryTick() {
-			return true;
-		}
+        @Override
+        public boolean isInterruptable() {
+            return mob.shouldBeStationary();
+        }
 
-		@Override
-		public boolean canUse() {
-			target = mob.getTarget();
+        public boolean requiresUpdateEveryTick() {
+            return true;
+        }
 
-			int nearbyClones = mob.level.getEntities(mob, mob.getBoundingBox().inflate(30.0D), MAGE_CLONE)
-					.size();
-			
-			return target != null && mob.tickCount >= this.nextUseTime && mob.random.nextInt(10) == 0 && mob.hasLineOfSight(target) && nearbyClones <= 0 && animationsUseable();
-		}
+        @Override
+        public boolean canUse() {
+            target = mob.getTarget();
 
-		@Override
-		public boolean canContinueToUse() {
-			return target != null && !animationsUseable();
-		}
+            int nearbyClones = mob.level.getEntities(mob, mob.getBoundingBox().inflate(30.0D), MAGE_CLONE)
+                    .size();
 
-		@Override
-		public void start() {
-			mob.playSound(SoundEvents.ILLUSIONER_PREPARE_MIRROR, 1.0F, 1.0F);
-			mob.vanishAnimationTick = mob.vanishAnimationLength;
-			mob.level.broadcastEntityEvent(mob, (byte) 8);
-		}
+            return target != null && mob.tickCount >= this.nextUseTime && mob.random.nextInt(10) == 0 && mob.hasLineOfSight(target) && nearbyClones <= 0 && animationsUseable();
+        }
 
-		@Override
-		public void tick() {
-			target = mob.getTarget();
+        @Override
+        public boolean canContinueToUse() {
+            return target != null && !animationsUseable();
+        }
 
-			mob.getNavigation().stop();
-			
-			if (target != null) {
-				mob.getLookControl().setLookAt(target.getX(), target.getEyeY(), target.getZ());
-			}
+        @Override
+        public void start() {
+            mob.playSound(SoundEvents.ILLUSIONER_PREPARE_MIRROR, 1.0F, 1.0F);
+            mob.vanishAnimationTick = mob.vanishAnimationLength;
+            mob.level.broadcastEntityEvent(mob, (byte) 8);
+        }
 
-			if (target != null && mob.vanishAnimationTick == 1) {
-				SummonSpotEntity summonSpot = ModEntityTypes.SUMMON_SPOT.get().create(mob.level);
-				summonSpot.moveTo(target.blockPosition().offset(-12.5 + mob.random.nextInt(25), 0, -12.5 + mob.random.nextInt(25)), 0.0F, 0.0F);
-				summonSpot.setSummonType(3);
-				((ServerLevel)mob.level).addFreshEntityWithPassengers(summonSpot);
-				PositionUtils.moveToCorrectHeight(summonSpot);
+        @Override
+        public void tick() {
+            target = mob.getTarget();
 
-				mob.level.broadcastEntityEvent(mob, (byte) 7);
-				mob.moveTo(summonSpot.blockPosition(), 0.0F, 0.0F);
-				mob.setYBodyRot(mob.random.nextInt(360));
-				mob.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(mob.getX(), mob.getEyeY(), mob.getZ()));
-				mob.appearDelay = 11;
-				mob.level.broadcastEntityEvent(mob, (byte) 6);
-				mob.playSound(SoundEvents.ILLUSIONER_MIRROR_MOVE, 1.0F, 1.0F);
-				PositionUtils.moveToCorrectHeight(mob);
+            mob.getNavigation().stop();
 
-				if (target instanceof Mob) {
-					((Mob)target).setTarget(null);
-					((Mob)target).setLastHurtByMob(null);
-					if (target instanceof NeutralMob) {
-						((NeutralMob)target).stopBeingAngry();
-						((NeutralMob)target).setLastHurtByMob(null);
-						((NeutralMob)target).setTarget(null);
-						((NeutralMob)target).setPersistentAngerTarget(null);
-					}
-				}
+            if (target != null) {
+                mob.getLookControl().setLookAt(target.getX(), target.getEyeY(), target.getZ());
+            }
 
-				int clonesByDifficulty = mob.level.getCurrentDifficultyAt(mob.blockPosition()).getDifficulty().getId();
+            if (target != null && mob.vanishAnimationTick == 1) {
+                SummonSpotEntity summonSpot = ModEntityTypes.SUMMON_SPOT.get().create(mob.level);
+                summonSpot.moveTo(target.blockPosition().offset(-12.5 + mob.random.nextInt(25), 0, -12.5 + mob.random.nextInt(25)), 0.0F, 0.0F);
+                summonSpot.setSummonType(3);
+                ((ServerLevel) mob.level).addFreshEntityWithPassengers(summonSpot);
+                PositionUtils.moveToCorrectHeight(summonSpot);
 
-				for (int i = 0; i < clonesByDifficulty * 5; i ++) {
-					SummonSpotEntity cloneSummonSpot = ModEntityTypes.SUMMON_SPOT.get().create(mob.level);
-					cloneSummonSpot.moveTo(target.blockPosition().offset(-12.5 + mob.random.nextInt(25), 0, -12.5 + mob.random.nextInt(25)), 0.0F, 0.0F);
-					cloneSummonSpot.setSummonType(3);
-					cloneSummonSpot.mobSpawnRotation = mob.random.nextInt(360);
-					((ServerLevel)mob.level).addFreshEntityWithPassengers(cloneSummonSpot);
-					PositionUtils.moveToCorrectHeight(cloneSummonSpot);
+                mob.level.broadcastEntityEvent(mob, (byte) 7);
+                mob.moveTo(summonSpot.blockPosition(), 0.0F, 0.0F);
+                mob.setYBodyRot(mob.random.nextInt(360));
+                mob.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(mob.getX(), mob.getEyeY(), mob.getZ()));
+                mob.appearDelay = 11;
+                mob.level.broadcastEntityEvent(mob, (byte) 6);
+                mob.playSound(SoundEvents.ILLUSIONER_MIRROR_MOVE, 1.0F, 1.0F);
+                PositionUtils.moveToCorrectHeight(mob);
 
-					MageCloneEntity clone = ModEntityTypes.MAGE_CLONE.get().create(mob.level);
-					clone.finalizeSpawn(((ServerLevel)mob.level), mob.level.getCurrentDifficultyAt(cloneSummonSpot.blockPosition()), MobSpawnType.MOB_SUMMONED, (SpawnGroupData)null, (CompoundTag)null);
-					clone.setOwner(mob);
-					clone.setHealth(mob.getHealth());
-					for (EquipmentSlot equipmentslottype : EquipmentSlot.values()) {
-						ItemStack itemstack = mob.getItemBySlot(equipmentslottype);
-						if (!itemstack.isEmpty()) {
-							clone.setItemSlot(equipmentslottype, itemstack.copy());
-							clone.setDropChance(equipmentslottype, 0.0F);
-						}
-					}
-					clone.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(mob.getX(), mob.getEyeY(), mob.getZ()));
-					clone.setDelayedAppear(true);
-					cloneSummonSpot.summonedEntity = clone;
-					cloneSummonSpot.playSound(SoundEvents.ILLUSIONER_MIRROR_MOVE, 1.0F, 1.0F);
-				}
-			}
-		}
+                if (target instanceof Mob) {
+                    ((Mob) target).setTarget(null);
+                    target.setLastHurtByMob(null);
+                    if (target instanceof NeutralMob) {
+                        ((NeutralMob) target).stopBeingAngry();
+                        ((NeutralMob) target).setLastHurtByMob(null);
+                        ((NeutralMob) target).setTarget(null);
+                        ((NeutralMob) target).setPersistentAngerTarget(null);
+                    }
+                }
 
-		public boolean animationsUseable() {
-			return mob.vanishAnimationTick <= 0;
-		}
-		
-		@Override
-		public void stop() {
-			super.stop();
-			this.nextUseTime = mob.tickCount + 60;
-		}
+                int clonesByDifficulty = mob.level.getCurrentDifficultyAt(mob.blockPosition()).getDifficulty().getId();
 
-	}
-    
+                for (int i = 0; i < clonesByDifficulty * 5; i++) {
+                    SummonSpotEntity cloneSummonSpot = ModEntityTypes.SUMMON_SPOT.get().create(mob.level);
+                    cloneSummonSpot.moveTo(target.blockPosition().offset(-12.5 + mob.random.nextInt(25), 0, -12.5 + mob.random.nextInt(25)), 0.0F, 0.0F);
+                    cloneSummonSpot.setSummonType(3);
+                    cloneSummonSpot.mobSpawnRotation = mob.random.nextInt(360);
+                    ((ServerLevel) mob.level).addFreshEntityWithPassengers(cloneSummonSpot);
+                    PositionUtils.moveToCorrectHeight(cloneSummonSpot);
+
+                    MageCloneEntity clone = ModEntityTypes.MAGE_CLONE.get().create(mob.level);
+                    clone.finalizeSpawn(((ServerLevel) mob.level), mob.level.getCurrentDifficultyAt(cloneSummonSpot.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
+                    clone.setOwner(mob);
+                    clone.setHealth(mob.getHealth());
+                    for (EquipmentSlot equipmentslottype : EquipmentSlot.values()) {
+                        ItemStack itemstack = mob.getItemBySlot(equipmentslottype);
+                        if (!itemstack.isEmpty()) {
+                            clone.setItemSlot(equipmentslottype, itemstack.copy());
+                            clone.setDropChance(equipmentslottype, 0.0F);
+                        }
+                    }
+                    clone.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(mob.getX(), mob.getEyeY(), mob.getZ()));
+                    clone.setDelayedAppear(true);
+                    cloneSummonSpot.summonedEntity = clone;
+                    cloneSummonSpot.playSound(SoundEvents.ILLUSIONER_MIRROR_MOVE, 1.0F, 1.0F);
+                }
+            }
+        }
+
+        public boolean animationsUseable() {
+            return mob.vanishAnimationTick <= 0;
+        }
+
+        @Override
+        public void stop() {
+            super.stop();
+            this.nextUseTime = mob.tickCount + 60;
+        }
+
+    }
+
     class LevitateTargetAttackGoal extends Goal {
-		public MageEntity mob;
-		@Nullable
-		public LivingEntity target;
-		
-		public int nextUseTime = 0;
-		
-		public boolean slammedTarget = false;
-		
-		public LevitateTargetAttackGoal(MageEntity mob) {
-			this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP, Goal.Flag.LOOK));
-			this.mob = mob;
-			this.target = mob.getTarget();
-		}
+        public MageEntity mob;
+        @Nullable
+        public LivingEntity target;
 
-		@Override
-		public boolean isInterruptable() {
-			return mob.shouldBeStationary();
-		}
+        public int nextUseTime = 0;
 
-		public boolean requiresUpdateEveryTick() {
-			return true;
-		}
+        public boolean slammedTarget = false;
 
-		@Override
-		public boolean canUse() {
-			target = mob.getTarget();
-			
-			return target != null && !mob.shouldBeStationary() && mob.tickCount >= this.nextUseTime && mob.distanceTo(target) <= 16 && mob.hasLineOfSight(target) && animationsUseable();
-		}
+        public LevitateTargetAttackGoal(MageEntity mob) {
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP, Goal.Flag.LOOK));
+            this.mob = mob;
+            this.target = mob.getTarget();
+        }
 
-		@Override
-		public boolean canContinueToUse() {
-			return target != null && !mob.shouldBeStationary() && !animationsUseable();
-		}
+        @Override
+        public boolean isInterruptable() {
+            return mob.shouldBeStationary();
+        }
 
-		@Override
-		public void start() {
-			this.slammedTarget = false;
-			mob.playSound(ModSoundEvents.NECROMANCER_PREPARE_SUMMON.get(), 1.0F, mob.getVoicePitch());
-			mob.attackAnimationTick = mob.attackAnimationLength;
-			mob.level.broadcastEntityEvent(mob, (byte) 4);
-		}
+        public boolean requiresUpdateEveryTick() {
+            return true;
+        }
 
-		@Override
-		public void tick() {
-			target = mob.getTarget();
+        @Override
+        public boolean canUse() {
+            target = mob.getTarget();
 
-			mob.getNavigation().stop();
-			
-			if (target != null) {
-				mob.getLookControl().setLookAt(target.getX(), target.getEyeY(), target.getZ());
-			}
+            return target != null && !mob.shouldBeStationary() && mob.tickCount >= this.nextUseTime && mob.distanceTo(target) <= 16 && mob.hasLineOfSight(target) && animationsUseable();
+        }
 
-			if (target != null) {
-				target.hurtMarked = true;
-				if (mob.attackAnimationTick >= mob.attackAnimationLength - 32) {
-					if (target.getY() < mob.getY() + 7) {
-						target.push(0, 0.1, 0);
-						if (target.verticalCollision && !target.isOnGround()) {
-							target.hurt(DamageSource.FLY_INTO_WALL, 10.0F);
-						}
-					} else {			
-						target.setDeltaMovement(target.getDeltaMovement().x * 0.5, 0, target.getDeltaMovement().z * 0.5);
-					}
-				} else {
-					if (!this.slammedTarget) {
-						target.fallDistance = 0;
-						target.push(0, -0.5, 0);
-						if (target.verticalCollision) {
-							this.slammedTarget = true;
-							target.hurt(DamageSource.FLY_INTO_WALL, 10.0F);
-						}
-					}
-				}
-			}
-		}
-		
-		@Override
-		public void stop() {
-			super.stop();
-			this.slammedTarget = false;
-			this.nextUseTime = mob.tickCount + 80 + mob.random.nextInt(120);
-		}
+        @Override
+        public boolean canContinueToUse() {
+            return target != null && !mob.shouldBeStationary() && !animationsUseable();
+        }
 
-		public boolean animationsUseable() {
-			return mob.attackAnimationTick <= 0;
-		}
+        @Override
+        public void start() {
+            this.slammedTarget = false;
+            mob.playSound(ModSoundEvents.NECROMANCER_PREPARE_SUMMON.get(), 1.0F, mob.getVoicePitch());
+            mob.attackAnimationTick = mob.attackAnimationLength;
+            mob.level.broadcastEntityEvent(mob, (byte) 4);
+        }
 
-	}
+        @Override
+        public void tick() {
+            target = mob.getTarget();
 
-	class RemainStationaryGoal extends Goal {
+            mob.getNavigation().stop();
 
-		public RemainStationaryGoal() {
-			this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK, Goal.Flag.TARGET, Goal.Flag.JUMP));
-		}
+            if (target != null) {
+                mob.getLookControl().setLookAt(target.getX(), target.getEyeY(), target.getZ());
+            }
 
-		@Override
-		public boolean canUse() {
-			return MageEntity.this.shouldBeStationary();
-		}
-	}
+            if (target != null) {
+                target.hurtMarked = true;
+                if (mob.attackAnimationTick >= mob.attackAnimationLength - 32) {
+                    if (target.getY() < mob.getY() + 7) {
+                        target.push(0, 0.1, 0);
+                        if (target.verticalCollision && !target.isOnGround()) {
+                            target.hurt(DamageSource.FLY_INTO_WALL, 10.0F);
+                        }
+                    } else {
+                        target.setDeltaMovement(target.getDeltaMovement().x * 0.5, 0, target.getDeltaMovement().z * 0.5);
+                    }
+                } else {
+                    if (!this.slammedTarget) {
+                        target.fallDistance = 0;
+                        target.push(0, -0.5, 0);
+                        if (target.verticalCollision) {
+                            this.slammedTarget = true;
+                            target.hurt(DamageSource.FLY_INTO_WALL, 10.0F);
+                        }
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void stop() {
+            super.stop();
+            this.slammedTarget = false;
+            this.nextUseTime = mob.tickCount + 80 + mob.random.nextInt(120);
+        }
+
+        public boolean animationsUseable() {
+            return mob.attackAnimationTick <= 0;
+        }
+
+    }
+
+    class RemainStationaryGoal extends Goal {
+
+        public RemainStationaryGoal() {
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK, Goal.Flag.TARGET, Goal.Flag.JUMP));
+        }
+
+        @Override
+        public boolean canUse() {
+            return MageEntity.this.shouldBeStationary();
+        }
+    }
 }

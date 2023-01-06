@@ -8,15 +8,15 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 
 public class DustParticle extends TextureSheetParticle {
-	
+
     protected DustParticle(ClientLevel level, double xCoord, double yCoord, double zCoord,
-    		SpriteSet spriteSet, double xd, double yd, double zd) {
+                           SpriteSet spriteSet, double xd, double yd, double zd) {
         super(level, xCoord, yCoord, zCoord, xd, yd, zd);
 
         this.quadSize *= 2.5F;
         this.lifetime = 20 + this.random.nextInt(40);
         this.hasPhysics = true;
-        
+
         this.pickSprite(spriteSet);
     }
 
@@ -34,7 +34,7 @@ public class DustParticle extends TextureSheetParticle {
     }
 
     private void fadeOut() {
-        this.alpha = (-(1/(float)lifetime) * age + 1);
+        this.alpha = (-(1 / (float) lifetime) * age + 1);
     }
 
     @OnlyIn(Dist.CLIENT)

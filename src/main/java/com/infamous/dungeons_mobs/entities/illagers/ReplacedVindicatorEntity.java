@@ -22,16 +22,16 @@ public class ReplacedVindicatorEntity implements IAnimatable, IGeoReplacedEntity
     public Mob entity;
 
     @Override
-    public Mob getMob(){
+    public Mob getMob() {
         return this.entity;
     }
 
     @Override
-    public void setMob(Mob mob){
+    public void setMob(Mob mob) {
         this.entity = mob;
     }
 
-    private AnimationFactory factory = GeckoLibUtil.createFactory(this);
+    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     @Override
     public void registerControllers(AnimationData data) {
@@ -44,14 +44,14 @@ public class ReplacedVindicatorEntity implements IAnimatable, IGeoReplacedEntity
             animation += "_mcd";
         }
         String handSide = "_right";
-        if(this.entity.isLeftHanded()){
+        if (this.entity.isLeftHanded()) {
             handSide = "_left";
         }
-        if(this.entity.getMainHandItem().isEmpty()){
+        if (this.entity.getMainHandItem().isEmpty()) {
             handSide = "_both";
         }
         String crossed = "";
-        if(IllagerArmsUtil.armorHasCrossedArms((Vindicator) this.entity, this.entity.getItemBySlot(EquipmentSlot.CHEST))){
+        if (IllagerArmsUtil.armorHasCrossedArms((Vindicator) this.entity, this.entity.getItemBySlot(EquipmentSlot.CHEST))) {
             crossed = "_crossed";
         }
         AnimatedProps cap = AnimatedPropsHelper.getAnimatedPropsCapability(entity);

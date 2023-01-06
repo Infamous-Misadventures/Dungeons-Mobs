@@ -17,40 +17,40 @@ public class ModProjectileHelper {
 
     private static final double RAYTRACE_DISTANCE = 16.0D;
 
-    public static InteractionHand getHandWith(LivingEntity livingEntity, Predicate<Item> itemPredicate){
+    public static InteractionHand getHandWith(LivingEntity livingEntity, Predicate<Item> itemPredicate) {
 
         return itemPredicate.test(livingEntity.getMainHandItem().getItem()) ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
     }
 
     public static ItemStack createRocket(int explosions, DyeColor... dyeColor) {
-       ItemStack rocket = new ItemStack(Items.FIREWORK_ROCKET);
-       ItemStack star = new ItemStack(Items.FIREWORK_STAR);
-       CompoundTag starExplosionNBT = star.getOrCreateTagElement("Explosion");
-       starExplosionNBT.putInt("Type", FireworkRocketItem.Shape.BURST.getId());
-       CompoundTag rocketFireworksNBT = rocket.getOrCreateTagElement("Fireworks");
-       ListTag rocketExplosionsNBT = new ListTag();
-       CompoundTag actualStarExplosionNBT = star.getTagElement("Explosion");
-       if (actualStarExplosionNBT != null) {
-          // making firework pink
-          List<Integer> colorList = Lists.newArrayList();
-          for (int i = 0; i < dyeColor.length; i++) {
-        	  int pinkFireworkColor = dyeColor[i].getFireworkColor();
-        	  colorList.add(pinkFireworkColor);
-          }
-          actualStarExplosionNBT.putIntArray("Colors", colorList);
-          actualStarExplosionNBT.putIntArray("FadeColors", colorList);
-          // adding actualStarExplosionNBT to rocketExplosionsNBT
-          for (int i = 0; i < explosions; i++) { 
-        	  rocketExplosionsNBT.add(actualStarExplosionNBT);
-          }
-       }
-       if (!rocketExplosionsNBT.isEmpty()) {
-    	rocketFireworksNBT.put("Explosions", rocketExplosionsNBT);
-       }
-       return rocket;
+        ItemStack rocket = new ItemStack(Items.FIREWORK_ROCKET);
+        ItemStack star = new ItemStack(Items.FIREWORK_STAR);
+        CompoundTag starExplosionNBT = star.getOrCreateTagElement("Explosion");
+        starExplosionNBT.putInt("Type", FireworkRocketItem.Shape.BURST.getId());
+        CompoundTag rocketFireworksNBT = rocket.getOrCreateTagElement("Fireworks");
+        ListTag rocketExplosionsNBT = new ListTag();
+        CompoundTag actualStarExplosionNBT = star.getTagElement("Explosion");
+        if (actualStarExplosionNBT != null) {
+            // making firework pink
+            List<Integer> colorList = Lists.newArrayList();
+            for (int i = 0; i < dyeColor.length; i++) {
+                int pinkFireworkColor = dyeColor[i].getFireworkColor();
+                colorList.add(pinkFireworkColor);
+            }
+            actualStarExplosionNBT.putIntArray("Colors", colorList);
+            actualStarExplosionNBT.putIntArray("FadeColors", colorList);
+            // adding actualStarExplosionNBT to rocketExplosionsNBT
+            for (int i = 0; i < explosions; i++) {
+                rocketExplosionsNBT.add(actualStarExplosionNBT);
+            }
+        }
+        if (!rocketExplosionsNBT.isEmpty()) {
+            rocketFireworksNBT.put("Explosions", rocketExplosionsNBT);
+        }
+        return rocket;
     }
 
-    public static HitResult getLaserRayTrace(LivingEntity shooter){
+    public static HitResult getLaserRayTrace(LivingEntity shooter) {
         Level world = shooter.level;
         BlockHitResult blockRTR = (BlockHitResult) shooter.pick(RAYTRACE_DISTANCE, 1.0F, false);
         Vec3 startVec = shooter.getEyePosition(1.0F);
@@ -64,7 +64,7 @@ public class ModProjectileHelper {
 
         if (entityRTR != null) {
             return entityRTR;
-        } else{
+        } else {
             return blockRTR;
         }
     }

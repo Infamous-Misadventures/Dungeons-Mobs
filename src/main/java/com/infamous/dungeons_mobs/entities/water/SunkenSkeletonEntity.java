@@ -75,7 +75,6 @@ public class SunkenSkeletonEntity extends AbstractSkeleton implements CrossbowAt
     }
 
 
-
     public static AttributeSupplier.Builder setCustomAttributes() {
         return AbstractSkeleton.createAttributes();
     }
@@ -162,7 +161,7 @@ public class SunkenSkeletonEntity extends AbstractSkeleton implements CrossbowAt
 
                 this.bowGoal.setMinAttackInterval(i);
                 this.goalSelector.addGoal(2, this.bowGoal);
-            } else if(crossbowStack.getItem() instanceof CrossbowItem){
+            } else if (crossbowStack.getItem() instanceof CrossbowItem) {
                 this.goalSelector.addGoal(2, this.crossbowGoal);
             } else {
                 this.goalSelector.addGoal(2, this.meleeGoal);
@@ -180,17 +179,17 @@ public class SunkenSkeletonEntity extends AbstractSkeleton implements CrossbowAt
     protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance p_180481_1_) {
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.CROSSBOW));
     }
-    
+
     @Override
     public void playAmbientSound() {
-    	if (this.isInWater()) {
-	        SoundEvent soundevent = this.getAmbientSound();
-	        if (soundevent != null) {
-	           this.playSound(soundevent, 0.5F, this.getVoicePitch());
-	        }
-    	} else {
-    		super.playAmbientSound();
-    	}
+        if (this.isInWater()) {
+            SoundEvent soundevent = this.getAmbientSound();
+            if (soundevent != null) {
+                this.playSound(soundevent, 0.5F, this.getVoicePitch());
+            }
+        } else {
+            super.playAmbientSound();
+        }
     }
 
     @Override
@@ -212,7 +211,7 @@ public class SunkenSkeletonEntity extends AbstractSkeleton implements CrossbowAt
     protected SoundEvent getStepSound() {
         return SoundEvents.SKELETON_STEP;
     }
-    
+
     @Override
     protected SoundEvent getSwimSound() {
         return ModSoundEvents.SUNKEN_SKELETON_STEP.get();
@@ -227,16 +226,16 @@ public class SunkenSkeletonEntity extends AbstractSkeleton implements CrossbowAt
     public void shootCrossbowProjectile(LivingEntity target, ItemStack crossbow, Projectile projectile, float inaccuracy) {
         this.shootCrossbowProjectile(this, target, projectile, inaccuracy, 1.6F);
     }
-    
+
     @Override
     public void shootCrossbowProjectile(LivingEntity p_234279_1_, LivingEntity p_234279_2_,
-    		Projectile p_234279_3_, float p_234279_4_, float p_234279_5_) {
+                                        Projectile p_234279_3_, float p_234279_4_, float p_234279_5_) {
         double d0 = p_234279_2_.getX() - p_234279_1_.getX();
         double d1 = p_234279_2_.getZ() - p_234279_1_.getZ();
-        double d2 = (double)Mth.sqrt((float) (d0 * d0 + d1 * d1));
-        double d3 = p_234279_2_.getY(0.3333333333333333D) - p_234279_3_.getY() + d2 * (double)0.2F;
+        double d2 = Mth.sqrt((float) (d0 * d0 + d1 * d1));
+        double d3 = p_234279_2_.getY(0.3333333333333333D) - p_234279_3_.getY() + d2 * (double) 0.2F;
         Vector3f vector3f = this.getProjectileShotVector(p_234279_1_, new Vec3(d0, d3, d1), p_234279_4_);
-        p_234279_3_.shoot((double)vector3f.x(), (double)vector3f.y(), (double)vector3f.z(), p_234279_5_, (float)(14 - p_234279_1_.level.getDifficulty().getId() * 4));
+        p_234279_3_.shoot(vector3f.x(), vector3f.y(), vector3f.z(), p_234279_5_, (float) (14 - p_234279_1_.level.getDifficulty().getId() * 4));
         p_234279_1_.playSound(this.isInWater() ? ModSoundEvents.SUNKEN_SKELETON_SHOOT.get() : SoundEvents.CROSSBOW_SHOOT, 1.0F, 1.0F / (p_234279_1_.getRandom().nextFloat() * 0.4F + 0.8F));
     }
 
@@ -247,9 +246,9 @@ public class SunkenSkeletonEntity extends AbstractSkeleton implements CrossbowAt
 
     @Override
     public void performRangedAttack(LivingEntity target, float p_82196_2_) {
-        if(this.isHolding(itemStack -> itemStack.getItem() instanceof BowItem)){
+        if (this.isHolding(itemStack -> itemStack.getItem() instanceof BowItem)) {
             super.performRangedAttack(target, p_82196_2_);
-        } else{
+        } else {
             this.performCrossbowAttack(this, 1.6F);
         }
     }

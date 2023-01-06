@@ -16,23 +16,23 @@ public class Convertible implements INBTSerializable<CompoundTag> {
     int conversionTime;
     int prepareConversionTime;
 
-    public void tickConversionTime(){
-        this.setConversionTime(this.getConversionTime() -1);
+    public void tickConversionTime() {
+        this.setConversionTime(this.getConversionTime() - 1);
     }
 
-    public <T extends Mob> T doConversion(Mob original, EntityType<T> convertToType, BiConsumer<Mob, T> onConversion){
+    public <T extends Mob> T doConversion(Mob original, EntityType<T> convertToType, BiConsumer<Mob, T> onConversion) {
         T convertedTo = original.convertTo(convertToType, true);
         onConversion.accept(original, convertedTo);
         return convertedTo;
 
     }
 
-    public void startConversion(int conversionLength){
+    public void startConversion(int conversionLength) {
         this.setConverting(true);
         this.setConversionTime(conversionLength);
     }
 
-    public void tickPrepareConversionTime(){
+    public void tickPrepareConversionTime() {
         this.setPrepareConversionTime(this.getPrepareConversionTime() + 1);
     }
 
@@ -82,7 +82,7 @@ public class Convertible implements INBTSerializable<CompoundTag> {
     @Override
     public void deserializeNBT(CompoundTag tag) {
         this.setPrepareConversionTime(tag.getInt("prepareConversionTime"));
-        if(tag.contains("DrownedConversionTime", 99) && tag.getInt("conversionTime") > -1){
+        if (tag.contains("DrownedConversionTime", 99) && tag.getInt("conversionTime") > -1) {
             this.startConversion(tag.getInt("conversionTime"));
         }
     }

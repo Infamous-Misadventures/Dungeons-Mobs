@@ -17,7 +17,7 @@ public class IceologerArmorGearRenderer extends ArmorGearRenderer<IceologerArmor
     public void render(float partialTicks, PoseStack stack, VertexConsumer bufferIn, int packedLightIn) {
 
         AnimatedGeoModel<IceologerArmorGear> geoModelProvider = getGeoModelProvider();
-        if(geoModelProvider instanceof IceologerArmorGearModel){
+        if (geoModelProvider instanceof IceologerArmorGearModel) {
             ((IceologerArmorGearModel<IceologerArmorGear>) geoModelProvider).setWearer(this.entityLiving);
         }
         super.render(partialTicks, stack, bufferIn, packedLightIn);

@@ -23,15 +23,13 @@ import java.util.List;
 
 import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
-import net.minecraft.world.entity.Entity.RemovalReason;
-
 public class TridentStormEntity extends Entity implements IAnimatable, IAnimationTickable {
 
-	AnimationFactory factory = GeckoLibUtil.createFactory(this);
-	
-	public int lifeTime;
-	public Entity owner;
-	
+    AnimationFactory factory = GeckoLibUtil.createFactory(this);
+
+    public int lifeTime;
+    public Entity owner;
+
     public TridentStormEntity(EntityType<? extends TridentStormEntity> entityTypeIn, Level worldIn) {
         super(entityTypeIn, worldIn);
     }
@@ -41,13 +39,13 @@ public class TridentStormEntity extends Entity implements IAnimatable, IAnimatio
         data.addAnimationController(new AnimationController(this, "controller", 1, this::predicate));
     }
 
-	@Override
-	public int tickTimer() {
-		return this.tickCount;
-	}
+    @Override
+    public int tickTimer() {
+        return this.tickCount;
+    }
 
     private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
-    	event.getController().setAnimation(new AnimationBuilder().addAnimation("trident_storm_strike", LOOP));       
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("trident_storm_strike", LOOP));
         return PlayState.CONTINUE;
     }
 
@@ -55,60 +53,60 @@ public class TridentStormEntity extends Entity implements IAnimatable, IAnimatio
     public AnimationFactory getFactory() {
         return factory;
     }
-    
+
     @Override
     public void baseTick() {
-    	super.baseTick();
-    	
-    	this.refreshDimensions();
-    	
-			List<Entity> list = this.level.getEntities(this, this.getBoundingBox(), Entity::isAlive);
-			if (!list.isEmpty() && !this.level.isClientSide) {
-				for (Entity entity : list) {
-					if(entity instanceof LivingEntity){
-	                    LivingEntity livingEntity = (LivingEntity)entity;
-						if (this.lifeTime >= 80 && this.lifeTime <= 90) {
-							if (this.owner != null) {
-								if (livingEntity != this.owner) {
-									livingEntity.hurt(ModDamageSources.summonedTridentStorm(this, owner), 20); 
-								}
-							} else {
-		                        livingEntity.hurt(ModDamageSources.tridentStorm(this), 20); 
-							}
-		                }
-					}
-					
-				}
-			}
-    	
-    	this.lifeTime ++;
-    	
-    	if (this.lifeTime == 80) {
-    		this.playSound(ModSoundEvents.DROWNED_NECROMANCER_TRIDENT_STORM_HIT.get(), 3.0F, 1.0F);
-    	}
-    			
-    	if (this.lifeTime >= 500 && !this.level.isClientSide) {
-    		this.remove(RemovalReason.DISCARDED);
-    	}
+        super.baseTick();
+
+        this.refreshDimensions();
+
+        List<Entity> list = this.level.getEntities(this, this.getBoundingBox(), Entity::isAlive);
+        if (!list.isEmpty() && !this.level.isClientSide) {
+            for (Entity entity : list) {
+                if (entity instanceof LivingEntity) {
+                    LivingEntity livingEntity = (LivingEntity) entity;
+                    if (this.lifeTime >= 80 && this.lifeTime <= 90) {
+                        if (this.owner != null) {
+                            if (livingEntity != this.owner) {
+                                livingEntity.hurt(ModDamageSources.summonedTridentStorm(this, owner), 20);
+                            }
+                        } else {
+                            livingEntity.hurt(ModDamageSources.tridentStorm(this), 20);
+                        }
+                    }
+                }
+
+            }
+        }
+
+        this.lifeTime++;
+
+        if (this.lifeTime == 80) {
+            this.playSound(ModSoundEvents.DROWNED_NECROMANCER_TRIDENT_STORM_HIT.get(), 3.0F, 1.0F);
+        }
+
+        if (this.lifeTime >= 500 && !this.level.isClientSide) {
+            this.remove(RemovalReason.DISCARDED);
+        }
     }
 
-	@Override
-	protected void defineSynchedData() {
+    @Override
+    protected void defineSynchedData() {
 
-	}
+    }
 
-	@Override
-	protected void readAdditionalSaveData(CompoundTag p_70037_1_) {
-		
-	}
+    @Override
+    protected void readAdditionalSaveData(CompoundTag p_70037_1_) {
 
-	@Override
-	protected void addAdditionalSaveData(CompoundTag p_213281_1_) {
-		
-	}
+    }
 
-	@Override
-	public Packet<?> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
-	}
+    @Override
+    protected void addAdditionalSaveData(CompoundTag p_213281_1_) {
+
+    }
+
+    @Override
+    public Packet<?> getAddEntityPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
+    }
 }

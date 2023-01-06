@@ -12,8 +12,8 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.function.Supplier;
 
 public class AnimatedPropsMessage {
-    private int entityId;
-    private AnimatedProps cap;
+    private final int entityId;
+    private final AnimatedProps cap;
 
     public AnimatedPropsMessage(int entityId, AnimatedProps cap) {
         this.entityId = entityId;

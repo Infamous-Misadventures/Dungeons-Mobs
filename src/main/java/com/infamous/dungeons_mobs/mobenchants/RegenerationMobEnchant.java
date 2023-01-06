@@ -10,8 +10,6 @@ import static com.infamous.dungeons_mobs.DungeonsMobs.PROXY;
 import static com.infamous.dungeons_mobs.mobenchants.NewMobEnchantUtils.executeIfPresentWithLevel;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchants.REGENERATION;
 
-import baguchan.enchantwithmob.mobenchant.MobEnchant.Properties;
-
 public class RegenerationMobEnchant extends MobEnchant {
 
     public RegenerationMobEnchant(Properties properties) {
@@ -20,7 +18,7 @@ public class RegenerationMobEnchant extends MobEnchant {
 
     @SubscribeEvent
     public static void onLivingUpdate(LivingEvent.LivingTickEvent event) {
-        LivingEntity entity = (LivingEntity) event.getEntity();
+        LivingEntity entity = event.getEntity();
         executeIfPresentWithLevel(entity, REGENERATION.get(), (level) -> {
             if (entity.getHealth() < entity.getMaxHealth() && entity.tickCount % getTickCountForLevel(level) == 0) {
                 entity.heal(1.0F);

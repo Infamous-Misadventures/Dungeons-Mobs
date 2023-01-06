@@ -17,7 +17,7 @@ import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 public class AnimatedPropsEvents {
 
     @SubscribeEvent
-    public static void onPlayerStartTracking(PlayerEvent.StartTracking event){
+    public static void onPlayerStartTracking(PlayerEvent.StartTracking event) {
         Player player = event.getEntity();
         Entity target = event.getTarget();
         if (player instanceof ServerPlayer && target instanceof Vindicator) {

@@ -20,12 +20,12 @@ public class SpawnArmoredHelper {
         if (armorSet.getFeet() != null) {
             mobEntity.setItemSlot(EquipmentSlot.FEET, new ItemStack(armorSet.getFeet().get()));
         }
-        if(DungeonsMobsConfig.COMMON.ENABLE_MOB_ARMOR_DROPS.get()){
+        if (DungeonsMobsConfig.COMMON.ENABLE_MOB_ARMOR_DROPS.get()) {
             mobEntity.setDropChance(EquipmentSlot.HEAD, 0.05F);
             mobEntity.setDropChance(EquipmentSlot.CHEST, 0.05F);
             mobEntity.setDropChance(EquipmentSlot.LEGS, 0.05F);
             mobEntity.setDropChance(EquipmentSlot.FEET, 0.05F);
-        }else{
+        } else {
             mobEntity.setDropChance(EquipmentSlot.HEAD, 0.0F);
             mobEntity.setDropChance(EquipmentSlot.CHEST, 0.0F);
             mobEntity.setDropChance(EquipmentSlot.LEGS, 0.0F);

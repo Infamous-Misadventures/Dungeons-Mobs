@@ -23,7 +23,7 @@ public class CustomZombieRenderer extends ZombieRenderer {
 
     @Override
     protected void scale(Zombie zombieEntity, PoseStack matrixStack, float v) {
-        if(zombieEntity instanceof Husk){
+        if (zombieEntity instanceof Husk) {
             float scaleFactor = 1.2F;
             matrixStack.scale(scaleFactor, scaleFactor, scaleFactor);
         }
@@ -31,16 +31,13 @@ public class CustomZombieRenderer extends ZombieRenderer {
     }
 
     public ResourceLocation getTextureLocation(Zombie zombieEntity) {
-        if(zombieEntity instanceof JungleZombieEntity){
+        if (zombieEntity instanceof JungleZombieEntity) {
             return JUNGLE_ZOMBIE_TEXUTRE;
-        }
-        else if(zombieEntity instanceof FrozenZombieEntity){
+        } else if (zombieEntity instanceof FrozenZombieEntity) {
             return FROZEN_ZOMBIE_TEXTURE;
-        }
-        else if(zombieEntity instanceof Husk){
+        } else if (zombieEntity instanceof Husk) {
             return HUSK_ZOMBIE_TEXTURE;
-        }
-        else {
+        } else {
             return super.getTextureLocation(zombieEntity);
         }
     }

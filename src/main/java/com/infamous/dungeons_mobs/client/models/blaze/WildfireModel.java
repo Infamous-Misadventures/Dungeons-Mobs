@@ -23,7 +23,7 @@ public class WildfireModel extends AnimatedGeoModel {
 
     @Override
     public ResourceLocation getModelResource(Object entity) {
-        return new ResourceLocation(DungeonsMobs.MODID, "geo/wildfire.geo.json") ;
+        return new ResourceLocation(DungeonsMobs.MODID, "geo/wildfire.geo.json");
     }
 
     @Override
@@ -38,39 +38,39 @@ public class WildfireModel extends AnimatedGeoModel {
         LivingEntity entityIn = (LivingEntity) entity;
 
         IBone head = this.getAnimationProcessor().getBone("head");
-        
+
         IBone shield1 = this.getAnimationProcessor().getBone("shield1");
         IBone shield2 = this.getAnimationProcessor().getBone("shield2");
         IBone shield3 = this.getAnimationProcessor().getBone("shield3");
         IBone shield4 = this.getAnimationProcessor().getBone("shield4");
-        
-        WildfireEntity wildfire = ((WildfireEntity)entity);
-        
+
+        WildfireEntity wildfire = ((WildfireEntity) entity);
+
         if (wildfire.getShields() >= 4) {
-        	shield1.setHidden(false);
-        	shield2.setHidden(false);
-        	shield3.setHidden(false);
-        	shield4.setHidden(false);
+            shield1.setHidden(false);
+            shield2.setHidden(false);
+            shield3.setHidden(false);
+            shield4.setHidden(false);
         } else if (wildfire.getShields() == 3) {
-        	shield1.setHidden(true);
-        	shield2.setHidden(false);
-        	shield3.setHidden(false);
-        	shield4.setHidden(false);
+            shield1.setHidden(true);
+            shield2.setHidden(false);
+            shield3.setHidden(false);
+            shield4.setHidden(false);
         } else if (wildfire.getShields() == 2) {
-        	shield1.setHidden(true);
-        	shield2.setHidden(true);
-        	shield3.setHidden(false);
-        	shield4.setHidden(false);
+            shield1.setHidden(true);
+            shield2.setHidden(true);
+            shield3.setHidden(false);
+            shield4.setHidden(false);
         } else if (wildfire.getShields() == 1) {
-        	shield1.setHidden(true);
-        	shield2.setHidden(true);
-        	shield3.setHidden(true);
-        	shield4.setHidden(false);
+            shield1.setHidden(true);
+            shield2.setHidden(true);
+            shield3.setHidden(true);
+            shield4.setHidden(false);
         } else if (wildfire.getShields() <= 0) {
-        	shield1.setHidden(true);
-        	shield2.setHidden(true);
-        	shield3.setHidden(true);
-        	shield4.setHidden(true);
+            shield1.setHidden(true);
+            shield2.setHidden(true);
+            shield3.setHidden(true);
+            shield4.setHidden(true);
         }
 
         EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
@@ -79,15 +79,15 @@ public class WildfireModel extends AnimatedGeoModel {
             head.setRotationY(head.getRotationY() + (extraData.netHeadYaw * ((float) Math.PI / 180F)));
         }
     }
-    
-	@Override
-	public void setMolangQueries(IAnimatable animatable, double currentTick) {
-		super.setMolangQueries(animatable, currentTick);
-		
-		MolangParser parser = GeckoLibCache.getInstance().parser;
-		LivingEntity livingEntity = (LivingEntity) animatable;
-		Vec3 velocity = livingEntity.getDeltaMovement();
-		float groundSpeed = Mth.sqrt((float) ((velocity.x * velocity.x) + (velocity.z * velocity.z)));
-		parser.setValue("query.ground_speed", () -> groundSpeed * 30);
-	}
+
+    @Override
+    public void setMolangQueries(IAnimatable animatable, double currentTick) {
+        super.setMolangQueries(animatable, currentTick);
+
+        MolangParser parser = GeckoLibCache.getInstance().parser;
+        LivingEntity livingEntity = (LivingEntity) animatable;
+        Vec3 velocity = livingEntity.getDeltaMovement();
+        float groundSpeed = Mth.sqrt((float) ((velocity.x * velocity.x) + (velocity.z * velocity.z)));
+        parser.setValue("query.ground_speed", () -> groundSpeed * 30);
+    }
 }

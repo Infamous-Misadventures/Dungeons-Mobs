@@ -40,9 +40,6 @@ import java.util.function.Predicate;
 
 import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
-import net.minecraft.world.entity.Entity.MovementEmission;
-import net.minecraft.world.entity.Entity.RemovalReason;
-
 public class IceCloudEntity extends Entity implements IAnimatable {
 
     private static final Predicate<Entity> ALIVE = (p_213685_0_) -> {
@@ -61,7 +58,7 @@ public class IceCloudEntity extends Entity implements IAnimatable {
     public boolean falling;
     public boolean hasFormed;
     public int soundLoopTick;
-    private AnimationFactory factory = GeckoLibUtil.createFactory(this);
+    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     public IceCloudEntity(Level world) {
         super(ModEntityTypes.ICE_CLOUD.get(), world);
@@ -248,11 +245,7 @@ public class IceCloudEntity extends Entity implements IAnimatable {
     }
 
     protected boolean canHitEntity(Entity p_230298_1_) {
-        if (!p_230298_1_.isSpectator() && p_230298_1_.isAlive() && p_230298_1_.isPickable()) {
-            return true;
-        } else {
-            return false;
-        }
+        return !p_230298_1_.isSpectator() && p_230298_1_.isAlive() && p_230298_1_.isPickable();
     }
 
     protected void onHit(HitResult p_70227_1_) {

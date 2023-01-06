@@ -10,9 +10,6 @@ import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
-import java.util.Random;
-
-import net.minecraft.world.entity.ai.goal.Goal.Flag;
 
 public class GoToWaterGoal extends Goal {
     public final PathfinderMob mob;

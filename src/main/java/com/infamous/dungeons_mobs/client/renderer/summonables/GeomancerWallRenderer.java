@@ -11,21 +11,21 @@ import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 public class GeomancerWallRenderer extends GeoEntityRenderer<GeomancerWallEntity> {
-	public GeomancerWallRenderer(EntityRendererProvider.Context renderManager) {
-		super(renderManager, new GeomancerConstructModel());
-		//this.addLayer(new GeoEyeLayer<>(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/enchanter/enchanter_eyes.png")));
-		//this.addLayer(new GeoHeldItemLayer<>(this, 0.0, 0.0, 0.5));
-	}
-	
-	protected void applyRotations(GeomancerWallEntity entityLiving, PoseStack matrixStackIn, float ageInTicks,
-			float rotationYaw, float partialTicks) {
-		super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
-	}
+    public GeomancerWallRenderer(EntityRendererProvider.Context renderManager) {
+        super(renderManager, new GeomancerConstructModel());
+        //this.addLayer(new GeoEyeLayer<>(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/enchanter/enchanter_eyes.png")));
+        //this.addLayer(new GeoHeldItemLayer<>(this, 0.0, 0.0, 0.5));
+    }
 
-	@Override
-	public RenderType getRenderType(GeomancerWallEntity animatable, float partialTicks, PoseStack stack,
-			MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn,
-			ResourceLocation textureLocation) {
-		return RenderType.entityTranslucent(getTextureLocation(animatable));
-	}
+    protected void applyRotations(GeomancerWallEntity entityLiving, PoseStack matrixStackIn, float ageInTicks,
+                                  float rotationYaw, float partialTicks) {
+        super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
+    }
+
+    @Override
+    public RenderType getRenderType(GeomancerWallEntity animatable, float partialTicks, PoseStack stack,
+                                    MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn,
+                                    ResourceLocation textureLocation) {
+        return RenderType.entityTranslucent(getTextureLocation(animatable));
+    }
 }

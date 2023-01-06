@@ -8,15 +8,15 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 
 public class SnowflakeParticle extends TextureSheetParticle {
-	
+
     protected SnowflakeParticle(ClientLevel level, double xCoord, double yCoord, double zCoord,
-    		SpriteSet spriteSet, double xd, double yd, double zd) {
+                                SpriteSet spriteSet, double xd, double yd, double zd) {
         super(level, xCoord, yCoord, zCoord, xd, yd, zd);
 
         this.quadSize *= 1.25F;
         this.lifetime = 5 + this.random.nextInt(10);
         this.hasPhysics = false;
-        
+
         this.pickSprite(spriteSet);
     }
 

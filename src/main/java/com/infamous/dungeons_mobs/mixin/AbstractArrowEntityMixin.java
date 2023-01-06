@@ -19,9 +19,9 @@ public abstract class AbstractArrowEntityMixin extends Projectile {
     }
 
     @Inject(at = @At("RETURN"), method = "getWaterInertia", cancellable = true)
-    private void checkShotByAquaticMob(CallbackInfoReturnable<Float> cir){
+    private void checkShotByAquaticMob(CallbackInfoReturnable<Float> cir) {
         Entity owner = this.getOwner();
-        if(owner instanceof IAquaticMob){
+        if (owner instanceof IAquaticMob) {
             cir.setReturnValue(0.99F);
         }
     }

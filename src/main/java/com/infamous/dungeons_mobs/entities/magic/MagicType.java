@@ -20,7 +20,7 @@ public enum MagicType {
         this.particleSpeed = new double[]{xParticleSpeed, yParticleSpeed, zParticleSpeed};
     }
 
-    public double[] getParticleSpeed(){
+    public double[] getParticleSpeed() {
         return this.particleSpeed;
     }
 
@@ -29,7 +29,7 @@ public enum MagicType {
     }
 
     public static MagicType getFromId(int idIn) {
-        for(MagicType magicType : values()) {
+        for (MagicType magicType : values()) {
             if (idIn == magicType.id) {
                 return magicType;
             }

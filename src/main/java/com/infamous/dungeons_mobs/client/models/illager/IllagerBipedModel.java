@@ -20,8 +20,6 @@ import net.minecraft.world.item.UseAnim;
 
 import static com.infamous.dungeons_mobs.entities.illagers.IllagerArmsUtil.armorHasCrossedArms;
 
-import net.minecraft.client.model.HumanoidModel.ArmPose;
-
 public class IllagerBipedModel<T extends AbstractIllager> extends HumanoidModel<T> {
     public ModelPart nose = this.head.getChild("nose");
     public ModelPart jacket = this.body.getChild("jacket");
@@ -96,10 +94,9 @@ public class IllagerBipedModel<T extends AbstractIllager> extends HumanoidModel<
         if (entityIn.getArmPose() != AbstractIllager.IllagerArmPose.CROSSED || !armorHasCrossedArms(entityIn, entityIn.getItemBySlot(EquipmentSlot.CHEST))) {
             switch (useaction) {
                 case BLOCK:
-                    if(entityIn.isBlocking()){
+                    if (entityIn.isBlocking()) {
                         this.rightArmPose = HumanoidModel.ArmPose.BLOCK;
-                    }
-                    else{
+                    } else {
                         this.rightArmPose = HumanoidModel.ArmPose.ITEM;
                     }
                     break;
@@ -131,10 +128,9 @@ public class IllagerBipedModel<T extends AbstractIllager> extends HumanoidModel<
         if (entityIn.getArmPose() != AbstractIllager.IllagerArmPose.CROSSED || !armorHasCrossedArms(entityIn, entityIn.getItemBySlot(EquipmentSlot.CHEST))) {
             switch (useaction) {
                 case BLOCK:
-                    if(entityIn.isBlocking()){
+                    if (entityIn.isBlocking()) {
                         this.leftArmPose = HumanoidModel.ArmPose.BLOCK;
-                    }
-                    else{
+                    } else {
                         this.leftArmPose = HumanoidModel.ArmPose.ITEM;
                     }
                     break;
@@ -177,7 +173,7 @@ public class IllagerBipedModel<T extends AbstractIllager> extends HumanoidModel<
 
         float f = 1.0F;
         if (flag) {
-            f = (float)entityIn.getDeltaMovement().lengthSqr();
+            f = (float) entityIn.getDeltaMovement().lengthSqr();
             f = f / 0.2F;
             f = f * f * f;
         }
@@ -196,27 +192,27 @@ public class IllagerBipedModel<T extends AbstractIllager> extends HumanoidModel<
         }
 
         if (this.riding) {
-            this.rightArm.xRot = (-(float)Math.PI / 5F);
+            this.rightArm.xRot = (-(float) Math.PI / 5F);
             this.rightArm.yRot = 0.0F;
             this.rightArm.zRot = 0.0F;
-            this.leftArm.xRot = (-(float)Math.PI / 5F);
+            this.leftArm.xRot = (-(float) Math.PI / 5F);
             this.leftArm.yRot = 0.0F;
             this.leftArm.zRot = 0.0F;
             this.leftLeg.xRot = -1.4137167F;
-            this.leftLeg.yRot = ((float)Math.PI / 10F);
+            this.leftLeg.yRot = ((float) Math.PI / 10F);
             this.leftLeg.zRot = 0.07853982F;
             this.rightLeg.xRot = -1.4137167F;
-            this.rightLeg.yRot = (-(float)Math.PI / 10F);
+            this.rightLeg.yRot = (-(float) Math.PI / 10F);
             this.rightLeg.zRot = -0.07853982F;
         } else {
             this.leftLeg.xRot = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount * 0.5F;
             this.leftLeg.yRot = 0.0F;
             this.leftLeg.zRot = 0.0F;
-            this.rightLeg.xRot = Mth.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount * 0.5F;
+            this.rightLeg.xRot = Mth.cos(limbSwing * 0.6662F + (float) Math.PI) * 1.4F * limbSwingAmount * 0.5F;
             this.rightLeg.yRot = 0.0F;
             this.rightLeg.zRot = 0.0F;
         }
-        if (entityIn instanceof MountaineerEntity && ((MountaineerEntity)entityIn).isClimbing()) {
+        if (entityIn instanceof MountaineerEntity && ((MountaineerEntity) entityIn).isClimbing()) {
             this.rightArm.xRot = -1.8849558F + Mth.sin(ageInTicks * 0.35F) * 0.5F;
             this.leftArm.xRot = -1.8849558F - Mth.sin(ageInTicks * 0.35F) * 0.5F;
         } else {
@@ -224,7 +220,7 @@ public class IllagerBipedModel<T extends AbstractIllager> extends HumanoidModel<
                 case ATTACKING:
                     if (!entityIn.getMainHandItem().isEmpty()
                             && !(entityIn.getMainHandItem().getItem() instanceof ProjectileWeaponItem)
-                            && !(entityIn.isBlocking())){
+                            && !(entityIn.isBlocking())) {
                         // raises arm with weapon, moves left arm back and forth while attacking
                         AnimationUtils.swingWeaponDown(this.rightArm, this.leftArm, entityIn, this.attackTime, ageInTicks);
                     }

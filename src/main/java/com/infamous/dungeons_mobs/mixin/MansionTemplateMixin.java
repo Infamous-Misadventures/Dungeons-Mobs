@@ -42,7 +42,7 @@ public abstract class MansionTemplateMixin extends TemplateStructurePiece {
             EntityType<?> entityType = ForgeRegistries.ENTITY_TYPES.getValue(entityResourceLocation);
             if (entityType != null) {
                 Entity entity = entityType.create(worldIn.getLevel());
-                if(entity instanceof Mob){
+                if (entity instanceof Mob) {
                     Mob mansionSpawn = (Mob) entity;
                     mansionSpawn.setPersistenceRequired();
                     mansionSpawn.moveTo(pos, 0.0F, 0.0F);

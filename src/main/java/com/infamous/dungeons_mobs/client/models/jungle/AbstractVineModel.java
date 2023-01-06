@@ -10,30 +10,30 @@ import software.bernie.geckolib3.resource.GeckoLibCache;
 
 public abstract class AbstractVineModel extends AnimatedGeoModel<AbstractVineEntity> {
 
-	@Override
-	public void setCustomAnimations(AbstractVineEntity entity, int uniqueID, AnimationEvent customPredicate) {
-		super.setCustomAnimations(entity, uniqueID, customPredicate);
+    @Override
+    public void setCustomAnimations(AbstractVineEntity entity, int uniqueID, AnimationEvent customPredicate) {
+        super.setCustomAnimations(entity, uniqueID, customPredicate);
 
-		IBone everything = this.getAnimationProcessor().getBone("everything");
+        IBone everything = this.getAnimationProcessor().getBone("everything");
 
-		everything.setHidden(entity.tickCount <= entity.getAnimationTransitionTime());
+        everything.setHidden(entity.tickCount <= entity.getAnimationTransitionTime());
 
-		for (int i = 1; i < 26; i++) {
-			IBone part = this.getAnimationProcessor().getBone("part" + i);
-			int partsToShow = 26 - entity.getLengthInSegments();
-			if (part != null) {
-				part.setHidden(i < partsToShow);
-			}
-		}
+        for (int i = 1; i < 26; i++) {
+            IBone part = this.getAnimationProcessor().getBone("part" + i);
+            int partsToShow = 26 - entity.getLengthInSegments();
+            if (part != null) {
+                part.setHidden(i < partsToShow);
+            }
+        }
 
-	}
+    }
 
-	@Override
-	public void setMolangQueries(IAnimatable animatable, double currentTick) {
-		super.setMolangQueries(animatable, currentTick);
+    @Override
+    public void setMolangQueries(IAnimatable animatable, double currentTick) {
+        super.setMolangQueries(animatable, currentTick);
 
-		MolangParser parser = GeckoLibCache.getInstance().parser;
-		AbstractVineEntity vine = (AbstractVineEntity) animatable;
-		parser.setValue("query.vine_length", vine::getLengthInSegments);
-	}
+        MolangParser parser = GeckoLibCache.getInstance().parser;
+        AbstractVineEntity vine = (AbstractVineEntity) animatable;
+        parser.setValue("query.vine_length", vine::getLengthInSegments);
+    }
 }

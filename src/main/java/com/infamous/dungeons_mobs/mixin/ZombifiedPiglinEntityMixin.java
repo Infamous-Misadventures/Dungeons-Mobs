@@ -42,27 +42,27 @@ public abstract class ZombifiedPiglinEntityMixin extends Zombie implements ISmar
     }
 
     @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/goal/GoalSelector;addGoal(ILnet/minecraft/world/entity/ai/goal/Goal;)V"), method = "addBehaviourGoals")
-    private void addCustomGoal(GoalSelector goalSelector, int priority, Goal originalGoal){
-        if(goalSelector == this.goalSelector && priority == 2 && originalGoal instanceof ZombieAttackGoal){
-            goalSelector.addGoal(priority, (Goal) new SmartZombieAttackGoal(this, 1.0D, false));
+    private void addCustomGoal(GoalSelector goalSelector, int priority, Goal originalGoal) {
+        if (goalSelector == this.goalSelector && priority == 2 && originalGoal instanceof ZombieAttackGoal) {
+            goalSelector.addGoal(priority, new SmartZombieAttackGoal(this, 1.0D, false));
             goalSelector.addGoal(priority, new RangedCrossbowAttackGoal<>(this, 1.0D, 8.0F));
-        } else{
+        } else {
             goalSelector.addGoal(priority, originalGoal);
         }
     }
 
     @Inject(at = @At("TAIL"), method = "populateDefaultEquipmentSlots", cancellable = true)
-    private void spawnWeapon(RandomSource random, DifficultyInstance p_180481_1_, CallbackInfo ci){
+    private void spawnWeapon(RandomSource random, DifficultyInstance p_180481_1_, CallbackInfo ci) {
         this.setItemSlot(EquipmentSlot.MAINHAND, this.createSpawnWeapon());
     }
 
     @Inject(at = @At("TAIL"), method = "readAdditionalSaveData")
-    private void readAdditional(CompoundTag compoundNBT, CallbackInfo ci){
+    private void readAdditional(CompoundTag compoundNBT, CallbackInfo ci) {
         this.readCrossbowUserNBT(compoundNBT);
     }
 
     @Inject(at = @At("TAIL"), method = "addAdditionalSaveData")
-    private void writeAdditional(CompoundTag compoundNBT, CallbackInfo ci){
+    private void writeAdditional(CompoundTag compoundNBT, CallbackInfo ci) {
         this.writeCrossbowUserNBT(compoundNBT);
     }
 
@@ -76,9 +76,9 @@ public abstract class ZombifiedPiglinEntityMixin extends Zombie implements ISmar
 
     private ItemStack createSpawnWeapon() {
         ItemStack meleeWeapon = DungeonsGearCompat.isLoaded() ?
-                new ItemStack (DungeonsGearCompat.getGoldAxe().get()) :
+                new ItemStack(DungeonsGearCompat.getGoldAxe().get()) :
                 new ItemStack(Items.GOLDEN_SWORD);
-        return (double)this.random.nextFloat() < 0.5D ? new ItemStack(Items.CROSSBOW) : meleeWeapon;
+        return (double) this.random.nextFloat() < 0.5D ? new ItemStack(Items.CROSSBOW) : meleeWeapon;
     }
 
     @Override

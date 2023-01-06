@@ -23,10 +23,14 @@ import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModCapabilities {
 
-    public static final Capability<Ancient> ANCIENT_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {});
-    public static final Capability<AnimatedProps> ANIMATED_PROPS_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {});
-    public static final Capability<Convertible> CONVERTIBLE_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {});
-    public static final Capability<MobProps> MOB_PROPS_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {});
+    public static final Capability<Ancient> ANCIENT_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {
+    });
+    public static final Capability<AnimatedProps> ANIMATED_PROPS_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {
+    });
+    public static final Capability<Convertible> CONVERTIBLE_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {
+    });
+    public static final Capability<MobProps> MOB_PROPS_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {
+    });
 
 
     public static void setupCapabilities() {

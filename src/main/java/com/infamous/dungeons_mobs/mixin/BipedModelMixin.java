@@ -34,7 +34,7 @@ public class BipedModelMixin {
     private void moveHatToHeadParts(CallbackInfoReturnable<Iterable<ModelPart>> cir) {
         Iterable<ModelPart> parts = cir.getReturnValue();
         List<ModelPart> newResult = StreamSupport.stream(parts.spliterator(), false).collect(Collectors.toList());
-        if(!newResult.contains(this.hat)){
+        if (!newResult.contains(this.hat)) {
             newResult.add(this.hat);
             cir.setReturnValue(newResult);
         }
@@ -44,7 +44,7 @@ public class BipedModelMixin {
     private void removeHatfromBodyParts(CallbackInfoReturnable<Iterable<ModelPart>> cir) {
         Iterable<ModelPart> parts = cir.getReturnValue();
         List<ModelPart> newResult = StreamSupport.stream(parts.spliterator(), false).collect(Collectors.toList());
-        if(newResult.contains(this.hat)){
+        if (newResult.contains(this.hat)) {
             newResult.remove(this.hat);
             cir.setReturnValue(newResult);
         }

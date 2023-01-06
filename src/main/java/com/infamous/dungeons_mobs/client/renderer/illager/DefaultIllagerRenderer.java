@@ -234,29 +234,24 @@ public class DefaultIllagerRenderer<T extends Mob & IAnimatable> extends Extende
     protected void setLimbBoneVisible(GeoArmorRenderer<? extends GeoArmorItem> armorRenderer, ModelPart limb, HumanoidModel<?> armorModel, EquipmentSlot slot) {
         if (limb == armorModel.head || limb == armorModel.hat) {
             armorRenderer.getGeoModelProvider().getBone(armorRenderer.headBone).setHidden(false);
-        }
-        else if (limb == armorModel.body) {
+        } else if (limb == armorModel.body) {
             armorRenderer.getGeoModelProvider().getBone(armorRenderer.bodyBone).setHidden(false);
             armorRenderer.getGeoModelProvider().getBone(armorRenderer.leftArmBone).setHidden(true);
             armorRenderer.getGeoModelProvider().getBone(armorRenderer.rightArmBone).setHidden(true);
-        }
-        else if (limb == armorModel.leftArm) {
+        } else if (limb == armorModel.leftArm) {
             armorRenderer.getGeoModelProvider().getBone(armorRenderer.bodyBone).setHidden(true);
             armorRenderer.getGeoModelProvider().getBone(armorRenderer.leftArmBone).setHidden(false);
             armorRenderer.getGeoModelProvider().getBone(armorRenderer.rightArmBone).setHidden(true);
-        }
-        else if (limb == armorModel.leftLeg) {
+        } else if (limb == armorModel.leftLeg) {
             armorRenderer.getGeoModelProvider().getBone((slot == EquipmentSlot.FEET ? armorRenderer.leftBootBone : armorRenderer.leftLegBone)).setHidden(false);
             armorRenderer.getGeoModelProvider().getBone((slot == EquipmentSlot.FEET ? armorRenderer.leftLegBone : armorRenderer.leftBootBone)).setHidden(true);
             armorRenderer.getGeoModelProvider().getBone(armorRenderer.rightBootBone).setHidden(true);
             armorRenderer.getGeoModelProvider().getBone(armorRenderer.rightLegBone).setHidden(true);
-        }
-        else if (limb == armorModel.rightArm) {
+        } else if (limb == armorModel.rightArm) {
             armorRenderer.getGeoModelProvider().getBone(armorRenderer.bodyBone).setHidden(true);
             armorRenderer.getGeoModelProvider().getBone(armorRenderer.leftArmBone).setHidden(true);
             armorRenderer.getGeoModelProvider().getBone(armorRenderer.rightArmBone).setHidden(false);
-        }
-        else if (limb == armorModel.rightLeg) {
+        } else if (limb == armorModel.rightLeg) {
             armorRenderer.getGeoModelProvider().getBone((slot == EquipmentSlot.FEET ? armorRenderer.rightBootBone : armorRenderer.rightLegBone)).setHidden(false);
             armorRenderer.getGeoModelProvider().getBone((slot == EquipmentSlot.FEET ? armorRenderer.rightLegBone : armorRenderer.rightBootBone)).setHidden(true);
             armorRenderer.getGeoModelProvider().getBone(armorRenderer.leftBootBone).setHidden(true);

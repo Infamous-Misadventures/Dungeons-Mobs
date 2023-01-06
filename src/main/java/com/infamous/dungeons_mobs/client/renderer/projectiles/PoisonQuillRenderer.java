@@ -16,12 +16,12 @@ public class PoisonQuillRenderer extends GeoProjectilesRenderer<PoisonQuillEntit
         super(renderManager, new PoisonQuillModel());
     }
 
-	
+
     @Override
     public void render(PoisonQuillEntity entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
         float scaleFactor = 1.0F;
         matrixStackIn.scale(scaleFactor, scaleFactor, scaleFactor);
-        
+
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
     }
 

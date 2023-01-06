@@ -33,12 +33,10 @@ import java.util.stream.Collectors;
 import static com.infamous.dungeons_libraries.attribute.AttributeRegistry.SUMMON_CAP;
 import static com.infamous.dungeons_libraries.capabilities.minionmaster.MinionMasterHelper.getMasterCapability;
 
-import net.minecraft.world.item.Item.Properties;
-
 public class NecromancerStaffItem extends ArtifactItem implements IHasInventorySprite, ISoulConsumer {
     public NecromancerStaffItem(Properties properties) {
         super(properties);
-        procOnItemUse=true;
+        procOnItemUse = true;
     }
 
     public InteractionResultHolder<ItemStack> procArtifact(ArtifactUseContext itemUseContext) {
@@ -59,16 +57,16 @@ public class NecromancerStaffItem extends ArtifactItem implements IHasInventoryS
                 blockPos = itemUseContextPos.relative(itemUseContextFace);
             }
 
-            if(itemUseContextPlayer != null){
+            if (itemUseContextPlayer != null) {
                 Master summonerCap = getMasterCapability(itemUseContextPlayer);
                 if (summonerCap != null) {
                     Entity summoned = SummonHelper.summonEntity(itemUseContextPlayer, itemUseContextPlayer.blockPosition(), EntityType.ZOMBIE);
-                    if(summoned != null) {
+                    if (summoned != null) {
                         SoundHelper.playCreatureSound(itemUseContextPlayer, ModSoundEvents.NECROMANCER_SUMMON.get());
                         itemUseContextItem.hurtAndBreak(1, itemUseContextPlayer, (entity) -> NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), new BreakItemMessage(entity.getId(), itemUseContextItem)));
                         ArtifactItem.putArtifactOnCooldown(itemUseContextPlayer, itemUseContextItem.getItem());
-                    } else{
-                        if(world instanceof ServerLevel) {
+                    } else {
+                        if (world instanceof ServerLevel) {
                             List<Entity> zombieEntities = summonerCap.getSummonedMobs().stream().filter(entity -> entity.getType() == EntityType.ZOMBIE).collect(Collectors.toList());
                             zombieEntities.forEach(entity -> {
                                 entity.teleportToWithTicket((double) blockPos.getX() + 0.5D, (double) blockPos.getY() + 0.05D, (double) blockPos.getZ() + 0.5D);

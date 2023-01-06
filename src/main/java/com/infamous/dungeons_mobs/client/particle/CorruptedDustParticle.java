@@ -8,15 +8,15 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 
 public class CorruptedDustParticle extends TextureSheetParticle {
-	
+
     protected CorruptedDustParticle(ClientLevel level, double xCoord, double yCoord, double zCoord,
-    		SpriteSet spriteSet, double xd, double yd, double zd) {
+                                    SpriteSet spriteSet, double xd, double yd, double zd) {
         super(level, xCoord, yCoord, zCoord, xd, yd, zd);
 
         this.quadSize *= 2.0F;
         this.lifetime = 10;
         this.hasPhysics = true;
-        
+
         this.pickSprite(spriteSet);
     }
 
@@ -35,11 +35,11 @@ public class CorruptedDustParticle extends TextureSheetParticle {
 
     @Override
     protected int getLightColor(float p_189214_1_) {
-    	return 240;
+        return 240;
     }
-    
+
     private void fadeOut() {
-        this.alpha = (-(1/(float)lifetime) * age + 1);
+        this.alpha = (-(1 / (float) lifetime) * age + 1);
     }
 
     @OnlyIn(Dist.CLIENT)

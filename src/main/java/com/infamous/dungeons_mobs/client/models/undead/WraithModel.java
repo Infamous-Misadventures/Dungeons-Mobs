@@ -12,20 +12,20 @@ import software.bernie.geckolib3.model.provider.data.EntityModelData;
 
 public class WraithModel extends AnimatedGeoModel<WraithEntity> {
 
-	@Override
-	public ResourceLocation getAnimationResource(WraithEntity entity) {
-		return new ResourceLocation(DungeonsMobs.MODID, "animations/wraith.animation.json");
-	}
+    @Override
+    public ResourceLocation getAnimationResource(WraithEntity entity) {
+        return new ResourceLocation(DungeonsMobs.MODID, "animations/wraith.animation.json");
+    }
 
-	@Override
-	public ResourceLocation getModelResource(WraithEntity entity) {
-		return new ResourceLocation(DungeonsMobs.MODID, "geo/wraith.geo.json");
-	}
+    @Override
+    public ResourceLocation getModelResource(WraithEntity entity) {
+        return new ResourceLocation(DungeonsMobs.MODID, "geo/wraith.geo.json");
+    }
 
-	@Override
-	public ResourceLocation getTextureResource(WraithEntity entity) {
-		return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/wraith/wraith.png");
-	}
+    @Override
+    public ResourceLocation getTextureResource(WraithEntity entity) {
+        return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/wraith/wraith.png");
+    }
 
     @Override
     public void setCustomAnimations(WraithEntity entity, int uniqueID, AnimationEvent customPredicate) {
@@ -33,17 +33,17 @@ public class WraithModel extends AnimatedGeoModel<WraithEntity> {
 
         IBone head = this.getAnimationProcessor().getBone("bipedHead");
         IBone cape = this.getAnimationProcessor().getBone("bipedCape");
-        
+
         cape.setHidden(true);
-        
+
         IBone leftHand = this.getAnimationProcessor().getBone("bipedHandLeft");
         IBone rightHand = this.getAnimationProcessor().getBone("bipedHandRight");
-        
+
         if (entity.tickCount % 2 == 0 && rightHand instanceof GeoBone && leftHand instanceof GeoBone && entity.isSpellcasting()) {
-        	GeoBone leftHandBone = ((GeoBone)leftHand);
-        	GeoBone rightHandBone = ((GeoBone)rightHand);
-        	entity.level.addParticle(ParticleTypes.SOUL_FIRE_FLAME, leftHandBone.getWorldPosition().x, leftHandBone.getWorldPosition().y, leftHandBone.getWorldPosition().z, entity.getRandom().nextGaussian() * 0.01, entity.getRandom().nextGaussian() * 0.01, entity.getRandom().nextGaussian() * 0.01);
-        	entity.level.addParticle(ParticleTypes.SOUL_FIRE_FLAME, rightHandBone.getWorldPosition().x, rightHandBone.getWorldPosition().y, rightHandBone.getWorldPosition().z, entity.getRandom().nextGaussian() * 0.01, entity.getRandom().nextGaussian() * 0.01, entity.getRandom().nextGaussian() * 0.01);
+            GeoBone leftHandBone = ((GeoBone) leftHand);
+            GeoBone rightHandBone = ((GeoBone) rightHand);
+            entity.level.addParticle(ParticleTypes.SOUL_FIRE_FLAME, leftHandBone.getWorldPosition().x, leftHandBone.getWorldPosition().y, leftHandBone.getWorldPosition().z, entity.getRandom().nextGaussian() * 0.01, entity.getRandom().nextGaussian() * 0.01, entity.getRandom().nextGaussian() * 0.01);
+            entity.level.addParticle(ParticleTypes.SOUL_FIRE_FLAME, rightHandBone.getWorldPosition().x, rightHandBone.getWorldPosition().y, rightHandBone.getWorldPosition().z, entity.getRandom().nextGaussian() * 0.01, entity.getRandom().nextGaussian() * 0.01, entity.getRandom().nextGaussian() * 0.01);
         }
 
         EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);

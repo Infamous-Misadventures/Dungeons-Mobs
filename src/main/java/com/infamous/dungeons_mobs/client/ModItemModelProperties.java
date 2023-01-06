@@ -6,7 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class ModItemModelProperties {
 
-    public ModItemModelProperties(){
+    public ModItemModelProperties() {
         ItemProperties.register(ModItems.ROYAL_GUARD_SHIELD.get(),
                 new ResourceLocation("blocking"),
                 (stack, clientWorld, livingEntity, i) -> {

@@ -1,7 +1,6 @@
 package com.infamous.dungeons_mobs.items;
 
 import com.infamous.dungeons_mobs.client.models.armor.PillagerHelmetModel;
-import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -16,8 +15,6 @@ import javax.annotation.Nullable;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 import static com.infamous.dungeons_mobs.client.models.geom.ModModelLayers.PILLAGER_HELMET;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class PillagerHelmetItem extends ArmorItem {
     private final boolean isDiamond;

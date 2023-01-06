@@ -14,7 +14,7 @@ public class UniqueAncientData {
                     ResourceLocation.CODEC.fieldOf("minion").forGetter(data -> data.minion),
                     ResourceLocation.CODEC.listOf().fieldOf("minion_mob_enchantments").forGetter(data -> data.minionMobEnchantments),
                     Codec.INT.fieldOf("minion_count").forGetter(data -> data.minionCount)
-                ).apply(builder, UniqueAncientData::new));
+            ).apply(builder, UniqueAncientData::new));
 
     private final String name;
     private final List<ResourceLocation> mobEnchantments;

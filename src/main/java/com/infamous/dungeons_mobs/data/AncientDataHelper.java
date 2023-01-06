@@ -2,7 +2,6 @@ package com.infamous.dungeons_mobs.data;
 
 import baguchan.enchantwithmob.EnchantWithMob;
 import baguchan.enchantwithmob.capability.MobEnchantCapability;
-import baguchan.enchantwithmob.mobenchant.MobEnchant;
 import baguchan.enchantwithmob.registry.MobEnchants;
 import com.infamous.dungeons_libraries.data.util.MergeableCodecDataManager;
 import com.infamous.dungeons_mobs.DungeonsMobs;
@@ -24,7 +23,7 @@ public class AncientDataHelper {
     public static final MergeableCodecDataManager<MobAncientData, MobAncientData> MOB_ANCIENT_DATA = new MergeableCodecDataManager<>("ancient/mob_ancient_data", MobAncientData.CODEC, AncientDataHelper::mobMerger);
     public static final MergeableCodecDataManager<MobEnchantmentAncientData, MobEnchantmentAncientData> MOB_ENCHANTMENT_ANCIENT_DATA = new MergeableCodecDataManager<>("ancient/mob_enchantment_ancient_data", MobEnchantmentAncientData.CODEC, AncientDataHelper::mobEnchantmentMerger);
 
-    public static MobAncientData mobMerger(List<MobAncientData> raws){
+    public static MobAncientData mobMerger(List<MobAncientData> raws) {
         List<String> adjectives = new ArrayList<>();
         List<String> nouns = new ArrayList<>();
         List<ResourceLocation> minions = new ArrayList<>();
@@ -37,7 +36,8 @@ public class AncientDataHelper {
         });
         return new MobAncientData(adjectives, nouns, minions, uniques);
     }
-    public static MobEnchantmentAncientData mobEnchantmentMerger(List<MobEnchantmentAncientData> raws){
+
+    public static MobEnchantmentAncientData mobEnchantmentMerger(List<MobEnchantmentAncientData> raws) {
         List<String> adjectives = new ArrayList<>();
         List<String> nouns = new ArrayList<>();
         raws.forEach(raw -> {
@@ -47,16 +47,16 @@ public class AncientDataHelper {
         return new MobEnchantmentAncientData(adjectives, nouns);
     }
 
-    public static MobAncientData getMobAncientData(ResourceLocation mobResourceLocation){
+    public static MobAncientData getMobAncientData(ResourceLocation mobResourceLocation) {
 
         return MOB_ANCIENT_DATA.getData().getOrDefault(mobResourceLocation, MobAncientData.DEFAULT);
     }
 
-    public static MobEnchantmentAncientData getMobEnchantmentAncientData(ResourceLocation mobEnchantmentResourceLocation){
+    public static MobEnchantmentAncientData getMobEnchantmentAncientData(ResourceLocation mobEnchantmentResourceLocation) {
         return MOB_ENCHANTMENT_ANCIENT_DATA.getData().getOrDefault(mobEnchantmentResourceLocation, MobEnchantmentAncientData.DEFAULT);
     }
 
-    public static String getAncientName(LivingEntity entity){
+    public static String getAncientName(LivingEntity entity) {
         Set<String> adjectives = new HashSet<>();
         Set<String> nouns = new HashSet<>();
         MobEnchantCapability enchantCap = entity.getCapability(EnchantWithMob.MOB_ENCHANT_CAP).orElse(new MobEnchantCapability());
@@ -74,8 +74,7 @@ public class AncientDataHelper {
     }
 
     @SubscribeEvent
-    public static void onAddReloadListeners(AddReloadListenerEvent event)
-    {
+    public static void onAddReloadListeners(AddReloadListenerEvent event) {
         event.addListener(MOB_ANCIENT_DATA);
     }
 }

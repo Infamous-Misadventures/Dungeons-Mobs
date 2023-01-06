@@ -1,14 +1,11 @@
 package com.infamous.dungeons_mobs.items;
 
 import com.google.common.collect.ImmutableSet;
-import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.level.block.Block;
 
 import java.util.Set;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class WoodenLadleItem extends ShovelItem {
     private static final Set<Block> EFFECTIVE_ON = ImmutableSet.of();

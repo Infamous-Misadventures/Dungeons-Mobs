@@ -44,9 +44,6 @@ import static baguchan.enchantwithmob.registry.MobEnchants.STRONG;
 import static com.infamous.dungeons_mobs.network.datasync.ModDataSerializers.UUID_LIST;
 import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
-import net.minecraft.world.entity.Entity.RemovalReason;
-import net.minecraft.world.entity.monster.AbstractIllager.IllagerArmPose;
-
 public class EnchanterEntity extends SpellcasterIllager implements IAnimatable {
 
     public static final EntityDataAccessor<Integer> ATTACK_TICKS = SynchedEntityData.defineId(EnchanterEntity.class, EntityDataSerializers.INT);
@@ -93,12 +90,12 @@ public class EnchanterEntity extends SpellcasterIllager implements IAnimatable {
         this.entityData.set(ENCHANT_TICKS, p_189794_1_);
     }
 
-    public void addEnchantmentTarget(Monster monsterEntity){
+    public void addEnchantmentTarget(Monster monsterEntity) {
         enchantmentTargets.add(monsterEntity);
         this.entityData.set(ENCHANTMENT_TARGETS, enchantmentTargets.stream().map(Entity::getUUID).collect(Collectors.toList()));
     }
 
-    public void setEnchantmentTargets(List<Monster> monsterEntities){
+    public void setEnchantmentTargets(List<Monster> monsterEntities) {
         enchantmentTargets = monsterEntities;
         this.entityData.set(ENCHANTMENT_TARGETS, enchantmentTargets.stream().map(Entity::getUUID).collect(Collectors.toList()));
     }
@@ -166,7 +163,7 @@ public class EnchanterEntity extends SpellcasterIllager implements IAnimatable {
     }
 
     private void clearEntityMobEnchantments(Monster entity) {
-        entity.getCapability(EnchantWithMob.MOB_ENCHANT_CAP).ifPresent(enchantableCapability ->{
+        entity.getCapability(EnchantWithMob.MOB_ENCHANT_CAP).ifPresent(enchantableCapability -> {
             enchantableCapability.removeAllMobEnchant(entity);
             entity.refreshDimensions();
         });
@@ -273,14 +270,14 @@ public class EnchanterEntity extends SpellcasterIllager implements IAnimatable {
                 return false;
             } else if (EnchanterEntity.this.tickCount < this.nextAttackTickCount) {
                 return false;
-            }else if(EnchanterEntity.this.enchantmentTargets.size() > 1){
+            } else if (EnchanterEntity.this.enchantmentTargets.size() > 1) {
                 return false;
             } else {
                 List<LivingEntity> list = AreaOfEffectHelper.getNearbyEnemies(EnchanterEntity.this, 16, EnchanterEntity.this.level, livingEntity -> {
-                    if(livingEntity.getCapability(EnchantWithMob.MOB_ENCHANT_CAP).isPresent()) {
+                    if (livingEntity.getCapability(EnchantWithMob.MOB_ENCHANT_CAP).isPresent()) {
                         MobEnchantCapability mobEnchantCapability = livingEntity.getCapability(EnchantWithMob.MOB_ENCHANT_CAP).resolve().get();
                         return !mobEnchantCapability.hasEnchant() && livingEntity instanceof Monster;
-                    }else{
+                    } else {
                         return false;
                     }
                 });
@@ -300,7 +297,7 @@ public class EnchanterEntity extends SpellcasterIllager implements IAnimatable {
 
         public void stop() {
             super.stop();
-            EnchanterEntity.this.setEnchantmentTarget((Monster) null);
+            EnchanterEntity.this.setEnchantmentTarget(null);
         }
 
         protected void performSpellCasting() {

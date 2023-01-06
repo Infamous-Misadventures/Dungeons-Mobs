@@ -17,8 +17,6 @@ import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 
-import java.util.Random;
-
 public class JungleZombieEntity extends Zombie {
 
     public JungleZombieEntity(Level worldIn) {
@@ -36,30 +34,30 @@ public class JungleZombieEntity extends Zombie {
     public static AttributeSupplier.Builder setCustomAttributes() {
         return Zombie.createAttributes();
     }
-    
+
     protected boolean isSunSensitive() {
         return false;
-     }
-    
-    protected float getSoundVolume() {
-    	return 0.5F;
     }
-    
+
+    protected float getSoundVolume() {
+        return 0.5F;
+    }
+
     protected SoundEvent getAmbientSound() {
         return ModSoundEvents.JUNGLE_ZOMBIE_IDLE.get();
-     }
+    }
 
-     protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
+    protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
         return ModSoundEvents.JUNGLE_ZOMBIE_HURT.get();
-     }
+    }
 
-     protected SoundEvent getDeathSound() {
+    protected SoundEvent getDeathSound() {
         return ModSoundEvents.JUNGLE_ZOMBIE_DEATH.get();
-     }
+    }
 
-     protected SoundEvent getStepSound() {
+    protected SoundEvent getStepSound() {
         return ModSoundEvents.JUNGLE_ZOMBIE_STEP.get();
-     }
+    }
 
     @Override
     public boolean doHurtTarget(Entity targetEntity) {
@@ -73,7 +71,7 @@ public class JungleZombieEntity extends Zombie {
                 }
 
                 if (i > 0) {
-                    ((LivingEntity)targetEntity).addEffect(new MobEffectInstance(MobEffects.POISON, i * 20, 0));
+                    ((LivingEntity) targetEntity).addEffect(new MobEffectInstance(MobEffects.POISON, i * 20, 0));
                 }
             }
 

@@ -30,9 +30,9 @@ public abstract class PiglinModelMixin<T extends Mob> extends PlayerModel<T> {
             method = "setupAnim",
             cancellable = true)
     private void animateZombifiedPiglin(T piglinLike, float p_225597_2_, float p_225597_3_, float ageInTicks, float p_225597_5_, float p_225597_6_, CallbackInfo ci) {
-        if(piglinLike instanceof ZombifiedPiglin){
+        if (piglinLike instanceof ZombifiedPiglin) {
             ci.cancel();
-            if(piglinLike.isHolding(itemStack -> itemStack.getItem() instanceof CrossbowItem)){
+            if (piglinLike.isHolding(itemStack -> itemStack.getItem() instanceof CrossbowItem)) {
                 if (piglinLike instanceof ISmartCrossbowUser && ((ISmartCrossbowUser) piglinLike)._isChargingCrossbow()) {
                     AnimationUtils.animateCrossbowCharge(this.rightArm, this.leftArm, piglinLike, !piglinLike.isLeftHanded());
                 } else {

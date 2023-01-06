@@ -16,8 +16,6 @@ import javax.annotation.Nullable;
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 import static com.infamous.dungeons_mobs.client.models.geom.ModModelLayers.VINDICATOR_HELMET;
 
-import net.minecraft.world.item.Item.Properties;
-
 public class VindicatorHelmetItem extends ArmorItem {
     private final boolean isDiamond;
 
@@ -48,7 +46,7 @@ public class VindicatorHelmetItem extends ArmorItem {
     @Override
     @OnlyIn(Dist.CLIENT)
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-        if(this.isDiamond){
+        if (this.isDiamond) {
             return MODID + ":textures/models/armor/diamond_vindicator_helmet.png";
         }
         return MODID + ":textures/models/armor/gold_vindicator_helmet.png";

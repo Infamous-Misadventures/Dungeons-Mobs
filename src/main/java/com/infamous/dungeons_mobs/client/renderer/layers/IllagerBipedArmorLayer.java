@@ -45,7 +45,7 @@ public class IllagerBipedArmorLayer<T extends AbstractIllager, M extends Illager
                 ResourceLocation crossedTexture = this.getArmorResource(p_241739_3_, itemstack, p_241739_4_, "crossed");
                 boolean armsCanBeCrossed = IllagerArmsUtil.resourceExists(crossedTexture);
                 this.setPartVisibilityCrossedArms(crossedArmsModel, p_241739_4_, armsCanBeCrossed);
-                if(!armsCanBeCrossed) return;
+                if (!armsCanBeCrossed) return;
                 boolean flag1 = itemstack.hasFoil();
                 if (armoritem instanceof net.minecraft.world.item.DyeableLeatherItem) {
                     int i = ((net.minecraft.world.item.DyeableLeatherItem) armoritem).getColor(itemstack);
@@ -74,8 +74,8 @@ public class IllagerBipedArmorLayer<T extends AbstractIllager, M extends Illager
 //                entityModel.rightArm.visible = false;
 //                entityModel.leftArm.visible = false;
 //            } else {
-                entityModel.rightArm.visible = true;
-                entityModel.leftArm.visible = true;
+            entityModel.rightArm.visible = true;
+            entityModel.leftArm.visible = true;
 //            }
         }
     }

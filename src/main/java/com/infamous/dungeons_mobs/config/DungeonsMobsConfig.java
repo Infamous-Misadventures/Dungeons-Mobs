@@ -79,7 +79,7 @@ public class DungeonsMobsConfig {
         public final ForgeConfigSpec.ConfigValue<Integer> PILLAGER_MIN_GROUP_SIZE;
         public final ForgeConfigSpec.ConfigValue<Integer> PILLAGER_MAX_GROUP_SIZE;
 
-//        public final ForgeConfigSpec.ConfigValue<List<? extends String>> ROYAL_GUARD_BIOME_TYPES;
+        //        public final ForgeConfigSpec.ConfigValue<List<? extends String>> ROYAL_GUARD_BIOME_TYPES;
         public final ForgeConfigSpec.ConfigValue<Integer> ROYAL_GUARD_SPAWN_WEIGHT;
         public final ForgeConfigSpec.ConfigValue<Integer> ROYAL_GUARD_MIN_GROUP_SIZE;
         public final ForgeConfigSpec.ConfigValue<Integer> ROYAL_GUARD_MAX_GROUP_SIZE;
@@ -189,7 +189,7 @@ public class DungeonsMobsConfig {
 
         public static ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ITEM_TAB;
 
-        public Common(ForgeConfigSpec.Builder builder){
+        public Common(ForgeConfigSpec.Builder builder) {
             // MOB CONFIGURATION
             builder.comment("Mob Configuration").push("mob_configuration");
             ENABLE_WRAITH_FIRE_SUMMON = builder
@@ -208,20 +208,20 @@ public class DungeonsMobsConfig {
                     .comment("Add mobs (preferably undead) that the Necromancer can summon. \n"
                             + "To do so, enter the namespace ID of the mob, like \"minecraft:zombie\".\n" +
                             "If this list is empty, zombies will be summoned instead.\n" +
-                            "If a mob chosen from this list cannot be spawned, a zombie will be summoned instead." )
+                            "If a mob chosen from this list cannot be spawned, a zombie will be summoned instead.")
                     .defineList("necromancerMobSummons", Lists.newArrayList(
-                            "minecraft:zombie",
-                            "minecraft:skeleton"
+                                    "minecraft:zombie",
+                                    "minecraft:skeleton"
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             DROWNED_NECROMANCER_MOB_SUMMONS = builder
                     .comment("Add mobs (preferably undead and aquatic) that the Drowned Necromancer can summon. \n"
                             + "To do so, enter the namespace ID of the mob, like \"minecraft:drowned\".\n" +
                             "If this list is empty, drowned will be summoned instead.\n" +
-                            "If a mob chosen from this list cannot be spawned, a drowned will be summoned instead." )
+                            "If a mob chosen from this list cannot be spawned, a drowned will be summoned instead.")
                     .defineList("drownedNecromancerMobSummons", Lists.newArrayList(
-                            "minecraft:drowned",
-                            "dungeons_mobs:sunken_skeleton"
+                                    "minecraft:drowned",
+                                    "dungeons_mobs:sunken_skeleton"
                             ),
                             (itemRaw) -> itemRaw instanceof String);
 
@@ -272,8 +272,8 @@ public class DungeonsMobsConfig {
             ICEOLOGER_BIOME_TYPES = builder
                     .comment("Add biome types that the Iceologer can spawn in. \n"
                             + "Put a \"!\" before the type to prevent spawning in that biome type. \n"
-                                + "Leave this blank if you don't want them to spawn at all.")
-                            .defineList("iceologerBiomeTypes", Lists.newArrayList(
+                            + "Leave this blank if you don't want them to spawn at all.")
+                    .defineList("iceologerBiomeTypes", Lists.newArrayList(
                                     "SNOWY",
                                     "!MUSHROOM",
                                     "!NETHER",
@@ -295,10 +295,10 @@ public class DungeonsMobsConfig {
                             + "Put a \"!\" before the type to prevent spawning in that biome type. \n"
                             + "Leave this blank if you don't want them to spawn at all.")
                     .defineList("wraithBiomeTypes", Lists.newArrayList(
-                            "OVERWORLD",
-                            "!MUSHROOM",
-                            "!NETHER",
-                            "!END"
+                                    "OVERWORLD",
+                                    "!MUSHROOM",
+                                    "!NETHER",
+                                    "!END"
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             WRAITH_SPAWN_WEIGHT = builder
@@ -316,10 +316,10 @@ public class DungeonsMobsConfig {
                             + "Put a \"!\" before the type to prevent spawning in that biome type. \n"
                             + "Leave this blank if you don't want them to spawn at all.")
                     .defineList("necromancerBiomeTypes", Lists.newArrayList(
-                            "SANDY",
-                            "!MUSHROOM",
-                            "!NETHER",
-                            "!END"
+                                    "SANDY",
+                                    "!MUSHROOM",
+                                    "!NETHER",
+                                    "!END"
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             NECROMANCER_SPAWN_WEIGHT = builder
@@ -337,11 +337,11 @@ public class DungeonsMobsConfig {
                             + "Put a \"!\" before the type to prevent spawning in that biome type. \n"
                             + "Leave this blank if you don't want them to spawn at all.")
                     .defineList("skeletonVanguardBiomeTypes", Lists.newArrayList(
-                            "OVERWORLD",
+                                    "OVERWORLD",
                                     "DESERT",
-                            "!MUSHROOM",
-                            "!NETHER",
-                            "!END"
+                                    "!MUSHROOM",
+                                    "!NETHER",
+                                    "!END"
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             SKELETON_VANGUARD_SPAWN_WEIGHT = builder
@@ -359,14 +359,14 @@ public class DungeonsMobsConfig {
                             + "Put a \"!\" before the type to prevent spawning in that biome type. \n"
                             + "Leave this blank if you don't want them to spawn at all.")
                     .defineList("mountaineerBiomeTypes", Lists.newArrayList(
-                            "MOUNTAIN",
-                            "!SANDY",
-                            "!JUNGLE",
-                            "!FOREST",
-                            "!MUSHROOM",
-                            "!HOT",
-                            "!NETHER",
-                            "!END"
+                                    "MOUNTAIN",
+                                    "!SANDY",
+                                    "!JUNGLE",
+                                    "!FOREST",
+                                    "!MUSHROOM",
+                                    "!HOT",
+                                    "!NETHER",
+                                    "!END"
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             MOUNTAINEER_SPAWN_WEIGHT = builder
@@ -384,14 +384,14 @@ public class DungeonsMobsConfig {
                             + "Put a \"!\" before the type to prevent spawning in that biome type. \n"
                             + "Leave this blank if you don't want them to spawn at all.")
                     .defineList("windcallerBiomeTypes", Lists.newArrayList(
-                            "MOUNTAIN",
-                            "!SANDY",
-                            "!JUNGLE",
-                            "!FOREST",
-                            "!MUSHROOM",
-                            "!HOT",
-                            "!NETHER",
-                            "!END"
+                                    "MOUNTAIN",
+                                    "!SANDY",
+                                    "!JUNGLE",
+                                    "!FOREST",
+                                    "!MUSHROOM",
+                                    "!HOT",
+                                    "!NETHER",
+                                    "!END"
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             WINDCALLER_SPAWN_WEIGHT = builder
@@ -409,10 +409,10 @@ public class DungeonsMobsConfig {
                             + "Put a \"!\" before the type to prevent spawning in that biome type. \n"
                             + "Leave this blank if you don't want them to spawn at all.")
                     .defineList("geomancerBiomeTypes", Lists.newArrayList(
-                            "SAVANNA",
-                            "!MUSHROOM",
-                            "!NETHER",
-                            "!END"
+                                    "SAVANNA",
+                                    "!MUSHROOM",
+                                    "!NETHER",
+                                    "!END"
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             GEOMANCER_SPAWN_WEIGHT = builder
@@ -430,15 +430,15 @@ public class DungeonsMobsConfig {
                             + "Put a \"!\" before the type to prevent spawning in that biome type. \n"
                             + "Leave this blank if you don't want them to spawn at all.")
                     .defineList("illusionerBiomeTypes", Lists.newArrayList(
-                            "SNOWY",
-                            "MOUNTAIN",
-                            "!SANDY",
-                            "!JUNGLE",
-                            "!FOREST",
-                            "!HOT",
-                            "!MUSHROOM",
-                            "!NETHER",
-                            "!END"
+                                    "SNOWY",
+                                    "MOUNTAIN",
+                                    "!SANDY",
+                                    "!JUNGLE",
+                                    "!FOREST",
+                                    "!HOT",
+                                    "!MUSHROOM",
+                                    "!NETHER",
+                                    "!END"
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             ILLUSIONER_SPAWN_WEIGHT = builder
@@ -456,10 +456,10 @@ public class DungeonsMobsConfig {
                             + "Put a \"!\" before the type to prevent spawning in that biome type. \n"
                             + "Leave this blank if you don't want them to spawn at all.")
                     .defineList("vindicatorBiomeTypes", Lists.newArrayList(
-                            "SPOOKY",
-                            "!MUSHROOM",
-                            "!NETHER",
-                            "!END"
+                                    "SPOOKY",
+                                    "!MUSHROOM",
+                                    "!NETHER",
+                                    "!END"
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             VINDICATOR_SPAWN_WEIGHT = builder
@@ -477,10 +477,10 @@ public class DungeonsMobsConfig {
                             + "Put a \"!\" before the type to prevent spawning in that biome type. \n"
                             + "Leave this blank if you don't want them to spawn at all.")
                     .defineList("evokerBiomeTypes", Lists.newArrayList(
-                            "SPOOKY",
-                            "!MUSHROOM",
-                            "!NETHER",
-                            "!END"
+                                    "SPOOKY",
+                                    "!MUSHROOM",
+                                    "!NETHER",
+                                    "!END"
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             EVOKER_SPAWN_WEIGHT = builder
@@ -498,10 +498,10 @@ public class DungeonsMobsConfig {
                             + "Put a \"!\" before the type to prevent spawning in that biome type. \n"
                             + "Leave this blank if you don't want them to spawn at all.")
                     .defineList("pillagerBiomeTypes", Lists.newArrayList(
-                            "SPOOKY",
-                            "!MUSHROOM",
-                            "!NETHER",
-                            "!END"
+                                    "SPOOKY",
+                                    "!MUSHROOM",
+                                    "!NETHER",
+                                    "!END"
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             PILLAGER_SPAWN_WEIGHT = builder
@@ -540,10 +540,10 @@ public class DungeonsMobsConfig {
                             + "Put a \"!\" before the type to prevent spawning in that biome type. \n"
                             + "Leave this blank if you don't want them to spawn at all.")
                     .defineList("whispererBiomeTypes", Lists.newArrayList(
-                            "JUNGLE",
-                            "!MUSHROOM",
-                            "!NETHER",
-                            "!END"
+                                    "JUNGLE",
+                                    "!MUSHROOM",
+                                    "!NETHER",
+                                    "!END"
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             WHISPERER_SPAWN_WEIGHT = builder
@@ -561,10 +561,10 @@ public class DungeonsMobsConfig {
                             + "Put a \"!\" before the type to prevent spawning in that biome type. \n"
                             + "Leave this blank if you don't want them to spawn at all.")
                     .defineList("leapleafBiomeTypes", Lists.newArrayList(
-                            "JUNGLE",
-                            "!MUSHROOM",
-                            "!NETHER",
-                            "!END"
+                                    "JUNGLE",
+                                    "!MUSHROOM",
+                                    "!NETHER",
+                                    "!END"
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             LEAPLEAF_SPAWN_WEIGHT = builder
@@ -582,10 +582,10 @@ public class DungeonsMobsConfig {
                             + "Put a \"!\" before the type to prevent spawning in that biome type. \n"
                             + "Leave this blank if you don't want them to spawn at all.")
                     .defineList("quickGrowingVineBiomeTypes", Lists.newArrayList(
-                            "JUNGLE",
-                            "!MUSHROOM",
-                            "!NETHER",
-                            "!END"
+                                    "JUNGLE",
+                                    "!MUSHROOM",
+                                    "!NETHER",
+                                    "!END"
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             QUICK_GROWING_VINE_SPAWN_WEIGHT = builder
@@ -603,10 +603,10 @@ public class DungeonsMobsConfig {
                             + "Put a \"!\" before the type to prevent spawning in that biome type. \n"
                             + "Leave this blank if you don't want them to spawn at all.")
                     .defineList("poisonQuillVineBiomeTypes", Lists.newArrayList(
-                            "JUNGLE",
-                            "!MUSHROOM",
-                            "!NETHER",
-                            "!END"
+                                    "JUNGLE",
+                                    "!MUSHROOM",
+                                    "!NETHER",
+                                    "!END"
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             POISON_QUILL_VINE_SPAWN_WEIGHT = builder
@@ -624,13 +624,13 @@ public class DungeonsMobsConfig {
                             + "Put a \"!\" before the type to prevent spawning in that biome type. \n"
                             + "Leave this blank if you don't want them to spawn at all.")
                     .defineList("fungusThrowerBiomeTypes", Lists.newArrayList(
-                            "NETHER",
-                            "CRIMSON",
-                            "!WARPED",
-                            "!SOULSAND",
-                            "!DELTA",
-                            "!OVERWORLD",
-                            "!END"
+                                    "NETHER",
+                                    "CRIMSON",
+                                    "!WARPED",
+                                    "!SOULSAND",
+                                    "!DELTA",
+                                    "!OVERWORLD",
+                                    "!END"
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             FUNGUS_THROWER_SPAWN_WEIGHT = builder
@@ -648,13 +648,13 @@ public class DungeonsMobsConfig {
                             + "Put a \"!\" before the type to prevent spawning in that biome type. \n"
                             + "Leave this blank if you don't want them to spawn at all.")
                     .defineList("zombifiedFungusThrowerBiomeTypes", Lists.newArrayList(
-                            "NETHER",
-                            "CRIMSON",
-                            "!WARPED",
-                            "!SOULSAND",
-                            "!DELTA",
-                            "!OVERWORLD",
-                            "!END"
+                                    "NETHER",
+                                    "CRIMSON",
+                                    "!WARPED",
+                                    "!SOULSAND",
+                                    "!DELTA",
+                                    "!OVERWORLD",
+                                    "!END"
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             ZOMBIFIED_FUNGUS_THROWER_SPAWN_WEIGHT = builder
@@ -673,13 +673,13 @@ public class DungeonsMobsConfig {
                             + "Put a \"!\" before the type to prevent spawning in that biome type. \n"
                             + "Leave this blank if you don't want them to spawn at all.")
                     .defineList("witherSkeletonBiomeTypes", Lists.newArrayList(
-                            "NETHER",
-                            "SOULSAND",
-                            "!CRIMSON",
-                            "!WARPED",
-                            "!DELTA",
-                            "!OVERWORLD",
-                            "!END"
+                                    "NETHER",
+                                    "SOULSAND",
+                                    "!CRIMSON",
+                                    "!WARPED",
+                                    "!DELTA",
+                                    "!OVERWORLD",
+                                    "!END"
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             WITHER_SKELETON_SPAWN_WEIGHT = builder
@@ -697,10 +697,10 @@ public class DungeonsMobsConfig {
                             + "Put a \"!\" before the type to prevent spawning in that biome type. \n"
                             + "Leave this blank if you don't want them to spawn at all.")
                     .defineList("sunkenSkeletonBiomeTypes", Lists.newArrayList(
-                            "WATER",
-                            "!MUSHROOM",
-                            "!NETHER",
-                            "!END"
+                                    "WATER",
+                                    "!MUSHROOM",
+                                    "!NETHER",
+                                    "!END"
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             SUNKEN_SKELETON_SPAWN_WEIGHT = builder
@@ -718,10 +718,10 @@ public class DungeonsMobsConfig {
                             + "Put a \"!\" before the type to prevent spawning in that biome type. \n"
                             + "Leave this blank if you don't want them to spawn at all.")
                     .defineList("drownedNecromancerBiomeTypes", Lists.newArrayList(
-                            "OCEAN",
-                            "!MUSHROOM",
-                            "!NETHER",
-                            "!END"
+                                    "OCEAN",
+                                    "!MUSHROOM",
+                                    "!NETHER",
+                                    "!END"
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             DROWNED_NECROMANCER_SPAWN_WEIGHT = builder
@@ -740,10 +740,10 @@ public class DungeonsMobsConfig {
                             + "Put a \"!\" before the type to prevent spawning in that biome type. \n"
                             + "Leave this blank if you don't want them to spawn at all.")
                     .defineList("wavewhispererBiomeTypes", Lists.newArrayList(
-                            "OCEAN",
-                            "!MUSHROOM",
-                            "!NETHER",
-                            "!END"
+                                    "OCEAN",
+                                    "!MUSHROOM",
+                                    "!NETHER",
+                                    "!END"
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             WAVEWHISPERER_SPAWN_WEIGHT = builder
@@ -761,10 +761,10 @@ public class DungeonsMobsConfig {
                             + "Put a \"!\" before the type to prevent spawning in that biome type. \n"
                             + "Leave this blank if you don't want them to spawn at all.")
                     .defineList("quickGrowingAnemoneBiomeTypes", Lists.newArrayList(
-                            "OCEAN",
-                            "!MUSHROOM",
-                            "!NETHER",
-                            "!END"
+                                    "OCEAN",
+                                    "!MUSHROOM",
+                                    "!NETHER",
+                                    "!END"
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             QUICK_GROWING_ANEMONE_SPAWN_WEIGHT = builder
@@ -782,10 +782,10 @@ public class DungeonsMobsConfig {
                             + "Put a \"!\" before the type to prevent spawning in that biome type. \n"
                             + "Leave this blank if you don't want them to spawn at all.")
                     .defineList("poisonAnemoneBiomeTypes", Lists.newArrayList(
-                            "OCEAN",
-                            "!MUSHROOM",
-                            "!NETHER",
-                            "!END"
+                                    "OCEAN",
+                                    "!MUSHROOM",
+                                    "!NETHER",
+                                    "!END"
                             ),
                             (itemRaw) -> itemRaw instanceof String);
             POISON_ANEMONE_SPAWN_WEIGHT = builder
@@ -902,15 +902,15 @@ public class DungeonsMobsConfig {
                             + "Put a \"!\" before the type to prevent spawning (in biome-specific raids) in that biome type. \n"
                             + "Leave this blank if you don't want them to spawn (in biome-specific raids) at all.")
                     .defineList("squallGolemBiomeTypes", Lists.newArrayList(
-                            "MOUNTAIN",
-                            "!SANDY",
-                            "!JUNGLE",
-                            "!FOREST",
-                            "!MUSHROOM",
-                            "!HOT",
-                            "!MUSHROOM",
-                            "!NETHER",
-                            "!END"
+                                    "MOUNTAIN",
+                                    "!SANDY",
+                                    "!JUNGLE",
+                                    "!FOREST",
+                                    "!MUSHROOM",
+                                    "!HOT",
+                                    "!MUSHROOM",
+                                    "!NETHER",
+                                    "!END"
                             ),
                             (itemRaw) -> itemRaw instanceof String);
 

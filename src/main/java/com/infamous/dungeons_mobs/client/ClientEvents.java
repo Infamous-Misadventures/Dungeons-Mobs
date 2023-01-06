@@ -11,7 +11,8 @@ import com.infamous.dungeons_mobs.client.renderer.ender.EndersentRenderer;
 import com.infamous.dungeons_mobs.client.renderer.ender.SnarelingRenderer;
 import com.infamous.dungeons_mobs.client.renderer.ender.WatchlingRenderer;
 import com.infamous.dungeons_mobs.client.renderer.golem.SquallGolemRenderer;
-import com.infamous.dungeons_mobs.client.renderer.illager.*;
+import com.infamous.dungeons_mobs.client.renderer.illager.DefaultIllagerRenderer;
+import com.infamous.dungeons_mobs.client.renderer.illager.DungeonsIllusionerRenderer;
 import com.infamous.dungeons_mobs.client.renderer.jungle.LeapleafRenderer;
 import com.infamous.dungeons_mobs.client.renderer.jungle.PoisonQuillVineRenderer;
 import com.infamous.dungeons_mobs.client.renderer.jungle.QuickGrowingVineRenderer;
@@ -25,7 +26,6 @@ import com.infamous.dungeons_mobs.client.renderer.slime.ConjuredSlimeRenderer;
 import com.infamous.dungeons_mobs.client.renderer.summonables.*;
 import com.infamous.dungeons_mobs.client.renderer.undead.*;
 import com.infamous.dungeons_mobs.client.renderer.water.*;
-import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.entities.illagers.IllusionerCloneEntity;
 import com.infamous.dungeons_mobs.entities.illagers.MageCloneEntity;
 import com.infamous.dungeons_mobs.entities.illagers.MageEntity;
@@ -75,7 +75,7 @@ public class ClientEvents {
 ////        if(DungeonsMobsConfig.COMMON.ENABLE_EVOKERS_WEARING_ARMOR.get()){
 //            event.registerEntityRenderer(EntityType.EVOKER, ReplacedEvokerRenderer::new);
 ////        }
-        
+
         event.registerEntityRenderer(EntityType.DROWNED, CustomDrownedRenderer::new);
 
         event.registerEntityRenderer(ModEntityTypes.MOSSY_SKELETON.get(), CustomSkeletonRenderer::new);
@@ -83,8 +83,7 @@ public class ClientEvents {
         event.registerEntityRenderer(ModEntityTypes.NECROMANCER.get(), NecromancerRenderer::new);
 
 
-
-        event.registerEntityRenderer(ModEntityTypes.ROYAL_GUARD.get(), manager -> new DefaultIllagerRenderer<>(manager, new RoyalGuardModel(), 0.9375F*1.2F));
+        event.registerEntityRenderer(ModEntityTypes.ROYAL_GUARD.get(), manager -> new DefaultIllagerRenderer<>(manager, new RoyalGuardModel(), 0.9375F * 1.2F));
         event.registerEntityRenderer(ModEntityTypes.MOUNTAINEER.get(), manager -> new DefaultIllagerRenderer<>(manager, new MountaineerModel()));
 
         event.registerEntityRenderer(ModEntityTypes.ICEOLOGER.get(), manager -> new DefaultIllagerRenderer<>(manager, new IceologerModel()));
@@ -112,9 +111,9 @@ public class ClientEvents {
         event.registerEntityRenderer(ModEntityTypes.LEAPLEAF.get(), LeapleafRenderer::new);
         event.registerEntityRenderer(ModEntityTypes.POISON_QUILL_VINE.get(), PoisonQuillVineRenderer::new);
         event.registerEntityRenderer(ModEntityTypes.QUICK_GROWING_VINE.get(), QuickGrowingVineRenderer::new);
-        
+
         event.registerEntityRenderer(ModEntityTypes.POISON_QUILL.get(), PoisonQuillRenderer::new);
-        
+
         event.registerEntityRenderer(ModEntityTypes.MAGE_MISSILE.get(), MageMissileRenderer::new);
 
         event.registerEntityRenderer(ModEntityTypes.SQUALL_GOLEM.get(), SquallGolemRenderer::new);
@@ -136,12 +135,12 @@ public class ClientEvents {
         event.registerEntityRenderer(ModEntityTypes.TORNADO.get(), WindcallerTornadoRenderer::new);
         event.registerEntityRenderer(ModEntityTypes.WINDCALLER_BLAST_PROJECTILE.get(), EmptyRenderer::new);
         event.registerEntityRenderer(ModEntityTypes.AREA_DAMAGE.get(), EmptyRenderer::new);
-        
+
         event.registerEntityRenderer(ModEntityTypes.SUMMON_SPOT.get(), SummonSpotRenderer::new);
-        
+
         event.registerEntityRenderer(ModEntityTypes.SIMPLE_TRAP.get(), SimpleTrapRenderer::new);
         event.registerEntityRenderer(ModEntityTypes.KELP_TRAP.get(), KelpTrapRenderer::new);
-        
+
         event.registerEntityRenderer(ModEntityTypes.WRAITH_FIRE.get(), WraithFireRenderer::new);
 
 
@@ -160,10 +159,10 @@ public class ClientEvents {
         event.registerEntityRenderer(ModEntityTypes.BLASTLING.get(), BlastlingRenderer::new);
         event.registerEntityRenderer(ModEntityTypes.WATCHLING.get(), WatchlingRenderer::new);
         event.registerEntityRenderer(ModEntityTypes.SNARELING.get(), SnarelingRenderer::new);
-        
+
         event.registerEntityRenderer(ModEntityTypes.BLASTLING_BULLET.get(), NecromancerOrbRenderer::new);
         event.registerEntityRenderer(ModEntityTypes.SNARELING_GLOB.get(), SnarelingGlobRenderer::new);
-        
+
         event.registerEntityRenderer(ModEntityTypes.WILDFIRE.get(), WildfireRenderer::new);
 
 

@@ -7,13 +7,11 @@ import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
-
-import net.minecraft.world.item.Item.Properties;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class PiglinHelmetItem extends ArmorItem {
 

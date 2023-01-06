@@ -8,15 +8,15 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 
 public class NecromancyParticle extends TextureSheetParticle {
-	
+
     protected NecromancyParticle(ClientLevel level, double xCoord, double yCoord, double zCoord,
-    		SpriteSet spriteSet, double xd, double yd, double zd) {
+                                 SpriteSet spriteSet, double xd, double yd, double zd) {
         super(level, xCoord, yCoord, zCoord, xd, yd, zd);
 
         this.quadSize *= 1.25F;
         this.lifetime = 15;
         this.hasPhysics = false;
-        
+
         this.pickSprite(spriteSet);
     }
 
@@ -27,18 +27,18 @@ public class NecromancyParticle extends TextureSheetParticle {
     @Override
     public void tick() {
         if (this.age++ >= this.lifetime) {
-           this.remove();
+            this.remove();
         }
         fadeOut();
     }
-    
+
     @Override
     protected int getLightColor(float p_189214_1_) {
-    	return 240;
+        return 240;
     }
 
     private void fadeOut() {
-        this.alpha = (-(1/(float)lifetime) * age + 1);
+        this.alpha = (-(1 / (float) lifetime) * age + 1);
     }
 
     @OnlyIn(Dist.CLIENT)

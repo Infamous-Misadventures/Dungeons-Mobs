@@ -4,7 +4,6 @@ import com.infamous.dungeons_mobs.interfaces.IAquaticMob;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.util.DefaultRandomPos;
-import net.minecraft.world.entity.ai.util.RandomPos;
 import net.minecraft.world.phys.Vec3;
 
 public class SwimUpGoal<T extends PathfinderMob & IAquaticMob> extends Goal {
@@ -29,7 +28,7 @@ public class SwimUpGoal<T extends PathfinderMob & IAquaticMob> extends Goal {
 
     public void tick() {
         if (this.aquaticMob.getY() < (double) (this.seaLevel - 1) && (this.aquaticMob.getNavigation().isDone() || this.aquaticMob.closeToNextPos(this.aquaticMob))) {
-            Vec3 vector3d = DefaultRandomPos.getPosTowards(this.aquaticMob, 4, 8, new Vec3(this.aquaticMob.getX(), (double) (this.seaLevel - 1), this.aquaticMob.getZ()), (double)((float)Math.PI / 2F));
+            Vec3 vector3d = DefaultRandomPos.getPosTowards(this.aquaticMob, 4, 8, new Vec3(this.aquaticMob.getX(), this.seaLevel - 1, this.aquaticMob.getZ()), (float) Math.PI / 2F);
             if (vector3d == null) {
                 this.stuck = true;
                 return;

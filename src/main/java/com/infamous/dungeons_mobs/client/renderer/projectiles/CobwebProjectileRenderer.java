@@ -15,12 +15,12 @@ public class CobwebProjectileRenderer extends GeoProjectilesRenderer<CobwebProje
     public CobwebProjectileRenderer(EntityRendererProvider.Context renderManager) {
         super(renderManager, new CobwebProjectileModel());
     }
-	
+
     @Override
     public void render(CobwebProjectileEntity entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
         float scaleFactor = 1.0F;
         matrixStackIn.scale(scaleFactor, scaleFactor, scaleFactor);
-        
+
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
     }
 

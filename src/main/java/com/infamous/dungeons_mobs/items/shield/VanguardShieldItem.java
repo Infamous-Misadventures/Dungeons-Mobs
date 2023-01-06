@@ -1,13 +1,8 @@
 package com.infamous.dungeons_mobs.items.shield;
 
-import com.infamous.dungeons_mobs.client.models.armor.VanguardShieldModel;
 import com.infamous.dungeons_mobs.items.shield.bewlr.VanguardShieldBEWLR;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShieldItem;
@@ -16,8 +11,6 @@ import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.common.util.NonNullLazy;
 
 import java.util.function.Consumer;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class VanguardShieldItem extends ShieldItem {
     public VanguardShieldItem(Properties builder) {
@@ -38,15 +31,12 @@ public class VanguardShieldItem extends ShieldItem {
     }
 
     @Override
-    public void initializeClient(Consumer<IClientItemExtensions> consumer)
-    {
-        consumer.accept(new IClientItemExtensions()
-        {
+    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+        consumer.accept(new IClientItemExtensions() {
             static final NonNullLazy<BlockEntityWithoutLevelRenderer> renderer = NonNullLazy.of(() -> new VanguardShieldBEWLR(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels()));
 
             @Override
-            public BlockEntityWithoutLevelRenderer getCustomRenderer()
-            {
+            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
                 return renderer.get();
             }
         });

@@ -15,8 +15,6 @@ import static com.infamous.dungeons_mobs.DungeonsMobs.PROXY;
 import static com.infamous.dungeons_mobs.mobenchants.NewMobEnchantUtils.executeIfPresentWithLevel;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchants.BURNING;
 
-import baguchan.enchantwithmob.mobenchant.MobEnchant.Properties;
-
 public class BurningMobEnchant extends MobEnchant {
 
     public BurningMobEnchant(Properties properties) {
@@ -25,13 +23,13 @@ public class BurningMobEnchant extends MobEnchant {
 
     @SubscribeEvent
     public static void OnLivingUpdate(LivingEvent.LivingTickEvent event) {
-        LivingEntity entity = (LivingEntity) event.getEntity();
+        LivingEntity entity = event.getEntity();
 
         executeIfPresentWithLevel(entity, BURNING.get(), (level) -> {
             MobProps comboCap = MobPropsHelper.getMobPropsCapability(entity);
-            if(comboCap == null) return;
+            if (comboCap == null) return;
             int burnNearbyTimer = comboCap.getBurnNearbyTimer();
-            if(burnNearbyTimer <= 0){
+            if (burnNearbyTimer <= 0) {
                 PROXY.spawnParticles(entity, ParticleTypes.FLAME);
                 applyToNearbyEntities(entity, 1.5F,
                         getCanApplyToEnemyPredicate(entity), (LivingEntity nearbyEntity) -> {
@@ -40,8 +38,7 @@ public class BurningMobEnchant extends MobEnchant {
                         }
                 );
                 comboCap.setBurnNearbyTimer(20);
-            }
-            else{
+            } else {
                 comboCap.setBurnNearbyTimer(burnNearbyTimer - 1);
             }
         });

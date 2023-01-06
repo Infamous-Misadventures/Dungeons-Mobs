@@ -1,6 +1,5 @@
 package com.infamous.dungeons_mobs.worldgen;
 
-import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.entities.blaze.WildfireEntity;
 import com.infamous.dungeons_mobs.entities.creepers.IcyCreeperEntity;
 import com.infamous.dungeons_mobs.entities.ender.BlastlingEntity;
@@ -24,21 +23,13 @@ import com.infamous.dungeons_mobs.entities.water.PoisonAnemoneEntity;
 import com.infamous.dungeons_mobs.entities.water.QuickGrowingKelpEntity;
 import com.infamous.dungeons_mobs.entities.water.SunkenSkeletonEntity;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.ZombifiedPiglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
-import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
-import static net.minecraft.world.entity.EntityType.HUSK;
 
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class EntityTypeAttributes {
@@ -82,7 +73,7 @@ public class EntityTypeAttributes {
 
         event.put(ModEntityTypes.GEOMANCER_WALL.get(), GeomancerWallEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.GEOMANCER_BOMB.get(), GeomancerBombEntity.setCustomAttributes().build());
-        
+
         event.put(ModEntityTypes.FUNGUS_THROWER.get(), Piglin.createAttributes().build());
         event.put(ModEntityTypes.ZOMBIFIED_FUNGUS_THROWER.get(), ZombifiedPiglin.createAttributes().build());
 
@@ -96,7 +87,7 @@ public class EntityTypeAttributes {
         event.put(ModEntityTypes.BLASTLING.get(), BlastlingEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.WATCHLING.get(), WatchlingEntity.setCustomAttributes().build());
         event.put(ModEntityTypes.SNARELING.get(), SnarelingEntity.setCustomAttributes().build());
-        
+
         event.put(ModEntityTypes.WILDFIRE.get(), WildfireEntity.setCustomAttributes().build());
 
     }

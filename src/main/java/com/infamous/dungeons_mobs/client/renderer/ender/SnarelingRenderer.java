@@ -13,15 +13,15 @@ import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 public class SnarelingRenderer extends GeoEntityRenderer<AbstractEnderlingEntity> {
-	public SnarelingRenderer(EntityRendererProvider.Context renderManager) {
-		super(renderManager, new SnarelingModel());
-		this.addLayer(new GeoEyeLayer<>(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/ender/snareling_eyes.png")));
-	}
+    public SnarelingRenderer(EntityRendererProvider.Context renderManager) {
+        super(renderManager, new SnarelingModel());
+        this.addLayer(new GeoEyeLayer<>(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/ender/snareling_eyes.png")));
+    }
 
-	@Override
-	public RenderType getRenderType(AbstractEnderlingEntity animatable, float partialTicks, PoseStack stack,
-			MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn,
-			ResourceLocation textureLocation) {
-		return RenderType.entityTranslucent(getTextureLocation(animatable));
-	}
+    @Override
+    public RenderType getRenderType(AbstractEnderlingEntity animatable, float partialTicks, PoseStack stack,
+                                    MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn,
+                                    ResourceLocation textureLocation) {
+        return RenderType.entityTranslucent(getTextureLocation(animatable));
+    }
 }

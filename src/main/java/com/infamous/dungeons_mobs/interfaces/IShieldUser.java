@@ -1,6 +1,6 @@
 package com.infamous.dungeons_mobs.interfaces;
 
-public interface IShieldUser{
+public interface IShieldUser {
 
     int getShieldCooldownTime();
 

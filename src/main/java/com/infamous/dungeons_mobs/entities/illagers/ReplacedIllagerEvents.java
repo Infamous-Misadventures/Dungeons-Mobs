@@ -23,9 +23,9 @@ public class ReplacedIllagerEvents {
 
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onEntityJoinWorld(EntityJoinLevelEvent event){
+    public static void onEntityJoinWorld(EntityJoinLevelEvent event) {
         Entity entity = event.getEntity();
-        if(entity instanceof Vindicator vindicatorEntity) {
+        if (entity instanceof Vindicator vindicatorEntity) {
             GoalUtils.removeGoal(vindicatorEntity.goalSelector, MeleeAttackGoal.class);
             vindicatorEntity.goalSelector.addGoal(4, new ReplacedModdedAttackGoal<>(vindicatorEntity, null, 20));
             vindicatorEntity.goalSelector.addGoal(5, new ApproachTargetGoal(vindicatorEntity, 0, 1.0D, true));
@@ -36,10 +36,10 @@ public class ReplacedIllagerEvents {
     }
 
     @SubscribeEvent
-    public static void onLivingUpdate(LivingEvent.LivingTickEvent event){
+    public static void onLivingUpdate(LivingEvent.LivingTickEvent event) {
 
         LivingEntity livingEntity = event.getEntity();
-        if(livingEntity instanceof Vindicator){
+        if (livingEntity instanceof Vindicator) {
             tickDownAnimTimers((Mob) livingEntity);
         }
     }

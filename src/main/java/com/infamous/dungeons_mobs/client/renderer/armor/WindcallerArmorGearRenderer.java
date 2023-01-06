@@ -28,15 +28,15 @@ public class WindcallerArmorGearRenderer extends ArmorGearRenderer<WindcallerArm
         RenderUtils.translate(bone, stack);
         RenderUtils.moveToPivot(bone, stack);
         EntityRenderer<? super LivingEntity> entityRenderer = Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(entityLiving);
-        if(!(entityRenderer instanceof GeoEntityRenderer) || !bone.getName().contains("armor")) {
+        if (!(entityRenderer instanceof GeoEntityRenderer) || !bone.getName().contains("armor")) {
             RenderUtils.rotate(bone, stack);
         }
         RenderUtils.scale(bone, stack);
         ArmorMaterial material = this.currentArmorItem.getMaterial();
-        if(bone.getName().contains("Body") && material instanceof DungeonsArmorMaterial && ((DungeonsArmorMaterial) material).getBaseType() == ArmorMaterialBaseType.CLOTH){
+        if (bone.getName().contains("Body") && material instanceof DungeonsArmorMaterial && ((DungeonsArmorMaterial) material).getBaseType() == ArmorMaterialBaseType.CLOTH) {
             stack.scale(1.0F, 1.0F, 0.85F);
         }
-        if(entityLiving instanceof WindcallerEntity && bone.getName().contains("Head")){
+        if (entityLiving instanceof WindcallerEntity && bone.getName().contains("Head")) {
             stack.scale(0.93F, 0.93F, 0.93F);
             stack.translate(0.0D, 0.116D, 0.0D);
         }
@@ -47,7 +47,7 @@ public class WindcallerArmorGearRenderer extends ArmorGearRenderer<WindcallerArm
     public void render(float partialTicks, PoseStack stack, VertexConsumer bufferIn, int packedLightIn) {
 
         AnimatedGeoModel<WindcallerArmorGear> geoModelProvider = getGeoModelProvider();
-        if(geoModelProvider instanceof WindcallerArmorGearModel){
+        if (geoModelProvider instanceof WindcallerArmorGearModel) {
             ((WindcallerArmorGearModel<WindcallerArmorGear>) geoModelProvider).setWearer(this.entityLiving);
         }
         super.render(partialTicks, stack, bufferIn, packedLightIn);

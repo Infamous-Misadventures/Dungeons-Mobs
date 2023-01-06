@@ -25,7 +25,7 @@ public class MageModel extends AnimatedGeoModel {
 
     @Override
     public ResourceLocation getModelResource(Object entity) {
-        return new ResourceLocation(DungeonsMobs.MODID, "geo/geo_illager.geo.json") ;
+        return new ResourceLocation(DungeonsMobs.MODID, "geo/geo_illager.geo.json");
     }
 
     @Override
@@ -41,11 +41,11 @@ public class MageModel extends AnimatedGeoModel {
 
         IBone head = this.getAnimationProcessor().getBone("bipedHead");
         IBone illagerArms = this.getAnimationProcessor().getBone("illagerArms");
-        
+
         illagerArms.setHidden(true);
 
         IBone cape = this.getAnimationProcessor().getBone("bipedCape");
-        if(entity instanceof SpawnArmoredMob && entity instanceof Mob) {
+        if (entity instanceof SpawnArmoredMob && entity instanceof Mob) {
             Mob mobEntity = (Mob) entity;
             cape.setHidden(mobEntity.getItemBySlot(EquipmentSlot.CHEST).getItem() != ((SpawnArmoredMob) entity).getArmorSet().getChest().get());
         }
@@ -55,16 +55,16 @@ public class MageModel extends AnimatedGeoModel {
             head.setRotationY(head.getRotationY() + (extraData.netHeadYaw * ((float) Math.PI / 180F)));
         }
     }
-    
-	@Override
-	public void setMolangQueries(IAnimatable animatable, double currentTick) {
-		super.setMolangQueries(animatable, currentTick);
-		
-		MolangParser parser = GeckoLibCache.getInstance().parser;
-		LivingEntity livingEntity = (LivingEntity) animatable;
-		Vec3 velocity = livingEntity.getDeltaMovement();
-		float groundSpeed = Mth.sqrt((float) ((velocity.x * velocity.x) + (velocity.z * velocity.z)));
-		parser.setValue("query.ground_speed", () -> groundSpeed * 15);
-	}
+
+    @Override
+    public void setMolangQueries(IAnimatable animatable, double currentTick) {
+        super.setMolangQueries(animatable, currentTick);
+
+        MolangParser parser = GeckoLibCache.getInstance().parser;
+        LivingEntity livingEntity = (LivingEntity) animatable;
+        Vec3 velocity = livingEntity.getDeltaMovement();
+        float groundSpeed = Mth.sqrt((float) ((velocity.x * velocity.x) + (velocity.z * velocity.z)));
+        parser.setValue("query.ground_speed", () -> groundSpeed * 15);
+    }
 }
 

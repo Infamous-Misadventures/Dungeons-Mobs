@@ -13,26 +13,26 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class RedstoneCubeModel<T extends Entity> extends HierarchicalModel<T> {
-   private final ModelPart cubeBody;
+    private final ModelPart cubeBody;
 
-   public RedstoneCubeModel(ModelPart modelPart) {
-      this.cubeBody = modelPart.getChild("cube");
-   }
+    public RedstoneCubeModel(ModelPart modelPart) {
+        this.cubeBody = modelPart.getChild("cube");
+    }
 
-   public static LayerDefinition createBodyLayer() {
-      MeshDefinition meshdefinition = new MeshDefinition();
-      PartDefinition partdefinition = meshdefinition.getRoot();
-      partdefinition.addOrReplaceChild("cube", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, 16.0F, -4.0F, 8.0F, 8.0F, 8.0F), PartPose.ZERO);
-      return LayerDefinition.create(meshdefinition, 128, 64);
-   }
+    public static LayerDefinition createBodyLayer() {
+        MeshDefinition meshdefinition = new MeshDefinition();
+        PartDefinition partdefinition = meshdefinition.getRoot();
+        partdefinition.addOrReplaceChild("cube", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, 16.0F, -4.0F, 8.0F, 8.0F, 8.0F), PartPose.ZERO);
+        return LayerDefinition.create(meshdefinition, 128, 64);
+    }
 
-   /**
-    * Sets this entity's model rotation angles
-    */
-   public void setupAnim(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-   }
+    /**
+     * Sets this entity's model rotation angles
+     */
+    public void setupAnim(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    }
 
-   public ModelPart root() {
-      return this.cubeBody;
-   }
+    public ModelPart root() {
+        return this.cubeBody;
+    }
 }

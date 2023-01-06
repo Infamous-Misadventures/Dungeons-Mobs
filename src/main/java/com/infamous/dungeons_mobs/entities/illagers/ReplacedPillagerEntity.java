@@ -20,16 +20,16 @@ public class ReplacedPillagerEntity implements IAnimatable, IGeoReplacedEntity {
     public Mob entity;
 
     @Override
-    public Mob getMob(){
+    public Mob getMob() {
         return this.entity;
     }
 
     @Override
-    public void setMob(Mob mob){
+    public void setMob(Mob mob) {
         this.entity = mob;
     }
 
-    private AnimationFactory factory = GeckoLibUtil.createFactory(this);
+    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     @Override
     public void registerControllers(AnimationData data) {
@@ -42,18 +42,18 @@ public class ReplacedPillagerEntity implements IAnimatable, IGeoReplacedEntity {
             animation += "_mcd";
         }
         String handSide = ".right";
-        if(this.entity.isLeftHanded()){
+        if (this.entity.isLeftHanded()) {
             handSide = ".left";
         }
 //        if(this.entity.getMainHandItem().isEmpty()){
 //            handSide += ".both";
 //        }
-        if(IllagerArmsUtil.armorHasCrossedArms((Pillager) this.entity, this.entity.getItemBySlot(EquipmentSlot.CHEST))){
+        if (IllagerArmsUtil.armorHasCrossedArms((Pillager) this.entity, this.entity.getItemBySlot(EquipmentSlot.CHEST))) {
         }
         if (((Pillager) this.entity).isChargingCrossbow()) {
             event.getController().setAnimation(new AnimationBuilder()
                     .addAnimation(animation + ".charge" + handSide, LOOP));
-        }else if (this.entity.isAggressive() && !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
+        } else if (this.entity.isAggressive() && !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
             event.getController().setAnimation(new AnimationBuilder()
                     .addAnimation(animation + ".run" + handSide, LOOP));
         } else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {

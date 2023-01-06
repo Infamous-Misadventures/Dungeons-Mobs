@@ -17,7 +17,7 @@ public class IllusionerArmorGearRenderer extends ArmorGearRenderer<IllusionerArm
     public void render(float partialTicks, PoseStack stack, VertexConsumer bufferIn, int packedLightIn) {
 
         AnimatedGeoModel<IllusionerArmorGear> geoModelProvider = getGeoModelProvider();
-        if(geoModelProvider instanceof IllusionerArmorGearModel){
+        if (geoModelProvider instanceof IllusionerArmorGearModel) {
             ((IllusionerArmorGearModel<IllusionerArmorGear>) geoModelProvider).setWearer(this.entityLiving);
         }
         super.render(partialTicks, stack, bufferIn, packedLightIn);

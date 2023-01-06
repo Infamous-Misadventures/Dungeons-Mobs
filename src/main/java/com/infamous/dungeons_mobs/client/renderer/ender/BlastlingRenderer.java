@@ -13,15 +13,15 @@ import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 public class BlastlingRenderer extends GeoEntityRenderer<AbstractEnderlingEntity> {
-	public BlastlingRenderer(EntityRendererProvider.Context renderManager) {
-		super(renderManager, new BlastlingModel());
-		this.addLayer(new GeoEyeLayer<>(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/ender/blastling_eyes.png")));
-	}
+    public BlastlingRenderer(EntityRendererProvider.Context renderManager) {
+        super(renderManager, new BlastlingModel());
+        this.addLayer(new GeoEyeLayer<>(this, new ResourceLocation(DungeonsMobs.MODID, "textures/entity/ender/blastling_eyes.png")));
+    }
 
-	@Override
-	public RenderType getRenderType(AbstractEnderlingEntity animatable, float partialTicks, PoseStack stack,
-			MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn,
-			ResourceLocation textureLocation) {
-		return RenderType.entityTranslucent(getTextureLocation(animatable));
-	}
+    @Override
+    public RenderType getRenderType(AbstractEnderlingEntity animatable, float partialTicks, PoseStack stack,
+                                    MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn,
+                                    ResourceLocation textureLocation) {
+        return RenderType.entityTranslucent(getTextureLocation(animatable));
+    }
 }

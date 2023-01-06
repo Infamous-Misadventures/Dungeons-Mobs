@@ -26,8 +26,8 @@ public class DungeonsGearCompat {
     private static Supplier<Item> ETERNAL_KNIFE = () -> Items.AIR;
 
     @SubscribeEvent
-    public static void onInterMod(InterModProcessEvent event){
-        if(ModList.get().isLoaded(DUNGEONS_GEAR_MOD_ID)){
+    public static void onInterMod(InterModProcessEvent event) {
+        if (ModList.get().isLoaded(DUNGEONS_GEAR_MOD_ID)) {
             IS_LOADED = true;
             GOLD_AXE = () -> getRegisteredItem("gold_axe");
             FIREBRAND = () -> getRegisteredItem("firebrand");
@@ -44,11 +44,11 @@ public class DungeonsGearCompat {
         return ForgeRegistries.ITEMS.getValue(getDungeonsGearResource(item));
     }
 
-    public static Item getOrDefault(Supplier<Item> dungeonsItemSupplier, Item defaultTo){
+    public static Item getOrDefault(Supplier<Item> dungeonsItemSupplier, Item defaultTo) {
         Item dungeonsItem = dungeonsItemSupplier.get();
-        if(dungeonsItem == Items.AIR){
+        if (dungeonsItem == Items.AIR) {
             return defaultTo;
-        } else{
+        } else {
             return dungeonsItem;
         }
     }
@@ -85,7 +85,7 @@ public class DungeonsGearCompat {
         return ETERNAL_KNIFE;
     }
 
-    public static boolean isLoaded(){
+    public static boolean isLoaded() {
         return IS_LOADED;
     }
 

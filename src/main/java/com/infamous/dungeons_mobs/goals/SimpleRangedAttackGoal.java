@@ -4,14 +4,11 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.EnumSet;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
-
-import net.minecraft.world.entity.ai.goal.Goal.Flag;
 
 public class SimpleRangedAttackGoal<T extends Mob> extends Goal {
     protected final T mob;
@@ -43,7 +40,7 @@ public class SimpleRangedAttackGoal<T extends Mob> extends Goal {
     }
 
     public boolean canUse() {
-        if(!this.mob.isHolding(this.weaponPredicate)){
+        if (!this.mob.isHolding(this.weaponPredicate)) {
             return false;
         }
         LivingEntity livingentity = this.mob.getTarget();
@@ -56,7 +53,7 @@ public class SimpleRangedAttackGoal<T extends Mob> extends Goal {
     }
 
     public boolean canContinueToUse() {
-        if(!this.mob.isHolding(this.weaponPredicate)){
+        if (!this.mob.isHolding(this.weaponPredicate)) {
             return false;
         }
         return this.canUse() || !this.mob.getNavigation().isDone();
@@ -77,7 +74,7 @@ public class SimpleRangedAttackGoal<T extends Mob> extends Goal {
             this.seeTime = 0;
         }
 
-        if (!(d0 > (double)this.attackRadiusSqr) && this.seeTime >= 5) {
+        if (!(d0 > (double) this.attackRadiusSqr) && this.seeTime >= 5) {
             this.mob.getNavigation().stop();
         } else {
             this.mob.getNavigation().moveTo(this.target, this.speedModifier);
@@ -92,10 +89,10 @@ public class SimpleRangedAttackGoal<T extends Mob> extends Goal {
             float f = Mth.sqrt((float) d0) / this.attackRadius;
             float lvt_5_1_ = Mth.clamp(f, 0.1F, 1.0F);
             this.performRangedAttack.accept(this.mob, this.target);
-            this.attackTime = Mth.floor(f * (float)(this.attackIntervalMax - this.attackIntervalMin) + (float)this.attackIntervalMin);
+            this.attackTime = Mth.floor(f * (float) (this.attackIntervalMax - this.attackIntervalMin) + (float) this.attackIntervalMin);
         } else if (this.attackTime < 0) {
             float f2 = Mth.sqrt((float) d0) / this.attackRadius;
-            this.attackTime = Mth.floor(f2 * (float)(this.attackIntervalMax - this.attackIntervalMin) + (float)this.attackIntervalMin);
+            this.attackTime = Mth.floor(f2 * (float) (this.attackIntervalMax - this.attackIntervalMin) + (float) this.attackIntervalMin);
         }
 
     }

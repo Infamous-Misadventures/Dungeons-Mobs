@@ -13,15 +13,17 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(SpiderModel.class)
-public class SpiderModelMixin{
+public class SpiderModelMixin {
 
-    @Shadow @Final private ModelPart root;
+    @Shadow
+    @Final
+    private ModelPart root;
     private float originalBodyRotateAngleX;
     private float originalBodyRotationPointY;
     private float originalBodyRotationPointZ;
 
     @Inject(at = @At("RETURN"), method = "<init>")
-    private void init(CallbackInfo callbackInfo){
+    private void init(CallbackInfo callbackInfo) {
         this.originalBodyRotateAngleX = getBody1().xRot;
         this.originalBodyRotationPointY = getBody1().y;
         this.originalBodyRotationPointZ = getBody1().z;
@@ -32,13 +34,13 @@ public class SpiderModelMixin{
     }
 
 
-    @Inject(at =@At("RETURN"), method = "setupAnim", cancellable = true)
-    private void setRotationAngles(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, CallbackInfo callbackInfo){
-        if (entityIn instanceof Mob && entityIn instanceof IWebShooter){
-            IWebShooter webShooter = (IWebShooter)entityIn;
+    @Inject(at = @At("RETURN"), method = "setupAnim", cancellable = true)
+    private void setRotationAngles(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, CallbackInfo callbackInfo) {
+        if (entityIn instanceof Mob && entityIn instanceof IWebShooter) {
+            IWebShooter webShooter = (IWebShooter) entityIn;
 
-            if(webShooter.isWebShooting()){
-                getBody1().xRot = ((float)Math.PI / 6F);
+            if (webShooter.isWebShooting()) {
+                getBody1().xRot = ((float) Math.PI / 6F);
                 getBody1().y = originalBodyRotationPointY - 5;
                 getBody1().z = originalBodyRotationPointZ - 2;
             } else {

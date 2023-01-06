@@ -35,14 +35,14 @@ public class ConjuredSlimeEntity extends Slime implements RangedAttackMob {
 
     protected void registerGoals() {
         //this.goalSelector.addGoal(1, new ConjuredSlimeEntity.FloatGoal(this));
-        this.goalSelector.addGoal(2, new ImmobileRangedAttackGoal( 40, 10.0F));
+        this.goalSelector.addGoal(2, new ImmobileRangedAttackGoal(40, 10.0F));
         this.goalSelector.addGoal(3, new ConjuredSlimeEntity.FaceRandomGoal(this));
         //this.goalSelector.addGoal(5, new ConjuredSlimeEntity.HopGoal(this));
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, this::canSlimeReach));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));
     }
 
-    private boolean canSlimeReach(LivingEntity target){
+    private boolean canSlimeReach(LivingEntity target) {
         return Math.abs(target.getY() - this.getY()) <= 4.0D;
     }
 
@@ -55,14 +55,14 @@ public class ConjuredSlimeEntity extends Slime implements RangedAttackMob {
      * Applies a velocity to the entities, to push them away from eachother.
      */
     public void push(Entity entityIn) {
-        if(!this.isSleeping()){
+        if (!this.isSleeping()) {
             if (!this.isPassengerOfSameVehicle(entityIn)) {
                 if (!entityIn.noPhysics && !this.noPhysics) {
                     double d0 = entityIn.getX() - this.getX();
                     double d1 = entityIn.getZ() - this.getZ();
                     double d2 = Mth.absMax(d0, d1);
-                    if (d2 >= (double)0.01F) {
-                        d2 = (double)Mth.sqrt((float) d2);
+                    if (d2 >= (double) 0.01F) {
+                        d2 = Mth.sqrt((float) d2);
                         d0 = d0 / d2;
                         d1 = d1 / d2;
                         double d3 = 1.0D / d2;
@@ -72,8 +72,8 @@ public class ConjuredSlimeEntity extends Slime implements RangedAttackMob {
 
                         d0 = d0 * d3;
                         d1 = d1 * d3;
-                        d0 = d0 * (double)0.05F;
-                        d1 = d1 * (double)0.05F;
+                        d0 = d0 * (double) 0.05F;
+                        d1 = d1 * (double) 0.05F;
                         d0 *= 0.5D;
                         d1 *= 0.5D;
                         if (!this.isVehicle()) {
@@ -125,7 +125,7 @@ public class ConjuredSlimeEntity extends Slime implements RangedAttackMob {
         double xDifference = target.getX() - this.getX();
         double yDifference = target.getY(0.5D) - this.getY(0.5D);
         double zDifference = target.getZ() - this.getZ();
-        float euclidDist = Mth.sqrt((float)(xDifference * xDifference + yDifference * yDifference + zDifference * zDifference));
+        float euclidDist = Mth.sqrt((float) (xDifference * xDifference + yDifference * yDifference + zDifference * zDifference));
 
         SlimeballEntity slimeballEntity = new SlimeballEntity(this.level,
                 this,
@@ -197,7 +197,7 @@ public class ConjuredSlimeEntity extends Slime implements RangedAttackMob {
                 return false;
             } else if (!livingentity.isAlive()) {
                 return false;
-            } else if (livingentity instanceof Player && ((Player)livingentity).getAbilities().invulnerable) {
+            } else if (livingentity instanceof Player && ((Player) livingentity).getAbilities().invulnerable) {
                 return false;
             } else {
                 return --this.growTieredTimer > 0;
@@ -209,7 +209,7 @@ public class ConjuredSlimeEntity extends Slime implements RangedAttackMob {
          */
         public void tick() {
             LivingEntity attackTarget = ConjuredSlimeEntity.this.getTarget();
-            if(attackTarget != null){
+            if (attackTarget != null) {
 
                 // HANDLE SEE TIME
                 double distanceSqToTarget = ConjuredSlimeEntity.this.distanceToSqr(attackTarget.getX(), attackTarget.getY(), attackTarget.getZ());
@@ -222,7 +222,7 @@ public class ConjuredSlimeEntity extends Slime implements RangedAttackMob {
 
                 // FACE THE TARGET
                 ConjuredSlimeEntity.this.lookAt(ConjuredSlimeEntity.this.getTarget(), 10.0F, 10.0F);
-                ((ConjuredSlimeEntity.MoveHelperController)ConjuredSlimeEntity.this.getMoveControl())
+                ((ConjuredSlimeEntity.MoveHelperController) ConjuredSlimeEntity.this.getMoveControl())
                         .setDirection(ConjuredSlimeEntity.this.getYRot());
 
                 // ATTACK WITH RANGED ATTACK OR TICK DOWN RANGED ATTACK TIME
@@ -234,13 +234,14 @@ public class ConjuredSlimeEntity extends Slime implements RangedAttackMob {
                     float f = Mth.sqrt((float) distanceSqToTarget) / this.attackRadius;
                     float clamp = Mth.clamp(f, 0.1F, 1.0F);
                     ConjuredSlimeEntity.this.performRangedAttack(attackTarget, clamp);
-                    this.rangedAttackTime = Mth.floor(f * (float)(this.maxRangedAttackTime - this.minRangedAttackInterval) + (float)this.minRangedAttackInterval);
+                    this.rangedAttackTime = Mth.floor(f * (float) (this.maxRangedAttackTime - this.minRangedAttackInterval) + (float) this.minRangedAttackInterval);
                 } else if (this.rangedAttackTime < 0) {
                     float f2 = Mth.sqrt((float) distanceSqToTarget) / this.attackRadius;
-                    this.rangedAttackTime = Mth.floor(f2 * (float)(this.maxRangedAttackTime - this.minRangedAttackInterval) + (float)this.minRangedAttackInterval);
+                    this.rangedAttackTime = Mth.floor(f2 * (float) (this.maxRangedAttackTime - this.minRangedAttackInterval) + (float) this.minRangedAttackInterval);
                 }
 
-            }}
+            }
+        }
     }
 
     static class FaceRandomGoal extends Goal {
@@ -272,10 +273,10 @@ public class ConjuredSlimeEntity extends Slime implements RangedAttackMob {
         public void tick() {
             if (--this.nextRandomizeTime <= 0) {
                 this.nextRandomizeTime = 40 + this.slime.getRandom().nextInt(60);
-                this.chosenDegrees = (float)this.slime.getRandom().nextInt(360);
+                this.chosenDegrees = (float) this.slime.getRandom().nextInt(360);
             }
 
-            ((ConjuredSlimeEntity.MoveHelperController)this.slime.getMoveControl())
+            ((ConjuredSlimeEntity.MoveHelperController) this.slime.getMoveControl())
                     .setDirection(this.chosenDegrees);
         }
     }
@@ -287,7 +288,7 @@ public class ConjuredSlimeEntity extends Slime implements RangedAttackMob {
         public MoveHelperController(ConjuredSlimeEntity slimeIn) {
             super(slimeIn);
             this.slime = slimeIn;
-            this.yRot = 180.0F * slimeIn.getYRot() / (float)Math.PI;
+            this.yRot = 180.0F * slimeIn.getYRot() / (float) Math.PI;
         }
 
         public void setDirection(float yRotIn) {

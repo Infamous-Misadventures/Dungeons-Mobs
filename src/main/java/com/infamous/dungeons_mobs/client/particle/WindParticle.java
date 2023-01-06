@@ -8,15 +8,15 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 
 public class WindParticle extends TextureSheetParticle {
-	
+
     protected WindParticle(ClientLevel level, double xCoord, double yCoord, double zCoord,
-    		SpriteSet spriteSet, double xd, double yd, double zd) {
+                           SpriteSet spriteSet, double xd, double yd, double zd) {
         super(level, xCoord, yCoord, zCoord, xd, yd, zd);
 
         this.quadSize *= 1.75F;
         this.lifetime = 15 + this.random.nextInt(15);
         this.hasPhysics = false;
-        
+
         this.pickSprite(spriteSet);
     }
 
@@ -34,7 +34,7 @@ public class WindParticle extends TextureSheetParticle {
     }
 
     private void fadeOut() {
-        this.alpha = (-(1/(float)lifetime) * age + 1);
+        this.alpha = (-(1 / (float) lifetime) * age + 1);
     }
 
     @OnlyIn(Dist.CLIENT)

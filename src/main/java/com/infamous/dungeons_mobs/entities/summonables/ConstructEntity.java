@@ -15,8 +15,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
 
-import net.minecraft.world.entity.Entity.RemovalReason;
-
 @SuppressWarnings("EntityConstructor")
 public abstract class ConstructEntity extends PathfinderMob {
     public static final EntityDataAccessor<Integer> LIFE_TICKS = SynchedEntityData.defineId(ConstructEntity.class, EntityDataSerializers.INT);

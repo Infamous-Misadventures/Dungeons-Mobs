@@ -21,10 +21,10 @@ public abstract class TridentRendererMixin extends EntityRenderer<ThrownTrident>
     }
 
     @Inject(at = @At("RETURN"), method = "getTextureLocation", cancellable = true)
-    private void checkColoredTexture(ThrownTrident tridentEntity, CallbackInfoReturnable<ResourceLocation> cir){
-        if(tridentEntity instanceof IHasItemStackData){
+    private void checkColoredTexture(ThrownTrident tridentEntity, CallbackInfoReturnable<ResourceLocation> cir) {
+        if (tridentEntity instanceof IHasItemStackData) {
             ItemStack dataItem = ((IHasItemStackData) tridentEntity).getDataItem();
-            if(dataItem.getItem() instanceof ColoredTridentItem){
+            if (dataItem.getItem() instanceof ColoredTridentItem) {
                 cir.setReturnValue(CustomISTER.getTridentTexture(((ColoredTridentItem) dataItem.getItem()).getTridentColor()));
             }
         }

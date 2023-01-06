@@ -45,13 +45,13 @@ import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes
 
 public class IceologerEntity extends AbstractIllager implements IAnimatable, SpawnArmoredMob {
 
-	public int summonAnimationTick;
-	public int summonAnimationLength = 60;
-	public int summonAnimationActionPoint = 40;
+    public int summonAnimationTick;
+    public int summonAnimationLength = 60;
+    public int summonAnimationActionPoint = 40;
 
     AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
-    public IceologerEntity(Level world){
+    public IceologerEntity(Level world) {
         super(ModEntityTypes.ICEOLOGER.get(), world);
     }
 
@@ -81,25 +81,25 @@ public class IceologerEntity extends AbstractIllager implements IAnimatable, Spa
         this.targetSelector.addGoal(3, (new NearestAttackableTargetGoal<>(this, AbstractVillager.class, false)).setUnseenMemoryTicks(600));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, false).setUnseenMemoryTicks(600));
     }
-    
-	public void handleEntityEvent(byte p_28844_) {
-		if (p_28844_ == 4) {
-			this.summonAnimationTick = summonAnimationLength;
-		} else {
-			super.handleEntityEvent(p_28844_);
-		}
-	}
+
+    public void handleEntityEvent(byte p_28844_) {
+        if (p_28844_ == 4) {
+            this.summonAnimationTick = summonAnimationLength;
+        } else {
+            super.handleEntityEvent(p_28844_);
+        }
+    }
 
     public void baseTick() {
         super.baseTick();
         this.tickDownAnimTimers();
     }
-    
-	public void tickDownAnimTimers() {
-		if (this.summonAnimationTick > 0) {
-			this.summonAnimationTick--;
-		}
-	}
+
+    public void tickDownAnimTimers() {
+        if (this.summonAnimationTick > 0) {
+            this.summonAnimationTick--;
+        }
+    }
 
     @Override
     public void registerControllers(AnimationData data) {
@@ -112,11 +112,11 @@ public class IceologerEntity extends AbstractIllager implements IAnimatable, Spa
         } else if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("iceologer_walk", LOOP));
         } else {
-        	if (this.isCelebrating()) {
-        		event.getController().setAnimation(new AnimationBuilder().addAnimation("iceologer_celebrate", LOOP));
-        	} else {
+            if (this.isCelebrating()) {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("iceologer_celebrate", LOOP));
+            } else {
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("iceologer_idle", LOOP));
-        	}
+            }
         }
         return PlayState.CONTINUE;
     }
@@ -151,7 +151,7 @@ public class IceologerEntity extends AbstractIllager implements IAnimatable, Spa
     public boolean isAlliedTo(Entity entityIn) {
         if (super.isAlliedTo(entityIn)) {
             return true;
-        } else if (entityIn instanceof LivingEntity && ((LivingEntity)entityIn).getMobType() == MobType.ILLAGER) {
+        } else if (entityIn instanceof LivingEntity && ((LivingEntity) entityIn).getMobType() == MobType.ILLAGER) {
             return this.getTeam() == null && entityIn.getTeam() == null;
         } else {
             return false;
@@ -188,66 +188,66 @@ public class IceologerEntity extends AbstractIllager implements IAnimatable, Spa
     }
 
     class SummonIceChunkGoal extends Goal {
-		public IceologerEntity mob;
-		@Nullable
-		public LivingEntity target;
+        public IceologerEntity mob;
+        @Nullable
+        public LivingEntity target;
 
-		private final Predicate<Entity> ICE_CHUNK = (p_33346_) -> {
-			return p_33346_ instanceof IceCloudEntity && ((IceCloudEntity)p_33346_).owner != null && ((IceCloudEntity)p_33346_).owner == mob;
-		};
-		
-		public SummonIceChunkGoal(IceologerEntity mob) {
-			this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP, Goal.Flag.LOOK));
-			this.mob = mob;
-			this.target = mob.getTarget();
-		}
+        private final Predicate<Entity> ICE_CHUNK = (p_33346_) -> {
+            return p_33346_ instanceof IceCloudEntity && ((IceCloudEntity) p_33346_).owner != null && ((IceCloudEntity) p_33346_).owner == mob;
+        };
 
-		@Override
-		public boolean isInterruptable() {
-			return false;
-		}
+        public SummonIceChunkGoal(IceologerEntity mob) {
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP, Goal.Flag.LOOK));
+            this.mob = mob;
+            this.target = mob.getTarget();
+        }
 
-		public boolean requiresUpdateEveryTick() {
-			return true;
-		}
+        @Override
+        public boolean isInterruptable() {
+            return false;
+        }
 
-		@Override
-		public boolean canUse() {
-			target = mob.getTarget();
-			int nearbyChunks = mob.level.getEntities(mob, mob.getBoundingBox().inflate(20.0D), ICE_CHUNK)
-					.size();
-			
-			return target != null && mob.random.nextInt(20) == 0 && mob.distanceTo(target) <= 12 && nearbyChunks <= 0 && mob.hasLineOfSight(target) && animationsUseable();
-		}
+        public boolean requiresUpdateEveryTick() {
+            return true;
+        }
 
-		@Override
-		public boolean canContinueToUse() {
-			return target != null && !animationsUseable();
-		}
+        @Override
+        public boolean canUse() {
+            target = mob.getTarget();
+            int nearbyChunks = mob.level.getEntities(mob, mob.getBoundingBox().inflate(20.0D), ICE_CHUNK)
+                    .size();
 
-		@Override
-		public void start() {
-			mob.playSound(ModSoundEvents.ICEOLOGER_ATTACK.get(), 1.0F, mob.getVoicePitch());
-			mob.summonAnimationTick = mob.summonAnimationLength;
-			mob.level.broadcastEntityEvent(mob, (byte) 4);
-		}
+            return target != null && mob.random.nextInt(20) == 0 && mob.distanceTo(target) <= 12 && nearbyChunks <= 0 && mob.hasLineOfSight(target) && animationsUseable();
+        }
 
-		@Override
-		public void tick() {
-			target = mob.getTarget();
+        @Override
+        public boolean canContinueToUse() {
+            return target != null && !animationsUseable();
+        }
 
-			if (target != null) {
-				mob.getLookControl().setLookAt(target.getX(), target.getEyeY(), target.getZ());
-			}
+        @Override
+        public void start() {
+            mob.playSound(ModSoundEvents.ICEOLOGER_ATTACK.get(), 1.0F, mob.getVoicePitch());
+            mob.summonAnimationTick = mob.summonAnimationLength;
+            mob.level.broadcastEntityEvent(mob, (byte) 4);
+        }
 
-			if (target != null && mob.summonAnimationTick == mob.summonAnimationActionPoint) {
-	            IceCloudEntity.spawn(mob, target);
-			}
-		}
+        @Override
+        public void tick() {
+            target = mob.getTarget();
 
-		public boolean animationsUseable() {
-			return mob.summonAnimationTick <= 0;
-		}
+            if (target != null) {
+                mob.getLookControl().setLookAt(target.getX(), target.getEyeY(), target.getZ());
+            }
 
-	}
+            if (target != null && mob.summonAnimationTick == mob.summonAnimationActionPoint) {
+                IceCloudEntity.spawn(mob, target);
+            }
+        }
+
+        public boolean animationsUseable() {
+            return mob.summonAnimationTick <= 0;
+        }
+
+    }
 }

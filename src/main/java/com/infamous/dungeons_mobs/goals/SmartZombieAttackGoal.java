@@ -17,11 +17,11 @@ public class SmartZombieAttackGoal extends ZombieAttackGoal {
 
     @Override
     public boolean canContinueToUse() {
-        return !this.isHoldingUsableProjectileWeapon() &&super.canContinueToUse();
+        return !this.isHoldingUsableProjectileWeapon() && super.canContinueToUse();
     }
 
     private boolean isHoldingUsableProjectileWeapon() {
         return this.mob.isHolding((itemStack) -> itemStack.getItem() instanceof ProjectileWeaponItem
-                && this.mob.canFireProjectileWeapon((ProjectileWeaponItem)itemStack.getItem()));
+                && this.mob.canFireProjectileWeapon((ProjectileWeaponItem) itemStack.getItem()));
     }
 }

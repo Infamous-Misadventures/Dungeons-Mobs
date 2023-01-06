@@ -28,7 +28,7 @@ public abstract class UseMagicGoal<T extends Mob & IMagicUser> extends Goal {
             if (this.hostMobEntity.isUsingMagic()) {
                 return false;
             } else {
-               return this.hostMobEntity.tickCount >= this.magicCooldown;
+                return this.hostMobEntity.tickCount >= this.magicCooldown;
             }
         } else {
             return false;
@@ -72,7 +72,7 @@ public abstract class UseMagicGoal<T extends Mob & IMagicUser> extends Goal {
     protected abstract void useMagic();
 
     private int getMagicWarmupTime() {
-         return 20;
+        return 20;
     }
 
     protected abstract int getMagicUseTime();

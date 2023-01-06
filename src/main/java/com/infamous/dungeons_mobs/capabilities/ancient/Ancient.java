@@ -37,7 +37,7 @@ public class Ancient implements INBTSerializable<CompoundTag> {
         }
         CompoundTag tag = new CompoundTag();
         tag.putBoolean("ancient", this.isAncient());
-        if(this.getBossInfo() != null) {
+        if (this.getBossInfo() != null) {
             tag.putString("displayName", this.getBossInfo().getName().getString());
         }
         return tag;
@@ -46,7 +46,7 @@ public class Ancient implements INBTSerializable<CompoundTag> {
     @Override
     public void deserializeNBT(CompoundTag tag) {
         this.setAncient(tag.getBoolean("ancient"));
-        if(tag.contains("displayName")) {
+        if (tag.contains("displayName")) {
             this.initiateBossBar(Component.literal(tag.getString("displayName")));
         }
     }

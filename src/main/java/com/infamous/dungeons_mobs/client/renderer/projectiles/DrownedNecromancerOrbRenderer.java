@@ -17,31 +17,31 @@ public class DrownedNecromancerOrbRenderer extends GeoProjectilesRenderer<Drowne
         super(renderManager, new DrownedNecromancerOrbModel());
     }
 
-	@Override
-	public void renderEarly(DrownedNecromancerOrbEntity animatable, PoseStack stackIn, float partialTicks,
-			MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn, int packedOverlayIn,
-			float red, float green, float blue, float alpha) {
-		
-		float scaleFactor = 1.0F;
-		if (animatable.lifeTime <= 3) {
-			scaleFactor = 0.0F;
-		} else {
-			scaleFactor = 1.0F;
-		}
-		stackIn.scale(scaleFactor, scaleFactor, scaleFactor);
-	}
-	
-	@Override
-	protected int getBlockLightLevel(DrownedNecromancerOrbEntity p_225624_1_, BlockPos p_225624_2_) {
-		return 15;
-	}
+    @Override
+    public void renderEarly(DrownedNecromancerOrbEntity animatable, PoseStack stackIn, float partialTicks,
+                            MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn, int packedOverlayIn,
+                            float red, float green, float blue, float alpha) {
 
-	
+        float scaleFactor = 1.0F;
+        if (animatable.lifeTime <= 3) {
+            scaleFactor = 0.0F;
+        } else {
+            scaleFactor = 1.0F;
+        }
+        stackIn.scale(scaleFactor, scaleFactor, scaleFactor);
+    }
+
+    @Override
+    protected int getBlockLightLevel(DrownedNecromancerOrbEntity p_225624_1_, BlockPos p_225624_2_) {
+        return 15;
+    }
+
+
     @Override
     public void render(DrownedNecromancerOrbEntity entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
         float scaleFactor = 1.0F;
         matrixStackIn.scale(scaleFactor, scaleFactor, scaleFactor);
-        
+
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
     }
 

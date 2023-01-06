@@ -18,8 +18,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
-import net.minecraft.world.item.Item.Properties;
-
 public abstract class AbstractStaffItem extends Item {
 
     private static final double RAYTRACE_DISTANCE = 256;
@@ -54,7 +52,7 @@ public abstract class AbstractStaffItem extends Item {
 
     protected abstract void activateStaff(Player playerIn, BlockPos targetPos, ItemStack itemStack, InteractionHand hand);
 
-    public Rarity getRarity(ItemStack itemStack){
+    public Rarity getRarity(ItemStack itemStack) {
         return Rarity.RARE;
     }
 }

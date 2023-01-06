@@ -6,8 +6,7 @@ import static com.infamous.dungeons_mobs.capabilities.ModCapabilities.ANIMATED_P
 
 public class AnimatedPropsHelper {
 
-    public static AnimatedProps getAnimatedPropsCapability(Mob mob)
-    {
+    public static AnimatedProps getAnimatedPropsCapability(Mob mob) {
         return mob.getCapability(ANIMATED_PROPS_CAPABILITY).orElse(new AnimatedProps());
     }
 }

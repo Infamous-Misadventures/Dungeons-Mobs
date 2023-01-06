@@ -13,8 +13,6 @@ import static com.infamous.dungeons_mobs.DungeonsMobs.PROXY;
 import static com.infamous.dungeons_mobs.mobenchants.NewMobEnchantUtils.executeIfPresentWithLevel;
 import static com.infamous.dungeons_mobs.mod.ModMobEnchants.RADIANCE;
 
-import baguchan.enchantwithmob.mobenchant.MobEnchant.Properties;
-
 public class RadianceMobEnchant extends MobEnchant {
 
 

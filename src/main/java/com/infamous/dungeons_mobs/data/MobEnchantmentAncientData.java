@@ -19,7 +19,7 @@ public class MobEnchantmentAncientData {
             ).apply(builder, MobEnchantmentAncientData::new));
 
     private final List<String> adjectives;
-    private final List<String> nouns ;
+    private final List<String> nouns;
 
     public MobEnchantmentAncientData(List<String> adjectives, List<String> nouns) {
         this.adjectives = adjectives;

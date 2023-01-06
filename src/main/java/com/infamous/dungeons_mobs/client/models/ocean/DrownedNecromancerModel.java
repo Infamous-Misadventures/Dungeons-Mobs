@@ -47,16 +47,16 @@ public class DrownedNecromancerModel extends AnimatedGeoModel<DrownedNecromancer
 
         IBone head = this.getAnimationProcessor().getBone("bipedHead");
         IBone cape = this.getAnimationProcessor().getBone("bipedCape");
-        
+
         IBone particles = this.getAnimationProcessor().getBone("staffParticles");
-        
+
         if (particles instanceof GeoBone && entity.isSpellcasting()) {
-        	GeoBone particleBone = ((GeoBone)particles);
-        	entity.level.addParticle(entity.isInWaterOrBubble() ? ParticleTypes.BUBBLE_COLUMN_UP : ModParticleTypes.NECROMANCY.get(), particleBone.getWorldPosition().x, particleBone.getWorldPosition().y, particleBone.getWorldPosition().z, 0, 0, 0);
+            GeoBone particleBone = ((GeoBone) particles);
+            entity.level.addParticle(entity.isInWaterOrBubble() ? ParticleTypes.BUBBLE_COLUMN_UP : ModParticleTypes.NECROMANCY.get(), particleBone.getWorldPosition().x, particleBone.getWorldPosition().y, particleBone.getWorldPosition().z, 0, 0, 0);
         }
 
         cape.setHidden(entity.getItemBySlot(EquipmentSlot.CHEST).getItem() != entity.getArmorSet().getChest().get());
-        
+
         EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
 
         if (extraData.headPitch != 0 || extraData.netHeadYaw != 0) {
@@ -64,15 +64,15 @@ public class DrownedNecromancerModel extends AnimatedGeoModel<DrownedNecromancer
             head.setRotationY(head.getRotationY() + (extraData.netHeadYaw * ((float) Math.PI / 180F)));
         }
     }
-    
-	@Override
-	public void setMolangQueries(IAnimatable animatable, double currentTick) {
-		super.setMolangQueries(animatable, currentTick);
-		
-		MolangParser parser = GeckoLibCache.getInstance().parser;
-		LivingEntity livingEntity = (LivingEntity) animatable;
-		Vec3 velocity = livingEntity.getDeltaMovement();
-		float groundSpeed = Mth.sqrt((float) ((velocity.x * velocity.x) + (velocity.z * velocity.z)));
-		parser.setValue("query.ground_speed", () -> groundSpeed * 20);
-	}
+
+    @Override
+    public void setMolangQueries(IAnimatable animatable, double currentTick) {
+        super.setMolangQueries(animatable, currentTick);
+
+        MolangParser parser = GeckoLibCache.getInstance().parser;
+        LivingEntity livingEntity = (LivingEntity) animatable;
+        Vec3 velocity = livingEntity.getDeltaMovement();
+        float groundSpeed = Mth.sqrt((float) ((velocity.x * velocity.x) + (velocity.z * velocity.z)));
+        parser.setValue("query.ground_speed", () -> groundSpeed * 20);
+    }
 }

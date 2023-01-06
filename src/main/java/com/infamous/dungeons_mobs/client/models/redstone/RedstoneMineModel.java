@@ -11,26 +11,26 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 public class RedstoneMineModel extends AnimatedGeoModel {
 
-	@Override
-	public ResourceLocation getAnimationResource(Object entity) {
-		return new ResourceLocation(DungeonsMobs.MODID, "animations/redstone_mine.animation.json");
-	}
+    @Override
+    public ResourceLocation getAnimationResource(Object entity) {
+        return new ResourceLocation(DungeonsMobs.MODID, "animations/redstone_mine.animation.json");
+    }
 
-	@Override
-	public ResourceLocation getModelResource(Object entity) {
-		return new ResourceLocation(DungeonsMobs.MODID, "geo/redstone_mine.geo.json");
-	}
+    @Override
+    public ResourceLocation getModelResource(Object entity) {
+        return new ResourceLocation(DungeonsMobs.MODID, "geo/redstone_mine.geo.json");
+    }
 
-	@Override
-	public ResourceLocation getTextureResource(Object entity) {
-		return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/redstone/redstone_mine.png");
-	}
+    @Override
+    public ResourceLocation getTextureResource(Object entity) {
+        return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/redstone/redstone_mine.png");
+    }
 
-	@Override
-	public void setCustomAnimations(IAnimatable entity, int uniqueID, AnimationEvent customPredicate) {
-		super.setCustomAnimations(entity, uniqueID, customPredicate);
+    @Override
+    public void setCustomAnimations(IAnimatable entity, int uniqueID, AnimationEvent customPredicate) {
+        super.setCustomAnimations(entity, uniqueID, customPredicate);
 
-	}
+    }
 
 	/*public IBone getArm(HandSide p_191216_1_) {
 		return this.getAnimationProcessor().getBone("rightArm");

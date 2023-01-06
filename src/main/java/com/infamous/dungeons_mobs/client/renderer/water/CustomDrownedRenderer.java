@@ -45,9 +45,9 @@ public class CustomDrownedRenderer extends AbstractZombieRenderer<Drowned, Drown
     @Override
     public ResourceLocation getTextureLocation(Zombie drowned) {
         EliteMob cap = EliteMobHelper.getEliteMobCapability(drowned);
-        if(cap != null && cap.isElite()){
+        if (cap != null && cap.isElite()) {
             return ARMORED_DROWNED_LOCATIONS.get(drowned.getId() % ARMORED_DROWNED_LOCATIONS.size());
-        } else{
+        } else {
             return DROWNED_LOCATION;
         }
     }

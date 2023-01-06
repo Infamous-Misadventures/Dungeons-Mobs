@@ -10,45 +10,45 @@ import java.util.EnumSet;
 public class UsingMagicGoal<T extends Mob & IMagicUser> extends Goal {
     private final T hostMobEntity;
 
-      public UsingMagicGoal(T magicUserMob) {
-          this.hostMobEntity = magicUserMob;
-         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
-      }
+    public UsingMagicGoal(T magicUserMob) {
+        this.hostMobEntity = magicUserMob;
+        this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
+    }
 
-      /**
-       * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
-       * method as well.
-       */
-      public boolean canUse() {
-         return this.hostMobEntity.getMagicUseTicks() > 0;
-      }
+    /**
+     * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
+     * method as well.
+     */
+    public boolean canUse() {
+        return this.hostMobEntity.getMagicUseTicks() > 0;
+    }
 
-      /**
-       * Execute a one shot task or start executing a continuous task
-       */
-      public void start() {
-         super.start();
-         this.hostMobEntity.getNavigation().stop();
-      }
+    /**
+     * Execute a one shot task or start executing a continuous task
+     */
+    public void start() {
+        super.start();
+        this.hostMobEntity.getNavigation().stop();
+    }
 
-      /**
-       * Reset the task's internal state. Called when this task is interrupted by another one
-       */
-      public void stop() {
-         super.stop();
-         this.hostMobEntity.setMagicType(MagicType.NONE);
-      }
+    /**
+     * Reset the task's internal state. Called when this task is interrupted by another one
+     */
+    public void stop() {
+        super.stop();
+        this.hostMobEntity.setMagicType(MagicType.NONE);
+    }
 
-      /**
-       * Keep ticking a continuous task that has already been started
-       */
-      public void tick() {
-         if (this.hostMobEntity.getTarget() != null) {
+    /**
+     * Keep ticking a continuous task that has already been started
+     */
+    public void tick() {
+        if (this.hostMobEntity.getTarget() != null) {
             this.hostMobEntity.getLookControl()
                     .setLookAt(this.hostMobEntity.getTarget(),
-                            (float)this.hostMobEntity.getMaxHeadYRot(),
-                            (float)this.hostMobEntity.getMaxHeadXRot());
-         }
+                            (float) this.hostMobEntity.getMaxHeadYRot(),
+                            (float) this.hostMobEntity.getMaxHeadXRot());
+        }
 
-      }
-   }
+    }
+}

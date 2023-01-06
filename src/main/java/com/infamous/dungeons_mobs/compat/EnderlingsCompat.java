@@ -10,15 +10,16 @@ import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 public class EnderlingsCompat {
     public static final String ENDERLINGS_MOD_ID = "enderlings";
     private static boolean IS_LOADED = false;
+
     @SubscribeEvent
-    public static void onInterMod(InterModProcessEvent event){
-        if(ModList.get().isLoaded(ENDERLINGS_MOD_ID)){
+    public static void onInterMod(InterModProcessEvent event) {
+        if (ModList.get().isLoaded(ENDERLINGS_MOD_ID)) {
             IS_LOADED = true;
         }
     }
 
 
-    public static boolean isLoaded(){
+    public static boolean isLoaded() {
         return IS_LOADED;
     }
 

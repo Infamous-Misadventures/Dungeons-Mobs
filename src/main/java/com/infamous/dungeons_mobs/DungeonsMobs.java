@@ -35,8 +35,7 @@ import software.bernie.geckolib3.GeckoLib;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod("dungeons_mobs")
-public class DungeonsMobs
-{
+public class DungeonsMobs {
     // Directly reference a log4j logger.
     public static final Logger LOGGER = LogManager.getLogger();
     public static final String MODID = "dungeons_mobs";
@@ -63,14 +62,14 @@ public class DungeonsMobs
         BiomeTags.register();
 
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-    	ModSoundEvents.SOUNDS.register(modEventBus);
-    	ModEffects.EFFECTS.register(modEventBus);
+        ModSoundEvents.SOUNDS.register(modEventBus);
+        ModEffects.EFFECTS.register(modEventBus);
         ModEntityTypes.ENTITY_TYPES.register(modEventBus);
         ModEntityTypes.SPAWN_EGGS.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
         ModRecipes.RECIPES.register(modEventBus);
         ModParticleTypes.PARTICLES.register(modEventBus);
-        if(EnchantWithMobCompat.isLoaded()) {
+        if (EnchantWithMobCompat.isLoaded()) {
             ModMobEnchants.MOB_ENCHANTS_DEFERRED.register(modEventBus);
             EnchantWithMobCompat.initMobEnchants(modEventBus);
         }
@@ -80,7 +79,7 @@ public class DungeonsMobs
         //ANCIENT_DATA.subscribeAsSyncable(CHANNEL, AncientDatas::toPacket);
     }
 
-    private void setup(final FMLCommonSetupEvent event){
+    private void setup(final FMLCommonSetupEvent event) {
         event.enqueueWork(EntitySpawnPlacements::createPlacementTypes);
         event.enqueueWork(EntitySpawnPlacements::initSpawnPlacements);
         event.enqueueWork(RaidEntries::initWaveMemberEntries);
@@ -89,14 +88,13 @@ public class DungeonsMobs
     }
 
 
-
     private void doClientStuff(final FMLClientSetupEvent event) {
         // ITEM MODEL PROPERTIES
         MinecraftForge.EVENT_BUS.register(new ModItemModelProperties());
     }
 
-    private void onLoadComplete(final FMLLoadCompleteEvent event){
-        if(DungeonsMobsConfig.COMMON.ENABLE_STRONGER_HUSKS.get()){
+    private void onLoadComplete(final FMLLoadCompleteEvent event) {
+        if (DungeonsMobsConfig.COMMON.ENABLE_STRONGER_HUSKS.get()) {
             EntityType.HUSK.dimensions = EntityDimensions.scalable(0.6F * 1.2F, 1.95F * 1.2F);
         }
     }

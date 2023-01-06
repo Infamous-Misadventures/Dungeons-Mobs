@@ -21,12 +21,12 @@ import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes
 import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.PLAY_ONCE;
 
 public class GeomancerBombEntity extends ConstructEntity implements IAnimatable {
-	
-	AnimationFactory factory = GeckoLibUtil.createFactory(this);
-	
-    private float explosionRadius = 3.0F;
 
-    public GeomancerBombEntity(Level worldIn){
+    AnimationFactory factory = GeckoLibUtil.createFactory(this);
+
+    private final float explosionRadius = 3.0F;
+
+    public GeomancerBombEntity(Level worldIn) {
         super(ModEntityTypes.GEOMANCER_BOMB.get(), worldIn);
     }
 
@@ -49,33 +49,33 @@ public class GeomancerBombEntity extends ConstructEntity implements IAnimatable 
     private void explode() {
         this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), this.explosionRadius, Explosion.BlockInteraction.NONE);
     }
-    
+
     public static AttributeSupplier.Builder setCustomAttributes() {
         return Monster.createMonsterAttributes().add(Attributes.FOLLOW_RANGE, 0.0D).add(Attributes.MOVEMENT_SPEED, 0.0D).add(Attributes.ATTACK_DAMAGE, 0.0D);
     }
-    
+
     @Override
-	public void registerControllers(AnimationData data) {
-		data.addAnimationController(new AnimationController(this, "controller", 0, this::predicate));
-	}
-   
-	private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
-		if (this.getLifeTicks() > 75) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("geomancer_pillar_appear", PLAY_ONCE));
-		} else {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("geomancer_pillar_idle", LOOP));
-		}
-		return PlayState.CONTINUE;
-	}
-	
-	@Override
-	public AnimationFactory getFactory() {
-		return factory;
-	}
+    public void registerControllers(AnimationData data) {
+        data.addAnimationController(new AnimationController(this, "controller", 0, this::predicate));
+    }
+
+    private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
+        if (this.getLifeTicks() > 75) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("geomancer_pillar_appear", PLAY_ONCE));
+        } else {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("geomancer_pillar_idle", LOOP));
+        }
+        return PlayState.CONTINUE;
+    }
+
+    @Override
+    public AnimationFactory getFactory() {
+        return factory;
+    }
 
 
- //  @Override
- //  public IPacket<?> getAddEntityPacket() {
- //       return NetworkHooks.getEntitySpawningPacket(this);
- //   }
+    //  @Override
+    //  public IPacket<?> getAddEntityPacket() {
+    //       return NetworkHooks.getEntitySpawningPacket(this);
+    //   }
 }

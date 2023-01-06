@@ -58,12 +58,9 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Random;
 
 import static com.infamous.dungeons_mobs.entities.SpawnArmoredHelper.equipArmorSet;
 import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
-
-import net.minecraft.world.entity.Entity.RemovalReason;
 
 public class DrownedNecromancerEntity extends Drowned implements IAnimatable, SpawnArmoredMob {
 
@@ -122,9 +119,9 @@ public class DrownedNecromancerEntity extends Drowned implements IAnimatable, Sp
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, AbstractVillager.class, true));
     }
-    
+
     public boolean isSpellcasting() {
-    	return this.shootAnimationTick > 0 || this.rainShootAnimationTick > 0 || this.landShootAnimationTick > 0 || this.tridentStormAnimationTick > 0 || this.rainTridentStormAnimationTick > 0 || this.summonAnimationTick > 0 || this.landSummonAnimationTick > 0;
+        return this.shootAnimationTick > 0 || this.rainShootAnimationTick > 0 || this.landShootAnimationTick > 0 || this.tridentStormAnimationTick > 0 || this.rainTridentStormAnimationTick > 0 || this.summonAnimationTick > 0 || this.landSummonAnimationTick > 0;
     }
 
     /**
@@ -185,7 +182,7 @@ public class DrownedNecromancerEntity extends Drowned implements IAnimatable, Sp
     public boolean isLeftHanded() {
         return false;
     }
-    
+
     @Override
     public boolean isBaby() {
         return false;
@@ -288,7 +285,7 @@ public class DrownedNecromancerEntity extends Drowned implements IAnimatable, Sp
 
     private boolean isInRain() {
         BlockPos blockpos = this.blockPosition();
-        return this.level.isRainingAt(blockpos) || this.level.isRainingAt(new BlockPos((double) blockpos.getX(), this.getBoundingBox().maxY, (double) blockpos.getZ()));
+        return this.level.isRainingAt(blockpos) || this.level.isRainingAt(new BlockPos(blockpos.getX(), this.getBoundingBox().maxY, blockpos.getZ()));
     }
 
     @Override
@@ -318,7 +315,7 @@ public class DrownedNecromancerEntity extends Drowned implements IAnimatable, Sp
 
         public void tick() {
             if (this.drowned.getY() < (double) (this.seaLevel - 1) && (this.drowned.getNavigation().isDone() || this.drowned.closeToNextPos())) {
-                Vec3 vector3d = DefaultRandomPos.getPosTowards(this.drowned, 4, 8, new Vec3(this.drowned.getX(), (double) (this.seaLevel - 1), this.drowned.getZ()), (double)((float)Math.PI / 2F));
+                Vec3 vector3d = DefaultRandomPos.getPosTowards(this.drowned, 4, 8, new Vec3(this.drowned.getX(), this.seaLevel - 1, this.drowned.getZ()), (float) Math.PI / 2F);
                 if (vector3d == null) {
                     this.stuck = true;
                     return;
@@ -414,7 +411,7 @@ public class DrownedNecromancerEntity extends Drowned implements IAnimatable, Sp
 
         protected boolean isValidTarget(LevelReader p_179488_1_, BlockPos p_179488_2_) {
             BlockPos blockpos = p_179488_2_.above();
-            return p_179488_1_.isEmptyBlock(blockpos) && p_179488_1_.isEmptyBlock(blockpos.above()) ? p_179488_1_.getBlockState(p_179488_2_).entityCanStandOn(p_179488_1_, p_179488_2_, this.drowned) : false;
+            return p_179488_1_.isEmptyBlock(blockpos) && p_179488_1_.isEmptyBlock(blockpos.above()) && p_179488_1_.getBlockState(p_179488_2_).entityCanStandOn(p_179488_1_, p_179488_2_, this.drowned);
         }
 
         public void start() {
@@ -520,7 +517,7 @@ public class DrownedNecromancerEntity extends Drowned implements IAnimatable, Sp
                 }
 
                 summonedMob.setTarget(target);
-                summonedMob.finalizeSpawn(((ServerLevel) mob.level), mob.level.getCurrentDifficultyAt(summonPos), MobSpawnType.MOB_SUMMONED, (SpawnGroupData) null, (CompoundTag) null);
+                summonedMob.finalizeSpawn(((ServerLevel) mob.level), mob.level.getCurrentDifficultyAt(summonPos), MobSpawnType.MOB_SUMMONED, null, null);
                 mobSummonSpot.playSound(ModSoundEvents.NECROMANCER_SUMMON.get(), 1.0F, 1.0F);
                 if (mob.getTeam() != null) {
                     Scoreboard scoreboard = mob.level.getScoreboard();
@@ -532,7 +529,7 @@ public class DrownedNecromancerEntity extends Drowned implements IAnimatable, Sp
 
         private EntityType<?> getEntityType() {
             EntityType<?> entityType = null;
-            List<String> necromancerMobSummons = (List<String>) DungeonsMobsConfig.COMMON.DROWNED_NECROMANCER_MOB_SUMMONS.get();
+            List<String> necromancerMobSummons = (List<String>) DungeonsMobsConfig.Common.DROWNED_NECROMANCER_MOB_SUMMONS.get();
             if (!necromancerMobSummons.isEmpty()) {
                 Collections.shuffle(necromancerMobSummons);
 
@@ -856,7 +853,7 @@ public class DrownedNecromancerEntity extends Drowned implements IAnimatable, Sp
                     }
 
                     summonedMob.setTarget(target);
-                    summonedMob.finalizeSpawn(((ServerLevel) mob.level), mob.level.getCurrentDifficultyAt(summonPos), MobSpawnType.MOB_SUMMONED, (SpawnGroupData) null, (CompoundTag) null);
+                    summonedMob.finalizeSpawn(((ServerLevel) mob.level), mob.level.getCurrentDifficultyAt(summonPos), MobSpawnType.MOB_SUMMONED, null, null);
                     mobSummonSpot.playSound(ModSoundEvents.DROWNED_NECROMANCER_SUMMON.get(), 1.0F, 1.0F);
                     if (mob.getTeam() != null) {
                         Scoreboard scoreboard = mob.level.getScoreboard();
@@ -869,7 +866,7 @@ public class DrownedNecromancerEntity extends Drowned implements IAnimatable, Sp
 
         private EntityType<?> getEntityType() {
             EntityType<?> entityType = null;
-            List<String> necromancerMobSummons = (List<String>) DungeonsMobsConfig.COMMON.DROWNED_NECROMANCER_MOB_SUMMONS.get();
+            List<String> necromancerMobSummons = (List<String>) DungeonsMobsConfig.Common.DROWNED_NECROMANCER_MOB_SUMMONS.get();
             if (!necromancerMobSummons.isEmpty()) {
                 Collections.shuffle(necromancerMobSummons);
 

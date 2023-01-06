@@ -52,18 +52,17 @@ public class MobEvents {
     private static ArmorStand DUMMY_TARGET;
 
     public static Random random = new Random();
-    
+
     @SubscribeEvent
-    public static void onSetAttackTarget(LivingChangeTargetEvent event){
+    public static void onSetAttackTarget(LivingChangeTargetEvent event) {
         LivingEntity attacker = event.getEntity();
         Level level = attacker.level;
         LivingEntity target = event.getNewTarget();
-        if(attacker instanceof Mob && target instanceof Mob){
-            if(AbilityHelper.isAlly(attacker, target)){
+        if (attacker instanceof Mob && target instanceof Mob) {
+            if (AbilityHelper.isAlly(attacker, target)) {
                 createDummyTarget(level);
-                if(attacker instanceof NeutralMob)
-                {
-                    ((NeutralMob) attacker).setPersistentAngerTarget((UUID)null);
+                if (attacker instanceof NeutralMob) {
+                    ((NeutralMob) attacker).setPersistentAngerTarget(null);
                     ((NeutralMob) attacker).setRemainingPersistentAngerTime(0);
                 }
                 ((Mob) attacker).setTarget(DUMMY_TARGET);
@@ -73,7 +72,7 @@ public class MobEvents {
     }
 
     private static void createDummyTarget(Level level) {
-        if(DUMMY_TARGET == null){
+        if (DUMMY_TARGET == null) {
             DUMMY_TARGET = EntityType.ARMOR_STAND.create(level);
             if (DUMMY_TARGET != null) {
                 DUMMY_TARGET.remove(Entity.RemovalReason.DISCARDED);
@@ -82,7 +81,7 @@ public class MobEvents {
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onEntityJoinWorld(EntityJoinLevelEvent event){
+    public static void onEntityJoinWorld(EntityJoinLevelEvent event) {
         // Making mobs avoid Geomancer Constructs
 //        if(event.getEntity() instanceof CreatureEntity && !(event.getEntity() instanceof GeomancerEntity)){
 //            CreatureEntity creatureEntity = (CreatureEntity) event.getEntity();
@@ -92,24 +91,24 @@ public class MobEvents {
 //            CreatureEntity creatureEntity = (CreatureEntity) event.getEntity();
 //            creatureEntity.goalSelector.addGoal(3, new AvoidEntityGoal<>(creatureEntity, VineEntity.class, 8.0F, 0.6D, 1.0D));
 //        }
-        if(event.getEntity() instanceof Drowned){
+        if (event.getEntity() instanceof Drowned) {
             Drowned drownedEntity = (Drowned) event.getEntity();
-            ((GoalSelectorAccessor)drownedEntity.goalSelector).getAvailableGoals().removeIf(pg -> pg.getPriority() == 2 && pg.getGoal() instanceof RangedAttackGoal);
+            ((GoalSelectorAccessor) drownedEntity.goalSelector).getAvailableGoals().removeIf(pg -> pg.getPriority() == 2 && pg.getGoal() instanceof RangedAttackGoal);
             drownedEntity.goalSelector.addGoal(2, new SmartTridentAttackGoal(drownedEntity, 1.0D, 40, 10.0F));
         }
-        if(event.getEntity() instanceof ThrownTrident){
-            ((IHasItemStackData)event.getEntity()).setDataItem(((TridentEntityAccessor) event.getEntity()).getTridentItem());
+        if (event.getEntity() instanceof ThrownTrident) {
+            ((IHasItemStackData) event.getEntity()).setDataItem(((TridentEntityAccessor) event.getEntity()).getTridentItem());
         }
     }
 
     @SubscribeEvent
-    public static void onLivingUpdate(LivingEvent.LivingTickEvent event){
+    public static void onLivingUpdate(LivingEvent.LivingTickEvent event) {
         LivingEntity livingEntity = event.getEntity();
-        if(livingEntity instanceof Mob && ConvertibleHelper.convertsInWater((Mob)livingEntity)){
+        if (livingEntity instanceof Mob && ConvertibleHelper.convertsInWater((Mob) livingEntity)) {
             Mob mob = (Mob) livingEntity;
             if (!mob.level.isClientSide && mob.isAlive() && !mob.isNoAi()) {
                 Convertible convertibleCap = ConvertibleHelper.getConvertibleCapability(mob);
-                if(convertibleCap == null) return;
+                if (convertibleCap == null) return;
 
                 convertibleCap.setCanConvert(mob.isEyeInFluid(FluidTags.WATER));
 
@@ -136,41 +135,18 @@ public class MobEvents {
     }
 
     @SubscribeEvent
-    public static void onSnowballHitPlayer(ProjectileImpactEvent event){
-        if(event.getEntity() instanceof Snowball){
-            Snowball snowballEntity = (Snowball)event.getEntity();
+    public static void onSnowballHitPlayer(ProjectileImpactEvent event) {
+        if (event.getEntity() instanceof Snowball) {
+            Snowball snowballEntity = (Snowball) event.getEntity();
             Entity shooter = snowballEntity.getOwner();
-            if(shooter instanceof FrozenZombieEntity){
-            	snowballEntity.playSound(ModSoundEvents.FROZEN_ZOMBIE_SNOWBALL_LAND.get(), 1.0F, 1.0F);
+            if (shooter instanceof FrozenZombieEntity) {
+                snowballEntity.playSound(ModSoundEvents.FROZEN_ZOMBIE_SNOWBALL_LAND.get(), 1.0F, 1.0F);
                 HitResult rayTraceResult = event.getRayTraceResult();
-                if(rayTraceResult instanceof EntityHitResult){
-                    EntityHitResult entityRayTraceResult = (EntityHitResult)rayTraceResult;
-                    if(entityRayTraceResult.getEntity() instanceof Player){
+                if (rayTraceResult instanceof EntityHitResult) {
+                    EntityHitResult entityRayTraceResult = (EntityHitResult) rayTraceResult;
+                    if (entityRayTraceResult.getEntity() instanceof Player) {
                         Player playerEntity = (Player) entityRayTraceResult.getEntity();
                         playerEntity.hurt(DamageSource.thrown(snowballEntity, shooter), 2.0F);
-                            int i = 0;
-                            if (event.getEntity().level.getDifficulty() == Difficulty.NORMAL) {
-                                i = 3;
-                            } else if (event.getEntity().level.getDifficulty() == Difficulty.HARD) {
-                                i = 6;
-                            }
-
-                            if (i > 0) {
-                                ((LivingEntity)playerEntity).addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, i * 20, 1));
-                            }
-                    }
-                }
-            }
-        }
-
-    }
-
-    @SubscribeEvent
-    public static void onSnowballDamageMob(LivingHurtEvent event){
-        if(event.getSource().getDirectEntity() instanceof Snowball){
-            if(event.getSource().getEntity() instanceof FrozenZombieEntity){
-                if(!(event.getEntity() instanceof Player)){
-                    event.setAmount(event.getAmount() + 2.0F);
                         int i = 0;
                         if (event.getEntity().level.getDifficulty() == Difficulty.NORMAL) {
                             i = 3;
@@ -179,53 +155,76 @@ public class MobEvents {
                         }
 
                         if (i > 0) {
-                            event.getEntity().addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, i * 20, 1));
+                            playerEntity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, i * 20, 1));
                         }
+                    }
                 }
             }
         }
+
     }
-    
+
     @SubscribeEvent
-    public static void onIllusionerCloneArrowHit(ProjectileImpactEvent event){
-        if(event.getEntity() instanceof AbstractArrow){
-        	AbstractArrow arrowEntity = (AbstractArrow)event.getEntity();
-            Entity shooter = arrowEntity.getOwner();
-            if(shooter instanceof IllusionerCloneEntity){
-            	arrowEntity.playSound(ModSoundEvents.ILLUSIONER_CLONE_ARROW_HIT.get(), 1.0F, 1.0F);   
-            	if (!arrowEntity.level.isClientSide) {
-            		arrowEntity.remove(Entity.RemovalReason.DISCARDED);
-            	} else {
-            		for(int i = 0; i < 2; ++i) {
-        	            double d0 = random.nextGaussian() * 0.02D;
-        	            double d1 = random.nextGaussian() * 0.02D;
-        	            double d2 = random.nextGaussian() * 0.02D;
-        	            arrowEntity.level.addParticle(ParticleTypes.POOF, arrowEntity.getRandomX(1.0D), arrowEntity.getRandomY(), arrowEntity.getRandomZ(1.0D), d0, d1, d2);
-        	         }
-            	}
+    public static void onSnowballDamageMob(LivingHurtEvent event) {
+        if (event.getSource().getDirectEntity() instanceof Snowball) {
+            if (event.getSource().getEntity() instanceof FrozenZombieEntity) {
+                if (!(event.getEntity() instanceof Player)) {
+                    event.setAmount(event.getAmount() + 2.0F);
+                    int i = 0;
+                    if (event.getEntity().level.getDifficulty() == Difficulty.NORMAL) {
+                        i = 3;
+                    } else if (event.getEntity().level.getDifficulty() == Difficulty.HARD) {
+                        i = 6;
+                    }
+
+                    if (i > 0) {
+                        event.getEntity().addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, i * 20, 1));
+                    }
+                }
             }
         }
     }
 
     @SubscribeEvent
-    public static void onIceCreeperExplosion(EntityMobGriefingEvent event){
-        if(event.getEntity() instanceof IcyCreeperEntity){
-            IcyCreeperEntity iceCreeperEntity = (IcyCreeperEntity)event.getEntity();
+    public static void onIllusionerCloneArrowHit(ProjectileImpactEvent event) {
+        if (event.getEntity() instanceof AbstractArrow) {
+            AbstractArrow arrowEntity = (AbstractArrow) event.getEntity();
+            Entity shooter = arrowEntity.getOwner();
+            if (shooter instanceof IllusionerCloneEntity) {
+                arrowEntity.playSound(ModSoundEvents.ILLUSIONER_CLONE_ARROW_HIT.get(), 1.0F, 1.0F);
+                if (!arrowEntity.level.isClientSide) {
+                    arrowEntity.remove(Entity.RemovalReason.DISCARDED);
+                } else {
+                    for (int i = 0; i < 2; ++i) {
+                        double d0 = random.nextGaussian() * 0.02D;
+                        double d1 = random.nextGaussian() * 0.02D;
+                        double d2 = random.nextGaussian() * 0.02D;
+                        arrowEntity.level.addParticle(ParticleTypes.POOF, arrowEntity.getRandomX(1.0D), arrowEntity.getRandomY(), arrowEntity.getRandomZ(1.0D), d0, d1, d2);
+                    }
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onIceCreeperExplosion(EntityMobGriefingEvent event) {
+        if (event.getEntity() instanceof IcyCreeperEntity) {
+            IcyCreeperEntity iceCreeperEntity = (IcyCreeperEntity) event.getEntity();
             iceCreeperEntity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 600));
         }
     }
 
     @SubscribeEvent
-    public static void onExplosionDetonate(ExplosionEvent.Detonate event){
+    public static void onExplosionDetonate(ExplosionEvent.Detonate event) {
         handlePillarProtection(event);
-        if(event.getExplosion().getSourceMob() instanceof IcyCreeperEntity){
-            if(!DungeonsMobsConfig.COMMON.ENABLE_ICY_CREEPER_GRIEFING.get()){
+        if (event.getExplosion().getSourceMob() instanceof IcyCreeperEntity) {
+            if (!DungeonsMobsConfig.COMMON.ENABLE_ICY_CREEPER_GRIEFING.get()) {
                 event.getAffectedBlocks().clear();
             }
             List<Entity> entityList = event.getAffectedEntities();
-            for(Entity entity : entityList){
-                if(entity instanceof LivingEntity){
-                    LivingEntity livingEntity = (LivingEntity)entity;
+            for (Entity entity : entityList) {
+                if (entity instanceof LivingEntity) {
+                    LivingEntity livingEntity = (LivingEntity) entity;
                     livingEntity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 600));
                 }
             }
@@ -253,13 +252,13 @@ public class MobEvents {
 
         List<Entity> entityList = event.getAffectedEntities();
         List<ConstructEntity> potentialProtectingPillars = new java.util.ArrayList<>(Collections.emptyList());
-        for(Entity entity : entityList){
+        for (Entity entity : entityList) {
             if (entity instanceof ConstructEntity && entity != source) {
                 potentialProtectingPillars.add((ConstructEntity) entity);
             }
         }
         boolean pillarsArePresent = !potentialProtectingPillars.isEmpty();
-        if(!pillarsArePresent) return;
+        if (!pillarsArePresent) return;
 
         Iterator<Entity> it = entityList.iterator();
         while (it.hasNext()) {
@@ -267,24 +266,24 @@ public class MobEvents {
             boolean notAPillar = !(currentEntity instanceof ConstructEntity);
             if (notAPillar && currentEntity != null) {
                 boolean protectedByPillar = entityProtectedByPillar(currentEntity, potentialProtectingPillars, detonationOrigin);
-                if(protectedByPillar) {
+                if (protectedByPillar) {
                     it.remove();
                 }
             }
         }
     }
 
-    private static boolean entityProtectedByPillar(Entity entity, List<ConstructEntity> pillarEntities, BlockPos detonationOrigin){
-        if(pillarEntities.isEmpty()) return false;
+    private static boolean entityProtectedByPillar(Entity entity, List<ConstructEntity> pillarEntities, BlockPos detonationOrigin) {
+        if (pillarEntities.isEmpty()) return false;
         BlockPos entityPos = entity.blockPosition();
-        for(ConstructEntity pillarEntity : pillarEntities){
+        for (ConstructEntity pillarEntity : pillarEntities) {
             BlockPos pillarPos = pillarEntity.blockPosition();
             double widthAllowance = pillarEntity.getBbWidth();
             double distanceEntityToPillar = Math.sqrt(entityPos.distSqr(pillarPos));
             double distanceExplosionToPillar = Math.sqrt(detonationOrigin.distSqr(pillarPos));
             double distanceExplosionToEntity = Math.sqrt(detonationOrigin.distSqr(entityPos));
             boolean canProtect = distanceEntityToPillar + distanceExplosionToPillar <= distanceExplosionToEntity + widthAllowance;
-            if(canProtect) return true;
+            if (canProtect) return true;
         }
         return false;
     }

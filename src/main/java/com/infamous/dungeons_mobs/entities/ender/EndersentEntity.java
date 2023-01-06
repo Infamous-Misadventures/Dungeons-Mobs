@@ -41,8 +41,6 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.world.entity.Entity.RemovalReason;
-
 public class EndersentEntity extends AbstractEnderlingEntity implements IAnimatable {
 
     public static final EntityDataAccessor<Integer> TELEPORTING = SynchedEntityData.defineId(EndersentEntity.class, EntityDataSerializers.INT);
