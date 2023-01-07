@@ -1,7 +1,13 @@
 package com.infamous.dungeons_mobs.capabilities.ancient;
 
+import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
+
+import java.util.List;
+
 import com.infamous.dungeons_mobs.network.NetworkHandler;
 import com.infamous.dungeons_mobs.network.message.AncientMessage;
+
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -12,11 +18,6 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.PacketDistributor;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
 @Mod.EventBusSubscriber(modid = MODID)
 public class AncientEvents {
@@ -43,7 +44,7 @@ public class AncientEvents {
                 nearbyEntities.forEach(playerEntity ->
                         cap.getBossInfo().addPlayer(playerEntity)
                 );
-                ArrayList<ServerPlayer> trackingPlayers = new ArrayList<>(cap.getBossInfo().getPlayers());
+                List<ServerPlayer> trackingPlayers = new ObjectArrayList<>(cap.getBossInfo().getPlayers());
                 List<ServerPlayer> furtherEntities = entityLiving.level.getNearbyEntities(ServerPlayer.class, TargetingConditions.forNonCombat().range(50.0D).ignoreInvisibilityTesting(), entityLiving, entityLiving.getBoundingBox().inflate(50D, 20D, 50D));
                 trackingPlayers.forEach(playerEntity -> {
                     if (!furtherEntities.contains(playerEntity)) {

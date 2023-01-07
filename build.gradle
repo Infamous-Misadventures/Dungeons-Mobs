@@ -24,7 +24,7 @@ apply plugin: 'maven-publish'
 apply from: 'https://raw.githubusercontent.com/SizableShrimp/ForgeUpdatesRemapper/main/remapper.gradle'
 
 version = "${mc_version}-${mod_version}"
-group = 'com.infamous.dungeons_mobs' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group = 'com.infamous.dungeons_mobs' 
 archivesBaseName = "${modid}"
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
@@ -75,9 +75,10 @@ minecraft {
             workingDirectory project.file('run')
 
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+
             properties 'mixin.env.remapRefMap': 'true'
             property 'mixin.env.refMapRemappingFile', "${project.projectDir}/build/createSrgToMcp/output.srg"
-            property 'forge.logging.console.level', 'debug'
 
             args '--mod', 'dungeons_mobs', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
@@ -120,7 +121,7 @@ repositories {
 		url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
 	}
     maven { 
-        name = "Illusive4 Maven" //TOP
+        name = "IllusiveC4 Maven" //Curios
         url = "https://maven.theillusivec4.top/" 
     }
     maven {
@@ -179,7 +180,7 @@ dependencies {
 jar {
     manifest {
         attributes([
-                "Specification-Title": "Dungeons Mobs",
+                "Specification-Title": project.name,
                 "Specification-Vendor": "Infamous Mods",
                 "Specification-Version": "1", 
                 "Implementation-Title": project.name,

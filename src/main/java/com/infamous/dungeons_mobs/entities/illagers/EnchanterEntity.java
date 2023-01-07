@@ -1,19 +1,41 @@
 package com.infamous.dungeons_mobs.entities.illagers;
 
-import baguchan.enchantwithmob.EnchantWithMob;
-import baguchan.enchantwithmob.capability.MobEnchantCapability;
+import static baguchan.enchantwithmob.registry.MobEnchants.PROTECTION;
+import static baguchan.enchantwithmob.registry.MobEnchants.STRONG;
+import static com.infamous.dungeons_mobs.network.datasync.ModDataSerializers.UUID_LIST;
+import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
+
+import java.util.EnumSet;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import javax.annotation.Nullable;
+
 import com.infamous.dungeons_libraries.utils.AreaOfEffectHelper;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
+
+import baguchan.enchantwithmob.EnchantWithMob;
+import baguchan.enchantwithmob.capability.MobEnchantCapability;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.IronGolem;
@@ -32,18 +54,6 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-import static baguchan.enchantwithmob.registry.MobEnchants.PROTECTION;
-import static baguchan.enchantwithmob.registry.MobEnchants.STRONG;
-import static com.infamous.dungeons_mobs.network.datasync.ModDataSerializers.UUID_LIST;
-import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
-
 public class EnchanterEntity extends SpellcasterIllager implements IAnimatable {
 
     public static final EntityDataAccessor<Integer> ATTACK_TICKS = SynchedEntityData.defineId(EnchanterEntity.class, EntityDataSerializers.INT);
@@ -53,7 +63,7 @@ public class EnchanterEntity extends SpellcasterIllager implements IAnimatable {
     AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     private Monster enchantmentTarget;
-    private List<Monster> enchantmentTargets = new ArrayList<>();
+    private List<Monster> enchantmentTargets = new ObjectArrayList<>();
 
     public EnchanterEntity(Level world) {
         super(ModEntityTypes.GEOMANCER.get(), world);
@@ -71,7 +81,7 @@ public class EnchanterEntity extends SpellcasterIllager implements IAnimatable {
         super.defineSynchedData();
         this.entityData.define(ATTACK_TICKS, 0);
         this.entityData.define(ENCHANT_TICKS, 0);
-        this.entityData.define(ENCHANTMENT_TARGETS, new ArrayList<>());
+        this.entityData.define(ENCHANTMENT_TARGETS, new ObjectArrayList<>());
     }
 
     public int getAttackTicks() {
@@ -159,7 +169,7 @@ public class EnchanterEntity extends SpellcasterIllager implements IAnimatable {
     public void remove(RemovalReason removalReason) {
         super.remove(removalReason);
         this.enchantmentTargets.forEach(this::clearEntityMobEnchantments);
-        this.setEnchantmentTargets(new ArrayList<>());
+        this.setEnchantmentTargets(new ObjectArrayList<>());
     }
 
     private void clearEntityMobEnchantments(Monster entity) {

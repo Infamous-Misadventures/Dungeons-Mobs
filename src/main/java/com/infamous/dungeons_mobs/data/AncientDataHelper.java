@@ -1,21 +1,22 @@
 package com.infamous.dungeons_mobs.data;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import com.infamous.dungeons_libraries.data.util.MergeableCodecDataManager;
+import com.infamous.dungeons_mobs.DungeonsMobs;
+
 import baguchan.enchantwithmob.EnchantWithMob;
 import baguchan.enchantwithmob.capability.MobEnchantCapability;
 import baguchan.enchantwithmob.registry.MobEnchants;
-import com.infamous.dungeons_libraries.data.util.MergeableCodecDataManager;
-import com.infamous.dungeons_mobs.DungeonsMobs;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Mod.EventBusSubscriber(modid = DungeonsMobs.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class AncientDataHelper {
@@ -24,10 +25,10 @@ public class AncientDataHelper {
     public static final MergeableCodecDataManager<MobEnchantmentAncientData, MobEnchantmentAncientData> MOB_ENCHANTMENT_ANCIENT_DATA = new MergeableCodecDataManager<>("ancient/mob_enchantment_ancient_data", MobEnchantmentAncientData.CODEC, AncientDataHelper::mobEnchantmentMerger);
 
     public static MobAncientData mobMerger(List<MobAncientData> raws) {
-        List<String> adjectives = new ArrayList<>();
-        List<String> nouns = new ArrayList<>();
-        List<ResourceLocation> minions = new ArrayList<>();
-        List<UniqueAncientData> uniques = new ArrayList<>();
+        List<String> adjectives = new ObjectArrayList<>();
+        List<String> nouns = new ObjectArrayList<>();
+        List<ResourceLocation> minions = new ObjectArrayList<>();
+        List<UniqueAncientData> uniques = new ObjectArrayList<>();
         raws.forEach(raw -> {
             adjectives.addAll(raw.getAdjectives());
             nouns.addAll(raw.getNouns());
@@ -38,8 +39,8 @@ public class AncientDataHelper {
     }
 
     public static MobEnchantmentAncientData mobEnchantmentMerger(List<MobEnchantmentAncientData> raws) {
-        List<String> adjectives = new ArrayList<>();
-        List<String> nouns = new ArrayList<>();
+        List<String> adjectives = new ObjectArrayList<>();
+        List<String> nouns = new ObjectArrayList<>();
         raws.forEach(raw -> {
             adjectives.addAll(raw.getAdjectives());
             nouns.addAll(raw.getNouns());
@@ -70,7 +71,7 @@ public class AncientDataHelper {
         nouns.addAll(mobAncientData.getNouns());
 //        adjectives.addAll(MobAncientData.DEFAULT.getAdjectives());
 //        nouns.addAll(MobAncientData.DEFAULT.getNouns());
-        return new ArrayList<>(adjectives).get(entity.getRandom().nextInt(adjectives.size())) + " " + new ArrayList<>(nouns).get(entity.getRandom().nextInt(nouns.size()));
+        return new ObjectArrayList<>(adjectives).get(entity.getRandom().nextInt(adjectives.size())) + " " + new ObjectArrayList<>(nouns).get(entity.getRandom().nextInt(nouns.size()));
     }
 
     @SubscribeEvent
