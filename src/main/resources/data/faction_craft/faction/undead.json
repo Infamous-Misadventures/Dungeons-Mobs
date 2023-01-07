@@ -45,38 +45,6 @@
       }
     },
     {
-      "entity_type": "dungeons_mobs:armored_zombie",
-      "weight": 70,
-      "strength": 10,
-      "rank": "soldier",
-      "maximum_rank": "leader",
-      "minimum_wave": 3,
-      "boosts": {
-        "rarity_overrides": [
-          {
-            "boost": "minecraft:mount/zombie_horse",
-            "rarity": "common"
-          }
-        ]
-      }
-    },
-    {
-      "entity_type": "dungeons_mobs:armored_skeleton",
-      "weight": 80,
-      "strength": 10,
-      "rank": "soldier",
-      "maximum_rank": "leader",
-      "minimum_wave": 3,
-      "boosts": {
-        "rarity_overrides": [
-          {
-            "boost": "minecraft:mount/skeleton_horse",
-            "rarity": "common"
-          }
-        ]
-      }
-    },
-    {
       "entity_type": "dungeons_mobs:wraith",
       "weight": 50,
       "strength": 9,

@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.client.models.illager;
 
 import com.infamous.dungeons_mobs.DungeonsMobs;
+import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import com.infamous.dungeons_mobs.entities.illagers.WindcallerEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -24,7 +25,11 @@ public class WindcallerModel extends AnimatedGeoModel<WindcallerEntity> {
 
     @Override
     public ResourceLocation getTextureResource(WindcallerEntity entity) {
-        return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/windcaller.png");
+        if(DungeonsMobsConfig.COMMON.ENABLE_3D_SLEEVES.get()){
+            return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/windcaller.png");
+        }else{
+            return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/windcaller_sleeved.png");
+        }
     }
 
     @Override
