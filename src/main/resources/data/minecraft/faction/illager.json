@@ -6,44 +6,12 @@
   }, 
   "entities": [
     {
-      "entity_type": "dungeons_mobs:armored_pillager",
-      "weight": 80,
-      "strength": 10,
-      "rank": "soldier",
-      "maximum_rank": "general",
-      "minimum_wave": 3,
-      "boosts": {
-        "rarity_overrides": [
-          {
-            "boost": "faction_craft:mount/faction_ravager",
-            "rarity": "common"
-          }
-        ]
-      }
-    },
-    {
       "entity_type": "dungeons_mobs:mountaineer",
       "weight": 80,
       "strength": 8,
       "rank": "soldier",
       "maximum_rank": "leader",
       "minimum_wave": 2
-    },
-    {
-      "entity_type": "dungeons_mobs:armored_vindicator",
-      "weight": 70,
-      "strength": 12,
-      "rank": "soldier",
-      "maximum_rank": "leader",
-      "minimum_wave": 3
-    },
-    {
-      "entity_type": "dungeons_mobs:armored_mountaineer",
-      "weight": 70,
-      "strength": 12,
-      "rank": "soldier",
-      "maximum_rank": "leader",
-      "minimum_wave": 3
     },
     {
       "entity_type": "dungeons_mobs:iceologer",

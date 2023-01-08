@@ -78,25 +78,18 @@ public class ReplacedPillagerRenderer extends ModExtentedGeoReplacedEntityRender
 
     @Override
     protected void preRenderItem(PoseStack stack, ItemStack item, String boneName, ReplacedPillagerEntity currentEntity, IBone bone) {
-        if (item == this.mainHand || item == this.offHand) {
-            stack.scale(1.1F, 1.1F, 1.1F);
-            stack.mulPose(Vector3f.XP.rotationDegrees(-90.0F));
-            boolean shieldFlag = item.getItem() instanceof ShieldItem;
-            if (item == this.mainHand) {
-                if (shieldFlag) {
-                    stack.translate(0.0, 0.125, -0.25);
-                } else {
+        if (item == this.mainHand) {
+            stack.mulPose(Vector3f.XP.rotationDegrees(-90f));
 
-                }
-            } else {
-                if (shieldFlag) {
-                    stack.translate(-0.15, 0.125, 0.05);
-                    stack.mulPose(Vector3f.YP.rotationDegrees(90));
-                } else {
+            if (item.getItem() instanceof ShieldItem)
+                stack.translate(0, 0.125, -0.25);
+        }
+        else if (item == this.offHand) {
+            stack.mulPose(Vector3f.XP.rotationDegrees(-90f));
 
-                }
-
-
+            if (item.getItem() instanceof ShieldItem) {
+                stack.translate(0, 0.125, 0.25);
+                stack.mulPose(Vector3f.YP.rotationDegrees(180));
             }
         }
     }
