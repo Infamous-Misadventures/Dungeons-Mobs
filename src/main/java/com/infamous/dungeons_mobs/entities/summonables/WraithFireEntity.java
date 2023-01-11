@@ -25,8 +25,13 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 public class WraithFireEntity extends Entity implements IAnimatable, IAnimationTickable {
+
+	private static final Predicate<Entity> ALIVE = (p_213685_0_) -> {
+		return p_213685_0_.isAlive();
+	};
 
 	public int lifeTime;
 	
@@ -94,7 +99,7 @@ public class WraithFireEntity extends Entity implements IAnimatable, IAnimationT
 	    	}
 	    	
 	    	if (this.isBurning()) {
-		    	List<Entity> list = this.level.getEntities(this, this.getBoundingBox(), null);
+		    	List<Entity> list = this.level.getEntities(this, this.getBoundingBox(), ALIVE);
 				if (!list.isEmpty()) {
 					for (Entity entity : list) {
 						if (entity instanceof LivingEntity && this.canHarmEntity(((LivingEntity)entity))) {
