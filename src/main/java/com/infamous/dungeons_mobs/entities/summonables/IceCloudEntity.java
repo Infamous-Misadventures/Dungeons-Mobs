@@ -177,6 +177,18 @@ public class IceCloudEntity extends Entity implements IAnimatable {
         	}
         }
         
+        if (this.isOnGround()) {
+		if (!this.level.isClientSide) {
+        		if (this.landAnimationTick <= 0) {
+             		   	this.landAnimationTick = landAnimationLength;
+             		   	this.level.broadcastEntityEvent(this, (byte) 3);	
+	     		   	this.land();
+	     		   	this.moveTo(this.getX(), this.getY() - 1, this.getZ());
+	     		   	this.playSound(ModSoundEvents.ICE_CHUNK_LAND.get(), 1.5F, this.getRandomPitch());
+        		}
+       		 }
+	}
+
         RayTraceResult raytraceresult = ProjectileHelper.getHitResult(this, this::canHitEntity);
         boolean flag = false;
         if (raytraceresult.getType() == RayTraceResult.Type.BLOCK) {
@@ -194,7 +206,6 @@ public class IceCloudEntity extends Entity implements IAnimatable {
               flag = true;
            }
         }
-
         if (raytraceresult.getType() != RayTraceResult.Type.MISS && !flag && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
            this.onHit(raytraceresult);
         }
@@ -230,7 +241,7 @@ public class IceCloudEntity extends Entity implements IAnimatable {
         		this.level.broadcastEntityEvent(this, (byte) 6);
         	}			
         	
-	        if ((this.target != null && this.lifeTime > 100 && this.fallAnimationTick <= 0 && this.falling == false) || this.target == null || this.target.isDeadOrDying()) {
+	        if (((this.target != null && this.lifeTime > 100) || this.target == null || this.target.isDeadOrDying()) && this.fallAnimationTick <= 0 && !this.falling) {
 	        	this.playSound(ModSoundEvents.ICE_CHUNK_FALL.get(), 1.0F, this.getRandomPitch());
 	        	this.fallAnimationTick = this.fallAnimationLength;
 	        	this.level.broadcastEntityEvent(this, (byte) 2);
