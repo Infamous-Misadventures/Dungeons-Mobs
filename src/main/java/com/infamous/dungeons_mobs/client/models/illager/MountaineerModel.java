@@ -11,12 +11,10 @@ import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.molang.MolangParser;
 import software.bernie.geckolib3.core.processor.IBone;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
-import software.bernie.geckolib3.model.provider.data.EntityModelData;
 import software.bernie.geckolib3.resource.GeckoLibCache;
 
 // Model and animation received from CQR and DerToaster
-public class MountaineerModel extends AnimatedGeoModel<MountaineerEntity> {
+public class MountaineerModel extends HeadTurningAnimatedGeoModel<MountaineerEntity> {
 
     @Override
     public ResourceLocation getAnimationFileLocation(MountaineerEntity entity) {
@@ -37,19 +35,12 @@ public class MountaineerModel extends AnimatedGeoModel<MountaineerEntity> {
     public void setCustomAnimations(MountaineerEntity entity, int uniqueID, AnimationEvent customPredicate) {
         super.setCustomAnimations(entity, uniqueID, customPredicate);
 
-        IBone head = this.getAnimationProcessor().getBone("bipedHead");
         IBone illagerArms = this.getAnimationProcessor().getBone("illagerArms");
         
         illagerArms.setHidden(true);
 
         IBone cape = this.getAnimationProcessor().getBone("bipedCape");
         cape.setHidden(entity.getItemBySlot(EquipmentSlot.CHEST).getItem() != entity.getArmorSet().getChest().get());
-
-        EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
-        if (extraData.headPitch != 0 || extraData.netHeadYaw != 0) {
-            head.setRotationX(head.getRotationX() + (extraData.headPitch * ((float) Math.PI / 180F)));
-            head.setRotationY(head.getRotationY() + (extraData.netHeadYaw * ((float) Math.PI / 180F)));
-        }
     }
     
 	@Override

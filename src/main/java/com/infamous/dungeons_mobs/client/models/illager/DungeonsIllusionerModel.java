@@ -7,14 +7,10 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.molang.MolangParser;
-import software.bernie.geckolib3.core.processor.IBone;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
-import software.bernie.geckolib3.model.provider.data.EntityModelData;
 import software.bernie.geckolib3.resource.GeckoLibCache;
 
-public class DungeonsIllusionerModel extends AnimatedGeoModel {
+public class DungeonsIllusionerModel extends HeadTurningAnimatedGeoModel {
 
     @Override
     public ResourceLocation getAnimationFileLocation(Object entity) {
@@ -32,20 +28,6 @@ public class DungeonsIllusionerModel extends AnimatedGeoModel {
             return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/illusioner.png");
         }else{
             return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/illager/illusioner_sleeved.png");
-        }
-    }
-
-    @Override
-    public void setCustomAnimations(IAnimatable entity, int uniqueID, AnimationEvent customPredicate) {
-        super.setCustomAnimations(entity, uniqueID, customPredicate);
-
-        IBone head = this.getAnimationProcessor().getBone("bipedHead");
-
-        EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
-
-        if (extraData.headPitch != 0 || extraData.netHeadYaw != 0) {
-            head.setRotationX(head.getRotationX() + (extraData.headPitch * ((float) Math.PI / 180F)));
-            head.setRotationY(head.getRotationY() + (extraData.netHeadYaw * ((float) Math.PI / 180F)));
         }
     }
     

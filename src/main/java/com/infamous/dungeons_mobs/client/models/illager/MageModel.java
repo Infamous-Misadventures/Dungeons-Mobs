@@ -13,11 +13,9 @@ import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.molang.MolangParser;
 import software.bernie.geckolib3.core.processor.IBone;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
-import software.bernie.geckolib3.model.provider.data.EntityModelData;
 import software.bernie.geckolib3.resource.GeckoLibCache;
 
-public class MageModel extends AnimatedGeoModel {
+public class MageModel extends HeadTurningAnimatedGeoModel {
 
     @Override
     public ResourceLocation getAnimationFileLocation(Object entity) {
@@ -42,9 +40,6 @@ public class MageModel extends AnimatedGeoModel {
     public void setCustomAnimations(IAnimatable entity, int uniqueID, AnimationEvent customPredicate) {
         super.setCustomAnimations(entity, uniqueID, customPredicate);
 
-        LivingEntity entityIn = (LivingEntity) entity;
-
-        IBone head = this.getAnimationProcessor().getBone("bipedHead");
         IBone illagerArms = this.getAnimationProcessor().getBone("illagerArms");
         
         illagerArms.setHidden(true);
@@ -53,11 +48,6 @@ public class MageModel extends AnimatedGeoModel {
         if(entity instanceof SpawnArmoredMob && entity instanceof Mob) {
             Mob mobEntity = (Mob) entity;
             cape.setHidden(mobEntity.getItemBySlot(EquipmentSlot.CHEST).getItem() != ((SpawnArmoredMob) entity).getArmorSet().getChest().get());
-        }
-        EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
-        if (extraData.headPitch != 0 || extraData.netHeadYaw != 0) {
-            head.setRotationX(head.getRotationX() + (extraData.headPitch * ((float) Math.PI / 180F)));
-            head.setRotationY(head.getRotationY() + (extraData.netHeadYaw * ((float) Math.PI / 180F)));
         }
     }
     

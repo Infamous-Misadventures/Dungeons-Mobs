@@ -10,11 +10,9 @@ import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.molang.MolangParser;
 import software.bernie.geckolib3.core.processor.IBone;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
-import software.bernie.geckolib3.model.provider.data.EntityModelData;
 import software.bernie.geckolib3.resource.GeckoLibCache;
 
-public class RoyalGuardModel extends AnimatedGeoModel<RoyalGuardEntity> {
+public class RoyalGuardModel extends HeadTurningAnimatedGeoModel<RoyalGuardEntity> {
 
     @Override
     public ResourceLocation getAnimationFileLocation(RoyalGuardEntity entity) {
@@ -35,21 +33,11 @@ public class RoyalGuardModel extends AnimatedGeoModel<RoyalGuardEntity> {
     public void setCustomAnimations(RoyalGuardEntity entity, int uniqueID, AnimationEvent customPredicate) {
         super.setCustomAnimations(entity, uniqueID, customPredicate);
 
-        LivingEntity entityIn = entity;
-
-        IBone head = this.getAnimationProcessor().getBone("bipedHeadBaseRotator");
-        IBone armorHead = this.getAnimationProcessor().getBone("armorBipedHead");
         IBone illagerArms = this.getAnimationProcessor().getBone("illagerArms");
         IBone cape = this.getAnimationProcessor().getBone("bipedCape");
         
         illagerArms.setHidden(true);
         cape.setHidden(true);
-
-        EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
-        if (extraData.headPitch != 0 || extraData.netHeadYaw != 0) {
-            head.setRotationX(head.getRotationX() + (extraData.headPitch * ((float) Math.PI / 180F)));
-            head.setRotationY(head.getRotationY() + (extraData.netHeadYaw * ((float) Math.PI / 180F)));
-        }
     }
     
 	@Override

@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.client.renderer.armor;
 
 import com.infamous.dungeons_libraries.client.renderer.gearconfig.ArmorGearRenderer;
+import com.infamous.dungeons_libraries.items.gearconfig.ArmorGear;
 import com.infamous.dungeons_libraries.items.materials.armor.ArmorMaterialBaseType;
 import com.infamous.dungeons_libraries.items.materials.armor.DungeonsArmorMaterial;
 import com.infamous.dungeons_mobs.client.models.armor.WindcallerArmorGearModel;
@@ -23,24 +24,24 @@ public class WindcallerArmorGearRenderer extends ArmorGearRenderer<WindcallerArm
         super(new WindcallerArmorGearModel<>());
     }
 
-    @Override
-    public void preparePositionRotationScale(GeoBone bone, PoseStack stack) {
-        RenderUtils.translate(bone, stack);
-        RenderUtils.moveToPivot(bone, stack);
-        EntityRenderer<? super LivingEntity> entityRenderer = Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(entityLiving);
-        if(!(entityRenderer instanceof GeoEntityRenderer) || !bone.getName().contains("armor")) {
-            RenderUtils.rotate(bone, stack);
+    public void prepMatrixForBone(PoseStack stack, GeoBone bone) {
+        RenderUtils.translateMatrixToBone(stack, bone);
+        RenderUtils.translateToPivotPoint(stack, bone);
+        EntityRenderer<? super LivingEntity> entityRenderer = Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(this.entityLiving);
+        if (!(entityRenderer instanceof GeoEntityRenderer) || !bone.getName().contains("armor")) {
+            RenderUtils.rotateMatrixAroundBone(stack, bone);
         }
-        RenderUtils.scale(bone, stack);
-        ArmorMaterial material = this.currentArmorItem.getMaterial();
-        if(bone.getName().contains("Body") && material instanceof DungeonsArmorMaterial && ((DungeonsArmorMaterial) material).getBaseType() == ArmorMaterialBaseType.CLOTH){
-            stack.scale(1.0F, 1.0F, 0.85F);
+
+        RenderUtils.scaleMatrixForBone(stack, bone);
+        ArmorMaterial material = ((ArmorGear)this.currentArmorItem).getMaterial();
+        if (bone.getName().contains("Body") && material instanceof DungeonsArmorMaterial && ((DungeonsArmorMaterial)material).getBaseType() == ArmorMaterialBaseType.CLOTH) {
+            stack.scale(1.0F, 1.0F, 0.93F);
         }
         if(entityLiving instanceof WindcallerEntity && bone.getName().contains("Head")){
             stack.scale(0.93F, 0.93F, 0.93F);
             stack.translate(0.0D, 0.116D, 0.0D);
         }
-        RenderUtils.moveBackFromPivot(bone, stack);
+        RenderUtils.translateAwayFromPivotPoint(stack, bone);
     }
 
     @Override
