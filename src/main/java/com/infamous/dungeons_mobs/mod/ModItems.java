@@ -27,6 +27,7 @@ import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 
 
 public class ModItems {
+    private static final ResourceLocation DEFAULT_ANIMATION_RESOURCE = new ResourceLocation(DungeonsLibraries.MODID, "animations/armor/armor_default.animation.json");
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
 
     public static final Map<ResourceLocation, RegistryObject<Item>> ARTIFACTS = new HashMap<>();
@@ -42,17 +43,29 @@ public class ModItems {
             () -> new VanguardShieldItem(new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS).durability(336)));
 
     // HELMETS
-    public static final RegistryObject<Item> GOLD_PILLAGER_HELMET = ITEMS.register("gold_pillager_helmet",
-            () -> new PillagerHelmetItem(ArmorMaterials.IRON, EquipmentSlot.HEAD, new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS), false));
+    public static final RegistryObject<Item> GOLD_PILLAGER_HELMET = registerArmor("gold_pillager_helmet",
+            () -> new ArmorGear(EquipmentSlot.HEAD, ARMOR_PROPERTIES, null,
+                    new ResourceLocation(MODID, "geo/armor/pillager_helmet.geo.json"),
+                    new ResourceLocation(MODID, "textures/models/armor/gold_pillager_helmet.png"),
+                    DEFAULT_ANIMATION_RESOURCE));
 
     public static final RegistryObject<Item> DIAMOND_PILLAGER_HELMET = ITEMS.register("diamond_pillager_helmet",
-            () -> new PillagerHelmetItem(ArmorMaterials.DIAMOND, EquipmentSlot.HEAD, new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS), true));
+            () -> new ArmorGear(EquipmentSlot.HEAD, ARMOR_PROPERTIES, null,
+                    new ResourceLocation(MODID, "geo/armor/pillager_helmet.geo.json"),
+                    new ResourceLocation(MODID, "textures/models/armor/diamond_pillager_helmet.png"),
+                    DEFAULT_ANIMATION_RESOURCE));
 
     public static final RegistryObject<Item> GOLD_VINDICATOR_HELMET = ITEMS.register("gold_vindicator_helmet",
-            () -> new VindicatorHelmetItem(ArmorMaterials.IRON, EquipmentSlot.HEAD, new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS), false));
+            () -> new ArmorGear(EquipmentSlot.HEAD, ARMOR_PROPERTIES, null,
+                    new ResourceLocation(MODID, "geo/armor/vindicator_helmet.geo.json"),
+                    new ResourceLocation(MODID, "textures/models/armor/gold_vindicator_helmet.png"),
+                    DEFAULT_ANIMATION_RESOURCE));
 
     public static final RegistryObject<Item> DIAMOND_VINDICATOR_HELMET = ITEMS.register("diamond_vindicator_helmet",
-            () -> new VindicatorHelmetItem(ArmorMaterials.IRON, EquipmentSlot.HEAD, new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS), true));
+            () -> new ArmorGear(EquipmentSlot.HEAD, ARMOR_PROPERTIES, null,
+                    new ResourceLocation(MODID, "geo/armor/vindicator_helmet.geo.json"),
+                    new ResourceLocation(MODID, "textures/models/armor/diamond_vindicator_helmet.png"),
+                    DEFAULT_ANIMATION_RESOURCE));
 
     public static final RegistryObject<Item> NETHERITE_PIGLIN_HELMET = ITEMS.register("netherite_piglin_helmet",
             () -> new PiglinHelmetItem(CustomArmorMaterial.PURE_NETHERITE, EquipmentSlot.HEAD, new Item.Properties().tab(DungeonsMobs.DUNGEONS_MOBS_ITEMS)));
@@ -122,7 +135,7 @@ public class ModItems {
         ResourceLocation armorSet = new ResourceLocation(MODID, armorSetId);
         ResourceLocation modelLocation = new ResourceLocation(MODID, "geo/armor/" + armorSetId + ".geo.json");
         ResourceLocation textureLocation = new ResourceLocation(MODID, "textures/models/armor/" + armorSetId + ".png");
-        ResourceLocation animationFileLocation = animated ? new ResourceLocation(MODID, "animations/armor/" + armorSetId + ".animation.json") : new ResourceLocation(DungeonsLibraries.MODID, "animations/armor/armor_default.animation.json");
+        ResourceLocation animationFileLocation = animated ? new ResourceLocation(MODID, "animations/armor/" + armorSetId + ".animation.json") : DEFAULT_ANIMATION_RESOURCE;
         return new ArmorSet(
                 armorSet,
                 registerArmor(helmetId, () -> new ArmorGear(EquipmentSlot.HEAD, ARMOR_PROPERTIES, armorSet, modelLocation, textureLocation, animationFileLocation)),
