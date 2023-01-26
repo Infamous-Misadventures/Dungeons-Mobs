@@ -53,44 +53,8 @@ public class MobEvents {
 
     public static Random random = new Random();
 
-    @SubscribeEvent
-    public static void onSetAttackTarget(LivingChangeTargetEvent event) {
-        LivingEntity attacker = event.getEntity();
-        Level level = attacker.level;
-        LivingEntity target = event.getNewTarget();
-        if (attacker instanceof Mob && target instanceof Mob) {
-            if (AbilityHelper.isAlly(attacker, target)) {
-                createDummyTarget(level);
-                if (attacker instanceof NeutralMob) {
-                    ((NeutralMob) attacker).setPersistentAngerTarget(null);
-                    ((NeutralMob) attacker).setRemainingPersistentAngerTime(0);
-                }
-                ((Mob) attacker).setTarget(DUMMY_TARGET);
-                attacker.setLastHurtByMob(DUMMY_TARGET);
-            }
-        }
-    }
-
-    private static void createDummyTarget(Level level) {
-        if (DUMMY_TARGET == null) {
-            DUMMY_TARGET = EntityType.ARMOR_STAND.create(level);
-            if (DUMMY_TARGET != null) {
-                DUMMY_TARGET.remove(Entity.RemovalReason.DISCARDED);
-            }
-        }
-    }
-
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onEntityJoinWorld(EntityJoinLevelEvent event) {
-        // Making mobs avoid Geomancer Constructs
-//        if(event.getEntity() instanceof CreatureEntity && !(event.getEntity() instanceof GeomancerEntity)){
-//            CreatureEntity creatureEntity = (CreatureEntity) event.getEntity();
-//            creatureEntity.goalSelector.addGoal(3, new AvoidBaseEntityGoal<>(creatureEntity, ConstructEntity.class, 8.0F, 0.6D, 1.0D));
-//        }
-//        if(event.getEntity() instanceof CreatureEntity && !(event.getEntity() instanceof WhispererEntity)){
-//            CreatureEntity creatureEntity = (CreatureEntity) event.getEntity();
-//            creatureEntity.goalSelector.addGoal(3, new AvoidEntityGoal<>(creatureEntity, VineEntity.class, 8.0F, 0.6D, 1.0D));
-//        }
         if (event.getEntity() instanceof Drowned) {
             Drowned drownedEntity = (Drowned) event.getEntity();
             ((GoalSelectorAccessor) drownedEntity.goalSelector).getAvailableGoals().removeIf(pg -> pg.getPriority() == 2 && pg.getGoal() instanceof RangedAttackGoal);
