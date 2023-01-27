@@ -1,8 +1,8 @@
 {
   "type": "forge:add_spawns",
-  "biomes": "#forge:is_snowy",
+  "biomes": "#minecraft:is_jungle",
   "spawners": {
-    "type": "dungeons_mobs:iceologer",
+    "type": "dungeons_mobs:leapleaf",
     "weight": 5,
     "minCount": 1,
     "maxCount": 1

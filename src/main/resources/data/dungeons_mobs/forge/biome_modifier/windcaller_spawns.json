@@ -1,0 +1,19 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": {
+	"type": "forge:and",
+	"values": [
+    "#minecraft:is_mountain",
+    "#minecraft:is_hill",
+    "#forge:is_peak",
+    "#forge:is_mountain",
+    "#forge:is_slope"
+	]
+},
+  "spawners": {
+    "type": "dungeons_mobs:windcaller",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

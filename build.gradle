@@ -152,7 +152,7 @@ dependencies {
 
     implementation fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
     implementation fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
-    implementation fg.deobf("curse.maven:just-enough-resources-jer-240630:${jer_version}")
+    implementation fg.deobf("curse. maven:just-enough-resources-jer-240630:${jer_version}")
 	implementation fg.deobf("curse.maven:just-enough-effect-descriptions-jeed-532286:${jeed_version}")
 
     implementation fg.deobf("curse.maven:appleskin-248787:${appleskin_version}")

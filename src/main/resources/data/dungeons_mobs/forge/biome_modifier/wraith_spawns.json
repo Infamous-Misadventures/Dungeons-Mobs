@@ -1,0 +1,16 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": {
+	"type": "forge:and",
+	"values": [
+    "#minecraft:is_overworld",
+	"#dungeons_mobs:is_soulsand"
+	]
+},
+  "spawners": {
+    "type": "dungeons_mobs:wraith",
+    "weight": 60,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

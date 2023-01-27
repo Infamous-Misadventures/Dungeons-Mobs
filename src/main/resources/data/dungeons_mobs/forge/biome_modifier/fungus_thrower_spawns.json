@@ -1,0 +1,16 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": {
+	"type": "forge:and",
+	"values": [
+    "#dungeons_mobs:is_crimson",
+    "#dungeons_mobs:is_warped"
+	]
+},
+  "spawners": {
+    "type": "dungeons_mobs:fungus_thrower",
+    "weight": 50,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}
