@@ -45,6 +45,7 @@ public class DungeonsMobs {
     public static CommonProxy PROXY;
 
     public DungeonsMobs() {
+    	GeckoLib.initialize();
         // Register the setup method for modloading
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, DungeonsMobsConfig.COMMON_SPEC, "dungeons-mobs-common.toml");
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
@@ -54,8 +55,6 @@ public class DungeonsMobs {
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
-
-        GeckoLib.initialize();
 
         // Registering custom tags
         EntityTags.register();

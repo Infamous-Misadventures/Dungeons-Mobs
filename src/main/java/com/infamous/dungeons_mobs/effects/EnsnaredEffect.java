@@ -11,12 +11,12 @@ public class EnsnaredEffect extends MobEffect {
     }
 
     @Override
-    public void applyEffectTick(LivingEntity p_76394_1_, int p_76394_2_) {
-        if (!p_76394_1_.level.isClientSide) {
-            p_76394_1_.teleportTo(p_76394_1_.getX(), p_76394_1_.getY(), p_76394_1_.getZ());
-            p_76394_1_.setDeltaMovement(0, p_76394_1_.getDeltaMovement().y > 0 ? 0 : p_76394_1_.getDeltaMovement().y, 0);
+    public void applyEffectTick(LivingEntity owner, int amplifier) {
+        if (!owner.level.isClientSide) {
+            owner.setDeltaMovement(0, owner.getDeltaMovement().y, 0);
+            owner.setSpeed(0);
         }
-        super.applyEffectTick(p_76394_1_, p_76394_2_);
+        super.applyEffectTick(owner, amplifier);
     }
 
     @Override

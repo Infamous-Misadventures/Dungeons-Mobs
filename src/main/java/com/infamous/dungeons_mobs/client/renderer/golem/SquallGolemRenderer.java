@@ -12,9 +12,9 @@ import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 
 public class SquallGolemRenderer extends GeoEntityRenderer<SquallGolemEntity> {
+	
     public SquallGolemRenderer(EntityRendererProvider.Context renderManager) {
         super(renderManager, new SquallGolemModel());
-
     }
 
     protected void applyRotations(SquallGolemEntity entityLiving, PoseStack matrixStackIn, float ageInTicks,

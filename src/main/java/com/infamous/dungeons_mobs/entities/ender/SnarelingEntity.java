@@ -74,7 +74,6 @@ public class SnarelingEntity extends AbstractEnderlingEntity implements IAnimata
         return ModSoundEvents.SNARELING_STEP.get();
     }
 
-
     protected SoundEvent getAmbientSound() {
         return ModSoundEvents.SNARELING_IDLE.get();
     }
