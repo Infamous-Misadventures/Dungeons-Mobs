@@ -1,4 +1,4 @@
-// 1.19.2	2022-12-08T21:41:58.3195587	Item Models: dungeons_mobs
+// 1.19.2	2023-01-31T01:59:35.9135624	Item Models: dungeons_mobs
 2225d03d664467e08f074641956a03498e25af5c assets/dungeons_mobs/models/item/alpine_boots.json
 711aaa15a5343b572a04f9e9608818dd4c64cfa0 assets/dungeons_mobs/models/item/alpine_chestplate.json
 d66b56d66cb79d8567a1722d631c569af3eef779 assets/dungeons_mobs/models/item/alpine_helmet.json
@@ -16,6 +16,7 @@ d1d934aabf03ae89f4b1aebf23e8fe0ab1111809 assets/dungeons_mobs/models/item/fungus
 24f37062c519ef23833f43b1874fc74798618120 assets/dungeons_mobs/models/item/fungus_thrower_helmet.json
 c0723d33f302134300aeaab08c43aaea2a250132 assets/dungeons_mobs/models/item/geomancer_chestplate.json
 4c4c21968b1b1c348975efb007f41a96f03e6cb9 assets/dungeons_mobs/models/item/geomancer_helmet.json
+e1d002ba47a13626876cb3167d4ae4bc772a4a2f assets/dungeons_mobs/models/item/gold_pillager_helmet.json
 ee3ff57af50da447a34ac052d57f6d10e0ef9685 assets/dungeons_mobs/models/item/iceologer_boots.json
 608c85488491a604c22fef608d0389548c38cb2c assets/dungeons_mobs/models/item/iceologer_chestplate.json
 8526b5b02a07d8ce99b3f249eba32704c1a3ff94 assets/dungeons_mobs/models/item/iceologer_helmet.json

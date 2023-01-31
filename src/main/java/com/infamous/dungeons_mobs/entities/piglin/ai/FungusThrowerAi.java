@@ -9,18 +9,16 @@ import com.infamous.dungeons_mobs.tasks.ThrowAtTargetTask;
 import com.infamous.dungeons_mobs.utils.BrainHelper;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.behavior.BackUpIfTooClose;
 import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.entity.ai.behavior.RunIf;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.alchemy.PotionUtils;
-import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.function.Predicate;
@@ -49,20 +47,18 @@ public class FungusThrowerAi {
         double yDiff = attackTarget.getY() - fungusThrower.getY();
         double zDiff = attackTarget.getZ() + targetDeltaMove.z - fungusThrower.getZ();
         float horizDistSq = Mth.sqrt((float) (xDiff * xDiff + zDiff * zDiff));
+        InteractionHand weaponHoldingHand = ProjectileUtil.getWeaponHoldingHand(fungusThrower, FUNGUS_ITEM_PREDICATE);
+        ItemStack fungusStack = fungusThrower.getItemInHand(weaponHoldingHand);
+        BlueNethershroomEntity blueNethershroom = BlueNethershroomItem.createBlueNethershroom(fungusThrower.level, fungusThrower, fungusStack.copy());
 
-        BlueNethershroomEntity blueNethershroom = new BlueNethershroomEntity(fungusThrower.level, fungusThrower);
-        ItemStack blueNethershroomStack = blueNethershroom.getItem();
-        BlueNethershroomEntity.setLightBluePotionColor(blueNethershroomStack);
-        blueNethershroom.setItem(PotionUtils.setPotion(blueNethershroomStack, Potions.POISON));
-
-        blueNethershroom.setXRot(blueNethershroom.getXRot() - -20.0F);
+        blueNethershroom.setXRot(blueNethershroom.getXRot() + 20.0F);
         blueNethershroom.shoot(xDiff, yDiff + (double) (horizDistSq * 0.2F), zDiff, 0.75F, 8.0F);
         if (!fungusThrower.isSilent()) {
             fungusThrower.level.playSound(null, fungusThrower.getX(), fungusThrower.getY(), fungusThrower.getZ(), ModSoundEvents.FUNGUS_THROWER_THROW.get(), fungusThrower.getSoundSource(), 1.0F, (fungusThrower.getRandom().nextFloat() - fungusThrower.getRandom().nextFloat()) * 0.2F + 1.0F);
         }
 
         fungusThrower.level.addFreshEntity(blueNethershroom);
-        fungusThrower.swing(ProjectileUtil.getWeaponHoldingHand(fungusThrower, FUNGUS_ITEM_PREDICATE));
+        fungusThrower.swing(weaponHoldingHand);
     }
 
     private static boolean hasBlueNethershroom(LivingEntity living) {

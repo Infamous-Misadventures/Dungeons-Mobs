@@ -13,6 +13,8 @@ public class EntityTags {
 
     public static final TagKey<EntityType<?>> PLANT_MOBS = tag("plant_mobs");
 
+    public static final TagKey<EntityType<?>> PIGLINS = tag("piglins");
+
     private static TagKey<EntityType<?>> tag(String name) {
         return TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(DungeonsMobs.MODID, name));
     }

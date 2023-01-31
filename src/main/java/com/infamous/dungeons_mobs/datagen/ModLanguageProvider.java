@@ -2,6 +2,7 @@ package com.infamous.dungeons_mobs.datagen;
 
 import baguchan.enchantwithmob.mobenchant.MobEnchant;
 import com.infamous.dungeons_mobs.DungeonsMobs;
+import com.infamous.dungeons_mobs.mod.ModEffects;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.data.LanguageProvider;
@@ -17,8 +18,10 @@ public class ModLanguageProvider extends LanguageProvider {
     @Override
     protected void addTranslations() {
         addConfigOptions();
-        addMobEnchantments();
+        //addMobEnchantments();
         addTips();
+        this.add(ModEffects.ENSNARED.get(), "Ensnared");
+        this.add(ModEffects.WARPED.get(), "Warped");
     }
 
     private void addMobEnchantments() {

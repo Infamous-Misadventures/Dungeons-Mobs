@@ -38,6 +38,7 @@
   "entity.dungeons_mobs.blastling_bullet" : "Blastling Bullet",
 	
   "effect.dungeons_mobs.ensnared" : "Ensnared",
+  "effect.dungeons_mobs.warped": "Warped",
 	
   "death.blastling": "%1$s was blasted",
   "death.attack.blastling": "%1$s was blasted by %2$s",
