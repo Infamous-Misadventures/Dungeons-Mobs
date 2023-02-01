@@ -12,16 +12,12 @@ import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.item.CrossbowItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -56,16 +52,6 @@ public abstract class PiglinEntityMixin extends AbstractPiglin implements ISmart
     @Inject(at = @At("TAIL"), method = "defineSynchedData")
     private void registerCustomData(CallbackInfo ci) {
         this.entityData.define(DATA_IS_CROSSBOW_USER, false);
-    }
-
-    @Inject(at = @At("RETURN"), method = "canFireProjectileWeapon", cancellable = true)
-    private void handleCanFireProjectileWeapon(ProjectileWeaponItem pProjectileWeapon, CallbackInfoReturnable<Boolean> cir){
-        cir.setReturnValue(pProjectileWeapon instanceof CrossbowItem);
-    }
-
-    @Redirect(method = "canReplaceCurrentItem(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"))
-    private boolean handleIsCrossbow(ItemStack instance, Item pItem){
-        return instance.getItem() instanceof CrossbowItem;
     }
 
     @Override
