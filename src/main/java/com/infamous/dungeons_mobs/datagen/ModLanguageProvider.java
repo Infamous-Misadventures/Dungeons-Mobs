@@ -15,6 +15,7 @@ public class ModLanguageProvider extends LanguageProvider {
         super(gen, DungeonsMobs.MODID, locale);
     }
 
+    //TODO Completely improve, getting onto it shortly -- Meme Man
     @Override
     protected void addTranslations() {
         addConfigOptions();
