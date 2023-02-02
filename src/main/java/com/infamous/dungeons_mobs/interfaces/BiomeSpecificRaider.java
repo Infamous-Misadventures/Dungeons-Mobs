@@ -11,19 +11,19 @@ public enum BiomeSpecificRaider {
     MOUNTAINEER(
             ModEntityTypes.MOUNTAINEER.get(),
             EntityType.VINDICATOR,
-            BiomeTags.MOUNTAINEER_SPAWN_BIOMES),
+            BiomeTags.MOUNTAINEEER_RAIDS_IN),
     ICEOLOGER(
             ModEntityTypes.ICEOLOGER.get(),
             EntityType.EVOKER,
-            BiomeTags.ICEOLOGER_SPAWN_BIOMES),
+            BiomeTags.ICEOLOGER_RAIDS_IN),
     WINDCALLER(
             ModEntityTypes.WINDCALLER.get(),
             EntityType.EVOKER,
-            BiomeTags.WINDCALLER_SPAWN_BIOMES),
+            BiomeTags.WINDCALLER_RAIDS_IN),
     SQUALL_GOLEM(
             ModEntityTypes.SQUALL_GOLEM.get(),
             EntityType.RAVAGER,
-            BiomeTags.SQUALL_GOLEM_SPAWN_BIOMES),
+            BiomeTags.SQUALL_GOLEM_RAIDS_IN),
 
     /*,
     ILLUSIONER(
