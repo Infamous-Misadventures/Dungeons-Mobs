@@ -48,7 +48,7 @@ import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.function.Predicate;
 
-import static com.infamous.dungeons_mobs.entities.SpawnArmoredHelper.equipArmorSet;
+import static com.infamous.dungeons_mobs.entities.SpawnEquipmentHelper.equipArmorSet;
 
 public class MageEntity extends AbstractIllager implements IAnimatable, SpawnArmoredMob {
 

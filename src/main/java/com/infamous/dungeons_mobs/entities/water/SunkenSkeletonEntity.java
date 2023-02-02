@@ -1,5 +1,6 @@
 package com.infamous.dungeons_mobs.entities.water;
 
+import com.infamous.dungeons_mobs.entities.SpawnEquipmentHelper;
 import com.infamous.dungeons_mobs.goals.AquaticMoveHelperController;
 import com.infamous.dungeons_mobs.goals.GoToBeachGoal;
 import com.infamous.dungeons_mobs.goals.GoToWaterGoal;
@@ -18,7 +19,6 @@ import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.goal.*;
@@ -177,7 +177,7 @@ public class SunkenSkeletonEntity extends AbstractSkeleton implements CrossbowAt
 
     @Override
     protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance p_180481_1_) {
-        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.CROSSBOW));
+        SpawnEquipmentHelper.equipMainhand(Items.CROSSBOW.getDefaultInstance(), this);
     }
 
     @Override

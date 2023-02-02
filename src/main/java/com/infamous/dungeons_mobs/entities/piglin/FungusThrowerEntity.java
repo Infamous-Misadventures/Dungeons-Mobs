@@ -1,5 +1,6 @@
 package com.infamous.dungeons_mobs.entities.piglin;
 
+import com.infamous.dungeons_mobs.entities.SpawnEquipmentHelper;
 import com.infamous.dungeons_mobs.entities.piglin.ai.FungusThrowerAi;
 import com.infamous.dungeons_mobs.interfaces.ISmartCrossbowUser;
 import com.infamous.dungeons_mobs.items.BlueNethershroomItem;
@@ -13,7 +14,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.Brain;
@@ -53,7 +53,7 @@ public class FungusThrowerEntity extends Piglin {
         }
         if (spawnReason != MobSpawnType.STRUCTURE) {
             if (this.isAdult()) {
-                this.setItemSlot(EquipmentSlot.MAINHAND, ModItems.BLUE_NETHERSHROOM.get().getDefaultInstance());
+                SpawnEquipmentHelper.equipMainhand(ModItems.BLUE_NETHERSHROOM.get().getDefaultInstance(), this);
             }
         }
         return spawnData;

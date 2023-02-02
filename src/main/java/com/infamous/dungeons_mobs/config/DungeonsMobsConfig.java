@@ -12,6 +12,7 @@ public class DungeonsMobsConfig {
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_WRAITH_FIRE_SUMMON;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ICY_CREEPER_GRIEFING;
         public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_MOB_ARMOR_DROPS;
+        public final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_MOB_HELD_ITEM_DROPS;
         public static ForgeConfigSpec.ConfigValue<List<? extends String>> NECROMANCER_MOB_SUMMONS;
         public static ForgeConfigSpec.ConfigValue<List<? extends String>> DROWNED_NECROMANCER_MOB_SUMMONS;
 
@@ -63,9 +64,13 @@ public class DungeonsMobsConfig {
                             "If you prefer their explosions to not damage the environment, disable this feature. [true / false]")
                     .define("enablyIcyCreeperGriefing", true);
             ENABLE_MOB_ARMOR_DROPS = builder
-                    .comment("Enable mobs to drop their armor when killed. \n" +
-                            "If you prefer mobs to not drop their armor, disable this feature. [true / false]")
+                    .comment("Enable mobs added/tweaked by Dungeons Mobs to drop their armor when killed. \n" +
+                            "If you prefer these mobs to not drop their armor, disable this feature. [true / false]")
                     .define("enableMobArmorDrops", true);
+            ENABLE_MOB_HELD_ITEM_DROPS = builder
+                    .comment("Enable mobs added/tweaked by Dungeons Mobs mobs to drop their held items when killed. \n" +
+                            "If you prefer these mobs to not drop their held items, disable this feature. [true / false]")
+                    .define("enableMobHeldItemDrops", true);
             NECROMANCER_MOB_SUMMONS = builder
                     .comment("Add mobs (preferably undead) that the Necromancer can summon. \n"
                             + "To do so, enter the namespace ID of the mob, like \"minecraft:zombie\".\n" +

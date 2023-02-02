@@ -5,6 +5,7 @@ import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
 import com.infamous.dungeons_libraries.items.gearconfig.ArmorSet;
 import com.infamous.dungeons_libraries.utils.GoalUtils;
 import com.infamous.dungeons_mobs.entities.AnimatableMeleeAttackMob;
+import com.infamous.dungeons_mobs.entities.SpawnEquipmentHelper;
 import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
 import com.infamous.dungeons_mobs.goals.BasicModdedAttackGoal;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
@@ -137,11 +138,8 @@ public class MountaineerEntity extends Vindicator implements SpawnArmoredMob, IA
 
     @Override
     protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficulty) {
-        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.MOUNTAINEER_AXE.get()));
-        this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(ModItems.MOUNTAINEER_ARMOR.getHead().get()));
-        this.setItemSlot(EquipmentSlot.CHEST, new ItemStack(ModItems.MOUNTAINEER_ARMOR.getChest().get()));
-        this.setItemSlot(EquipmentSlot.LEGS, new ItemStack(ModItems.MOUNTAINEER_ARMOR.getLegs().get()));
-        this.setItemSlot(EquipmentSlot.FEET, new ItemStack(ModItems.MOUNTAINEER_ARMOR.getFeet().get()));
+        SpawnEquipmentHelper.equipMainhand(ModItems.MOUNTAINEER_AXE.get().getDefaultInstance(), this);
+        SpawnEquipmentHelper.equipArmorSet(ModItems.MOUNTAINEER_ARMOR, this);
     }
 
     @Nullable
@@ -173,7 +171,7 @@ public class MountaineerEntity extends Vindicator implements SpawnArmoredMob, IA
             EnchantmentHelper.setEnchantments(map, itemStack);
         }
 
-        this.setItemSlot(EquipmentSlot.MAINHAND, itemStack);
+        SpawnEquipmentHelper.equipMainhand(itemStack, this);
     }
 
     @Override

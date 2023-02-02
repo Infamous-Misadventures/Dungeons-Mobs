@@ -40,7 +40,7 @@ import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.function.Predicate;
 
-import static com.infamous.dungeons_mobs.entities.SpawnArmoredHelper.equipArmorSet;
+import static com.infamous.dungeons_mobs.entities.SpawnEquipmentHelper.equipArmorSet;
 import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
 public class IceologerEntity extends AbstractIllager implements IAnimatable, SpawnArmoredMob {

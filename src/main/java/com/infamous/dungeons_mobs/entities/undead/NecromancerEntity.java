@@ -5,6 +5,7 @@ import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
 import com.infamous.dungeons_libraries.items.gearconfig.ArmorSet;
 import com.infamous.dungeons_libraries.summon.SummonHelper;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
+import com.infamous.dungeons_mobs.entities.SpawnEquipmentHelper;
 import com.infamous.dungeons_mobs.entities.projectiles.NecromancerOrbEntity;
 import com.infamous.dungeons_mobs.entities.summonables.SummonSpotEntity;
 import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
@@ -30,7 +31,6 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -52,7 +52,7 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
-import static com.infamous.dungeons_mobs.entities.SpawnArmoredHelper.equipArmorSet;
+import static com.infamous.dungeons_mobs.entities.SpawnEquipmentHelper.equipArmorSet;
 import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
 public class NecromancerEntity extends Skeleton implements IAnimatable, SpawnArmoredMob {
@@ -135,7 +135,7 @@ public class NecromancerEntity extends Skeleton implements IAnimatable, SpawnArm
     }
 
     protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficultyInstance) {
-        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.NECROMANCER_STAFF.get()));
+        SpawnEquipmentHelper.equipMainhand(ModItems.NECROMANCER_STAFF.get().getDefaultInstance(), this);
         equipArmorSet(ModItems.NECROMANCER_ARMOR, this);
     }
 

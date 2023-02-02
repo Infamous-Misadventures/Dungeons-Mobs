@@ -1,13 +1,13 @@
 package com.infamous.dungeons_mobs.mixin;
 
 import com.infamous.dungeons_mobs.compat.DungeonsGearCompat;
+import com.infamous.dungeons_mobs.entities.SpawnEquipmentHelper;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.entity.monster.WitherSkeleton;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -46,7 +46,7 @@ public abstract class WitherSkeletonEntityMixin extends AbstractSkeleton {
 
     @Inject(at = @At("RETURN"), method = "populateDefaultEquipmentSlots")
     private void setEquipmentOnInitialSpawn(RandomSource randomSource, DifficultyInstance difficultyInstance, CallbackInfo ci) {
-        this.setItemSlot(EquipmentSlot.MAINHAND, this.createSpawnWeapon());
+        SpawnEquipmentHelper.equipMainhand(this.createSpawnWeapon(), this);
     }
 
     private ItemStack createSpawnWeapon() {

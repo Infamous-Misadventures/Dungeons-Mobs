@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.mixin;
 
 import com.infamous.dungeons_mobs.compat.DungeonsGearCompat;
+import com.infamous.dungeons_mobs.entities.SpawnEquipmentHelper;
 import com.infamous.dungeons_mobs.goals.SmartZombieAttackGoal;
 import com.infamous.dungeons_mobs.interfaces.ISmartCrossbowUser;
 import net.minecraft.nbt.CompoundTag;
@@ -53,7 +54,7 @@ public abstract class ZombifiedPiglinEntityMixin extends Zombie implements ISmar
 
     @Inject(at = @At("TAIL"), method = "populateDefaultEquipmentSlots", cancellable = true)
     private void spawnWeapon(RandomSource random, DifficultyInstance p_180481_1_, CallbackInfo ci) {
-        this.setItemSlot(EquipmentSlot.MAINHAND, this.createSpawnWeapon());
+        SpawnEquipmentHelper.equipMainhand(this.createSpawnWeapon(), this);
     }
 
     @Inject(at = @At("TAIL"), method = "readAdditionalSaveData")

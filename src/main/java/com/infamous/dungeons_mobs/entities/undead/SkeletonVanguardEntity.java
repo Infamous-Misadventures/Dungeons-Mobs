@@ -3,6 +3,7 @@ package com.infamous.dungeons_mobs.entities.undead;
 import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
 import com.infamous.dungeons_libraries.items.gearconfig.ArmorSet;
 import com.infamous.dungeons_mobs.entities.AnimatableMeleeAttackMob;
+import com.infamous.dungeons_mobs.entities.SpawnEquipmentHelper;
 import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
 import com.infamous.dungeons_mobs.goals.BasicModdedAttackGoal;
 import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
@@ -55,7 +56,7 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-import static com.infamous.dungeons_mobs.entities.SpawnArmoredHelper.equipArmorSet;
+import static com.infamous.dungeons_mobs.entities.SpawnEquipmentHelper.equipArmorSet;
 import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
 public class SkeletonVanguardEntity extends Skeleton implements IShieldUser, IAnimatable, SpawnArmoredMob, AnimatableMeleeAttackMob {
@@ -115,12 +116,12 @@ public class SkeletonVanguardEntity extends Skeleton implements IShieldUser, IAn
             Item GLAIVE = ForgeRegistries.ITEMS.getValue(new ResourceLocation("dungeons_gear", "glaive"));
             ItemStack glaive = new ItemStack(GLAIVE);
 
-            this.setItemSlot(EquipmentSlot.MAINHAND, glaive);
+            SpawnEquipmentHelper.equipMainhand(glaive, this);
         } else {
-            this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
+            SpawnEquipmentHelper.equipMainhand(Items.IRON_SWORD.getDefaultInstance(), this);
         }
         //this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(ModItems.SKELETON_VANGUARD_HELMET.get()));
-        this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ModItems.VANGUARD_SHIELD.get()));
+        SpawnEquipmentHelper.equipOffhand(ModItems.VANGUARD_SHIELD.get().getDefaultInstance(), this);
     }
 
     @Nullable

@@ -2,6 +2,7 @@ package com.infamous.dungeons_mobs.entities.illagers;
 
 import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
 import com.infamous.dungeons_libraries.items.gearconfig.ArmorSet;
+import com.infamous.dungeons_mobs.entities.SpawnEquipmentHelper;
 import com.infamous.dungeons_mobs.entities.summonables.ConstructEntity;
 import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
 import com.infamous.dungeons_mobs.goals.AvoidBaseEntityGoal;
@@ -29,7 +30,6 @@ import net.minecraft.world.entity.monster.SpellcasterIllager;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -45,7 +45,7 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-import static com.infamous.dungeons_mobs.entities.SpawnArmoredHelper.equipArmorSet;
+import static com.infamous.dungeons_mobs.entities.SpawnEquipmentHelper.equipArmorSet;
 
 public class GeomancerEntity extends SpellcasterIllager implements IAnimatable, SpawnArmoredMob {
 
@@ -152,7 +152,7 @@ public class GeomancerEntity extends SpellcasterIllager implements IAnimatable, 
 
     @Override
     protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficulty) {
-        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.GEOMANCER_STAFF.get()));
+        SpawnEquipmentHelper.equipMainhand(ModItems.GEOMANCER_STAFF.get().getDefaultInstance(), this);
         equipArmorSet(ModItems.GEOMANCER_ARMOR, this);
     }
 

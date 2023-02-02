@@ -5,6 +5,7 @@ import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
 import com.infamous.dungeons_libraries.items.gearconfig.ArmorSet;
 import com.infamous.dungeons_libraries.summon.SummonHelper;
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
+import com.infamous.dungeons_mobs.entities.SpawnEquipmentHelper;
 import com.infamous.dungeons_mobs.entities.projectiles.DrownedNecromancerOrbEntity;
 import com.infamous.dungeons_mobs.entities.projectiles.NecromancerOrbEntity;
 import com.infamous.dungeons_mobs.entities.summonables.SummonSpotEntity;
@@ -16,7 +17,6 @@ import com.infamous.dungeons_mobs.mod.ModItems;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
 import com.infamous.dungeons_mobs.utils.PositionUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -35,7 +35,6 @@ import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.monster.Drowned;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -59,7 +58,7 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
-import static com.infamous.dungeons_mobs.entities.SpawnArmoredHelper.equipArmorSet;
+import static com.infamous.dungeons_mobs.entities.SpawnEquipmentHelper.equipArmorSet;
 import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
 public class DrownedNecromancerEntity extends Drowned implements IAnimatable, SpawnArmoredMob {
@@ -238,7 +237,7 @@ public class DrownedNecromancerEntity extends Drowned implements IAnimatable, Sp
     }
 
     protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficultyInstance) {
-        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.NECROMANCER_TRIDENT.get()));
+        SpawnEquipmentHelper.equipMainhand(ModItems.NECROMANCER_TRIDENT.get().getDefaultInstance(), this);
         equipArmorSet(ModItems.DROWNED_NECROMANCER_ARMOR, this);
     }
 

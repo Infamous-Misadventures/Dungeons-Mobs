@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.entities.undead;
 
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
+import com.infamous.dungeons_mobs.entities.SpawnEquipmentHelper;
 import com.infamous.dungeons_mobs.goals.switchcombat.SwitchCombatItemGoal;
 import com.infamous.dungeons_mobs.goals.switchcombat.ThrowAndMeleeAttackGoal;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
@@ -29,7 +30,6 @@ import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Snowball;
 import net.minecraft.world.item.EggItem;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.SnowballItem;
 import net.minecraft.world.level.Level;
@@ -93,7 +93,7 @@ public class FrozenZombieEntity extends Zombie implements RangedAttackMob {
 
     protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficultyInstance) {
         super.populateDefaultEquipmentSlots(random, difficultyInstance);
-        this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.SNOWBALL));
+        SpawnEquipmentHelper.equipOffhand(Items.SNOWBALL.getDefaultInstance(), this);
     }
 
     @Override

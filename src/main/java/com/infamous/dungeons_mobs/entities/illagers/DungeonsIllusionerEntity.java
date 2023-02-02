@@ -2,6 +2,7 @@ package com.infamous.dungeons_mobs.entities.illagers;
 
 import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
 import com.infamous.dungeons_libraries.items.gearconfig.ArmorSet;
+import com.infamous.dungeons_mobs.entities.SpawnEquipmentHelper;
 import com.infamous.dungeons_mobs.entities.summonables.SummonSpotEntity;
 import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
 import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
@@ -61,7 +62,7 @@ import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.function.Predicate;
 
-import static com.infamous.dungeons_mobs.entities.SpawnArmoredHelper.equipArmorSet;
+import static com.infamous.dungeons_mobs.entities.SpawnEquipmentHelper.equipArmorSet;
 import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
 public class DungeonsIllusionerEntity extends AbstractIllager implements IAnimatable, SpawnArmoredMob {
@@ -224,10 +225,9 @@ public class DungeonsIllusionerEntity extends AbstractIllager implements IAnimat
         if (ModList.get().isLoaded("dungeons_gear")) {
             Item SHORTBOW = ForgeRegistries.ITEMS.getValue(new ResourceLocation("dungeons_gear", "shortbow"));
 
-            ItemStack shortbow = new ItemStack(SHORTBOW);
-            this.setItemSlot(EquipmentSlot.MAINHAND, shortbow);
+            SpawnEquipmentHelper.equipMainhand(SHORTBOW.getDefaultInstance(), this);
         } else {
-            this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
+            SpawnEquipmentHelper.equipMainhand(Items.BOW.getDefaultInstance(), this);
         }
     }
 

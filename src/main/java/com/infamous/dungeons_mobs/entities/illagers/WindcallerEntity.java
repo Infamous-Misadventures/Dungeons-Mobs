@@ -3,6 +3,7 @@ package com.infamous.dungeons_mobs.entities.illagers;
 import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
 import com.infamous.dungeons_libraries.items.gearconfig.ArmorSet;
 import com.infamous.dungeons_mobs.client.particle.ModParticleTypes;
+import com.infamous.dungeons_mobs.entities.SpawnEquipmentHelper;
 import com.infamous.dungeons_mobs.entities.projectiles.WindcallerBlastProjectileEntity;
 import com.infamous.dungeons_mobs.entities.summonables.WindcallerTornadoEntity;
 import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
@@ -30,7 +31,6 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.Vec3;
@@ -47,7 +47,7 @@ import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.function.Predicate;
 
-import static com.infamous.dungeons_mobs.entities.SpawnArmoredHelper.equipArmorSet;
+import static com.infamous.dungeons_mobs.entities.SpawnEquipmentHelper.equipArmorSet;
 import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
 public class WindcallerEntity extends AbstractIllager implements IAnimatable, SpawnArmoredMob {
@@ -205,7 +205,7 @@ public class WindcallerEntity extends AbstractIllager implements IAnimatable, Sp
     @Override
     protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance p_180481_1_) {
         super.populateDefaultEquipmentSlots(random, p_180481_1_);
-        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.WINDCALLER_STAFF.get()));
+        SpawnEquipmentHelper.equipMainhand(ModItems.WINDCALLER_STAFF.get().getDefaultInstance(), this);
         equipArmorSet(ModItems.WINDCALLER_ARMOR, this);
     }
 

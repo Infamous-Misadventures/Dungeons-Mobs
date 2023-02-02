@@ -3,6 +3,7 @@ package com.infamous.dungeons_mobs.entities.illagers;
 import com.google.common.collect.Maps;
 import com.infamous.dungeons_libraries.entities.SpawnArmoredMob;
 import com.infamous.dungeons_libraries.items.gearconfig.ArmorSet;
+import com.infamous.dungeons_mobs.entities.SpawnEquipmentHelper;
 import com.infamous.dungeons_mobs.goals.ApproachTargetGoal;
 import com.infamous.dungeons_mobs.goals.LookAtTargetGoal;
 import com.infamous.dungeons_mobs.goals.UseShieldGoal;
@@ -65,7 +66,7 @@ import java.util.EnumSet;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.infamous.dungeons_mobs.entities.SpawnArmoredHelper.equipArmorSet;
+import static com.infamous.dungeons_mobs.entities.SpawnEquipmentHelper.equipArmorSet;
 import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.LOOP;
 
 public class RoyalGuardEntity extends AbstractIllager implements IAnimatable, IShieldUser, SpawnArmoredMob {
@@ -227,14 +228,14 @@ public class RoyalGuardEntity extends AbstractIllager implements IAnimatable, IS
 
             ItemStack mace = new ItemStack(MACE);
             if (this.getCurrentRaid() == null) {
-                this.setItemSlot(EquipmentSlot.MAINHAND, mace);
+                SpawnEquipmentHelper.equipMainhand(mace, this);
             }
         } else {
             if (this.getCurrentRaid() == null) {
-                this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_AXE));
+                SpawnEquipmentHelper.equipMainhand(Items.IRON_AXE.getDefaultInstance(), this);
             }
         }
-        this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ModItems.ROYAL_GUARD_SHIELD.get()));
+        SpawnEquipmentHelper.equipOffhand(ModItems.ROYAL_GUARD_SHIELD.get().getDefaultInstance(), this);
     }
 
     @Override
@@ -261,7 +262,7 @@ public class RoyalGuardEntity extends AbstractIllager implements IAnimatable, IS
             EnchantmentHelper.setEnchantments(enchantmentIntegerMap, mainhandWeapon);
         }
 
-        this.setItemSlot(EquipmentSlot.MAINHAND, mainhandWeapon);
+        SpawnEquipmentHelper.equipMainhand(mainhandWeapon, this);
     }
 
     @Override

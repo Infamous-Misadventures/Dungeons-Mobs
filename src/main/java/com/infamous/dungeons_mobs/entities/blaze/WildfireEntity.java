@@ -64,7 +64,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import static com.infamous.dungeons_libraries.attribute.AttributeRegistry.SUMMON_CAP;
-import static com.infamous.dungeons_mobs.entities.SpawnArmoredHelper.equipArmorSet;
+import static com.infamous.dungeons_mobs.entities.SpawnEquipmentHelper.equipArmorSet;
 
 public class WildfireEntity extends Monster implements IAnimatable, SpawnArmoredMob {
 
