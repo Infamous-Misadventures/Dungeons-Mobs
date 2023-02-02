@@ -28,9 +28,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class WraithFireEntity extends Entity implements IAnimatable, IAnimationTickable {
-    private static final Predicate<Entity> ALIVE = (p_213685_0_) -> {
-        return p_213685_0_.isAlive();
-    };
+    private static final Predicate<Entity> ALIVE = Entity::isAlive;
 
     public int lifeTime;
 
@@ -80,16 +78,9 @@ public class WraithFireEntity extends Entity implements IAnimatable, IAnimationT
 
         if (!this.level.isClientSide) {
 
-            if (this.isInWaterOrBubble()) {
+            if (this.isOnFire()) {
                 this.remove(RemovalReason.DISCARDED);
                 this.playSound(SoundEvents.FIRE_EXTINGUISH, 1.0F, 1.0F);
-            }
-
-            if (this.isInRain()) {
-                if (this.random.nextInt(40) == 0) {
-                    this.remove(RemovalReason.DISCARDED);
-                    this.playSound(SoundEvents.FIRE_EXTINGUISH, 1.0F, 1.0F);
-                }
             }
 
 
@@ -102,18 +93,13 @@ public class WraithFireEntity extends Entity implements IAnimatable, IAnimationT
                 if (!list.isEmpty()) {
                     for (Entity entity : list) {
                         if (entity instanceof LivingEntity && this.canHarmEntity(entity)) {
-                            entity.hurt(DamageSource.IN_FIRE, 4.0F);
-                            entity.setSecondsOnFire(4);
+                            entity.hurt(DamageSource.FREEZE, 4.0F);
+                            //entity.setSecondsOnFire(4);
                         }
                     }
                 }
             }
         }
-    }
-
-    public boolean isInRain() {
-        BlockPos blockpos = this.blockPosition();
-        return this.level.isRainingAt(blockpos) || this.level.isRainingAt(new BlockPos(blockpos.getX(), this.getBoundingBox().maxY, blockpos.getZ()));
     }
 
     public boolean isBurning() {
@@ -161,6 +147,7 @@ public class WraithFireEntity extends Entity implements IAnimatable, IAnimationT
     }
 
     public boolean canHarmEntity(Entity target) {
-        return this.owner != null && this.owner instanceof Mob ? ((Mob) this.owner).getTarget() == target : !target.fireImmune();
+        boolean canFreeze = target.canFreeze();
+        return this.owner != null && this.owner instanceof Mob mob? mob.getTarget() == target & canFreeze : canFreeze;
     }
 }

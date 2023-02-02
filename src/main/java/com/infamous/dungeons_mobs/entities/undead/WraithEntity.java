@@ -25,7 +25,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.EntityTeleportEvent;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -54,6 +57,7 @@ public class WraithEntity extends Monster implements IAnimatable {
 
     public WraithEntity(EntityType<? extends WraithEntity> type, Level world) {
         super(type, world);
+        this.setPathfindingMalus(BlockPathTypes.WATER, -1.0F);
     }
 
     protected void registerGoals() {
@@ -101,7 +105,8 @@ public class WraithEntity extends Monster implements IAnimatable {
         }
     }
 
-    public boolean causeFallDamage(float p_225503_1_, float p_225503_2_) {
+    @Override
+    public boolean causeFallDamage(float pFallDistance, float pMultiplier, DamageSource pSource) {
         return false;
     }
 
@@ -217,53 +222,43 @@ public class WraithEntity extends Monster implements IAnimatable {
         return factory;
     }
 
-    protected boolean teleport() {
-        if (!this.level.isClientSide() && this.isAlive()) {
-            double d0 = this.getX() + (this.random.nextDouble() - 0.5D) * 64.0D;
-            double d1 = this.getY() + (double) (this.random.nextInt(64) - 32);
-            double d2 = this.getZ() + (this.random.nextDouble() - 0.5D) * 64.0D;
-            return this.teleport(d0, d1, d2);
-        } else {
-            return false;
-        }
-    }
+    private boolean teleport(double pX, double pY, double pZ) {
+        BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos(pX, pY, pZ);
 
-    private boolean teleportTowards(Entity p_70816_1_) {
-        Vec3 vector3d = new Vec3(this.getX() - p_70816_1_.getX(), this.getY(0.5D) - p_70816_1_.getEyeY(), this.getZ() - p_70816_1_.getZ());
-        vector3d = vector3d.normalize();
-        double d0 = 16.0D;
-        double d1 = this.getX() + (this.random.nextDouble() - 0.5D) * 8.0D - vector3d.x * 16.0D;
-        double d2 = this.getY() + (double) (this.random.nextInt(16) - 8) - vector3d.y * 16.0D;
-        double d3 = this.getZ() + (this.random.nextDouble() - 0.5D) * 8.0D - vector3d.z * 16.0D;
-        return this.teleport(d1, d2, d3);
-    }
-
-    private boolean teleport(double p_70825_1_, double p_70825_3_, double p_70825_5_) {
-        BlockPos.MutableBlockPos blockpos$mutable = new BlockPos.MutableBlockPos(p_70825_1_, p_70825_3_, p_70825_5_);
-
-        while (blockpos$mutable.getY() > 0 && !this.level.getBlockState(blockpos$mutable).getMaterial().blocksMotion()) {
-            blockpos$mutable.move(Direction.DOWN);
+        while(blockpos$mutableblockpos.getY() > this.level.getMinBuildHeight() && !this.level.getBlockState(blockpos$mutableblockpos).getMaterial().blocksMotion()) {
+            blockpos$mutableblockpos.move(Direction.DOWN);
         }
 
-        BlockState blockstate = this.level.getBlockState(blockpos$mutable);
+        BlockState blockstate = this.level.getBlockState(blockpos$mutableblockpos);
         boolean flag = blockstate.getMaterial().blocksMotion();
         boolean flag1 = blockstate.getFluidState().is(FluidTags.WATER);
         if (flag && !flag1) {
-            EntityTeleportEvent.EnderEntity event = net.minecraftforge.event.ForgeEventFactory.onEnderTeleport(this, p_70825_1_, p_70825_3_, p_70825_5_);
-            if (event.isCanceled()) return false;
-            boolean flag2 = this.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), false);
-            if (flag2 && !this.isSilent()) {
-                this.level.playSound(null, this.xo, this.yo, this.zo, ModSoundEvents.WRAITH_TELEPORT.get(), this.getSoundSource(), 1.0F, 1.0F);
-                this.playSound(ModSoundEvents.WRAITH_TELEPORT.get(), 1.0F, 1.0F);
-            }
+            EntityTeleportEvent.EnderEntity event = ForgeEventFactory.onEnderTeleport(this, pX, pY, pZ);
+            if (event.isCanceled()) {
+                return false;
+            } else {
+                Vec3 vec3 = this.position();
+                boolean randomTeleport = this.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
+                if (randomTeleport) {
+                    this.level.gameEvent(GameEvent.TELEPORT, vec3, GameEvent.Context.of(this));
+                    if (!this.isSilent()) {
+                        this.level.playSound((Player)null, this.xo, this.yo, this.zo, ModSoundEvents.WRAITH_TELEPORT.get(), this.getSoundSource(), 1.0F, 1.0F);
+                        this.playSound(ModSoundEvents.WRAITH_TELEPORT.get(), 1.0F, 1.0F);
+                    }
+                }
 
-            return flag2;
+                return randomTeleport;
+            }
         } else {
             return false;
         }
     }
 
     class TeleportGoal extends Goal {
+        public static final int TELEPORT_AWAY_RANGE = 20;
+        public static final int TELEPORT_TO_RANGE = 10;
+        public static final int TARGET_TOO_FAR = 16;
+        public static final int TARGET_TOO_CLOSE = 4;
         public WraithEntity mob;
         @Nullable
         public LivingEntity target;
@@ -287,7 +282,10 @@ public class WraithEntity extends Monster implements IAnimatable {
         public boolean canUse() {
             target = mob.getTarget();
 
-            return target != null && (mob.distanceTo(target) <= 4 || mob.distanceTo(target) >= 16) && mob.hasLineOfSight(target) && animationsUseable();
+            return target != null
+                    && (mob.distanceTo(target) <= TARGET_TOO_CLOSE || mob.distanceTo(target) >= TARGET_TOO_FAR)
+                    && mob.hasLineOfSight(target)
+                    && animationsUseable();
         }
 
         @Override
@@ -310,20 +308,21 @@ public class WraithEntity extends Monster implements IAnimatable {
                 mob.getLookControl().setLookAt(target.getX(), target.getEyeY(), target.getZ());
             }
 
-            int teleportAwayRange = 20;
-            int teleportToRange = 10;
-
             if (target != null && mob.teleportAnimationTick == mob.teleportAnimationActionPoint) {
-                if (mob.distanceTo(target) >= 16) {
-                    for (int i = 0; i < 10; i++) {
-                        mob.teleport(target.getX() - teleportToRange + mob.random.nextInt(teleportToRange * 2), target.getY(), target.getZ() - teleportToRange + mob.random.nextInt(teleportToRange * 2));
-                    }
+                if (mob.distanceTo(target) >= TARGET_TOO_FAR) {
+                    this.tryTeleport(TELEPORT_TO_RANGE, this.target.getX(), this.target.getY(), this.target.getZ());
                 } else {
-                    for (int i = 0; i < 10; i++) {
-                        mob.teleport(target.getX() - teleportAwayRange + mob.random.nextInt(teleportAwayRange * 2), target.getY(), target.getZ() - teleportAwayRange + mob.random.nextInt(teleportAwayRange * 2));
-                    }
+                    this.tryTeleport(TELEPORT_AWAY_RANGE, this.target.getX(), this.target.getY(), this.target.getZ());
                 }
+            }
+        }
 
+        private void tryTeleport(int teleportToRange, double targetX, double targetY, double targetZ) {
+            for (int i = 0; i < 10; i++) {
+                if(mob.teleport(
+                        targetX - teleportToRange + mob.random.nextInt(teleportToRange * 2),
+                        targetY,
+                        targetZ - teleportToRange + mob.random.nextInt(teleportToRange * 2))) break;
             }
         }
 
