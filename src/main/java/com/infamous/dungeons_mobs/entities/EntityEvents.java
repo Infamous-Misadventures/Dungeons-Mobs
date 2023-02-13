@@ -1,32 +1,26 @@
 package com.infamous.dungeons_mobs.entities;
 
-import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
-import static com.infamous.dungeons_mobs.mod.ModEffects.ENSNARED;
-import static net.minecraft.world.entity.EntityType.HUSK;
-
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
-
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.client.event.MovementInputUpdateEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.LeftClickBlock;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.LeftClickEmpty;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickEmpty;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.*;
 import net.minecraftforge.event.level.BlockEvent.BlockToolModificationEvent;
 import net.minecraftforge.event.level.BlockEvent.BreakEvent;
 import net.minecraftforge.event.level.BlockEvent.EntityPlaceEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
+import static com.infamous.dungeons_mobs.mod.ModEffects.ENSNARED;
+import static net.minecraft.world.entity.EntityType.HUSK;
 
 @Mod.EventBusSubscriber(modid = MODID)
 public class EntityEvents {
@@ -56,16 +50,6 @@ public class EntityEvents {
 		LivingEntity owner = event.getEntity();
 
 		if (owner.hasEffect(ENSNARED.get())) event.setCanceled(true);
-	}
-
-	@SubscribeEvent
-	public static void preventExtraMovement(MovementInputUpdateEvent event) {
-		Player owner = event.getEntity();
-
-		if (owner.hasEffect(ENSNARED.get())) {
-			event.getInput().getMoveVector().scale(0);
-			if (event.getInput().jumping) event.getInput().jumping = false;
-		}
 	}
 	
 	@SubscribeEvent

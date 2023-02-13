@@ -146,7 +146,7 @@ dependencies {
 
     //Extras
     runtimeOnly    fg.deobf("dungeons_gear:dungeons_gear:${dungeons_gear_version}")
-    runtimeOnly    fg.deobf("curse.maven:illagersweararmor-407488:${illagers_wear_armor_version}")
+//    runtimeOnly    fg.deobf("curse.maven:illagersweararmor-407488:${illagers_wear_armor_version}")
 
     implementation fg.deobf("curse.maven:enchantwithmob-391187:${enchant_with_mob_version}")
 
