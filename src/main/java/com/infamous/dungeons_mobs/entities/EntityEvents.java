@@ -2,10 +2,15 @@ package com.infamous.dungeons_mobs.entities;
 
 import com.infamous.dungeons_mobs.config.DungeonsMobsConfig;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.MobSpawnSettings;
+import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
+import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
@@ -15,8 +20,11 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.*;
 import net.minecraftforge.event.level.BlockEvent.BlockToolModificationEvent;
 import net.minecraftforge.event.level.BlockEvent.BreakEvent;
 import net.minecraftforge.event.level.BlockEvent.EntityPlaceEvent;
+import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import java.awt.*;
 
 import static com.infamous.dungeons_mobs.DungeonsMobs.MODID;
 import static com.infamous.dungeons_mobs.mod.ModEffects.ENSNARED;
@@ -151,6 +159,16 @@ public class EntityEvents {
 		
 		if (owner.hasEffect(ENSNARED.get())) {
 			if (event.isCancelable()) event.setCanceled(true);
+		}
+	}
+
+	@SubscribeEvent
+	public static void addEndermanSpawns(LevelEvent.PotentialSpawns event) {
+		if (event.getLevel() instanceof Level level && level.dimensionTypeRegistration().is(BuiltinDimensionTypes.END)) {
+			int reduce = event.getSpawnerDataList().stream().filter(spawnerData -> spawnerData.type.equals(EntityType.ENDERMAN)).map(spawnerData -> spawnerData.getWeight().asInt()).reduce(Integer::sum).orElse(100);
+			if (reduce < 100) {
+					event.addSpawnerData(new MobSpawnSettings.SpawnerData(EntityType.ENDERMAN, 100-reduce, 4, 4));
+			}
 		}
 	}
 }
