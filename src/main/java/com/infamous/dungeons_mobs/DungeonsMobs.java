@@ -89,7 +89,7 @@ public class DungeonsMobs {
 
     private void doClientStuff(final FMLClientSetupEvent event) {
         // ITEM MODEL PROPERTIES
-        MinecraftForge.EVENT_BUS.register(new ModItemModelProperties());
+        event.enqueueWork(ModItemModelProperties::registerProperties);
     }
 
     private void onLoadComplete(final FMLLoadCompleteEvent event) {
