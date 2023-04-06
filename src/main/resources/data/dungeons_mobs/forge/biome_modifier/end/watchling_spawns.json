@@ -12,7 +12,7 @@
 },
   "spawners": {
     "type": "dungeons_mobs:watchling",
-    "weight": 100,
+    "weight": 50,
     "minCount": 2,
     "maxCount": 4
   }

@@ -12,7 +12,7 @@
 },
   "spawners": {
     "type": "dungeons_mobs:blastling",
-    "weight": 50,
+    "weight": 30,
     "minCount": 1,
     "maxCount": 1
   }
