@@ -160,7 +160,7 @@ dependencies {
     implementation fg.deobf("curse.maven:configured-457570:${configured_version}")
     implementation fg.deobf("curse.maven:catalogue-459701:${catalogue_version}")
 
-    runtimeOnly fg.deobf("curse.maven:mob-battle-mod-version-268746:${mob_battle_mod_version}")
+    runtimeOnly fg.deobf("curse.maven:mob-battle-mod-version-268746:${mob_battle_version}")
 
     runtimeOnly fg.deobf("curse.maven:spark-361579:${spark_version}")
 
