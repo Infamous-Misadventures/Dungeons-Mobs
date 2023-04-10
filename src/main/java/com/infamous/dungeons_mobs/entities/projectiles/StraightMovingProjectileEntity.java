@@ -52,6 +52,12 @@ public abstract class StraightMovingProjectileEntity extends Projectile {
             this.yPower = p_i50174_10_ / d0 * 0.1D;
             this.zPower = p_i50174_12_ / d0 * 0.1D;
         }
+        Vec3 vec3 = (new Vec3(p_i50174_8_, p_i50174_10_, p_i50174_12_)).normalize();
+        double d1 = vec3.horizontalDistance();
+        this.setYRot((float)(Mth.atan2(vec3.x, vec3.z) * (double)(180F / (float)Math.PI)));
+        this.setXRot((float)(Mth.atan2(vec3.y, d1) * (double)(180F / (float)Math.PI)));
+        this.yRotO = this.getYRot();
+        this.xRotO = this.getXRot();
 
     }
 

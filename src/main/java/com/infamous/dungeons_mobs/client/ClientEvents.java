@@ -150,7 +150,7 @@ public class ClientEvents {
         event.registerEntityRenderer(ModEntityTypes.DROWNED_NECROMANCER.get(), DrownedNecromancerRenderer::new);
         event.registerEntityRenderer(ModEntityTypes.SUNKEN_SKELETON.get(), SunkenSkeletonRenderer::new);
 
-        event.registerEntityRenderer(ModEntityTypes.NECROMANCER_ORB.get(), NecromancerOrbRenderer::new);
+        event.registerEntityRenderer(ModEntityTypes.NECROMANCER_ORB.get(), OrbProjectileRenderer::new);
         event.registerEntityRenderer(ModEntityTypes.DROWNED_NECROMANCER_ORB.get(), DrownedNecromancerOrbRenderer::new);
 
         event.registerEntityRenderer(ModEntityTypes.TRIDENT_STORM.get(), TridentStormRenderer::new);
@@ -160,7 +160,7 @@ public class ClientEvents {
         event.registerEntityRenderer(ModEntityTypes.WATCHLING.get(), WatchlingRenderer::new);
         event.registerEntityRenderer(ModEntityTypes.SNARELING.get(), SnarelingRenderer::new);
 
-        event.registerEntityRenderer(ModEntityTypes.BLASTLING_BULLET.get(), NecromancerOrbRenderer::new);
+        event.registerEntityRenderer(ModEntityTypes.BLASTLING_BULLET.get(), (manager) -> new OrbProjectileRenderer(manager, 0xFFFF93F7, false));
         event.registerEntityRenderer(ModEntityTypes.SNARELING_GLOB.get(), SnarelingGlobRenderer::new);
 
         event.registerEntityRenderer(ModEntityTypes.WILDFIRE.get(), WildfireRenderer::new);

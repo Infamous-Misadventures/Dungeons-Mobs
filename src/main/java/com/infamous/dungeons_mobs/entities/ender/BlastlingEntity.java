@@ -125,11 +125,11 @@ public class BlastlingEntity extends AbstractEnderlingEntity implements IAnimata
         double d3 = p_82209_2_ - d0;
         double d4 = p_82209_4_ - d1;
         double d5 = p_82209_6_ - d2;
-        BlastlingBulletEntity witherskullentity = new BlastlingBulletEntity(this.level, this, d3, d4, d5);
-        witherskullentity.setOwner(this);
+        BlastlingBulletEntity blastlingBulletEntity = new BlastlingBulletEntity(this.level, this, d3, d4, d5);
+        blastlingBulletEntity.setOwner(this);
 
-        witherskullentity.setPosRaw(d0, d1, d2);
-        this.level.addFreshEntity(witherskullentity);
+        blastlingBulletEntity.setPosRaw(d0, d1, d2);
+        this.level.addFreshEntity(blastlingBulletEntity);
     }
 
     private double getHeadX(boolean p_82214_1_) {

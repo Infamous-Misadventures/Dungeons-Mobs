@@ -80,6 +80,9 @@ public class NecromancerOrbEntity extends StraightMovingProjectileEntity impleme
 
     @Override
     protected ParticleOptions getTrailParticle() {
+        if(this.getType().equals(ModEntityTypes.BLASTLING_BULLET.get())){
+            return null;
+        }
         return ModParticleTypes.NECROMANCY.get();
     }
 

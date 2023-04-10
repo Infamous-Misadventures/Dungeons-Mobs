@@ -8,7 +8,13 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
-public class NecromancerOrbModel extends AnimatedGeoModel<NecromancerOrbEntity> {
+public class OrbProjectileModel extends AnimatedGeoModel<NecromancerOrbEntity> {
+
+    private final boolean renderTrail;
+
+    public OrbProjectileModel(boolean renderTrail) {
+        this.renderTrail = renderTrail;
+    }
 
     @Override
     public ResourceLocation getAnimationResource(NecromancerOrbEntity entity) {
@@ -22,13 +28,17 @@ public class NecromancerOrbModel extends AnimatedGeoModel<NecromancerOrbEntity> 
 
     @Override
     public ResourceLocation getTextureResource(NecromancerOrbEntity entity) {
-        return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/projectile/necromancer_orb_" + entity.textureChange % 3 + ".png");
+        return new ResourceLocation(DungeonsMobs.MODID, "textures/entity/projectile/orb_projectile_" + entity.textureChange % 3 + ".png");
     }
 
     @Override
     public void setCustomAnimations(NecromancerOrbEntity entity, int uniqueID, AnimationEvent customPredicate) {
         super.setCustomAnimations(entity, uniqueID, customPredicate);
         IBone everything = this.getAnimationProcessor().getBone("everything");
+        if(!renderTrail) {
+            IBone trail = this.getAnimationProcessor().getBone("trail1");
+            trail.setHidden(true);
+        }
 
         everything.setRotationY(-1.5708F);
     }

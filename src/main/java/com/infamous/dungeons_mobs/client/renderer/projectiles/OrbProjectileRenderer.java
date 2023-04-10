@@ -1,6 +1,6 @@
 package com.infamous.dungeons_mobs.client.renderer.projectiles;
 
-import com.infamous.dungeons_mobs.client.models.projectile.NecromancerOrbModel;
+import com.infamous.dungeons_mobs.client.models.projectile.OrbProjectileModel;
 import com.infamous.dungeons_mobs.entities.projectiles.NecromancerOrbEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -9,19 +9,28 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.Nullable;
+import software.bernie.geckolib3.core.processor.IBone;
+import software.bernie.geckolib3.core.util.Color;
 import software.bernie.geckolib3.renderers.geo.GeoProjectilesRenderer;
 
-public class NecromancerOrbRenderer extends GeoProjectilesRenderer<NecromancerOrbEntity> {
+public class OrbProjectileRenderer extends GeoProjectilesRenderer<NecromancerOrbEntity> {
 
-    public NecromancerOrbRenderer(EntityRendererProvider.Context renderManager) {
-        super(renderManager, new NecromancerOrbModel());
+    private Color color;
+
+    public OrbProjectileRenderer(EntityRendererProvider.Context renderManager) {
+        this(renderManager, Color.WHITE.getColor(), true);
+    }
+
+    public OrbProjectileRenderer(EntityRendererProvider.Context renderManager, int color, boolean renderTrail) {
+        super(renderManager, new OrbProjectileModel(renderTrail));
+        this.color = Color.ofTransparent(color);
     }
 
     @Override
     public void renderEarly(NecromancerOrbEntity animatable, PoseStack stackIn, float partialTicks,
                             MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn, int packedOverlayIn,
                             float red, float green, float blue, float alpha) {
-
         float scaleFactor = 1.0F;
         if (animatable.lifeTime <= 3) {
             scaleFactor = 0.0F;
@@ -49,6 +58,12 @@ public class NecromancerOrbRenderer extends GeoProjectilesRenderer<NecromancerOr
     public RenderType getRenderType(NecromancerOrbEntity animatable, float partialTicks, PoseStack stack,
                                     MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn,
                                     ResourceLocation textureLocation) {
-        return RenderType.entityTranslucent(getTextureLocation(animatable));
+//        return RenderType.entityTranslucent(getTextureLocation(animatable));
+            return RenderType.eyes(getTextureLocation(animatable));
+    }
+
+    @Override
+    public Color getRenderColor(NecromancerOrbEntity animatable, float partialTick, PoseStack poseStack, @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, int packedLight) {
+        return color;
     }
 }
