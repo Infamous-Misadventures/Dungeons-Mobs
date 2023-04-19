@@ -220,7 +220,8 @@ public class WildfireEntity extends Monster implements IAnimatable, SpawnArmored
         return true;
     }
 
-    public boolean causeFallDamage(float p_225503_1_, float p_225503_2_) {
+    @Override
+    public boolean causeFallDamage(float pFallDistance, float pMultiplier, DamageSource pSource) {
         return false;
     }
 

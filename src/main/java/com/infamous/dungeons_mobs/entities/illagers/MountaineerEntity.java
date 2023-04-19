@@ -223,6 +223,12 @@ public class MountaineerEntity extends Vindicator implements SpawnArmoredMob, IA
         return attackAnimationActionPoint;
     }
 
+    @Override
+    public void baseTick() {
+        super.baseTick();
+        this.tickDownAnimTimers();
+    }
+
     public void tickDownAnimTimers() {
         if (this.attackAnimationTick > 0) {
             this.attackAnimationTick--;

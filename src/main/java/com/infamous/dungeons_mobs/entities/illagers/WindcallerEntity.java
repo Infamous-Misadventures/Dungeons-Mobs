@@ -116,7 +116,8 @@ public class WindcallerEntity extends AbstractIllager implements IAnimatable, Sp
         return !this.level.isClientSide && blockBeneath == false;
     }
 
-    public boolean causeFallDamage(float p_225503_1_, float p_225503_2_) {
+    @Override
+    public boolean causeFallDamage(float pFallDistance, float pMultiplier, DamageSource pSource) {
         return false;
     }
 
