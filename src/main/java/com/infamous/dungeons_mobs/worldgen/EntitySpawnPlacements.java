@@ -251,7 +251,7 @@ public class EntitySpawnPlacements {
     }
 
     public static boolean canJungleMobSpawn(EntityType<? extends Monster> entityType, ServerLevelAccessor world, MobSpawnType spawnReason, BlockPos blockPos, RandomSource rand) {
-        return Monster.checkMonsterSpawnRules(entityType, world, spawnReason, blockPos, rand);
+        return Monster.checkMonsterSpawnRules(entityType, world, spawnReason, blockPos, rand) && world.getSeaLevel() <= blockPos.getY();
     }
 
     public static boolean canIllagerSpawn(EntityType<? extends AbstractIllager> entityType, ServerLevelAccessor world, MobSpawnType spawnReason, BlockPos blockPos, RandomSource rand) {

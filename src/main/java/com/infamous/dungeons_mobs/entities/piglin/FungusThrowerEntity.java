@@ -12,6 +12,7 @@ import com.mojang.serialization.Dynamic;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntityType;
@@ -35,7 +36,7 @@ public class FungusThrowerEntity extends Piglin {
     }
 
     public static boolean checkFungusThrowerSpawnRules(EntityType<? extends Piglin> p_234418_0_, LevelAccessor p_234418_1_, MobSpawnType p_234418_2_, BlockPos p_234418_3_, RandomSource p_234418_4_) {
-        return !p_234418_1_.getBlockState(p_234418_3_.below()).is(Blocks.WARPED_WART_BLOCK);
+        return !p_234418_1_.getBlockState(p_234418_3_.below()).is(BlockTags.WART_BLOCKS);
     }
 
     @Override

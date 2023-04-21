@@ -6,6 +6,7 @@ import com.infamous.dungeons_mobs.goals.SimpleRangedAttackGoal;
 import com.infamous.dungeons_mobs.items.BlueNethershroomItem;
 import com.infamous.dungeons_mobs.mod.ModItems;
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
@@ -23,7 +24,7 @@ public class ZombifiedFungusThrowerEntity extends ZombifiedPiglin {
     }
 
     public static boolean checkZombifiedFungusThrowerSpawnRules(EntityType<? extends ZombifiedPiglin> p_234351_0_, LevelAccessor p_234351_1_, MobSpawnType p_234351_2_, BlockPos p_234351_3_, RandomSource p_234351_4_) {
-        return p_234351_1_.getDifficulty() != Difficulty.PEACEFUL && p_234351_1_.getBlockState(p_234351_3_.below()).getBlock() != Blocks.WARPED_WART_BLOCK;
+        return p_234351_1_.getDifficulty() != Difficulty.PEACEFUL && !p_234351_1_.getBlockState(p_234351_3_.below()).is(BlockTags.WART_BLOCKS);
     }
 
     @Override

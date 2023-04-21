@@ -34,6 +34,7 @@ import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.Vec3;
@@ -179,6 +180,14 @@ public class WhispererEntity extends Monster implements IAnimatable, IAquaticMob
         if (this.isClimbing()) {
             this.yBodyRot = this.yHeadRot;
         }
+    }
+
+    @Override
+    public boolean checkSpawnObstruction(LevelReader pLevel) {
+        if(this.isWavewhisperer()){
+            return pLevel.isUnobstructed(this);
+        }
+        return super.checkSpawnObstruction(pLevel);
     }
 
     public boolean isClimbing() {
