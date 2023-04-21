@@ -3,7 +3,7 @@
   "biomes": "#minecraft:is_overworld",
   "spawners": {
     "type": "dungeons_mobs:necromancer",
-    "weight": 5,
+    "weight": 50,
     "minCount": 1,
     "maxCount": 1
   }

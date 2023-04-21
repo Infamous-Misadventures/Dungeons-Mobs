@@ -3,7 +3,7 @@
   "biomes": "#minecraft:is_jungle",
   "spawners": {
     "type": "dungeons_mobs:whisperer",
-    "weight": 10,
+    "weight": 100,
     "minCount": 1,
     "maxCount": 1
   }

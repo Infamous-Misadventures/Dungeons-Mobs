@@ -1,6 +1,8 @@
 package com.infamous.dungeons_mobs.worldgen;
 
 import com.infamous.dungeons_mobs.entities.creepers.IcyCreeperEntity;
+import com.infamous.dungeons_mobs.entities.piglin.FungusThrowerEntity;
+import com.infamous.dungeons_mobs.entities.piglin.ZombifiedFungusThrowerEntity;
 import com.infamous.dungeons_mobs.entities.undead.FrozenZombieEntity;
 import com.infamous.dungeons_mobs.entities.undead.JungleZombieEntity;
 import com.infamous.dungeons_mobs.entities.undead.MossySkeletonEntity;
@@ -8,6 +10,7 @@ import com.infamous.dungeons_mobs.interfaces.IAquaticMob;
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
@@ -18,16 +21,9 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.monster.ZombifiedPiglin;
-import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.raid.Raider;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LightLayer;
-import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.Biomes;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.material.FluidState;
@@ -35,6 +31,8 @@ import net.minecraft.world.level.material.FluidState;
 public class EntitySpawnPlacements {
 
     public static SpawnPlacements.Type IN_WATER_ON_GROUND;
+
+    public static SpawnPlacements.Type ON_GROUND_ALLOW_LEAVES;
 
     public static void createPlacementTypes() {
         IN_WATER_ON_GROUND = SpawnPlacements.Type.create("in_water_on_ground",
@@ -52,6 +50,20 @@ public class EntitySpawnPlacements {
                         return validEmptySpawn && inWater;
                     }
                 });
+        ON_GROUND_ALLOW_LEAVES = SpawnPlacements.Type.create("on_ground_allow_leaves",
+                ((levelReader, blockPos, entityType) -> {
+                    BlockState blockstate = levelReader.getBlockState(blockPos);
+                    FluidState fluidstate = levelReader.getFluidState(blockPos);
+                    BlockPos above = blockPos.above();
+                    BlockPos below = blockPos.below();
+                    BlockState stateBelow = levelReader.getBlockState(below);
+                    if (!stateBelow.isValidSpawn(levelReader, below, SpawnPlacements.Type.ON_GROUND, entityType) && !(stateBelow.is(BlockTags.LEAVES))) {
+                        return false;
+                    } else {
+                        return NaturalSpawner.isValidEmptySpawnBlock(levelReader, blockPos, blockstate, fluidstate, entityType)
+                                && NaturalSpawner.isValidEmptySpawnBlock(levelReader, above, levelReader.getBlockState(above), levelReader.getFluidState(above), entityType);
+                    }
+                }));
     }
 
     public static boolean isValidEmptySpawnBlockNoFluidCheck(BlockGetter blockReader, BlockPos blockPos, BlockState blockState, EntityType<?> entityType) {
@@ -80,11 +92,11 @@ public class EntitySpawnPlacements {
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 IcyCreeperEntity::canIcyCreeperSpawn);
         SpawnPlacements.register(ModEntityTypes.JUNGLE_ZOMBIE.get(),
-                SpawnPlacements.Type.ON_GROUND,
+                ON_GROUND_ALLOW_LEAVES,
                 Heightmap.Types.MOTION_BLOCKING,
                 JungleZombieEntity::canJungleZombieSpawn);
         SpawnPlacements.register(ModEntityTypes.MOSSY_SKELETON.get(),
-                SpawnPlacements.Type.ON_GROUND,
+                ON_GROUND_ALLOW_LEAVES,
                 Heightmap.Types.MOTION_BLOCKING,
                 MossySkeletonEntity::canMossySkeletonSpawn);
 
@@ -144,13 +156,13 @@ public class EntitySpawnPlacements {
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Mob::checkMobSpawnRules);
 
-
+        // Jungle
         SpawnPlacements.register(ModEntityTypes.WHISPERER.get(),
-                SpawnPlacements.Type.ON_GROUND,
+                ON_GROUND_ALLOW_LEAVES,
                 Heightmap.Types.MOTION_BLOCKING,
                 EntitySpawnPlacements::canJungleMobSpawn);
         SpawnPlacements.register(ModEntityTypes.LEAPLEAF.get(),
-                SpawnPlacements.Type.ON_GROUND,
+                ON_GROUND_ALLOW_LEAVES,
                 Heightmap.Types.MOTION_BLOCKING,
                 EntitySpawnPlacements::canJungleMobSpawn);
         // COMMENTED OUT BECAUSE THEY SHOULDN'T SPAWN WITHOUT DUNGEONS WORLD
@@ -163,16 +175,16 @@ public class EntitySpawnPlacements {
                 Heightmap.Type.MOTION_BLOCKING,
                 VineEntity::canVineSpawnInLight);*/
 
-
+        // Piglin
         SpawnPlacements.register(ModEntityTypes.FUNGUS_THROWER.get(),
                 SpawnPlacements.Type.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                EntitySpawnPlacements::checkPiglinSpawnRules);
+                FungusThrowerEntity::checkFungusThrowerSpawnRules);
 
         SpawnPlacements.register(ModEntityTypes.ZOMBIFIED_FUNGUS_THROWER.get(),
                 SpawnPlacements.Type.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                EntitySpawnPlacements::checkZombifiedPiglinSpawnRules);
+                ZombifiedFungusThrowerEntity::checkZombifiedFungusThrowerSpawnRules);
 
 
         SpawnPlacements.register(ModEntityTypes.WILDFIRE.get(),
@@ -181,6 +193,7 @@ public class EntitySpawnPlacements {
                 Monster::checkAnyLightMonsterSpawnRules);
 
 
+        // Ocean
         SpawnPlacements.register(ModEntityTypes.WAVEWHISPERER.get(),
                 SpawnPlacements.Type.IN_WATER,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
@@ -223,40 +236,33 @@ public class EntitySpawnPlacements {
 
     }
 
-    public static boolean checkAquaticMobSpawnRules(EntityType<? extends Mob> type, ServerLevelAccessor serverWorld, MobSpawnType spawnReason, BlockPos blockPos, RandomSource random) {
-        Holder<Biome> biome = serverWorld.getBiome(blockPos);
-        boolean canSpawn = serverWorld.getDifficulty() != Difficulty.PEACEFUL && Monster.isDarkEnoughToSpawn(serverWorld, blockPos, random) && (spawnReason == MobSpawnType.SPAWNER || serverWorld.getFluidState(blockPos).is(FluidTags.WATER));
-        if (!biome.is(Biomes.RIVER) && !biome.is(Biomes.FROZEN_RIVER)) {
-            return random.nextInt(40) == 0 && IAquaticMob.isDeepEnoughToSpawn(serverWorld, blockPos) && canSpawn;
+    public static boolean checkAquaticMobSpawnRules(EntityType<? extends Mob> type, ServerLevelAccessor pServerLevel, MobSpawnType pMobSpawnType, BlockPos pPos, RandomSource pRandom) {
+        if (!pServerLevel.getFluidState(pPos.below()).is(FluidTags.WATER)) {
+            return false;
         } else {
-            return random.nextInt(15) == 0 && canSpawn;
+            Holder<Biome> holder = pServerLevel.getBiome(pPos);
+            boolean flag = pServerLevel.getDifficulty() != Difficulty.PEACEFUL && Monster.isDarkEnoughToSpawn(pServerLevel, pPos, pRandom) && (pMobSpawnType == MobSpawnType.SPAWNER || pServerLevel.getFluidState(pPos).is(FluidTags.WATER));
+            if (holder.is(BiomeTags.MORE_FREQUENT_DROWNED_SPAWNS)) {
+                return pRandom.nextInt(15) == 0 && flag;
+            } else {
+                return pRandom.nextInt(40) == 0 && IAquaticMob.isDeepEnoughToSpawn(pServerLevel, pPos) && flag;
+            }
         }
     }
 
-    public static boolean checkZombifiedPiglinSpawnRules(EntityType<? extends ZombifiedPiglin> p_234351_0_, LevelAccessor p_234351_1_, MobSpawnType p_234351_2_, BlockPos p_234351_3_, RandomSource p_234351_4_) {
-        return p_234351_1_.getDifficulty() != Difficulty.PEACEFUL && p_234351_1_.getBlockState(p_234351_3_.below()).getBlock() != Blocks.NETHER_WART_BLOCK;
-    }
-
-    public static boolean checkPiglinSpawnRules(EntityType<? extends Piglin> p_234418_0_, LevelAccessor p_234418_1_, MobSpawnType p_234418_2_, BlockPos p_234418_3_, RandomSource p_234418_4_) {
-        return !p_234418_1_.getBlockState(p_234418_3_.below()).is(Blocks.NETHER_WART_BLOCK);
-    }
-
     public static boolean canJungleMobSpawn(EntityType<? extends Monster> entityType, ServerLevelAccessor world, MobSpawnType spawnReason, BlockPos blockPos, RandomSource rand) {
-        return Monster.checkMonsterSpawnRules(entityType, world, spawnReason, blockPos, rand)
-                && (spawnReason == MobSpawnType.SPAWNER || canSeeSkyLight(world, blockPos));
+        return Monster.checkMonsterSpawnRules(entityType, world, spawnReason, blockPos, rand);
     }
 
     public static boolean canIllagerSpawn(EntityType<? extends AbstractIllager> entityType, ServerLevelAccessor world, MobSpawnType spawnReason, BlockPos blockPos, RandomSource rand) {
-        return Monster.checkMonsterSpawnRules(entityType, world, spawnReason, blockPos, rand)
-                && (spawnReason == MobSpawnType.SPAWNER || canSeeSkyLight(world, blockPos));
+        return Monster.checkMonsterSpawnRules(entityType, world, spawnReason, blockPos, rand);
     }
 
     public static boolean canRaiderSpawn(EntityType<? extends Raider> entityType, ServerLevelAccessor world, MobSpawnType spawnReason, BlockPos blockPos, RandomSource rand) {
-        return Monster.checkMonsterSpawnRules(entityType, world, spawnReason, blockPos, rand)
-                && (spawnReason == MobSpawnType.SPAWNER || canSeeSkyLight(world, blockPos));
+        return Monster.checkMonsterSpawnRules(entityType, world, spawnReason, blockPos, rand);
     }
 
-    private static boolean canSeeSkyLight(ServerLevelAccessor world, BlockPos blockPos) {
+    public static boolean canSeeSkyLight(ServerLevelAccessor world, BlockPos blockPos) {
         return world.getBrightness(LightLayer.SKY, blockPos) > 4;
     }
 

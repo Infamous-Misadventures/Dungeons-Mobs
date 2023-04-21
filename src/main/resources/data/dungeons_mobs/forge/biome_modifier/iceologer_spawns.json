@@ -3,7 +3,7 @@
   "biomes": "#forge:is_snowy",
   "spawners": {
     "type": "dungeons_mobs:iceologer",
-    "weight": 5,
+    "weight": 50,
     "minCount": 1,
     "maxCount": 1
   }

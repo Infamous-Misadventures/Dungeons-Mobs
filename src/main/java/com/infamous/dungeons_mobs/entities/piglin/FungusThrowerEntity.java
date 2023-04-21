@@ -9,6 +9,7 @@ import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModItems;
 import com.infamous.dungeons_mobs.utils.PiglinHelper;
 import com.mojang.serialization.Dynamic;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -21,7 +22,9 @@ import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Blocks;
 
 import javax.annotation.Nullable;
 
@@ -29,6 +32,10 @@ public class FungusThrowerEntity extends Piglin {
 
     public FungusThrowerEntity(EntityType<? extends FungusThrowerEntity> entityType, Level world) {
         super(entityType, world);
+    }
+
+    public static boolean checkFungusThrowerSpawnRules(EntityType<? extends Piglin> p_234418_0_, LevelAccessor p_234418_1_, MobSpawnType p_234418_2_, BlockPos p_234418_3_, RandomSource p_234418_4_) {
+        return !p_234418_1_.getBlockState(p_234418_3_.below()).is(Blocks.WARPED_WART_BLOCK);
     }
 
     @Override

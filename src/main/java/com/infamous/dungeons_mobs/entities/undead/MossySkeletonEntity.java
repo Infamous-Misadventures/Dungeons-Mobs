@@ -2,6 +2,7 @@ package com.infamous.dungeons_mobs.entities.undead;
 
 import com.infamous.dungeons_mobs.mod.ModEntityTypes;
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
+import com.infamous.dungeons_mobs.worldgen.EntitySpawnPlacements;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
@@ -33,7 +34,7 @@ public class MossySkeletonEntity extends AbstractSkeleton {
     }
 
     public static boolean canMossySkeletonSpawn(EntityType<MossySkeletonEntity> entityType, ServerLevelAccessor iWorld, MobSpawnType spawnReason, BlockPos blockPos, RandomSource rand) {
-        return checkMonsterSpawnRules(entityType, iWorld, spawnReason, blockPos, rand) && (spawnReason == MobSpawnType.SPAWNER || iWorld.canSeeSky(blockPos));
+        return checkMonsterSpawnRules(entityType, iWorld, spawnReason, blockPos, rand) && (spawnReason == MobSpawnType.SPAWNER || EntitySpawnPlacements.canSeeSkyLight(iWorld, blockPos));
     }
 
     public static AttributeSupplier.Builder setCustomAttributes() {

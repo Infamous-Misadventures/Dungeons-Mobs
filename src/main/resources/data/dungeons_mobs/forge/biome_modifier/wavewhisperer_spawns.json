@@ -3,7 +3,7 @@
   "biomes": "#minecraft:is_ocean",
   "spawners": {
     "type": "dungeons_mobs:wavewhisperer",
-    "weight": 10,
+    "weight": 100,
     "minCount": 1,
     "maxCount": 1
   }

@@ -1,6 +1,7 @@
 package com.infamous.dungeons_mobs.entities.undead;
 
 import com.infamous.dungeons_mobs.mod.ModSoundEvents;
+import com.infamous.dungeons_mobs.worldgen.EntitySpawnPlacements;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.RandomSource;
@@ -28,7 +29,7 @@ public class JungleZombieEntity extends Zombie {
     }
 
     public static boolean canJungleZombieSpawn(EntityType<JungleZombieEntity> entityType, ServerLevelAccessor iWorld, MobSpawnType spawnReason, BlockPos blockPos, RandomSource rand) {
-        return checkMonsterSpawnRules(entityType, iWorld, spawnReason, blockPos, rand) && (spawnReason == MobSpawnType.SPAWNER || iWorld.canSeeSky(blockPos));
+        return checkMonsterSpawnRules(entityType, iWorld, spawnReason, blockPos, rand) && (spawnReason == MobSpawnType.SPAWNER || EntitySpawnPlacements.canSeeSkyLight(iWorld, blockPos));
     }
 
     public static AttributeSupplier.Builder setCustomAttributes() {
