@@ -3,7 +3,7 @@
   "biomes": "#minecraft:is_ocean",
   "spawners": {
     "type": "dungeons_mobs:drowned_necromancer",
-    "weight": 50,
+    "weight": 5,
     "minCount": 1,
     "maxCount": 1
   }
