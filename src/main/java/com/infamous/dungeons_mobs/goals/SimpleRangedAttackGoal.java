@@ -65,6 +65,10 @@ public class SimpleRangedAttackGoal<T extends Mob> extends Goal {
         this.attackTime = -1;
     }
 
+    public boolean requiresUpdateEveryTick() {
+        return true;
+    }
+
     public void tick() {
         double d0 = this.mob.distanceToSqr(this.target.getX(), this.target.getY(), this.target.getZ());
         boolean flag = this.mob.getSensing().hasLineOfSight(this.target);
@@ -89,10 +93,10 @@ public class SimpleRangedAttackGoal<T extends Mob> extends Goal {
             float f = Mth.sqrt((float) d0) / this.attackRadius;
             float lvt_5_1_ = Mth.clamp(f, 0.1F, 1.0F);
             this.performRangedAttack.accept(this.mob, this.target);
-            this.attackTime = Mth.floor(f * (float) (this.attackIntervalMax - this.attackIntervalMin) + (float) this.attackIntervalMin);
+            this.attackTime = Mth.floor(f * (float)(this.attackIntervalMax - this.attackIntervalMin) + (float)this.attackIntervalMin);
         } else if (this.attackTime < 0) {
             float f2 = Mth.sqrt((float) d0) / this.attackRadius;
-            this.attackTime = Mth.floor(f2 * (float) (this.attackIntervalMax - this.attackIntervalMin) + (float) this.attackIntervalMin);
+            this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double)this.attackRadius, (double)this.attackIntervalMin, (double)this.attackIntervalMax));
         }
 
     }
