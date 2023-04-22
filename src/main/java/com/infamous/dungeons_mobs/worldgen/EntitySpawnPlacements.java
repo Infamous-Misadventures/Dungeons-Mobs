@@ -109,6 +109,8 @@ public class EntitySpawnPlacements {
                 SpawnPlacements.Type.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Monster::checkMonsterSpawnRules);
+
+        // Illager
         SpawnPlacements.register(ModEntityTypes.ROYAL_GUARD.get(),
                 SpawnPlacements.Type.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
@@ -180,13 +182,12 @@ public class EntitySpawnPlacements {
                 SpawnPlacements.Type.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 FungusThrowerEntity::checkFungusThrowerSpawnRules);
-
         SpawnPlacements.register(ModEntityTypes.ZOMBIFIED_FUNGUS_THROWER.get(),
                 SpawnPlacements.Type.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 ZombifiedFungusThrowerEntity::checkZombifiedFungusThrowerSpawnRules);
 
-
+        // Blaze
         SpawnPlacements.register(ModEntityTypes.WILDFIRE.get(),
                 SpawnPlacements.Type.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,

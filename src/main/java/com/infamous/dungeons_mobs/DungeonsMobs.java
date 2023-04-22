@@ -73,6 +73,7 @@ public class DungeonsMobs {
             EnchantWithMobCompat.initMobEnchants(modEventBus);
         }
         ModDataSerializers.DATA_SERIALIZERS.register(modEventBus);
+        ModStructureModifiers.STRUCTURE_MODIFIER_SERIALIZERS.register(modEventBus);
         PROXY = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 
         //ANCIENT_DATA.subscribeAsSyncable(CHANNEL, AncientDatas::toPacket);
