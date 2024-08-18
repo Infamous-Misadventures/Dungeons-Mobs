@@ -64,7 +64,7 @@ public class EntityEvents {
 	public static void preventBlockBreaking(BreakEvent event) {
 		Player owner = event.getPlayer();
 		
-		if (owner.hasEffect(ENSNARED.get())) {
+		if (owner != null && owner.hasEffect(ENSNARED.get())) {
 			// Prevent crashes, cause sometimes it isn't cancellable
 			if (event.isCancelable()) event.setCanceled(true);
 		}
@@ -85,7 +85,7 @@ public class EntityEvents {
 	public static void preventBlockInteraction(BlockToolModificationEvent event) {
 		Player owner = event.getPlayer();
 		
-		if (owner.hasEffect(ENSNARED.get())) {
+		if (owner != null && owner.hasEffect(ENSNARED.get())) {
 			if (event.isCancelable()) event.setCanceled(true);
 		}
 	}
